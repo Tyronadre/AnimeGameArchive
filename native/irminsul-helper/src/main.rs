@@ -1,7 +1,9 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use std::collections::HashMap;
-use std::time::Duration;
+use std::fs::{OpenOptions, create_dir_all};
+use std::path::{Path, PathBuf};
+use std::time::{Duration, Instant};
 
 use anime_game_data::AnimeGameData;
 use anyhow::{Context, Result, anyhow};
@@ -14,11 +16,13 @@ use serde::{Deserialize, Serialize};
 use tokio::time::{MissedTickBehavior, interval};
 
 use crate::capture::PacketCapture;
+use crate::live_updates::{parse_item_changes, parse_item_deletions};
 use crate::player_data::{ExportSettings, PlayerData};
 
 mod admin;
 mod capture;
 mod good;
+mod live_updates;
 mod player_data;
 
 const TOKEN_HEADER: &str = "X-Genshin-Desktop-Token";
@@ -35,6 +39,9 @@ struct Args {
     session: String,
     #[arg(long, default_value_t = false)]
     no_admin: bool,
+
+    #[arg(long)]
+    log_file: Option<PathBuf>,
 }
 
 #[derive(Serialize)]
@@ -51,12 +58,9 @@ struct ControlResponse {
 
 #[tokio::main]
 async fn main() {
-    tracing_subscriber::fmt()
-        .with_env_filter(tracing_subscriber::EnvFilter::new("info"))
-        .with_ansi(false)
-        .init();
-
     let args = Args::parse();
+    configure_logging(args.log_file.as_deref());
+    tracing::info!("Capture helper process starting");
     if !args.no_admin {
         #[cfg(windows)]
         admin::ensure_admin();
@@ -75,6 +79,27 @@ async fn main() {
     }
 }
 
+fn configure_logging(log_file: Option<&Path>) {
+    let file = log_file.and_then(|path| {
+        path.parent()
+            .and_then(|parent| create_dir_all(parent).ok())?;
+        OpenOptions::new().create(true).append(true).open(path).ok()
+    });
+    let filter = tracing_subscriber::EnvFilter::new("info");
+    if let Some(file) = file {
+        tracing_subscriber::fmt()
+            .with_env_filter(filter)
+            .with_ansi(false)
+            .with_writer(file)
+            .init();
+    } else {
+        tracing_subscriber::fmt()
+            .with_env_filter(filter)
+            .with_ansi(false)
+            .init();
+    }
+}
+
 async fn run_capture(client: &Client, args: &Args) -> Result<()> {
     let database = load_database()?;
     let mut player_data = PlayerData::new(database);
@@ -82,6 +107,7 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
     let mut sniffer = GameSniffer::new().set_initial_keys(keys);
     let mut capture =
         PacketCapture::new().map_err(|error| anyhow!("packet capture could not start: {error}"))?;
+    tracing::info!("Packet capture started; waiting for Genshin Impact traffic");
 
     send_status(
         client,
@@ -93,15 +119,27 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
 
     let mut control_poll = interval(Duration::from_secs(1));
     control_poll.set_missed_tick_behavior(MissedTickBehavior::Skip);
+    let mut sync_poll = interval(Duration::from_millis(250));
+    sync_poll.set_missed_tick_behavior(MissedTickBehavior::Skip);
+    let mut diagnostics_poll = interval(Duration::from_secs(10));
+    diagnostics_poll.set_missed_tick_behavior(MissedTickBehavior::Skip);
     let mut control_failures = 0;
     let mut captured_items = false;
     let mut captured_characters = false;
+    let mut initial_snapshot_uploaded = false;
+    let mut pending_changes = 0;
+    let mut last_change = None;
+    let mut commands_since_report = 0_usize;
+    let mut packets_since_report = 0_usize;
+    let mut recognized_since_report = 0_usize;
+    let mut command_ids_since_report: HashMap<u16, usize> = HashMap::new();
 
     loop {
         tokio::select! {
             _ = control_poll.tick() => {
                 match cancellation_requested(client, args).await {
                     Ok(true) => {
+                        tracing::info!("Stop requested by the desktop application");
                         send_status(client, args, "stopped", "Capture stopped.").await?;
                         return Ok(());
                     }
@@ -117,18 +155,89 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
                     }
                 }
             }
+            _ = sync_poll.tick() => {
+                if initial_snapshot_uploaded
+                    && pending_changes > 0
+                    && last_change.is_some_and(|changed: Instant| {
+                        changed.elapsed() >= Duration::from_millis(750)
+                    })
+                {
+                    tracing::info!(
+                        changes = pending_changes,
+                        "Debounce window complete; exporting live snapshot"
+                    );
+                    send_status(
+                        client,
+                        args,
+                        "syncing",
+                        &format!(
+                            "Saving {pending_changes} live inventory change{}…",
+                            if pending_changes == 1 { "" } else { "s" },
+                        ),
+                    )
+                    .await?;
+                    let snapshot =
+                        player_data.export_genshin_optimizer(&full_export_settings())?;
+                    post_snapshot(client, args, snapshot).await?;
+                    tracing::info!(
+                        changes = pending_changes,
+                        "Live snapshot saved to the desktop application"
+                    );
+                    pending_changes = 0;
+                    last_change = None;
+                }
+            }
+            _ = diagnostics_poll.tick() => {
+                if initial_snapshot_uploaded {
+                    let mut command_counts = command_ids_since_report
+                        .iter()
+                        .map(|(id, count)| (*id, *count))
+                        .collect::<Vec<_>>();
+                    command_counts.sort_by_key(|(_, count)| std::cmp::Reverse(*count));
+                    let top_ids = command_counts
+                        .into_iter()
+                        .take(8)
+                        .map(|(id, count)| format!("{id}×{count}"))
+                        .collect::<Vec<_>>()
+                        .join(", ");
+                    tracing::info!(
+                        packets = packets_since_report,
+                        commands = commands_since_report,
+                        recognized_changes = recognized_since_report,
+                        top_command_ids = %top_ids,
+                        "Live capture heartbeat"
+                    );
+                    commands_since_report = 0;
+                    packets_since_report = 0;
+                    recognized_since_report = 0;
+                    command_ids_since_report.clear();
+                }
+            }
             packet = capture.next_packet() => {
                 let packet = packet
                     .map_err(|error| anyhow!("packet capture failed: {error}"))?;
+                if initial_snapshot_uploaded {
+                    packets_since_report += 1;
+                }
                 let Some(GamePacket::Commands(commands)) = sniffer.receive_packet(packet) else {
                     continue;
                 };
 
                 for command in commands {
+                    if initial_snapshot_uploaded {
+                        commands_since_report += 1;
+                        *command_ids_since_report
+                            .entry(command.command_id)
+                            .or_default() += 1;
+                    }
                     if let Some(items) = matches_item_packet(&command) {
-                        player_data.process_items(&items);
+                        let changed = player_data.process_items(&items);
                         if !captured_items {
                             captured_items = true;
+                            tracing::info!(
+                                inventory_entries = items.len(),
+                                "Captured initial inventory"
+                            );
                             send_status(
                                 client,
                                 args,
@@ -137,10 +246,24 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
                             )
                             .await?;
                         }
+                        if initial_snapshot_uploaded && changed {
+                            pending_changes += items.len().max(1);
+                            recognized_since_report += items.len().max(1);
+                            last_change = Some(Instant::now());
+                            tracing::info!(
+                                command_id = command.command_id,
+                                changed_items = items.len(),
+                                "Captured a complete live inventory refresh"
+                            );
+                        }
                     } else if let Some(characters) = matches_avatar_packet(&command) {
-                        player_data.process_characters(&characters);
+                        let changed = player_data.process_characters(&characters);
                         if !captured_characters {
                             captured_characters = true;
+                            tracing::info!(
+                                characters = characters.len(),
+                                "Captured initial characters"
+                            );
                             send_status(
                                 client,
                                 args,
@@ -149,22 +272,57 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
                             )
                             .await?;
                         }
+                        if initial_snapshot_uploaded && changed {
+                            pending_changes += characters.len().max(1);
+                            last_change = Some(Instant::now());
+                        }
+                    } else if captured_items {
+                        if let Some(items) = parse_item_changes(&command) {
+                            let changed = player_data.process_item_changes(&items);
+                            if changed > 0 {
+                                pending_changes += changed;
+                                recognized_since_report += changed;
+                                last_change = Some(Instant::now());
+                                tracing::info!(
+                                    command_id = command.command_id,
+                                    changed_items = changed,
+                                    "Captured live item additions or updates"
+                                );
+                            }
+                        } else if let Some(guids) = parse_item_deletions(&command)
+                            && player_data.contains_all_item_guids(&guids)
+                        {
+                            let changed = player_data.process_item_deletions(&guids);
+                            if changed > 0 {
+                                pending_changes += changed;
+                                recognized_since_report += changed;
+                                last_change = Some(Instant::now());
+                                tracing::info!(
+                                    command_id = command.command_id,
+                                    deleted_items = changed,
+                                    "Captured live item deletions"
+                                );
+                            }
+                        }
                     }
                 }
             }
         }
 
-        if captured_items && captured_characters {
+        if captured_items && captured_characters && !initial_snapshot_uploaded {
             send_status(
                 client,
                 args,
                 "uploading",
-                "Complete game snapshot captured. Importing it now…",
+                "Complete game snapshot captured. Starting live sync…",
             )
             .await?;
             let snapshot = player_data.export_genshin_optimizer(&full_export_settings())?;
             post_snapshot(client, args, snapshot).await?;
-            return Ok(());
+            tracing::info!("Initial snapshot saved; continuous live capture is active");
+            initial_snapshot_uploaded = true;
+            pending_changes = 0;
+            last_change = None;
         }
     }
 }

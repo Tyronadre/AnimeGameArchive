@@ -1,41 +1,92 @@
-.desktop-root {
-    -fx-background-color: #f4f1e8;
+.launcher-root,
+.launcher-panel {
+    -fx-background-color: linear-gradient(to bottom right, #302949, #1d192d);
     -fx-font-family: "Segoe UI";
 }
 
-.browser-toolbar {
-    -fx-background-color: #ffffff;
-    -fx-border-color: transparent transparent #ded9ca transparent;
-    -fx-border-width: 0 0 1 0;
+.launcher-panel > .separator .line {
+    -fx-border-color: rgba(255, 255, 255, 0.12);
 }
 
-.toolbar-button {
-    -fx-background-color: transparent;
-    -fx-background-radius: 8;
-    -fx-font-size: 17px;
-    -fx-min-width: 36px;
-    -fx-min-height: 34px;
-    -fx-cursor: hand;
+.launcher-browser-card {
+    -fx-border-color: rgba(241, 216, 144, 0.28);
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
 }
 
-.toolbar-button:hover {
-    -fx-background-color: #eee9dc;
+.launcher-address {
+    -fx-text-fill: #968aaa;
+    -fx-font-family: "Consolas";
+    -fx-font-size: 10px;
 }
 
-.toolbar-button:disabled {
-    -fx-opacity: 0.32;
+.startup-root {
+    -fx-background-color:
+        radial-gradient(center 50% 22%, radius 70%, rgba(118, 100, 165, 0.46), transparent),
+        linear-gradient(to bottom right, #302949, #1d192d);
+    -fx-font-family: "Segoe UI";
 }
 
-.location-label {
-    -fx-background-color: #f4f1e8;
-    -fx-background-radius: 9;
-    -fx-padding: 8 12;
-    -fx-text-fill: #6b6477;
+.startup-emblem {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 38;
+    -fx-border-color: rgba(241, 216, 144, 0.5);
+    -fx-border-radius: 38;
+    -fx-border-width: 1;
+}
+
+.startup-mark {
+    -fx-text-fill: #f1d890;
+    -fx-font-size: 42px;
+}
+
+.startup-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+}
+
+.startup-subtitle {
+    -fx-text-fill: #c9bde2;
+    -fx-font-size: 13px;
+}
+
+.startup-progress {
+    -fx-progress-color: #f1d890;
+}
+
+.startup-status {
+    -fx-text-fill: #eee8f7;
     -fx-font-size: 12px;
+    -fx-text-alignment: center;
 }
 
-.local-tools {
-    -fx-background-color: linear-gradient(to bottom, #2f2944, #211d33);
+.startup-path {
+    -fx-text-fill: #9085a5;
+    -fx-font-family: "Consolas";
+    -fx-font-size: 9px;
+    -fx-text-alignment: center;
+}
+
+.startup-error-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.startup-error-copy {
+    -fx-text-fill: #e6ddeb;
+    -fx-font-size: 12px;
+    -fx-text-alignment: center;
+}
+
+.startup-close {
+    -fx-background-color: #f1d890;
+    -fx-background-radius: 9;
+    -fx-padding: 9 22;
+    -fx-text-fill: #2f2944;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
 }
 
 .desktop-mark {
@@ -140,29 +191,33 @@
     -fx-opacity: 0.45;
 }
 
-.status-bar {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #ded9ca transparent transparent transparent;
-    -fx-border-width: 1 0 0 0;
+.capture-log-card {
+    -fx-padding: 12;
 }
 
-.status-text {
-    -fx-text-fill: #6b6477;
-    -fx-font-size: 11px;
+.capture-log-area {
+    -fx-pref-height: 132;
+    -fx-font-family: "Consolas";
+    -fx-font-size: 9px;
+    -fx-text-fill: #ddd5eb;
+    -fx-control-inner-background: rgba(0, 0, 0, 0.22);
+    -fx-background-color: rgba(0, 0, 0, 0.22);
+    -fx-background-radius: 8;
 }
 
-.storage-status {
-    -fx-text-fill: #48865f;
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
+.capture-log-area .content {
+    -fx-background-color: rgba(0, 0, 0, 0.22);
 }
 
-.split-pane {
-    -fx-padding: 0;
-    -fx-background-color: transparent;
+.capture-log-open {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 8;
+    -fx-padding: 7 10;
+    -fx-text-fill: #e8e1f2;
+    -fx-font-size: 10px;
+    -fx-cursor: hand;
 }
 
-.split-pane-divider {
-    -fx-padding: 0 1 0 1;
-    -fx-background-color: #d8d2c4;
+.capture-log-open:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.16);
 }

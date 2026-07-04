@@ -47,7 +47,8 @@ impl PlayerData {
         }
     }
 
-    pub fn process_characters(&mut self, avatars: &[AvatarInfo]) {
+    pub fn process_characters(&mut self, avatars: &[AvatarInfo]) -> bool {
+        let changed = self.characters != avatars;
         self.character_equip_guid_map.clear();
         for avatar in avatars {
             for guid in &avatar.equip_guid_list {
@@ -56,10 +57,47 @@ impl PlayerData {
             }
         }
         self.characters = avatars.into();
+        changed
     }
 
-    pub fn process_items(&mut self, items: &[Item]) {
+    pub fn process_items(&mut self, items: &[Item]) -> bool {
+        let changed = self.items != items;
         self.items = items.into();
+        changed
+    }
+
+    pub fn process_item_changes(&mut self, items: &[Item]) -> usize {
+        let mut changed = 0;
+        for item in items {
+            match self
+                .items
+                .iter_mut()
+                .find(|stored| stored.guid == item.guid)
+            {
+                Some(stored) if stored == item => {}
+                Some(stored) => {
+                    *stored = item.clone();
+                    changed += 1;
+                }
+                None => {
+                    self.items.push(item.clone());
+                    changed += 1;
+                }
+            }
+        }
+        changed
+    }
+
+    pub fn contains_all_item_guids(&self, guids: &[u64]) -> bool {
+        guids
+            .iter()
+            .all(|guid| self.items.iter().any(|item| item.guid == *guid))
+    }
+
+    pub fn process_item_deletions(&mut self, guids: &[u64]) -> usize {
+        let previous_len = self.items.len();
+        self.items.retain(|item| !guids.contains(&item.guid));
+        previous_len - self.items.len()
     }
 
     pub fn export_genshin_optimizer(&self, settings: &ExportSettings) -> Result<String> {

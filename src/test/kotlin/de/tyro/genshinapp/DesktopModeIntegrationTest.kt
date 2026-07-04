@@ -3,6 +3,7 @@ package de.tyro.genshinapp
 import de.tyro.genshinapp.configuration.DesktopUserProvider
 import de.tyro.genshinapp.desktop.irminsul.IrminsulCaptureState
 import de.tyro.genshinapp.desktop.irminsul.IrminsulIntegrationService
+import de.tyro.genshinapp.desktop.irminsul.IrminsulStatusEvent
 import de.tyro.genshinapp.repository.UserRepository
 import de.tyro.genshinapp.service.GoodImportServiceTest
 import de.tyro.genshinapp.service.PlayerSnapshotStore
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.util.ReflectionTestUtils
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
@@ -21,6 +23,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.nio.file.Files
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 @SpringBootTest(
     properties = [
@@ -71,5 +74,22 @@ class DesktopModeIntegrationTest @Autowired constructor(
 
         assertEquals(IrminsulCaptureState.COMPLETE, result.state)
         assertEquals(81, snapshotStore.current(requireNotNull(user.id))?.characters?.size)
+    }
+
+    @Test
+    fun `Irminsul bridge keeps an active capture session live after saving`() {
+        ReflectionTestUtils.setField(integrationService, "activeSession", "live-test")
+        try {
+            val result = integrationService.receiveSnapshot(
+                Files.readAllBytes(GoodImportServiceTest.SAMPLE_EXPORT),
+            )
+
+            assertEquals(IrminsulCaptureState.LIVE, result.state)
+            assertTrue(result.state.active)
+        } finally {
+            integrationService.receiveStatus(
+                IrminsulStatusEvent(state = "stopped", message = "Test capture stopped."),
+            )
+        }
     }
 }

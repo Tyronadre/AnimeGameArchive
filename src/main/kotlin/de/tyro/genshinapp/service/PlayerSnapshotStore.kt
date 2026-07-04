@@ -21,6 +21,7 @@ class PlayerSnapshotStore(
     properties: GenshinContentProperties,
     private val goodImportService: GoodImportService,
     private val objectMapper: ObjectMapper,
+    private val snapshotActivityService: SnapshotActivityService? = null,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val playerDataDirectory = Path.of(properties.cacheDirectory)
@@ -32,7 +33,9 @@ class PlayerSnapshotStore(
     fun save(userId: Long, bytes: ByteArray): PlayerSnapshot {
         val snapshot = goodImportService.parse(bytes)
         val state = stateFor(userId)
+        val previous: PlayerSnapshot?
         synchronized(state.writeLock) {
+            previous = state.baseSnapshot.get()
             writeAtomically(state.snapshotFile, bytes)
             writeAtomically(state.inventoryOverridesFile, "{}".toByteArray())
             Files.deleteIfExists(state.artifactOverridesFile)
@@ -41,7 +44,9 @@ class PlayerSnapshotStore(
             state.baseSnapshot.set(snapshot)
             state.revision.incrementAndGet()
         }
-        return current(userId) ?: snapshot
+        val saved = current(userId) ?: snapshot
+        snapshotActivityService?.record(userId, previous, saved)
+        return saved
     }
 
     fun current(userId: Long): PlayerSnapshot? {

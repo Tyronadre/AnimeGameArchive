@@ -62,6 +62,36 @@
             <a href="#dashboard-goals" th:text="#{dashboard.goals.manage}">Manage goals</a>
         </section>
 
+        <section class="dashboard-section dashboard-recent-activity">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow" th:text="#{dashboard.recent.eyebrow}">Live inventory</p>
+                    <h2 th:text="#{dashboard.recent.heading}">Latest updates</h2>
+                </div>
+                <span th:text="#{dashboard.recent.help}">
+                    Changes captured from the game appear here automatically.
+                </span>
+            </div>
+            <ol id="dashboard-recent-list" class="dashboard-recent-list"
+                aria-live="polite" th:hidden="${recentActivity.isEmpty()}">
+                <li th:each="activity : ${recentActivity}"
+                    th:classappend="${' tone-' + activity.tone}">
+                    <span class="dashboard-recent-icon" th:text="${activity.icon}">＋</span>
+                    <div>
+                        <h3 th:text="${activity.title}">Mora collected</h3>
+                        <p th:text="${activity.detail}">+2,400 · 120,000 total</p>
+                    </div>
+                    <time th:datetime="${activity.occurredAt}"
+                          th:text="${activity.age}">Just now</time>
+                </li>
+            </ol>
+            <p id="dashboard-recent-empty" class="dashboard-recent-empty"
+               th:hidden="${!recentActivity.isEmpty()}"
+               th:text="#{dashboard.recent.empty}">
+                Start live capture and make an inventory change to see it here.
+            </p>
+        </section>
+
         <section class="dashboard-no-goals" th:if="${dashboard.goals.isEmpty()}">
             <span>✧</span>
             <div>
@@ -356,6 +386,60 @@
                     !option.textContent.toLocaleLowerCase().includes(query);
             });
         });
+    })();
+</script>
+<script>
+    (() => {
+        const list = document.getElementById("dashboard-recent-list");
+        const empty = document.getElementById("dashboard-recent-empty");
+        if (!list || !empty) return;
+
+        let rendered = "";
+        const render = activities => {
+            const signature = JSON.stringify(activities);
+            if (signature === rendered) return;
+            rendered = signature;
+            list.replaceChildren(...activities.map(activity => {
+                const item = document.createElement("li");
+                item.classList.add(`tone-${activity.tone}`);
+
+                const icon = document.createElement("span");
+                icon.className = "dashboard-recent-icon";
+                icon.textContent = activity.icon;
+
+                const copy = document.createElement("div");
+                const title = document.createElement("h3");
+                title.textContent = activity.title;
+                const detail = document.createElement("p");
+                detail.textContent = activity.detail;
+                copy.append(title, detail);
+
+                const time = document.createElement("time");
+                time.dateTime = activity.occurredAt;
+                time.textContent = activity.age;
+                item.append(icon, copy, time);
+                return item;
+            }));
+            list.hidden = activities.length === 0;
+            empty.hidden = activities.length !== 0;
+        };
+
+        const refresh = async () => {
+            if (document.hidden) return;
+            try {
+                const response = await fetch("/api/dashboard/recent-activity", {
+                    headers: {"Accept": "application/json"},
+                    cache: "no-store"
+                });
+                if (response.ok) render(await response.json());
+            } catch (_) {
+                // The next poll retries when the local backend is reachable again.
+            }
+        };
+
+        window.setInterval(refresh, 3000);
+        document.addEventListener("visibilitychange", refresh);
+        refresh();
     })();
 </script>
 </body>

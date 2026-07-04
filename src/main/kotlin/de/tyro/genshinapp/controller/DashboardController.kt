@@ -13,13 +13,19 @@ import de.tyro.genshinapp.service.DashboardGoalType
 import de.tyro.genshinapp.service.FarmingDashboardService
 import de.tyro.genshinapp.service.PlayerPlanningService
 import de.tyro.genshinapp.service.PlayerSnapshotStore
+import de.tyro.genshinapp.service.SnapshotActivityEvent
+import de.tyro.genshinapp.service.SnapshotActivityService
+import de.tyro.genshinapp.service.SnapshotActivityType
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
+import java.time.Duration
+import java.time.Instant
 
 @Controller
 class DashboardController(
@@ -29,6 +35,7 @@ class DashboardController(
     private val goalService: DashboardGoalService,
     private val dashboardService: FarmingDashboardService,
     private val planningService: PlayerPlanningService,
+    private val activityService: SnapshotActivityService,
     private val messages: LocalizedMessages,
 ) {
     @GetMapping("/")
@@ -42,12 +49,19 @@ class DashboardController(
         model.addAttribute("snapshot", snapshot)
         model.addAttribute("goalOptions", options)
         model.addAttribute("selectedGoalCount", selections.size)
+        model.addAttribute("recentActivity", recentActivityViews(principal.id))
         model.addAttribute(
             "dashboard",
             snapshot?.let { dashboardService.create(principal.id, it, selections) },
         )
         return "dashboard"
     }
+
+    @GetMapping("/api/dashboard/recent-activity")
+    @ResponseBody
+    fun recentActivity(
+        @AuthenticationPrincipal principal: AppUserPrincipal,
+    ): List<DashboardActivityView> = recentActivityViews(principal.id)
 
     @PostMapping("/goals")
     fun saveGoals(
@@ -137,6 +151,104 @@ class DashboardController(
         )
     }
 
+    private fun activityView(event: SnapshotActivityEvent): DashboardActivityView {
+        val title: String
+        val detail: String
+        when (event.type) {
+            SnapshotActivityType.MATERIAL_GAIN -> {
+                title = messages.get("dashboard.recent.materialGain", event.name)
+                detail = messages.get(
+                    "dashboard.recent.materialGain.detail",
+                    event.amount ?: 0,
+                    event.total ?: 0,
+                )
+            }
+            SnapshotActivityType.MATERIAL_SPEND -> {
+                title = messages.get("dashboard.recent.materialSpend", event.name)
+                detail = messages.get(
+                    "dashboard.recent.materialSpend.detail",
+                    event.amount ?: 0,
+                    event.total ?: 0,
+                )
+            }
+            SnapshotActivityType.ARTIFACT_LEVEL -> {
+                title = messages.get("dashboard.recent.artifactLevel", event.name)
+                detail = messages.get(
+                    "dashboard.recent.level.detail",
+                    event.detailName.orEmpty(),
+                    event.previousLevel ?: 0,
+                    event.currentLevel ?: 0,
+                )
+            }
+            SnapshotActivityType.ARTIFACT_ADDED -> {
+                title = messages.get("dashboard.recent.artifactAdded", event.name)
+                detail = messages.get(
+                    "dashboard.recent.newLevel.detail",
+                    event.detailName.orEmpty(),
+                    event.currentLevel ?: 0,
+                )
+            }
+            SnapshotActivityType.ARTIFACTS_REMOVED -> {
+                title = messages.get("dashboard.recent.artifactsRemoved", event.amount ?: 0)
+                detail = messages.get(
+                    "dashboard.recent.artifactsRemoved.detail",
+                    event.total ?: 0,
+                )
+            }
+            SnapshotActivityType.WEAPON_LEVEL -> {
+                title = messages.get("dashboard.recent.weaponLevel", event.name)
+                detail = messages.get(
+                    "dashboard.recent.weaponLevel.detail",
+                    event.previousLevel ?: 0,
+                    event.currentLevel ?: 0,
+                )
+            }
+            SnapshotActivityType.WEAPON_ADDED -> {
+                title = messages.get("dashboard.recent.weaponAdded", event.name)
+                detail = messages.get(
+                    "dashboard.recent.weaponAdded.detail",
+                    event.currentLevel ?: 0,
+                )
+            }
+            SnapshotActivityType.WEAPON_REMOVED -> {
+                title = messages.get("dashboard.recent.weaponRemoved", event.name)
+                detail = messages.get(
+                    "dashboard.recent.weaponRemoved.detail",
+                    event.previousLevel ?: 0,
+                )
+            }
+            SnapshotActivityType.CHARACTER_LEVEL -> {
+                title = messages.get("dashboard.recent.characterLevel", event.name)
+                detail = messages.get(
+                    "dashboard.recent.characterLevel.detail",
+                    event.previousLevel ?: 0,
+                    event.currentLevel ?: 0,
+                )
+            }
+        }
+        return DashboardActivityView(
+            icon = event.type.icon,
+            tone = event.type.tone,
+            title = title,
+            detail = detail,
+            occurredAt = event.occurredAt.toString(),
+            age = activityAge(event.occurredAt),
+        )
+    }
+
+    private fun recentActivityViews(userId: Long): List<DashboardActivityView> =
+        activityService.recent(userId).map(::activityView)
+
+    private fun activityAge(occurredAt: Instant): String {
+        val age = Duration.between(occurredAt, Instant.now()).coerceAtLeast(Duration.ZERO)
+        return when {
+            age.toMinutes() < 1 -> messages.get("dashboard.recent.justNow")
+            age.toHours() < 1 -> messages.get("dashboard.recent.minutesAgo", age.toMinutes())
+            age.toDays() < 1 -> messages.get("dashboard.recent.hoursAgo", age.toHours())
+            else -> messages.get("dashboard.recent.daysAgo", age.toDays())
+        }
+    }
+
     companion object {
         private val TRAVELER_KEYS = setOf("aether", "lumine")
     }
@@ -165,4 +277,13 @@ data class DashboardCharacterGoalOption(
     val canOptimize: Boolean,
     val characterSelected: Boolean,
     val artifactsSelected: Boolean,
+)
+
+data class DashboardActivityView(
+    val icon: String,
+    val tone: String,
+    val title: String,
+    val detail: String,
+    val occurredAt: String,
+    val age: String,
 )
