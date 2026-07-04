@@ -1,0 +1,96 @@
+package de.tyro.genshinapp.service
+
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import de.tyro.genshinapp.configuration.GenshinContentProperties
+import org.junit.jupiter.api.io.TempDir
+import java.nio.file.Files
+import java.nio.file.Path
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
+
+class GoodImportServiceTest {
+    private val objectMapper = jacksonObjectMapper()
+    private val service = GoodImportService(objectMapper)
+
+    @TempDir
+    lateinit var temporaryDirectory: Path
+
+    @Test
+    fun `parses the supplied GOOD version 3 export`() {
+        val snapshot = service.parse(Files.readAllBytes(SAMPLE_EXPORT))
+
+        assertEquals(3, snapshot.formatVersion)
+        assertEquals("Irminsul", snapshot.source)
+        assertEquals(81, snapshot.characters.size)
+        assertEquals(78L, snapshot.inventory["heroswit"])
+        assertEquals(117L, snapshot.inventory["lakelightlily"])
+        assertEquals(41L, snapshot.inventory["crownofinsight"])
+        assertTrue(snapshot.exportedInventoryKeys > 1_000)
+        assertEquals(1_177, snapshot.artifacts.size)
+        assertEquals(280, snapshot.weapons.size)
+        assertEquals("MaidenBeloved", snapshot.artifacts.first().setKey)
+        assertEquals("RecurveBow", snapshot.weapons.first().key)
+    }
+
+    @Test
+    fun `rejects json that is not in GOOD format`() {
+        val exception = assertFailsWith<GoodImportException> {
+            service.parse("""{"format":"something-else","version":3}""".toByteArray())
+        }
+
+        assertEquals("good.error.invalidFormat", exception.messageKey)
+    }
+
+    @Test
+    fun `stores and reloads the validated GOOD export`() {
+        val properties = GenshinContentProperties().also {
+            it.cacheDirectory = temporaryDirectory.toString()
+        }
+        val bytes = Files.readAllBytes(SAMPLE_EXPORT)
+        val store = PlayerSnapshotStore(properties, service, objectMapper)
+
+        val saved = store.save(USER_ONE_ID, bytes)
+        val updated = store.updateInventoryAmount(USER_ONE_ID, "heroswit", 999)
+        val reloaded = PlayerSnapshotStore(properties, service, objectMapper).current(USER_ONE_ID)
+
+        assertEquals(81, saved.characters.size)
+        assertEquals(999L, updated.inventory["heroswit"])
+        assertEquals(81, reloaded?.characters?.size)
+        assertEquals(999L, reloaded?.inventory?.get("heroswit"))
+        assertTrue(
+            Files.isRegularFile(
+                temporaryDirectory.resolve("player-data/$USER_ONE_ID/current-good.json"),
+            ),
+        )
+        assertTrue(
+            Files.isRegularFile(
+                temporaryDirectory.resolve("player-data/$USER_ONE_ID/inventory-overrides.json"),
+            ),
+        )
+    }
+
+    @Test
+    fun `keeps imported inventories isolated by user id`() {
+        val properties = GenshinContentProperties().also {
+            it.cacheDirectory = temporaryDirectory.toString()
+        }
+        val bytes = Files.readAllBytes(SAMPLE_EXPORT)
+        val store = PlayerSnapshotStore(properties, service, objectMapper)
+
+        store.save(USER_ONE_ID, bytes)
+        store.save(USER_TWO_ID, bytes)
+        store.updateInventoryAmount(USER_ONE_ID, "heroswit", 999)
+
+        assertEquals(999L, store.current(USER_ONE_ID)?.inventory?.get("heroswit"))
+        assertEquals(78L, store.current(USER_TWO_ID)?.inventory?.get("heroswit"))
+        assertTrue(store.filePath(USER_ONE_ID) != store.filePath(USER_TWO_ID))
+    }
+
+    companion object {
+        val SAMPLE_EXPORT: Path = Path.of("src", "data", "genshin_export_1.json")
+        const val USER_ONE_ID = 11L
+        const val USER_TWO_ID = 22L
+    }
+}

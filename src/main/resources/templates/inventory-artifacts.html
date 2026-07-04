@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{artifacts.title}">Artifacts · Genshin Archive</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+</head>
+<body>
+<header th:replace="~{fragments :: siteHeader('inventory')}"></header>
+<main class="inventory-page">
+    <section class="inventory-intro compact-intro">
+        <p class="eyebrow" th:text="#{inventory.good}">GOOD Inventory</p>
+        <h1 th:text="#{inventory.artifacts}">Artifacts</h1>
+        <p class="lead" th:text="${snapshot == null
+            ? #messages.msg('inventory.import.first')
+            : #messages.msg('artifacts.summary', totalItems)}">Artifacts</p>
+    </section>
+    <nav class="inventory-tabs">
+        <a th:href="@{/inventory/items}" th:text="#{inventory.items}">Items</a>
+        <a th:href="@{/inventory/missing}" th:text="#{inventory.missing}">Missing Materials</a>
+        <a class="active" th:href="@{/inventory/artifacts}"
+           th:text="#{inventory.artifacts}">Artifacts</a>
+        <a th:href="@{/inventory/artifact-optimizer}"
+           th:text="#{inventory.optimizer}">Optimizer</a>
+        <a th:href="@{/inventory/weapons}" th:text="#{inventory.weapons}">Weapons</a>
+    </nav>
+    <section class="inventory-section" th:if="${snapshot != null}">
+        <div class="flash success" th:if="${successMessage != null}"
+             th:text="${successMessage}">Artifact saved.
+        </div>
+        <div class="flash error" th:if="${errorMessage != null}"
+             th:text="${errorMessage}">Artifact could not be changed.
+        </div>
+        <form class="inventory-search artifact-filters" th:action="@{/inventory/artifacts}" method="get">
+            <input type="search" name="query" th:value="${query}"
+                   th:placeholder="#{artifacts.search}" placeholder="Set, stat, or character…">
+            <select name="slot">
+                <option value="all" th:selected="${selectedSlot == 'all'}"
+                        th:text="#{artifacts.allSlots}">All slots
+                </option>
+                <option value="flower" th:selected="${selectedSlot == 'flower'}"
+                        th:text="#{artifacts.slot.flower}">Flower
+                </option>
+                <option value="plume" th:selected="${selectedSlot == 'plume'}"
+                        th:text="#{artifacts.slot.plume}">Plume
+                </option>
+                <option value="sands" th:selected="${selectedSlot == 'sands'}"
+                        th:text="#{artifacts.slot.sands}">Sands
+                </option>
+                <option value="goblet" th:selected="${selectedSlot == 'goblet'}"
+                        th:text="#{artifacts.slot.goblet}">Goblet
+                </option>
+                <option value="circlet" th:selected="${selectedSlot == 'circlet'}"
+                        th:text="#{artifacts.slot.circlet}">Circlet
+                </option>
+            </select>
+            <button type="submit" th:text="#{action.filter}">Filter</button>
+        </form>
+        <div class="artifact-toolbar">
+            <button class="primary-button" id="open-artifact-create" type="button"
+                    th:text="#{artifacts.create.heading}">Define a new artifact
+            </button>
+        </div>
+        <div class="artifact-grid">
+            <article class="artifact-card" th:each="row : ${artifacts}"
+                     th:with="artifact=${row.artifact}">
+                <div class="artifact-card-top">
+                    <div class="artifact-icon" th:classappend="${'rarity-' + artifact.rarity}">
+                        <img th:if="${artifactIcons[artifact.imageKey] != null}"
+                             th:src="${artifactIcons[artifact.imageKey]}"
+                             th:alt="${artifact.setName + ' · '
+                                + #messages.msg('artifacts.slot.' + artifact.slotKey)}"
+                             loading="lazy">
+                    </div>
+                    <div class="artifact-card-title">
+                        <div class="artifact-heading">
+                            <span th:text="${artifact.rarity + ' ★ · +' + artifact.level}">5 ★</span>
+                            <span th:if="${artifact.locked}">🔒</span>
+                        </div>
+                        <p class="artifact-slot"
+                           th:text="${#messages.msg('artifacts.slot.' + artifact.slotKey)}">Flower</p>
+                        <h2 th:text="${artifact.setName}">Set</h2>
+                    </div>
+                </div>
+                <div class="artifact-main-stat">
+                    <span th:text="${artifact.mainStatName}">HP</span>
+                </div>
+                <ul>
+                    <li th:each="stat : ${artifact.substats}">
+                        <span th:text="${stat.name}">CRIT</span>
+                        <b th:text="${#numbers.formatDecimal(stat.value, 1, 1)}">0</b>
+                    </li>
+                </ul>
+                <p class="equipped-label" th:if="${artifact.location != null}"
+                   th:text="#{artifacts.equipped(${artifact.location})}">Equipped</p>
+                <div class="artifact-flags" th:if="${artifact.astralMark || artifact.elixirCrafted}">
+                    <span th:if="${artifact.astralMark}"
+                          th:text="#{artifacts.astralMark}">Astral Mark</span>
+                    <span th:if="${artifact.elixirCrafted}"
+                          th:text="#{artifacts.elixirCrafted}">Elixir Crafted</span>
+                </div>
+                <button class="artifact-manage-button" type="button"
+                        th:attr="data-index=${row.inventoryIndex},
+                            data-set-key=${artifact.setKey},
+                            data-slot-key=${artifact.slotKey},
+                            data-rarity=${artifact.rarity},
+                            data-level=${artifact.level},
+                            data-total-rolls=${artifact.totalRolls},
+                            data-main-stat-key=${artifact.mainStatKey},
+                            data-location=${artifact.location},
+                            data-locked=${artifact.locked},
+                            data-astral-mark=${artifact.astralMark},
+                            data-elixir-crafted=${artifact.elixirCrafted},
+                            data-substat0-key=${row.editorSubstats[0].key},
+                            data-substat0-value=${row.editorSubstats[0].value},
+                            data-substat1-key=${row.editorSubstats[1].key},
+                            data-substat1-value=${row.editorSubstats[1].value},
+                            data-substat2-key=${row.editorSubstats[2].key},
+                            data-substat2-value=${row.editorSubstats[2].value},
+                            data-substat3-key=${row.editorSubstats[3].key},
+                            data-substat3-value=${row.editorSubstats[3].value}"
+                        th:text="#{artifacts.manage}">Manage artifact
+                </button>
+            </article>
+        </div>
+        <nav class="pagination" th:if="${totalPages > 1}">
+            <a th:if="${page > 0}"
+               th:href="@{/inventory/artifacts(page=${page - 1},query=${query},
+                    slot=${selectedSlot},character=${selectedArtifactCharacter})}"
+               th:text="#{pagination.previous}">← Previous</a>
+            <span th:text="#{pagination.page(${page + 1},${totalPages})}">Page 1</span>
+            <a th:if="${page + 1 < totalPages}"
+               th:href="@{/inventory/artifacts(page=${page + 1},query=${query},
+                    slot=${selectedSlot},character=${selectedArtifactCharacter})}"
+               th:text="#{pagination.next}">Next →</a>
+        </nav>
+        <dialog class="artifact-dialog" id="artifact-create-dialog"
+                aria-labelledby="artifact-create-title">
+            <div class="artifact-dialog-shell">
+                <header class="artifact-dialog-header">
+                    <div>
+                        <p class="eyebrow" th:text="#{inventory.artifacts}">Artifacts</p>
+                        <h2 id="artifact-create-title" th:text="#{artifacts.create.heading}">
+                            Define a new artifact
+                        </h2>
+                    </div>
+                    <button class="artifact-dialog-close" type="button" data-dialog-close
+                            aria-label="Close"
+                            th:attr="aria-label=#{artifacts.dialog.close}">×
+                    </button>
+                </header>
+                <form class="artifact-editor-form" id="artifact-create-form" method="post"
+                      th:action="@{/inventory/artifacts/create}"
+                      th:attr="data-roll-required=#{artifacts.rollBuilder.required},
+                        data-roll-limit=#{artifacts.rollBuilder.limit}">
+                    <input type="hidden" name="totalRolls" class="artifact-total-rolls">
+                    <label>
+                        <span th:text="#{artifacts.set}">Set</span>
+                        <select name="setKey" required>
+                            <option th:each="set : ${artifactSetOptions}"
+                                    th:value="${set.key}" th:text="${set.value}">
+                                Set
+                            </option>
+                        </select>
+                    </label>
+                    <div class="artifact-editor-main">
+                        <label>
+                            <span th:text="#{artifacts.slot}">Slot</span>
+                            <select name="slotKey" class="artifact-slot-select">
+                                <option value="flower" th:text="#{artifacts.slot.flower}">Flower</option>
+                                <option value="plume" th:text="#{artifacts.slot.plume}">Plume</option>
+                                <option value="sands" th:text="#{artifacts.slot.sands}">Sands</option>
+                                <option value="goblet" th:text="#{artifacts.slot.goblet}">Goblet</option>
+                                <option value="circlet" th:text="#{artifacts.slot.circlet}">Circlet</option>
+                            </select>
+                        </label>
+                        <label>
+                            <span th:text="#{artifacts.rarity}">Rarity</span>
+                            <select name="rarity" class="artifact-rarity-select">
+                                <option value="5" selected>5 ★</option>
+                                <option value="4">4 ★</option>
+                                <option value="3">3 ★</option>
+                                <option value="2">2 ★</option>
+                                <option value="1">1 ★</option>
+                            </select>
+                        </label>
+                        <label>
+                            <span th:text="#{character.level}">Level</span>
+                            <input type="number" name="level" class="artifact-level-input"
+                                   min="0" max="20" value="20" required>
+                        </label>
+                        <label>
+                            <span th:text="#{artifacts.mainStat}">Main Stat</span>
+                            <select name="mainStatKey" class="artifact-main-stat-select">
+                                <option th:each="option : ${artifactMainStatOptions}"
+                                        th:value="${option.key}"
+                                        th:attr="data-slots=${#strings.listJoin(
+                                        artifactMainStatSlots[option.key], ',')}"
+                                        th:text="${#messages.msg(option.messageKey)}">
+                                    HP
+                                </option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="artifact-value-mode" role="group"
+                         th:attr="aria-label=#{artifacts.rollBuilder.mode}">
+                        <button class="is-active" type="button" data-artifact-value-mode="direct">
+                            <span aria-hidden="true">⌨</span>
+                            <b th:text="#{artifacts.rollBuilder.direct}">Enter values</b>
+                            <small th:text="#{artifacts.rollBuilder.directHelp}">
+                                Type the combined values directly
+                            </small>
+                        </button>
+                        <button type="button" data-artifact-value-mode="rolls">
+                            <span aria-hidden="true">✦</span>
+                            <b th:text="#{artifacts.rollBuilder.rolls}">Build from rolls</b>
+                            <small th:text="#{artifacts.rollBuilder.rollsHelp}">
+                                Click Tier 1–4 rolls to add them
+                            </small>
+                        </button>
+                    </div>
+                    <div class="artifact-roll-budget" aria-live="polite">
+                        <div>
+                            <span th:text="#{artifacts.rollBuilder.budget}">Roll budget</span>
+                            <strong>
+                                <output data-roll-count>0</output>
+                                <span>/</span>
+                                <output data-roll-maximum>9</output>
+                            </strong>
+                        </div>
+                        <div class="artifact-roll-budget-track"><span></span></div>
+                        <small th:text="#{artifacts.rollBuilder.fiveStarOnly}">
+                            The roll builder uses the 5★ roll table.
+                        </small>
+                    </div>
+                    <div class="artifact-editor-substats">
+                        <span th:text="#{artifacts.substats}">Substats</span>
+                        <div class="artifact-substat-row" data-roll-row
+                             th:each="number : ${#numbers.sequence(0,3)}">
+                            <select name="substatKeys" class="artifact-substat-key">
+                                <option value="" th:text="#{artifacts.noSubstat}">None</option>
+                                <option th:each="option : ${artifactSubstatOptions}"
+                                        th:value="${option.key}"
+                                        th:text="${#messages.msg(option.messageKey)}">
+                                    CRIT Rate
+                                </option>
+                            </select>
+                            <div class="artifact-direct-value">
+                                <input type="number" name="substatValues" min="0" step="0.001"
+                                       placeholder="0">
+                            </div>
+                            <div class="artifact-roll-builder">
+                                <div class="artifact-roll-total">
+                                    <span th:text="#{artifacts.rollBuilder.total}">Total</span>
+                                    <output data-roll-total>0</output>
+                                    <small data-roll-row-count>0 rolls</small>
+                                </div>
+                                <div class="artifact-roll-options" data-roll-options></div>
+                                <div class="artifact-selected-rolls" data-selected-rolls></div>
+                                <p data-roll-empty th:text="#{artifacts.rollBuilder.selectStat}">
+                                    Select a substat to show its roll tiers.
+                                </p>
+                                <p class="artifact-roll-error" data-roll-error></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="artifact-editor-flags">
+                        <label><input type="checkbox" name="locked" value="true">
+                            <span th:text="#{artifacts.locked}">Locked</span></label>
+                        <label><input type="checkbox" name="astralMark" value="true">
+                            <span th:text="#{artifacts.astralMark}">Astral Mark</span></label>
+                        <label><input type="checkbox" name="elixirCrafted" value="true">
+                            <span th:text="#{artifacts.elixirCrafted}">
+                                Elixir Crafted
+                            </span>
+                        </label>
+                    </div>
+                    <button class="primary-button" type="submit"
+                            th:text="#{artifacts.create.action}">Create artifact
+                    </button>
+                </form>
+            </div>
+        </dialog>
+        <dialog class="artifact-dialog" id="artifact-change-dialog"
+                aria-labelledby="artifact-change-title"
+                th:attr="data-preferred-character=${selectedArtifactCharacter}">
+            <div class="artifact-dialog-shell">
+                <header class="artifact-dialog-header">
+                    <div>
+                        <p class="eyebrow" th:text="#{inventory.artifacts}">Artifacts</p>
+                        <h2 id="artifact-change-title" th:text="#{artifacts.edit.heading}">
+                            Edit or level artifact
+                        </h2>
+                    </div>
+                    <button class="artifact-dialog-close" type="button" data-dialog-close
+                            aria-label="Close"
+                            th:attr="aria-label=#{artifacts.dialog.close}">×
+                    </button>
+                </header>
+                <section class="artifact-dialog-section">
+                    <h3 th:text="#{artifacts.assignTo}">Equip on character</h3>
+                    <form class="artifact-assignment-form" id="artifact-assignment-form"
+                          method="post" th:action="@{/inventory/artifacts/assign}">
+                        <input type="hidden" name="artifactIndex">
+                        <label>
+                            <span th:text="#{artifacts.assignTo}">Equip on character</span>
+                            <select name="location">
+                                <option value="" th:text="#{artifacts.unequipped}">Unequipped</option>
+                                <option th:each="character : ${artifactCharacters}"
+                                        th:value="${character.key}" th:text="${character.name}">
+                                    Furina
+                                </option>
+                            </select>
+                        </label>
+                        <button class="text-button" type="submit"
+                                th:text="#{artifacts.assign}">Assign / switch
+                        </button>
+                    </form>
+                </section>
+                <section class="artifact-dialog-section artifact-edit-section" id="artifact-edit-section">
+                    <h3 th:text="#{artifacts.edit.heading}">Level artifact</h3>
+                    <form class="artifact-editor-form" id="artifact-edit-form" method="post"
+                          th:action="@{/inventory/artifacts/update}">
+                        <input type="hidden" name="artifactIndex">
+                        <input type="hidden" name="setKey">
+                        <input type="hidden" name="slotKey">
+                        <input type="hidden" name="rarity">
+                        <input type="hidden" name="mainStatKey">
+                        <input type="hidden" name="totalRolls">
+                        <div class="artifact-editor-main">
+                            <label>
+                                <span th:text="#{character.level}">Level</span>
+                                <input type="number" name="level" class="artifact-level-input"
+                                       min="0" required>
+                            </label>
+                        </div>
+
+                        <div class="artifact-editor-substats">
+                            <span th:text="#{artifacts.substats}">Substats</span>
+                            <div th:each="number : ${#numbers.sequence(0,3)}">
+                                <select name="substatKeys">
+                                    <option value="" th:text="#{artifacts.noSubstat}">None</option>
+                                    <option th:each="option : ${artifactSubstatOptions}"
+                                            th:value="${option.key}"
+                                            th:text="${#messages.msg(option.messageKey)}">
+                                        CRIT Rate
+                                    </option>
+                                </select>
+                                <input type="number" name="substatValues" min="0" step="0.1"
+                                       placeholder="0">
+                            </div>
+                        </div>
+                        <div class="artifact-editor-flags">
+                            <label><input type="checkbox" name="locked" value="true">
+                                <span th:text="#{artifacts.locked}">Locked</span></label>
+                            <label><input type="checkbox" name="astralMark" value="true">
+                                <span th:text="#{artifacts.astralMark}">Astral Mark</span></label>
+                            <label><input type="checkbox" name="elixirCrafted" value="true">
+                                <span th:text="#{artifacts.elixirCrafted}">
+                                    Elixir Crafted
+                                </span>
+                            </label>
+                        </div>
+                        <button class="primary-button" type="submit"
+                                th:text="#{artifacts.edit.action}">Save artifact changes
+                        </button>
+                    </form>
+                </section>
+            </div>
+        </dialog>
+    </section>
+</main>
+<script>
+  (() => {
+    const maximumLevels = {1: 4, 2: 4, 3: 12, 4: 16, 5: 20};
+    const formControllers = new Map();
+
+    const setupArtifactForm = form => {
+      const slot = form.querySelector(".artifact-slot-select");
+      const mainStat = form.querySelector(".artifact-main-stat-select");
+      const rarity = form.querySelector(".artifact-rarity-select");
+      const level = form.querySelector(".artifact-level-input");
+      if (!slot || !mainStat || !rarity || !level) return null;
+
+      const refreshMainStats = () => {
+        let firstAvailable = null;
+        Array.from(mainStat.options).forEach(option => {
+          const available = (option.dataset.slots ?? "").split(",").includes(slot.value);
+          option.hidden = !available;
+          option.disabled = !available;
+          if (available && !firstAvailable) firstAvailable = option;
+        });
+        if (mainStat.selectedOptions[0]?.disabled && firstAvailable) {
+          firstAvailable.selected = true;
+        }
+      };
+      const refreshLevel = () => {
+        const maximum = maximumLevels[rarity.value] ?? 20;
+        level.max = maximum;
+        if (Number(level.value) > maximum) level.value = maximum;
+      };
+      slot.addEventListener("change", refreshMainStats);
+      rarity.addEventListener("change", refreshLevel);
+      refreshMainStats();
+      refreshLevel();
+      return {refreshMainStats, refreshLevel};
+    };
+
+    document.querySelectorAll(".artifact-editor-form").forEach(form => {
+      formControllers.set(form, setupArtifactForm(form));
+    });
+
+    const substatRollValues = {
+      hp: [209.13, 239.0, 268.88, 298.75],
+      hp_: [4.08, 4.66, 5.25, 5.83],
+      atk: [13.62, 15.56, 17.51, 19.45],
+      atk_: [4.08, 4.66, 5.25, 5.83],
+      def: [16.2, 18.52, 20.83, 23.15],
+      def_: [5.1, 5.83, 6.56, 7.29],
+      critRate_: [2.72, 3.11, 3.5, 3.89],
+      critDMG_: [5.44, 6.22, 6.99, 7.77],
+      enerRech_: [4.53, 5.18, 5.83, 6.48],
+      eleMas: [16.32, 18.65, 20.98, 23.31]
+    };
+
+    const setupRollBuilder = form => {
+      if (!form) return null;
+      const rows = Array.from(form.querySelectorAll("[data-roll-row]"));
+      const modeButtons = Array.from(form.querySelectorAll("[data-artifact-value-mode]"));
+      const rollModeButton = modeButtons.find(button =>
+        button.dataset.artifactValueMode === "rolls"
+      );
+      const rarity = form.querySelector('[name="rarity"]');
+      const level = form.querySelector('[name="level"]');
+      const mainStat = form.querySelector('[name="mainStatKey"]');
+      const totalRollsInput = form.querySelector('[name="totalRolls"]');
+      const rollCount = form.querySelector("[data-roll-count]");
+      const rollMaximum = form.querySelector("[data-roll-maximum]");
+      const budget = form.querySelector(".artifact-roll-budget");
+      const budgetHint = budget?.querySelector(":scope > small");
+      const defaultBudgetHint = budgetHint?.textContent ?? "";
+      const states = new Map(rows.map(row => [row, []]));
+      let mode = "direct";
+
+      const trimNumber = value =>
+        String(Math.round((value + Number.EPSILON) * 1000) / 1000);
+      const formatRoll = (key, value) => {
+        const formatted = trimNumber(value);
+        return key.endsWith("_") ? `${formatted}%` : formatted;
+      };
+      const maximumRolls = () =>
+        Math.min(9, 4 + Math.floor(Number(level?.value || 0) / 4));
+      const usedRolls = () =>
+        Array.from(states.values()).reduce((sum, rolls) => sum + rolls.length, 0);
+
+      const animateLimit = element => {
+        element?.classList.remove("is-limit");
+        void element?.offsetWidth;
+        element?.classList.add("is-limit");
+      };
+
+      const refreshSubstatOptions = () => {
+        const selects = rows.map(row => row.querySelector('[name="substatKeys"]'));
+        selects.forEach((select, index) => {
+          if (select?.value && select.value === mainStat?.value) {
+            select.value = "";
+            states.get(rows[index]).splice(0);
+          }
+        });
+        const chosen = selects.map(select => select?.value).filter(Boolean);
+        selects.forEach(select => {
+          Array.from(select?.options ?? []).forEach(option => {
+            if (!option.value) return;
+            option.disabled =
+              option.value === mainStat?.value ||
+              (option.value !== select.value && chosen.includes(option.value));
+          });
+        });
+      };
+
+      const updateBudget = () => {
+        const used = usedRolls();
+        const maximum = maximumRolls();
+        if (rollCount) rollCount.value = used;
+        if (rollMaximum) rollMaximum.value = maximum;
+        if (totalRollsInput) {
+          totalRollsInput.value = mode === "rolls" && used > 0 ? used : "";
+        }
+        budget?.style.setProperty(
+          "--roll-progress",
+          `${Math.min(100, maximum > 0 ? used / maximum * 100 : 0)}%`
+        );
+        budget?.classList.toggle("is-over-limit", used > maximum);
+        if (budgetHint) {
+          budgetHint.textContent =
+            used > maximum ? form.dataset.rollLimit : defaultBudgetHint;
+        }
+      };
+
+      const updateRow = row => {
+        const key = row.querySelector('[name="substatKeys"]')?.value ?? "";
+        const input = row.querySelector('[name="substatValues"]');
+        const options = row.querySelector("[data-roll-options]");
+        const selected = row.querySelector("[data-selected-rolls]");
+        const empty = row.querySelector("[data-roll-empty]");
+        const rowCount = row.querySelector("[data-roll-row-count]");
+        const rolls = states.get(row);
+        const values = substatRollValues[key];
+        const rowMaximum = 1 + Math.floor(Number(level?.value || 0) / 4);
+        const atGlobalLimit = usedRolls() >= maximumRolls();
+
+        options.replaceChildren();
+        selected.replaceChildren();
+        empty.hidden = Boolean(values);
+        if (rowCount) rowCount.textContent = `${rolls.length}×`;
+
+        if (values) {
+          values.forEach((value, index) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = `artifact-roll-tier tier-${index + 1}`;
+            button.innerHTML =
+              `<b>T${index + 1}</b><span>${formatRoll(key, value)}</span>`;
+            button.disabled = rolls.length >= rowMaximum || atGlobalLimit;
+            button.addEventListener("click", () => {
+              if (rolls.length >= rowMaximum || usedRolls() >= maximumRolls()) {
+                animateLimit(row);
+                return;
+              }
+              rolls.push({tier: index + 1, value});
+              row.classList.remove("has-roll-error");
+              updateAllRows();
+              row.classList.add("has-new-roll");
+              window.setTimeout(() => row.classList.remove("has-new-roll"), 260);
+            });
+            options.append(button);
+          });
+        }
+
+        rolls.forEach((roll, index) => {
+          const chip = document.createElement("button");
+          chip.type = "button";
+          chip.className = `artifact-selected-roll tier-${roll.tier}`;
+          chip.innerHTML =
+            `<span>T${roll.tier}</span><b>${formatRoll(key, roll.value)}</b><i>×</i>`;
+          chip.addEventListener("click", () => {
+            rolls.splice(index, 1);
+            updateAllRows();
+          });
+          selected.append(chip);
+        });
+
+        if (input && mode === "rolls") {
+          input.value = rolls.length
+            ? trimNumber(rolls.reduce((sum, roll) => sum + roll.value, 0))
+            : "";
+        }
+        row.querySelector("[data-roll-total]").value =
+          rolls.length && key
+            ? formatRoll(key, rolls.reduce((sum, roll) => sum + roll.value, 0))
+            : "0";
+      };
+
+      const updateAllRows = () => {
+        refreshSubstatOptions();
+        rows.forEach(updateRow);
+        updateBudget();
+      };
+
+      const setMode = (nextMode, clearRolls = false) => {
+        if (nextMode === "rolls" && rarity?.value !== "5") return;
+        mode = nextMode;
+        form.dataset.valueMode = mode;
+        modeButtons.forEach(button => {
+          button.classList.toggle(
+            "is-active",
+            button.dataset.artifactValueMode === mode
+          );
+        });
+        if (clearRolls) {
+          states.forEach(rolls => rolls.splice(0));
+          rows.forEach(row => {
+            const input = row.querySelector('[name="substatValues"]');
+            if (input) input.value = "";
+          });
+        }
+        updateAllRows();
+      };
+
+      modeButtons.forEach(button => {
+        button.addEventListener("click", () => {
+          const nextMode = button.dataset.artifactValueMode;
+          setMode(nextMode, nextMode === "rolls" && mode !== "rolls");
+        });
+      });
+      rows.forEach(row => {
+        row.querySelector('[name="substatKeys"]')?.addEventListener("change", () => {
+          states.get(row).splice(0);
+          row.classList.remove("has-roll-error");
+          updateAllRows();
+        });
+      });
+      level?.addEventListener("input", updateAllRows);
+      mainStat?.addEventListener("change", updateAllRows);
+      rarity?.addEventListener("change", () => {
+        const fiveStar = rarity.value === "5";
+        if (rollModeButton) rollModeButton.disabled = !fiveStar;
+        if (!fiveStar && mode === "rolls") setMode("direct", true);
+        updateAllRows();
+      });
+      form.addEventListener("submit", event => {
+        if (mode !== "rolls") {
+          if (totalRollsInput) totalRollsInput.value = "";
+          return;
+        }
+        let firstInvalid = null;
+        rows.forEach(row => {
+          const hasStat = Boolean(row.querySelector('[name="substatKeys"]')?.value);
+          const invalid = hasStat && states.get(row).length === 0;
+          row.classList.toggle("has-roll-error", invalid);
+          const error = row.querySelector("[data-roll-error]");
+          if (error) error.textContent = invalid ? form.dataset.rollRequired : "";
+          if (invalid && !firstInvalid) firstInvalid = row;
+        });
+        if (usedRolls() > maximumRolls()) {
+          firstInvalid = firstInvalid ?? budget;
+          animateLimit(budget);
+        }
+        if (firstInvalid) {
+          event.preventDefault();
+          firstInvalid.scrollIntoView({behavior: "smooth", block: "center"});
+        }
+      });
+
+      const reset = () => {
+        states.forEach(rolls => rolls.splice(0));
+        rows.forEach(row => {
+          row.classList.remove("has-roll-error", "has-new-roll", "is-limit");
+          const error = row.querySelector("[data-roll-error]");
+          if (error) error.textContent = "";
+        });
+        if (rollModeButton) rollModeButton.disabled = rarity?.value !== "5";
+        setMode("direct");
+      };
+
+      reset();
+      return {reset};
+    };
+
+    const createDialog = document.querySelector("#artifact-create-dialog");
+    const createForm = document.querySelector("#artifact-create-form");
+    const createRollBuilder = setupRollBuilder(createForm);
+    document.querySelector("#open-artifact-create")?.addEventListener("click", () => {
+      createForm?.reset();
+      formControllers.get(createForm)?.refreshMainStats();
+      formControllers.get(createForm)?.refreshLevel();
+      createRollBuilder?.reset();
+      createDialog?.showModal();
+    });
+
+    const changeDialog = document.querySelector("#artifact-change-dialog");
+    const assignmentForm = document.querySelector("#artifact-assignment-form");
+    const editSection = document.querySelector("#artifact-edit-section");
+    const editForm = document.querySelector("#artifact-edit-form");
+    const editController = formControllers.get(editForm);
+
+    const setFieldValue = (form, name, value) => {
+      const field = form?.querySelector(`[name="${name}"]`);
+      if (field) field.value = value ?? "";
+    };
+
+    document.querySelectorAll(".artifact-manage-button").forEach(button => {
+      button.addEventListener("click", () => {
+        if (!changeDialog || !assignmentForm || !editForm) return;
+
+        setFieldValue(assignmentForm, "artifactIndex", button.dataset.index);
+        const preferredCharacter = changeDialog.dataset.preferredCharacter;
+        setFieldValue(
+          assignmentForm,
+          "location",
+          preferredCharacter || button.dataset.location || ""
+        );
+        if (editSection) {
+          editSection.hidden = Number(button.dataset.level) >= 20;
+        }
+
+        setFieldValue(editForm, "artifactIndex", button.dataset.index);
+        setFieldValue(editForm, "setKey", button.dataset.setKey);
+        setFieldValue(editForm, "slotKey", button.dataset.slotKey);
+        setFieldValue(editForm, "rarity", button.dataset.rarity);
+        setFieldValue(editForm, "level", button.dataset.level);
+        setFieldValue(editForm, "totalRolls", button.dataset.totalRolls);
+        editController?.refreshMainStats();
+        setFieldValue(editForm, "mainStatKey", button.dataset.mainStatKey);
+        editController?.refreshMainStats();
+        editController?.refreshLevel();
+
+        editForm.querySelectorAll('[name="substatKeys"]').forEach((field, index) => {
+          field.value = button.getAttribute(`data-substat${index}-key`) ?? "";
+        });
+        editForm.querySelectorAll('[name="substatValues"]').forEach((field, index) => {
+          field.value = button.getAttribute(`data-substat${index}-value`) ?? "";
+        });
+        editForm.querySelector('[name="locked"]').checked =
+          button.dataset.locked === "true";
+        editForm.querySelector('[name="astralMark"]').checked =
+          button.dataset.astralMark === "true";
+        editForm.querySelector('[name="elixirCrafted"]').checked =
+          button.dataset.elixirCrafted === "true";
+
+        changeDialog.showModal();
+      });
+    });
+
+    document.querySelectorAll("[data-dialog-close]").forEach(button => {
+      button.addEventListener("click", () => button.closest("dialog")?.close());
+    });
+
+    document.querySelectorAll(".artifact-dialog").forEach(dialog => {
+      dialog.addEventListener("click", event => {
+        if (event.target === dialog) dialog.close();
+      });
+    });
+  })();
+</script>
+</body>
+</html>

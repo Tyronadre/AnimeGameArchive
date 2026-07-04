@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{planning.title}">Inventory Planning · Genshin Archive</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+</head>
+<body>
+<header th:replace="~{fragments :: siteHeader('inventory')}"></header>
+
+<main class="inventory-page">
+    <section class="inventory-intro">
+        <p class="eyebrow" th:text="#{planning.overall}">Overall planning</p>
+        <h1 th:text="#{inventory.missing}">Missing Materials</h1>
+        <p class="lead" th:text="#{planning.lead}">
+            The combined requirements of all imported characters for level 80, ascension 6,
+            and talents 9/9/9 — your inventory is deducted exactly once.
+        </p>
+    </section>
+
+    <div class="flash success" th:if="${successMessage != null}" th:text="${successMessage}">
+        Imported.
+    </div>
+    <div class="flash error" th:if="${errorMessage != null}" th:text="${errorMessage}">
+        Error.
+    </div>
+
+    <nav class="inventory-tabs" th:attr="aria-label=#{inventory.sections}">
+        <a th:href="@{/inventory/items}" th:text="#{inventory.items}">Items</a>
+        <a class="active" th:href="@{/inventory/missing}"
+           th:text="#{inventory.missing}">Missing Materials</a>
+        <a th:href="@{/inventory/artifacts}" th:text="#{inventory.artifacts}">Artifacts</a>
+        <a th:href="@{/inventory/artifact-optimizer}"
+           th:text="#{inventory.optimizer}">Optimizer</a>
+        <a th:href="@{/inventory/weapons}" th:text="#{inventory.weapons}">Weapons</a>
+    </nav>
+
+    <section class="empty-state inventory-empty" th:if="${plan == null}">
+        <span>◇</span>
+        <h2 th:text="#{inventory.empty.heading}">No GOOD export imported yet</h2>
+        <p th:text="#{planning.empty.text}">
+            After uploading, your total material requirements and all character plans appear here.
+        </p>
+    </section>
+
+    <div th:if="${plan != null}">
+        <section class="import-summary">
+            <div>
+                <span th:text="#{planning.format}">Format</span>
+                <strong th:text="${'GOOD v' + plan.snapshot.formatVersion}">GOOD v3</strong>
+            </div>
+            <div>
+                <span th:text="#{planning.source}">Source</span>
+                <strong th:text="${plan.snapshot.source ?: #messages.msg('common.unknown')}">Irminsul</strong>
+            </div>
+            <div>
+                <span th:text="#{nav.characters}">Characters</span>
+                <strong th:text="${plan.matchedCharacters + ' / ' + plan.snapshot.characters.size()}">81</strong>
+            </div>
+            <div>
+                <span th:text="#{planning.inventoryEntries}">Inventory entries</span>
+                <strong th:text="${plan.snapshot.exportedInventoryKeys}">0</strong>
+            </div>
+            <div>
+                <span th:text="#{planning.missingKinds}">Missing material types</span>
+                <strong th:text="${plan.missingMaterialKinds}">0</strong>
+            </div>
+        </section>
+
+        <section class="unmatched-warning" th:if="${!plan.unmatchedCharacterKeys.isEmpty()}">
+            <strong th:text="#{planning.unmatched}">Unmatched characters:</strong>
+            <span th:text="${#strings.listJoin(plan.unmatchedCharacterKeys, ', ')}">Unknown</span>
+        </section>
+
+        <section id="material-breakdown" class="material-breakdown"
+                 th:if="${selectedMaterial != null}">
+            <div class="breakdown-heading">
+                <div class="material-icon">
+                    <img th:if="${selectedMaterial.imageUrl != null}"
+                         th:src="${selectedMaterial.imageUrl}"
+                         th:alt="${selectedMaterial.name}"
+                         onerror="this.remove()">
+                </div>
+                <div>
+                    <p class="eyebrow" th:text="#{planning.byCharacter}">Breakdown by character</p>
+                    <h2 th:text="${selectedMaterial.name}">Mora</h2>
+                </div>
+                <a class="breakdown-close" th:href="@{/inventory/missing}"
+                   th:attr="aria-label=#{planning.closeBreakdown}">×</a>
+            </div>
+            <dl class="breakdown-totals">
+                <div>
+                    <dt th:text="#{material.totalRequired}">Total required</dt>
+                    <dd th:text="${#numbers.formatInteger(selectedMaterial.required, 1, 'POINT')}">0</dd>
+                </div>
+                <div>
+                    <dt th:text="#{material.inInventory}">In inventory</dt>
+                    <dd th:text="${#numbers.formatInteger(selectedMaterial.owned, 1, 'POINT')}">0</dd>
+                </div>
+                <div>
+                    <dt th:text="#{material.craftable}">Craftable</dt>
+                    <dd th:text="${#numbers.formatInteger(selectedMaterial.craftable, 1, 'POINT')}">0</dd>
+                </div>
+                <div>
+                    <dt th:text="#{material.totalMissing}">Total missing</dt>
+                    <dd th:text="${#numbers.formatInteger(selectedMaterial.missing, 1, 'POINT')}">0</dd>
+                </div>
+            </dl>
+            <p class="breakdown-note" th:text="#{planning.breakdownNote}">
+                The values below are each character's contribution to the total requirement.
+                Shared inventory and craftable materials are deducted only from the total.
+            </p>
+            <div class="character-need-grid">
+                <a class="character-need-row" th:each="need : ${characterNeeds}"
+                   th:href="@{/characters/{key}(key=${need.character.key})}">
+                    <div class="player-character-icon">
+                        <span th:text="${#strings.substring(need.character.name, 0, 1)}">F</span>
+                        <img th:if="${need.character.iconImageUrl != null}"
+                             th:src="${need.character.iconImageUrl}"
+                             th:alt="${need.character.name}"
+                             loading="lazy" onerror="this.remove()">
+                    </div>
+                    <div>
+                        <strong th:text="${need.character.name}">Furina</strong>
+                        <span th:text="#{character.levelTalents(${need.state.level},
+                            ${need.state.normalTalent},${need.state.skillTalent},${need.state.burstTalent})}">
+                            Lv. 80
+                        </span>
+                    </div>
+                    <b th:text="${#numbers.formatInteger(need.required, 1, 'POINT')}">0</b>
+                </a>
+            </div>
+        </section>
+
+        <section class="inventory-section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow" th:text="#{planning.overall}">Overall planning</p>
+                    <h2 th:text="#{inventory.missing}">Missing Materials</h2>
+                </div>
+                <span th:text="#{planning.inventoryDeductedOnce}">Inventory is deducted only once here</span>
+            </div>
+
+            <div class="balance-grid" th:if="${!plan.missingMaterials.isEmpty()}">
+                <a class="balance-card balance-card-link" th:each="material : ${plan.missingMaterials}"
+                   th:classappend="${selectedMaterial != null && selectedMaterial.id == material.id
+                       ? ' selected' : ''}"
+                   th:href="@{/inventory/missing(materialId=${material.id})}">
+                    <div class="material-icon">
+                        <img th:if="${material.imageUrl != null}" th:src="${material.imageUrl}"
+                             th:alt="${material.name}" loading="lazy" onerror="this.remove()">
+                    </div>
+                    <div class="balance-copy">
+                        <h3 th:text="${material.name}">Mora</h3>
+                        <span class="material-category"
+                              th:text="${#messages.msg(material.category.messageKey)}">
+                            Collectable
+                        </span>
+                        <dl>
+                            <div>
+                                <dt th:text="#{material.required}">Required</dt>
+                                <dd th:text="${#numbers.formatInteger(material.required, 1, 'POINT')}">0</dd>
+                            </div>
+                            <div>
+                                <dt th:text="#{material.owned}">Owned</dt>
+                                <dd th:text="${#numbers.formatInteger(material.owned, 1, 'POINT')}">0</dd>
+                            </div>
+                            <div>
+                                <dt th:text="#{material.craftable}">Craftable</dt>
+                                <dd th:text="${#numbers.formatInteger(material.craftable, 1, 'POINT')}">0</dd>
+                            </div>
+                            <div class="missing-value">
+                                <dt th:text="#{material.missing}">Missing</dt>
+                                <dd th:text="${#numbers.formatInteger(material.missing, 1, 'POINT')}">0</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </a>
+            </div>
+            <div class="empty-state compact" th:if="${plan.missingMaterials.isEmpty()}">
+                <span>✓</span>
+                <h3 th:text="#{planning.allAvailable}">All materials available</h3>
+            </div>
+        </section>
+
+    </div>
+</main>
+</body>
+</html>

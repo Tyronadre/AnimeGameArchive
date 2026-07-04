@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{character.title(${character.name})}">Character · Genshin Archive</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+</head>
+<body>
+<header th:replace="~{fragments :: siteHeader('characters')}"></header>
+
+<main class="detail-page">
+    <section class="character-hero"
+             th:classappend="${character.element != null
+                ? ' element-' + #strings.toLowerCase(character.element)
+                : ' element-neutral'}">
+        <div class="hero-copy">
+            <p class="eyebrow"
+               th:text="${character.element ?: #messages.msg('character.fallback')}">Hydro</p>
+            <div class="character-heading">
+                <div class="character-icon">
+                    <span th:text="${#strings.substring(character.name, 0, 1)}">F</span>
+                    <img th:if="${character.iconImageUrl != null}"
+                         th:src="${character.iconImageUrl}"
+                         th:alt="${character.name + ' Icon'}"
+                         onerror="this.remove()">
+                </div>
+                <h1 th:text="${character.name}">Furina</h1>
+            </div>
+            <p class="character-title" th:if="${character.title != null}" th:text="${character.title}">Title</p>
+            <p class="lead" th:if="${character.description != null}" th:text="${character.description}">
+                Description
+            </p>
+            <div class="facts">
+                <span th:if="${character.rarity > 0}">
+                    <b th:text="${character.rarity + ' ★'}">5 ★</b>
+                    Rarity
+                </span>
+                <span th:if="${character.weapon != null}">
+                    <b th:text="${character.weapon}">Sword</b>
+                    Weapon
+                </span>
+                <span th:if="${character.region != null}">
+                    <b th:text="${character.region}">Fontaine</b>
+                   Region
+                </span>
+                <span th:if="${character.birthday != null}">
+                    <b th:text="${character.birthday}">October 13</b>
+                    Birthday
+                </span>
+                <span th:if="${character.constellation != null}">
+                    <b th:text="${character.constellation}">Constellation</b>
+                    Constellation
+                </span>
+            </div>
+            <div class="good-character-state" th:classappend="${progress.owned ? ' owned' : ' unowned'}">
+                <span class="good-label"
+                      th:text="${progress.owned
+                        ? #messages.msg('character.owned')
+                        : #messages.msg('character.unowned')}">Owned</span>
+                <strong th:if="${progress.owned}"
+                        th:text="#{character.levelAscension(${progress.level},${progress.ascension})}">
+                    Level 80 · Ascension 6
+                </strong>
+                <span th:if="${progress.owned}"
+                      th:text="#{character.constellationTalents(${progress.constellation},
+                        ${progress.normalTalent},${progress.skillTalent},${progress.burstTalent})}">
+                    C0 · Talents 8/8/8
+                </span>
+                <span class="good-source" th:if="${progress.owned && playerState != null}"
+                      th:text="#{character.fromGood}">
+                    Imported from GOOD
+                </span>
+                <span th:unless="${progress.owned}" th:text="#{character.unownedNote}">
+                    Marked as unowned for material planning.
+                </span>
+            </div>
+            <a class="inventory-hint" th:if="${!inventoryAvailable}" th:href="@{/inventory/items}"
+               th:text="#{character.importHint}">
+                Import a GOOD export to include ownership and inventory →
+            </a>
+            <a class="optimizer-character-link" th:if="${inventoryAvailable}"
+               th:href="@{/inventory/artifact-optimizer(character=${character.key})}">
+                <span aria-hidden="true">✦</span>
+                <span th:text="#{character.openOptimizer}">
+                    Optimize this character's artifacts
+                </span>
+                <b aria-hidden="true">→</b>
+            </a>
+        </div>
+        <div class="hero-art">
+            <div class="hero-orbit orbit-one" aria-hidden="true"></div>
+            <div class="hero-orbit orbit-two" aria-hidden="true"></div>
+            <span class="hero-spark spark-one" aria-hidden="true">✦</span>
+            <span class="hero-spark spark-two" aria-hidden="true">✧</span>
+            <span class="hero-spark spark-three" aria-hidden="true">✦</span>
+            <span class="hero-art-fallback" aria-hidden="true">✦</span>
+            <img th:if="${character.wishImageUrl != null}"
+                 th:src="${character.wishImageUrl}"
+                 th:alt="${character.name + ' Wish'}"
+                 decoding="async"
+                 fetchpriority="high"
+                 onerror="this.remove()">
+            <div class="wish-art-label" th:if="${character.wishImageUrl != null}">
+                <span aria-hidden="true">✦</span>
+                <span th:text="${character.rarity > 0
+                    ? #messages.msg('character.rarityWishArtwork', character.rarity)
+                    : #messages.msg('character.wishArtwork')}">5 ★ Wish Artwork</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="flash success" th:if="${successMessage != null}" th:text="${successMessage}">
+        Target saved.
+    </div>
+
+    <div class="detail-layout">
+        <section class="panel progress-panel">
+            <p class="eyebrow" th:text="#{character.progress}">Progress</p>
+            <h2 th:text="#{character.setTarget}">Set target</h2>
+            <p class="muted" th:text="#{character.progressHelp}">
+                The material list updates from your current and desired progress.
+            </p>
+
+            <form class="progress-form" method="post"
+                  th:action="@{/characters/{key}(key=${character.key})}">
+                <label class="ownership-toggle">
+                    <input type="checkbox" name="owned" value="true" th:checked="${progress.owned}">
+                    <span class="ownership-switch" aria-hidden="true"></span>
+                    <span>
+                        <b th:text="#{character.ownershipToggle}">Character owned</b>
+                        <small th:text="#{character.ownershipHelp}">
+                            Disable this if the character is not unlocked yet. Planning then starts at level 1.
+                        </small>
+                    </span>
+                </label>
+
+                <div class="form-section current-progress-fields">
+                    <h3 th:text="#{character.fallback}">Character</h3>
+                    <div class="field-pair">
+                        <label><span th:text="#{character.currentLevel}">Current level</span>
+                            <input type="number" name="level" min="1" max="90" th:value="${progress.level}">
+                        </label>
+                        <label><span th:text="#{character.targetLevel}">Target level</span>
+                            <input type="number" name="targetLevel" min="1" max="90"
+                                   th:value="${progress.targetLevel}">
+                        </label>
+                    </div>
+                    <div class="field-pair">
+                        <label><span th:text="#{character.ascensionPhase}">Ascension phase</span>
+                            <input type="number" name="ascension" min="0" max="6"
+                                   th:value="${progress.ascension}">
+                        </label>
+                        <label><span th:text="#{character.targetAscensionPhase}">Target ascension phase</span>
+                            <input type="number" name="targetAscension" min="0" max="6"
+                                   th:value="${progress.targetAscension}">
+                        </label>
+                    </div>
+                    <div class="field-pair single-field">
+                        <label><span th:text="#{character.constellations}">Constellations</span>
+                            <input type="number" name="constellation" min="0" max="6"
+                                   th:value="${progress.constellation}">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 th:text="#{character.talents}">Talents</h3>
+                    <div class="talent-row">
+                        <span th:text="#{character.normalAttack}">Normal Attack</span>
+                        <input th:attr="aria-label=#{character.currentNormalAttack}"
+                               type="number" name="normalTalent"
+                               min="1" max="10" th:value="${progress.normalTalent}">
+                        <span>→</span>
+                        <input th:attr="aria-label=#{character.targetNormalAttack}"
+                               type="number" name="targetNormalTalent"
+                               min="1" max="10" th:value="${progress.targetNormalTalent}">
+                    </div>
+                    <div class="talent-row">
+                        <span th:text="#{character.elementalSkill}">Elemental Skill</span>
+                        <input th:attr="aria-label=#{character.currentElementalSkill}"
+                               type="number" name="skillTalent"
+                               min="1" max="10" th:value="${progress.skillTalent}">
+                        <span>→</span>
+                        <input th:attr="aria-label=#{character.targetElementalSkill}"
+                               type="number" name="targetSkillTalent"
+                               min="1" max="10" th:value="${progress.targetSkillTalent}">
+                    </div>
+                    <div class="talent-row">
+                        <span th:text="#{character.elementalBurst}">Elemental Burst</span>
+                        <input th:attr="aria-label=#{character.currentElementalBurst}"
+                               type="number" name="burstTalent"
+                               min="1" max="10" th:value="${progress.burstTalent}">
+                        <span>→</span>
+                        <input th:attr="aria-label=#{character.targetElementalBurst}"
+                               type="number" name="targetBurstTalent"
+                               min="1" max="10" th:value="${progress.targetBurstTalent}">
+                    </div>
+                    <p class="form-note" th:if="${character.talentCosts.isEmpty()}"
+                       th:text="#{character.noTalentCosts}">
+                        The legacy data set has no talent costs for this character.
+                    </p>
+                </div>
+
+                <button class="primary-button" type="submit" th:text="#{character.saveProgress}">
+                    Save status &amp; progress
+                </button>
+            </form>
+        </section>
+
+        <section class="panel materials-panel">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow" th:text="#{character.requirements}">Requirements</p>
+                    <h2 th:text="${inventoryAvailable
+                        ? #messages.msg('inventory.missing')
+                        : #messages.msg('character.requiredMaterials')}">
+                        Missing Materials
+                    </h2>
+                </div>
+                <span th:text="${'Lv. ' + progress.level + ' → ' + progress.targetLevel
+                    + ' · A' + progress.ascension + ' → ' + progress.targetAscension}">
+                    Lv. 1 → 80
+                </span>
+            </div>
+
+            <div class="material-grid" th:if="${!materials.isEmpty()}">
+                <article class="material-card" th:each="material : ${materials}"
+                         th:classappend="${material.missing == 0 ? ' covered' : ''}">
+                    <div class="material-icon">
+                        <img th:if="${material.imageUrl != null}" th:src="${material.imageUrl}"
+                             th:alt="${material.name}" loading="lazy">
+                        <span th:unless="${material.imageUrl != null}"
+                              th:text="${#strings.substring(material.name, 0, 1)}">M</span>
+                    </div>
+                    <div>
+                        <h3 th:text="${material.name}">Mora</h3>
+                        <span class="material-category"
+                              th:text="${#messages.msg(material.category.messageKey)}">
+                            Collectable
+                        </span>
+                        <div class="character-material-numbers">
+                            <span>
+                                <small th:text="#{material.required}">Required</small>
+                                <b th:text="${#numbers.formatInteger(material.required, 1, 'POINT')}">0</b>
+                            </span>
+                            <span th:if="${inventoryAvailable}">
+                                <small th:text="#{material.owned}">Owned</small>
+                                <b th:text="${#numbers.formatInteger(material.owned, 1, 'POINT')}">0</b>
+                            </span>
+                            <span th:if="${inventoryAvailable}">
+                                <small th:text="#{material.craftable}">Craftable</small>
+                                <b th:text="${#numbers.formatInteger(material.craftable, 1, 'POINT')}">0</b>
+                            </span>
+                            <span class="missing-number">
+                                <small th:text="${inventoryAvailable
+                                    ? #messages.msg('material.missing')
+                                    : #messages.msg('material.total')}">Missing</small>
+                                <b th:text="${#numbers.formatInteger(material.missing, 1, 'POINT')}">0</b>
+                            </span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <div class="empty-state compact" th:if="${materials.isEmpty()}">
+                <span>✓</span>
+                <h3 th:text="#{character.noRequirements}">No further requirements</h3>
+                <p th:text="#{character.sameProgress}">Current progress and target are identical.</p>
+            </div>
+        </section>
+    </div>
+
+    <section class="character-equipment" th:if="${equipment != null}">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow" th:text="#{character.goodEquipment}">GOOD Equipment</p>
+                <h2 th:text="#{character.equipmentHeading}">Weapon, Artifacts &amp; Stats</h2>
+            </div>
+            <span th:text="#{character.artifactsEquipped(${equipment.artifactCount})}">
+                5 / 5 artifacts equipped
+            </span>
+        </div>
+
+        <div class="equipment-overview">
+            <article class="equipped-weapon">
+                <p class="eyebrow" th:text="#{character.currentWeapon}">Current weapon</p>
+                <div th:if="${equipment.weapon != null}">
+                    <div class="equipped-weapon-content">
+                        <div class="weapon-icon large">
+                            <img th:if="${weaponIcon != null}"
+                                 th:src="${weaponIcon}"
+                                 th:alt="${equipment.weapon.name}">
+                        </div>
+                        <div class="equipped-weapon-details">
+                            <div class="weapon-title">
+                                <h3 th:text="${equipment.weapon.name}">Weapon</h3>
+                                <span th:if="${equipment.weapon.locked}">🔒</span>
+                            </div>
+                            <dl>
+                                <div><dt th:text="#{character.level}">Level</dt>
+                                    <dd th:text="${equipment.weapon.level}">90</dd></div>
+                                <div><dt th:text="#{character.ascension}">Ascension</dt>
+                                    <dd th:text="${equipment.weapon.ascension}">6</dd></div>
+                                <div><dt th:text="#{weapons.refinement}">Refinement</dt>
+                                    <dd th:text="${'R' + equipment.weapon.refinement}">R1</dd>
+                                </div>
+                            </dl>
+                            <form class="character-weapon-target" method="post"
+                                  th:action="@{/characters/{key}/weapon-target(
+                                    key=${character.key})}">
+                                <label>
+                                    <span th:text="#{optimizer.weapon.targetLevel}">
+                                        Target level
+                                    </span>
+                                    <select name="targetLevel">
+                                        <option th:each="level : ${weaponTargetLevels}"
+                                                th:value="${level}"
+                                                th:selected="${level == weaponTargetLevel}"
+                                                th:text="${level}">90</option>
+                                    </select>
+                                </label>
+                                <button class="text-button" type="submit"
+                                        th:text="#{character.weaponTarget.save}">
+                                    Save weapon target
+                                </button>
+                            </form>
+                            <div class="character-weapon-needs" th:if="${weaponPlan != null}">
+                                <span th:text="#{optimizer.weapon.missing}">
+                                    Missing for this target
+                                </span>
+                                <div th:if="${!weaponPlan.missingMaterials.isEmpty()}">
+                                    <small th:each="material : ${weaponPlan.missingMaterials}"
+                                           th:text="${material.name + ' ×'
+                                            + #numbers.formatInteger(
+                                                material.missing, 1, 'POINT')}">
+                                        Mora ×100,000
+                                    </small>
+                                </div>
+                                <b th:if="${weaponPlan.missingMaterials.isEmpty()}"
+                                   th:text="#{optimizer.weapon.ready}">
+                                    Materials ready
+                                </b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="muted" th:if="${equipment.weapon == null}"
+                   th:text="#{character.noWeapon}">No weapon equipped.</p>
+            </article>
+
+            <article class="artifact-stat-summary">
+                <p class="eyebrow" th:text="#{character.currentStats}">
+                    Current build stats
+                </p>
+                <div class="stat-summary-grid"
+                     th:if="${equippedStats != null && !equippedStats.rows.isEmpty()}">
+                    <div th:each="stat : ${equippedStats.rows}">
+                        <span th:text="${#messages.msg(stat.messageKey)}">CRIT Rate</span>
+                        <div class="character-stat-value">
+                            <b th:text="${#numbers.formatDecimal(stat.totalValue, 1, 1)
+                                + (stat.percentage ? '%' : '')}">72.4%</b>
+                            <small>
+                                <span th:text="#{character.statCharacter}">Character</span>
+                                <i th:text="${#numbers.formatDecimal(
+                                    stat.characterValue, 1, 1)
+                                    + (stat.percentage ? '%' : '')}">5.0%</i>
+                                <span th:if="${stat.weaponValue != 0}"
+                                      th:text="#{character.statWeapon}">Weapon</span>
+                                <i th:if="${stat.weaponValue != 0}"
+                                   th:text="${#numbers.formatDecimal(
+                                        stat.weaponValue, 1, 1)
+                                        + (stat.percentage ? '%' : '')}">22.1%</i>
+                                <span th:if="${stat.bonusValue != 0}"
+                                      th:text="#{character.statAdditional}">Additional</span>
+                                <i th:if="${stat.bonusValue != 0}"
+                                   th:text="${#numbers.formatDecimal(
+                                        stat.bonusValue, 1, 1)
+                                        + (stat.percentage ? '%' : '')}">15.0%</i>
+                                <span th:text="#{character.statArtifacts}">Artifacts</span>
+                                <i th:text="${#numbers.formatDecimal(
+                                    stat.artifactValue, 1, 1)
+                                    + (stat.percentage ? '%' : '')}">45.3%</i>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <p class="muted" th:if="${equippedStats == null}">
+                    <span th:text="#{character.noCurrentStats}">
+                        No current build stats available.
+                    </span>
+                </p>
+                <p class="stat-disclaimer" th:text="#{character.currentStatsHelp}">
+                    Includes the character's innate CRIT and Energy Recharge, the equipped
+                    weapon, and artifact main stats and substats.
+                </p>
+                <details class="character-additional-stats">
+                    <summary th:text="#{character.additionalStats.heading}">
+                        Edit additional stat values
+                    </summary>
+                    <p th:text="#{character.additionalStats.help}">
+                        Add buffs, passives, team effects, or penalties that cannot be
+                        detected automatically.
+                    </p>
+                    <form method="post"
+                          th:action="@{/characters/{key}/stats(key=${character.key})}">
+                        <label th:each="option : ${additionalStatOptions}">
+                            <input type="hidden" name="statBonusKeys" th:value="${option.key}">
+                            <span th:text="${#messages.msg(option.messageKey)}">CRIT Rate</span>
+                            <span class="additional-stat-input">
+                                <input type="number" name="statBonusValues" step="0.1"
+                                       th:value="${additionalStats[option.key] ?: 0}">
+                                <small th:if="${#strings.endsWith(option.key, '_')}">%</small>
+                            </span>
+                        </label>
+                        <button class="text-button" type="submit"
+                                th:text="#{character.additionalStats.save}">
+                            Save additional values
+                        </button>
+                    </form>
+                </details>
+            </article>
+        </div>
+
+        <div class="equipped-artifact-grid" th:if="${!equipment.artifacts.isEmpty()}">
+            <article class="equipped-artifact" th:each="artifact : ${equipment.artifacts}">
+                <div class="equipped-artifact-top">
+                    <div class="artifact-icon compact" th:classappend="${'rarity-' + artifact.rarity}">
+                        <img th:if="${artifactIcons[artifact.imageKey] != null}"
+                             th:src="${artifactIcons[artifact.imageKey]}"
+                             th:alt="${artifact.setName + ' · '
+                                + #messages.msg('artifacts.slot.' + artifact.slotKey)}"
+                             loading="lazy">
+                    </div>
+                    <div class="equipped-artifact-title">
+                        <div class="artifact-heading">
+                            <span th:text="${#messages.msg('artifacts.slot.' + artifact.slotKey)}">
+                                Flower
+                            </span>
+                            <span th:text="${artifact.rarity + ' ★ · +' + artifact.level}">5 ★ · +20</span>
+                        </div>
+                        <h3 th:text="${artifact.setName}">Artifact Set</h3>
+                    </div>
+                </div>
+                <div class="artifact-main-stat">
+                    <span th:text="#{artifacts.mainStat}">Main Stat</span>
+                    <b th:text="${artifact.mainStatName}">HP</b>
+                </div>
+                <ul>
+                    <li th:each="stat : ${artifact.substats}">
+                        <span th:text="${stat.name}">CRIT Rate</span>
+                        <b th:text="${stat.formattedValue}">10.5 %</b>
+                    </li>
+                </ul>
+                <div class="artifact-flags">
+                    <span th:if="${artifact.locked}" th:text="#{artifacts.locked}">Locked</span>
+                    <span th:if="${artifact.astralMark}"
+                          th:text="#{artifacts.astralMark}">Astral Mark</span>
+                    <span th:if="${artifact.elixirCrafted}"
+                          th:text="#{artifacts.elixirCrafted}">Elixir Crafted</span>
+                </div>
+                <a class="artifact-switch-link"
+                   th:href="@{/inventory/artifacts(
+                        slot=${artifact.slotKey},character=${character.key})}"
+                   th:text="#{artifacts.switchForCharacter}">
+                    Switch artifact
+                </a>
+            </article>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <span th:text="#{character.footer}">
+        Costs from the local character data set. Event and inventory discounts are not included.
+    </span>
+</footer>
+</body>
+</html>

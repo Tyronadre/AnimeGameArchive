@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{login.title}">Log in · Genshin Archive</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+</head>
+<body class="auth-page">
+<div class="auth-language" th:insert="~{fragments :: languageSwitcher}"></div>
+<main class="auth-layout">
+    <section class="auth-intro">
+        <a class="brand auth-brand" th:href="@{/login}">
+            <span class="brand-mark">✦</span>
+            <span th:text="#{app.name}">Genshin Archive</span>
+        </a>
+        <p class="eyebrow" th:text="#{login.eyebrow}">Your personal archive</p>
+        <h1 th:text="#{login.heading}">Welcome back.</h1>
+        <p class="lead" th:text="#{login.lead}">
+            Log in to access your characters, artifacts, weapons, and inventory amounts.
+        </p>
+    </section>
+
+    <section class="auth-card" aria-labelledby="login-heading">
+        <p class="eyebrow" th:text="#{auth.account}">Account</p>
+        <h2 id="login-heading" th:text="#{login.action}">Log in</h2>
+
+        <div class="flash success" th:if="${successMessage != null}" th:text="${successMessage}">
+            Account created.
+        </div>
+        <div class="flash error" th:if="${param.error}" th:text="#{login.error}">
+            The email address or password is incorrect.
+        </div>
+        <div class="flash success" th:if="${param.logout}" th:text="#{login.logout}">
+            You have been logged out.
+        </div>
+
+        <form class="auth-form" th:action="@{/login}" method="post">
+            <label for="email"><span th:text="#{auth.email}">Email address</span>
+                <input id="email" name="email" type="email" autocomplete="email" required autofocus>
+            </label>
+            <label for="password"><span th:text="#{auth.password}">Password</span>
+                <input id="password" name="password" type="password"
+                       autocomplete="current-password" required>
+            </label>
+            <button class="primary-button" type="submit" th:text="#{login.action}">Log in</button>
+        </form>
+        <p class="auth-switch">
+            <span th:text="#{login.noAccount}">No account yet?</span>
+            <a th:href="@{/registration}" th:text="#{login.register}">Register now</a>
+        </p>
+    </section>
+</main>
+</body>
+</html>

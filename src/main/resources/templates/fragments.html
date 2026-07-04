@@ -1,0 +1,37 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<header class="site-header" th:fragment="siteHeader(activeSection)">
+    <a class="brand" th:href="@{/}">
+        <span class="brand-mark">✦</span>
+        <span th:text="#{app.name}">Genshin Archive</span>
+    </a>
+    <nav class="header-actions" th:attr="aria-label=#{nav.main}">
+        <a class="back-link" th:classappend="${activeSection == 'dashboard'} ? ' active' : ''"
+           th:href="@{/}" th:text="#{nav.dashboard}">Dashboard</a>
+        <a class="back-link" th:classappend="${activeSection == 'characters'} ? ' active' : ''"
+           th:href="@{/characters}" th:text="#{nav.characters}">Characters</a>
+        <a class="back-link" th:classappend="${activeSection == 'inventory'} ? ' active' : ''"
+           th:href="@{/inventory}" th:text="#{nav.inventory}">Inventory</a>
+        <a class="back-link" th:classappend="${activeSection == 'images'} ? ' active' : ''"
+           th:href="@{/admin/images}" th:text="#{nav.images}">Image management</a>
+    </nav>
+    <div class="account-controls">
+        <span class="account-name" th:text="${currentUser.name}">Player</span>
+        <div th:replace="~{fragments :: languageSwitcher}"></div>
+        <form th:unless="${desktopMode}" th:action="@{/logout}" method="post">
+            <button type="submit" th:text="#{nav.logout}">Log out</button>
+        </form>
+    </div>
+</header>
+
+<div class="language-switcher" th:fragment="languageSwitcher">
+    <label class="sr-only" for="language" th:text="#{language.label}">Language</label>
+    <select id="language" th:attr="aria-label=#{language.label}"
+            onchange="const url = new URL(window.location.href); url.searchParams.set('lang', this.value); window.location.assign(url);">
+        <option value="en" th:selected="${#locale.language == 'en'}">EN</option>
+        <option value="de" th:selected="${#locale.language == 'de'}">DE</option>
+    </select>
+</div>
+</body>
+</html>

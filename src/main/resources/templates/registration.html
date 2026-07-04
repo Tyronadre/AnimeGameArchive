@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{registration.title}">Create account · Genshin Archive</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+</head>
+<body class="auth-page">
+<div class="auth-language" th:insert="~{fragments :: languageSwitcher}"></div>
+<main class="auth-layout">
+    <section class="auth-intro">
+        <a class="brand auth-brand" th:href="@{/login}">
+            <span class="brand-mark">✦</span>
+            <span th:text="#{app.name}">Genshin Archive</span>
+        </a>
+        <p class="eyebrow" th:text="#{registration.eyebrow}">An archive just for you</p>
+        <h1 th:text="#{registration.heading}">Your progress. Your account.</h1>
+        <p class="lead" th:text="#{registration.lead}">
+            Every import and inventory change stays separate from other players' data.
+        </p>
+    </section>
+
+    <section class="auth-card" aria-labelledby="registration-heading">
+        <p class="eyebrow" th:text="#{registration.newAccount}">New account</p>
+        <h2 id="registration-heading" th:text="#{registration.action}">Register</h2>
+        <div class="flash error" th:if="${errorMessage != null}" th:text="${errorMessage}">
+            Registration failed.
+        </div>
+
+        <form class="auth-form" th:action="@{/registration}" method="post">
+            <label for="name"><span th:text="#{auth.displayName}">Display name</span>
+                <input id="name" name="name" type="text" minlength="2" maxlength="60"
+                       autocomplete="name" th:value="${name}" required autofocus>
+            </label>
+            <label for="email"><span th:text="#{auth.email}">Email address</span>
+                <input id="email" name="email" type="email" maxlength="254"
+                       autocomplete="email" th:value="${email}" required>
+            </label>
+            <label for="password"><span th:text="#{auth.password}">Password</span>
+                <input id="password" name="password" type="password" minlength="8" maxlength="72"
+                       autocomplete="new-password" required>
+            </label>
+            <label for="password-confirmation">
+                <span th:text="#{auth.passwordConfirmation}">Repeat password</span>
+                <input id="password-confirmation" name="passwordConfirmation" type="password"
+                       minlength="8" maxlength="72" autocomplete="new-password" required>
+            </label>
+            <button class="primary-button" type="submit" th:text="#{registration.create}">
+                Create account
+            </button>
+        </form>
+        <p class="auth-switch">
+            <span th:text="#{registration.alreadyRegistered}">Already registered?</span>
+            <a th:href="@{/login}" th:text="#{registration.toLogin}">Go to login</a>
+        </p>
+    </section>
+</main>
+</body>
+</html>

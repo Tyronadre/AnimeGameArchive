@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{home.title}">Genshin Characters</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+</head>
+<body>
+<header th:replace="~{fragments :: siteHeader('characters')}"></header>
+
+<main>
+    <section class="welcome">
+        <p class="eyebrow" th:text="#{home.eyebrow}">Character database</p>
+        <h1 th:text="#{home.heading}">Who do you want to build?</h1>
+        <p class="lead" th:text="#{home.lead}">
+            Search the bundled data and calculate ascension and talent materials.
+        </p>
+
+        <form class="search" th:action="@{/characters}" method="get">
+            <label class="sr-only" for="query" th:text="#{home.search.label}">Search characters</label>
+            <input id="query" name="query" type="search" th:value="${query}"
+                   th:placeholder="#{home.search.placeholder}" placeholder="Name, element, or region…"
+                   autocomplete="off">
+            <button type="submit" th:text="#{action.search}">Search</button>
+            <a th:if="${!query.isBlank()}" th:href="@{/characters}" th:text="#{action.reset}">Reset</a>
+        </form>
+    </section>
+
+    <section class="catalog" aria-labelledby="catalog-heading">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow" th:text="#{home.collection}">Collection</p>
+                <h2 id="catalog-heading" th:text="#{nav.characters}">Characters</h2>
+            </div>
+            <span th:text="#{home.results(${characters.size()})}">0 results</span>
+        </div>
+
+        <div class="character-grid" th:if="${!characters.isEmpty()}">
+            <a class="character-card" th:each="character : ${characters}"
+               th:href="@{/characters/{key}(key=${character.key})}">
+                <div class="portrait">
+                    <span class="portrait-fallback"
+                          th:text="${#strings.substring(character.name, 0, 1)}">?</span>
+                    <img th:if="${character.cardImageUrl != null}"
+                         th:src="${character.cardImageUrl}"
+                         th:alt="${character.name + ' Card'}"
+                         loading="lazy" onerror="this.remove()">
+                    <span class="element-pill" th:if="${character.element != null}"
+                          th:text="${character.element}">Hydro</span>
+                    <span class="collection-status-pill"
+                          th:classappend="${ownershipByCharacter[character.key] ? ' owned' : ' unowned'}"
+                          th:text="${ownershipByCharacter[character.key]
+                            ? #messages.msg('character.owned')
+                            : #messages.msg('character.unowned')}">
+                        Not owned
+                    </span>
+                </div>
+                <div class="card-copy">
+                    <h3 th:text="${character.name}">Furina</h3>
+                    <p th:text="${character.title ?: character.region ?: #messages.msg('character.fallback')}">
+                        Character
+                    </p>
+                    <div class="card-meta">
+                        <span th:text="${character.rarity + ' ★'}">5 ★</span>
+                        <span th:if="${character.weapon != null}" th:text="${character.weapon}">Sword</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="empty-state" th:if="${characters.isEmpty()}">
+            <span>✧</span>
+            <h3 th:text="#{home.empty.heading}">No characters found</h3>
+            <p th:text="#{home.empty.text}">Try another name, element, or region.</p>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <span th:text="#{home.footer}">
+        Data is loaded from application resources at startup, independently of the old Swing project.
+    </span>
+</footer>
+</body>
+</html>

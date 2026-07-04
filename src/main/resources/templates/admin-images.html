@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{images.title}">Image Management · Genshin Archive</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+</head>
+<body>
+<header th:replace="~{fragments :: siteHeader('images')}"></header>
+
+<main class="admin-page">
+    <section class="admin-intro">
+        <p class="eyebrow" th:text="#{images.administration}">Administration</p>
+        <h1 th:text="#{images.heading}">Image Sources</h1>
+        <p class="lead" th:text="#{images.lead}">
+            Check URLs, add missing images, and permanently replace incorrect sources.
+            A change is saved only after the image loads successfully.
+        </p>
+        <div class="registry-path">
+            <span th:text="#{images.configFile}">Configuration file</span>
+            <code th:text="${registryFile}">image-links.json</code>
+        </div>
+    </section>
+
+    <div class="flash success" th:if="${successMessage != null}" th:text="${successMessage}">
+        Saved.
+    </div>
+    <div class="flash error" th:if="${errorMessage != null}" th:text="${errorMessage}">
+        Error.
+    </div>
+
+    <section class="admin-content">
+        <form class="admin-filters" th:action="@{/admin/images}" method="get">
+            <label>
+                <span th:text="#{action.search}">Search</span>
+                <input type="search" name="query" th:value="${query}"
+                       th:placeholder="#{images.search}" placeholder="Name or key…">
+            </label>
+            <label>
+                <span th:text="#{images.imageType}">Image type</span>
+                <select name="type">
+                    <option value="all" th:selected="${selectedType == 'all'}"
+                            th:text="#{common.all}">All</option>
+                    <option value="character" th:selected="${selectedType == 'character'}"
+                            th:text="#{nav.characters}">Characters</option>
+                    <option value="material" th:selected="${selectedType == 'material'}"
+                            th:text="#{images.materials}">Materials</option>
+                </select>
+            </label>
+            <label>
+                <span th:text="#{common.status}">Status</span>
+                <select name="state">
+                    <option value="all" th:selected="${selectedState == 'all'}"
+                            th:text="#{common.all}">All</option>
+                    <option value="bundled" th:selected="${selectedState == 'bundled'}"
+                            th:text="#{images.state.bundled}">Available locally</option>
+                    <option value="cached" th:selected="${selectedState == 'cached'}"
+                            th:text="#{images.state.cached}">Downloaded</option>
+                    <option value="remote" th:selected="${selectedState == 'remote'}"
+                            th:text="#{images.state.remote}">Not loaded yet</option>
+                    <option value="missing" th:selected="${selectedState == 'missing'}"
+                            th:text="#{images.state.missing}">URL missing</option>
+                </select>
+            </label>
+            <button type="submit" th:text="#{action.filter}">Filter</button>
+            <a th:href="@{/admin/images}" th:text="#{action.reset}">Reset</a>
+        </form>
+
+        <div class="admin-summary">
+            <span th:text="#{images.summary(${images.size()},${totalImages})}">0 images</span>
+            <span th:utext="#{images.overrideHelp}">
+                Overrides are stored in <code>url</code>; automatically detected sources in
+                <code>defaultUrl</code>.
+            </span>
+        </div>
+
+        <div class="image-admin-list" th:if="${!images.isEmpty()}">
+            <article class="image-admin-row" th:each="image : ${images}">
+                <div class="admin-preview">
+                    <img th:if="${image.previewUrl != null}" th:src="${image.previewUrl}"
+                         th:alt="${image.name}" loading="lazy">
+                    <span th:unless="${image.previewUrl != null}"
+                          th:text="${#strings.substring(image.name, 0, 1)}">?</span>
+                </div>
+
+                <div class="admin-image-copy">
+                    <div class="admin-image-title">
+                        <div>
+                            <span class="image-kind"
+                                  th:text="${image.typeLabel}">Type</span>
+                            <h2 th:text="${image.name}">Image name</h2>
+                        </div>
+                        <span class="status-badge"
+                              th:text="${#messages.msg(image.state.messageKey)}">Status</span>
+                    </div>
+                    <p>
+                        <span th:text="#{images.key}">Key:</span>
+                        <code th:text="${image.key}">key</code>
+                        <span th:if="${image.hasOverride}" class="override-note"
+                              th:text="#{images.overrideActive}">Admin override active</span>
+                    </p>
+
+                    <form class="image-url-form" th:action="${image.updatePath}" method="post">
+                        <label>
+                            <span th:text="#{images.url}">Image URL</span>
+                            <input type="url" name="url" th:value="${image.currentUrl}"
+                                   placeholder="https://…">
+                        </label>
+                        <div class="admin-buttons">
+                            <button class="primary-button" type="submit" name="action" value="save">
+                                <span th:text="#{images.testAndSave}">Test &amp; save</span>
+                            </button>
+                            <button class="secondary-button" th:if="${image.hasOverride}"
+                                    type="submit" name="action" value="reset">
+                                <span th:text="#{images.useDefault}">Use default</span>
+                            </button>
+                        </div>
+                    </form>
+
+                    <details th:if="${!image.defaultUrl.isBlank()}">
+                        <summary th:text="#{images.detectedDefault}">
+                            Automatically detected default URL
+                        </summary>
+                        <code th:text="${image.defaultUrl}">https://…</code>
+                    </details>
+                </div>
+            </article>
+        </div>
+
+        <div class="empty-state" th:if="${images.isEmpty()}">
+            <span>✧</span>
+            <h3 th:text="#{images.empty}">No images match this filter</h3>
+        </div>
+    </section>
+</main>
+</body>
+</html>

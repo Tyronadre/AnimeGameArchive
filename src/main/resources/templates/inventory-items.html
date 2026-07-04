@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{items.title}">Item Inventory · Genshin Archive</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+</head>
+<body>
+<header th:replace="~{fragments :: siteHeader('inventory')}"></header>
+
+<main class="inventory-page">
+    <section class="inventory-intro">
+        <p class="eyebrow" th:text="#{inventory.good}">GOOD Inventory</p>
+        <h1 th:text="#{inventory.items}">Items</h1>
+        <p class="lead" th:text="#{items.lead}">
+            Import your scan, then adjust quantities manually. Changes are saved as persistent overrides.
+        </p>
+        <form class="good-upload" th:action="@{/inventory/upload}" method="post"
+              enctype="multipart/form-data">
+            <label for="good-file"><span th:text="#{items.goodFile}">GOOD JSON file</span>
+                <input id="good-file" type="file" name="file" accept="application/json,.json" required>
+            </label>
+            <button class="primary-button" type="submit" th:text="#{items.import}">
+                Import GOOD
+            </button>
+        </form>
+        <p class="storage-note"><span th:text="#{items.currentExport}">Current export:</span>
+            <code th:text="${snapshotFile}">current-good.json</code>
+        </p>
+    </section>
+
+    <div class="flash success" th:if="${successMessage != null}" th:text="${successMessage}">Saved.</div>
+    <div class="flash error" th:if="${errorMessage != null}" th:text="${errorMessage}">Error.</div>
+
+    <nav class="inventory-tabs" th:attr="aria-label=#{inventory.sections}">
+        <a class="active" th:href="@{/inventory/items}" th:text="#{inventory.items}">Items</a>
+        <a th:href="@{/inventory/missing}" th:text="#{inventory.missing}">Missing Materials</a>
+        <a th:href="@{/inventory/artifacts}" th:text="#{inventory.artifacts}">Artifacts</a>
+        <a th:href="@{/inventory/artifact-optimizer}"
+           th:text="#{inventory.optimizer}">Optimizer</a>
+        <a th:href="@{/inventory/weapons}" th:text="#{inventory.weapons}">Weapons</a>
+    </nav>
+
+    <section class="empty-state inventory-empty" th:if="${snapshot == null}">
+        <span>◇</span>
+        <h2 th:text="#{inventory.empty.heading}">No GOOD export imported yet</h2>
+        <p th:text="#{items.empty.text}">After importing, all item quantities can be edited.</p>
+    </section>
+
+    <section class="inventory-section" th:if="${snapshot != null}">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow" th:text="#{items.stock}">Stock</p>
+                <h2 th:text="#{items.amounts}">Item quantities</h2>
+            </div>
+            <span th:text="#{items.entries(${items.size()})}">0 entries</span>
+        </div>
+        <form class="inventory-search" th:action="@{/inventory/items}" method="get">
+            <input type="search" name="query" th:value="${query}"
+                   th:placeholder="#{items.search}" placeholder="Search items…">
+            <button type="submit" th:text="#{action.search}">Search</button>
+            <a th:if="${!query.isBlank()}" th:href="@{/inventory/items}"
+               th:text="#{action.reset}">Reset</a>
+        </form>
+
+        <div class="editable-inventory-list">
+            <article class="editable-item" th:each="item : ${items}"
+                     th:classappend="${item.buildMaterial ? ' build-material' : ''}">
+                <div class="material-icon">
+                    <img th:if="${item.imageUrl != null}" th:src="${item.imageUrl}"
+                         th:alt="${item.name}" loading="lazy" onerror="this.remove()">
+                </div>
+                <div class="editable-item-name">
+                    <h3 th:text="${item.name}">Mora</h3>
+                    <span class="material-category" th:if="${item.categoryMessageKey != null}"
+                          th:text="${#messages.msg(item.categoryMessageKey)}">Gem</span>
+                    <code th:text="${item.key}">mora</code>
+                    <div class="crafting-availability" th:if="${item.craftableAmount > 0}">
+                        <span>
+                            <span th:text="#{material.craftable}">Craftable</span>
+                            <b th:text="${'+' + #numbers.formatInteger(item.craftableAmount, 1, 'POINT')}">
+                                +0
+                            </b>
+                        </span>
+                        <span>
+                            <span th:text="#{items.effectivelyAvailable}">Effectively available</span>
+                            <b th:text="${#numbers.formatInteger(item.availableAmount, 1, 'POINT')}">0</b>
+                        </span>
+                    </div>
+                </div>
+                <form th:action="@{/inventory/items/{key}(key=${item.key})}" method="post">
+                    <label><span th:text="#{items.amount}">Amount</span>
+                        <input type="number" name="amount" min="0" step="1" th:value="${item.amount}">
+                    </label>
+                    <button type="submit" th:text="#{action.save}">Save</button>
+                </form>
+            </article>
+        </div>
+    </section>
+</main>
+</body>
+</html>

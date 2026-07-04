@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{dashboard.title}">Farming Dashboard · Genshin Archive</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+</head>
+<body>
+<header th:replace="~{fragments :: siteHeader('dashboard')}"></header>
+
+<main class="dashboard-page">
+    <section class="dashboard-hero">
+        <div>
+            <p class="eyebrow" th:text="#{dashboard.eyebrow}">Your next resin</p>
+            <h1 th:text="#{dashboard.heading}">Know what is worth farming next.</h1>
+            <p class="lead" th:text="#{dashboard.lead}">
+                Pick the characters and builds you care about. The dashboard turns their
+                missing materials and artifact targets into one focused farming plan.
+            </p>
+        </div>
+        <div class="dashboard-hero-compass" aria-hidden="true">
+            <span>✦</span>
+            <i></i>
+        </div>
+    </section>
+
+    <div class="flash success" th:if="${successMessage != null}"
+         th:text="${successMessage}">Goals saved.</div>
+    <div class="flash error" th:if="${errorMessage != null}"
+         th:text="${errorMessage}">Goals could not be saved.</div>
+
+    <section class="dashboard-import-empty" th:if="${snapshot == null}">
+        <div>
+            <span>◇</span>
+            <p class="eyebrow" th:text="#{dashboard.empty.eyebrow}">Inventory required</p>
+            <h2 th:text="#{dashboard.empty.heading}">Import a GOOD export to start planning.</h2>
+            <p th:text="#{dashboard.empty.text}">
+                Farming advice needs your characters, artifacts, and current material inventory.
+            </p>
+            <a class="primary-button" th:href="@{/inventory/items}"
+               th:text="#{dashboard.empty.action}">Import inventory</a>
+        </div>
+    </section>
+
+    <div th:if="${snapshot != null}" class="dashboard-content">
+        <section class="dashboard-overview">
+            <div>
+                <span th:text="#{dashboard.overview.goals}">Active goals</span>
+                <strong th:text="${selectedGoalCount}">3</strong>
+            </div>
+            <div>
+                <span th:text="#{dashboard.overview.actions}">Farming options</span>
+                <strong th:text="${dashboard.recommendations.size()}">8</strong>
+            </div>
+            <div>
+                <span th:text="#{dashboard.overview.source}">Inventory source</span>
+                <strong th:text="${snapshot.source ?: #messages.msg('common.unknown')}">
+                    Irminsul
+                </strong>
+            </div>
+            <a href="#dashboard-goals" th:text="#{dashboard.goals.manage}">Manage goals</a>
+        </section>
+
+        <section class="dashboard-no-goals" th:if="${dashboard.goals.isEmpty()}">
+            <span>✧</span>
+            <div>
+                <p class="eyebrow" th:text="#{dashboard.noGoals.eyebrow}">Set a direction</p>
+                <h2 th:text="#{dashboard.noGoals.heading}">
+                    Choose at least one character goal.
+                </h2>
+                <p th:text="#{dashboard.noGoals.text}">
+                    You can plan character levels and talents, artifact optimization, or both.
+                </p>
+            </div>
+            <a href="#dashboard-goals" class="primary-button"
+               th:text="#{dashboard.noGoals.action}">Choose goals</a>
+        </section>
+
+        <section class="dashboard-focus"
+                 th:if="${dashboard.primaryRecommendation != null}"
+                 th:with="recommendation=${dashboard.primaryRecommendation}">
+            <div class="dashboard-focus-copy">
+                <p class="eyebrow" th:text="#{dashboard.top.eyebrow}">Best next farm</p>
+                <div class="dashboard-activity-line">
+                    <span th:text="${recommendation.activity.icon}">◆</span>
+                    <small th:text="${#messages.msg(recommendation.activity.messageKey)}">
+                        Talent Domain
+                    </small>
+                </div>
+                <h2 th:text="${recommendation.title}">Guide to Freedom</h2>
+                <p th:text="${#messages.msg(recommendation.activity.actionMessageKey)}">
+                    Run the matching domain to make progress on this goal.
+                </p>
+                <div class="dashboard-impact-meter">
+                    <span>
+                        <i th:style="${'width:' + recommendation.impactPercent + '%'}"></i>
+                    </span>
+                    <b th:text="#{dashboard.needSeverity(${recommendation.impactPercent})}">
+                        72% need
+                    </b>
+                </div>
+                <a class="primary-button" th:href="${recommendation.href}"
+                   th:text="#{dashboard.openDetails}">Open details</a>
+            </div>
+            <div class="dashboard-focus-visual">
+                <span class="dashboard-focus-glyph"
+                      th:text="${recommendation.activity.icon}">◆</span>
+                <img th:if="${recommendation.imageUrl != null}"
+                     th:src="${recommendation.imageUrl}"
+                     th:alt="${recommendation.title}"
+                     onerror="this.remove()">
+            </div>
+            <div class="dashboard-focus-details">
+                <div>
+                    <span th:text="#{dashboard.helps}">Helps</span>
+                    <ul class="dashboard-character-chips">
+                        <li th:each="character : ${recommendation.characters}">
+                            <img th:if="${character.iconUrl != null}"
+                                 th:src="${character.iconUrl}" th:alt="${character.name}"
+                                 onerror="this.remove()">
+                            <b th:text="${character.name}">Furina</b>
+                        </li>
+                    </ul>
+                </div>
+                <div th:if="${!recommendation.materials.isEmpty()}">
+                    <span th:text="#{dashboard.missing}">Still missing</span>
+                    <ul class="dashboard-material-list">
+                        <li th:each="material : ${recommendation.materials}">
+                            <b th:text="${material.name}">Guide to Freedom</b>
+                            <strong th:text="${#numbers.formatInteger(
+                                material.missing, 1, 'POINT')}">12</strong>
+                        </li>
+                    </ul>
+                </div>
+                <div th:if="${recommendation.artifactScore != null}">
+                    <span th:text="#{dashboard.currentArtifactScore}">
+                        Current average artifact score
+                    </span>
+                    <strong class="dashboard-artifact-score"
+                            th:text="${#numbers.formatDecimal(
+                                recommendation.artifactScore, 1, 1)}">63.4</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-complete"
+                 th:if="${!dashboard.goals.isEmpty()
+                    && dashboard.recommendations.isEmpty()
+                    && dashboard.allGoalsComplete}">
+            <span>✓</span>
+            <div>
+                <p class="eyebrow" th:text="#{dashboard.complete.eyebrow}">Goals covered</p>
+                <h2 th:text="#{dashboard.complete.heading}">
+                    Your inventory already covers the selected progression goals.
+                </h2>
+                <p th:text="#{dashboard.complete.text}">
+                    Raise the targets or choose another character when you are ready.
+                </p>
+            </div>
+        </section>
+
+        <section class="dashboard-complete"
+                 th:if="${!dashboard.goals.isEmpty()
+                    && dashboard.recommendations.isEmpty()
+                    && !dashboard.allGoalsComplete}">
+            <span>☾</span>
+            <div>
+                <p class="eyebrow" th:text="#{dashboard.todayDone.eyebrow}">
+                    Nothing urgent today
+                </p>
+                <h2 th:text="#{dashboard.todayDone.heading}">
+                    No selected day-specific domain is available right now.
+                </h2>
+                <p th:text="#{dashboard.todayDone.text}">
+                    Other required materials are already covered, or the missing domain
+                    rotates back on another day.
+                </p>
+            </div>
+        </section>
+
+        <section class="dashboard-section"
+                 th:if="${!dashboard.additionalRecommendations.isEmpty()}">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow" th:text="#{dashboard.queue.eyebrow}">After that</p>
+                    <h2 th:text="#{dashboard.queue.heading}">Your farming queue</h2>
+                </div>
+                <span th:text="#{dashboard.queue.help}">
+                    Ranked by shared goals and current shortages.
+                </span>
+            </div>
+            <div class="dashboard-recommendation-grid">
+                <a class="dashboard-recommendation"
+                   th:each="recommendation, iteration : ${dashboard.additionalRecommendations}"
+                   th:href="${recommendation.href}">
+                    <div class="dashboard-recommendation-rank"
+                         th:text="${iteration.index + 2}">2</div>
+                    <div class="dashboard-recommendation-icon">
+                        <span th:text="${recommendation.activity.icon}">◆</span>
+                        <img th:if="${recommendation.imageUrl != null}"
+                             th:src="${recommendation.imageUrl}"
+                             th:alt="${recommendation.title}"
+                             loading="lazy" onerror="this.remove()">
+                    </div>
+                    <div>
+                        <span th:text="${#messages.msg(recommendation.activity.messageKey)}">
+                            Talent Domain
+                        </span>
+                        <h3 th:text="${recommendation.title}">Guide to Freedom</h3>
+                        <p th:text="#{dashboard.goalCount(${recommendation.characters.size()})}">
+                            Helps 2 goals
+                        </p>
+                    </div>
+                    <strong th:text="${recommendation.impactPercent + '%'}">64%</strong>
+                </a>
+            </div>
+        </section>
+
+        <section class="dashboard-section dashboard-active-goals"
+                 th:if="${!dashboard.goals.isEmpty()}">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow" th:text="#{dashboard.active.eyebrow}">In focus</p>
+                    <h2 th:text="#{dashboard.active.heading}">Active goals</h2>
+                </div>
+            </div>
+            <div class="dashboard-goal-progress-grid">
+                <a class="dashboard-goal-progress" th:each="goal : ${dashboard.goals}"
+                   th:href="${goal.type.key == 'artifacts'
+                        ? '/inventory/artifact-optimizer?character=' + goal.characterKey
+                        : '/characters/' + goal.characterKey}">
+                    <div class="dashboard-goal-avatar">
+                        <span th:text="${#strings.substring(goal.characterName, 0, 1)}">F</span>
+                        <img th:if="${goal.iconUrl != null}" th:src="${goal.iconUrl}"
+                             th:alt="${goal.characterName}" onerror="this.remove()">
+                    </div>
+                    <div>
+                        <span th:text="${goal.type.key == 'artifacts'
+                            ? #messages.msg('dashboard.goal.artifacts')
+                            : #messages.msg('dashboard.goal.character')}">
+                            Character progress
+                        </span>
+                        <h3 th:text="${goal.characterName}">Furina</h3>
+                        <p th:if="${goal.type.key == 'character'}"
+                           th:text="#{dashboard.goal.level(
+                            ${goal.currentLevel},${goal.targetLevel})}">
+                            Level 70 → 90
+                        </p>
+                        <small th:if="${goal.type.key == 'character'}"
+                               th:text="#{dashboard.goal.talents(
+                                ${goal.currentTalentTotal},${goal.targetTalentTotal})}">
+                            Talents 18 → 27 total
+                        </small>
+                        <p th:if="${goal.type.key == 'artifacts'}"
+                           th:text="#{dashboard.goal.artifactScore(
+                            ${#numbers.formatDecimal(goal.artifactScore, 1, 1)})}">
+                            Average score 63.4
+                        </p>
+                        <small th:if="${goal.type.key == 'artifacts'
+                            && goal.weaponName != null}"
+                               th:text="#{dashboard.goal.weapon(
+                                ${goal.weaponName},${goal.weaponCurrentLevel},
+                                ${goal.weaponTargetLevel})}">
+                            Rust · Level 20 → 90
+                        </small>
+                    </div>
+                    <b th:if="${goal.complete}">✓</b>
+                    <b th:unless="${goal.complete}">→</b>
+                </a>
+            </div>
+        </section>
+
+        <section id="dashboard-goals" class="dashboard-section dashboard-goal-manager">
+            <details th:open="${dashboard.goals.isEmpty()}">
+                <summary>
+                    <div>
+                        <p class="eyebrow" th:text="#{dashboard.goals.eyebrow}">Priorities</p>
+                        <h2 th:text="#{dashboard.goals.heading}">Choose what you are working on</h2>
+                    </div>
+                    <span th:text="#{dashboard.goals.summary}">
+                        Level characters, improve artifacts, or do both.
+                    </span>
+                </summary>
+                <form th:action="@{/goals}" method="post">
+                    <label class="dashboard-goal-search">
+                        <span class="sr-only" th:text="#{dashboard.goals.searchLabel}">
+                            Search goal characters
+                        </span>
+                        <input id="dashboard-goal-search" type="search"
+                               th:placeholder="#{dashboard.goals.search}"
+                               placeholder="Find a character…" autocomplete="off">
+                    </label>
+                    <div class="dashboard-goal-table-head">
+                        <span th:text="#{nav.characters}">Characters</span>
+                        <span th:text="#{dashboard.goal.character}">Character progress</span>
+                        <span th:text="#{dashboard.goal.artifacts}">Artifact optimization</span>
+                    </div>
+                    <div class="dashboard-goal-option" th:each="option : ${goalOptions}">
+                        <a th:href="@{/characters/{key}(key=${option.key})}">
+                            <span class="dashboard-goal-option-avatar">
+                                <i th:text="${#strings.substring(option.name, 0, 1)}">F</i>
+                                <img th:if="${option.iconUrl != null}" th:src="${option.iconUrl}"
+                                     th:alt="${option.name}" loading="lazy" onerror="this.remove()">
+                            </span>
+                            <span>
+                                <b th:text="${option.name}">Furina</b>
+                                <small th:text="#{dashboard.goal.level(
+                                    ${option.currentLevel},${option.targetLevel})}">
+                                    Level 70 → 90
+                                </small>
+                            </span>
+                        </a>
+                        <label>
+                            <input type="checkbox" name="characterGoals"
+                                   th:value="${option.key}"
+                                   th:checked="${option.characterSelected}">
+                            <span th:text="#{dashboard.goal.characterShort}">
+                                Materials
+                            </span>
+                        </label>
+                        <label th:classappend="${!option.canOptimize ? ' disabled' : ''}">
+                            <input type="checkbox" name="artifactGoals"
+                                   th:value="${option.key}"
+                                   th:checked="${option.artifactsSelected}"
+                                   th:disabled="${!option.canOptimize}">
+                            <span th:text="${option.canOptimize
+                                ? #messages.msg('dashboard.goal.artifactsShort')
+                                : #messages.msg('dashboard.goal.noArtifacts')}">
+                                Artifacts
+                            </span>
+                        </label>
+                    </div>
+                    <div class="dashboard-goal-actions">
+                        <p th:text="#{dashboard.goals.hint}">
+                            Character targets come from each character page. Artifact targets
+                            come from that character's saved optimizer profile.
+                        </p>
+                        <button class="primary-button" type="submit"
+                                th:text="#{dashboard.goals.save}">Save goals</button>
+                    </div>
+                </form>
+            </details>
+        </section>
+    </div>
+</main>
+<script>
+    (() => {
+        const search = document.getElementById("dashboard-goal-search");
+        if (!search) return;
+        const options = [...document.querySelectorAll(".dashboard-goal-option")];
+        search.addEventListener("input", () => {
+            const query = search.value.trim().toLocaleLowerCase();
+            options.forEach(option => {
+                option.hidden = query !== "" &&
+                    !option.textContent.toLocaleLowerCase().includes(query);
+            });
+        });
+    })();
+</script>
+</body>
+</html>

@@ -1,0 +1,1112 @@
+<!doctype html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{optimizer.title}">Artifact Optimizer · Genshin Archive</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+</head>
+<body>
+<header th:replace="~{fragments :: siteHeader('inventory')}"></header>
+
+<main class="optimizer-page">
+    <section class="optimizer-intro">
+        <div>
+            <p class="eyebrow" th:text="#{optimizer.eyebrow}">Artifact analysis lab</p>
+            <h1 th:text="#{optimizer.heading}">Find the upgrades hiding in your inventory.</h1>
+            <p class="lead" th:text="#{optimizer.lead}">
+                Grade the current build, estimate farming odds, test unfinished pieces,
+                and find stronger loadouts without losing active set bonuses.
+            </p>
+        </div>
+        <div class="optimizer-intro-mark" aria-hidden="true">
+            <span>✦</span>
+            <small>RV</small>
+        </div>
+    </section>
+
+    <nav class="inventory-tabs" th:attr="aria-label=#{inventory.sections}">
+        <a th:href="@{/inventory/items}" th:text="#{inventory.items}">Items</a>
+        <a th:href="@{/inventory/missing}" th:text="#{inventory.missing}">Missing Materials</a>
+        <a th:href="@{/inventory/artifacts}" th:text="#{inventory.artifacts}">Artifacts</a>
+        <a class="active" th:href="@{/inventory/artifact-optimizer}"
+           th:text="#{inventory.optimizer}">Optimizer</a>
+        <a th:href="@{/inventory/weapons}" th:text="#{inventory.weapons}">Weapons</a>
+    </nav>
+
+    <section class="empty-state inventory-empty" th:if="${snapshot == null}">
+        <span>◇</span>
+        <h2 th:text="#{inventory.empty.heading}">No GOOD export imported yet</h2>
+        <p th:text="#{optimizer.empty.text}">
+            Import a GOOD export before analyzing artifact builds.
+        </p>
+        <a class="primary-button empty-action" th:href="@{/inventory/items}"
+           th:text="#{optimizer.empty.action}">Import artifacts</a>
+    </section>
+
+    <div th:if="${snapshot != null}">
+        <div class="flash success" th:if="${successMessage != null}"
+             th:text="${successMessage}">Optimizer profile saved.</div>
+        <div class="flash error" th:if="${errorMessage != null}"
+             th:text="${errorMessage}">The optimizer profile could not be saved.</div>
+        <aside class="optimizer-share-banner"
+               th:if="${sharedOptimizerConfiguration != null}">
+            <div>
+                <strong th:text="#{optimizer.share.preview}">Shared configuration preview</strong>
+                <span th:text="#{optimizer.share.previewHelp}">
+                    Save and analyze to import this configuration for the selected character.
+                </span>
+            </div>
+            <label>
+                <span class="sr-only" th:text="#{optimizer.share.link}">Share link</span>
+                <input id="optimizer-share-link" readonly
+                       th:value="${'/inventory/artifact-optimizer?shared='
+                            + sharedOptimizerConfiguration.token}">
+            </label>
+            <button type="button" id="copy-optimizer-share"
+                    th:text="#{optimizer.share.copy}">Copy link</button>
+        </aside>
+        <section class="optimizer-controls">
+            <form th:action="@{/inventory/artifact-optimizer/profile}" method="post">
+                <label>
+                    <span th:text="#{optimizer.character}">Character</span>
+                    <select name="character" id="optimizer-character-select">
+                        <option th:each="option : ${optimizerCharacters}"
+                                th:value="${option.key}"
+                                th:selected="${selectedCharacter != null
+                                    && selectedCharacter.key == option.key}"
+                                th:text="${option.name + ' · ' + option.artifactCount + '/5'}">
+                            Furina · 5/5
+                        </option>
+                    </select>
+                </label>
+                <label>
+                    <span th:text="#{optimizer.profile}">Scoring profile</span>
+                    <select name="profile" id="optimizer-profile-select">
+                        <option th:each="option : ${profiles}"
+                                th:value="${option.key}"
+                                th:selected="${selectedProfileSelection == option.key}"
+                                th:text="${#messages.msg(option.messageKey)}">
+                            ATK damage
+                        </option>
+                        <optgroup th:if="${!customProfiles.isEmpty()}"
+                                  th:label="#{optimizer.profile.savedProfiles}">
+                            <option th:each="option : ${customProfiles}"
+                                    th:value="${option.selectionKey}"
+                                    th:selected="${selectedProfileSelection
+                                        == option.selectionKey}"
+                                    th:text="${option.name}">
+                                Nefer Build
+                            </option>
+                        </optgroup>
+                        <option value="custom-new"
+                                th:selected="${selectedProfileSelection == 'custom-new'}"
+                                th:text="#{optimizer.profile.newCustom}">
+                            New custom profile…
+                        </option>
+                    </select>
+                    <input type="hidden" name="baseProfile" th:value="${selectedProfile.key}">
+                </label>
+                <label class="optimizer-profile-name" id="optimizer-profile-name">
+                    <span th:text="#{optimizer.profile.name}">Profile name</span>
+                    <input type="text" name="customProfileName" maxlength="60"
+                           th:value="${selectedCustomProfile?.name}"
+                           th:placeholder="#{optimizer.profile.namePlaceholder}">
+                </label>
+                <button class="primary-button" type="submit"
+                        th:text="#{optimizer.saveAndAnalyze}">Save &amp; analyze</button>
+                <details class="optimizer-targets">
+                    <summary>
+                        <span th:text="#{optimizer.targets.heading}">Build targets</span>
+                        <small th:text="#{optimizer.targets.summary}">
+                            Choose target main stats for the three variable slots and the
+                            substats you value.
+                        </small>
+                    </summary>
+                    <input type="hidden" name="customTargets"
+                           th:value="${optimizerTargets.custom}">
+                    <div class="optimizer-main-targets">
+                        <label th:each="entry : ${mainStatOptions}">
+                            <span th:text="${#messages.msg(
+                                'artifacts.slot.' + entry.key)}">Flower</span>
+                            <select th:name="${entry.key + 'Main'}"
+                                    onchange="this.form.elements.customTargets.value='true'">
+                                <option value="auto"
+                                        th:selected="${optimizerTargets.mainStats[entry.key] == null}"
+                                        th:text="#{optimizer.targets.profileDefault}">
+                                    Profile recommendation
+                                </option>
+                                <option th:each="option : ${entry.value}"
+                                        th:value="${option.key}"
+                                        th:selected="${optimizerTargets.mainStats[entry.key]
+                                            == option.key}"
+                                        th:text="${#messages.msg(option.messageKey)}">
+                                    HP
+                                </option>
+                            </select>
+                        </label>
+                    </div>
+                    <p class="optimizer-fixed-main-stats"
+                       th:text="#{optimizer.targets.fixedMainStats}">
+                        Flower always has HP and Plume always has ATK, so both are handled
+                        automatically.
+                    </p>
+                    <fieldset class="optimizer-combat-base">
+                        <legend th:text="#{optimizer.base.heading}">
+                            Basis values before artifacts
+                        </legend>
+                        <p th:text="#{optimizer.base.help}">
+                            Character level, ascension, and the equipped weapon are detected
+                            automatically. Add buffs or penalties that cannot be detected.
+                        </p>
+                        <div class="optimizer-bonus-grid">
+                            <label th:each="option : ${additionalStatOptions}">
+                                <input type="hidden" name="statBonusKeys"
+                                       th:value="${option.key}">
+                                <span th:text="${#messages.msg(option.messageKey)}">
+                                    CRIT Rate
+                                </span>
+                                <span class="optimizer-bonus-input">
+                                    <input type="number" name="statBonusValues" step="0.1"
+                                           th:value="${optimizerTargets.additionalStats[
+                                                option.key] ?: 0}"
+                                           onchange="this.form.elements.customTargets.value='true'">
+                                    <small th:if="${#strings.endsWith(option.key, '_')}">%</small>
+                                </span>
+                            </label>
+                        </div>
+                    </fieldset>
+                    <fieldset class="optimizer-substat-targets">
+                        <legend th:text="#{optimizer.targets.substats}">
+                            Stat priorities and target ranges
+                        </legend>
+                        <div class="optimizer-priority-board">
+                            <section class="optimizer-priority-column">
+                                <h4 th:text="#{optimizer.priority.selected}">Selected</h4>
+                                <div class="optimizer-priority-list" id="optimizer-priority-selected"
+                                     data-selected="true">
+                                    <article class="optimizer-priority-item" draggable="true"
+                                             th:each="option : ${selectedSubstatOptions}"
+                                             th:attr="data-stat-key=${option.key}">
+                                        <button class="optimizer-drag-handle" type="button"
+                                                th:attr="aria-label=#{optimizer.priority.drag}">⋮⋮</button>
+                                        <strong th:text="${#messages.msg(option.messageKey)}">
+                                            CRIT Rate
+                                        </strong>
+                                        <input type="hidden" name="priorityStats"
+                                               th:value="${option.key}">
+                                        <label>
+                                            <span th:text="#{optimizer.priority.minimum}">Min</span>
+                                            <input type="number" name="priorityMinimums"
+                                                   min="0" step="0.1"
+                                                   th:value="${optimizerTargets.minimumTargets[
+                                                        option.key]}"
+                                                   th:placeholder="#{optimizer.priority.optional}">
+                                        </label>
+                                        <label>
+                                            <span th:text="#{optimizer.priority.maximum}">Max</span>
+                                            <input type="number" name="priorityMaximums"
+                                                   min="0" step="0.1"
+                                                   th:value="${optimizerTargets.maximumTargets[
+                                                        option.key]}"
+                                                   th:placeholder="#{optimizer.priority.optional}">
+                                        </label>
+                                        <button class="optimizer-priority-toggle" type="button"
+                                                data-priority-remove
+                                                th:attr="aria-label=#{optimizer.priority.remove}">−</button>
+                                    </article>
+                                </div>
+                            </section>
+                            <section class="optimizer-priority-column">
+                                <h4 th:text="#{optimizer.priority.available}">Not selected</h4>
+                                <div class="optimizer-priority-list" id="optimizer-priority-available"
+                                     data-selected="false">
+                                    <article class="optimizer-priority-item" draggable="true"
+                                             th:each="option : ${unselectedSubstatOptions}"
+                                             th:attr="data-stat-key=${option.key}">
+                                        <button class="optimizer-drag-handle" type="button"
+                                                th:attr="aria-label=#{optimizer.priority.drag}">⋮⋮</button>
+                                        <strong th:text="${#messages.msg(option.messageKey)}">
+                                            Elemental Mastery
+                                        </strong>
+                                        <input type="hidden" name="priorityStats"
+                                               th:value="${option.key}" disabled>
+                                        <label>
+                                            <span th:text="#{optimizer.priority.minimum}">Min</span>
+                                            <input type="number" name="priorityMinimums"
+                                                   min="0" step="0.1" disabled
+                                                   th:placeholder="#{optimizer.priority.optional}">
+                                        </label>
+                                        <label>
+                                            <span th:text="#{optimizer.priority.maximum}">Max</span>
+                                            <input type="number" name="priorityMaximums"
+                                                   min="0" step="0.1" disabled
+                                                   th:value="${option.key == 'critRate_' ? 100 : null}"
+                                                   th:placeholder="#{optimizer.priority.optional}">
+                                        </label>
+                                        <button class="optimizer-priority-toggle" type="button"
+                                                data-priority-add
+                                                th:attr="aria-label=#{optimizer.priority.add}">+</button>
+                                    </article>
+                                </div>
+                            </section>
+                        </div>
+                        <small th:text="#{optimizer.priority.help}">
+                            Drag stats into Selected. Their order is their priority. Minimums are
+                            reached first and maximums stop adding value.
+                        </small>
+                    </fieldset>
+                    <fieldset class="optimizer-set-targets">
+                        <legend th:text="#{optimizer.sets.heading}">
+                            Set bonuses for the calculated loadout
+                        </legend>
+                        <label class="optimizer-set-mode">
+                            <span th:text="#{optimizer.sets.mode}">Set constraint</span>
+                            <select name="setMode" id="optimizer-set-mode">
+                                <option value="current"
+                                        th:selected="${optimizerSetSelection.mode.key == 'current'}"
+                                        th:text="#{optimizer.sets.current}">
+                                    Keep current bonuses
+                                </option>
+                                <option value="none"
+                                        th:selected="${optimizerSetSelection.mode.key == 'none'}"
+                                        th:text="#{optimizer.sets.none}">
+                                    No set requirement
+                                </option>
+                                <option value="custom"
+                                        th:selected="${optimizerSetSelection.mode.key == 'custom'}"
+                                        th:text="#{optimizer.sets.custom}">
+                                    Choose set bonuses
+                                </option>
+                            </select>
+                        </label>
+                        <div class="optimizer-set-picks" id="optimizer-set-picks">
+                            <label>
+                                <span th:text="#{optimizer.sets.first}">First set</span>
+                                <select name="firstSet">
+                                    <option value="" th:text="#{optimizer.sets.choose}">
+                                        Choose a set
+                                    </option>
+                                    <option th:each="option : ${artifactSetOptions}"
+                                            th:value="${option.key}"
+                                            th:selected="${!optimizerSetSelection.requirements.isEmpty()
+                                                && optimizerSetSelection.requirements[0].setKey
+                                                == option.key}"
+                                            th:text="${option.name + ' · ' + option.pieces}">
+                                        Golden Troupe · 8
+                                    </option>
+                                </select>
+                            </label>
+                            <label class="optimizer-set-count">
+                                <span th:text="#{optimizer.sets.bonus}">Bonus</span>
+                                <select name="firstSetCount" id="optimizer-first-set-count">
+                                    <option value="2"
+                                            th:selected="${optimizerSetSelection.requirements.isEmpty()
+                                                || optimizerSetSelection.requirements[0].count == 2}"
+                                            th:text="#{optimizer.sets.twoPiece}">
+                                        2-piece
+                                    </option>
+                                    <option value="4"
+                                            th:selected="${!optimizerSetSelection.requirements.isEmpty()
+                                                && optimizerSetSelection.requirements[0].count == 4}"
+                                            th:text="#{optimizer.sets.fourPiece}">
+                                        4-piece
+                                    </option>
+                                </select>
+                            </label>
+                            <label>
+                                <span th:text="#{optimizer.sets.second}">Second set</span>
+                                <select name="secondSet" id="optimizer-second-set">
+                                    <option value="" th:text="#{optimizer.sets.noSecond}">
+                                        No second set
+                                    </option>
+                                    <option th:each="option : ${artifactSetOptions}"
+                                            th:value="${option.key}"
+                                            th:selected="${optimizerSetSelection.requirements.size() > 1
+                                                && optimizerSetSelection.requirements[1].setKey
+                                                == option.key}"
+                                            th:text="${option.name + ' · ' + option.pieces}">
+                                        Marechaussee Hunter · 6
+                                    </option>
+                                </select>
+                                <input type="hidden" name="secondSetCount" value="2">
+                            </label>
+                        </div>
+                        <small th:text="#{optimizer.sets.help}">
+                            The number after a set is how many pieces are in your inventory.
+                            A second set is available for 2+2 builds.
+                        </small>
+                    </fieldset>
+                    <div class="optimizer-target-actions">
+                        <p th:text="#{optimizer.targets.help}">
+                            Minimum targets are fulfilled first. Remaining stats follow their
+                            priority order while CRIT stays balanced.
+                        </p>
+                        <div>
+                            <span th:if="${optimizerProfileSaved}"
+                                  th:text="#{optimizer.profile.savedBadge}">
+                                Saved for this character
+                            </span>
+                            <button class="text-button" type="submit"
+                                    th:formaction="@{/inventory/artifact-optimizer/profile/reset}"
+                                    th:text="#{optimizer.targets.reset}">
+                                Reset saved profile
+                            </button>
+                            <button class="text-button" type="submit"
+                                    th:formaction="@{/inventory/artifact-optimizer/profile/share}"
+                                    th:text="#{optimizer.share.action}">
+                                Create share link
+                            </button>
+                            <button class="text-button danger" type="submit"
+                                    th:if="${selectedCustomProfile != null}"
+                                    th:name="customProfileId"
+                                    th:value="${selectedCustomProfile.id}"
+                                    th:formaction="@{/inventory/artifact-optimizer/profile/custom/delete}"
+                                    th:text="#{optimizer.profile.deleteCustom}">
+                                Delete custom profile
+                            </button>
+                        </div>
+                    </div>
+                </details>
+            </form>
+            <p th:if="${selectedProfile != null}"
+               th:text="${#messages.msg(selectedProfile.descriptionKey)}">
+                Prioritizes CRIT, ATK, Energy Recharge, and Elemental Mastery.
+            </p>
+        </section>
+
+        <div class="optimizer-results" th:if="${optimization != null}">
+            <section class="optimizer-build-summary">
+                <div class="optimizer-character">
+                    <div class="optimizer-character-icon">
+                        <span th:text="${#strings.substring(selectedCharacter.name, 0, 1)}">F</span>
+                        <img th:if="${selectedCharacter.iconUrl != null}"
+                             th:src="${selectedCharacter.iconUrl}"
+                             th:alt="${selectedCharacter.name}"
+                             onerror="this.remove()">
+                    </div>
+                    <div>
+                        <p class="eyebrow" th:text="#{optimizer.currentBuild}">Current build</p>
+                        <h2 th:text="${selectedCharacter.name}">Furina</h2>
+                        <p th:text="${selectedCustomProfile != null
+                            ? selectedCustomProfile.name
+                            : #messages.msg(selectedProfile.messageKey)}">ATK damage</p>
+                        <span class="custom-target-badge" th:if="${optimizerTargets.custom}"
+                              th:text="#{optimizer.targets.active}">Custom targets active</span>
+                    </div>
+                </div>
+                <div class="optimizer-score grade"
+                     th:classappend="${' grade-' + #strings.toLowerCase(optimization.currentGrade)}">
+                    <span th:text="${optimization.currentGrade}">A</span>
+                    <div>
+                        <strong th:text="${#numbers.formatDecimal(
+                            optimization.currentAverageScore, 1, 1)}">63.4</strong>
+                        <small th:text="#{optimizer.averageScore}">average score</small>
+                    </div>
+                </div>
+                <div class="optimizer-set-plan">
+                    <span th:text="#{optimizer.preservedBonuses}">Preserved set bonuses</span>
+                    <div th:if="${!optimization.setPlan.requirements.isEmpty()}">
+                        <b th:each="requirement : ${optimization.setPlan.requirements}"
+                           th:text="${requirement.count + '× ' + requirement.setName}">
+                            4× Golden Troupe
+                        </b>
+                    </div>
+                    <b th:if="${optimization.setPlan.requirements.isEmpty()}"
+                       th:text="#{optimizer.noSetConstraint}">No active set constraint</b>
+                </div>
+            </section>
+
+            <section class="optimizer-stat-summary">
+                <div class="section-heading optimizer-heading">
+                    <div>
+                        <p class="eyebrow" th:text="#{optimizer.stats.eyebrow}">
+                            Complete build values
+                        </p>
+                        <h2 th:text="#{optimizer.stats.heading}">
+                            Basis, weapon, bonuses, and artifacts
+                        </h2>
+                    </div>
+                    <span th:text="#{optimizer.stats.help}">
+                        Main stats and substats from all five artifacts are included.
+                    </span>
+                </div>
+                <div class="optimizer-stat-grid">
+                    <article th:each="stat : ${optimization.currentBuildStats.rows}"
+                             th:classappend="${!stat.minimumMet || !stat.maximumMet
+                                ? ' goal-missing'
+                                : (stat.minimumTarget != null || stat.maximumTarget != null
+                                    ? ' goal-met' : '')}">
+                        <header>
+                            <span th:text="${#messages.msg(stat.messageKey)}">CRIT Rate</span>
+                            <div>
+                                <b th:if="${stat.priority != null}"
+                                   th:text="#{optimizer.priority.badge(${stat.priority})}">
+                                    Priority 1
+                                </b>
+                                <b th:if="${stat.minimumTarget != null}"
+                                   th:text="${#messages.msg(
+                                        stat.minimumMet
+                                            ? 'optimizer.minimum.met'
+                                            : 'optimizer.minimum.missing')}">
+                                    Target met
+                                </b>
+                                <b th:if="${stat.maximumTarget != null && !stat.maximumMet}"
+                                   th:text="#{optimizer.maximum.exceeded}">
+                                    Above maximum
+                                </b>
+                            </div>
+                        </header>
+                        <strong th:text="${#numbers.formatDecimal(stat.totalValue, 1, 1)
+                            + (stat.percentage ? '%' : '')}">72.4%</strong>
+                        <dl>
+                            <div>
+                                <dt th:text="#{optimizer.stats.character}">Character</dt>
+                                <dd th:text="${#numbers.formatDecimal(stat.characterValue, 1, 1)
+                                    + (stat.percentage ? '%' : '')}">5.0%</dd>
+                            </div>
+                            <div>
+                                <dt th:text="#{optimizer.stats.weapon}">Weapon</dt>
+                                <dd th:text="${#numbers.formatDecimal(stat.weaponValue, 1, 1)
+                                    + (stat.percentage ? '%' : '')}">0.0%</dd>
+                            </div>
+                            <div>
+                                <dt th:text="#{optimizer.stats.bonus}">Bonus</dt>
+                                <dd th:text="${#numbers.formatDecimal(stat.bonusValue, 1, 1)
+                                    + (stat.percentage ? '%' : '')}">0.0%</dd>
+                            </div>
+                            <div>
+                                <dt th:text="#{optimizer.stats.artifacts}">Artifacts</dt>
+                                <dd th:text="${#numbers.formatDecimal(stat.artifactValue, 1, 1)
+                                    + (stat.percentage ? '%' : '')}">67.4%</dd>
+                            </div>
+                        </dl>
+                        <p th:if="${stat.minimumTarget != null}"
+                           th:text="#{optimizer.minimum.value(
+                                ${#numbers.formatDecimal(stat.minimumTarget, 1, 1)
+                                    + (stat.percentage ? '%' : '')})}">
+                            Minimum: 70.0%
+                        </p>
+                        <p th:if="${stat.maximumTarget != null}"
+                           th:text="#{optimizer.maximum.value(
+                                ${#numbers.formatDecimal(stat.maximumTarget, 1, 1)
+                                    + (stat.percentage ? '%' : '')})}">
+                            Maximum: 100.0%
+                        </p>
+                    </article>
+                </div>
+                <p class="optimizer-overcap-warning"
+                   th:if="${optimization.currentBuildStats.critRateOverflow > 0}"
+                   th:text="#{optimizer.stats.critOvercap(
+                        ${#numbers.formatDecimal(
+                            optimization.currentBuildStats.critRateOverflow, 1, 1)})}">
+                    CRIT Rate is 4.2 percentage points above the cap.
+                </p>
+            </section>
+
+            <section class="optimizer-section">
+                <div class="section-heading optimizer-heading">
+                    <div>
+                        <p class="eyebrow" th:text="#{optimizer.currentPieces.eyebrow}">
+                            Piece by piece
+                        </p>
+                        <h2 th:text="#{optimizer.currentPieces.heading}">Current artifacts</h2>
+                    </div>
+                    <span th:text="#{optimizer.currentPieces.help}">
+                        Score combines useful roll value and main-stat fit.
+                    </span>
+                </div>
+
+                <div class="optimizer-piece-grid">
+                    <article class="optimizer-piece" th:each="piece : ${optimization.currentPieces}"
+                             th:classappend="${' grade-' + #strings.toLowerCase(piece.grade)}">
+                        <div class="optimizer-piece-top">
+                            <div class="artifact-icon optimizer-artifact-icon"
+                                 th:classappend="${'rarity-' + piece.artifact.rarity}">
+                                <img th:if="${artifactIcons[piece.artifact.imageKey] != null}"
+                                     th:src="${artifactIcons[piece.artifact.imageKey]}"
+                                     th:alt="${piece.setName}"
+                                     loading="lazy">
+                            </div>
+                            <div>
+                                <span class="optimizer-slot"
+                                      th:text="${#messages.msg(
+                                        'artifacts.slot.' + piece.artifact.slotKey)}">Flower</span>
+                                <h3 th:text="${piece.setName}">Artifact Set</h3>
+                                <small th:text="${'+' + piece.artifact.level}">+20</small>
+                            </div>
+                            <div class="piece-grade">
+                                <b th:text="${piece.grade}">A</b>
+                                <span th:text="${#numbers.formatDecimal(piece.score, 1, 1)}">62.4</span>
+                            </div>
+                        </div>
+                        <div class="optimizer-score-track" th:style="${'--piece-score:' + piece.score + '%'}">
+                            <span></span>
+                        </div>
+                        <div class="optimizer-main-stat">
+                            <span>
+                                <b th:text="${#messages.msg(piece.mainStatMessageKey)}">
+                                    CRIT Rate
+                                </b>
+                                <strong th:text="${piece.mainStatFormattedValue}">31.1 %</strong>
+                            </span>
+                            <small th:text="${#messages.msg(piece.mainStatFitKey)}">Preferred main stat</small>
+                        </div>
+                        <div class="artifact-roll-summary">
+                            <span>
+                                <small th:text="#{optimizer.rolls.quality}">Roll quality</small>
+                                <b th:text="${#numbers.formatDecimal(
+                                    piece.rollQuality * 100, 1, 0) + '%'}">86%</b>
+                            </span>
+                            <span>
+                                <small th:text="#{optimizer.rolls.wanted}">Wanted rolls</small>
+                                <b th:text="${piece.usefulRolls + '/' + piece.totalRolls}">7/9</b>
+                            </span>
+                            <span>
+                                <small th:text="#{optimizer.rolls.upgradeHits}">Upgrade hits</small>
+                                <b th:text="${piece.upgradeRolls == 0
+                                    ? '—'
+                                    : piece.usefulUpgradeRolls + '/' + piece.upgradeRolls}">
+                                    4/5
+                                </b>
+                            </span>
+                            <span>
+                                <small th:text="#{optimizer.rolls.targetEfficiency}">
+                                    Target efficiency
+                                </small>
+                                <b th:text="${#numbers.formatDecimal(
+                                    piece.targetEfficiency * 100, 1, 0) + '%'}">72%</b>
+                            </span>
+                        </div>
+                        <ul class="optimizer-substats">
+                            <li th:each="stat : ${piece.stats}" th:classappend="${stat.useful ? ' useful' : ''}">
+                                <span>
+                                    <span th:text="${#messages.msg(stat.messageKey)}">CRIT DMG</span>
+                                    <small th:text="${#messages.msg(
+                                        'optimizer.rolls.count', stat.rollCount)
+                                        + (stat.tierSummary.isEmpty()
+                                            ? ''
+                                            : ' · ' + stat.tierSummary)}">
+                                        2 rolls · T4 · T2
+                                    </small>
+                                </span>
+                                <b th:text="${stat.formattedValue}">14.0 %</b>
+                            </li>
+                        </ul>
+                        <footer>
+                            <span th:text="#{optimizer.weightedRolls}">Weighted rolls</span>
+                            <b th:text="${#numbers.formatDecimal(piece.weightedRolls, 1, 2)}">5.21</b>
+                        </footer>
+                    </article>
+                </div>
+
+                <div class="empty-state compact" th:if="${optimization.currentPieces.isEmpty()}">
+                    <span>◇</span>
+                    <h3 th:text="#{optimizer.noEquippedArtifacts}">
+                        This character has no equipped artifacts in the GOOD export.
+                    </h3>
+                </div>
+            </section>
+
+            <section class="optimizer-section farming-section">
+                <div class="section-heading optimizer-heading">
+                    <div>
+                        <p class="eyebrow" th:text="#{optimizer.farming.eyebrow}">Resin outlook</p>
+                        <h2 th:text="#{optimizer.farming.heading}">How hard is the next upgrade?</h2>
+                    </div>
+                    <span th:text="#{optimizer.farming.help}">
+                        Simulated against the pieces that preserve your current set bonuses.
+                    </span>
+                </div>
+
+                <div class="farming-grid" th:if="${!optimization.farmingOutlooks.isEmpty()}">
+                    <article class="farming-card" th:each="outlook : ${optimization.farmingOutlooks}">
+                        <div class="farming-card-title">
+                            <div>
+                                <span th:text="#{optimizer.farming.targetSet}">Target set</span>
+                                <h3 th:text="${outlook.setName}">Golden Troupe</h3>
+                            </div>
+                            <b th:text="#{optimizer.farming.comparedSlots(${outlook.comparedSlots})}">
+                                5 slots compared
+                            </b>
+                        </div>
+                        <div class="farming-probability">
+                            <strong th:text="${#numbers.formatDecimal(
+                                outlook.chancePerDomainFiveStar * 100, 1, 2) + '%'}">2.40%</strong>
+                            <span th:text="#{optimizer.farming.perDrop}">
+                                chance per domain 5★ drop
+                            </span>
+                        </div>
+                        <dl>
+                            <div>
+                                <dt th:text="#{optimizer.farming.onSet}">If the set drops</dt>
+                                <dd th:text="${#numbers.formatDecimal(
+                                    outlook.chancePerOnSetDrop * 100, 1, 1) + '%'}">4.8%</dd>
+                            </div>
+                            <div>
+                                <dt th:text="#{optimizer.farming.afterTwenty}">After 20 domain 5★ drops</dt>
+                                <dd th:text="${#numbers.formatDecimal(
+                                    outlook.chanceAfterTwentyDomainDrops * 100, 1, 1) + '%'}">38.5%</dd>
+                            </div>
+                            <div>
+                                <dt th:text="#{optimizer.farming.expected}">Expected domain 5★ drops</dt>
+                                <dd th:text="${outlook.expectedDomainDrops == null
+                                    ? '—'
+                                    : #numbers.formatDecimal(outlook.expectedDomainDrops, 1, 0)}">42</dd>
+                            </div>
+                        </dl>
+                    </article>
+                </div>
+                <div class="artifact-upgrade-outlooks"
+                     th:if="${!optimization.artifactOutlooks.isEmpty()}">
+                    <h3 th:text="#{optimizer.farming.perArtifact}">
+                        Upgrade chance per equipped artifact
+                    </h3>
+                    <div>
+                        <article th:each="outlook : ${optimization.artifactOutlooks}">
+                            <div class="artifact-icon compact"
+                                 th:classappend="${'rarity-' + outlook.piece.artifact.rarity}">
+                                <img th:if="${artifactIcons[
+                                    outlook.piece.artifact.imageKey] != null}"
+                                     th:src="${artifactIcons[
+                                        outlook.piece.artifact.imageKey]}"
+                                     th:alt="${outlook.piece.setName}" loading="lazy">
+                            </div>
+                            <div>
+                                <span th:text="${#messages.msg('artifacts.slot.'
+                                    + outlook.piece.artifact.slotKey)}">Circlet</span>
+                                <strong th:text="${outlook.piece.setName}">Artifact Set</strong>
+                                <small th:text="${#messages.msg(
+                                    outlook.piece.mainStatMessageKey) + ' · '
+                                    + outlook.piece.mainStatFormattedValue}">
+                                    CRIT DMG · 62.2 %
+                                </small>
+                            </div>
+                            <dl>
+                                <div>
+                                    <dt th:text="#{optimizer.farming.perDrop}">
+                                        Chance per domain 5★ drop
+                                    </dt>
+                                    <dd th:text="${#numbers.formatDecimal(
+                                        outlook.chancePerDomainFiveStar * 100, 1, 2) + '%'}">
+                                        1.25%
+                                    </dd>
+                                </div>
+                                <div>
+                                    <dt th:text="#{optimizer.farming.expected}">
+                                        Average drops until upgrade
+                                    </dt>
+                                    <dd th:text="${outlook.expectedDomainDrops == null
+                                        ? '—'
+                                        : #numbers.formatDecimal(
+                                            outlook.expectedDomainDrops, 1, 0)}">80</dd>
+                                </div>
+                            </dl>
+                        </article>
+                    </div>
+                </div>
+                <div class="empty-state compact" th:if="${optimization.farmingOutlooks.isEmpty()}">
+                    <span>◇</span>
+                    <h3 th:text="#{optimizer.farming.empty}">
+                        Equip at least two pieces from one set to calculate a farming outlook.
+                    </h3>
+                </div>
+            </section>
+
+            <section class="optimizer-section">
+                <div class="section-heading optimizer-heading">
+                    <div>
+                        <p class="eyebrow" th:text="#{optimizer.leveling.eyebrow}">Hidden potential</p>
+                        <h2 th:text="#{optimizer.leveling.heading}">Artifacts worth trying</h2>
+                    </div>
+                    <span th:text="#{optimizer.leveling.help}">
+                        Unfinished 5★ pieces that can beat the current slot without breaking set bonuses.
+                    </span>
+                </div>
+
+                <div class="leveling-recommendation-list"
+                     th:if="${!optimization.levelingRecommendations.isEmpty()}">
+                    <section class="leveling-recommendation"
+                             th:each="recommendation : ${optimization.levelingRecommendations}">
+                        <header>
+                            <div class="artifact-icon compact"
+                                 th:classappend="${'rarity-'
+                                    + recommendation.currentPiece.artifact.rarity}">
+                                <img th:if="${artifactIcons[
+                                    recommendation.currentPiece.artifact.imageKey] != null}"
+                                     th:src="${artifactIcons[
+                                        recommendation.currentPiece.artifact.imageKey]}"
+                                     th:alt="${recommendation.currentPiece.setName}" loading="lazy">
+                            </div>
+                            <div>
+                                <span th:text="#{optimizer.leveling.replace}">
+                                    Suggestions for
+                                </span>
+                                <h3 th:text="${#messages.msg('artifacts.slot.'
+                                    + recommendation.currentPiece.artifact.slotKey)
+                                    + ' · ' + recommendation.currentPiece.setName}">
+                                    Circlet · Set
+                                </h3>
+                                <small th:text="${#messages.msg(
+                                    recommendation.currentPiece.mainStatMessageKey) + ' · '
+                                    + recommendation.currentPiece.mainStatFormattedValue}">
+                                    CRIT DMG · 62.2 %
+                                </small>
+                            </div>
+                        </header>
+                        <div class="equipped-artifact-substats">
+                            <span th:each="stat : ${recommendation.currentPiece.stats}"
+                                  th:classappend="${stat.useful ? ' useful' : ''}"
+                                  th:text="${#messages.msg(stat.messageKey)
+                                    + ' ' + stat.formattedValue + ' · '
+                                    + #messages.msg('optimizer.rolls.count', stat.rollCount)
+                                    + (stat.tierSummary.isEmpty()
+                                        ? '' : ' · ' + stat.tierSummary)}">
+                                CRIT Rate 7.0 % · 2 rolls · T3 · T2
+                            </span>
+                        </div>
+                        <div class="leveling-candidate-list">
+                            <article class="leveling-candidate"
+                                     th:each="candidate : ${recommendation.candidates}">
+                                <div class="artifact-icon candidate-icon"
+                                     th:classappend="${'rarity-'
+                                        + candidate.piece.artifact.rarity}">
+                                    <img th:if="${artifactIcons[
+                                        candidate.piece.artifact.imageKey] != null}"
+                                         th:src="${artifactIcons[
+                                            candidate.piece.artifact.imageKey]}"
+                                         th:alt="${candidate.piece.setName}" loading="lazy">
+                                </div>
+                                <div class="candidate-copy">
+                                    <h3 th:text="${candidate.piece.setName}">Artifact Set</h3>
+                                    <p>
+                                        <b th:text="${#messages.msg(
+                                            candidate.piece.mainStatMessageKey)}">CRIT Rate</b>
+                                        <span th:text="${' '
+                                            + candidate.piece.mainStatFormattedValue
+                                            + ' · +' + candidate.piece.artifact.level}">
+                                            31.1 % · +0
+                                        </span>
+                                        <span th:text="${' · ' + #messages.msg(
+                                            'optimizer.leveling.rollsLeft',
+                                            candidate.remainingUpgrades)}">
+                                            · 5 rolls left
+                                        </span>
+                                    </p>
+                                    <div class="candidate-stats">
+                                        <span th:each="stat : ${candidate.piece.stats}"
+                                              th:classappend="${stat.useful ? ' useful' : ''}"
+                                              th:text="${#messages.msg(stat.messageKey)
+                                                + ' ' + stat.formattedValue + ' · '
+                                                + #messages.msg(
+                                                    'optimizer.rolls.count', stat.rollCount)
+                                                + (stat.tierSummary.isEmpty()
+                                                    ? '' : ' · ' + stat.tierSummary)}">
+                                            CRIT DMG 7.8% · 1 roll · T4
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="candidate-chance">
+                                    <strong th:text="${#numbers.formatDecimal(
+                                        candidate.chanceToImprove * 100, 1, 1) + '%'}">28.4%</strong>
+                                    <span th:text="#{optimizer.leveling.chance}">
+                                        chance to improve the slot
+                                    </span>
+                                </div>
+                                <dl>
+                                    <div>
+                                        <dt th:text="#{optimizer.leveling.average}">
+                                            Average at +20
+                                        </dt>
+                                        <dd th:text="${#numbers.formatDecimal(
+                                            candidate.averageFinalScore, 1, 1)}">48.0</dd>
+                                    </div>
+                                    <div>
+                                        <dt th:text="#{optimizer.leveling.likelyRange}">
+                                            Likely final range
+                                        </dt>
+                                        <dd th:text="${#numbers.formatDecimal(
+                                            candidate.likelyLowScore, 1, 1)
+                                            + '–' + #numbers.formatDecimal(
+                                                candidate.likelyHighScore, 1, 1)}">
+                                            48.0–71.0
+                                        </dd>
+                                    </div>
+                                    <div>
+                                        <dt th:text="#{optimizer.leveling.nextWanted}">
+                                            Next wanted roll
+                                        </dt>
+                                        <dd th:text="${#numbers.formatDecimal(
+                                            candidate.chanceNextUpgradeUseful * 100, 1, 0)
+                                            + '%'}">75%</dd>
+                                    </div>
+                                    <div>
+                                        <dt th:text="#{optimizer.leveling.expectedWanted}">
+                                            Expected wanted rolls
+                                        </dt>
+                                        <dd th:text="${#numbers.formatDecimal(
+                                            candidate.expectedUsefulUpgrades, 1, 1)
+                                            + '/' + candidate.remainingUpgrades}">
+                                            2.8/4
+                                        </dd>
+                                    </div>
+                                    <div>
+                                        <dt th:text="#{optimizer.leveling.allWanted}">
+                                            All remaining rolls wanted
+                                        </dt>
+                                        <dd th:text="${#numbers.formatDecimal(
+                                            candidate.chanceAllUpgradesUseful * 100, 1, 0)
+                                            + '%'}">32%</dd>
+                                    </div>
+                                    <div>
+                                        <dt th:text="#{optimizer.leveling.ceiling}">
+                                            Best-case ceiling
+                                        </dt>
+                                        <dd th:text="${#numbers.formatDecimal(
+                                            candidate.optimisticScore, 1, 1)}">78.0</dd>
+                                    </div>
+                                </dl>
+                            </article>
+                        </div>
+                        <p class="leveling-no-candidate"
+                           th:if="${recommendation.candidates.isEmpty()}"
+                           th:text="#{optimizer.leveling.noneForArtifact}">
+                            No unfinished artifact is worth leveling for this slot.
+                        </p>
+                    </section>
+                </div>
+                <div class="empty-state compact"
+                     th:if="${optimization.levelingRecommendations.isEmpty()}">
+                    <span>✓</span>
+                    <h3 th:text="#{optimizer.leveling.empty}">
+                        No unfinished piece has a meaningful chance to improve this build.
+                    </h3>
+                </div>
+            </section>
+
+            <section class="optimizer-section loadout-section">
+                <div class="section-heading optimizer-heading">
+                    <div>
+                        <p class="eyebrow" th:text="#{optimizer.loadout.eyebrow}">Inventory search</p>
+                        <h2 th:text="#{optimizer.loadout.heading}">A better loadout</h2>
+                    </div>
+                    <span th:text="#{optimizer.loadout.help}">
+                        Searches leveled 5★ artifacts and preserves current set bonuses.
+                    </span>
+                </div>
+
+                <div th:if="${optimization.loadout != null}" class="loadout-suggestion">
+                    <div class="loadout-gain">
+                        <span th:text="#{optimizer.loadout.projectedScore}">Projected average score</span>
+                        <strong>
+                            <span th:text="${#numbers.formatDecimal(
+                                optimization.loadout.currentAverageScore, 1, 1)}">52.0</span>
+                            <i>→</i>
+                            <span th:text="${#numbers.formatDecimal(
+                                optimization.loadout.optimizedAverageScore, 1, 1)}">64.0</span>
+                        </strong>
+                        <b th:text="${(optimization.loadout.scoreGain >= 0 ? '+' : '')
+                            + #numbers.formatDecimal(
+                            optimization.loadout.scoreGain, 1, 1)}">+12.0</b>
+                    </div>
+                    <div class="loadout-stat-comparison">
+                        <article th:each="stat, status : ${optimization.loadout.buildStats.rows}"
+                                 th:if="${status.index < 4
+                                    || stat.priority != null
+                                    || stat.minimumTarget != null}">
+                            <span th:text="${#messages.msg(stat.messageKey)}">CRIT Rate</span>
+                            <strong>
+                                <span th:text="${#numbers.formatDecimal(
+                                    optimization.currentBuildStats.totalValues[stat.key], 1, 1)
+                                    + (stat.percentage ? '%' : '')}">60.0%</span>
+                                <i>→</i>
+                                <span th:text="${#numbers.formatDecimal(stat.totalValue, 1, 1)
+                                    + (stat.percentage ? '%' : '')}">72.0%</span>
+                            </strong>
+                        </article>
+                    </div>
+                    <p class="loadout-transfer-warning"
+                       th:if="${optimization.loadout.transferredPieces > 0}"
+                       th:text="#{optimizer.loadout.transfers(
+                            ${optimization.loadout.transferredPieces})}">
+                        This suggestion borrows 2 pieces from other characters.
+                    </p>
+                    <div class="suggested-loadout-grid">
+                        <article th:each="piece : ${optimization.loadout.pieces}">
+                            <div class="artifact-icon compact"
+                                 th:classappend="${'rarity-' + piece.artifact.rarity}">
+                                <img th:if="${artifactIcons[piece.artifact.imageKey] != null}"
+                                     th:src="${artifactIcons[piece.artifact.imageKey]}"
+                                     th:alt="${piece.setName}"
+                                     loading="lazy">
+                            </div>
+                            <div>
+                                <span th:text="${#messages.msg(
+                                    'artifacts.slot.' + piece.artifact.slotKey)}">Flower</span>
+                                <h3 th:text="${piece.setName}">Artifact Set</h3>
+                                <p>
+                                    <b th:text="${#messages.msg(piece.mainStatMessageKey)}">
+                                        CRIT Rate
+                                    </b>
+                                    <small th:text="${' ' + piece.mainStatFormattedValue
+                                        + ' · +' + piece.artifact.level}">
+                                        31.1 % · +20
+                                    </small>
+                                </p>
+                                <small th:if="${piece.artifact.location != null}"
+                                       th:text="#{optimizer.loadout.from(
+                                        ${piece.artifact.location})}">From Furina</small>
+                            </div>
+                            <strong th:text="${#numbers.formatDecimal(piece.score, 1, 1)}">72.1</strong>
+                        </article>
+                    </div>
+                </div>
+                <div class="empty-state compact" th:if="${optimization.loadout == null}">
+                    <span>✓</span>
+                    <h3 th:text="#{optimizer.loadout.empty}">
+                        No clearly stronger leveled loadout was found.
+                    </h3>
+                    <p th:text="#{optimizer.loadout.emptyHelp}">
+                        Your current pieces are already the best fit under the active set constraints.
+                    </p>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</main>
+<script>
+    (() => {
+        const characterSelect = document.getElementById("optimizer-character-select");
+        characterSelect?.addEventListener("change", () => {
+            const url = new URL("/inventory/artifact-optimizer", window.location.origin);
+            url.searchParams.set("character", characterSelect.value);
+            window.location.assign(url);
+        });
+
+        const profileSelect = document.getElementById("optimizer-profile-select");
+        const profileName = document.getElementById("optimizer-profile-name");
+        const profileNameInput = profileName?.querySelector("input");
+        const refreshProfileName = () => {
+            if (!profileSelect || !profileName) return;
+            const custom = profileSelect.value.startsWith("custom-");
+            profileName.hidden = !custom;
+            if (profileNameInput) {
+                profileNameInput.disabled = !custom;
+                profileNameInput.required = custom;
+            }
+        };
+        profileSelect?.addEventListener("change", () => {
+            refreshProfileName();
+            if (profileSelect.value === "custom-new") {
+                if (profileNameInput) profileNameInput.value = "";
+                profileNameInput?.focus();
+                return;
+            }
+            const form = profileSelect.closest("form");
+            const url = new URL("/inventory/artifact-optimizer", window.location.origin);
+            const character = form?.elements.character?.value;
+            if (character) url.searchParams.set("character", character);
+            url.searchParams.set("profile", profileSelect.value);
+            window.location.assign(url);
+        });
+        refreshProfileName();
+
+        const selectedPriorities = document.getElementById("optimizer-priority-selected");
+        const availablePriorities = document.getElementById("optimizer-priority-available");
+        let draggedPriority = null;
+
+        const setPriorityItemState = (item, selected) => {
+            item.querySelectorAll('input[name^="priority"]').forEach(input => {
+                input.disabled = !selected;
+            });
+            const toggle = item.querySelector(".optimizer-priority-toggle");
+            if (toggle) {
+                toggle.textContent = selected ? "−" : "+";
+                toggle.toggleAttribute("data-priority-remove", selected);
+                toggle.toggleAttribute("data-priority-add", !selected);
+            }
+        };
+        const movePriorityItem = (item, target) => {
+            target.appendChild(item);
+            setPriorityItemState(item, target === selectedPriorities);
+            const customTargets = item.closest("form")?.elements.customTargets;
+            if (customTargets) customTargets.value = "true";
+        };
+        const insertBeforePointer = (list, item, clientY) => {
+            const siblings = Array.from(
+                list.querySelectorAll(".optimizer-priority-item:not(.dragging)")
+            );
+            const next = siblings.find(sibling => {
+                const box = sibling.getBoundingClientRect();
+                return clientY < box.top + box.height / 2;
+            });
+            list.insertBefore(item, next ?? null);
+            setPriorityItemState(item, list === selectedPriorities);
+        };
+
+        document.querySelectorAll(".optimizer-priority-item").forEach(item => {
+            setPriorityItemState(item, item.parentElement === selectedPriorities);
+            item.addEventListener("dragstart", () => {
+                draggedPriority = item;
+                item.classList.add("dragging");
+            });
+            item.addEventListener("dragend", () => {
+                item.classList.remove("dragging");
+                draggedPriority = null;
+            });
+            item.querySelector(".optimizer-priority-toggle")?.addEventListener("click", () => {
+                movePriorityItem(
+                    item,
+                    item.parentElement === selectedPriorities
+                        ? availablePriorities
+                        : selectedPriorities
+                );
+            });
+        });
+        [selectedPriorities, availablePriorities].filter(Boolean).forEach(list => {
+            list.addEventListener("dragover", event => {
+                event.preventDefault();
+                if (draggedPriority) insertBeforePointer(list, draggedPriority, event.clientY);
+            });
+            list.addEventListener("drop", event => {
+                event.preventDefault();
+                if (draggedPriority) {
+                    insertBeforePointer(list, draggedPriority, event.clientY);
+                    const customTargets = list.closest("form")?.elements.customTargets;
+                    if (customTargets) customTargets.value = "true";
+                }
+            });
+        });
+
+        const mode = document.getElementById("optimizer-set-mode");
+        const picks = document.getElementById("optimizer-set-picks");
+        const firstCount = document.getElementById("optimizer-first-set-count");
+        const secondSet = document.getElementById("optimizer-second-set");
+        if (!mode || !picks || !firstCount || !secondSet) return;
+
+        const refreshSetControls = () => {
+            const custom = mode.value === "custom";
+            picks.classList.toggle("is-disabled", !custom);
+            picks.querySelectorAll("select").forEach(select => {
+                select.disabled = !custom;
+            });
+            secondSet.disabled = !custom || firstCount.value === "4";
+            if (firstCount.value === "4") secondSet.value = "";
+        };
+        mode.addEventListener("change", refreshSetControls);
+        firstCount.addEventListener("change", refreshSetControls);
+        refreshSetControls();
+
+        const copyButton = document.getElementById("copy-optimizer-share");
+        const shareInput = document.getElementById("optimizer-share-link");
+        copyButton?.addEventListener("click", async () => {
+            const shareUrl = new URL(shareInput.value, window.location.origin).toString();
+            await navigator.clipboard.writeText(shareUrl);
+            shareInput.value = shareUrl;
+            shareInput.select();
+        });
+    })();
+</script>
+</body>
+</html>
