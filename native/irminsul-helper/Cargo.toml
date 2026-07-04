@@ -1,0 +1,40 @@
+[package]
+name = "genshin-irminsul-helper"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+build = "build.rs"
+
+[dependencies]
+anime-game-data = { git = "https://github.com/konkers/anime-game-data", rev = "df004591478efaedb995a425256b8ee535e36eee" }
+anyhow = "1.0.99"
+auto-artifactarium = { git = "https://github.com/konkers/auto-artifactarium", rev = "b0338e65d8bebb84149feaada5910f7d2251056f" }
+base64 = "0.22.1"
+clap = { version = "4.5.47", features = ["derive"] }
+flate2 = "1.1.9"
+futures = "0.3.31"
+indexmap = "2.11.1"
+reqwest = { version = "0.12.23", features = ["json"] }
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.143"
+tokio = { version = "1.47.1", features = ["macros", "rt-multi-thread", "time"] }
+tracing = "0.1.41"
+tracing-subscriber = { version = "0.3.20", features = ["env-filter"] }
+
+[target.'cfg(windows)'.dependencies]
+pktmon = { version = "0.6.2", features = ["tokio"] }
+windows = { version = "0.61.3", features = [
+    "Win32_System_Console",
+    "Win32_System_Registry",
+    "Win32_UI_Shell",
+    "Win32_UI_WindowsAndMessaging",
+] }
+
+[build-dependencies]
+anime-game-data = { git = "https://github.com/konkers/anime-game-data", rev = "df004591478efaedb995a425256b8ee535e36eee" }
+flate2 = "1.1.9"
+tokio = { version = "1.47.1", features = ["macros", "rt-multi-thread"] }
+
+[profile.release]
+opt-level = 2
+strip = true
