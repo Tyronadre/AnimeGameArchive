@@ -18,12 +18,23 @@
     </nav>
     <div class="account-controls">
         <span class="account-name" th:text="${currentUser.name}">Player</span>
+        <button th:replace="~{fragments :: themeToggle}"></button>
         <div th:replace="~{fragments :: languageSwitcher}"></div>
         <form th:unless="${desktopMode}" th:action="@{/logout}" method="post">
             <button type="submit" th:text="#{nav.logout}">Log out</button>
         </form>
     </div>
 </header>
+
+<button class="theme-toggle" type="button" th:fragment="themeToggle"
+        data-theme-toggle aria-pressed="false"
+        data-theme-dark-label="Switch to dark mode"
+        data-theme-light-label="Switch to light mode"
+        th:attr="data-theme-dark-label=#{theme.switch.dark},data-theme-light-label=#{theme.switch.light},
+                 aria-label=#{theme.switch.dark},title=#{theme.switch.dark}">
+    <span class="theme-toggle-icon theme-toggle-sun" aria-hidden="true">☀</span>
+    <span class="theme-toggle-icon theme-toggle-moon" aria-hidden="true">☾</span>
+</button>
 
 <div class="language-switcher" th:fragment="languageSwitcher">
     <label class="sr-only" for="language" th:text="#{language.label}">Language</label>

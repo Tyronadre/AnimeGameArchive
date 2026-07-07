@@ -5,30 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="#{dashboard.title}">Farming Dashboard · Genshin Archive</title>
     <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+    <script th:src="@{/js/theme.js}" src="/js/theme.js"></script>
 </head>
 <body>
 <header th:replace="~{fragments :: siteHeader('dashboard')}"></header>
 
 <main class="dashboard-page">
-    <section class="dashboard-hero">
+    <section class="dashboard-hero dashboard-hero-today">
         <div>
-            <p class="eyebrow" th:text="#{dashboard.eyebrow}">Your next resin</p>
-            <h1 th:text="#{dashboard.heading}">Know what is worth farming next.</h1>
+            <p class="eyebrow" th:text="#{dashboard.eyebrow}">Today in Teyvat</p>
+            <h1 th:text="#{dashboard.heading}">What is worth doing today?</h1>
             <p class="lead" th:text="#{dashboard.lead}">
-                Pick the characters and builds you care about. The dashboard turns their
-                missing materials and artifact targets into one focused farming plan.
+                Your inventory becomes a short plan: use weekly rewards first,
+                spend resin with purpose, then collect what costs nothing.
             </p>
+            <span class="dashboard-mode-pill" th:if="${snapshot != null}"
+                  th:classappend="${dashboardAutomatic ? ' is-automatic' : ' is-custom'}">
+                <i th:text="${dashboardAutomatic ? '✦' : '◆'}">✦</i>
+                <span th:text="${dashboardAutomatic
+                    ? #messages.msg('dashboard.mode.automatic')
+                    : #messages.msg('dashboard.mode.custom')}">
+                    Automatic plan
+                </span>
+            </span>
         </div>
-        <div class="dashboard-hero-compass" aria-hidden="true">
-            <span>✦</span>
-            <i></i>
+        <div class="dashboard-hero-route" aria-hidden="true">
+            <span>1</span><i></i><span>2</span><i></i><span>3</span>
         </div>
     </section>
 
     <div class="flash success" th:if="${successMessage != null}"
-         th:text="${successMessage}">Goals saved.</div>
+         th:text="${successMessage}">Priorities saved.</div>
     <div class="flash error" th:if="${errorMessage != null}"
-         th:text="${errorMessage}">Goals could not be saved.</div>
+         th:text="${errorMessage}">Priorities could not be saved.</div>
 
     <section class="dashboard-import-empty" th:if="${snapshot == null}">
         <div>
@@ -43,134 +52,392 @@
         </div>
     </section>
 
-    <div th:if="${snapshot != null}" class="dashboard-content">
-        <section class="dashboard-overview">
-            <div>
-                <span th:text="#{dashboard.overview.goals}">Active goals</span>
-                <strong th:text="${selectedGoalCount}">3</strong>
+    <div th:if="${snapshot != null}" id="dashboard-content" class="dashboard-content"
+         th:attr="data-snapshot-revision=${snapshot.revision}">
+        <section id="dashboard-routine" class="dashboard-routine-bar"
+                 data-day-budget="200" data-weekly-limit="3"
+                 th:attr="data-weekly-open=#{dashboard.routine.weeklyOpen},
+                          data-weekly-done=#{dashboard.routine.weeklyDone}">
+            <div class="dashboard-routine-stat dashboard-routine-weekly">
+                <span class="dashboard-routine-icon">✹</span>
+                <div>
+                    <small th:text="#{dashboard.routine.weekly}">Weekly rewards</small>
+                    <strong><span data-weekly-count>0</span><b>/3</b></strong>
+                </div>
+                <div class="dashboard-weekly-dots" aria-hidden="true">
+                    <i data-weekly-dot></i><i data-weekly-dot></i><i data-weekly-dot></i>
+                </div>
             </div>
-            <div>
-                <span th:text="#{dashboard.overview.actions}">Farming options</span>
-                <strong th:text="${dashboard.recommendations.size()}">8</strong>
+            <div class="dashboard-routine-stat">
+                <div class="dashboard-resin-ring" data-resin-ring>
+                    <strong data-resin-remaining>200</strong>
+                    <small th:text="#{dashboard.routine.resinUnit}">Resin</small>
+                </div>
+                <div>
+                    <small th:text="#{dashboard.routine.today}">Today's budget</small>
+                    <strong><span data-resin-used>0</span><b>/200</b></strong>
+                </div>
             </div>
-            <div>
-                <span th:text="#{dashboard.overview.source}">Inventory source</span>
-                <strong th:text="${snapshot.source ?: #messages.msg('common.unknown')}">
-                    Irminsul
-                </strong>
+            <div class="dashboard-routine-copy">
+                <small th:text="${dashboardAutomatic
+                    ? #messages.msg('dashboard.routine.autoLabel')
+                    : #messages.msg('dashboard.routine.customLabel')}">
+                    Planned automatically
+                </small>
+                <p th:text="${dashboardAutomatic
+                    ? #messages.msg('dashboard.routine.autoText')
+                    : #messages.msg('dashboard.routine.customText')}">
+                    Based on your most invested unfinished characters.
+                </p>
+                <button type="button" class="dashboard-reset-button" data-routine-reset
+                        th:text="#{dashboard.routine.reset}">Reset today</button>
             </div>
-            <a href="#dashboard-goals" th:text="#{dashboard.goals.manage}">Manage goals</a>
         </section>
 
-        <section class="dashboard-section dashboard-recent-activity">
-            <div class="section-heading">
-                <div>
-                    <p class="eyebrow" th:text="#{dashboard.recent.eyebrow}">Live inventory</p>
-                    <h2 th:text="#{dashboard.recent.heading}">Latest updates</h2>
-                </div>
-                <span th:text="#{dashboard.recent.help}">
-                    Changes captured from the game appear here automatically.
-                </span>
+        <div id="dashboard-live-plan" class="dashboard-live-plan" aria-live="polite">
+        <div class="dashboard-plan-heading">
+            <div>
+                <p class="eyebrow" th:text="#{dashboard.plan.eyebrow}">Your route</p>
+                <h2 th:text="#{dashboard.plan.heading}">Three decisions. No checklist chaos.</h2>
             </div>
-            <ol id="dashboard-recent-list" class="dashboard-recent-list"
-                aria-live="polite" th:hidden="${recentActivity.isEmpty()}">
-                <li th:each="activity : ${recentActivity}"
-                    th:classappend="${' tone-' + activity.tone}">
-                    <span class="dashboard-recent-icon" th:text="${activity.icon}">＋</span>
+            <a href="#dashboard-goals" th:text="#{dashboard.goals.manage}">
+                Adjust priorities
+            </a>
+        </div>
+
+        <section class="dashboard-lane dashboard-lane-weekly">
+            <header class="dashboard-lane-heading">
+                <span class="dashboard-step">1</span>
+                <div>
+                    <p class="eyebrow" th:text="#{dashboard.weekly.eyebrow}">Do first</p>
+                    <h2 th:text="#{dashboard.weekly.heading}">Secure weekly rewards</h2>
+                </div>
+                <p th:text="#{dashboard.weekly.help}">
+                    Three discounted claims refresh each week. Let none expire.
+                </p>
+            </header>
+            <div class="dashboard-weekly-layout">
+                <div class="dashboard-weekly-action">
+                    <span>✹</span>
                     <div>
-                        <h3 th:text="${activity.title}">Mora collected</h3>
-                        <p th:text="${activity.detail}">+2,400 · 120,000 total</p>
+                        <strong th:text="#{dashboard.weekly.counterHeading}">
+                            Weekly claim
+                        </strong>
+                        <p th:text="#{dashboard.weekly.counterText}">
+                            Record a claim after collecting the blossom.
+                        </p>
                     </div>
-                    <time th:datetime="${activity.occurredAt}"
-                          th:text="${activity.age}">Just now</time>
-                </li>
-            </ol>
-            <p id="dashboard-recent-empty" class="dashboard-recent-empty"
-               th:hidden="${!recentActivity.isEmpty()}"
-               th:text="#{dashboard.recent.empty}">
-                Start live capture and make an inventory change to see it here.
-            </p>
-        </section>
-
-        <section class="dashboard-no-goals" th:if="${dashboard.goals.isEmpty()}">
-            <span>✧</span>
-            <div>
-                <p class="eyebrow" th:text="#{dashboard.noGoals.eyebrow}">Set a direction</p>
-                <h2 th:text="#{dashboard.noGoals.heading}">
-                    Choose at least one character goal.
-                </h2>
-                <p th:text="#{dashboard.noGoals.text}">
-                    You can plan character levels and talents, artifact optimization, or both.
-                </p>
-            </div>
-            <a href="#dashboard-goals" class="primary-button"
-               th:text="#{dashboard.noGoals.action}">Choose goals</a>
-        </section>
-
-        <section class="dashboard-focus"
-                 th:if="${dashboard.primaryRecommendation != null}"
-                 th:with="recommendation=${dashboard.primaryRecommendation}">
-            <div class="dashboard-focus-copy">
-                <p class="eyebrow" th:text="#{dashboard.top.eyebrow}">Best next farm</p>
-                <div class="dashboard-activity-line">
-                    <span th:text="${recommendation.activity.icon}">◆</span>
-                    <small th:text="${#messages.msg(recommendation.activity.messageKey)}">
-                        Talent Domain
-                    </small>
+                    <button type="button" class="primary-button" data-weekly-claim
+                            th:text="#{dashboard.weekly.claim}">Record claim</button>
                 </div>
-                <h2 th:text="${recommendation.title}">Guide to Freedom</h2>
-                <p th:text="${#messages.msg(recommendation.activity.actionMessageKey)}">
-                    Run the matching domain to make progress on this goal.
-                </p>
-                <div class="dashboard-impact-meter">
-                    <span>
-                        <i th:style="${'width:' + recommendation.impactPercent + '%'}"></i>
-                    </span>
-                    <b th:text="#{dashboard.needSeverity(${recommendation.impactPercent})}">
-                        72% need
-                    </b>
-                </div>
-                <a class="primary-button" th:href="${recommendation.href}"
-                   th:text="#{dashboard.openDetails}">Open details</a>
-            </div>
-            <div class="dashboard-focus-visual">
-                <span class="dashboard-focus-glyph"
-                      th:text="${recommendation.activity.icon}">◆</span>
-                <img th:if="${recommendation.imageUrl != null}"
-                     th:src="${recommendation.imageUrl}"
-                     th:alt="${recommendation.title}"
-                     onerror="this.remove()">
-            </div>
-            <div class="dashboard-focus-details">
-                <div>
-                    <span th:text="#{dashboard.helps}">Helps</span>
-                    <ul class="dashboard-character-chips">
-                        <li th:each="character : ${recommendation.characters}">
-                            <img th:if="${character.iconUrl != null}"
-                                 th:src="${character.iconUrl}" th:alt="${character.name}"
+                <div class="dashboard-task-list" data-dashboard-list="weekly-main"
+                     th:hidden="${dashboard.weeklyRecommendations.isEmpty()}">
+                    <article class="dashboard-task-card is-weekly"
+                             th:each="recommendation, iteration : ${dashboard.weeklyRecommendations}"
+                             th:if="${iteration.index < 3}">
+                        <div class="dashboard-task-art">
+                            <span th:text="${recommendation.activity.icon}">✹</span>
+                            <img th:if="${recommendation.imageUrl != null}"
+                                 th:src="${recommendation.imageUrl}" th:alt="${recommendation.title}"
                                  onerror="this.remove()">
-                            <b th:text="${character.name}">Furina</b>
-                        </li>
-                    </ul>
+                        </div>
+                        <a class="dashboard-task-main" th:href="${recommendation.href}">
+                            <small th:text="${#messages.msg(recommendation.activity.messageKey)}">
+                                Weekly boss
+                            </small>
+                            <h3 th:text="${recommendation.title}">Dvalin's Plume</h3>
+                            <span th:text="#{dashboard.card.helps(
+                                ${recommendation.characters.size()})}">
+                                Helps 2 characters
+                            </span>
+                            <span class="dashboard-material-progress"
+                                  th:if="${recommendation.requiredTotal > 0}"
+                                  th:text="#{dashboard.card.materialProgress(
+                                    ${recommendation.coveredTotal},
+                                    ${recommendation.requiredTotal})}">
+                                Collected 12/30
+                            </span>
+                        </a>
+                        <b class="dashboard-cost">30 <span>◐</span></b>
+                    </article>
                 </div>
-                <div th:if="${!recommendation.materials.isEmpty()}">
-                    <span th:text="#{dashboard.missing}">Still missing</span>
-                    <ul class="dashboard-material-list">
-                        <li th:each="material : ${recommendation.materials}">
-                            <b th:text="${material.name}">Guide to Freedom</b>
-                            <strong th:text="${#numbers.formatInteger(
-                                material.missing, 1, 'POINT')}">12</strong>
-                        </li>
-                    </ul>
+                <div class="dashboard-lane-empty" data-dashboard-empty="weekly"
+                     th:hidden="${!dashboard.weeklyRecommendations.isEmpty()}">
+                    <span>✓</span>
+                    <div>
+                        <strong th:text="#{dashboard.weekly.flexHeading}">
+                            No specific boss is blocking a priority.
+                        </strong>
+                        <p th:text="#{dashboard.weekly.flexText}">
+                            Use the three discounted claims freely for billets, solvent, and stock.
+                        </p>
+                    </div>
                 </div>
-                <div th:if="${recommendation.artifactScore != null}">
-                    <span th:text="#{dashboard.currentArtifactScore}">
-                        Current average artifact score
+            </div>
+        </section>
+
+        <div class="dashboard-lane-grid">
+            <section class="dashboard-lane dashboard-lane-resin">
+                <header class="dashboard-lane-heading">
+                    <span class="dashboard-step">2</span>
+                    <div>
+                        <p class="eyebrow" th:text="#{dashboard.resin.eyebrow}">Spend deliberately</p>
+                        <h2 th:text="#{dashboard.resin.heading}">Use today's resin</h2>
+                    </div>
+                    <p th:text="#{dashboard.resin.help}">
+                        Best returns for the characters in focus, available today.
+                    </p>
+                </header>
+                <div class="dashboard-task-list" data-dashboard-list="resin-main"
+                     th:hidden="${dashboard.resinRecommendations.isEmpty()}">
+                    <article class="dashboard-task-card"
+                             th:each="recommendation, iteration : ${dashboard.resinRecommendations}"
+                             th:if="${iteration.index < 5}"
+                             th:attr="data-resin-task=${recommendation.key}">
+                        <div class="dashboard-task-art">
+                            <span th:text="${recommendation.activity.icon}">◆</span>
+                            <img th:if="${recommendation.imageUrl != null}"
+                                 th:src="${recommendation.imageUrl}" th:alt="${recommendation.title}"
+                                 onerror="this.remove()">
+                        </div>
+                        <a class="dashboard-task-main" th:href="${recommendation.href}">
+                            <small th:text="${#messages.msg(recommendation.activity.messageKey)}">
+                                Talent domain
+                            </small>
+                            <h3 th:text="${recommendation.title}">Guide to Freedom</h3>
+                            <span th:text="#{dashboard.card.helps(
+                                ${recommendation.characters.size()})}">
+                                Helps 2 characters
+                            </span>
+                            <span class="dashboard-material-progress"
+                                  th:if="${recommendation.requiredTotal > 0}"
+                                  th:text="#{dashboard.card.materialProgress(
+                                    ${recommendation.coveredTotal},
+                                    ${recommendation.requiredTotal})}">
+                                Collected 12/30
+                            </span>
+                        </a>
+                        <div class="dashboard-task-actions">
+                            <b class="dashboard-cost">
+                                <span th:text="${recommendation.activity.resinCost}">20</span>
+                                <span>◐</span>
+                            </b>
+                            <button type="button" data-resin-run
+                                    th:attr="data-task-key=${recommendation.key},
+                                             data-resin-cost=${recommendation.activity.resinCost},
+                                             aria-label=#{dashboard.resin.recordRun(${recommendation.title})}">
+                                <span data-run-count>+</span>
+                            </button>
+                        </div>
+                    </article>
+                </div>
+                <details class="dashboard-more" data-dashboard-more="resin"
+                         th:hidden="${dashboard.resinRecommendations.size() <= 5}">
+                    <summary data-dashboard-more-summary="resin"
+                             th:text="${dashboard.resinRecommendations.size() > 5
+                                ? #messages.msg('dashboard.more',
+                                    dashboard.resinRecommendations.size() - 5)
+                                : ''}">
+                        Show 2 more
+                    </summary>
+                    <div class="dashboard-task-list" data-dashboard-list="resin-more">
+                        <article class="dashboard-task-card is-compact"
+                                 th:each="recommendation, iteration : ${dashboard.resinRecommendations}"
+                                 th:if="${iteration.index >= 5}"
+                                 th:attr="data-resin-task=${recommendation.key}">
+                            <div class="dashboard-task-art">
+                                <span th:text="${recommendation.activity.icon}">◆</span>
+                                <img th:if="${recommendation.imageUrl != null}"
+                                     th:src="${recommendation.imageUrl}" th:alt="${recommendation.title}"
+                                     onerror="this.remove()">
+                            </div>
+                            <a class="dashboard-task-main" th:href="${recommendation.href}">
+                                <small th:text="${#messages.msg(recommendation.activity.messageKey)}">
+                                    Domain
+                                </small>
+                                <h3 th:text="${recommendation.title}">Material</h3>
+                                <span class="dashboard-material-progress"
+                                      th:if="${recommendation.requiredTotal > 0}"
+                                      th:text="#{dashboard.card.materialProgress(
+                                        ${recommendation.coveredTotal},
+                                        ${recommendation.requiredTotal})}">
+                                    Collected 12/30
+                                </span>
+                            </a>
+                            <div class="dashboard-task-actions">
+                                <b class="dashboard-cost">
+                                    <span th:text="${recommendation.activity.resinCost}">20</span>
+                                    <span>◐</span>
+                                </b>
+                                <button type="button" data-resin-run
+                                        th:attr="data-task-key=${recommendation.key},
+                                                 data-resin-cost=${recommendation.activity.resinCost},
+                                                 aria-label=#{dashboard.resin.recordRun(${recommendation.title})}">
+                                    <span data-run-count>+</span>
+                                </button>
+                            </div>
+                        </article>
+                    </div>
+                </details>
+                <div class="dashboard-lane-empty" data-dashboard-empty="resin"
+                     th:hidden="${!dashboard.resinRecommendations.isEmpty()}">
+                    <span>✓</span>
+                    <div>
+                        <strong th:text="#{dashboard.resin.emptyHeading}">
+                            Today's resin goals are covered.
+                        </strong>
+                        <p th:text="#{dashboard.resin.emptyText}">
+                            Save resin or spend it on a flexible artifact upgrade.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="dashboard-lane dashboard-lane-free">
+                <header class="dashboard-lane-heading">
+                    <span class="dashboard-step">3</span>
+                    <div>
+                        <p class="eyebrow" th:text="#{dashboard.free.eyebrow}">Any time</p>
+                        <h2 th:text="#{dashboard.free.heading}">Continue without resin</h2>
+                    </div>
+                    <p th:text="#{dashboard.free.help}">
+                        Pick one route whenever you still feel like playing.
+                    </p>
+                </header>
+                <div class="dashboard-task-list" data-dashboard-list="free-main"
+                     th:hidden="${dashboard.freeRecommendations.isEmpty()}">
+                    <a class="dashboard-task-card is-free"
+                       th:each="recommendation, iteration : ${dashboard.freeRecommendations}"
+                       th:if="${iteration.index < 5}"
+                       th:attr="data-free-task=${recommendation.key}"
+                       th:href="${recommendation.href}">
+                        <div class="dashboard-task-art">
+                            <span th:text="${recommendation.activity.icon}">❧</span>
+                            <img th:if="${recommendation.imageUrl != null}"
+                                 th:src="${recommendation.imageUrl}" th:alt="${recommendation.title}"
+                                 onerror="this.remove()">
+                        </div>
+                        <div class="dashboard-task-main">
+                            <small th:text="${#messages.msg(recommendation.activity.messageKey)}">
+                                Regional specialty
+                            </small>
+                            <h3 th:text="${recommendation.title}">Lakelight Lily</h3>
+                            <span th:text="#{dashboard.card.helps(
+                                ${recommendation.characters.size()})}">
+                                Helps 1 character
+                            </span>
+                            <span class="dashboard-material-progress"
+                                  th:if="${recommendation.requiredTotal > 0}"
+                                  th:text="#{dashboard.card.materialProgress(
+                                    ${recommendation.coveredTotal},
+                                    ${recommendation.requiredTotal})}">
+                                Collected 12/30
+                            </span>
+                        </div>
+                        <b class="dashboard-free-badge" th:text="#{dashboard.free.cost}">
+                            0 resin
+                        </b>
+                    </a>
+                </div>
+                <details class="dashboard-more" data-dashboard-more="free"
+                         th:hidden="${dashboard.freeRecommendations.size() <= 5}">
+                    <summary data-dashboard-more-summary="free"
+                             th:text="${dashboard.freeRecommendations.size() > 5
+                                ? #messages.msg('dashboard.more',
+                                    dashboard.freeRecommendations.size() - 5)
+                                : ''}">
+                        Show 2 more
+                    </summary>
+                    <div class="dashboard-task-list" data-dashboard-list="free-more">
+                        <a class="dashboard-task-card is-free is-compact"
+                           th:each="recommendation, iteration : ${dashboard.freeRecommendations}"
+                           th:if="${iteration.index >= 5}"
+                           th:attr="data-free-task=${recommendation.key}"
+                           th:href="${recommendation.href}">
+                            <div class="dashboard-task-art">
+                                <span th:text="${recommendation.activity.icon}">❧</span>
+                                <img th:if="${recommendation.imageUrl != null}"
+                                     th:src="${recommendation.imageUrl}"
+                                     th:alt="${recommendation.title}"
+                                     onerror="this.remove()">
+                            </div>
+                            <div class="dashboard-task-main">
+                                <small th:text="${#messages.msg(recommendation.activity.messageKey)}">
+                                    Open world
+                                </small>
+                                <h3 th:text="${recommendation.title}">Material</h3>
+                                <span class="dashboard-material-progress"
+                                      th:if="${recommendation.requiredTotal > 0}"
+                                      th:text="#{dashboard.card.materialProgress(
+                                        ${recommendation.coveredTotal},
+                                        ${recommendation.requiredTotal})}">
+                                    Collected 12/30
+                                </span>
+                            </div>
+                            <b class="dashboard-free-badge" th:text="#{dashboard.free.cost}">
+                                0 resin
+                            </b>
+                        </a>
+                    </div>
+                </details>
+                <div class="dashboard-lane-empty" data-dashboard-empty="free"
+                     th:hidden="${!dashboard.freeRecommendations.isEmpty()}">
+                    <span>✓</span>
+                    <div>
+                        <strong th:text="#{dashboard.free.emptyHeading}">
+                            Nothing needs an overworld route right now.
+                        </strong>
+                        <p th:text="#{dashboard.free.emptyText}">
+                            Explore freely or adjust your character priorities.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <section class="dashboard-priority-summary"
+                 th:if="${!dashboardAutomatic && !dashboard.goals.isEmpty()}">
+            <div class="dashboard-priority-summary-heading">
+                <div>
+                    <p class="eyebrow" th:text="#{dashboard.active.eyebrow}">In focus</p>
+                    <h2 th:text="#{dashboard.active.heading}">Your priorities</h2>
+                </div>
+                <a href="#dashboard-goals" th:text="#{dashboard.goals.manage}">
+                    Adjust priorities
+                </a>
+            </div>
+            <div class="dashboard-priority-cards">
+                <a class="dashboard-priority-card" th:each="goal : ${dashboard.goals}"
+                   th:href="${goal.type.key == 'artifacts'
+                        ? '/inventory/artifact-optimizer?character=' + goal.characterKey
+                        : '/characters/' + goal.characterKey}">
+                    <span class="dashboard-goal-avatar">
+                        <i th:text="${#strings.substring(goal.characterName, 0, 1)}">F</i>
+                        <img th:if="${goal.iconUrl != null}" th:src="${goal.iconUrl}"
+                             th:alt="${goal.characterName}" onerror="this.remove()">
                     </span>
-                    <strong class="dashboard-artifact-score"
-                            th:text="${#numbers.formatDecimal(
-                                recommendation.artifactScore, 1, 1)}">63.4</strong>
-                </div>
+                    <span>
+                        <small th:text="${goal.type.key == 'artifacts'
+                            ? #messages.msg('dashboard.goal.artifacts')
+                            : #messages.msg('dashboard.goal.character')}">
+                            Character progress
+                        </small>
+                        <strong th:text="${goal.characterName}">Furina</strong>
+                        <b th:if="${goal.type.key == 'character'}"
+                           th:text="#{dashboard.goal.level(
+                            ${goal.currentLevel},${goal.targetLevel})}">
+                            Level 70 → 80
+                        </b>
+                        <b th:if="${goal.type.key == 'artifacts'
+                            && goal.weaponName != null}"
+                           th:text="#{dashboard.goal.weapon(
+                            ${goal.weaponName},${goal.weaponCurrentLevel},
+                            ${goal.weaponTargetLevel})}">
+                            Rust · Level 20 → 90
+                        </b>
+                    </span>
+                    <i>→</i>
+                </a>
             </div>
         </section>
 
@@ -182,162 +449,83 @@
             <div>
                 <p class="eyebrow" th:text="#{dashboard.complete.eyebrow}">Goals covered</p>
                 <h2 th:text="#{dashboard.complete.heading}">
-                    Your inventory already covers the selected progression goals.
+                    Your inventory already covers the current progression goals.
                 </h2>
                 <p th:text="#{dashboard.complete.text}">
                     Raise the targets or choose another character when you are ready.
                 </p>
             </div>
         </section>
-
-        <section class="dashboard-complete"
-                 th:if="${!dashboard.goals.isEmpty()
-                    && dashboard.recommendations.isEmpty()
-                    && !dashboard.allGoalsComplete}">
-            <span>☾</span>
-            <div>
-                <p class="eyebrow" th:text="#{dashboard.todayDone.eyebrow}">
-                    Nothing urgent today
-                </p>
-                <h2 th:text="#{dashboard.todayDone.heading}">
-                    No selected day-specific domain is available right now.
-                </h2>
-                <p th:text="#{dashboard.todayDone.text}">
-                    Other required materials are already covered, or the missing domain
-                    rotates back on another day.
-                </p>
-            </div>
-        </section>
-
-        <section class="dashboard-section"
-                 th:if="${!dashboard.additionalRecommendations.isEmpty()}">
-            <div class="section-heading">
-                <div>
-                    <p class="eyebrow" th:text="#{dashboard.queue.eyebrow}">After that</p>
-                    <h2 th:text="#{dashboard.queue.heading}">Your farming queue</h2>
-                </div>
-                <span th:text="#{dashboard.queue.help}">
-                    Ranked by shared goals and current shortages.
-                </span>
-            </div>
-            <div class="dashboard-recommendation-grid">
-                <a class="dashboard-recommendation"
-                   th:each="recommendation, iteration : ${dashboard.additionalRecommendations}"
-                   th:href="${recommendation.href}">
-                    <div class="dashboard-recommendation-rank"
-                         th:text="${iteration.index + 2}">2</div>
-                    <div class="dashboard-recommendation-icon">
-                        <span th:text="${recommendation.activity.icon}">◆</span>
-                        <img th:if="${recommendation.imageUrl != null}"
-                             th:src="${recommendation.imageUrl}"
-                             th:alt="${recommendation.title}"
-                             loading="lazy" onerror="this.remove()">
-                    </div>
-                    <div>
-                        <span th:text="${#messages.msg(recommendation.activity.messageKey)}">
-                            Talent Domain
-                        </span>
-                        <h3 th:text="${recommendation.title}">Guide to Freedom</h3>
-                        <p th:text="#{dashboard.goalCount(${recommendation.characters.size()})}">
-                            Helps 2 goals
-                        </p>
-                    </div>
-                    <strong th:text="${recommendation.impactPercent + '%'}">64%</strong>
-                </a>
-            </div>
-        </section>
-
-        <section class="dashboard-section dashboard-active-goals"
-                 th:if="${!dashboard.goals.isEmpty()}">
-            <div class="section-heading">
-                <div>
-                    <p class="eyebrow" th:text="#{dashboard.active.eyebrow}">In focus</p>
-                    <h2 th:text="#{dashboard.active.heading}">Active goals</h2>
-                </div>
-            </div>
-            <div class="dashboard-goal-progress-grid">
-                <a class="dashboard-goal-progress" th:each="goal : ${dashboard.goals}"
-                   th:href="${goal.type.key == 'artifacts'
-                        ? '/inventory/artifact-optimizer?character=' + goal.characterKey
-                        : '/characters/' + goal.characterKey}">
-                    <div class="dashboard-goal-avatar">
-                        <span th:text="${#strings.substring(goal.characterName, 0, 1)}">F</span>
-                        <img th:if="${goal.iconUrl != null}" th:src="${goal.iconUrl}"
-                             th:alt="${goal.characterName}" onerror="this.remove()">
-                    </div>
-                    <div>
-                        <span th:text="${goal.type.key == 'artifacts'
-                            ? #messages.msg('dashboard.goal.artifacts')
-                            : #messages.msg('dashboard.goal.character')}">
-                            Character progress
-                        </span>
-                        <h3 th:text="${goal.characterName}">Furina</h3>
-                        <p th:if="${goal.type.key == 'character'}"
-                           th:text="#{dashboard.goal.level(
-                            ${goal.currentLevel},${goal.targetLevel})}">
-                            Level 70 → 90
-                        </p>
-                        <small th:if="${goal.type.key == 'character'}"
-                               th:text="#{dashboard.goal.talents(
-                                ${goal.currentTalentTotal},${goal.targetTalentTotal})}">
-                            Talents 18 → 27 total
-                        </small>
-                        <p th:if="${goal.type.key == 'artifacts'}"
-                           th:text="#{dashboard.goal.artifactScore(
-                            ${#numbers.formatDecimal(goal.artifactScore, 1, 1)})}">
-                            Average score 63.4
-                        </p>
-                        <small th:if="${goal.type.key == 'artifacts'
-                            && goal.weaponName != null}"
-                               th:text="#{dashboard.goal.weapon(
-                                ${goal.weaponName},${goal.weaponCurrentLevel},
-                                ${goal.weaponTargetLevel})}">
-                            Rust · Level 20 → 90
-                        </small>
-                    </div>
-                    <b th:if="${goal.complete}">✓</b>
-                    <b th:unless="${goal.complete}">→</b>
-                </a>
-            </div>
-        </section>
+        </div>
 
         <section id="dashboard-goals" class="dashboard-section dashboard-goal-manager">
-            <details th:open="${dashboard.goals.isEmpty()}">
+            <details>
                 <summary>
                     <div>
-                        <p class="eyebrow" th:text="#{dashboard.goals.eyebrow}">Priorities</p>
-                        <h2 th:text="#{dashboard.goals.heading}">Choose what you are working on</h2>
+                        <p class="eyebrow" th:text="#{dashboard.goals.eyebrow}">Optional focus</p>
+                        <h2 th:text="#{dashboard.goals.heading}">Prioritize specific characters</h2>
                     </div>
-                    <span th:text="#{dashboard.goals.summary}">
-                        Level characters, improve artifacts, or do both.
+                    <span th:text="${dashboardAutomatic
+                        ? #messages.msg('dashboard.goals.autoSummary')
+                        : #messages.msg('dashboard.goals.customSummary',
+                            selectedGoalCount)}">
+                        Optional: the automatic plan already works without this.
                     </span>
                 </summary>
-                <form th:action="@{/goals}" method="post">
+                <form action="/goals" method="post">
+                    <input th:unless="${desktopMode}" type="hidden"
+                           th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <div class="dashboard-priority-note" th:if="${dashboardAutomatic}">
+                        <span>✦</span>
+                        <p th:text="#{dashboard.goals.autoNote}">
+                            No priorities selected. The dashboard currently chooses invested,
+                            unfinished characters automatically.
+                        </p>
+                    </div>
                     <label class="dashboard-goal-search">
                         <span class="sr-only" th:text="#{dashboard.goals.searchLabel}">
-                            Search goal characters
+                            Search characters
                         </span>
                         <input id="dashboard-goal-search" type="search"
                                th:placeholder="#{dashboard.goals.search}"
                                placeholder="Find a character…" autocomplete="off">
                     </label>
+                    <div class="dashboard-element-filters"
+                         th:if="${!goalElementFilters.isEmpty()}"
+                         role="group"
+                         th:attr="aria-label=#{dashboard.goals.elementFilters}">
+                        <button type="button" class="is-active" data-element-filter="all"
+                                aria-pressed="true"
+                                th:text="#{dashboard.goals.allElements}">
+                            All
+                        </button>
+                        <button type="button" th:each="element : ${goalElementFilters}"
+                                th:attr="data-element-filter=${element.key}"
+                                aria-pressed="false"
+                                th:text="${element.label}">
+                            Pyro
+                        </button>
+                    </div>
                     <div class="dashboard-goal-table-head">
                         <span th:text="#{nav.characters}">Characters</span>
                         <span th:text="#{dashboard.goal.character}">Character progress</span>
-                        <span th:text="#{dashboard.goal.artifacts}">Artifact optimization</span>
+                        <span th:text="#{dashboard.goal.artifacts}">Build optimization</span>
                     </div>
-                    <div class="dashboard-goal-option" th:each="option : ${goalOptions}">
+                    <div class="dashboard-goal-option" th:each="option : ${goalOptions}"
+                         th:attr="data-character-search=${option.searchText},
+                                  data-character-element=${option.elementKey}">
                         <a th:href="@{/characters/{key}(key=${option.key})}">
                             <span class="dashboard-goal-option-avatar">
                                 <i th:text="${#strings.substring(option.name, 0, 1)}">F</i>
                                 <img th:if="${option.iconUrl != null}" th:src="${option.iconUrl}"
-                                     th:alt="${option.name}" loading="lazy" onerror="this.remove()">
+                                     th:alt="${option.name}" loading="lazy"
+                                     onerror="this.remove()">
                             </span>
                             <span>
                                 <b th:text="${option.name}">Furina</b>
                                 <small th:text="#{dashboard.goal.level(
                                     ${option.currentLevel},${option.targetLevel})}">
-                                    Level 70 → 90
+                                    Level 70 → 80
                                 </small>
                             </span>
                         </a>
@@ -345,9 +533,7 @@
                             <input type="checkbox" name="characterGoals"
                                    th:value="${option.key}"
                                    th:checked="${option.characterSelected}">
-                            <span th:text="#{dashboard.goal.characterShort}">
-                                Materials
-                            </span>
+                            <span th:text="#{dashboard.goal.characterShort}">Materials</span>
                         </label>
                         <label th:classappend="${!option.canOptimize ? ' disabled' : ''}">
                             <input type="checkbox" name="artifactGoals"
@@ -357,35 +543,228 @@
                             <span th:text="${option.canOptimize
                                 ? #messages.msg('dashboard.goal.artifactsShort')
                                 : #messages.msg('dashboard.goal.noArtifacts')}">
-                                Artifacts
+                                Artifacts & weapon
                             </span>
                         </label>
                     </div>
                     <div class="dashboard-goal-actions">
                         <p th:text="#{dashboard.goals.hint}">
-                            Character targets come from each character page. Artifact targets
-                            come from that character's saved optimizer profile.
+                            Leave everything empty to return to the automatic plan.
                         </p>
                         <button class="primary-button" type="submit"
-                                th:text="#{dashboard.goals.save}">Save goals</button>
+                                th:text="#{dashboard.goals.save}">Save priorities</button>
                     </div>
                 </form>
             </details>
         </section>
+
+        <section class="dashboard-section dashboard-recent-activity">
+            <details>
+                <summary class="section-heading">
+                    <div>
+                        <p class="eyebrow" th:text="#{dashboard.recent.eyebrow}">Live inventory</p>
+                        <h2 th:text="#{dashboard.recent.heading}">Latest updates</h2>
+                    </div>
+                    <span th:text="#{dashboard.recent.help}">
+                        Changes captured from the game appear here automatically.
+                    </span>
+                </summary>
+                <ol id="dashboard-recent-list" class="dashboard-recent-list"
+                    aria-live="polite" th:hidden="${recentActivity.isEmpty()}">
+                    <li th:each="activity : ${recentActivity}"
+                        th:classappend="${' tone-' + activity.tone}">
+                        <span class="dashboard-recent-icon" th:text="${activity.icon}">＋</span>
+                        <div>
+                            <h3 th:text="${activity.title}">Mora collected</h3>
+                            <p th:text="${activity.detail}">+2,400 · 120,000 total</p>
+                        </div>
+                        <time th:datetime="${activity.occurredAt}"
+                              th:text="${activity.age}">Just now</time>
+                    </li>
+                </ol>
+                <p id="dashboard-recent-empty" class="dashboard-recent-empty"
+                   th:hidden="${!recentActivity.isEmpty()}"
+                   th:text="#{dashboard.recent.empty}">
+                    Start live capture and make an inventory change to see it here.
+                </p>
+            </details>
+        </section>
     </div>
 </main>
+
 <script>
     (() => {
         const search = document.getElementById("dashboard-goal-search");
         if (!search) return;
         const options = [...document.querySelectorAll(".dashboard-goal-option")];
-        search.addEventListener("input", () => {
+        const elementFilters = [...document.querySelectorAll("[data-element-filter]")];
+        let activeElement = "all";
+
+        const applyFilters = () => {
             const query = search.value.trim().toLocaleLowerCase();
             options.forEach(option => {
-                option.hidden = query !== "" &&
-                    !option.textContent.toLocaleLowerCase().includes(query);
+                const searchableText = (
+                    option.dataset.characterSearch ||
+                    option.textContent ||
+                    ""
+                ).toLocaleLowerCase();
+                const characterElement = option.dataset.characterElement || "";
+                const matchesSearch = query === "" || searchableText.includes(query);
+                const matchesElement = activeElement === "all" ||
+                    characterElement === activeElement;
+                const filteredOut = !(matchesSearch && matchesElement);
+                option.hidden = filteredOut;
+                option.classList.toggle("is-filtered-out", filteredOut);
+                option.setAttribute("aria-hidden", filteredOut ? "true" : "false");
+            });
+        };
+
+        const scheduleApplyFilters = () => window.requestAnimationFrame(applyFilters);
+
+        search.addEventListener("input", applyFilters);
+        search.addEventListener("keyup", applyFilters);
+        search.addEventListener("keydown", scheduleApplyFilters);
+        search.addEventListener("search", applyFilters);
+
+        elementFilters.forEach(button => {
+            button.addEventListener("click", () => {
+                activeElement = button.dataset.elementFilter || "all";
+                elementFilters.forEach(filter => {
+                    const selected = filter === button;
+                    filter.classList.toggle("is-active", selected);
+                    filter.setAttribute("aria-pressed", selected ? "true" : "false");
+                });
+                applyFilters();
+                try {
+                    search.focus({preventScroll: true});
+                } catch (_) {
+                    search.focus();
+                }
             });
         });
+
+        applyFilters();
+    })();
+</script>
+<script>
+    (() => {
+        const root = document.getElementById("dashboard-routine");
+        if (!root) return;
+
+        const budget = Number(root.dataset.dayBudget || 200);
+        const weeklyLimit = Number(root.dataset.weeklyLimit || 3);
+        const storageKey = "genshin-dashboard-routine-v1";
+        const today = new Date().toLocaleDateString("en-CA");
+        const weekKey = date => {
+            const utc = new Date(Date.UTC(
+                date.getFullYear(), date.getMonth(), date.getDate()
+            ));
+            const day = utc.getUTCDay() || 7;
+            utc.setUTCDate(utc.getUTCDate() + 4 - day);
+            const first = new Date(Date.UTC(utc.getUTCFullYear(), 0, 1));
+            return `${utc.getUTCFullYear()}-${Math.ceil((((utc - first) / 86400000) + 1) / 7)}`;
+        };
+        const currentWeek = weekKey(new Date());
+        let state;
+        try {
+            state = JSON.parse(localStorage.getItem(storageKey)) || {};
+        } catch (_) {
+            state = {};
+        }
+        if (state.week !== currentWeek) {
+            state.week = currentWeek;
+            state.weeklyClaims = [];
+        }
+        if (state.day !== today) {
+            state.day = today;
+            state.runs = {};
+        }
+        state.runs ||= {};
+        state.weeklyClaims ||= [];
+
+        const save = () => {
+            try {
+                localStorage.setItem(storageKey, JSON.stringify(state));
+            } catch (_) {
+                // The tracker remains usable for this page view.
+            }
+        };
+        const resinSpent = () => {
+            const runs = Object.values(state.runs).reduce(
+                (sum, run) => sum + (Number(run.count) * Number(run.cost)), 0
+            );
+            const weeklyToday = state.weeklyClaims.filter(day => day === today).length * 30;
+            return runs + weeklyToday;
+        };
+        const render = () => {
+            const spent = resinSpent();
+            const remaining = Math.max(0, budget - spent);
+            root.querySelector("[data-resin-remaining]").textContent = remaining;
+            root.querySelector("[data-resin-used]").textContent = spent;
+            root.querySelector("[data-resin-ring]").style.setProperty(
+                "--routine-progress",
+                `${Math.min(1, spent / budget) * 360}deg`
+            );
+            root.querySelector("[data-weekly-count]").textContent =
+                state.weeklyClaims.length;
+            root.querySelectorAll("[data-weekly-dot]").forEach((dot, index) => {
+                dot.classList.toggle("is-used", index < state.weeklyClaims.length);
+            });
+
+            document.querySelectorAll("[data-resin-run]").forEach(button => {
+                const key = button.dataset.taskKey;
+                const cost = Number(button.dataset.resinCost);
+                const count = Number(state.runs[key]?.count || 0);
+                button.disabled = cost > remaining;
+                button.querySelector("[data-run-count]").textContent =
+                    count > 0 ? `${count}×` : "+";
+            });
+
+            const weeklyButton = document.querySelector("[data-weekly-claim]");
+            if (weeklyButton) {
+                weeklyButton.disabled =
+                    state.weeklyClaims.length >= weeklyLimit || remaining < 30;
+                weeklyButton.textContent = state.weeklyClaims.length >= weeklyLimit
+                    ? root.dataset.weeklyDone
+                    : root.dataset.weeklyOpen;
+            }
+        };
+
+        document.addEventListener("click", event => {
+            const target = event.target instanceof Element
+                ? event.target
+                : event.target?.parentElement;
+            const button = target?.closest("[data-resin-run]");
+            if (!button) return;
+            const key = button.dataset.taskKey;
+            const cost = Number(button.dataset.resinCost);
+            if (resinSpent() + cost > budget) return;
+            const current = state.runs[key] || {count: 0, cost};
+            current.count += 1;
+            current.cost = cost;
+            state.runs[key] = current;
+            save();
+            render();
+        });
+
+        const weeklyButton = document.querySelector("[data-weekly-claim]");
+        weeklyButton?.addEventListener("click", () => {
+            if (state.weeklyClaims.length >= weeklyLimit || resinSpent() + 30 > budget) return;
+            state.weeklyClaims.push(today);
+            save();
+            render();
+        });
+
+        root.querySelector("[data-routine-reset]").addEventListener("click", () => {
+            state.runs = {};
+            state.weeklyClaims = state.weeklyClaims.filter(day => day !== today);
+            save();
+            render();
+        });
+
+        save();
+        render();
+        document.addEventListener("dashboard:plan-updated", render);
     })();
 </script>
 <script>
@@ -395,6 +774,8 @@
         if (!list || !empty) return;
 
         let rendered = "";
+        const content = document.getElementById("dashboard-content");
+        let knownRevision = Number(content?.dataset.snapshotRevision || 0);
         const render = activities => {
             const signature = JSON.stringify(activities);
             if (signature === rendered) return;
@@ -423,6 +804,137 @@
             list.hidden = activities.length === 0;
             empty.hidden = activities.length !== 0;
         };
+        const cardArt = card => {
+            const art = document.createElement("div");
+            art.className = "dashboard-task-art";
+            const icon = document.createElement("span");
+            icon.textContent = card.activityIcon;
+            art.append(icon);
+            if (card.imageUrl) {
+                const image = document.createElement("img");
+                image.src = card.imageUrl;
+                image.alt = card.title;
+                image.addEventListener("error", () => image.remove(), {once: true});
+                art.append(image);
+            }
+            return art;
+        };
+        const cardMain = (card, linked = true, includeHelps = true) => {
+            const main = document.createElement(linked ? "a" : "div");
+            main.className = "dashboard-task-main";
+            if (linked) main.href = card.href;
+            const activity = document.createElement("small");
+            activity.textContent = card.activityLabel;
+            const title = document.createElement("h3");
+            title.textContent = card.title;
+            main.append(activity, title);
+            if (includeHelps) {
+                const helps = document.createElement("span");
+                helps.textContent = card.helpsText;
+                main.append(helps);
+            }
+            if (card.progressText) {
+                const progress = document.createElement("span");
+                progress.className = "dashboard-material-progress";
+                progress.textContent = card.progressText;
+                main.append(progress);
+            }
+            return main;
+        };
+        const resinCost = card => {
+            const cost = document.createElement("b");
+            cost.className = "dashboard-cost";
+            const amount = document.createElement("span");
+            amount.textContent = card.resinCost;
+            const icon = document.createElement("span");
+            icon.textContent = "◐";
+            cost.append(amount, " ", icon);
+            return cost;
+        };
+        const resinActions = card => {
+            const actions = document.createElement("div");
+            actions.className = "dashboard-task-actions";
+            const button = document.createElement("button");
+            button.type = "button";
+            button.dataset.resinRun = "";
+            button.dataset.taskKey = card.key;
+            button.dataset.resinCost = card.resinCost;
+            button.setAttribute("aria-label", card.recordRunLabel);
+            const count = document.createElement("span");
+            count.dataset.runCount = "";
+            count.textContent = "+";
+            button.append(count);
+            actions.append(resinCost(card), button);
+            return actions;
+        };
+        const createWeeklyCard = card => {
+            const item = document.createElement("article");
+            item.className = "dashboard-task-card is-weekly";
+            item.dataset.dashboardCardKey = card.key;
+            item.append(cardArt(card), cardMain(card), resinCost(card));
+            return item;
+        };
+        const createResinCard = (card, compact) => {
+            const item = document.createElement("article");
+            item.className = `dashboard-task-card${compact ? " is-compact" : ""}`;
+            item.dataset.dashboardCardKey = card.key;
+            item.dataset.resinTask = card.key;
+            item.append(cardArt(card), cardMain(card, true, !compact), resinActions(card));
+            return item;
+        };
+        const createFreeCard = (card, compact) => {
+            const item = document.createElement("a");
+            item.className = `dashboard-task-card is-free${compact ? " is-compact" : ""}`;
+            item.href = card.href;
+            item.dataset.dashboardCardKey = card.key;
+            item.dataset.freeTask = card.key;
+            item.append(cardArt(card), cardMain(card, false, !compact));
+            const badge = document.createElement("b");
+            badge.className = "dashboard-free-badge";
+            badge.textContent = card.freeCostText;
+            item.append(badge);
+            return item;
+        };
+        const replaceList = (selector, cards, createCard, compact = false) => {
+            const container = document.querySelector(selector);
+            if (!container) return;
+            container.replaceChildren(...cards.map(card => createCard(card, compact)));
+            container.hidden = cards.length === 0;
+        };
+        const syncGroup = (name, group, createCard) => {
+            const items = group.items || [];
+            const visibleLimit = group.visibleLimit || 5;
+            const visible = items.slice(0, visibleLimit);
+            const hidden = items.slice(visibleLimit);
+            replaceList(`[data-dashboard-list="${name}-main"]`, visible, createCard);
+            replaceList(`[data-dashboard-list="${name}-more"]`, hidden, createCard, true);
+
+            const empty = document.querySelector(`[data-dashboard-empty="${name}"]`);
+            if (empty) empty.hidden = items.length !== 0;
+
+            const more = document.querySelector(`[data-dashboard-more="${name}"]`);
+            if (more) more.hidden = hidden.length === 0;
+            const summary = document.querySelector(`[data-dashboard-more-summary="${name}"]`);
+            if (summary) summary.textContent = group.moreText || "";
+        };
+        const applyDashboardPlan = plan => {
+            syncGroup("weekly", plan.weekly || {items: [], visibleLimit: 3}, createWeeklyCard);
+            syncGroup("resin", plan.resin || {items: [], visibleLimit: 5}, createResinCard);
+            syncGroup("free", plan.free || {items: [], visibleLimit: 5}, createFreeCard);
+            document.dispatchEvent(new CustomEvent("dashboard:plan-updated"));
+        };
+        const refreshDashboardPlan = async revision => {
+            if (!content || revision === knownRevision) return;
+            const response = await fetch("/api/dashboard/plan", {
+                headers: {"Accept": "application/json"},
+                cache: "no-store"
+            });
+            if (!response.ok) return;
+            const plan = await response.json();
+            applyDashboardPlan(plan);
+            knownRevision = Number(plan.revision || revision);
+            content.dataset.snapshotRevision = String(knownRevision);
+        };
 
         const refresh = async () => {
             if (document.hidden) return;
@@ -431,7 +943,19 @@
                     headers: {"Accept": "application/json"},
                     cache: "no-store"
                 });
-                if (response.ok) render(await response.json());
+                if (response.ok) {
+                    const payload = await response.json();
+                    const activities = Array.isArray(payload)
+                        ? payload
+                        : payload.activities || [];
+                    const revision = Array.isArray(payload)
+                        ? knownRevision
+                        : Number(payload.revision || knownRevision);
+                    if (revision !== knownRevision) {
+                        await refreshDashboardPlan(revision);
+                    }
+                    render(activities);
+                }
             } catch (_) {
                 // The next poll retries when the local backend is reachable again.
             }

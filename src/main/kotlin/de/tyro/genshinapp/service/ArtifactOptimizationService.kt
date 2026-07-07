@@ -8,6 +8,7 @@ import de.tyro.genshinapp.model.PlayerSnapshot
 import org.springframework.stereotype.Service
 import kotlin.math.abs
 import kotlin.math.pow
+import kotlin.math.roundToLong
 import kotlin.random.Random
 
 @Service
@@ -634,12 +635,6 @@ class ArtifactOptimizationService(
             compareDoubles(
                 priorityValue(key, first.buildStats.totalValues, targets),
                 priorityValue(key, second.buildStats.totalValues, targets),
-                priorityComparisonEpsilon(
-                    key,
-                    first.buildStats.totalValues,
-                    second.buildStats.totalValues,
-                    targets,
-                ),
             ).takeIf { it != 0 }?.let { return it }
         }
 
@@ -665,25 +660,6 @@ class ArtifactOptimizationService(
         return minOf(value, targets.maximumTargets[key] ?: Double.MAX_VALUE)
     }
 
-    private fun priorityComparisonEpsilon(
-        key: String,
-        firstTotals: Map<String, Double>,
-        secondTotals: Map<String, Double>,
-        targets: ArtifactOptimizationTargets,
-    ): Double {
-        if (key != "critRate_") return BUILD_COMPARISON_EPSILON
-        val maximum = targets.maximumTargets["critRate_"] ?: CRIT_RATE_CAP
-        val highestRate = maxOf(
-            firstTotals.getOrDefault("critRate_", 0.0),
-            secondTotals.getOrDefault("critRate_", 0.0),
-        )
-        return when {
-            highestRate >= maximum * 0.95 -> 2.0
-            highestRate >= maximum * 0.90 -> 1.0
-            else -> BUILD_COMPARISON_EPSILON
-        }
-    }
-
     private fun comparePreferLower(first: Double, second: Double): Int =
         compareDoubles(second, first)
 
@@ -691,10 +667,11 @@ class ArtifactOptimizationService(
         first: Double,
         second: Double,
         epsilon: Double = BUILD_COMPARISON_EPSILON,
-    ): Int = when {
-        first > second + epsilon -> 1
-        second > first + epsilon -> -1
-        else -> 0
+    ): Int {
+        val bucketSize = epsilon.takeIf { it > 0.0 } ?: BUILD_COMPARISON_EPSILON
+        val firstBucket = (first / bucketSize).roundToLong()
+        val secondBucket = (second / bucketSize).roundToLong()
+        return firstBucket.compareTo(secondBucket)
     }
 
     private fun buildStats(

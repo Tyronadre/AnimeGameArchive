@@ -152,12 +152,52 @@ class AccountAuthenticationIntegrationTest @Autowired constructor(
             .andExpect(status().is3xxRedirection)
             .andExpect(redirectedUrl("/inventory/items"))
 
-        mockMvc.perform(get("/").session(session))
+        val automaticDashboard = mockMvc.perform(get("/").session(session))
             .andExpect(status().isOk)
-            .andExpect(content().string(containsString("Know what is worth farming next.")))
-            .andExpect(content().string(containsString("Choose at least one character goal.")))
+            .andExpect(content().string(containsString("What is worth doing today?")))
+            .andExpect(content().string(containsString("Automatic plan")))
+            .andExpect(content().string(containsString("Secure weekly rewards")))
+            .andExpect(content().string(containsString("Continue without resin")))
+            .andExpect(content().string(containsString("data-free-task")))
             .andExpect(content().string(containsString("name=\"characterGoals\"")))
             .andExpect(content().string(containsString("name=\"artifactGoals\"")))
+            .andExpect(content().string(containsString("data-element-filter=\"all\"")))
+            .andExpect(content().string(containsString("data-character-search=\"")))
+            .andExpect(content().string(containsString("data-character-element=\"")))
+            .andReturn()
+            .response
+            .contentAsString
+        val automaticTaskCount =
+            Regex("data-(resin|free)-task=").findAll(automaticDashboard).count()
+        assertTrue(
+            automaticTaskCount >= 10,
+            "Expected at least 10 automatic dashboard tasks, got $automaticTaskCount",
+        )
+        assertTrue(automaticDashboard.contains("dashboard-material-progress"))
+
+        mockMvc.perform(
+            post("/inventory/items/heroswit")
+                .session(session)
+                .with(csrf())
+                .param("amount", "999"),
+        )
+            .andExpect(status().is3xxRedirection)
+            .andExpect(redirectedUrl("/inventory/items"))
+
+        mockMvc.perform(get("/api/dashboard/recent-activity").session(session))
+            .andExpect(status().isOk)
+            .andExpect(content().string(containsString("\"revision\":")))
+            .andExpect(content().string(containsString("\"activities\"")))
+            .andExpect(content().string(containsString("Hero")))
+            .andExpect(content().string(containsString("999 total")))
+
+        mockMvc.perform(get("/api/dashboard/plan").session(session))
+            .andExpect(status().isOk)
+            .andExpect(content().string(containsString("\"weekly\"")))
+            .andExpect(content().string(containsString("\"resin\"")))
+            .andExpect(content().string(containsString("\"free\"")))
+            .andExpect(content().string(containsString("\"progressText\"")))
+            .andExpect(content().string(containsString("Collected")))
 
         mockMvc.perform(
             post("/goals")
@@ -178,9 +218,8 @@ class AccountAuthenticationIntegrationTest @Autowired constructor(
 
         mockMvc.perform(get("/").session(session))
             .andExpect(status().isOk)
-            .andExpect(content().string(containsString("Best next farm")))
-            .andExpect(content().string(containsString("Today&#39;s farming queue")))
-            .andExpect(content().string(containsString("Active goals")))
+            .andExpect(content().string(containsString("Personal focus")))
+            .andExpect(content().string(containsString("Three decisions. No checklist chaos.")))
             .andExpect(content().string(containsString("Aloy")))
             .andExpect(content().string(containsString("Tartaglia")))
             .andExpect(
@@ -193,7 +232,7 @@ class AccountAuthenticationIntegrationTest @Autowired constructor(
             .andExpect(status().isOk)
             .andExpect(
                 content().string(
-                    containsString("Erkenne, was sich als Nächstes zu farmen lohnt."),
+                    containsString("Was lohnt sich heute?"),
                 ),
             )
 

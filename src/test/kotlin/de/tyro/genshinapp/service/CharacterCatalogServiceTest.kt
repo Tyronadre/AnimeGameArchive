@@ -2,7 +2,9 @@ package de.tyro.genshinapp.service
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import de.tyro.genshinapp.configuration.GenshinContentProperties
+import de.tyro.genshinapp.model.CharacterDefinition
 import de.tyro.genshinapp.model.CharacterProgress
+import de.tyro.genshinapp.model.MaterialDefinition
 import de.tyro.genshinapp.model.PlayerCharacterState
 import de.tyro.genshinapp.model.PlayerWeapon
 import java.nio.file.Files
@@ -44,6 +46,37 @@ class CharacterCatalogServiceTest {
         assertEquals("Hydro", furina.element)
         assertTrue(furina.ascensionCosts.isNotEmpty())
         assertTrue(furina.talentCosts.isNotEmpty())
+    }
+
+    @Test
+    fun `loads characters from the catalog store before bundled data`() {
+        val storedCharacters = catalog.getCharacters().map { character ->
+            if (character.key == "furina") {
+                character.copy(name = "Stored Furina")
+            } else {
+                character
+            }
+        }
+        val store = InMemoryCatalogStore(storedCharacters)
+        val storedCatalog = catalogWithStore(store)
+
+        val furina = assertNotNull(storedCatalog.findCharacter("furina"))
+
+        assertEquals("Stored Furina", furina.name)
+        assertTrue("furina" !in store.savedCharacterKeys)
+    }
+
+    @Test
+    fun `saves bundled fallback characters into the catalog store`() {
+        val store = InMemoryCatalogStore(
+            catalog.getCharacters().filterNot { it.key == "albedo" },
+        )
+
+        catalogWithStore(store)
+
+        assertTrue("albedo" in store.savedCharacterKeys)
+        assertNotNull(store.findCharacter("albedo"))
+        assertNotNull(store.findMaterial(104101))
     }
 
     @Test
@@ -127,5 +160,63 @@ class CharacterCatalogServiceTest {
         assertEquals(53.7512, stats.totals.getValue("critRate_"), 0.01)
         assertEquals(50.0, stats.totals.getValue("critDMG_"), 0.01)
         assertEquals(100.0, stats.totals.getValue("enerRech_"), 0.01)
+    }
+
+    private fun catalogWithStore(store: CharacterCatalogStore): CharacterCatalogService =
+        CharacterCatalogService(
+            objectMapper,
+            DynamicContentLoader(
+                objectMapper,
+                properties,
+                imageUrlRegistry,
+                fandomImageUrlResolver,
+            ),
+            fandomImageUrlResolver,
+            store,
+        )
+
+    private class InMemoryCatalogStore(
+        characters: Collection<CharacterDefinition>,
+    ) : CharacterCatalogStore {
+        private val charactersByKey = linkedMapOf<String, CharacterDefinition>()
+        private val materialsById = linkedMapOf<Int, MaterialDefinition>()
+        val savedCharacterKeys = mutableListOf<String>()
+
+        init {
+            characters.forEach(::remember)
+        }
+
+        override fun getCharacters(): List<CharacterDefinition> =
+            charactersByKey.values.sortedBy { it.name }
+
+        override fun findCharacter(key: String): CharacterDefinition? =
+            charactersByKey[key.trim().lowercase()]
+
+        override fun saveCharacter(character: CharacterDefinition): CharacterDefinition {
+            savedCharacterKeys += character.key
+            remember(character)
+            return character
+        }
+
+        override fun getMaterials(): List<MaterialDefinition> =
+            materialsById.values.sortedBy { it.name }
+
+        override fun findMaterial(id: Int): MaterialDefinition? =
+            materialsById[id]
+
+        override fun saveMaterials(materials: Collection<MaterialDefinition>) {
+            materials.forEach { material -> materialsById[material.id] = material }
+        }
+
+        private fun remember(character: CharacterDefinition) {
+            charactersByKey[character.key] = character
+            val materials = character.ascensionCosts.values.flatten() +
+                character.talentCosts.values.flatten()
+            materials
+                .filter { it.id > 0 }
+                .forEach { material ->
+                    materialsById[material.id] = MaterialDefinition(material.id, material.name)
+                }
+        }
     }
 }

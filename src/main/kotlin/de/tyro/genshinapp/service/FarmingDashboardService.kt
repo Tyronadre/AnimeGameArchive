@@ -10,6 +10,7 @@ import de.tyro.genshinapp.model.MaterialRequirement
 import de.tyro.genshinapp.model.PlayerArtifact
 import de.tyro.genshinapp.model.PlayerSnapshot
 import org.springframework.stereotype.Service
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.roundToInt
 
 @Service
@@ -31,6 +32,7 @@ class FarmingDashboardService(
         userId: Long,
         snapshot: PlayerSnapshot,
         selections: Set<DashboardGoalSelection>,
+        automaticPlan: Boolean = false,
     ): FarmingDashboard {
         val charactersByKey = catalogService.getCharacters().associateBy {
             GoodKeyNormalizer.normalize(it.key)
@@ -137,13 +139,55 @@ class FarmingDashboardService(
         }
 
         val recommendations = linkedMapOf<String, MutableFarmRecommendation>()
-        addMaterialRecommendations(snapshot, characterRequirements, recommendations)
+        val rosterRequirements = rosterCharacterRequirements(
+            snapshot,
+            charactersByKey,
+            savedTargets,
+            AUTOMATIC_ROSTER_CHARACTER_COUNT,
+        )
+        val selectedMaterialRecommendationKeys: Set<String>?
+        val expandedMaterialRequirements: List<CharacterGoalRequirements>
+        if (automaticPlan) {
+            selectedMaterialRecommendationKeys = null
+            expandedMaterialRequirements = mergeCharacterRequirements(
+                characterRequirements + rosterRequirements,
+            )
+        } else {
+            val selectedMaterialRecommendations = linkedMapOf<String, MutableFarmRecommendation>()
+            addMaterialRecommendations(
+                userId,
+                snapshot,
+                characterRequirements,
+                selectedMaterialRecommendations,
+            )
+            selectedMaterialRecommendationKeys = selectedMaterialRecommendations.keys.toSet()
+            expandedMaterialRequirements = if (selectedMaterialRecommendationKeys.isEmpty()) {
+                emptyList()
+            } else {
+                mergeCharacterRequirements(characterRequirements + rosterRequirements)
+            }
+        }
+        addMaterialRecommendations(
+            userId,
+            snapshot,
+            expandedMaterialRequirements,
+            recommendations,
+            allowedRecommendationKeys = selectedMaterialRecommendationKeys,
+        )
         addArtifactRecommendations(
             userId,
             snapshot,
             summaries.filter { it.type == DashboardGoalType.ARTIFACTS },
             recommendations,
         )
+        if (automaticPlan && recommendations.values.none { !it.activity.resin }) {
+            addAutomaticFreeMaterialFallback(
+                userId,
+                snapshot,
+                rosterRequirements,
+                recommendations,
+            )
+        }
 
         return FarmingDashboard(
             goals = summaries,
@@ -167,9 +211,12 @@ class FarmingDashboardService(
     }
 
     private fun addMaterialRecommendations(
+        userId: Long,
         snapshot: PlayerSnapshot,
         characterRequirements: List<CharacterGoalRequirements>,
         recommendations: MutableMap<String, MutableFarmRecommendation>,
+        freeOnly: Boolean = false,
+        allowedRecommendationKeys: Set<String>? = null,
     ) {
         val aggregate = linkedMapOf<MaterialIdentity, MaterialRequirement>()
         characterRequirements.flatMap(CharacterGoalRequirements::requirements)
@@ -180,7 +227,7 @@ class FarmingDashboardService(
                     amount = (previous?.amount ?: 0L) + requirement.amount,
                 )
             }
-        val balances = planningService.calculateBalances(aggregate.values.toList(), snapshot)
+        val balances = cachedMaterialBalances(userId, snapshot, aggregate.values.toList())
 
         balances.filter { it.missing > 0 }
             .filter { balance ->
@@ -193,10 +240,16 @@ class FarmingDashboardService(
                 }
             }
             .forEach { balance ->
+            val descriptor = farmDescriptor(balance)
+            if (freeOnly && descriptor.activity.resin) return@forEach
+            if (allowedRecommendationKeys != null &&
+                descriptor.key !in allowedRecommendationKeys
+            ) {
+                return@forEach
+            }
             val contributors = characterRequirements.filter { goal ->
                 goal.requirements.any { it.id == balance.id && it.name == balance.name }
             }
-            val descriptor = farmDescriptor(balance)
             val recommendation = recommendations.getOrPut(descriptor.key) {
                 MutableFarmRecommendation(
                     key = descriptor.key,
@@ -212,6 +265,113 @@ class FarmingDashboardService(
                 balance.missing.toDouble() / balance.required.coerceAtLeast(1),
             )
         }
+    }
+
+    private fun cachedMaterialBalances(
+        userId: Long,
+        snapshot: PlayerSnapshot,
+        requirements: List<MaterialRequirement>,
+    ): List<InventoryMaterialBalance> {
+        if (requirements.isEmpty()) return emptyList()
+        val key = MaterialBalanceCacheKey(
+            userId = userId,
+            snapshotRevision = snapshot.revision,
+            requirementSignature = requirementsSignature(requirements),
+        )
+        return materialBalanceCache.computeIfAbsent(key) {
+            planningService.calculateBalances(requirements, snapshot)
+        }.also {
+            pruneMaterialBalanceCache(userId, snapshot.revision)
+        }
+    }
+
+    private fun requirementsSignature(requirements: List<MaterialRequirement>): String =
+        requirements.sortedWith(
+            compareBy<MaterialRequirement> { it.id }
+                .thenBy { it.name }
+                .thenBy { it.amount },
+        ).joinToString("|") { requirement ->
+            "${requirement.id}:${requirement.name}:${requirement.amount}"
+        }
+
+    private fun pruneMaterialBalanceCache(userId: Long, currentRevision: Long) {
+        if (materialBalanceCache.size <= MAX_MATERIAL_BALANCE_CACHE_ENTRIES) return
+        materialBalanceCache.keys
+            .filter { it.userId == userId && it.snapshotRevision != currentRevision }
+            .forEach(materialBalanceCache::remove)
+        if (materialBalanceCache.size > MAX_MATERIAL_BALANCE_CACHE_ENTRIES) {
+            materialBalanceCache.clear()
+        }
+    }
+
+    private fun addAutomaticFreeMaterialFallback(
+        userId: Long,
+        snapshot: PlayerSnapshot,
+        rosterRequirements: List<CharacterGoalRequirements>,
+        recommendations: MutableMap<String, MutableFarmRecommendation>,
+    ) {
+        addMaterialRecommendations(
+            userId,
+            snapshot,
+            rosterRequirements,
+            recommendations,
+            freeOnly = true,
+        )
+    }
+
+    private fun rosterCharacterRequirements(
+        snapshot: PlayerSnapshot,
+        charactersByKey: Map<String, CharacterDefinition>,
+        savedTargets: Map<String, CharacterTargetValues>,
+        limit: Int,
+    ): List<CharacterGoalRequirements> =
+        snapshot.characters.mapNotNull { state ->
+            val normalizedKey = GoodKeyNormalizer.normalize(state.key)
+            val character = charactersByKey[normalizedKey]
+                ?: if (normalizedKey == TRAVELER_KEY) {
+                    charactersByKey[AETHER_KEY] ?: charactersByKey[LUMINE_KEY]
+                } else {
+                    catalogService.findCharacter(normalizedKey)
+                }
+                ?: return@mapNotNull null
+            val targetKey = GoodKeyNormalizer.normalize(character.key)
+            val progress = progressFor(state, savedTargets[targetKey])
+            if (!progress.owned) return@mapNotNull null
+            if (
+                progress.level >= progress.targetLevel &&
+                progress.normalTalent >= progress.targetNormalTalent &&
+                progress.skillTalent >= progress.targetSkillTalent &&
+                progress.burstTalent >= progress.targetBurstTalent
+            ) {
+                return@mapNotNull null
+            }
+            CharacterFreeFallbackCandidate(
+                requirements = CharacterGoalRequirements(
+                    character,
+                    materialCalculator.calculate(character, progress),
+                ),
+                level = progress.level,
+                talentTotal = progress.normalTalent +
+                    progress.skillTalent + progress.burstTalent,
+            )
+        }.sortedWith(
+            compareByDescending<CharacterFreeFallbackCandidate> { it.level }
+                .thenByDescending { it.talentTotal },
+        ).take(limit)
+            .map(CharacterFreeFallbackCandidate::requirements)
+
+    private fun mergeCharacterRequirements(
+        requirements: List<CharacterGoalRequirements>,
+    ): List<CharacterGoalRequirements> {
+        val grouped = linkedMapOf<String, MutableCharacterGoalRequirements>()
+        requirements.forEach { goal ->
+            val key = GoodKeyNormalizer.normalize(goal.character.key)
+            val aggregate = grouped.getOrPut(key) {
+                MutableCharacterGoalRequirements(goal.character)
+            }
+            goal.requirements.forEach(aggregate::add)
+        }
+        return grouped.values.map(MutableCharacterGoalRequirements::toRequirements)
     }
 
     private fun farmDescriptor(balance: InventoryMaterialBalance): FarmDescriptor {
@@ -343,9 +503,38 @@ class FarmingDashboardService(
         val requirements: List<MaterialRequirement>,
     )
 
+    private class MutableCharacterGoalRequirements(
+        val character: CharacterDefinition,
+    ) {
+        private val requirements = linkedMapOf<MaterialIdentity, MaterialRequirement>()
+
+        fun add(requirement: MaterialRequirement) {
+            val key = MaterialIdentity(requirement.id, requirement.name)
+            val previous = requirements[key]
+            requirements[key] = requirement.copy(
+                amount = (previous?.amount ?: 0L) + requirement.amount,
+            )
+        }
+
+        fun toRequirements(): CharacterGoalRequirements =
+            CharacterGoalRequirements(character, requirements.values.toList())
+    }
+
+    private data class CharacterFreeFallbackCandidate(
+        val requirements: CharacterGoalRequirements,
+        val level: Int,
+        val talentTotal: Int,
+    )
+
     private data class MaterialIdentity(
         val id: Int,
         val name: String,
+    )
+
+    private data class MaterialBalanceCacheKey(
+        val userId: Long,
+        val snapshotRevision: Long,
+        val requirementSignature: String,
     )
 
     private data class FarmDescriptor(
@@ -382,6 +571,9 @@ class FarmingDashboardService(
             materials[balance.id] = FarmingMaterialNeed(
                 id = balance.id,
                 name = balance.name,
+                required = (current?.required ?: 0L) + balance.required,
+                covered = (current?.covered ?: 0L) +
+                    (balance.required - balance.missing).coerceAtLeast(0L),
                 missing = (current?.missing ?: 0L) + balance.missing,
                 imageUrl = balance.imageUrl,
             )
@@ -424,13 +616,32 @@ class FarmingDashboardService(
         private const val CHARACTER_EXPERIENCE_ID = 0
         private const val MORA_ID = 202
         private const val MYSTIC_ENHANCEMENT_ORE_ID = 104013
+        private const val AUTOMATIC_ROSTER_CHARACTER_COUNT = 24
+        private const val MAX_MATERIAL_BALANCE_CACHE_ENTRIES = 128
+        private const val TRAVELER_KEY = "traveler"
+        private const val AETHER_KEY = "aether"
+        private const val LUMINE_KEY = "lumine"
     }
+
+    private val materialBalanceCache =
+        ConcurrentHashMap<MaterialBalanceCacheKey, List<InventoryMaterialBalance>>()
 }
 
 data class FarmingDashboard(
     val goals: List<DashboardGoalProgress>,
     val recommendations: List<FarmingRecommendation>,
 ) {
+    val weeklyRecommendations: List<FarmingRecommendation>
+        get() = recommendations.filter { it.activity == FarmingActivity.WEEKLY_BOSS }
+
+    val resinRecommendations: List<FarmingRecommendation>
+        get() = recommendations.filter {
+            it.activity.resin && it.activity != FarmingActivity.WEEKLY_BOSS
+        }
+
+    val freeRecommendations: List<FarmingRecommendation>
+        get() = recommendations.filterNot { it.activity.resin }
+
     val primaryRecommendation: FarmingRecommendation?
         get() = recommendations.firstOrNull()
 
@@ -463,6 +674,7 @@ enum class FarmingActivity(
     val actionMessageKey: String,
     val icon: String,
     val resin: Boolean,
+    val resinCost: Int,
 ) {
     CHARACTER_EXPERIENCE(
         "experience",
@@ -470,14 +682,16 @@ enum class FarmingActivity(
         "dashboard.action.experience",
         "✦",
         true,
+        20,
     ),
-    MORA("mora", "dashboard.activity.mora", "dashboard.action.mora", "₥", true),
+    MORA("mora", "dashboard.activity.mora", "dashboard.action.mora", "₥", true, 20),
     TALENT_DOMAIN(
         "talent",
         "dashboard.activity.talent",
         "dashboard.action.talent",
         "◆",
         true,
+        20,
     ),
     WEAPON_DOMAIN(
         "weapon",
@@ -485,6 +699,7 @@ enum class FarmingActivity(
         "dashboard.action.weapon",
         "◇",
         true,
+        20,
     ),
     WEAPON_ORE(
         "weapon-ore",
@@ -492,6 +707,7 @@ enum class FarmingActivity(
         "dashboard.action.weaponOre",
         "⬡",
         false,
+        0,
     ),
     WORLD_BOSS(
         "world-boss",
@@ -499,6 +715,7 @@ enum class FarmingActivity(
         "dashboard.action.worldBoss",
         "♜",
         true,
+        40,
     ),
     WEEKLY_BOSS(
         "weekly-boss",
@@ -506,6 +723,7 @@ enum class FarmingActivity(
         "dashboard.action.weeklyBoss",
         "✹",
         true,
+        30,
     ),
     REGIONAL_SPECIALTY(
         "collectable",
@@ -513,6 +731,7 @@ enum class FarmingActivity(
         "dashboard.action.collectable",
         "❧",
         false,
+        0,
     ),
     ENEMY_DROPS(
         "enemy",
@@ -520,6 +739,7 @@ enum class FarmingActivity(
         "dashboard.action.enemy",
         "⚔",
         false,
+        0,
     ),
     ARTIFACTS(
         "artifacts",
@@ -527,8 +747,9 @@ enum class FarmingActivity(
         "dashboard.action.artifacts",
         "✧",
         true,
+        20,
     ),
-    OTHER("other", "dashboard.activity.other", "dashboard.action.other", "◇", false),
+    OTHER("other", "dashboard.activity.other", "dashboard.action.other", "◇", false, 0),
 }
 
 data class FarmingRecommendation(
@@ -542,11 +763,22 @@ data class FarmingRecommendation(
     val impactPercent: Int,
     val priority: Int,
     val href: String,
-)
+) {
+    val requiredTotal: Long
+        get() = materials.sumOf(FarmingMaterialNeed::required)
+
+    val coveredTotal: Long
+        get() = materials.sumOf(FarmingMaterialNeed::covered)
+
+    val missingTotal: Long
+        get() = materials.sumOf(FarmingMaterialNeed::missing)
+}
 
 data class FarmingMaterialNeed(
     val id: Int,
     val name: String,
+    val required: Long,
+    val covered: Long,
     val missing: Long,
     val imageUrl: String?,
 )

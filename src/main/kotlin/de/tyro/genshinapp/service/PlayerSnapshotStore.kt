@@ -64,6 +64,7 @@ class PlayerSnapshotStore(
         require(amount >= 0) { "Inventory amount must not be negative" }
         val state = stateFor(userId)
         val snapshot = state.baseSnapshot.get() ?: throw IllegalStateException("No GOOD file imported")
+        val previous = current(userId) ?: throw IllegalStateException("No GOOD file imported")
 
         synchronized(state.writeLock) {
             val updatedOverrides = state.inventoryOverrides.get().toMutableMap()
@@ -80,7 +81,9 @@ class PlayerSnapshotStore(
             state.inventoryOverrides.set(updatedOverrides)
             state.revision.incrementAndGet()
         }
-        return current(userId) ?: throw IllegalStateException("No GOOD file imported")
+        val updated = current(userId) ?: throw IllegalStateException("No GOOD file imported")
+        snapshotActivityService?.record(userId, previous, updated)
+        return updated
     }
 
     fun updateArtifacts(
@@ -89,6 +92,7 @@ class PlayerSnapshotStore(
     ): PlayerSnapshot {
         val state = stateFor(userId)
         val snapshot = state.baseSnapshot.get() ?: throw IllegalStateException("No GOOD file imported")
+        val previous = current(userId) ?: throw IllegalStateException("No GOOD file imported")
         synchronized(state.writeLock) {
             val currentArtifacts = state.artifactOverrides.get() ?: snapshot.artifacts
             val updatedArtifacts = update(currentArtifacts)
@@ -103,7 +107,9 @@ class PlayerSnapshotStore(
             state.artifactOverrides.set(updatedArtifacts)
             state.revision.incrementAndGet()
         }
-        return current(userId) ?: throw IllegalStateException("No GOOD file imported")
+        val updated = current(userId) ?: throw IllegalStateException("No GOOD file imported")
+        snapshotActivityService?.record(userId, previous, updated)
+        return updated
     }
 
     fun filePath(userId: Long): Path = stateFor(userId).snapshotFile

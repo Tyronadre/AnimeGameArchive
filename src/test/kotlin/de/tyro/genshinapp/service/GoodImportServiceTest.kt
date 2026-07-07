@@ -72,6 +72,25 @@ class GoodImportServiceTest {
     }
 
     @Test
+    fun `records inventory override activity for live dashboard updates`() {
+        val mapper = jacksonObjectMapper().findAndRegisterModules()
+        val properties = GenshinContentProperties().also {
+            it.cacheDirectory = temporaryDirectory.toString()
+        }
+        val activityService = SnapshotActivityService(properties, mapper)
+        val store = PlayerSnapshotStore(properties, GoodImportService(mapper), mapper, activityService)
+
+        store.save(USER_ONE_ID, Files.readAllBytes(SAMPLE_EXPORT))
+        val updated = store.updateInventoryAmount(USER_ONE_ID, "heroswit", 999)
+        val activity = activityService.recent(USER_ONE_ID).first()
+
+        assertEquals(999L, updated.inventory["heroswit"])
+        assertEquals(SnapshotActivityType.MATERIAL_GAIN, activity.type)
+        assertEquals(921L, activity.amount)
+        assertEquals(999L, activity.total)
+    }
+
+    @Test
     fun `keeps imported inventories isolated by user id`() {
         val properties = GenshinContentProperties().also {
             it.cacheDirectory = temporaryDirectory.toString()

@@ -29,7 +29,12 @@ class DesktopSecurityConfiguration {
     ): SecurityFilterChain {
         http
             .authorizeHttpRequests { it.anyRequest().authenticated() }
-            .csrf { it.ignoringRequestMatchers("/api/desktop/irminsul/**") }
+            .csrf {
+                it.ignoringRequestMatchers(
+                    "/api/desktop/irminsul/**",
+                    "/goals",
+                )
+            }
             .addFilterBefore(desktopAuthenticationFilter, AnonymousAuthenticationFilter::class.java)
             .logout { it.logoutSuccessUrl("/") }
         return http.build()

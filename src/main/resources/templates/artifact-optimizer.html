@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="#{optimizer.title}">Artifact Optimizer · Genshin Archive</title>
     <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+    <script th:src="@{/js/theme.js}" src="/js/theme.js"></script>
 </head>
 <body>
 <header th:replace="~{fragments :: siteHeader('inventory')}"></header>
@@ -89,6 +90,16 @@
                                 th:text="${#messages.msg(option.messageKey)}">
                             ATK damage
                         </option>
+                        <optgroup th:if="${!sourceProfiles.isEmpty()}"
+                                  th:label="#{optimizer.profile.sourceProfiles}">
+                            <option th:each="option : ${sourceProfiles}"
+                                    th:value="${option.selectionKey}"
+                                    th:selected="${selectedProfileSelection
+                                        == option.selectionKey}"
+                                    th:text="${option.displayName}">
+                                Game8 - DPS
+                            </option>
+                        </optgroup>
                         <optgroup th:if="${!customProfiles.isEmpty()}"
                                   th:label="#{optimizer.profile.savedProfiles}">
                             <option th:each="option : ${customProfiles}"

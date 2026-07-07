@@ -18,15 +18,26 @@ class CharacterCatalogService(
     private val objectMapper: ObjectMapper,
     private val contentLoader: DynamicContentLoader,
     private val fandomImageUrlResolver: FandomImageUrlResolver,
+    private val catalogStore: CharacterCatalogStore? = null,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val configuredKeys = loadCharacterKeys()
     private val charactersByKey = ConcurrentHashMap<String, CharacterDefinition>()
+    private val materialsById = ConcurrentHashMap<Int, MaterialDefinition>()
 
     init {
+        catalogStore?.getCharacters().orEmpty().forEach(::rememberCharacter)
+        catalogStore?.getMaterials().orEmpty().forEach(::rememberMaterials)
+
         configuredKeys.forEach { key ->
-            loadCharacter(key)?.let { charactersByKey[key] = it }
+            if (!charactersByKey.containsKey(key)) {
+                loadCharacterFromExistingSources(key)?.let { character ->
+                    rememberCharacter(saveCharacter(character))
+                }
+            }
         }
+        rememberMaterials(BASE_MATERIALS)
+        catalogStore?.saveMaterials(materialsById.values)
         contentLoader.registerDefaultImageLinks(getCharacters(), getMaterials())
     }
 
@@ -43,25 +54,32 @@ class CharacterCatalogService(
         val normalizedKey = key.trim().lowercase()
         charactersByKey[normalizedKey]?.let { return it }
 
-        return loadCharacter(normalizedKey)?.also { character ->
-            charactersByKey.putIfAbsent(normalizedKey, character)
+        catalogStore?.findCharacter(normalizedKey)?.let { character ->
+            rememberCharacter(character)
             contentLoader.registerDefaultImageLinks(
                 listOf(character),
                 materialsOf(listOf(character)),
             )
+            return character
+        }
+
+        return loadCharacterFromExistingSources(normalizedKey)?.let { loadedCharacter ->
+            val character = saveCharacter(loadedCharacter)
+            rememberCharacter(character)
+            contentLoader.registerDefaultImageLinks(
+                listOf(character),
+                materialsOf(listOf(character)),
+            )
+            character
         }
     }
 
     fun getMaterials(): List<MaterialDefinition> =
-        (
-            materialsOf(getCharacters()) +
-                MaterialDefinition(0, "Character EXP") +
-                MaterialDefinition(104013, "Mystic Enhancement Ore")
-            )
-            .distinctBy { it.id }
-            .sortedBy { it.name }
+        materialsById.values.sortedBy { it.name }
 
-    fun findMaterial(id: Int): MaterialDefinition? = getMaterials().find { it.id == id }
+    fun findMaterial(id: Int): MaterialDefinition? =
+        materialsById[id]
+            ?: catalogStore?.findMaterial(id)?.also(::rememberMaterials)
 
     private fun loadCharacterKeys(): List<String> {
         val listResource = ClassPathResource("data/characters/char_list.json")
@@ -72,7 +90,7 @@ class CharacterCatalogService(
         }.map(String::lowercase)
     }
 
-    private fun loadCharacter(key: String): CharacterDefinition? = runCatching {
+    private fun loadCharacterFromExistingSources(key: String): CharacterDefinition? = runCatching {
         val root = contentLoader.loadCharacterJson(key)
             ?: throw IllegalStateException("Character data for $key is unavailable")
         mapCharacter(key, root)
@@ -139,6 +157,23 @@ class CharacterCatalogService(
             .toUriString()
     }
 
+    private fun saveCharacter(character: CharacterDefinition): CharacterDefinition {
+        return catalogStore?.saveCharacter(character) ?: character
+    }
+
+    private fun rememberCharacter(character: CharacterDefinition) {
+        charactersByKey[character.key] = character
+        rememberMaterials(materialsOf(listOf(character)))
+    }
+
+    private fun rememberMaterials(materials: Collection<MaterialDefinition>) {
+        materials.forEach(::rememberMaterials)
+    }
+
+    private fun rememberMaterials(material: MaterialDefinition) {
+        materialsById[material.id] = material
+    }
+
     private fun materialsOf(
         characters: Collection<CharacterDefinition>,
     ): List<MaterialDefinition> = characters
@@ -158,4 +193,11 @@ class CharacterCatalogService(
 
     private fun JsonNode.optionalText(field: String): String? =
         path(field).takeIf { it.isTextual && !it.asText().isBlank() }?.asText()
+
+    companion object {
+        private val BASE_MATERIALS = listOf(
+            MaterialDefinition(0, "Character EXP"),
+            MaterialDefinition(104013, "Mystic Enhancement Ore"),
+        )
+    }
 }

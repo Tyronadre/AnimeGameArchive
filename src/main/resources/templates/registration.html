@@ -5,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="#{registration.title}">Create account · Genshin Archive</title>
     <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+    <script th:src="@{/js/theme.js}" src="/js/theme.js"></script>
 </head>
 <body class="auth-page">
-<div class="auth-language" th:insert="~{fragments :: languageSwitcher}"></div>
+<div class="auth-controls">
+    <button th:replace="~{fragments :: themeToggle}"></button>
+    <div th:insert="~{fragments :: languageSwitcher}"></div>
+</div>
 <main class="auth-layout">
     <section class="auth-intro">
         <a class="brand auth-brand" th:href="@{/login}">

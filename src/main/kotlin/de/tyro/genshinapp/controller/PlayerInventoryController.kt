@@ -9,6 +9,7 @@ import de.tyro.genshinapp.service.ArtifactCatalogService
 import de.tyro.genshinapp.service.ArtifactMutationRequest
 import de.tyro.genshinapp.service.ArtifactOptimizationProfile
 import de.tyro.genshinapp.service.ArtifactOptimizationService
+import de.tyro.genshinapp.service.ArtifactOptimizerBuildProfileService
 import de.tyro.genshinapp.service.ArtifactOptimizerCustomProfileService
 import de.tyro.genshinapp.service.ArtifactOptimizerProfileService
 import de.tyro.genshinapp.service.ArtifactOptimizerSharingService
@@ -49,6 +50,7 @@ class PlayerInventoryController(
     private val weaponCatalogService: WeaponCatalogService,
     private val materialCraftingService: MaterialCraftingService,
     private val artifactOptimizationService: ArtifactOptimizationService,
+    private val artifactOptimizerBuildProfileService: ArtifactOptimizerBuildProfileService,
     private val artifactOptimizerCustomProfileService: ArtifactOptimizerCustomProfileService,
     private val artifactOptimizerProfileService: ArtifactOptimizerProfileService,
     private val artifactOptimizerSharingService: ArtifactOptimizerSharingService,
@@ -408,6 +410,9 @@ class PlayerInventoryController(
         val customProfiles = selectedCharacter?.let {
             artifactOptimizerCustomProfileService.findAll(principal.id, it.key)
         }.orEmpty()
+        val sourceProfiles = selectedCharacter?.let {
+            artifactOptimizerBuildProfileService.findAll(it.key)
+        }.orEmpty()
         val requestedCustomProfileId = profile
             ?.removePrefix(CUSTOM_PROFILE_PREFIX)
             ?.takeIf { profile.startsWith(CUSTOM_PROFILE_PREFIX) }
@@ -418,6 +423,9 @@ class PlayerInventoryController(
                 it.key,
                 requestedCustomProfileId,
             )
+        }
+        val requestedSourceProfile = selectedCharacter?.let {
+            artifactOptimizerBuildProfileService.find(it.key, profile)
         }
         val savedCustomProfile = selectedCharacter?.let {
             artifactOptimizerCustomProfileService.find(
@@ -443,7 +451,17 @@ class PlayerInventoryController(
             priorityStats != null || priorityMinimums != null || priorityMaximums != null ||
             statBonusKeys != null || statBonusValues != null ||
             additionalCritRate != null || firstSetCount != null || secondSetCount != null
+        val defaultSourceProfile = sourceProfiles.firstOrNull()
+            ?.takeIf {
+                !hasConfigurationQuery &&
+                    sharedConfiguration == null &&
+                    savedProfile == null &&
+                    savedCustomProfile == null
+            }
+        val activeSourceProfile = requestedSourceProfile ?: defaultSourceProfile
         val selectedProfile = when {
+            activeSourceProfile != null ->
+                artifactOptimizerBuildProfileService.profileFor(activeSourceProfile)
             requestedCustomProfile != null -> requestedCustomProfile.profile
             !profile.isNullOrBlank() -> ArtifactOptimizationProfile.fromKey(profile)
             !hasConfigurationQuery && sharedConfiguration != null ->
@@ -453,6 +471,11 @@ class PlayerInventoryController(
             else -> artifactOptimizationService.inferProfile(selectedArtifacts)
         }
         val baseTargets = when {
+            activeSourceProfile != null ->
+                artifactOptimizerBuildProfileService.targetsFor(
+                    activeSourceProfile,
+                    artifactOptimizationService,
+                )
             !hasConfigurationQuery && sharedConfiguration != null -> sharedConfiguration.targets
             requestedCustomProfile != null -> requestedCustomProfile.targets
             !hasConfigurationQuery && savedProfile != null -> savedProfile.targets
@@ -510,6 +533,12 @@ class PlayerInventoryController(
             )
         }
         val requestedSetSelection = when {
+            activeSourceProfile != null ->
+                artifactOptimizerBuildProfileService.setSelectionFor(
+                    activeSourceProfile,
+                    artifactOptimizationService,
+                    availableSets.map(OptimizerArtifactSetOption::key),
+                )
             !hasConfigurationQuery && sharedConfiguration != null ->
                 sharedConfiguration.setSelection
             requestedCustomProfile != null -> requestedCustomProfile.setSelection
@@ -557,9 +586,11 @@ class PlayerInventoryController(
         model.addAttribute("selectedCharacter", selectedCharacter)
         model.addAttribute("profiles", ArtifactOptimizationProfile.entries)
         model.addAttribute("customProfiles", customProfiles)
+        model.addAttribute("sourceProfiles", sourceProfiles)
         model.addAttribute(
             "selectedProfileSelection",
             when {
+                activeSourceProfile != null -> activeSourceProfile.selectionKey
                 requestedCustomProfile != null -> requestedCustomProfile.selectionKey
                 !hasConfigurationQuery && savedCustomProfile != null ->
                     savedCustomProfile.selectionKey
@@ -658,6 +689,10 @@ class PlayerInventoryController(
             selectedCharacter.key,
             selectedCustomProfileId,
         )
+        val selectedSourceProfile = artifactOptimizerBuildProfileService.find(
+            selectedCharacter.key,
+            profile,
+        )
         val requestedCustomProfileName = customProfileName
             ?.trim()
             ?.takeIf {
@@ -672,13 +707,14 @@ class PlayerInventoryController(
             return "redirect:/inventory/artifact-optimizer"
         }
         val selectedProfile = selectedCustomProfile?.profile
+            ?: selectedSourceProfile?.let(artifactOptimizerBuildProfileService::profileFor)
             ?: ArtifactOptimizationProfile.fromKey(
                 if (profile == "custom-new") baseProfile else profile,
             )
         val targets = artifactOptimizationService.createTargets(
             profile = selectedProfile,
             custom = customTargets || selectedCustomProfile != null ||
-                requestedCustomProfileName != null,
+                requestedCustomProfileName != null || selectedSourceProfile != null,
             requestedMainStats = mapOf(
                 "sands" to sandsMain.takeUnless { it == "auto" },
                 "goblet" to gobletMain.takeUnless { it == "auto" },
