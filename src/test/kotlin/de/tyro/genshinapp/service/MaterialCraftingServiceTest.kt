@@ -9,6 +9,7 @@ import java.time.Duration
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class MaterialCraftingServiceTest {
     private val objectMapper = jacksonObjectMapper()
@@ -96,6 +97,42 @@ class MaterialCraftingServiceTest {
         assertEquals(1L, result.owned)
         assertEquals(2L, result.craftable)
         assertEquals(2L, result.missing)
+    }
+
+    @Test
+    fun `all crafting metadata has complete and valid persisted relationships`() {
+        val craftingMaterials = catalog.getMaterials().filter { it.category in setOf(
+            MaterialCategory.GEM,
+            MaterialCategory.TALENT_BOOK,
+            MaterialCategory.WEAPON_ASCENSION,
+            MaterialCategory.ENEMY_DROP,
+            MaterialCategory.WEEKLY_BOSS,
+        ) }
+
+        assertTrue(craftingMaterials.isNotEmpty())
+        assertTrue(craftingMaterials.all { it.craftingFamily != null })
+        craftingMaterials.filter { it.category != MaterialCategory.WEEKLY_BOSS }.forEach {
+            assertNotNull(it.craftingTier, it.name)
+        }
+        craftingMaterials.groupBy { it.craftingFamily }.values.forEach { family ->
+            val expectedSize = when (family.first().category) {
+                MaterialCategory.GEM, MaterialCategory.WEAPON_ASCENSION -> 4
+                else -> 3
+            }
+            assertEquals(expectedSize, family.size, family.first().craftingFamily)
+        }
+    }
+
+    @Test
+    fun `gems convert across elements at the same tier with dust of azoth`() {
+        val target = material("Varunada Lazurite Chunk")
+        val result = service.applyCrafting(
+            listOf(balance(target.id, target.name, required = 2)),
+            mapOf("agnidusagatechunk" to 3L, "dustofazoth" to 18L),
+        ).single()
+
+        assertEquals(2L, result.craftable)
+        assertEquals(0L, result.missing)
     }
 
     private fun categoryOf(name: String): MaterialCategory =

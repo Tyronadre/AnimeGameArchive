@@ -27,6 +27,15 @@ mod player_data;
 
 const TOKEN_HEADER: &str = "X-Genshin-Desktop-Token";
 const SESSION_HEADER: &str = "X-Genshin-Capture-Session";
+const SESSION_KEY_LENGTH: usize = 4096;
+
+#[derive(Deserialize, Serialize)]
+struct CachedSession {
+    key: String,
+    characters: Vec<String>,
+    items: Vec<String>,
+    complete: bool,
+}
 
 #[derive(Parser, Debug)]
 #[command(version, about = "Irminsul capture helper for Genshin Archive")]
@@ -42,6 +51,14 @@ struct Args {
 
     #[arg(long)]
     log_file: Option<PathBuf>,
+
+    /// Development-only location used to persist the current game session key.
+    #[arg(long)]
+    session_key_file: Option<PathBuf>,
+
+    /// Restore the key from --session-key-file for an already-running game.
+    #[arg(long, default_value_t = false)]
+    reuse_session_key: bool,
 }
 
 #[derive(Serialize)]
@@ -105,6 +122,26 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
     let mut player_data = PlayerData::new(database);
     let keys = load_keys()?;
     let mut sniffer = GameSniffer::new().set_initial_keys(keys);
+    let mut restored_session = false;
+    if args.reuse_session_key {
+        let path = args
+            .session_key_file
+            .as_deref()
+            .context("--reuse-session-key requires --session-key-file")?;
+        let cached = load_session(path)?;
+        if !cached.complete {
+            return Err(anyhow!(
+                "cached development session does not contain a complete player snapshot"
+            ));
+        }
+        let key = decode_session_key(&cached.key)?;
+        let characters = decode_cached_messages(&cached.characters)?;
+        let items = decode_cached_messages(&cached.items)?;
+        player_data.restore_cached_state(&characters, &items)?;
+        tracing::info!(path = %path.display(), "Restoring cached development session key");
+        sniffer = sniffer.set_session_key(key);
+        restored_session = true;
+    }
     let mut capture =
         PacketCapture::new().map_err(|error| anyhow!("packet capture could not start: {error}"))?;
     tracing::info!("Packet capture started; waiting for Genshin Impact traffic");
@@ -113,7 +150,11 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
         client,
         args,
         "waiting_for_game",
-        "Capture is running. Start Genshin Impact and enter the game.",
+        if args.reuse_session_key {
+            "Capture is running with the cached development session key. Make an inventory change in Genshin Impact."
+        } else {
+            "Capture is running. Start Genshin Impact and enter the game."
+        },
     )
     .await?;
 
@@ -124,15 +165,20 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
     let mut diagnostics_poll = interval(Duration::from_secs(10));
     diagnostics_poll.set_missed_tick_behavior(MissedTickBehavior::Skip);
     let mut control_failures = 0;
-    let mut captured_items = false;
-    let mut captured_characters = false;
-    let mut initial_snapshot_uploaded = false;
+    let mut captured_items = restored_session;
+    let mut captured_characters = restored_session;
+    let mut initial_snapshot_uploaded = restored_session;
     let mut pending_changes = 0;
     let mut last_change = None;
     let mut commands_since_report = 0_usize;
     let mut packets_since_report = 0_usize;
     let mut recognized_since_report = 0_usize;
     let mut command_ids_since_report: HashMap<u16, usize> = HashMap::new();
+    if restored_session {
+        let snapshot = player_data.export_genshin_optimizer(&full_export_settings())?;
+        post_snapshot(client, args, snapshot).await?;
+        tracing::info!("Restored cached player state; continuous live capture is active");
+    }
 
     loop {
         tokio::select! {
@@ -179,6 +225,11 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
                     let snapshot =
                         player_data.export_genshin_optimizer(&full_export_settings())?;
                     post_snapshot(client, args, snapshot).await?;
+                    if let (Some(path), Some(key)) =
+                        (args.session_key_file.as_deref(), sniffer.session_key())
+                    {
+                        save_session(path, key, &player_data, true)?;
+                    }
                     tracing::info!(
                         changes = pending_changes,
                         "Live snapshot saved to the desktop application"
@@ -219,7 +270,8 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
                 if initial_snapshot_uploaded {
                     packets_since_report += 1;
                 }
-                let Some(GamePacket::Commands(commands)) = sniffer.receive_packet(packet) else {
+                let received = sniffer.receive_packet(packet);
+                let Some(GamePacket::Commands(commands)) = received else {
                     continue;
                 };
 
@@ -319,6 +371,11 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
             .await?;
             let snapshot = player_data.export_genshin_optimizer(&full_export_settings())?;
             post_snapshot(client, args, snapshot).await?;
+            if let (Some(path), Some(key)) =
+                (args.session_key_file.as_deref(), sniffer.session_key())
+            {
+                save_session(path, key, &player_data, true)?;
+            }
             tracing::info!("Initial snapshot saved; continuous live capture is active");
             initial_snapshot_uploaded = true;
             pending_changes = 0;
@@ -338,6 +395,61 @@ fn load_keys() -> Result<HashMap<u16, Vec<u8>>> {
     keys.iter()
         .map(|(key, value)| -> Result<_> { Ok((*key, BASE64_STANDARD.decode(value)?)) })
         .collect()
+}
+
+fn load_session(path: &Path) -> Result<CachedSession> {
+    let encoded = std::fs::read_to_string(path).with_context(|| {
+        format!(
+            "cached session key could not be read from {}",
+            path.display()
+        )
+    })?;
+    serde_json::from_str(&encoded).context("cached development session is invalid")
+}
+
+fn decode_session_key(encoded: &str) -> Result<Vec<u8>> {
+    let key = BASE64_STANDARD
+        .decode(encoded)
+        .context("cached session key is not valid base64")?;
+    if key.len() != SESSION_KEY_LENGTH {
+        return Err(anyhow!(
+            "cached session key has invalid length {} (expected {SESSION_KEY_LENGTH})",
+            key.len(),
+        ));
+    }
+    Ok(key)
+}
+
+fn decode_cached_messages(messages: &[String]) -> Result<Vec<Vec<u8>>> {
+    messages
+        .iter()
+        .map(|message| {
+            BASE64_STANDARD
+                .decode(message)
+                .context("cached player data is not valid base64")
+        })
+        .collect()
+}
+
+fn save_session(path: &Path, key: &[u8], player_data: &PlayerData, complete: bool) -> Result<()> {
+    if let Some(parent) = path.parent() {
+        create_dir_all(parent)?;
+    }
+    let (characters, items) = player_data.cached_state()?;
+    let cached = CachedSession {
+        key: BASE64_STANDARD.encode(key),
+        characters: characters
+            .iter()
+            .map(|value| BASE64_STANDARD.encode(value))
+            .collect(),
+        items: items
+            .iter()
+            .map(|value| BASE64_STANDARD.encode(value))
+            .collect(),
+        complete,
+    };
+    std::fs::write(path, serde_json::to_vec(&cached)?)
+        .with_context(|| format!("session key could not be saved to {}", path.display()))
 }
 
 fn full_export_settings() -> ExportSettings {

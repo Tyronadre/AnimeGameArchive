@@ -26,3 +26,14 @@ snapshot save so live-capture failures can be diagnosed without console access.
 
 Live updates currently cover artifacts, weapons, and materials. Character
 progression and equipped item locations are refreshed by starting a new capture.
+
+## Development session-key reuse
+
+When the desktop launcher is run outside a packaged `jpackage` application, it passes a
+development-only session-cache path to the helper. After the login handshake discovers the current
+session key, the helper stores it together with the GUID-indexed player state under the desktop
+home's `irminsul` directory. The
+launcher's **Reuse current Genshin session (dev)** button restores that key after an application
+restart so Genshin does not need to be restarted. Packaged launches never pass either session-key
+argument and never expose the reuse button. A cached key is valid only until Genshin reconnects or
+starts a new session.

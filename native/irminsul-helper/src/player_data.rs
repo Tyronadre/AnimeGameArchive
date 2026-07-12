@@ -4,6 +4,7 @@ use anime_game_data::{AnimeGameData, Property, SkillType};
 use anyhow::Result;
 pub use auto_artifactarium::r#gen::protos::{AvatarInfo, Item};
 use indexmap::IndexMap;
+use protobuf::Message;
 use serde::{Deserialize, Serialize};
 
 use crate::good::{self, fake_uninitialized_4th_line};
@@ -98,6 +99,37 @@ impl PlayerData {
         let previous_len = self.items.len();
         self.items.retain(|item| !guids.contains(&item.guid));
         previous_len - self.items.len()
+    }
+
+    pub fn cached_state(&self) -> Result<(Vec<Vec<u8>>, Vec<Vec<u8>>)> {
+        Ok((
+            self.characters
+                .iter()
+                .map(Message::write_to_bytes)
+                .collect::<protobuf::Result<Vec<_>>>()?,
+            self.items
+                .iter()
+                .map(Message::write_to_bytes)
+                .collect::<protobuf::Result<Vec<_>>>()?,
+        ))
+    }
+
+    pub fn restore_cached_state(
+        &mut self,
+        characters: &[Vec<u8>],
+        items: &[Vec<u8>],
+    ) -> Result<()> {
+        let characters = characters
+            .iter()
+            .map(|bytes| AvatarInfo::parse_from_bytes(bytes))
+            .collect::<protobuf::Result<Vec<_>>>()?;
+        let items = items
+            .iter()
+            .map(|bytes| Item::parse_from_bytes(bytes))
+            .collect::<protobuf::Result<Vec<_>>>()?;
+        self.process_characters(&characters);
+        self.process_items(&items);
+        Ok(())
     }
 
     pub fn export_genshin_optimizer(&self, settings: &ExportSettings) -> Result<String> {

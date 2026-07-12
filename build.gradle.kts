@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "de.tyro"
-version = "0.1"
+version = "0.1.2"
 description = "GenshinApp"
 
 java {
@@ -69,6 +69,7 @@ val desktopMainClass = "de.tyro.genshinapp.desktop.DesktopLauncherKt"
 val irminsulManifest = layout.projectDirectory.file("native/irminsul-helper/Cargo.toml")
 val irminsulExecutable = layout.projectDirectory.file("native/irminsul-helper/target/release/genshin-irminsul-helper.exe")
 val appName = "Another Anime Game Archive"
+val appIcon = layout.projectDirectory.file("src/main/resources/desktop/app-icon.ico")
 val appImageDirectory = layout.buildDirectory.dir("desktop/$appName")
 val installerDirectory = layout.buildDirectory.dir("desktop-installer")
 val packageDirectory = layout.buildDirectory.dir("desktop").get().asFile
@@ -143,6 +144,7 @@ tasks.register<Exec>("packageDesktop") {
     group = "desktop"
     description = "Creates a Windows application image with a bundled Java runtime."
     dependsOn(prepareDesktopPackage)
+    inputs.file(appIcon)
 
     doFirst {
         delete(packageDirectory)
@@ -155,6 +157,7 @@ tasks.register<Exec>("packageDesktop") {
             executable,
             "--type", "app-image",
             "--name", appName,
+            "--icon", appIcon.asFile.absolutePath,
             "--dest", packageDirectory,
             "--input", inputDirectory,
             "--main-jar", desktopJar.name,

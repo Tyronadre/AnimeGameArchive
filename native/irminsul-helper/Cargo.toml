@@ -8,7 +8,7 @@ build = "build.rs"
 [dependencies]
 anime-game-data = { git = "https://github.com/konkers/anime-game-data", rev = "df004591478efaedb995a425256b8ee535e36eee" }
 anyhow = "1.0.99"
-auto-artifactarium = { git = "https://github.com/konkers/auto-artifactarium", rev = "b0338e65d8bebb84149feaada5910f7d2251056f" }
+auto-artifactarium = { path = "../vendor/auto-artifactarium" }
 base64 = "0.22.1"
 clap = { version = "4.5.47", features = ["derive"] }
 flate2 = "1.1.9"

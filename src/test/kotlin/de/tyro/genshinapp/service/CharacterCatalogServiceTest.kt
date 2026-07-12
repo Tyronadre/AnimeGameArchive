@@ -121,6 +121,42 @@ class CharacterCatalogServiceTest {
     }
 
     @Test
+    fun `aggregate plan respects saved ownership and individual character targets`() {
+        val snapshot = GoodImportService(objectMapper).parse(
+            Files.readAllBytes(GoodImportServiceTest.SAMPLE_EXPORT),
+        )
+        val furina = assertNotNull(snapshot.characters.find { it.key.equals("Furina", true) })
+        val service = PlayerPlanningService(
+            catalog,
+            MaterialCalculator(catalog),
+            MaterialCraftingService(catalog),
+        )
+        val targets = mapOf(
+            "amber" to targetValues(owned = false),
+            "furina" to targetValues(
+                owned = true,
+                state = furina,
+                targetLevel = furina.level,
+                targetAscension = maxOf(
+                    furina.ascension,
+                    CharacterProgress.minimumAscensionFor(furina.level),
+                ),
+                targetNormalTalent = furina.normalTalent,
+                targetSkillTalent = furina.skillTalent,
+                targetBurstTalent = furina.burstTalent,
+            ),
+        )
+
+        val plan = service.createPlan(snapshot, targets)
+
+        assertTrue(plan.characters.none { it.character.key == "amber" })
+        assertTrue(
+            assertNotNull(plan.characters.find { it.character.key == "furina" })
+                .materials.isEmpty(),
+        )
+    }
+
+    @Test
     fun `resolves ascension weapon and manual crit rate before artifacts`() {
         val weaponDataService = mock(WeaponDataService::class.java)
         `when`(weaponDataService.find("SkywardHarp")).thenReturn(
@@ -174,6 +210,30 @@ class CharacterCatalogServiceTest {
             fandomImageUrlResolver,
             store,
         )
+
+    private fun targetValues(
+        owned: Boolean,
+        state: PlayerCharacterState? = null,
+        targetLevel: Int = 80,
+        targetAscension: Int = 6,
+        targetNormalTalent: Int = 9,
+        targetSkillTalent: Int = 9,
+        targetBurstTalent: Int = 9,
+    ) = CharacterTargetValues(
+        owned = owned,
+        currentLevel = state?.level,
+        currentAscension = state?.ascension,
+        currentConstellation = state?.constellation,
+        currentNormalTalent = state?.normalTalent,
+        currentSkillTalent = state?.skillTalent,
+        currentBurstTalent = state?.burstTalent,
+        additionalStats = emptyMap(),
+        targetLevel = targetLevel,
+        targetAscension = targetAscension,
+        targetNormalTalent = targetNormalTalent,
+        targetSkillTalent = targetSkillTalent,
+        targetBurstTalent = targetBurstTalent,
+    )
 
     private class InMemoryCatalogStore(
         characters: Collection<CharacterDefinition>,

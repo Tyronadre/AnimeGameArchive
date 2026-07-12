@@ -134,7 +134,6 @@ checksum = "1505bd5d3d116872e7271a6d4e16d81d0c8570876c8de68093a09ac269d8aac0"
 [[package]]
 name = "auto-artifactarium"
 version = "1.4.0"
-source = "git+https://github.com/konkers/auto-artifactarium?rev=b0338e65d8bebb84149feaada5910f7d2251056f#b0338e65d8bebb84149feaada5910f7d2251056f"
 dependencies = [
  "anyhow",
  "base64",
