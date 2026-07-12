@@ -96,8 +96,20 @@ class IrminsulIntegrationService(
     }
 
     @Synchronized
-    fun startCapture(): IrminsulCaptureStatus {
+    fun startCapture(reuseSessionKey: Boolean = false): IrminsulCaptureStatus {
         if (status().state.active) return status()
+        if (reuseSessionKey && !developmentMode()) {
+            return update(
+                IrminsulCaptureState.ERROR,
+                "Session-key reuse is available only in development mode.",
+            )
+        }
+        if (reuseSessionKey && !hasCachedSessionKey()) {
+            return update(
+                IrminsulCaptureState.ERROR,
+                "No cached Genshin session key is available yet.",
+            )
+        }
 
         val executable = resolveExecutable()
         if (executable == null) {
@@ -128,9 +140,12 @@ class IrminsulIntegrationService(
         val launchLog = logDirectory.resolve("launcher.log").toFile()
         val captureLog = captureLogPath()
         rotateCaptureLog(captureLog)
+        if (developmentMode() && !reuseSessionKey) {
+            Files.deleteIfExists(sessionKeyPath())
+        }
 
         return try {
-            launchProcess = ProcessBuilder(
+            val command = mutableListOf(
                 executable.toString(),
                 "--endpoint",
                 baseUrl,
@@ -141,6 +156,11 @@ class IrminsulIntegrationService(
                 "--log-file",
                 captureLog.toString(),
             )
+            if (developmentMode()) {
+                command += listOf("--session-key-file", sessionKeyPath().toString())
+                if (reuseSessionKey) command += "--reuse-session-key"
+            }
+            launchProcess = ProcessBuilder(command)
                 .redirectErrorStream(true)
                 .redirectOutput(ProcessBuilder.Redirect.appendTo(launchLog))
                 .start()
@@ -244,6 +264,16 @@ class IrminsulIntegrationService(
     }
 
     fun captureLogPath(): Path = desktopHome().resolve("irminsul").resolve("live-capture.log")
+
+    fun developmentMode(): Boolean = System.getProperty("jpackage.app-path").isNullOrBlank()
+
+    fun hasCachedSessionKey(): Boolean =
+        developmentMode() && runCatching {
+            Files.readString(sessionKeyPath()).contains("\"complete\":true")
+        }.getOrDefault(false)
+
+    private fun sessionKeyPath(): Path =
+        desktopHome().resolve("irminsul").resolve("dev-session.json")
 
     private fun initialStatus(): IrminsulCaptureStatus =
         if (resolveExecutable() == null) {

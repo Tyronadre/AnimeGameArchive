@@ -1,0 +1,383 @@
+{
+  "id" : 10000069,
+  "name" : "Tighnari",
+  "title" : "Verdant Strider",
+  "description" : "A young researcher well-versed in botany who currently serves as a Forest Watcher in Avidya Forest. He is a straight shooter with a warm heart — and a dab hand at guiding even the dullest of pupils.",
+  "weaponType" : "WEAPON_BOW",
+  "weaponText" : "Bow",
+  "bodyType" : "BODY_BOY",
+  "gender" : "Male",
+  "qualityType" : "QUALITY_ORANGE",
+  "rarity" : 5,
+  "birthdaymmdd" : "12/29",
+  "birthday" : "December 29",
+  "elementType" : "ELEMENT_DENDRO",
+  "elementText" : "Dendro",
+  "affiliation" : "Gandharva Ville",
+  "associationType" : "ASSOC_SUMERU",
+  "region" : "Sumeru",
+  "substatType" : "FIGHT_PROP_GRASS_ADD_HURT",
+  "substatText" : "Dendro DMG Bonus",
+  "constellation" : "Vulpes Zerda",
+  "cv" : {
+    "english" : "Zachary Gordon",
+    "chinese" : "莫然",
+    "japanese" : "小林沙苗",
+    "korean" : "Jung Ui-taek"
+  },
+  "costs" : {
+    "ascend1" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 20000
+    }, {
+      "id" : 104131,
+      "name" : "Nagadus Emerald Sliver",
+      "count" : 1
+    }, {
+      "id" : 101215,
+      "name" : "Nilotpala Lotus",
+      "count" : 3
+    }, {
+      "id" : 112059,
+      "name" : "Fungal Spores",
+      "count" : 3
+    } ],
+    "ascend2" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 40000
+    }, {
+      "id" : 104132,
+      "name" : "Nagadus Emerald Fragment",
+      "count" : 3
+    }, {
+      "id" : 113036,
+      "name" : "Majestic Hooked Beak",
+      "count" : 2
+    }, {
+      "id" : 101215,
+      "name" : "Nilotpala Lotus",
+      "count" : 10
+    }, {
+      "id" : 112059,
+      "name" : "Fungal Spores",
+      "count" : 15
+    } ],
+    "ascend3" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 60000
+    }, {
+      "id" : 104132,
+      "name" : "Nagadus Emerald Fragment",
+      "count" : 6
+    }, {
+      "id" : 113036,
+      "name" : "Majestic Hooked Beak",
+      "count" : 4
+    }, {
+      "id" : 101215,
+      "name" : "Nilotpala Lotus",
+      "count" : 20
+    }, {
+      "id" : 112060,
+      "name" : "Luminescent Pollen",
+      "count" : 12
+    } ],
+    "ascend4" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 80000
+    }, {
+      "id" : 104133,
+      "name" : "Nagadus Emerald Chunk",
+      "count" : 3
+    }, {
+      "id" : 113036,
+      "name" : "Majestic Hooked Beak",
+      "count" : 8
+    }, {
+      "id" : 101215,
+      "name" : "Nilotpala Lotus",
+      "count" : 30
+    }, {
+      "id" : 112060,
+      "name" : "Luminescent Pollen",
+      "count" : 18
+    } ],
+    "ascend5" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 100000
+    }, {
+      "id" : 104133,
+      "name" : "Nagadus Emerald Chunk",
+      "count" : 6
+    }, {
+      "id" : 113036,
+      "name" : "Majestic Hooked Beak",
+      "count" : 12
+    }, {
+      "id" : 101215,
+      "name" : "Nilotpala Lotus",
+      "count" : 45
+    }, {
+      "id" : 112061,
+      "name" : "Crystalline Cyst Dust",
+      "count" : 12
+    } ],
+    "ascend6" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 120000
+    }, {
+      "id" : 104134,
+      "name" : "Nagadus Emerald Gemstone",
+      "count" : 6
+    }, {
+      "id" : 113036,
+      "name" : "Majestic Hooked Beak",
+      "count" : 20
+    }, {
+      "id" : 101215,
+      "name" : "Nilotpala Lotus",
+      "count" : 60
+    }, {
+      "id" : 112061,
+      "name" : "Crystalline Cyst Dust",
+      "count" : 24
+    } ]
+  },
+  "images" : {
+    "cover1" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/08/23/a15445b2b2e4443398eabf3b479f49e7_2848574930993769772.png",
+    "cover2" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/08/23/b00b62e3b4f10026bfa95bc07896bbd7_4361735007308383481.png",
+    "hoyolab-avatar" : "https://img-os-static.hoyolab.com/communityWeb/upload/58163a3ff45260b4b6a5e447e9e1b7eb.png",
+    "filename_icon" : "UI_AvatarIcon_Tighnari",
+    "filename_iconCard" : "UI_AvatarIcon_Tighnari_Card",
+    "filename_sideIcon" : "UI_AvatarIcon_Side_Tighnari",
+    "filename_gachaSplash" : "UI_Gacha_AvatarImg_Tighnari",
+    "filename_gachaSlice" : "UI_Gacha_AvatarIcon_Tighnari",
+    "mihoyo_icon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Tighnari.png",
+    "mihoyo_sideIcon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_side_icon/UI_AvatarIcon_Side_Tighnari.png"
+  },
+  "version" : "3.0",
+  "talents" : {
+    "id" : 6901,
+    "name" : "Tighnari",
+    "combat1" : {
+      "name" : "Khanda Barrier-Buster",
+      "descriptionRaw" : "<color=#FFD780FF>Normal Attack</color>\nPerforms up to 4 consecutive shots with a bow.\n\n<color=#FFD780FF>Charged Attack</color>\nPerforms a more precise <color=#FFD780FF>Aimed Shot</color> with increased DMG.\nWhile aiming, the power of Dendro will accumulate on the arrowhead before the arrow is fired. Has different effects based on how long the energy has been charged:\n·Charge Level 1: Fires off an arrow carrying the power of flora that deals <color=#99FF88FF>Dendro DMG</color>.\n·Charge Level 2: Fires off a Wreath Arrow that deals <color=#99FF88FF>Dendro DMG</color>. Upon hit, the Wreath Arrow will create 4 Clusterbloom Arrows that will track nearby opponents automatically and deal <color=#99FF88FF>Dendro DMG</color>.\n\n<color=#FFD780FF>Plunging Attack</color>\nFires off a shower of arrows in mid-air before falling and striking the ground, dealing AoE DMG upon impact.",
+      "description" : "Normal Attack\nPerforms up to 4 consecutive shots with a bow.\n\nCharged Attack\nPerforms a more precise Aimed Shot with increased DMG.\nWhile aiming, the power of Dendro will accumulate on the arrowhead before the arrow is fired. Has different effects based on how long the energy has been charged:\n·Charge Level 1: Fires off an arrow carrying the power of flora that deals Dendro DMG.\n·Charge Level 2: Fires off a Wreath Arrow that deals Dendro DMG. Upon hit, the Wreath Arrow will create 4 Clusterbloom Arrows that will track nearby opponents automatically and deal Dendro DMG.\n\nPlunging Attack\nFires off a shower of arrows in mid-air before falling and striking the ground, dealing AoE DMG upon impact.",
+      "attributes" : {
+        "labels" : [ "1-Hit DMG|{param1:F1P}", "2-Hit DMG|{param2:F1P}", "3-Hit DMG|{param3:F1P}×2", "4-Hit DMG|{param4:F1P}", "Aimed Shot|{param5:F1P}", "Level 1 Aimed Shot|{param6:P}", "Wreath Arrow DMG|{param7:F1P}", "Clusterbloom Arrow DMG|{param8:F1P}", "Plunge DMG|{param9:F1P}", "Low/High Plunge DMG|{param10:P}/{param11:P}" ],
+        "parameters" : {
+          "param1" : [ 0.44634, 0.48267, 0.519, 0.5709, 0.60723, 0.64875, 0.70584, 0.76293, 0.82002, 0.8823, 0.94458, 1.00686, 1.06914, 1.13142, 1.1937 ],
+          "param2" : [ 0.41968, 0.45384, 0.488, 0.5368, 0.57096, 0.61, 0.66368, 0.71736, 0.77104, 0.8296, 0.88816, 0.94672, 1.00528, 1.06384, 1.1224 ],
+          "param3" : [ 0.26445, 0.285975, 0.3075, 0.33825, 0.359775, 0.384375, 0.4182, 0.452025, 0.48585, 0.52275, 0.55965, 0.59655, 0.63345, 0.67035, 0.70725 ],
+          "param4" : [ 0.68628, 0.74214, 0.798, 0.8778, 0.93366, 0.9975, 1.08528, 1.17306, 1.26084, 1.3566, 1.45236, 1.54812, 1.64388, 1.73964, 1.8354 ],
+          "param5" : [ 0.4386, 0.4743, 0.51, 0.561, 0.5967, 0.6375, 0.6936, 0.7497, 0.8058, 0.867, 0.9282, 0.9894, 1.0506, 1.1118, 1.173 ],
+          "param6" : [ 1.24, 1.333, 1.426, 1.55, 1.643, 1.736, 1.86, 1.984, 2.108, 2.232, 2.356, 2.48, 2.635, 2.79, 2.945 ],
+          "param7" : [ 0.872, 0.9374, 1.0028, 1.09, 1.1554, 1.2208, 1.308, 1.3952, 1.4824, 1.5696, 1.6568, 1.744, 1.853, 1.962, 2.071 ],
+          "param8" : [ 0.386, 0.41495, 0.4439, 0.4825, 0.51145, 0.5404, 0.579, 0.6176, 0.6562, 0.6948, 0.7334, 0.772, 0.82025, 0.8685, 0.91675 ],
+          "param9" : [ 0.568288, 0.614544, 0.6608, 0.72688, 0.773136, 0.826, 0.898688, 0.971376, 1.044064, 1.12336, 1.202656, 1.281952, 1.361248, 1.440544, 1.51984 ],
+          "param10" : [ 1.136335, 1.228828, 1.32132, 1.453452, 1.545944, 1.65165, 1.796995, 1.94234, 2.087686, 2.246244, 2.404802, 2.563361, 2.721919, 2.880478, 3.039036 ],
+          "param11" : [ 1.419344, 1.534872, 1.6504, 1.81544, 1.930968, 2.063, 2.244544, 2.426088, 2.607632, 2.80568, 3.003728, 3.201776, 3.399824, 3.597872, 3.79592 ]
+        }
+      }
+    },
+    "combat2" : {
+      "name" : "Vijnana-Phala Mine",
+      "descriptionRaw" : "Tighnari throws a Vijnana Stormheart ahead that deals <color=#99FF88FF>AoE Dendro DMG</color>, creating a Vijnana-Khanda Field that creates mysterious illusions that taunt opponents and draw their fire.\nAdditionally, Tighnari gains the Vijnana Suffusion effect, which will decrease the Wreath Arrow's charging time by 2.4s. This effect will dissipate once the skill duration ends or after Tighnari has fired 3 Wreath Arrows.\n\n<i>\"If seeds wither apart from the soil, they will remain a single seed. But if returned to the soil, they shall multiply ten-million fold.\"</i>",
+      "description" : "Tighnari throws a Vijnana Stormheart ahead that deals AoE Dendro DMG, creating a Vijnana-Khanda Field that creates mysterious illusions that taunt opponents and draw their fire.\nAdditionally, Tighnari gains the Vijnana Suffusion effect, which will decrease the Wreath Arrow's charging time by 2.4s. This effect will dissipate once the skill duration ends or after Tighnari has fired 3 Wreath Arrows.",
+      "flavorText" : "\"If seeds wither apart from the soil, they will remain a single seed. But if returned to the soil, they shall multiply ten-million fold.\"",
+      "attributes" : {
+        "labels" : [ "Skill DMG|{param1:F1P}", "Vijnana-Khanda Field Duration|{param2:F1}s", "Vijnana Suffusion Duration|{param3:F1}s", "CD|{param4:F1}s" ],
+        "parameters" : {
+          "param1" : [ 1.496, 1.6082, 1.7204, 1.87, 1.9822, 2.0944, 2.244, 2.3936, 2.5432, 2.6928, 2.8424, 2.992, 3.179, 3.366, 3.553 ],
+          "param2" : [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 ],
+          "param3" : [ 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12 ],
+          "param4" : [ 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12 ]
+        }
+      }
+    },
+    "combat3" : {
+      "name" : "Fashioner's Tanglevine Shaft",
+      "descriptionRaw" : "Combines the power of all seeds to fire 6 Tanglevine Shafts that can track opponents and deal <color=#99FF88FF>Dendro DMG</color>.\nAfter they hit, the Tanglevine Shafts will create a secondary wave of Tanglevine Shafts that can also track nearby opponents and deal <color=#99FF88FF>Dendro DMG</color> on hit.\n\n<i>\"Do not seek to escape so easily. The vines grow and regrow ever on. Things might get dicey if you don't clear every last one of them out.\"</i>",
+      "description" : "Combines the power of all seeds to fire 6 Tanglevine Shafts that can track opponents and deal Dendro DMG.\nAfter they hit, the Tanglevine Shafts will create a secondary wave of Tanglevine Shafts that can also track nearby opponents and deal Dendro DMG on hit.",
+      "flavorText" : "\"Do not seek to escape so easily. The vines grow and regrow ever on. Things might get dicey if you don't clear every last one of them out.\"",
+      "attributes" : {
+        "labels" : [ "Tanglevine Shaft DMG|{param1:F1P}", "Secondary Tanglevine Shaft DMG|{param2:F1P}", "CD|{param3:F1}s", "Energy Cost|{param4:I}" ],
+        "parameters" : {
+          "param1" : [ 0.5562, 0.597915, 0.63963, 0.69525, 0.736965, 0.77868, 0.8343, 0.88992, 0.94554, 1.00116, 1.05678, 1.1124, 1.181925, 1.25145, 1.320975 ],
+          "param2" : [ 0.6798, 0.730785, 0.78177, 0.84975, 0.900735, 0.95172, 1.0197, 1.08768, 1.15566, 1.22364, 1.29162, 1.3596, 1.444575, 1.52955, 1.614525 ],
+          "param3" : [ 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12 ],
+          "param4" : [ 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40 ]
+        }
+      }
+    },
+    "passive1" : {
+      "name" : "Keen Sight",
+      "descriptionRaw" : "After Tighnari fires a <color=#FFD780FF>Wreath Arrow</color>, his Elemental Mastery is increased by 50 for 4s.",
+      "description" : "After Tighnari fires a Wreath Arrow, his Elemental Mastery is increased by 50 for 4s."
+    },
+    "passive2" : {
+      "name" : "Scholarly Blade",
+      "descriptionRaw" : "For every point of Elemental Mastery Tighnari possesses, his Charged Attack and <color=#FFD780FF>Fashioner's Tanglevine Shaft</color> DMG are increased by 0.06%.\nThe maximum DMG Bonus obtainable this way is 60%.",
+      "description" : "For every point of Elemental Mastery Tighnari possesses, his Charged Attack and Fashioner's Tanglevine Shaft DMG are increased by 0.06%.\nThe maximum DMG Bonus obtainable this way is 60%."
+    },
+    "passive3" : {
+      "name" : "Encyclopedic Knowledge",
+      "descriptionRaw" : "Displays the location of nearby <color=#FFD780FF>resources unique to Sumeru</color> on the mini-map.",
+      "description" : "Displays the location of nearby resources unique to Sumeru on the mini-map."
+    },
+    "costs" : {
+      "lvl2" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 12500
+      }, {
+        "id" : 104329,
+        "name" : "Teachings of Admonition",
+        "count" : 3
+      }, {
+        "id" : 112059,
+        "name" : "Fungal Spores",
+        "count" : 6
+      } ],
+      "lvl3" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 17500
+      }, {
+        "id" : 104330,
+        "name" : "Guide to Admonition",
+        "count" : 2
+      }, {
+        "id" : 112060,
+        "name" : "Luminescent Pollen",
+        "count" : 3
+      } ],
+      "lvl4" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 25000
+      }, {
+        "id" : 104330,
+        "name" : "Guide to Admonition",
+        "count" : 4
+      }, {
+        "id" : 112060,
+        "name" : "Luminescent Pollen",
+        "count" : 4
+      } ],
+      "lvl5" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 30000
+      }, {
+        "id" : 104330,
+        "name" : "Guide to Admonition",
+        "count" : 6
+      }, {
+        "id" : 112060,
+        "name" : "Luminescent Pollen",
+        "count" : 6
+      } ],
+      "lvl6" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 37500
+      }, {
+        "id" : 104330,
+        "name" : "Guide to Admonition",
+        "count" : 9
+      }, {
+        "id" : 112060,
+        "name" : "Luminescent Pollen",
+        "count" : 9
+      } ],
+      "lvl7" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 120000
+      }, {
+        "id" : 104331,
+        "name" : "Philosophies of Admonition",
+        "count" : 4
+      }, {
+        "id" : 112061,
+        "name" : "Crystalline Cyst Dust",
+        "count" : 4
+      }, {
+        "id" : 113034,
+        "name" : "The Meaning of Aeons",
+        "count" : 1
+      } ],
+      "lvl8" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 260000
+      }, {
+        "id" : 104331,
+        "name" : "Philosophies of Admonition",
+        "count" : 6
+      }, {
+        "id" : 112061,
+        "name" : "Crystalline Cyst Dust",
+        "count" : 6
+      }, {
+        "id" : 113034,
+        "name" : "The Meaning of Aeons",
+        "count" : 1
+      } ],
+      "lvl9" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 450000
+      }, {
+        "id" : 104331,
+        "name" : "Philosophies of Admonition",
+        "count" : 12
+      }, {
+        "id" : 112061,
+        "name" : "Crystalline Cyst Dust",
+        "count" : 9
+      }, {
+        "id" : 113034,
+        "name" : "The Meaning of Aeons",
+        "count" : 2
+      } ],
+      "lvl10" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 700000
+      }, {
+        "id" : 104331,
+        "name" : "Philosophies of Admonition",
+        "count" : 16
+      }, {
+        "id" : 112061,
+        "name" : "Crystalline Cyst Dust",
+        "count" : 12
+      }, {
+        "id" : 113034,
+        "name" : "The Meaning of Aeons",
+        "count" : 2
+      }, {
+        "id" : 104319,
+        "name" : "Crown of Insight",
+        "count" : 1
+      } ]
+    },
+    "images" : {
+      "filename_combat1" : "Skill_A_02",
+      "filename_combat2" : "Skill_S_Tighnari_01",
+      "filename_combat3" : "Skill_E_Tighnari_01_HD",
+      "filename_passive1" : "UI_Talent_S_Tighnari_05",
+      "filename_passive2" : "UI_Talent_S_Tighnari_06",
+      "filename_passive3" : "UI_Talent_S_Tighnari_07"
+    },
+    "version" : "3.0"
+  }
+}

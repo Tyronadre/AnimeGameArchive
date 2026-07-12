@@ -1,0 +1,385 @@
+{
+  "id" : 10000059,
+  "name" : "Shikanoin Heizou",
+  "title" : "Analytical Harmony",
+  "description" : "A young prodigy detective from the Tenryou Commission. His senses are sharp and his thoughts are clear.",
+  "weaponType" : "WEAPON_CATALYST",
+  "weaponText" : "Catalyst",
+  "bodyType" : "BODY_BOY",
+  "gender" : "Male",
+  "qualityType" : "QUALITY_PURPLE",
+  "rarity" : 4,
+  "birthdaymmdd" : "7/24",
+  "birthday" : "July 24",
+  "elementType" : "ELEMENT_ANEMO",
+  "elementText" : "Anemo",
+  "affiliation" : "Tenryou Commission",
+  "associationType" : "ASSOC_INAZUMA",
+  "region" : "Inazuma",
+  "substatType" : "FIGHT_PROP_WIND_ADD_HURT",
+  "substatText" : "Anemo DMG Bonus",
+  "constellation" : "Cervus Minor",
+  "cv" : {
+    "english" : "Kieran Regan",
+    "chinese" : "林景",
+    "japanese" : "井口祐一",
+    "korean" : "Jung Eui-jin"
+  },
+  "costs" : {
+    "ascend1" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 20000
+    }, {
+      "id" : 104151,
+      "name" : "Vayuda Turquoise Sliver",
+      "count" : 1
+    }, {
+      "id" : 101201,
+      "name" : "Onikabuto",
+      "count" : 3
+    }, {
+      "id" : 112035,
+      "name" : "Treasure Hoarder Insignia",
+      "count" : 3
+    } ],
+    "ascend2" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 40000
+    }, {
+      "id" : 104152,
+      "name" : "Vayuda Turquoise Fragment",
+      "count" : 3
+    }, {
+      "id" : 113035,
+      "name" : "Runic Fang",
+      "count" : 2
+    }, {
+      "id" : 101201,
+      "name" : "Onikabuto",
+      "count" : 10
+    }, {
+      "id" : 112035,
+      "name" : "Treasure Hoarder Insignia",
+      "count" : 15
+    } ],
+    "ascend3" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 60000
+    }, {
+      "id" : 104152,
+      "name" : "Vayuda Turquoise Fragment",
+      "count" : 6
+    }, {
+      "id" : 113035,
+      "name" : "Runic Fang",
+      "count" : 4
+    }, {
+      "id" : 101201,
+      "name" : "Onikabuto",
+      "count" : 20
+    }, {
+      "id" : 112036,
+      "name" : "Silver Raven Insignia",
+      "count" : 12
+    } ],
+    "ascend4" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 80000
+    }, {
+      "id" : 104153,
+      "name" : "Vayuda Turquoise Chunk",
+      "count" : 3
+    }, {
+      "id" : 113035,
+      "name" : "Runic Fang",
+      "count" : 8
+    }, {
+      "id" : 101201,
+      "name" : "Onikabuto",
+      "count" : 30
+    }, {
+      "id" : 112036,
+      "name" : "Silver Raven Insignia",
+      "count" : 18
+    } ],
+    "ascend5" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 100000
+    }, {
+      "id" : 104153,
+      "name" : "Vayuda Turquoise Chunk",
+      "count" : 6
+    }, {
+      "id" : 113035,
+      "name" : "Runic Fang",
+      "count" : 12
+    }, {
+      "id" : 101201,
+      "name" : "Onikabuto",
+      "count" : 45
+    }, {
+      "id" : 112037,
+      "name" : "Golden Raven Insignia",
+      "count" : 12
+    } ],
+    "ascend6" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 120000
+    }, {
+      "id" : 104154,
+      "name" : "Vayuda Turquoise Gemstone",
+      "count" : 6
+    }, {
+      "id" : 113035,
+      "name" : "Runic Fang",
+      "count" : 20
+    }, {
+      "id" : 101201,
+      "name" : "Onikabuto",
+      "count" : 60
+    }, {
+      "id" : 112037,
+      "name" : "Golden Raven Insignia",
+      "count" : 24
+    } ]
+  },
+  "images" : {
+    "cover1" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/07/07/c20ab407d9316480290f7c690836f35c_2106028234032197103.png",
+    "cover2" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/07/07/ec07d3511f0ebe503e83ef645acc333c_2276094340014227662.png",
+    "hoyolab-avatar" : "https://img-os-static.hoyolab.com/communityWeb/upload/3669a189c4a2b374ee0730a8ae112704.png",
+    "filename_icon" : "UI_AvatarIcon_Heizo",
+    "filename_iconCard" : "UI_AvatarIcon_Heizo_Card",
+    "filename_sideIcon" : "UI_AvatarIcon_Side_Heizo",
+    "filename_gachaSplash" : "UI_Gacha_AvatarImg_Heizo",
+    "filename_gachaSlice" : "UI_Gacha_AvatarIcon_Heizo",
+    "mihoyo_icon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Heizo.png",
+    "mihoyo_sideIcon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_side_icon/UI_AvatarIcon_Side_Heizo.png"
+  },
+  "version" : "2.8",
+  "talents" : {
+    "id" : 5901,
+    "name" : "Shikanoin Heizou",
+    "combat1" : {
+      "name" : "Fudou Style Martial Arts",
+      "descriptionRaw" : "<color=#FFD780FF>Normal Attack</color>\nPerforms up to 5 fisticuffs empowered by a mighty wind, dealing <color=#80FFD7FF>Anemo DMG</color>.\n\n<color=#FFD780FF>Charged Attack</color>\nConsumes a certain amount of Stamina and performs a sweeping kick that deals <color=#80FFD7FF>Anemo DMG</color>.\n\n<color=#FFD780FF>Plunging Attack</color>\nCalling upon the surging wind, Heizou plunges towards the ground from mid-air, damaging all opponents in his path. Deals <color=#80FFD7FF>AoE Anemo DMG</color> upon impact with the ground.",
+      "description" : "Normal Attack\nPerforms up to 5 fisticuffs empowered by a mighty wind, dealing Anemo DMG.\n\nCharged Attack\nConsumes a certain amount of Stamina and performs a sweeping kick that deals Anemo DMG.\n\nPlunging Attack\nCalling upon the surging wind, Heizou plunges towards the ground from mid-air, damaging all opponents in his path. Deals AoE Anemo DMG upon impact with the ground.",
+      "attributes" : {
+        "labels" : [ "1-Hit DMG|{param1:F1P}", "2-Hit DMG|{param2:F1P}", "3-Hit DMG|{param3:F1P}", "4-Hit DMG|{param4:F1P}+{param5:F1P}+{param6:F1P}", "5-Hit DMG|{param7:F1P}", "Charged Attack|{param8:F1P}", "Charged Attack Stamina Cost|{param9:F1}", "Plunge DMG|{param10:F1P}", "Low/High Plunge DMG|{param11:P}/{param12:P}" ],
+        "parameters" : {
+          "param1" : [ 0.374736, 0.402841, 0.430946, 0.46842, 0.496525, 0.52463, 0.562104, 0.599578, 0.637051, 0.674525, 0.711998, 0.749472, 0.796314, 0.843156, 0.889998 ],
+          "param2" : [ 0.36852, 0.396159, 0.423798, 0.46065, 0.488289, 0.515928, 0.55278, 0.589632, 0.626484, 0.663336, 0.700188, 0.73704, 0.783105, 0.82917, 0.875235 ],
+          "param3" : [ 0.5106, 0.548895, 0.58719, 0.63825, 0.676545, 0.71484, 0.7659, 0.81696, 0.86802, 0.91908, 0.97014, 1.0212, 1.085025, 1.14885, 1.212675 ],
+          "param4" : [ 0.147824, 0.158911, 0.169998, 0.18478, 0.195867, 0.206954, 0.221736, 0.236518, 0.251301, 0.266083, 0.280866, 0.295648, 0.314126, 0.332604, 0.351082 ],
+          "param5" : [ 0.162608, 0.174804, 0.186999, 0.20326, 0.215456, 0.227651, 0.243912, 0.260173, 0.276434, 0.292694, 0.308955, 0.325216, 0.345542, 0.365868, 0.386194 ],
+          "param6" : [ 0.192176, 0.206589, 0.221002, 0.24022, 0.254633, 0.269046, 0.288264, 0.307482, 0.326699, 0.345917, 0.365134, 0.384352, 0.408374, 0.432396, 0.456418 ],
+          "param7" : [ 0.614496, 0.660583, 0.70667, 0.76812, 0.814207, 0.860294, 0.921744, 0.983194, 1.044643, 1.106093, 1.167542, 1.228992, 1.305804, 1.382616, 1.459428 ],
+          "param8" : [ 0.73, 0.78475, 0.8395, 0.9125, 0.96725, 1.022, 1.095, 1.168, 1.241, 1.314, 1.387, 1.46, 1.55125, 1.6425, 1.73375 ],
+          "param9" : [ 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25 ],
+          "param10" : [ 0.568288, 0.614544, 0.6608, 0.72688, 0.773136, 0.826, 0.898688, 0.971376, 1.044064, 1.12336, 1.202656, 1.281952, 1.361248, 1.440544, 1.51984 ],
+          "param11" : [ 1.136335, 1.228828, 1.32132, 1.453452, 1.545944, 1.65165, 1.796995, 1.94234, 2.087686, 2.246244, 2.404802, 2.563361, 2.721919, 2.880478, 3.039036 ],
+          "param12" : [ 1.419344, 1.534872, 1.6504, 1.81544, 1.930968, 2.063, 2.244544, 2.426088, 2.607632, 2.80568, 3.003728, 3.201776, 3.399824, 3.597872, 3.79592 ]
+        }
+      }
+    },
+    "combat2" : {
+      "name" : "Heartstopper Strike",
+      "descriptionRaw" : "<color=#FFD780FF>Tap</color>\nWields the swift winds to launch a Heartstopper Strike that deals <color=#80FFD7FF>Anemo DMG</color>.\n\n<color=#FFD780FF>Hold</color>\nCharges energy to unleash an even stronger blow. He will obtain the Declension effect while charging, which will increase the power of the Heartstopper Strike. When the skill button is released or the skill finishes charging, he will strike forward, dealing <color=#80FFD7FF>Anemo DMG</color>.\n\n<color=#FFD780FF>Declension</color>\nIncreases the power of the next Heartstopper Strike. Max 4 stacks.\nWhen you possess 4 Declension stacks, the Conviction effect will be produced, which will cause the next Heartstopper Strike to be even stronger and have a larger AoE.\n\n<i>This seemingly ordinary strike contains Heizou's desire for criminals to honestly confess and repent.</i>",
+      "description" : "Tap\nWields the swift winds to launch a Heartstopper Strike that deals Anemo DMG.\n\nHold\nCharges energy to unleash an even stronger blow. He will obtain the Declension effect while charging, which will increase the power of the Heartstopper Strike. When the skill button is released or the skill finishes charging, he will strike forward, dealing Anemo DMG.\n\nDeclension\nIncreases the power of the next Heartstopper Strike. Max 4 stacks.\nWhen you possess 4 Declension stacks, the Conviction effect will be produced, which will cause the next Heartstopper Strike to be even stronger and have a larger AoE.",
+      "flavorText" : "This seemingly ordinary strike contains Heizou's desire for criminals to honestly confess and repent.",
+      "attributes" : {
+        "labels" : [ "Skill DMG|{param1:F1P}", "Declension DMG Bonus|{param2:F1P}/stack", "Conviction DMG Bonus|{param3:F1P}", "Declension Duration|{param5:F1}s", "CD|{param4:F1}s" ],
+        "parameters" : {
+          "param1" : [ 2.2752, 2.44584, 2.61648, 2.844, 3.01464, 3.18528, 3.4128, 3.64032, 3.86784, 4.09536, 4.32288, 4.5504, 4.8348, 5.1192, 5.4036 ],
+          "param2" : [ 0.5688, 0.61146, 0.65412, 0.711, 0.75366, 0.79632, 0.8532, 0.91008, 0.96696, 1.02384, 1.08072, 1.1376, 1.2087, 1.2798, 1.3509 ],
+          "param3" : [ 1.1376, 1.22292, 1.30824, 1.422, 1.50732, 1.59264, 1.7064, 1.82016, 1.93392, 2.04768, 2.16144, 2.2752, 2.4174, 2.5596, 2.7018 ],
+          "param4" : [ 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 ],
+          "param5" : [ 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60 ]
+        }
+      }
+    },
+    "combat3" : {
+      "name" : "Windmuster Kick",
+      "descriptionRaw" : "Leaps into the air and uses the Fudou Style Vacuum Slugger and kicks his opponent. The Vacuum Slugger will explode upon hit and create an Arresting Windtunnel that pulls in nearby objects and opponents, dealing <color=#80FFD7FF>AoE Anemo DMG</color>.\nWhen Vacuum Slugger hits opponents affected by <color=#80C0FFFF>Hydro</color>/<color=#FF9999FF>Pyro</color>/<color=#99FFFFFF>Cryo</color>/<color=#FFACFFFF>Electro</color>, these opponents will be afflicted with Windmuster Iris. This Windmuster Iris will explode after a moment and dissipate, dealing AoE DMG of the corresponding aforementioned elemental type.\nVacuum Slugger can afflict a maximum of 4 opponents with the Windmuster Iris. A single opponent cannot be under the effect of Windmuster Irises of different elements at the same time.\n\n<i>A unique technique that gathers Anemo in one place before unleashing it all in one kick. Is always there in a pinch to land on some criminal's fleeing back.</i>",
+      "description" : "Leaps into the air and uses the Fudou Style Vacuum Slugger and kicks his opponent. The Vacuum Slugger will explode upon hit and create an Arresting Windtunnel that pulls in nearby objects and opponents, dealing AoE Anemo DMG.\nWhen Vacuum Slugger hits opponents affected by Hydro/Pyro/Cryo/Electro, these opponents will be afflicted with Windmuster Iris. This Windmuster Iris will explode after a moment and dissipate, dealing AoE DMG of the corresponding aforementioned elemental type.\nVacuum Slugger can afflict a maximum of 4 opponents with the Windmuster Iris. A single opponent cannot be under the effect of Windmuster Irises of different elements at the same time.",
+      "flavorText" : "A unique technique that gathers Anemo in one place before unleashing it all in one kick. Is always there in a pinch to land on some criminal's fleeing back.",
+      "attributes" : {
+        "labels" : [ "Fudou Style Vacuum Slugger DMG|{param1:F1P}", "Windmuster Iris DMG|{param2:F1P}", "CD|{param3:F1}s", "Energy Cost|{param4:I}" ],
+        "parameters" : {
+          "param1" : [ 3.14688, 3.382896, 3.618912, 3.9336, 4.169616, 4.405632, 4.72032, 5.035008, 5.349696, 5.664384, 5.979072, 6.29376, 6.68712, 7.08048, 7.47384 ],
+          "param2" : [ 0.21456, 0.230652, 0.246744, 0.2682, 0.284292, 0.300384, 0.32184, 0.343296, 0.364752, 0.386208, 0.407664, 0.42912, 0.45594, 0.48276, 0.50958 ],
+          "param3" : [ 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12 ],
+          "param4" : [ 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40 ]
+        }
+      }
+    },
+    "passive1" : {
+      "name" : "Paradoxical Practice",
+      "descriptionRaw" : "When Shikanoin Heizou activates a Swirl reaction while on the field, he will gain 1 Declension stack for <color=#FFD780FF>Heartstopper Strike</color>. This effect can be triggered once every 0.1s.",
+      "description" : "When Shikanoin Heizou activates a Swirl reaction while on the field, he will gain 1 Declension stack for Heartstopper Strike. This effect can be triggered once every 0.1s."
+    },
+    "passive2" : {
+      "name" : "Penetrative Reasoning",
+      "descriptionRaw" : "After Shikanoin Heizou's <color=#FFD780FF>Heartstopper Strike</color> hits an opponent, increases all party members' (excluding Shikanoin Heizou) Elemental Mastery by 80 for 10s.",
+      "description" : "After Shikanoin Heizou's Heartstopper Strike hits an opponent, increases all party members' (excluding Shikanoin Heizou) Elemental Mastery by 80 for 10s."
+    },
+    "passive3" : {
+      "name" : "Pre-Existing Guilt",
+      "descriptionRaw" : "Decreases sprinting Stamina consumption for your own party members by 20%.\nNot stackable with Passive Talents that provide the exact same effects.",
+      "description" : "Decreases sprinting Stamina consumption for your own party members by 20%.\nNot stackable with Passive Talents that provide the exact same effects."
+    },
+    "costs" : {
+      "lvl2" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 12500
+      }, {
+        "id" : 104320,
+        "name" : "Teachings of Transience",
+        "count" : 3
+      }, {
+        "id" : 112035,
+        "name" : "Treasure Hoarder Insignia",
+        "count" : 6
+      } ],
+      "lvl3" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 17500
+      }, {
+        "id" : 104321,
+        "name" : "Guide to Transience",
+        "count" : 2
+      }, {
+        "id" : 112036,
+        "name" : "Silver Raven Insignia",
+        "count" : 3
+      } ],
+      "lvl4" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 25000
+      }, {
+        "id" : 104321,
+        "name" : "Guide to Transience",
+        "count" : 4
+      }, {
+        "id" : 112036,
+        "name" : "Silver Raven Insignia",
+        "count" : 4
+      } ],
+      "lvl5" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 30000
+      }, {
+        "id" : 104321,
+        "name" : "Guide to Transience",
+        "count" : 6
+      }, {
+        "id" : 112036,
+        "name" : "Silver Raven Insignia",
+        "count" : 6
+      } ],
+      "lvl6" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 37500
+      }, {
+        "id" : 104321,
+        "name" : "Guide to Transience",
+        "count" : 9
+      }, {
+        "id" : 112036,
+        "name" : "Silver Raven Insignia",
+        "count" : 9
+      } ],
+      "lvl7" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 120000
+      }, {
+        "id" : 104322,
+        "name" : "Philosophies of Transience",
+        "count" : 4
+      }, {
+        "id" : 112037,
+        "name" : "Golden Raven Insignia",
+        "count" : 4
+      }, {
+        "id" : 113034,
+        "name" : "The Meaning of Aeons",
+        "count" : 1
+      } ],
+      "lvl8" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 260000
+      }, {
+        "id" : 104322,
+        "name" : "Philosophies of Transience",
+        "count" : 6
+      }, {
+        "id" : 112037,
+        "name" : "Golden Raven Insignia",
+        "count" : 6
+      }, {
+        "id" : 113034,
+        "name" : "The Meaning of Aeons",
+        "count" : 1
+      } ],
+      "lvl9" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 450000
+      }, {
+        "id" : 104322,
+        "name" : "Philosophies of Transience",
+        "count" : 12
+      }, {
+        "id" : 112037,
+        "name" : "Golden Raven Insignia",
+        "count" : 9
+      }, {
+        "id" : 113034,
+        "name" : "The Meaning of Aeons",
+        "count" : 2
+      } ],
+      "lvl10" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 700000
+      }, {
+        "id" : 104322,
+        "name" : "Philosophies of Transience",
+        "count" : 16
+      }, {
+        "id" : 112037,
+        "name" : "Golden Raven Insignia",
+        "count" : 12
+      }, {
+        "id" : 113034,
+        "name" : "The Meaning of Aeons",
+        "count" : 2
+      }, {
+        "id" : 104319,
+        "name" : "Crown of Insight",
+        "count" : 1
+      } ]
+    },
+    "images" : {
+      "filename_combat1" : "Skill_A_Catalyst_MD",
+      "filename_combat2" : "Skill_S_Heizo_01",
+      "filename_combat3" : "Skill_E_Heizo_01_HD",
+      "filename_passive1" : "UI_Talent_S_Heizo_05",
+      "filename_passive2" : "UI_Talent_S_Heizo_06",
+      "filename_passive3" : "UI_Talent_Explosion_Sprint"
+    },
+    "version" : "2.8"
+  }
+}

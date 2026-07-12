@@ -1,0 +1,386 @@
+{
+  "id" : 10000082,
+  "name" : "Baizhu",
+  "title" : "Beyond Mortality",
+  "description" : "The owner of Bubu Pharmacy, who is rarely seen without the white snake named Changsheng. His medicinal knowledge is encyclopedic, and his personal intrigues subtle.",
+  "weaponType" : "WEAPON_CATALYST",
+  "weaponText" : "Catalyst",
+  "bodyType" : "BODY_MALE",
+  "gender" : "Male",
+  "qualityType" : "QUALITY_ORANGE",
+  "rarity" : 5,
+  "birthdaymmdd" : "4/25",
+  "birthday" : "April 25",
+  "elementType" : "ELEMENT_DENDRO",
+  "elementText" : "Dendro",
+  "affiliation" : "Bubu Pharmacy",
+  "associationType" : "ASSOC_LIYUE",
+  "region" : "Liyue",
+  "substatType" : "FIGHT_PROP_HP_PERCENT",
+  "substatText" : "HP",
+  "constellation" : "Lagenaria",
+  "cv" : {
+    "english" : "Sean Durrie & Xanthe Huynh",
+    "chinese" : "秦且歌 & 王晓彤",
+    "japanese" : "遊佐浩二 & 庄子裕衣",
+    "korean" : "Yi Ho-san & Jang Mi"
+  },
+  "costs" : {
+    "ascend1" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 20000
+    }, {
+      "id" : 104131,
+      "name" : "Nagadus Emerald Sliver",
+      "count" : 1
+    }, {
+      "id" : 100034,
+      "name" : "Violetgrass",
+      "count" : 3
+    }, {
+      "id" : 112059,
+      "name" : "Fungal Spores",
+      "count" : 3
+    } ],
+    "ascend2" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 40000
+    }, {
+      "id" : 104132,
+      "name" : "Nagadus Emerald Fragment",
+      "count" : 3
+    }, {
+      "id" : 113045,
+      "name" : "Evergloom Ring",
+      "count" : 2
+    }, {
+      "id" : 100034,
+      "name" : "Violetgrass",
+      "count" : 10
+    }, {
+      "id" : 112059,
+      "name" : "Fungal Spores",
+      "count" : 15
+    } ],
+    "ascend3" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 60000
+    }, {
+      "id" : 104132,
+      "name" : "Nagadus Emerald Fragment",
+      "count" : 6
+    }, {
+      "id" : 113045,
+      "name" : "Evergloom Ring",
+      "count" : 4
+    }, {
+      "id" : 100034,
+      "name" : "Violetgrass",
+      "count" : 20
+    }, {
+      "id" : 112060,
+      "name" : "Luminescent Pollen",
+      "count" : 12
+    } ],
+    "ascend4" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 80000
+    }, {
+      "id" : 104133,
+      "name" : "Nagadus Emerald Chunk",
+      "count" : 3
+    }, {
+      "id" : 113045,
+      "name" : "Evergloom Ring",
+      "count" : 8
+    }, {
+      "id" : 100034,
+      "name" : "Violetgrass",
+      "count" : 30
+    }, {
+      "id" : 112060,
+      "name" : "Luminescent Pollen",
+      "count" : 18
+    } ],
+    "ascend5" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 100000
+    }, {
+      "id" : 104133,
+      "name" : "Nagadus Emerald Chunk",
+      "count" : 6
+    }, {
+      "id" : 113045,
+      "name" : "Evergloom Ring",
+      "count" : 12
+    }, {
+      "id" : 100034,
+      "name" : "Violetgrass",
+      "count" : 45
+    }, {
+      "id" : 112061,
+      "name" : "Crystalline Cyst Dust",
+      "count" : 12
+    } ],
+    "ascend6" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 120000
+    }, {
+      "id" : 104134,
+      "name" : "Nagadus Emerald Gemstone",
+      "count" : 6
+    }, {
+      "id" : 113045,
+      "name" : "Evergloom Ring",
+      "count" : 20
+    }, {
+      "id" : 100034,
+      "name" : "Violetgrass",
+      "count" : 60
+    }, {
+      "id" : 112061,
+      "name" : "Crystalline Cyst Dust",
+      "count" : 24
+    } ]
+  },
+  "images" : {
+    "cover1" : "https://webstatic.hoyoverse.com/upload/op-public/2023/03/27/7e0096b8907484d2c530a57a0d0bda80_6830097800800736702.png",
+    "cover2" : "https://webstatic.hoyoverse.com/upload/op-public/2023/03/27/7f741e68d13763893e9765114653dbba_6767301111904721877.png",
+    "filename_icon" : "UI_AvatarIcon_Baizhuer",
+    "filename_iconCard" : "UI_AvatarIcon_Baizhuer_Card",
+    "filename_sideIcon" : "UI_AvatarIcon_Side_Baizhuer",
+    "filename_gachaSplash" : "UI_Gacha_AvatarImg_Baizhuer",
+    "filename_gachaSlice" : "UI_Gacha_AvatarIcon_Baizhuer",
+    "mihoyo_icon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Baizhuer.png",
+    "mihoyo_sideIcon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_side_icon/UI_AvatarIcon_Side_Baizhuer.png"
+  },
+  "version" : "3.6",
+  "talents" : {
+    "id" : 8201,
+    "name" : "Baizhu",
+    "combat1" : {
+      "name" : "The Classics of Acupuncture",
+      "descriptionRaw" : "<color=#FFD780FF>Normal Attack</color>\nPerforms up to 4 attacks that deal <color=#99FF88FF>Dendro DMG</color> to opponents in front of him.\n\n<color=#FFD780FF>Charged Attack</color>\nConsumes a certain amount of Stamina to deal <color=#99FF88FF>AoE Dendro DMG</color> to opponents in front of him after a short casting time.\n\n<color=#FFD780FF>Plunging Attack</color>\nCalling upon the might of Dendro, Baizhu plunges towards the ground from mid-air, damaging all opponents in his path. Deals <color=#99FF88FF>AoE Dendro DMG</color> upon impact with the ground.",
+      "description" : "Normal Attack\nPerforms up to 4 attacks that deal Dendro DMG to opponents in front of him.\n\nCharged Attack\nConsumes a certain amount of Stamina to deal AoE Dendro DMG to opponents in front of him after a short casting time.\n\nPlunging Attack\nCalling upon the might of Dendro, Baizhu plunges towards the ground from mid-air, damaging all opponents in his path. Deals AoE Dendro DMG upon impact with the ground.",
+      "attributes" : {
+        "labels" : [ "1-Hit DMG|{param1:F1P}", "2-Hit DMG|{param2:F1P}", "3-Hit DMG|{param3:F1P}×2", "4-Hit DMG|{param4:F1P}", "Charged Attack DMG|{param5:F1P}", "Charged Attack Stamina Cost|{param6:F1}", "Plunge DMG|{param7:F1P}", "Low/High Plunge DMG|{param8:P}/{param9:P}" ],
+        "parameters" : {
+          "param1" : [ 0.373704, 0.401732, 0.42976, 0.46713, 0.495158, 0.523186, 0.560556, 0.597926, 0.635297, 0.672667, 0.710038, 0.747408, 0.794121, 0.840834, 0.887547 ],
+          "param2" : [ 0.364248, 0.391567, 0.418885, 0.45531, 0.482629, 0.509947, 0.546372, 0.582797, 0.619222, 0.655646, 0.692071, 0.728496, 0.774027, 0.819558, 0.865089 ],
+          "param3" : [ 0.225416, 0.242322, 0.259228, 0.28177, 0.298676, 0.315582, 0.338124, 0.360666, 0.383207, 0.405749, 0.42829, 0.450832, 0.479009, 0.507186, 0.535363 ],
+          "param4" : [ 0.541376, 0.581979, 0.622582, 0.67672, 0.717323, 0.757926, 0.812064, 0.866202, 0.920339, 0.974477, 1.028614, 1.082752, 1.150424, 1.218096, 1.285768 ],
+          "param5" : [ 1.2104, 1.30118, 1.39196, 1.513, 1.60378, 1.69456, 1.8156, 1.93664, 2.05768, 2.17872, 2.29976, 2.4208, 2.5721, 2.7234, 2.8747 ],
+          "param6" : [ 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50 ],
+          "param7" : [ 0.568288, 0.614544, 0.6608, 0.72688, 0.773136, 0.826, 0.898688, 0.971376, 1.044064, 1.12336, 1.202656, 1.281952, 1.361248, 1.440544, 1.51984 ],
+          "param8" : [ 1.136335, 1.228828, 1.32132, 1.453452, 1.545944, 1.65165, 1.796995, 1.94234, 2.087686, 2.246244, 2.404802, 2.563361, 2.721919, 2.880478, 3.039036 ],
+          "param9" : [ 1.419344, 1.534872, 1.6504, 1.81544, 1.930968, 2.063, 2.244544, 2.426088, 2.607632, 2.80568, 3.003728, 3.201776, 3.399824, 3.597872, 3.79592 ]
+        }
+      }
+    },
+    "combat2" : {
+      "name" : "Universal Diagnosis",
+      "descriptionRaw" : "Controls a Gossamer Sprite that cruises and attacks nearby opponents, dealing <color=#99FF88FF>Dendro DMG</color>.\nAfter it performs 3 attacks or if there are no opponents nearby, the Sprite will return, healing all nearby party members based on Baizhu's Max HP.\n\n<i>Those in the medical field who can read true signs of illness from false ones may even cure people before any symptoms can show.</i>",
+      "description" : "Controls a Gossamer Sprite that cruises and attacks nearby opponents, dealing Dendro DMG.\nAfter it performs 3 attacks or if there are no opponents nearby, the Sprite will return, healing all nearby party members based on Baizhu's Max HP.",
+      "flavorText" : "Those in the medical field who can read true signs of illness from false ones may even cure people before any symptoms can show.",
+      "attributes" : {
+        "labels" : [ "Skill DMG|{param1:F1P}", "Healing|{param2:F2P} Max HP+{param3:I}", "CD|{param4:F1}s" ],
+        "parameters" : {
+          "param1" : [ 0.792, 0.8514, 0.9108, 0.99, 1.0494, 1.1088, 1.188, 1.2672, 1.3464, 1.4256, 1.5048, 1.584, 1.683, 1.782, 1.881 ],
+          "param2" : [ 0.08, 0.086, 0.092, 0.1, 0.106, 0.112, 0.12, 0.128, 0.136, 0.144, 0.152, 0.16, 0.17, 0.18, 0.19 ],
+          "param3" : [ 770.3755, 847.42377, 930.8927, 1020.78235, 1117.0927, 1219.8236, 1328.9753, 1444.5477, 1566.5408, 1694.9546, 1829.7891, 1971.0442, 2118.72, 2272.8164, 2433.3337 ],
+          "param4" : [ 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 ]
+        }
+      }
+    },
+    "combat3" : {
+      "name" : "Holistic Revivification",
+      "descriptionRaw" : "Enters the Pulsing Clarity state, creating a Seamless Shield that absorbs <color=#99FF88FF>Dendro DMG</color> with 250% effectiveness.\nWhile in this state, Baizhu will generate a new Seamless Shield every 2.5s.\n\nThe Seamless Shield will heal your own active character based on Baizhu's Max HP and attack opponents by unleashing Spiritveins, dealing <color=#99FF88FF>Dendro DMG</color> under the following circumstances:\n·When a character is under the protection of a Seamless Shield and a new Seamless Shield is generated.\n·When the Seamless Shield's effects expire, or when it is shattered.\n\n<i>If you can perceive the heavens and the earth, defend against malignant auras with the flow of qi, and keep your mind clear, surely nothing can hinder you.</i>",
+      "description" : "Enters the Pulsing Clarity state, creating a Seamless Shield that absorbs Dendro DMG with 250% effectiveness.\nWhile in this state, Baizhu will generate a new Seamless Shield every 2.5s.\n\nThe Seamless Shield will heal your own active character based on Baizhu's Max HP and attack opponents by unleashing Spiritveins, dealing Dendro DMG under the following circumstances:\n·When a character is under the protection of a Seamless Shield and a new Seamless Shield is generated.\n·When the Seamless Shield's effects expire, or when it is shattered.",
+      "flavorText" : "If you can perceive the heavens and the earth, defend against malignant auras with the flow of qi, and keep your mind clear, surely nothing can hinder you.",
+      "attributes" : {
+        "labels" : [ "Seamless Shield DMG Absorption|{param1:F2P} Max HP+{param2:I}", "Seamless Shield Duration|{param3:F1}s", "Seamless Shield Healing|{param5:F2P} Max HP+{param6:I}", "Spiritvein DMG|{param7:F1P}", "Pulsing Clarity Duration|{param8:F1}s", "CD|{param9:F1}s", "Energy Cost|{param10:I}" ],
+        "parameters" : {
+          "param1" : [ 0.008, 0.0086, 0.0092, 0.01, 0.0106, 0.0112, 0.012, 0.0128, 0.0136, 0.0144, 0.0152, 0.016, 0.017, 0.018, 0.019 ],
+          "param2" : [ 77.03752, 84.74235, 93.08924, 102.0782, 111.70923, 121.98233, 132.89749, 144.45473, 156.65404, 169.4954, 182.97885, 197.10435, 211.87193, 227.28157, 243.3333 ],
+          "param3" : [ 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5 ],
+          "param4" : [ 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5 ],
+          "param5" : [ 0.052, 0.0559, 0.0598, 0.065, 0.0689, 0.0728, 0.078, 0.0832, 0.0884, 0.0936, 0.0988, 0.104, 0.1105, 0.117, 0.1235 ],
+          "param6" : [ 500.74408, 550.82544, 605.08026, 663.50854, 726.1102, 792.8854, 863.834, 938.95605, 1018.2515, 1101.7205, 1189.3629, 1281.1787, 1377.168, 1477.3307, 1581.6669 ],
+          "param7" : [ 0.97064, 1.043438, 1.116236, 1.2133, 1.286098, 1.358896, 1.45596, 1.553024, 1.650088, 1.747152, 1.844216, 1.94128, 2.06261, 2.18394, 2.30527 ],
+          "param8" : [ 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14 ],
+          "param9" : [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ],
+          "param10" : [ 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80 ]
+        }
+      }
+    },
+    "passive1" : {
+      "name" : "Five Fortunes Forever",
+      "descriptionRaw" : "Baizhu gains different effects according to the current HP of your current active character:\n·When their HP is less than 50%, Baizhu gains 20% Healing Bonus.\n·When their HP is equal to or more than 50%, Baizhu gains 25% <color=#99FF88FF>Dendro DMG Bonus</color>.",
+      "description" : "Baizhu gains different effects according to the current HP of your current active character:\n·When their HP is less than 50%, Baizhu gains 20% Healing Bonus.\n·When their HP is equal to or more than 50%, Baizhu gains 25% Dendro DMG Bonus."
+    },
+    "passive2" : {
+      "name" : "All Things Are of the Earth",
+      "descriptionRaw" : "Characters who are healed by <color=#FFD780FF>Seamless Shields</color> will gain the Year of Verdant Favor effect: Each 1,000 Max HP that Baizhu possesses that does not exceed 50,000 will increase the Burning, Bloom, Hyperbloom, and Burgeon reaction DMG dealt by these characters by 2%, their Lunar-Bloom DMG by 0.7%, and the DMG Bonus provided by Aggravate and Spread by 0.8%. This effect lasts 6s.",
+      "description" : "Characters who are healed by Seamless Shields will gain the Year of Verdant Favor effect: Each 1,000 Max HP that Baizhu possesses that does not exceed 50,000 will increase the Burning, Bloom, Hyperbloom, and Burgeon reaction DMG dealt by these characters by 2%, their Lunar-Bloom DMG by 0.7%, and the DMG Bonus provided by Aggravate and Spread by 0.8%. This effect lasts 6s."
+    },
+    "passive3" : {
+      "name" : "Herbal Nourishment",
+      "descriptionRaw" : "When Baizhu is in the party, interacting with certain harvestable items will heal your current active character for 2.5% of Baizhu's Max HP.",
+      "description" : "When Baizhu is in the party, interacting with certain harvestable items will heal your current active character for 2.5% of Baizhu's Max HP."
+    },
+    "costs" : {
+      "lvl2" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 12500
+      }, {
+        "id" : 104316,
+        "name" : "Teachings of Gold",
+        "count" : 3
+      }, {
+        "id" : 112059,
+        "name" : "Fungal Spores",
+        "count" : 6
+      } ],
+      "lvl3" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 17500
+      }, {
+        "id" : 104317,
+        "name" : "Guide to Gold",
+        "count" : 2
+      }, {
+        "id" : 112060,
+        "name" : "Luminescent Pollen",
+        "count" : 3
+      } ],
+      "lvl4" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 25000
+      }, {
+        "id" : 104317,
+        "name" : "Guide to Gold",
+        "count" : 4
+      }, {
+        "id" : 112060,
+        "name" : "Luminescent Pollen",
+        "count" : 4
+      } ],
+      "lvl5" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 30000
+      }, {
+        "id" : 104317,
+        "name" : "Guide to Gold",
+        "count" : 6
+      }, {
+        "id" : 112060,
+        "name" : "Luminescent Pollen",
+        "count" : 6
+      } ],
+      "lvl6" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 37500
+      }, {
+        "id" : 104317,
+        "name" : "Guide to Gold",
+        "count" : 9
+      }, {
+        "id" : 112060,
+        "name" : "Luminescent Pollen",
+        "count" : 9
+      } ],
+      "lvl7" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 120000
+      }, {
+        "id" : 104318,
+        "name" : "Philosophies of Gold",
+        "count" : 4
+      }, {
+        "id" : 112061,
+        "name" : "Crystalline Cyst Dust",
+        "count" : 4
+      }, {
+        "id" : 113046,
+        "name" : "Worldspan Fern",
+        "count" : 1
+      } ],
+      "lvl8" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 260000
+      }, {
+        "id" : 104318,
+        "name" : "Philosophies of Gold",
+        "count" : 6
+      }, {
+        "id" : 112061,
+        "name" : "Crystalline Cyst Dust",
+        "count" : 6
+      }, {
+        "id" : 113046,
+        "name" : "Worldspan Fern",
+        "count" : 1
+      } ],
+      "lvl9" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 450000
+      }, {
+        "id" : 104318,
+        "name" : "Philosophies of Gold",
+        "count" : 12
+      }, {
+        "id" : 112061,
+        "name" : "Crystalline Cyst Dust",
+        "count" : 9
+      }, {
+        "id" : 113046,
+        "name" : "Worldspan Fern",
+        "count" : 2
+      } ],
+      "lvl10" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 700000
+      }, {
+        "id" : 104318,
+        "name" : "Philosophies of Gold",
+        "count" : 16
+      }, {
+        "id" : 112061,
+        "name" : "Crystalline Cyst Dust",
+        "count" : 12
+      }, {
+        "id" : 113046,
+        "name" : "Worldspan Fern",
+        "count" : 2
+      }, {
+        "id" : 104319,
+        "name" : "Crown of Insight",
+        "count" : 1
+      } ]
+    },
+    "images" : {
+      "filename_combat1" : "Skill_A_Catalyst_MD",
+      "filename_combat2" : "Skill_S_Baizhuer_01",
+      "filename_combat3" : "Skill_E_Baizhuer_01_HD",
+      "filename_passive1" : "UI_Talent_S_Baizhuer_05",
+      "filename_passive2" : "UI_Talent_S_Baizhuer_06",
+      "filename_passive3" : "UI_Talent_S_Baizhuer_07"
+    },
+    "version" : "3.6"
+  }
+}

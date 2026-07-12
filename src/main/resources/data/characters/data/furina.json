@@ -1,0 +1,394 @@
+{
+  "id" : 10000089,
+  "name" : "Furina",
+  "title" : "Endless Solo of Solitude",
+  "description" : "The absolute focus of the stage of judgment, until the final applause sounds.",
+  "weaponType" : "WEAPON_SWORD_ONE_HAND",
+  "weaponText" : "Sword",
+  "bodyType" : "BODY_GIRL",
+  "gender" : "Female",
+  "qualityType" : "QUALITY_ORANGE",
+  "rarity" : 5,
+  "birthdaymmdd" : "10/13",
+  "birthday" : "October 13",
+  "elementType" : "ELEMENT_HYDRO",
+  "elementText" : "Hydro",
+  "affiliation" : "Court of Fontaine",
+  "associationType" : "ASSOC_FONTAINE",
+  "region" : "Fontaine",
+  "substatType" : "FIGHT_PROP_CRITICAL",
+  "substatText" : "CRIT Rate",
+  "constellation" : "Animula Choragi",
+  "cv" : {
+    "english" : "Amber Lee Connors",
+    "chinese" : "钱琛",
+    "japanese" : "水瀬いのり",
+    "korean" : "Kim Ha-young"
+  },
+  "costs" : {
+    "ascend1" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 20000
+    }, {
+      "id" : 104121,
+      "name" : "Varunada Lazurite Sliver",
+      "count" : 1
+    }, {
+      "id" : 101238,
+      "name" : "Lakelight Lily",
+      "count" : 3
+    }, {
+      "id" : 112038,
+      "name" : "Whopperflower Nectar",
+      "count" : 3
+    } ],
+    "ascend2" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 40000
+    }, {
+      "id" : 104122,
+      "name" : "Varunada Lazurite Fragment",
+      "count" : 3
+    }, {
+      "id" : 113057,
+      "name" : "Water That Failed To Transcend",
+      "count" : 2
+    }, {
+      "id" : 101238,
+      "name" : "Lakelight Lily",
+      "count" : 10
+    }, {
+      "id" : 112038,
+      "name" : "Whopperflower Nectar",
+      "count" : 15
+    } ],
+    "ascend3" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 60000
+    }, {
+      "id" : 104122,
+      "name" : "Varunada Lazurite Fragment",
+      "count" : 6
+    }, {
+      "id" : 113057,
+      "name" : "Water That Failed To Transcend",
+      "count" : 4
+    }, {
+      "id" : 101238,
+      "name" : "Lakelight Lily",
+      "count" : 20
+    }, {
+      "id" : 112039,
+      "name" : "Shimmering Nectar",
+      "count" : 12
+    } ],
+    "ascend4" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 80000
+    }, {
+      "id" : 104123,
+      "name" : "Varunada Lazurite Chunk",
+      "count" : 3
+    }, {
+      "id" : 113057,
+      "name" : "Water That Failed To Transcend",
+      "count" : 8
+    }, {
+      "id" : 101238,
+      "name" : "Lakelight Lily",
+      "count" : 30
+    }, {
+      "id" : 112039,
+      "name" : "Shimmering Nectar",
+      "count" : 18
+    } ],
+    "ascend5" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 100000
+    }, {
+      "id" : 104123,
+      "name" : "Varunada Lazurite Chunk",
+      "count" : 6
+    }, {
+      "id" : 113057,
+      "name" : "Water That Failed To Transcend",
+      "count" : 12
+    }, {
+      "id" : 101238,
+      "name" : "Lakelight Lily",
+      "count" : 45
+    }, {
+      "id" : 112040,
+      "name" : "Energy Nectar",
+      "count" : 12
+    } ],
+    "ascend6" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 120000
+    }, {
+      "id" : 104124,
+      "name" : "Varunada Lazurite Gemstone",
+      "count" : 6
+    }, {
+      "id" : 113057,
+      "name" : "Water That Failed To Transcend",
+      "count" : 20
+    }, {
+      "id" : 101238,
+      "name" : "Lakelight Lily",
+      "count" : 60
+    }, {
+      "id" : 112040,
+      "name" : "Energy Nectar",
+      "count" : 24
+    } ]
+  },
+  "images" : {
+    "filename_icon" : "UI_AvatarIcon_Furina",
+    "filename_iconCard" : "UI_AvatarIcon_Furina_Card",
+    "filename_sideIcon" : "UI_AvatarIcon_Side_Furina",
+    "filename_gachaSplash" : "UI_Gacha_AvatarImg_Furina",
+    "filename_gachaSlice" : "UI_Gacha_AvatarIcon_Furina",
+    "mihoyo_icon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Furina.png",
+    "mihoyo_sideIcon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_side_icon/UI_AvatarIcon_Side_Furina.png",
+    "cover1" : "https://fastcdn.hoyoverse.com/content-v2/hk4e/113447/e8d153da1a2dca7a07fd76397cd60612_2043628622447437530.png",
+    "cover2" : "https://fastcdn.hoyoverse.com/content-v2/hk4e/113447/a28573fbba728cd873a56337bf83ff31_2734275279164942426.png"
+  },
+  "version" : "4.2",
+  "talents" : {
+    "id" : 8901,
+    "name" : "Furina",
+    "combat1" : {
+      "name" : "Soloist's Solicitation",
+      "descriptionRaw" : "<color=#FFD780FF>Normal Attack</color>\nPerforms up to 4 consecutive strikes.\n\n<color=#FFD780FF>Charged Attack</color>\nConsumes a certain amount of Stamina to unleash a solo dance, dealing Physical DMG to nearby opponents and changing her Arkhe alignment. If Salon Members or the Singer of Many Waters summoned by her Elemental Skill \"Salon Solitaire\" is present, their lineup will switch in response.\n\n<color=#FFD780FF>Arkhe: Seats Sacred and Secular</color>\nAt intervals, when Furina's Normal Attacks hit, a Spiritbreath Thorn or a Surging Blade will descend based on her current Arkhe alignment, dealing Pneuma- or Ousia-aligned <color=#80C0FFFF>Hydro DMG</color>.\nWhen Furina takes the field, her starting Arkhe alignment will be Ousia.\n\n<color=#FFD780FF>Plunging Attack</color>\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "description" : "Normal Attack\nPerforms up to 4 consecutive strikes.\n\nCharged Attack\nConsumes a certain amount of Stamina to unleash a solo dance, dealing Physical DMG to nearby opponents and changing her Arkhe alignment. If Salon Members or the Singer of Many Waters summoned by her Elemental Skill \"Salon Solitaire\" is present, their lineup will switch in response.\n\nArkhe: Seats Sacred and Secular\nAt intervals, when Furina's Normal Attacks hit, a Spiritbreath Thorn or a Surging Blade will descend based on her current Arkhe alignment, dealing Pneuma- or Ousia-aligned Hydro DMG.\nWhen Furina takes the field, her starting Arkhe alignment will be Ousia.\n\nPlunging Attack\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "attributes" : {
+        "labels" : [ "1-Hit DMG|{param1:F1P}", "2-Hit DMG|{param2:F1P}", "3-Hit DMG|{param3:F1P}", "4-Hit DMG|{param4:F1P}", "Charged Attack DMG|{param5:F1P}", "Charged Attack Stamina Cost|{param6:F1}", "Plunge DMG|{param7:F1P}", "Low/High Plunge DMG|{param8:P}/{param9:P}", "Spiritbreath Thorn/Surging Blade DMG|{param10:F1P}", "Spiritbreath Thorn/Surging Blade DMG Interval|{param11:I}s/{param12:I}s" ],
+        "parameters" : {
+          "param1" : [ 0.483862, 0.523246, 0.56263, 0.618893, 0.658277, 0.703287, 0.765177, 0.827066, 0.888955, 0.956471, 1.023987, 1.091502, 1.159018, 1.226533, 1.294049 ],
+          "param2" : [ 0.437293, 0.472886, 0.50848, 0.559328, 0.594922, 0.6356, 0.691533, 0.747466, 0.803398, 0.864416, 0.925434, 0.986451, 1.047469, 1.108486, 1.169504 ],
+          "param3" : [ 0.5512, 0.596065, 0.64093, 0.705023, 0.749888, 0.801162, 0.871665, 0.942167, 1.012669, 1.089581, 1.166493, 1.243404, 1.320316, 1.397227, 1.474139 ],
+          "param4" : [ 0.732978, 0.792639, 0.8523, 0.93753, 0.997191, 1.065375, 1.159128, 1.252881, 1.346634, 1.44891, 1.551186, 1.653462, 1.755738, 1.858014, 1.96029 ],
+          "param5" : [ 0.74218, 0.80259, 0.863, 0.9493, 1.00971, 1.07875, 1.17368, 1.26861, 1.36354, 1.4671, 1.57066, 1.67422, 1.77778, 1.88134, 1.9849 ],
+          "param6" : [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ],
+          "param7" : [ 0.639324, 0.691362, 0.7434, 0.81774, 0.869778, 0.92925, 1.011024, 1.092798, 1.174572, 1.26378, 1.352988, 1.442196, 1.531404, 1.620612, 1.70982 ],
+          "param8" : [ 1.278377, 1.382431, 1.486485, 1.635134, 1.739187, 1.858106, 2.02162, 2.185133, 2.348646, 2.527025, 2.705403, 2.883781, 3.062159, 3.240537, 3.418915 ],
+          "param9" : [ 1.596762, 1.726731, 1.8567, 2.04237, 2.172339, 2.320875, 2.525112, 2.729349, 2.933586, 3.15639, 3.379194, 3.601998, 3.824802, 4.047606, 4.27041 ],
+          "param10" : [ 0.0946, 0.1023, 0.11, 0.121, 0.1287, 0.1375, 0.1496, 0.1617, 0.1738, 0.187, 0.2002, 0.2134, 0.2266, 0.2398, 0.253 ],
+          "param11" : [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 ],
+          "param12" : [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 ]
+        }
+      }
+    },
+    "combat2" : {
+      "name" : "Salon Solitaire",
+      "descriptionRaw" : "Invites the guests of the Salon Solitaire to come forth and aid in Furina's performance. Will summon either the Salon Members or the Singer of Many Waters based on Furina's current <color=#FFD780FF>Arkhe alignment</color>.\n\n<color=#FFD780FF>Ousia</color>\nFoaming bubbles like celebrants shall dance, dealing <color=#80C0FFFF>AoE Hydro DMG</color> based on Furina's Max HP and summoning 3 Salon Members: the Ball Octopus-shaped Gentilhomme Usher, the Bubbly Seahorse-shaped Surintendante Chevalmarin, and the Armored Crab-shaped Mademoiselle Crabaletta.\nThey will attack nearby opponents at intervals, prioritizing the target of the active character, dealing <color=#80C0FFFF>Hydro</color> DMG based on Max HP.\nWhen they attack, if character(s) with more than 50% HP are nearby, the Members will increase their current attack's power based on the number of such characters, and consume said characters' HP. If 1/2/3/4 (or more) characters meet these requirements, the Members' attacks will deal 110%/120%/130%/140% of their original DMG.\n\n<color=#FFD780FF>Pneuma</color>\nSummons the Singer of Many Waters, who will heal nearby active character(s) based on Max HP at intervals.\n\nThe Salon Members and Singer of Many Waters share a duration, and when Furina uses her Charged Attack to change the guest type, the new guests will inherit the remaining duration.\nWhile the Salon Members or the Singer of Many Waters is on the field, Furina can move on the water's surface.\n\n<i>A fixed roster of regulars frequent Furina's Salon Solitaire. At other times, Mademoiselle Crabaletta, Surintendante Chevalmarin, and Gentilhomme Usher shall visit, and on gloomy Wednesdays, it is the singer who comes by.</i>",
+      "description" : "Invites the guests of the Salon Solitaire to come forth and aid in Furina's performance. Will summon either the Salon Members or the Singer of Many Waters based on Furina's current Arkhe alignment.\n\nOusia\nFoaming bubbles like celebrants shall dance, dealing AoE Hydro DMG based on Furina's Max HP and summoning 3 Salon Members: the Ball Octopus-shaped Gentilhomme Usher, the Bubbly Seahorse-shaped Surintendante Chevalmarin, and the Armored Crab-shaped Mademoiselle Crabaletta.\nThey will attack nearby opponents at intervals, prioritizing the target of the active character, dealing Hydro DMG based on Max HP.\nWhen they attack, if character(s) with more than 50% HP are nearby, the Members will increase their current attack's power based on the number of such characters, and consume said characters' HP. If 1/2/3/4 (or more) characters meet these requirements, the Members' attacks will deal 110%/120%/130%/140% of their original DMG.\n\nPneuma\nSummons the Singer of Many Waters, who will heal nearby active character(s) based on Max HP at intervals.\n\nThe Salon Members and Singer of Many Waters share a duration, and when Furina uses her Charged Attack to change the guest type, the new guests will inherit the remaining duration.\nWhile the Salon Members or the Singer of Many Waters is on the field, Furina can move on the water's surface.",
+      "flavorText" : "A fixed roster of regulars frequent Furina's Salon Solitaire. At other times, Mademoiselle Crabaletta, Surintendante Chevalmarin, and Gentilhomme Usher shall visit, and on gloomy Wednesdays, it is the singer who comes by.",
+      "attributes" : {
+        "labels" : [ "Ousia Bubble DMG|{param1:F1P} Max HP", "Duration|{param2:F1}s", "Gentilhomme Usher DMG|{param3:F2P} Max HP", "Surintendante Chevalmarin DMG|{param4:F2P} Max HP", "Mademoiselle Crabaletta DMG|{param5:F2P} Max HP", "Gentilhomme Usher HP Consumption|{param6:F1P} Max HP", "Surintendante Chevalmarin HP Consumption|{param7:F1P} Max HP", "Mademoiselle Crabaletta HP Consumption|{param8:F1P} Max HP", "Singer of Many Waters Healing|{param9:F2P} Max HP+{param10:I}", "CD|{param11:F1}s" ],
+        "parameters" : {
+          "param1" : [ 0.07864, 0.084538, 0.090436, 0.0983, 0.104198, 0.110096, 0.11796, 0.125824, 0.133688, 0.141552, 0.149416, 0.15728, 0.16711, 0.17694, 0.18677 ],
+          "param2" : [ 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30 ],
+          "param3" : [ 0.0596, 0.06407, 0.06854, 0.0745, 0.07897, 0.08344, 0.0894, 0.09536, 0.10132, 0.10728, 0.11324, 0.1192, 0.12665, 0.1341, 0.14155 ],
+          "param4" : [ 0.03232, 0.034744, 0.037168, 0.0404, 0.042824, 0.045248, 0.04848, 0.051712, 0.054944, 0.058176, 0.061408, 0.06464, 0.06868, 0.07272, 0.07676 ],
+          "param5" : [ 0.08288, 0.089096, 0.095312, 0.1036, 0.109816, 0.116032, 0.12432, 0.132608, 0.140896, 0.149184, 0.157472, 0.16576, 0.17612, 0.18648, 0.19684 ],
+          "param6" : [ 0.024, 0.024, 0.024, 0.024, 0.024, 0.024, 0.024, 0.024, 0.024, 0.024, 0.024, 0.024, 0.024, 0.024, 0.024 ],
+          "param7" : [ 0.016, 0.016, 0.016, 0.016, 0.016, 0.016, 0.016, 0.016, 0.016, 0.016, 0.016, 0.016, 0.016, 0.016, 0.016 ],
+          "param8" : [ 0.036, 0.036, 0.036, 0.036, 0.036, 0.036, 0.036, 0.036, 0.036, 0.036, 0.036, 0.036, 0.036, 0.036, 0.036 ],
+          "param9" : [ 0.048, 0.0516, 0.0552, 0.06, 0.0636, 0.0672, 0.072, 0.0768, 0.0816, 0.0864, 0.0912, 0.096, 0.102, 0.108, 0.114 ],
+          "param10" : [ 462.2253, 508.45425, 558.53564, 612.4694, 670.2556, 731.8942, 797.3852, 866.72864, 939.9245, 1016.9728, 1097.8734, 1182.6265, 1271.232, 1363.69, 1460.0002 ],
+          "param11" : [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ]
+        }
+      }
+    },
+    "combat3" : {
+      "name" : "Let the People Rejoice",
+      "descriptionRaw" : "Rouses the impulse to revel, creating a stage of foam that will deal <color=#80C0FFFF>AoE Hydro DMG</color> based on Furina's Max HP and cause nearby party members to enter the Universal Revelry state: During this time, when nearby party members' HP increases or decreases, 1 Fanfare point will be granted to Furina for each percentage point of their Max HP by which their HP changes.\nAt the same time, Furina will increase the DMG dealt by and Incoming Healing Bonus of all nearby party members based on the amount of Fanfare she has.\nWhen the duration ends, Furina's Fanfare points will be cleared.\n\n<i>\"Cheer! Give praise! Be awed! Raise your glasses! Every night bereft of banqueting is a sordid squandering of sore, sober daylight... And, uh, those who are not yet of age may have grape juice instead!\"</i>",
+      "description" : "Rouses the impulse to revel, creating a stage of foam that will deal AoE Hydro DMG based on Furina's Max HP and cause nearby party members to enter the Universal Revelry state: During this time, when nearby party members' HP increases or decreases, 1 Fanfare point will be granted to Furina for each percentage point of their Max HP by which their HP changes.\nAt the same time, Furina will increase the DMG dealt by and Incoming Healing Bonus of all nearby party members based on the amount of Fanfare she has.\nWhen the duration ends, Furina's Fanfare points will be cleared.",
+      "flavorText" : "\"Cheer! Give praise! Be awed! Raise your glasses! Every night bereft of banqueting is a sordid squandering of sore, sober daylight... And, uh, those who are not yet of age may have grape juice instead!\"",
+      "attributes" : {
+        "labels" : [ "Skill DMG|{param1:F1P} Max HP", "Duration|{param2:F1}s", "Maximum Fanfare|{param4:I}", "Fanfare to DMG Increase Conversion Ratio|{param5:F2P}", "Fanfare to Incoming Healing Bonus Conversion Ratio|{param6:F2P}", "CD|{param7:F1}s", "Energy Cost|{param8:I}" ],
+        "parameters" : {
+          "param1" : [ 0.114064, 0.122619, 0.131174, 0.14258, 0.151135, 0.15969, 0.171096, 0.182502, 0.193909, 0.205315, 0.216722, 0.228128, 0.242386, 0.256644, 0.270902 ],
+          "param2" : [ 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18 ],
+          "param3" : [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ],
+          "param4" : [ 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300 ],
+          "param5" : [ 7.0E-4, 9.0E-4, 0.0011, 0.0013, 0.0015, 0.0017, 0.0019, 0.0021, 0.0023, 0.0025, 0.0027, 0.0029, 0.0031, 0.0033, 0.0035 ],
+          "param6" : [ 1.0E-4, 2.0E-4, 3.0E-4, 4.0E-4, 5.0E-4, 6.0E-4, 7.0E-4, 8.0E-4, 9.0E-4, 0.001, 0.0011, 0.0012, 0.0013, 0.0014, 0.0015 ],
+          "param7" : [ 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 ],
+          "param8" : [ 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60 ]
+        }
+      }
+    },
+    "passive1" : {
+      "name" : "Endless Waltz",
+      "descriptionRaw" : "When the active character in your party receives healing, if the source of the healing is not Furina herself and the healing overflows, then Furina will heal nearby party members for 2% of their Max HP once every 2s for the next 4s.",
+      "description" : "When the active character in your party receives healing, if the source of the healing is not Furina herself and the healing overflows, then Furina will heal nearby party members for 2% of their Max HP once every 2s for the next 4s."
+    },
+    "passive2" : {
+      "name" : "Unheard Confession",
+      "descriptionRaw" : "Every 1,000 points of Furina's Max HP can buff the different Arkhe-aligned <color=#FFD780FF>Salon Solitaire</color> in the following ways:\nWill increase Salon Members' DMG dealt by 0.7%, up to a maximum of 28%.\nWill decrease the Singer of Many Waters' healing interval for nearby active characters by 0.4%, up to a maximum of 16%.",
+      "description" : "Every 1,000 points of Furina's Max HP can buff the different Arkhe-aligned Salon Solitaire in the following ways:\nWill increase Salon Members' DMG dealt by 0.7%, up to a maximum of 28%.\nWill decrease the Singer of Many Waters' healing interval for nearby active characters by 0.4%, up to a maximum of 16%."
+    },
+    "passive3" : {
+      "name" : "The Sea Is My Stage",
+      "descriptionRaw" : "Xenochromatic Fontemer Aberrant ability CD decreased by 30%.",
+      "description" : "Xenochromatic Fontemer Aberrant ability CD decreased by 30%."
+    },
+    "costs" : {
+      "lvl2" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 12500
+      }, {
+        "id" : 104341,
+        "name" : "Teachings of Justice",
+        "count" : 3
+      }, {
+        "id" : 112038,
+        "name" : "Whopperflower Nectar",
+        "count" : 6
+      } ],
+      "lvl3" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 17500
+      }, {
+        "id" : 104342,
+        "name" : "Guide to Justice",
+        "count" : 2
+      }, {
+        "id" : 112039,
+        "name" : "Shimmering Nectar",
+        "count" : 3
+      } ],
+      "lvl4" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 25000
+      }, {
+        "id" : 104342,
+        "name" : "Guide to Justice",
+        "count" : 4
+      }, {
+        "id" : 112039,
+        "name" : "Shimmering Nectar",
+        "count" : 4
+      } ],
+      "lvl5" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 30000
+      }, {
+        "id" : 104342,
+        "name" : "Guide to Justice",
+        "count" : 6
+      }, {
+        "id" : 112039,
+        "name" : "Shimmering Nectar",
+        "count" : 6
+      } ],
+      "lvl6" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 37500
+      }, {
+        "id" : 104342,
+        "name" : "Guide to Justice",
+        "count" : 9
+      }, {
+        "id" : 112039,
+        "name" : "Shimmering Nectar",
+        "count" : 9
+      } ],
+      "lvl7" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 120000
+      }, {
+        "id" : 104343,
+        "name" : "Philosophies of Justice",
+        "count" : 4
+      }, {
+        "id" : 112040,
+        "name" : "Energy Nectar",
+        "count" : 4
+      }, {
+        "id" : 113056,
+        "name" : "Lightless Mass",
+        "count" : 1
+      } ],
+      "lvl8" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 260000
+      }, {
+        "id" : 104343,
+        "name" : "Philosophies of Justice",
+        "count" : 6
+      }, {
+        "id" : 112040,
+        "name" : "Energy Nectar",
+        "count" : 6
+      }, {
+        "id" : 113056,
+        "name" : "Lightless Mass",
+        "count" : 1
+      } ],
+      "lvl9" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 450000
+      }, {
+        "id" : 104343,
+        "name" : "Philosophies of Justice",
+        "count" : 12
+      }, {
+        "id" : 112040,
+        "name" : "Energy Nectar",
+        "count" : 9
+      }, {
+        "id" : 113056,
+        "name" : "Lightless Mass",
+        "count" : 2
+      } ],
+      "lvl10" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 700000
+      }, {
+        "id" : 104343,
+        "name" : "Philosophies of Justice",
+        "count" : 16
+      }, {
+        "id" : 112040,
+        "name" : "Energy Nectar",
+        "count" : 12
+      }, {
+        "id" : 113056,
+        "name" : "Lightless Mass",
+        "count" : 2
+      }, {
+        "id" : 104319,
+        "name" : "Crown of Insight",
+        "count" : 1
+      } ]
+    },
+    "images" : {
+      "filename_combat1" : "Skill_A_01",
+      "filename_combat2" : "Skill_S_Furina_01",
+      "filename_combat3" : "Skill_E_Furina_01_HD",
+      "filename_passive1" : "UI_Talent_S_Furina_05",
+      "filename_passive2" : "UI_Talent_S_Furina_06",
+      "filename_passive3" : "UI_Talent_S_Furina_07"
+    },
+    "version" : "4.2"
+  }
+}

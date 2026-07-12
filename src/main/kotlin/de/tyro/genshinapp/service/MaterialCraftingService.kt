@@ -1,11 +1,9 @@
 package de.tyro.genshinapp.service
 
-import de.tyro.genshinapp.model.CharacterDefinition
 import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.model.InventoryMaterialBalance
 import de.tyro.genshinapp.model.MaterialCategory
 import de.tyro.genshinapp.model.MaterialCraftingInfo
-import de.tyro.genshinapp.model.MaterialDefinition
 import de.tyro.genshinapp.model.MaterialInventoryAvailability
 import org.springframework.stereotype.Service
 
@@ -34,11 +32,25 @@ class MaterialCraftingService(
         val family = info.familyKey?.let(craftingFamilies::get).orEmpty()
 
         val craftable = when (info.category) {
-            MaterialCategory.GEM,
             MaterialCategory.TALENT_BOOK,
             MaterialCategory.WEAPON_ASCENSION,
             MaterialCategory.ENEMY_DROP,
             -> tieredCraftableAmount(info, family, inventory)
+
+            MaterialCategory.GEM -> {
+                val upgraded = tieredCraftableAmount(info, family, inventory)
+                val dustCost = GEM_CONVERSION_DUST.getOrElse(info.tier ?: -1) { Long.MAX_VALUE }
+                val convertible = craftingInfoById.values
+                    .filter { sibling ->
+                        sibling.category == MaterialCategory.GEM &&
+                            sibling.tier == info.tier && sibling.material.id != materialId
+                    }
+                    .sumOf { quantity(it, inventory) }
+                saturatingAdd(
+                    upgraded,
+                    minOf(convertible, inventory.getOrDefault(DUST_OF_AZOTH_KEY, 0L) / dustCost),
+                )
+            }
 
             MaterialCategory.WEEKLY_BOSS -> {
                 val convertibleDrops = family
@@ -59,10 +71,7 @@ class MaterialCraftingService(
         balances: List<InventoryMaterialBalance>,
         inventory: Map<String, Long>,
     ): List<InventoryMaterialBalance> {
-        val inferredWeaponInfo = balances.mapNotNull(::inferredWeaponCraftingInfo)
-        val effectiveInfoById = craftingInfoById + inferredWeaponInfo.associateBy {
-            it.material.id
-        }
+        val effectiveInfoById = craftingInfoById
         val effectiveFamilies = effectiveInfoById.values
             .filter { it.familyKey != null }
             .groupBy { requireNotNull(it.familyKey) }
@@ -79,21 +88,9 @@ class MaterialCraftingService(
             .forEach { family -> applyTieredFamily(family, inventory, result) }
 
         applyWeeklyBossFamilies(inventory, result)
+        applyGemConversions(inventory, result)
 
         return balances.map { result.getValue(it.id) }
-    }
-
-    private fun inferredWeaponCraftingInfo(
-        balance: InventoryMaterialBalance,
-    ): MaterialCraftingInfo? {
-        if (balance.id !in WEAPON_ASCENSION_ID_RANGE) return null
-        val offset = balance.id - WEAPON_ASCENSION_ID_RANGE.first
-        return MaterialCraftingInfo(
-            material = MaterialDefinition(balance.id, balance.name),
-            category = MaterialCategory.WEAPON_ASCENSION,
-            familyKey = "weapon:${offset / WEAPON_ASCENSION_FAMILY_SIZE}",
-            tier = offset % WEAPON_ASCENSION_FAMILY_SIZE,
-        )
     }
 
     private fun applyTieredFamily(
@@ -155,6 +152,36 @@ class MaterialCraftingService(
             }
     }
 
+    private fun applyGemConversions(
+        inventory: Map<String, Long>,
+        result: MutableMap<Int, InventoryMaterialBalance>,
+    ) {
+        var remainingDust = inventory.getOrDefault(DUST_OF_AZOTH_KEY, 0L)
+        craftingInfoById.values.filter { it.category == MaterialCategory.GEM }
+            .groupBy { it.tier }
+            .toSortedMap(compareBy(nullsFirst()) { it })
+            .forEach tierLoop@{ (tier, gems) ->
+                val dustCost = GEM_CONVERSION_DUST.getOrElse(tier ?: return@tierLoop) { return@tierLoop }
+                var surplus = gems.sumOf { gem ->
+                    val required = result[gem.material.id]?.required ?: 0L
+                    (quantity(gem, inventory) - required).coerceAtLeast(0L)
+                }
+                gems.sortedBy { it.material.id }.forEach gemLoop@{ gem ->
+                    val balance = result[gem.material.id] ?: return@gemLoop
+                    val deficit = balance.missing
+                    val converted = minOf(deficit, surplus, remainingDust / dustCost)
+                    if (converted > 0) {
+                        result[gem.material.id] = balance.copy(
+                            craftable = saturatingAdd(balance.craftable, converted),
+                            missing = deficit - converted,
+                        )
+                        surplus -= converted
+                        remainingDust -= converted * dustCost
+                    }
+                }
+            }
+    }
+
     private fun tieredCraftableAmount(
         target: MaterialCraftingInfo,
         family: List<MaterialCraftingInfo>,
@@ -180,151 +207,25 @@ class MaterialCraftingService(
     )
 
     private fun buildCraftingCatalog(): Map<Int, MaterialCraftingInfo> {
-        val characters = catalogService.getCharacters()
-        val usages = collectMaterialUsages(characters)
-        val categories = usages.mapValues { (_, usage) -> categoryFor(usage) }
-        val enemyFamilies = enemyFamilies(characters, categories)
-        val weeklyFamilies = weeklyFamilies(usages, categories)
-
-        val preliminary = usages.values.associate { usage ->
-            val category = categories.getValue(usage.id)
-            val familyKey = when (category) {
-                MaterialCategory.GEM -> "gem:${gemFamilyName(usage.name)}"
-                MaterialCategory.TALENT_BOOK -> "talent:${talentBookFamilyName(usage.name)}"
-                MaterialCategory.ENEMY_DROP -> enemyFamilies[usage.id]
-                MaterialCategory.WEEKLY_BOSS -> weeklyFamilies[usage.id]
-                else -> null
-            }
-            usage.id to MaterialCraftingInfo(
-                material = MaterialDefinition(usage.id, usage.name),
-                category = category,
-                familyKey = familyKey,
+        return catalogService.getMaterials().associate { material ->
+            material.id to MaterialCraftingInfo(
+                material = material,
+                category = material.category,
+                familyKey = material.craftingFamily,
+                tier = material.craftingTier,
+                conversionGroup = material.conversionGroup,
             )
         }
-
-        val tierByMaterialId = preliminary.values
-            .filter { it.category in TIERED_CATEGORIES && it.familyKey != null }
-            .groupBy { requireNotNull(it.familyKey) }
-            .flatMap { (_, family) ->
-                family.sortedBy { it.material.id }
-                    .mapIndexed { tier, info -> info.material.id to tier }
-            }
-            .toMap()
-
-        return preliminary.mapValues { (id, info) ->
-            info.copy(tier = tierByMaterialId[id])
-        }
-    }
-
-    private fun collectMaterialUsages(
-        characters: List<CharacterDefinition>,
-    ): Map<Int, MaterialUsage> {
-        val usages = linkedMapOf<Int, MaterialUsage>()
-        characters.forEach { character ->
-            character.ascensionCosts.values.flatten().forEach { material ->
-                usages.getOrPut(material.id) {
-                    MaterialUsage(material.id, material.name)
-                }.usedForAscension = true
-            }
-            character.talentCosts.values.flatten().forEach { material ->
-                usages.getOrPut(material.id) {
-                    MaterialUsage(material.id, material.name)
-                }.usedForTalents = true
-            }
-        }
-        return usages
-    }
-
-    private fun categoryFor(usage: MaterialUsage): MaterialCategory = when {
-        GEM_SUFFIXES.any { usage.name.endsWith(it, ignoreCase = true) } ->
-            MaterialCategory.GEM
-        TALENT_BOOK_PREFIXES.any { usage.name.startsWith(it, ignoreCase = true) } ->
-            MaterialCategory.TALENT_BOOK
-        usage.id in ENEMY_DROP_ID_RANGE && usage.usedForAscension && usage.usedForTalents ->
-            MaterialCategory.ENEMY_DROP
-        usage.id in BOSS_DROP_ID_RANGE && usage.usedForTalents && !usage.usedForAscension ->
-            MaterialCategory.WEEKLY_BOSS
-        usage.id in BOSS_DROP_ID_RANGE && usage.usedForAscension ->
-            MaterialCategory.WORLD_BOSS
-        usage.id in COLLECTABLE_ID_RANGE && usage.usedForAscension ->
-            MaterialCategory.COLLECTABLE
-        else -> MaterialCategory.OTHER
-    }
-
-    private fun enemyFamilies(
-        characters: List<CharacterDefinition>,
-        categories: Map<Int, MaterialCategory>,
-    ): Map<Int, String> {
-        val result = mutableMapOf<Int, String>()
-        characters.forEach { character ->
-            val ids = (
-                character.ascensionCosts.values.flatten() +
-                    character.talentCosts.values.flatten()
-                )
-                .map { it.id }
-                .filter { categories[it] == MaterialCategory.ENEMY_DROP }
-                .distinct()
-                .sorted()
-            if (ids.isNotEmpty()) {
-                val familyKey = "enemy:${ids.first()}"
-                ids.forEach { result[it] = familyKey }
-            }
-        }
-        return result
-    }
-
-    private fun weeklyFamilies(
-        usages: Map<Int, MaterialUsage>,
-        categories: Map<Int, MaterialCategory>,
-    ): Map<Int, String> =
-        usages.values
-            .filter { categories[it.id] == MaterialCategory.WEEKLY_BOSS }
-            .sortedBy { it.id }
-            .chunked(WEEKLY_BOSS_FAMILY_SIZE)
-            .filter { it.size == WEEKLY_BOSS_FAMILY_SIZE }
-            .flatMap { family ->
-                val familyKey = "weekly:${family.first().id}"
-                family.map { it.id to familyKey }
-            }
-            .toMap()
-
-    private fun gemFamilyName(name: String): String {
-        val suffix = GEM_SUFFIXES.first { name.endsWith(it, ignoreCase = true) }
-        return GoodKeyNormalizer.normalize(name.dropLast(suffix.length))
-    }
-
-    private fun talentBookFamilyName(name: String): String {
-        val prefix = TALENT_BOOK_PREFIXES.first {
-            name.startsWith(it, ignoreCase = true)
-        }
-        return GoodKeyNormalizer.normalize(name.drop(prefix.length))
     }
 
     private fun saturatingAdd(first: Long, second: Long): Long =
         if (Long.MAX_VALUE - first < second) Long.MAX_VALUE else first + second
 
-    private data class MaterialUsage(
-        val id: Int,
-        val name: String,
-        var usedForAscension: Boolean = false,
-        var usedForTalents: Boolean = false,
-    )
-
     companion object {
         private const val TIERED_RECIPE_COST = 3L
-        private const val WEEKLY_BOSS_FAMILY_SIZE = 3
         private const val DREAM_SOLVENT_KEY = "dreamsolvent"
-        private val ENEMY_DROP_ID_RANGE = 112000..112999
-        private val BOSS_DROP_ID_RANGE = 113000..113999
-        private val COLLECTABLE_ID_RANGE = 101000..101999
-        private val WEAPON_ASCENSION_ID_RANGE = 114001..114999
-        private const val WEAPON_ASCENSION_FAMILY_SIZE = 4
-        private val GEM_SUFFIXES = listOf(" Sliver", " Fragment", " Chunk", " Gemstone")
-        private val TALENT_BOOK_PREFIXES = listOf(
-            "Teachings of ",
-            "Guide to ",
-            "Philosophies of ",
-        )
+        private const val DUST_OF_AZOTH_KEY = "dustofazoth"
+        private val GEM_CONVERSION_DUST = longArrayOf(1L, 3L, 9L, 27L)
         private val TIERED_CATEGORIES = setOf(
             MaterialCategory.GEM,
             MaterialCategory.TALENT_BOOK,

@@ -1,0 +1,5294 @@
+{
+  "sourceName" : "Game8",
+  "sourceUrl" : "https://game8.co/games/Genshin-Impact/archives/530535",
+  "sourceLastUpdated" : "July 4, 2026 02:29 AM",
+  "scrapedAt" : "2026-07-07T11:40:40.738038600Z",
+  "profiles" : [ {
+    "id" : "aino-support-1",
+    "characterKey" : "aino",
+    "characterName" : "Aino",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/537903",
+    "buildName" : "Support",
+    "profileKey" : "reaction",
+    "weaponName" : "Flame-Forged Insight",
+    "artifactSets" : [ {
+      "name" : "Silken Moon's Serenade",
+      "key" : "silkenmoonsserenade",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT/Elemental Mastery",
+        "keys" : [ "critRate_", "critDMG_", "eleMas" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "albedo-subdps-1",
+    "characterKey" : "albedo",
+    "characterName" : "Albedo",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/312182",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "defense",
+    "weaponName" : "Uraku Misugiri",
+    "artifactSets" : [ {
+      "name" : "Husk of Opulent Dreams",
+      "key" : "huskofopulentdreams",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "DEF%",
+        "keys" : [ "def_" ]
+      },
+      "goblet" : {
+        "raw" : "Geo DMG Bonus",
+        "keys" : [ "geo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "DEF%",
+      "keys" : [ "def_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    } ]
+  }, {
+    "id" : "alhaitham-dps-1",
+    "characterKey" : "alhaitham",
+    "characterName" : "Alhaitham",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/383712",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Light of Foliar Incision",
+    "artifactSets" : [ {
+      "name" : "Gilded Dreams",
+      "key" : "gildeddreams",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Dendro DMG Bonus",
+        "keys" : [ "dendro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "aloy-dps-1",
+    "characterKey" : "aloy",
+    "characterName" : "Aloy",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/337957",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Thundering Pulse",
+    "artifactSets" : [ {
+      "name" : "Wanderer's Troupe",
+      "key" : "wandererstroupe",
+      "count" : 2
+    }, {
+      "name" : "Blizzard Strayer",
+      "key" : "blizzardstrayer",
+      "count" : 2
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Cryo DMG Bonus",
+        "keys" : [ "cryo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate/CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    } ]
+  }, {
+    "id" : "amber-dps-1",
+    "characterKey" : "amber",
+    "characterName" : "Amber",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297535",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Astral Vulture's Crimson Plumage",
+    "artifactSets" : [ {
+      "name" : "Wanderer's Troupe",
+      "key" : "wandererstroupe",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Elemental Mastery",
+        "keys" : [ "atk_", "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Pyro DMG Bonus",
+        "keys" : [ "pyro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "arlecchino-dps-1",
+    "characterKey" : "arlecchino",
+    "characterName" : "Arlecchino",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/382103",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Crimson Moon's Semblance",
+    "artifactSets" : [ {
+      "name" : "Fragment of Harmonic Whimsy",
+      "key" : "fragmentofharmonicwhimsy",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Pyro DMG Bonus",
+        "keys" : [ "pyro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "kamisatoayaka-dps-1",
+    "characterKey" : "kamisatoayaka",
+    "characterName" : "Kamisato Ayaka",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/315215",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Mistsplitter Reforged",
+    "artifactSets" : [ {
+      "name" : "Blizzard Strayer",
+      "key" : "blizzardstrayer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Cryo DMG Bonus",
+        "keys" : [ "cryo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT DMG",
+        "keys" : [ "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    } ]
+  }, {
+    "id" : "kamisatoayato-dps-1",
+    "characterKey" : "kamisatoayato",
+    "characterName" : "Kamisato Ayato",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/345514",
+    "buildName" : "DPS",
+    "profileKey" : "hp",
+    "weaponName" : "Haran Geppaku Futsu",
+    "artifactSets" : [ {
+      "name" : "Echoes of an Offering",
+      "key" : "echoesofanoffering",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Hydro DMG Bonus",
+        "keys" : [ "hydro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate or CRIT DMG",
+      "keys" : [ "critRate_", "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    } ]
+  }, {
+    "id" : "baizhu-support-1",
+    "characterKey" : "baizhu",
+    "characterName" : "Baizhu",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/314348",
+    "buildName" : "Support",
+    "profileKey" : "energy",
+    "weaponName" : null,
+    "artifactSets" : [ {
+      "name" : "Deepwood Memories",
+      "key" : "deepwoodmemories",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP% or Energy Recharge",
+        "keys" : [ "hp_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "circlet" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "HP",
+      "keys" : [ "hp" ]
+    } ]
+  }, {
+    "id" : "barbara-support-1",
+    "characterKey" : "barbara",
+    "characterName" : "Barbara",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297517",
+    "buildName" : "Support",
+    "profileKey" : "energy",
+    "weaponName" : "Thrilling Tales of Dragon Slayers",
+    "artifactSets" : [ {
+      "name" : "Ocean-Hued Clam",
+      "key" : "oceanhuedclam",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "goblet" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "circlet" : {
+        "raw" : "HP% or Healing Bonus",
+        "keys" : [ "hp_", "heal_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    } ]
+  }, {
+    "id" : "beidou-subdps-1",
+    "characterKey" : "beidou",
+    "characterName" : "Beidou",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297528",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Wolf's Gravestone",
+    "artifactSets" : [ {
+      "name" : "Emblem of Severed Fate",
+      "key" : "emblemofseveredfate",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Electro DMG Bonus / ATK% / HP",
+        "keys" : [ "electro_dmg_", "atk_", "hp" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "bennett-buffer-1",
+    "characterKey" : "bennett",
+    "characterName" : "Bennett",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/Bennett-Best-Builds",
+    "buildName" : "Buffer",
+    "profileKey" : "energy",
+    "weaponName" : "Mistsplitter Reforged",
+    "artifactSets" : [ {
+      "name" : "Noblesse Oblige",
+      "key" : "noblesseoblige",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Energy Recharge or ATK%",
+        "keys" : [ "enerRech_", "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Pyro DMG Bonus",
+        "keys" : [ "pyro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "bennett-support-2",
+    "characterKey" : "bennett",
+    "characterName" : "Bennett",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/Bennett-Best-Builds",
+    "buildName" : "Support",
+    "profileKey" : "energy",
+    "weaponName" : "Skyward Blade",
+    "artifactSets" : [ {
+      "name" : "Noblesse Oblige",
+      "key" : "noblesseoblige",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP% or Energy Recharge",
+        "keys" : [ "hp_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "circlet" : {
+        "raw" : "Healing Bonus or HP%",
+        "keys" : [ "heal_", "hp_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    } ]
+  }, {
+    "id" : "candace-subdps-1",
+    "characterKey" : "candace",
+    "characterName" : "Candace",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/386384",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "hp",
+    "weaponName" : "The Catch",
+    "artifactSets" : [ {
+      "name" : "Scroll of the Hero of Cinder City",
+      "key" : "scrolloftheheroofcindercity",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Energy Recharge or HP%",
+        "keys" : [ "enerRech_", "hp_" ]
+      },
+      "goblet" : {
+        "raw" : "HP% or Hydro DMG Bonus",
+        "keys" : [ "hp_", "hydro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "HP%, CRIT Rate, or CRIT DMG",
+        "keys" : [ "hp_", "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "Crit DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "charlotte-subdps-1",
+    "characterKey" : "charlotte",
+    "characterName" : "Charlotte",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/412428",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Kagura's Verity",
+    "artifactSets" : [ {
+      "name" : "Golden Troupe",
+      "key" : "goldentroupe",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "ATK% or Cryo DMG Bonus",
+        "keys" : [ "atk_", "cryo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT DMG",
+        "keys" : [ "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    } ]
+  }, {
+    "id" : "chasca-dps-1",
+    "characterKey" : "chasca",
+    "characterName" : "Chasca",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/462001",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Astral Vulture's Crimson Plumage",
+    "artifactSets" : [ {
+      "name" : "Obsidian Codex",
+      "key" : "obsidiancodex",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "ATK% or Element DMG Bonus",
+        "keys" : [ "atk_", "anemo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT DMG or Crit Rate",
+        "keys" : [ "critDMG_", "critRate_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "chevreuse-overloadsupport-1",
+    "characterKey" : "chevreuse",
+    "characterName" : "Chevreuse",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/426201",
+    "buildName" : "Overload Support",
+    "profileKey" : "energy",
+    "weaponName" : "Black Tassel",
+    "artifactSets" : [ {
+      "name" : "Noblesse Oblige",
+      "key" : "noblesseoblige",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP% or Energy Recharge",
+        "keys" : [ "hp_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "circlet" : {
+        "raw" : "HP% or Healing Bonus%",
+        "keys" : [ "hp_", "heal_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "chevreuse-overloadsubdps-2",
+    "characterKey" : "chevreuse",
+    "characterName" : "Chevreuse",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/426201",
+    "buildName" : "Overload Sub-DPS",
+    "profileKey" : "hp",
+    "weaponName" : "Favonius Lance",
+    "artifactSets" : [ {
+      "name" : "Crimson Witch of Flames",
+      "key" : "crimsonwitchofflames",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP% or ATK%",
+        "keys" : [ "hp_", "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Pyro DMG Bonus",
+        "keys" : [ "pyro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "chiori-subdps-1",
+    "characterKey" : "chiori",
+    "characterName" : "Chiori",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/382793",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "defense",
+    "weaponName" : "Uraku Misugiri",
+    "artifactSets" : [ {
+      "name" : "Golden Troupe",
+      "key" : "goldentroupe",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "DEF% or ATK%",
+        "keys" : [ "def_", "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Geo DMG Bonus",
+        "keys" : [ "geo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "DEF%",
+      "keys" : [ "def_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "chongyun-subdps-1",
+    "characterKey" : "chongyun",
+    "characterName" : "Chongyun",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297532",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Wolf's Gravestone",
+    "artifactSets" : [ {
+      "name" : "Emblem of Severed Fate",
+      "key" : "emblemofseveredfate",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Cryo DMG Bonus",
+        "keys" : [ "cryo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "citlali-shielder-1",
+    "characterKey" : "citlali",
+    "characterName" : "Citlali",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/461989",
+    "buildName" : "Shielder",
+    "profileKey" : "reaction",
+    "weaponName" : "Starcaller's Watch",
+    "artifactSets" : [ {
+      "name" : "Scroll of the Hero of Cinder City",
+      "key" : "scrolloftheheroofcindercity",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "circlet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "clorinde-dps-1",
+    "characterKey" : "clorinde",
+    "characterName" : "Clorinde",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/417218",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Absolution",
+    "artifactSets" : [ {
+      "name" : "Fragment of Harmonic Whimsy",
+      "key" : "fragmentofharmonicwhimsy",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Elemental Mastery",
+        "keys" : [ "atk_", "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Electro DMG Bonus",
+        "keys" : [ "electro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "collei-subdps-1",
+    "characterKey" : "collei",
+    "characterName" : "Collei",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/382079",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Elegy for the End",
+    "artifactSets" : [ {
+      "name" : "Deepwood Memories",
+      "key" : "deepwoodmemories",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Energy Recharge, ATK%, or Elemental Mastery",
+        "keys" : [ "enerRech_", "atk_", "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Dendro DMG Bonus",
+        "keys" : [ "dendro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "columbina-lunarsubdps-1",
+    "characterKey" : "columbina",
+    "characterName" : "Columbina",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/382106",
+    "buildName" : "Lunar Sub-DPS",
+    "profileKey" : "hp",
+    "weaponName" : "Nocturne's Curtain Call",
+    "artifactSets" : [ {
+      "name" : "Silken Moon's Serenade",
+      "key" : "silkenmoonsserenade",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP% or Energy Recharge",
+        "keys" : [ "hp_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "HP% or Hydro DMG Bonus",
+        "keys" : [ "hp_", "hydro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "cyno-aggravate-1",
+    "characterKey" : "cyno",
+    "characterName" : "Cyno",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/315233",
+    "buildName" : "Aggravate",
+    "profileKey" : "attack",
+    "weaponName" : "Staff of the Scarlet Sands",
+    "artifactSets" : [ {
+      "name" : "Thundering Fury",
+      "key" : "thunderingfury",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Electro DMG Bonus",
+        "keys" : [ "electro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate/CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "Crit Rate/Crit DMG",
+      "keys" : [ "critRate_", "critDMG_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "dahlia-shielder-1",
+    "characterKey" : "dahlia",
+    "characterName" : "Dahlia",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/516026",
+    "buildName" : "Shielder",
+    "profileKey" : "energy",
+    "weaponName" : "Favonius Sword",
+    "artifactSets" : [ {
+      "name" : "Noblesse Oblige",
+      "key" : "noblesseoblige",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP% or Energy Recharge",
+        "keys" : [ "hp_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "circlet" : {
+        "raw" : "HP% or CRIT Rate",
+        "keys" : [ "hp_", "critRate_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    } ]
+  }, {
+    "id" : "dehya-subdps-1",
+    "characterKey" : "dehya",
+    "characterName" : "Dehya",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/Dehya-Best-Builds",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "reaction",
+    "weaponName" : "Favonius Greatsword",
+    "artifactSets" : [ {
+      "name" : "Scroll of the Hero of Cinder City",
+      "key" : "scrolloftheheroofcindercity",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP% or Elemental Mastery",
+        "keys" : [ "hp_", "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "HP% or Elemental Mastery",
+        "keys" : [ "hp_", "eleMas" ]
+      },
+      "circlet" : {
+        "raw" : "HP% or Elemental Mastery",
+        "keys" : [ "hp_", "eleMas" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "dehya-dps-2",
+    "characterKey" : "dehya",
+    "characterName" : "Dehya",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/Dehya-Best-Builds",
+    "buildName" : "DPS",
+    "profileKey" : "hp",
+    "weaponName" : "Beacon of the Reed Sea",
+    "artifactSets" : [ {
+      "name" : "Marechaussee Hunter",
+      "key" : "marechausseehunter",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%, Energy Recharge, or HP%",
+        "keys" : [ "atk_", "enerRech_", "hp_" ]
+      },
+      "goblet" : {
+        "raw" : "Pyro DMG Bonus",
+        "keys" : [ "pyro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate/CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    } ]
+  }, {
+    "id" : "diluc-dps-1",
+    "characterKey" : "diluc",
+    "characterName" : "Diluc",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297518",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Redhorn Stonethresher",
+    "artifactSets" : [ {
+      "name" : "Crimson Witch of Flames",
+      "key" : "crimsonwitchofflames",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Elemental Mastery",
+        "keys" : [ "atk_", "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Pyro DMG Bonus",
+        "keys" : [ "pyro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate / CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "diona-support-1",
+    "characterKey" : "diona",
+    "characterName" : "Diona",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/305872",
+    "buildName" : "Support",
+    "profileKey" : "energy",
+    "weaponName" : "Sacrificial Bow",
+    "artifactSets" : [ {
+      "name" : "Noblesse Oblige",
+      "key" : "noblesseoblige",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Energy Recharge or HP%",
+        "keys" : [ "enerRech_", "hp_" ]
+      },
+      "goblet" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "circlet" : {
+        "raw" : "Healing Bonus or HP%",
+        "keys" : [ "heal_", "hp_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "HP",
+      "keys" : [ "hp" ]
+    } ]
+  }, {
+    "id" : "dori-support-1",
+    "characterKey" : "dori",
+    "characterName" : "Dori",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/380569",
+    "buildName" : "Support",
+    "profileKey" : "energy",
+    "weaponName" : "Favonius Greatsword",
+    "artifactSets" : [ {
+      "name" : "Noblesse Oblige",
+      "key" : "noblesseoblige",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Energy Recharge or HP%",
+        "keys" : [ "enerRech_", "hp_" ]
+      },
+      "goblet" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "circlet" : {
+        "raw" : "HP% or Healing Bonus%",
+        "keys" : [ "hp_", "heal_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    } ]
+  }, {
+    "id" : "durin-pyrosubdps-1",
+    "characterKey" : "durin",
+    "characterName" : "Durin",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/462478",
+    "buildName" : "Pyro Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Athame Artis",
+    "artifactSets" : [ {
+      "name" : "A Day Carved from Rising Winds",
+      "key" : "adaycarvedfromrisingwinds",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "ATK% or Pyro DMG Bonus",
+        "keys" : [ "atk_", "pyro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT DMG or CRIT Rate",
+        "keys" : [ "critDMG_", "critRate_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    } ]
+  }, {
+    "id" : "durin-burgeon-2",
+    "characterKey" : "durin",
+    "characterName" : "Durin",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/462478",
+    "buildName" : "Burgeon",
+    "profileKey" : "reaction",
+    "weaponName" : "Freedom-Sworn",
+    "artifactSets" : [ {
+      "name" : "Flower of Paradise Lost",
+      "key" : "flowerofparadiselost",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "circlet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    } ]
+  }, {
+    "id" : "emilie-subdps-1",
+    "characterKey" : "emilie",
+    "characterName" : "Emilie",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/422493",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Lumidouce Elegy",
+    "artifactSets" : [ {
+      "name" : "Unfinished Reverie",
+      "key" : "unfinishedreverie",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Dendro DMG Bonus",
+        "keys" : [ "dendro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "escoffier-subdps-1",
+    "characterKey" : "escoffier",
+    "characterName" : "Escoffier",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/385307",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Symphonist of Scents",
+    "artifactSets" : [ {
+      "name" : "Golden Troupe",
+      "key" : "goldentroupe",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Cryo DMG Bonus or ATK%",
+        "keys" : [ "cryo_dmg_", "atk_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "eula-dps-1",
+    "characterKey" : "eula",
+    "characterName" : "Eula",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/328764",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Song of Broken Pines",
+    "artifactSets" : [ {
+      "name" : "Pale Flame",
+      "key" : "paleflame",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Physical DMG Bonus",
+        "keys" : [ "physical_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "faruzan-anemobuffer-1",
+    "characterKey" : "faruzan",
+    "characterName" : "Faruzan",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/391897",
+    "buildName" : "Anemo Buffer",
+    "profileKey" : "energy",
+    "weaponName" : "Elegy for the End",
+    "artifactSets" : [ {
+      "name" : "Viridescent Venerer",
+      "key" : "viridescentvenerer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Energy Recharge",
+        "keys" : [ "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Anemo DMG Bonus",
+        "keys" : [ "anemo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate/CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    } ]
+  }, {
+    "id" : "fischl-electro-1",
+    "characterKey" : "fischl",
+    "characterName" : "Fischl",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297524",
+    "buildName" : "Electro",
+    "profileKey" : "attack",
+    "weaponName" : "Polar Star",
+    "artifactSets" : [ {
+      "name" : "Golden Troupe",
+      "key" : "goldentroupe",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Elemental Mastery",
+        "keys" : [ "atk_", "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Electro DMG Bonus",
+        "keys" : [ "electro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK",
+      "keys" : [ "atk" ]
+    } ]
+  }, {
+    "id" : "flins-lunarchargeddps-1",
+    "characterKey" : "flins",
+    "characterName" : "Flins",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/538451",
+    "buildName" : "Lunar-Charged DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Bloodsoaked Ruins",
+    "artifactSets" : [ {
+      "name" : "Night of the Sky's Unveiling",
+      "key" : "nightoftheskysunveiling",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK",
+      "keys" : [ "atk" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "freminet-physical-1",
+    "characterKey" : "freminet",
+    "characterName" : "Freminet",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/417207",
+    "buildName" : "Physical",
+    "profileKey" : "attack",
+    "weaponName" : "Song of Broken Pines",
+    "artifactSets" : [ {
+      "name" : "Pale Flame",
+      "key" : "paleflame",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Physical DMG Bonus",
+        "keys" : [ "physical_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK",
+      "keys" : [ "atk" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "freminet-cryo-2",
+    "characterKey" : "freminet",
+    "characterName" : "Freminet",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/417207",
+    "buildName" : "Cryo",
+    "profileKey" : "attack",
+    "weaponName" : "Wolf's Gravestone",
+    "artifactSets" : [ {
+      "name" : "Blizzard Strayer",
+      "key" : "blizzardstrayer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Cryo DMG Bonus",
+        "keys" : [ "cryo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "furina-subdps-1",
+    "characterKey" : "furina",
+    "characterName" : "Furina",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "hp",
+    "weaponName" : "Splendor of Tranquil Waters",
+    "artifactSets" : [ {
+      "name" : "Golden Troupe",
+      "key" : "goldentroupe",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP% or Energy Recharge",
+        "keys" : [ "hp_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "HP% or Hydro DMG Bonus",
+        "keys" : [ "hp_", "hydro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "gaming-dps-1",
+    "characterKey" : "gaming",
+    "characterName" : "Gaming",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/437446",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Serpent Spine",
+    "artifactSets" : [ {
+      "name" : "Marechaussee Hunter",
+      "key" : "marechausseehunter",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery or ATK%",
+        "keys" : [ "eleMas", "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Pyro DMG Bonus",
+        "keys" : [ "pyro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT DMG",
+        "keys" : [ "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "ganyu-freeze-1",
+    "characterKey" : "ganyu",
+    "characterName" : "Ganyu",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/312173",
+    "buildName" : "Freeze",
+    "profileKey" : "attack",
+    "weaponName" : "The First Great Magic",
+    "artifactSets" : [ {
+      "name" : "Blizzard Strayer",
+      "key" : "blizzardstrayer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Cryo DMG Bonus",
+        "keys" : [ "cryo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT DMG or CRIT Rate",
+        "keys" : [ "critDMG_", "critRate_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "ganyu-melt-2",
+    "characterKey" : "ganyu",
+    "characterName" : "Ganyu",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/312173",
+    "buildName" : "Melt",
+    "profileKey" : "attack",
+    "weaponName" : "Astral Vulture's Crimson Plumage",
+    "artifactSets" : [ {
+      "name" : "Unfinished Reverie",
+      "key" : "unfinishedreverie",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery or ATK%",
+        "keys" : [ "eleMas", "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Cryo DMG Bonus",
+        "keys" : [ "cryo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "gorou-geobuffer-1",
+    "characterKey" : "gorou",
+    "characterName" : "Gorou",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/336726",
+    "buildName" : "Geo Buffer",
+    "profileKey" : "defense",
+    "weaponName" : "Elegy for the End",
+    "artifactSets" : [ {
+      "name" : "Husk of Opulent Dreams",
+      "key" : "huskofopulentdreams",
+      "count" : 2
+    }, {
+      "name" : "Emblem of Severed Fate",
+      "key" : "emblemofseveredfate",
+      "count" : 2
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "DEF% or Energy Recharge",
+        "keys" : [ "def_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "DEF or Geo DMG Bonus",
+        "keys" : [ "def", "geo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "DEF%",
+        "keys" : [ "def_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "DEF%",
+      "keys" : [ "def_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    } ]
+  }, {
+    "id" : "shikanoinheizou-swirl-1",
+    "characterKey" : "shikanoinheizou",
+    "characterName" : "Shikanoin Heizou",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/345516",
+    "buildName" : "Swirl",
+    "profileKey" : "reaction",
+    "weaponName" : "A Thousand Floating Dreams",
+    "artifactSets" : [ {
+      "name" : "Viridescent Venerer",
+      "key" : "viridescentvenerer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "circlet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    } ]
+  }, {
+    "id" : "shikanoinheizou-anemo-2",
+    "characterKey" : "shikanoinheizou",
+    "characterName" : "Shikanoin Heizou",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/345516",
+    "buildName" : "Anemo",
+    "profileKey" : "reaction",
+    "weaponName" : "Tulaytullah's Remembrance",
+    "artifactSets" : [ {
+      "name" : "Viridescent Venerer",
+      "key" : "viridescentvenerer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Elemental Mastery",
+        "keys" : [ "atk_", "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Anemo DMG",
+        "keys" : [ "anemo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate/CRIT DMG or Elemental Mastery",
+        "keys" : [ "critRate_", "critDMG_", "eleMas" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "hutao-dps-1",
+    "characterKey" : "hutao",
+    "characterName" : "Hu Tao",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/314347",
+    "buildName" : "DPS",
+    "profileKey" : "hp",
+    "weaponName" : "Staff of Homa",
+    "artifactSets" : [ {
+      "name" : "Crimson Witch of Flames",
+      "key" : "crimsonwitchofflames",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "goblet" : {
+        "raw" : "Pyro DMG Bonus",
+        "keys" : [ "pyro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT DMG or CRIT Rate",
+        "keys" : [ "critDMG_", "critRate_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "iansan-buffer-1",
+    "characterKey" : "iansan",
+    "characterName" : "Iansan",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/345881",
+    "buildName" : "Buffer",
+    "profileKey" : "energy",
+    "weaponName" : "Symphonist of Scents",
+    "artifactSets" : [ {
+      "name" : "Scroll of the Hero of Cinder City",
+      "key" : "scrolloftheheroofcindercity",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "circlet" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "ifa-swirl-1",
+    "characterKey" : "ifa",
+    "characterName" : "Ifa",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/472693",
+    "buildName" : "Swirl",
+    "profileKey" : "reaction",
+    "weaponName" : "Sunny Morning Sleep-In",
+    "artifactSets" : [ {
+      "name" : "Viridescent Venerer",
+      "key" : "viridescentvenerer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "circlet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "ineffa-subdps-1",
+    "characterKey" : "ineffa",
+    "characterName" : "Ineffa",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/531360",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "reaction",
+    "weaponName" : "Fractured Halo",
+    "artifactSets" : [ {
+      "name" : "Aubade of Morningstar and Moon",
+      "key" : "aubadeofmorningstarandmoon",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Elemental Mastery",
+        "keys" : [ "atk_", "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "ATK% or Elemental Mastery",
+        "keys" : [ "atk_", "eleMas" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or Crit DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "aratakiitto-dps-1",
+    "characterKey" : "aratakiitto",
+    "characterName" : "Arataki Itto",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/345461",
+    "buildName" : "DPS",
+    "profileKey" : "defense",
+    "weaponName" : "Redhorn Stonethresher",
+    "artifactSets" : [ {
+      "name" : "Husk of Opulent Dreams",
+      "key" : "huskofopulentdreams",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "DEF%",
+        "keys" : [ "def_" ]
+      },
+      "goblet" : {
+        "raw" : "Geo DMG Bonus",
+        "keys" : [ "geo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "DEF%",
+      "keys" : [ "def_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "jahoda-anemosupport-1",
+    "characterKey" : "jahoda",
+    "characterName" : "Jahoda",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/538446",
+    "buildName" : "Anemo Support",
+    "profileKey" : "energy",
+    "weaponName" : "Elegy for the End",
+    "artifactSets" : [ {
+      "name" : "Viridescent Venerer",
+      "key" : "viridescentvenerer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Energy Recharge or ATK%",
+        "keys" : [ "enerRech_", "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "circlet" : {
+        "raw" : "ATK%, Healing Bonus, or CRIT Rate",
+        "keys" : [ "atk_", "heal_", "critRate_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "ATK",
+      "keys" : [ "atk" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "jean-support-1",
+    "characterKey" : "jean",
+    "characterName" : "Jean",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297536",
+    "buildName" : "Support",
+    "profileKey" : "energy",
+    "weaponName" : "Freedom-Sworn",
+    "artifactSets" : [ {
+      "name" : "Viridescent Venerer",
+      "key" : "viridescentvenerer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Anemo DMG Bonus",
+        "keys" : [ "anemo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or Healing Bonus",
+        "keys" : [ "critRate_", "heal_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    } ]
+  }, {
+    "id" : "kachina-subdps-1",
+    "characterKey" : "kachina",
+    "characterName" : "Kachina",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/462004",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "defense",
+    "weaponName" : "Footprint of the Rainbow",
+    "artifactSets" : [ {
+      "name" : "Scroll of the Hero of Cinder City",
+      "key" : "scrolloftheheroofcindercity",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "DEF%",
+        "keys" : [ "def_" ]
+      },
+      "goblet" : {
+        "raw" : "Geo DMG Bonus",
+        "keys" : [ "geo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "DEF%",
+      "keys" : [ "def_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "kaeya-dps-1",
+    "characterKey" : "kaeya",
+    "characterName" : "Kaeya",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297516",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Mistsplitter Reforged",
+    "artifactSets" : [ {
+      "name" : "Blizzard Strayer",
+      "key" : "blizzardstrayer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Cryo DMG Bonus",
+        "keys" : [ "cryo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT DMG or CRIT Rate",
+        "keys" : [ "critDMG_", "critRate_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    } ]
+  }, {
+    "id" : "kaveh-bloom-1",
+    "characterKey" : "kaveh",
+    "characterName" : "Kaveh",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/Kaveh-Best-Builds",
+    "buildName" : "Bloom",
+    "profileKey" : "reaction",
+    "weaponName" : "Favonius Greatsword",
+    "artifactSets" : [ {
+      "name" : "Deepwood Memories",
+      "key" : "deepwoodmemories",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "circlet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "kaedeharakazuha-subdps-1",
+    "characterKey" : "kaedeharakazuha",
+    "characterName" : "Kaedehara Kazuha",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/332826",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "reaction",
+    "weaponName" : "Freedom-Sworn",
+    "artifactSets" : [ {
+      "name" : "Viridescent Venerer",
+      "key" : "viridescentvenerer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery or ATK%",
+        "keys" : [ "eleMas", "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery or Anemo DMG Bonus",
+        "keys" : [ "eleMas", "anemo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "Elemental Mastery or CRIT Rate / CRIT DMG",
+        "keys" : [ "eleMas", "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "keqing-aggravate-1",
+    "characterKey" : "keqing",
+    "characterName" : "Keqing",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/Keqing-Best-Builds",
+    "buildName" : "Aggravate",
+    "profileKey" : "attack",
+    "weaponName" : "Mistsplitter Reforged",
+    "artifactSets" : [ {
+      "name" : "Thundering Fury",
+      "key" : "thunderingfury",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Elemental Mastery",
+        "keys" : [ "atk_", "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Electro DMG Bonus",
+        "keys" : [ "electro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "kinich-dps-1",
+    "characterKey" : "kinich",
+    "characterName" : "Kinich",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/461991",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Fang of the Mountain King",
+    "artifactSets" : [ {
+      "name" : "Obsidian Codex",
+      "key" : "obsidiancodex",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Dendro DMG Bonus",
+        "keys" : [ "dendro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "kirara-shielder-1",
+    "characterKey" : "kirara",
+    "characterName" : "Kirara",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/409556",
+    "buildName" : "Shielder",
+    "profileKey" : "energy",
+    "weaponName" : "Key of Khaj-Nisut",
+    "artifactSets" : [ {
+      "name" : "Tenacity of the Millelith",
+      "key" : "tenacityofthemillelith",
+      "count" : 2
+    }, {
+      "name" : "Vourukasha's Glow",
+      "key" : "vourukashasglow",
+      "count" : 2
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP% or Energy Recharge",
+        "keys" : [ "hp_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "circlet" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "HP",
+      "keys" : [ "hp" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "klee-dps-1",
+    "characterKey" : "klee",
+    "characterName" : "Klee",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297521",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Lost Prayer to the Sacred Winds",
+    "artifactSets" : [ {
+      "name" : "A Day Carved from Rising Winds",
+      "key" : "adaycarvedfromrisingwinds",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Pyro DMG Bonus",
+        "keys" : [ "pyro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "sangonomiyakokomi-support-1",
+    "characterKey" : "sangonomiyakokomi",
+    "characterName" : "Sangonomiya Kokomi",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/337140",
+    "buildName" : "Support",
+    "profileKey" : "energy",
+    "weaponName" : "Everlasting Moonglow",
+    "artifactSets" : [ {
+      "name" : "Ocean-Hued Clam",
+      "key" : "oceanhuedclam",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "goblet" : {
+        "raw" : "Hydro DMG Bonus",
+        "keys" : [ "hydro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "Healing Bonus or HP%",
+        "keys" : [ "heal_", "hp_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "lanyan-shielder-1",
+    "characterKey" : "lanyan",
+    "characterName" : "Lan Yan",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/486709",
+    "buildName" : "Shielder",
+    "profileKey" : "energy",
+    "weaponName" : "Memory of Dust",
+    "artifactSets" : [ {
+      "name" : "Viridescent Venerer",
+      "key" : "viridescentvenerer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "circlet" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "lanyan-swirl-2",
+    "characterKey" : "lanyan",
+    "characterName" : "Lan Yan",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/486709",
+    "buildName" : "Swirl",
+    "profileKey" : "reaction",
+    "weaponName" : "Starcaller's Watch",
+    "artifactSets" : [ {
+      "name" : "Viridescent Venerer",
+      "key" : "viridescentvenerer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "circlet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "lauma-support-1",
+    "characterKey" : "lauma",
+    "characterName" : "Lauma",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/538066",
+    "buildName" : "Support",
+    "profileKey" : "reaction",
+    "weaponName" : "Nightweaver's Looking Glass",
+    "artifactSets" : [ {
+      "name" : "Deepwood Memories",
+      "key" : "deepwoodmemories",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "circlet" : {
+        "raw" : "Elemental Mastery or CRIT Rate/DMG",
+        "keys" : [ "eleMas", "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "layla-shielder-1",
+    "characterKey" : "layla",
+    "characterName" : "Layla",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/386486",
+    "buildName" : "Shielder",
+    "profileKey" : "energy",
+    "weaponName" : "Key of Khaj-Nisut",
+    "artifactSets" : [ {
+      "name" : "Tenacity of the Millelith",
+      "key" : "tenacityofthemillelith",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "goblet" : {
+        "raw" : "HP% or Cryo DMG Bonus",
+        "keys" : [ "hp_", "cryo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "HP% or CRIT Rate/CRIT DMG",
+        "keys" : [ "hp_", "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "lisa-subdps-1",
+    "characterKey" : "lisa",
+    "characterName" : "Lisa",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/Lisa-Best-Builds",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "reaction",
+    "weaponName" : "Kagura's Verity",
+    "artifactSets" : [ {
+      "name" : "Gilded Dreams",
+      "key" : "gildeddreams",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Elemental Mastery",
+        "keys" : [ "atk_", "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Electro DMG Bonus or Elemental Mastery",
+        "keys" : [ "electro_dmg_", "eleMas" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate/CRIT DMG or Elemental Mastery",
+        "keys" : [ "critRate_", "critDMG_", "eleMas" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    } ]
+  }, {
+    "id" : "lynette-swirl-1",
+    "characterKey" : "lynette",
+    "characterName" : "Lynette",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/345879",
+    "buildName" : "Swirl",
+    "profileKey" : "reaction",
+    "weaponName" : "Freedom-Sworn",
+    "artifactSets" : [ {
+      "name" : "Viridescent Venerer",
+      "key" : "viridescentvenerer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery or Energy Recharge",
+        "keys" : [ "eleMas", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery or Anemo DMG Bonus",
+        "keys" : [ "eleMas", "anemo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "Elemental Mastery or CRIT Rate/DMG",
+        "keys" : [ "eleMas", "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    } ]
+  }, {
+    "id" : "lyney-dps-1",
+    "characterKey" : "lyney",
+    "characterName" : "Lyney",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/345540",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "The First Great Magic",
+    "artifactSets" : [ {
+      "name" : "Marechaussee Hunter",
+      "key" : "marechausseehunter",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Pyro DMG Bonus",
+        "keys" : [ "pyro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT DMG",
+        "keys" : [ "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "mavuika-dps-1",
+    "characterKey" : "mavuika",
+    "characterName" : "Mavuika",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/461999",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "A Thousand Blazing Suns",
+    "artifactSets" : [ {
+      "name" : "Obsidian Codex",
+      "key" : "obsidiancodex",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Elemental Mastery",
+        "keys" : [ "atk_", "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Pyro DMG Bonus",
+        "keys" : [ "pyro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "mavuika-subdps-2",
+    "characterKey" : "mavuika",
+    "characterName" : "Mavuika",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/461999",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "A Thousand Blazing Suns",
+    "artifactSets" : [ {
+      "name" : "Scroll of the Hero of Cinder City",
+      "key" : "scrolloftheheroofcindercity",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Elemental Mastery",
+        "keys" : [ "atk_", "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Pyro DMG Bonus",
+        "keys" : [ "pyro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "mika-support-1",
+    "characterKey" : "mika",
+    "characterName" : "Mika",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/390096",
+    "buildName" : "Support",
+    "profileKey" : "energy",
+    "weaponName" : "Favonius Lance",
+    "artifactSets" : [ {
+      "name" : "Noblesse Oblige",
+      "key" : "noblesseoblige",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Energy Recharge or HP%",
+        "keys" : [ "enerRech_", "hp_" ]
+      },
+      "goblet" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "circlet" : {
+        "raw" : "HP%, Healing Bonus, or CRIT Rate",
+        "keys" : [ "hp_", "heal_", "critRate_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "Crit Rate",
+      "keys" : [ "critRate_" ]
+    } ]
+  }, {
+    "id" : "mizuki-swirl-1",
+    "characterKey" : "mizuki",
+    "characterName" : "Mizuki",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/492414",
+    "buildName" : "Swirl",
+    "profileKey" : "reaction",
+    "weaponName" : "Sunny Morning Sleep-In",
+    "artifactSets" : [ {
+      "name" : "Viridescent Venerer",
+      "key" : "viridescentvenerer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery or Energy Recharge",
+        "keys" : [ "eleMas", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "circlet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "mona-subdps-1",
+    "characterKey" : "mona",
+    "characterName" : "Mona",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/Mona-Best-Builds",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Skyward Atlas",
+    "artifactSets" : [ {
+      "name" : "Emblem of Severed Fate",
+      "key" : "emblemofseveredfate",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Hydro DMG Bonus",
+        "keys" : [ "hydro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "mualani-dps-1",
+    "characterKey" : "mualani",
+    "characterName" : "Mualani",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/461994",
+    "buildName" : "DPS",
+    "profileKey" : "hp",
+    "weaponName" : "Surf's Up",
+    "artifactSets" : [ {
+      "name" : "Obsidian Codex",
+      "key" : "obsidiancodex",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP% or Elemental Mastery",
+        "keys" : [ "hp_", "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Hydro DMG Bonus or HP%",
+        "keys" : [ "hydro_dmg_", "hp_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT DMG",
+        "keys" : [ "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "nahida-subdps-1",
+    "characterKey" : "nahida",
+    "characterName" : "Nahida",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/Nahida-Best-Builds",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "reaction",
+    "weaponName" : "A Thousand Floating Dreams",
+    "artifactSets" : [ {
+      "name" : "Deepwood Memories",
+      "key" : "deepwoodmemories",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery or Dendro DMG Bonus",
+        "keys" : [ "eleMas", "dendro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "Elemental Mastery or CRIT Rate/CRIT DMG",
+        "keys" : [ "eleMas", "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "navia-dps-1",
+    "characterKey" : "navia",
+    "characterName" : "Navia",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/417194",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Verdict",
+    "artifactSets" : [ {
+      "name" : "Nighttime Whispers in the Echoing Woods",
+      "key" : "nighttimewhispersintheechoingwoods",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Geo DMG Bonus",
+        "keys" : [ "geo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "navia-subdps-2",
+    "characterKey" : "navia",
+    "characterName" : "Navia",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/417194",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Verdict",
+    "artifactSets" : [ {
+      "name" : "Golden Troupe",
+      "key" : "goldentroupe",
+      "count" : 2
+    }, {
+      "name" : "Archaic Petra",
+      "key" : "archaicpetra",
+      "count" : 2
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Geo DMG Bonus",
+        "keys" : [ "geo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "neuvillette-dps-1",
+    "characterKey" : "neuvillette",
+    "characterName" : "Neuvillette",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/Neuvillette-Best-Builds",
+    "buildName" : "DPS",
+    "profileKey" : "hp",
+    "weaponName" : "Tome of the Eternal Flow",
+    "artifactSets" : [ {
+      "name" : "Marechaussee Hunter",
+      "key" : "marechausseehunter",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "goblet" : {
+        "raw" : "Hydro DMG Bonus or HP%",
+        "keys" : [ "hydro_dmg_", "hp_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "nilou-bloom-1",
+    "characterKey" : "nilou",
+    "characterName" : "Nilou",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/383715",
+    "buildName" : "Bloom",
+    "profileKey" : "reaction",
+    "weaponName" : "Key of Khaj-Nisut",
+    "artifactSets" : [ {
+      "name" : "Tenacity of the Millelith",
+      "key" : "tenacityofthemillelith",
+      "count" : 2
+    }, {
+      "name" : "Vourukasha's Glow",
+      "key" : "vourukashasglow",
+      "count" : 2
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP% or Energy Recharge",
+        "keys" : [ "hp_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "circlet" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "Flat HP",
+      "keys" : [ "hp" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "ningguang-dps-1",
+    "characterKey" : "ningguang",
+    "characterName" : "Ningguang",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297529",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Lost Prayer to the Sacred Winds",
+    "artifactSets" : [ {
+      "name" : "Nighttime Whispers in the Echoing Woods",
+      "key" : "nighttimewhispersintheechoingwoods",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Geo DMG Bonus",
+        "keys" : [ "geo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "noelle-dps-1",
+    "characterKey" : "noelle",
+    "characterName" : "Noelle",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297523",
+    "buildName" : "DPS",
+    "profileKey" : "defense",
+    "weaponName" : "Redhorn Stonethresher",
+    "artifactSets" : [ {
+      "name" : "Marechaussee Hunter",
+      "key" : "marechausseehunter",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "DEF%",
+        "keys" : [ "def_" ]
+      },
+      "goblet" : {
+        "raw" : "Geo DMG Bonus",
+        "keys" : [ "geo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "DEF%",
+      "keys" : [ "def_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate%",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "noelle-support-2",
+    "characterKey" : "noelle",
+    "characterName" : "Noelle",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297523",
+    "buildName" : "Support",
+    "profileKey" : "defense",
+    "weaponName" : "Skyward Pride",
+    "artifactSets" : [ {
+      "name" : "Archaic Petra",
+      "key" : "archaicpetra",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Energy Recharge",
+        "keys" : [ "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "DEF%",
+        "keys" : [ "def_" ]
+      },
+      "circlet" : {
+        "raw" : "DEF% or Healing Bonus",
+        "keys" : [ "def_", "heal_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "DEF%",
+      "keys" : [ "def_" ]
+    } ]
+  }, {
+    "id" : "ororon-subdps-1",
+    "characterKey" : "ororon",
+    "characterName" : "Ororon",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/461993",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Elegy for the End",
+    "artifactSets" : [ {
+      "name" : "Scroll of the Hero of Cinder City",
+      "key" : "scrolloftheheroofcindercity",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Electro DMG Bonus",
+        "keys" : [ "electro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT DMG or Crit Rate",
+        "keys" : [ "critDMG_", "critRate_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK",
+      "keys" : [ "atk" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "ororon-hyperbloom-2",
+    "characterKey" : "ororon",
+    "characterName" : "Ororon",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/461993",
+    "buildName" : "Hyperbloom",
+    "profileKey" : "reaction",
+    "weaponName" : "Elegy for the End",
+    "artifactSets" : [ {
+      "name" : "Scroll of the Hero of Cinder City",
+      "key" : "scrolloftheheroofcindercity",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery or ATK%",
+        "keys" : [ "eleMas", "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery or Electro DMG Bonus",
+        "keys" : [ "eleMas", "electro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "Elemental Mastery or CRIT DMG or Crit Rate",
+        "keys" : [ "eleMas", "critDMG_", "critRate_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    } ]
+  }, {
+    "id" : "qiqi-support-1",
+    "characterKey" : "qiqi",
+    "characterName" : "Qiqi",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297533",
+    "buildName" : "Support",
+    "profileKey" : "energy",
+    "weaponName" : "Skyward Blade",
+    "artifactSets" : [ {
+      "name" : "Ocean-Hued Clam",
+      "key" : "oceanhuedclam",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "circlet" : {
+        "raw" : "ATK% or Healing Bonus",
+        "keys" : [ "atk_", "heal_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "ATK",
+      "keys" : [ "atk" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "raidenshogun-dps-1",
+    "characterKey" : "raidenshogun",
+    "characterName" : "Raiden Shogun",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/337161",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Engulfing Lightning",
+    "artifactSets" : [ {
+      "name" : "Emblem of Severed Fate",
+      "key" : "emblemofseveredfate",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Energy Recharge or ATK%",
+        "keys" : [ "enerRech_", "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "ATK% or Electro DMG Bonus",
+        "keys" : [ "atk_", "electro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "raidenshogun-hyperbloom-2",
+    "characterKey" : "raidenshogun",
+    "characterName" : "Raiden Shogun",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/337161",
+    "buildName" : "Hyperbloom",
+    "profileKey" : "reaction",
+    "weaponName" : "Dragon's Bane",
+    "artifactSets" : [ {
+      "name" : "Flower of Paradise Lost",
+      "key" : "flowerofparadiselost",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "circlet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "razor-electro-1",
+    "characterKey" : "razor",
+    "characterName" : "Razor",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297519",
+    "buildName" : "Electro",
+    "profileKey" : "attack",
+    "weaponName" : "A Thousand Blazing Suns",
+    "artifactSets" : [ {
+      "name" : "A Day Carved from Rising Winds",
+      "key" : "adaycarvedfromrisingwinds",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Electro DMG Bonus",
+        "keys" : [ "electro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT DMG or CRIT Rate",
+        "keys" : [ "critDMG_", "critRate_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "rosaria-meltdps-1",
+    "characterKey" : "rosaria",
+    "characterName" : "Rosaria",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/314177",
+    "buildName" : "Melt DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Staff of the Scarlet Sands",
+    "artifactSets" : [ {
+      "name" : "Unfinished Reverie",
+      "key" : "unfinishedreverie",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery or ATK%",
+        "keys" : [ "eleMas", "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Cryo DMG Bonus",
+        "keys" : [ "cryo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "rosaria-cryosubdps-2",
+    "characterKey" : "rosaria",
+    "characterName" : "Rosaria",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/314177",
+    "buildName" : "Cryo Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Staff of Homa",
+    "artifactSets" : [ {
+      "name" : "Blizzard Strayer",
+      "key" : "blizzardstrayer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Cryo DMG Bonus",
+        "keys" : [ "cryo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "kujousara-subdps-1",
+    "characterKey" : "kujousara",
+    "characterName" : "Kujou Sara",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/336727",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Elegy for the End",
+    "artifactSets" : [ {
+      "name" : "Emblem of Severed Fate",
+      "key" : "emblemofseveredfate",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Energy Recharge or ATK%",
+        "keys" : [ "enerRech_", "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Electro DMG Bonus",
+        "keys" : [ "electro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    } ]
+  }, {
+    "id" : "sayu-swirl-1",
+    "characterKey" : "sayu",
+    "characterName" : "Sayu",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/333496",
+    "buildName" : "Swirl",
+    "profileKey" : "reaction",
+    "weaponName" : "Makhaira Aquamarine",
+    "artifactSets" : [ {
+      "name" : "Viridescent Venerer",
+      "key" : "viridescentvenerer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Energy Recharge or Elemental Mastery",
+        "keys" : [ "enerRech_", "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "circlet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "sayu-subdps-2",
+    "characterKey" : "sayu",
+    "characterName" : "Sayu",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/333496",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Wolf's Gravestone",
+    "artifactSets" : [ {
+      "name" : "Viridescent Venerer",
+      "key" : "viridescentvenerer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Anemo DMG Bonus",
+        "keys" : [ "anemo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "sethos-dps-1",
+    "characterKey" : "sethos",
+    "characterName" : "Sethos",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/451024",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Hunter's Path",
+    "artifactSets" : [ {
+      "name" : "Wanderer's Troupe",
+      "key" : "wandererstroupe",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Electro DMG Bonus",
+        "keys" : [ "electro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "shenhe-cryobuffer-1",
+    "characterKey" : "shenhe",
+    "characterName" : "Shenhe",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/346620",
+    "buildName" : "Cryo Buffer",
+    "profileKey" : "energy",
+    "weaponName" : "Calamity Queller",
+    "artifactSets" : [ {
+      "name" : "Gladiator's Finale",
+      "key" : "gladiatorsfinale",
+      "count" : 2
+    }, {
+      "name" : "Shimenawa's Reminiscence",
+      "key" : "shimenawasreminiscence",
+      "count" : 2
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "circlet" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "kukishinobu-hyperbloom-1",
+    "characterKey" : "kukishinobu",
+    "characterName" : "Kuki Shinobu",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/346199",
+    "buildName" : "Hyperbloom",
+    "profileKey" : "reaction",
+    "weaponName" : "Freedom-Sworn",
+    "artifactSets" : [ {
+      "name" : "Flower of Paradise Lost",
+      "key" : "flowerofparadiselost",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "circlet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "kukishinobu-support-2",
+    "characterKey" : "kukishinobu",
+    "characterName" : "Kuki Shinobu",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/346199",
+    "buildName" : "Support",
+    "profileKey" : "energy",
+    "weaponName" : "Freedom-Sworn",
+    "artifactSets" : [ {
+      "name" : "Tenacity of the Millelith",
+      "key" : "tenacityofthemillelith",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "goblet" : {
+        "raw" : "HP% or Electro DMG",
+        "keys" : [ "hp_", "electro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "Healing Bonus or HP%",
+        "keys" : [ "heal_", "hp_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "sigewinne-support-1",
+    "characterKey" : "sigewinne",
+    "characterName" : "Sigewinne",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/352956",
+    "buildName" : "Support",
+    "profileKey" : "energy",
+    "weaponName" : "Silvershower Heartstrings",
+    "artifactSets" : [ {
+      "name" : "Song of Days Past",
+      "key" : "songofdayspast",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "goblet" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "circlet" : {
+        "raw" : "HP% or Healing Bonus",
+        "keys" : [ "hp_", "heal_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "sigewinne-subdps-2",
+    "characterKey" : "sigewinne",
+    "characterName" : "Sigewinne",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/352956",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "hp",
+    "weaponName" : "Silvershower Heartstrings",
+    "artifactSets" : [ {
+      "name" : "Emblem of Severed Fate",
+      "key" : "emblemofseveredfate",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP% or Energy Recharge",
+        "keys" : [ "hp_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "HP% or Hydro DMG Bonus",
+        "keys" : [ "hp_", "hydro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate, CRIT DMG, or HP%",
+        "keys" : [ "critRate_", "critDMG_", "hp_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    } ]
+  }, {
+    "id" : "skirk-dps-1",
+    "characterKey" : "skirk",
+    "characterName" : "Skirk",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/333140",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Azurelight",
+    "artifactSets" : [ {
+      "name" : "Finale of the Deep Galleries",
+      "key" : "finaleofthedeepgalleries",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Cryo DMG Bonus",
+        "keys" : [ "cryo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT DMG or CRIT Rate",
+        "keys" : [ "critDMG_", "critRate_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    } ]
+  }, {
+    "id" : "sucrose-swirlsupport-1",
+    "characterKey" : "sucrose",
+    "characterName" : "Sucrose",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297525",
+    "buildName" : "Swirl Support",
+    "profileKey" : "reaction",
+    "weaponName" : "Sunny Morning Sleep-In",
+    "artifactSets" : [ {
+      "name" : "Viridescent Venerer",
+      "key" : "viridescentvenerer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "circlet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    } ]
+  }, {
+    "id" : "tartaglia-dps-1",
+    "characterKey" : "tartaglia",
+    "characterName" : "Tartaglia",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/305862",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Polar Star",
+    "artifactSets" : [ {
+      "name" : "Nymph's Dream",
+      "key" : "nymphsdream",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Hydro DMG Bonus",
+        "keys" : [ "hydro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "thoma-shielder-1",
+    "characterKey" : "thoma",
+    "characterName" : "Thoma",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/337141",
+    "buildName" : "Shielder",
+    "profileKey" : "energy",
+    "weaponName" : "Favonius Lance",
+    "artifactSets" : [ {
+      "name" : "Noblesse Oblige",
+      "key" : "noblesseoblige",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Energy Recharge",
+        "keys" : [ "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "circlet" : {
+        "raw" : "HP% or CRIT Rate",
+        "keys" : [ "hp_", "critRate_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    } ]
+  }, {
+    "id" : "thoma-burgeon-2",
+    "characterKey" : "thoma",
+    "characterName" : "Thoma",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/337141",
+    "buildName" : "Burgeon",
+    "profileKey" : "reaction",
+    "weaponName" : "Kitain Cross Spear",
+    "artifactSets" : [ {
+      "name" : "Flower of Paradise Lost",
+      "key" : "flowerofparadiselost",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery or Energy Recharge",
+        "keys" : [ "eleMas", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "circlet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "tighnari-dps-1",
+    "characterKey" : "tighnari",
+    "characterName" : "Tighnari",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/382082",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Hunter's Path",
+    "artifactSets" : [ {
+      "name" : "Wanderer's Troupe",
+      "key" : "wandererstroupe",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Elemental Mastery",
+        "keys" : [ "atk_", "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Dendro DMG Bonus",
+        "keys" : [ "dendro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "traveleranemo-subdps-1",
+    "characterKey" : "traveleranemo",
+    "characterName" : "Traveler (Anemo)",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297537",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Freedom-Sworn",
+    "artifactSets" : [ {
+      "name" : "Viridescent Venerer",
+      "key" : "viridescentvenerer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Energy Recharge",
+        "keys" : [ "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Anemo DMG Bonus",
+        "keys" : [ "anemo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    } ]
+  }, {
+    "id" : "travelerdendro-subdps-1",
+    "characterKey" : "travelerdendro",
+    "characterName" : "Traveler (Dendro)",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/381807",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Freedom-Sworn",
+    "artifactSets" : [ {
+      "name" : "Deepwood Memories",
+      "key" : "deepwoodmemories",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Energy Recharge% or Elemental Mastery",
+        "keys" : [ "enerRech_", "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Dendro DMG Bonus",
+        "keys" : [ "dendro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "Crit Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "Crit DMG",
+      "keys" : [ "critDMG_" ]
+    } ]
+  }, {
+    "id" : "travelerelectro-subdps-1",
+    "characterKey" : "travelerelectro",
+    "characterName" : "Traveler (Electro)",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/336865",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Skyward Blade",
+    "artifactSets" : [ {
+      "name" : "Emblem of Severed Fate",
+      "key" : "emblemofseveredfate",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Electro DMG Bonus",
+        "keys" : [ "electro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate/CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "travelergeo-subdps-1",
+    "characterKey" : "travelergeo",
+    "characterName" : "Traveler (Geo)",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297538",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Primordial Jade Cutter",
+    "artifactSets" : [ {
+      "name" : "Emblem of Severed Fate",
+      "key" : "emblemofseveredfate",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Geo DMG Bonus",
+        "keys" : [ "geo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "travelerhydro-subdps-1",
+    "characterKey" : "travelerhydro",
+    "characterName" : "Traveler (Hydro)",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/416602",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "hp",
+    "weaponName" : "Freedom-Sworn",
+    "artifactSets" : [ {
+      "name" : "Noblesse Oblige",
+      "key" : "noblesseoblige",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Hydro DMG Bonus",
+        "keys" : [ "hydro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "ATK% or HP%",
+      "keys" : [ "atk_", "hp_" ]
+    } ]
+  }, {
+    "id" : "travelerpyro-subdps-1",
+    "characterKey" : "travelerpyro",
+    "characterName" : "Traveler (Pyro)",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/470309",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Mistsplitter Reforged",
+    "artifactSets" : [ {
+      "name" : "Scroll of the Hero of Cinder City",
+      "key" : "scrolloftheheroofcindercity",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Pyro DMG Bonus or ATK%",
+        "keys" : [ "pyro_dmg_", "atk_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "varesa-dps-1",
+    "characterKey" : "varesa",
+    "characterName" : "Varesa",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/500244",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Vivid Notions",
+    "artifactSets" : [ {
+      "name" : "Long Night's Oath",
+      "key" : "longnightsoath",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Electro DMG Bonus",
+        "keys" : [ "electro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "venti-maindps-1",
+    "characterKey" : "venti",
+    "characterName" : "Venti",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/Venti-Best-Builds",
+    "buildName" : "Main DPS",
+    "profileKey" : "attack",
+    "weaponName" : "The Daybreak Chronicles",
+    "artifactSets" : [ {
+      "name" : "A Day Carved from Rising Winds",
+      "key" : "adaycarvedfromrisingwinds",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Anemo DMG Bonus",
+        "keys" : [ "anemo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    } ]
+  }, {
+    "id" : "venti-swirlsupport-2",
+    "characterKey" : "venti",
+    "characterName" : "Venti",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/Venti-Best-Builds",
+    "buildName" : "Swirl Support",
+    "profileKey" : "reaction",
+    "weaponName" : "Elegy for the End",
+    "artifactSets" : [ {
+      "name" : "Viridescent Venerer",
+      "key" : "viridescentvenerer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "goblet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      },
+      "circlet" : {
+        "raw" : "Elemental Mastery",
+        "keys" : [ "eleMas" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    } ]
+  }, {
+    "id" : "wanderer-dps-1",
+    "characterKey" : "wanderer",
+    "characterName" : "Wanderer",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/309656",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Tulaytullah's Remembrance",
+    "artifactSets" : [ {
+      "name" : "Desert Pavilion Chronicle",
+      "key" : "desertpavilionchronicle",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Anemo DMG Bonus",
+        "keys" : [ "anemo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate/CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "wriothesley-dps-1",
+    "characterKey" : "wriothesley",
+    "characterName" : "Wriothesley",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/Wriothesley-Best-Builds",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Cashflow Supervision",
+    "artifactSets" : [ {
+      "name" : "Marechaussee Hunter",
+      "key" : "marechausseehunter",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Cryo DMG Bonus",
+        "keys" : [ "cryo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "xiangling-subdps-1",
+    "characterKey" : "xiangling",
+    "characterName" : "Xiangling",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297530",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Staff of the Scarlet Sands",
+    "artifactSets" : [ {
+      "name" : "Emblem of Severed Fate",
+      "key" : "emblemofseveredfate",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Elemental Mastery or ATK%",
+        "keys" : [ "eleMas", "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Pyro DMG Bonus",
+        "keys" : [ "pyro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "xianyun-support-1",
+    "characterKey" : "xianyun",
+    "characterName" : "Xianyun",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/Xianyun-Best-Builds",
+    "buildName" : "Support",
+    "profileKey" : "energy",
+    "weaponName" : "Crane's Echoing Call",
+    "artifactSets" : [ {
+      "name" : "Viridescent Venerer",
+      "key" : "viridescentvenerer",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Energy Recharge or ATK%",
+        "keys" : [ "enerRech_", "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "circlet" : {
+        "raw" : "ATK% or Healing Bonus%",
+        "keys" : [ "atk_", "heal_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "xiao-dps-1",
+    "characterKey" : "xiao",
+    "characterName" : "Xiao",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297527",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Primordial Jade Winged-Spear",
+    "artifactSets" : [ {
+      "name" : "Long Night's Oath",
+      "key" : "longnightsoath",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Anemo DMG Bonus",
+        "keys" : [ "anemo_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    } ]
+  }, {
+    "id" : "xilonen-support-1",
+    "characterKey" : "xilonen",
+    "characterName" : "Xilonen",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/461997",
+    "buildName" : "Support",
+    "profileKey" : "defense",
+    "weaponName" : "Peak Patrol Song",
+    "artifactSets" : [ {
+      "name" : "Scroll of the Hero of Cinder City",
+      "key" : "scrolloftheheroofcindercity",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Energy Recharge",
+        "keys" : [ "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "DEF%",
+        "keys" : [ "def_" ]
+      },
+      "circlet" : {
+        "raw" : "Healing Bonus or DEF%",
+        "keys" : [ "heal_", "def_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "DEF%",
+      "keys" : [ "def_" ]
+    } ]
+  }, {
+    "id" : "xingqiu-subdps-1",
+    "characterKey" : "xingqiu",
+    "characterName" : "Xingqiu",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/297531",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Sacrificial Sword",
+    "artifactSets" : [ {
+      "name" : "Emblem of Severed Fate",
+      "key" : "emblemofseveredfate",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Hydro DMG Bonus",
+        "keys" : [ "hydro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    } ]
+  }, {
+    "id" : "xinyan-physical-1",
+    "characterKey" : "xinyan",
+    "characterName" : "Xinyan",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/305873",
+    "buildName" : "Physical",
+    "profileKey" : "attack",
+    "weaponName" : "Redhorn Stonethresher",
+    "artifactSets" : [ {
+      "name" : "Pale Flame",
+      "key" : "paleflame",
+      "count" : 2
+    }, {
+      "name" : "Bloodstained Chivalry",
+      "key" : "bloodstainedchivalry",
+      "count" : 2
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Physical DMG Bonus or ATK%",
+        "keys" : [ "physical_dmg_", "atk_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK",
+      "keys" : [ "atk" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    } ]
+  }, {
+    "id" : "xinyan-pyro-2",
+    "characterKey" : "xinyan",
+    "characterName" : "Xinyan",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/305873",
+    "buildName" : "Pyro",
+    "profileKey" : "attack",
+    "weaponName" : "Redhorn Stonethresher",
+    "artifactSets" : [ {
+      "name" : "Marechaussee Hunter",
+      "key" : "marechausseehunter",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Pyro DMG Bonus",
+        "keys" : [ "pyro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    } ]
+  }, {
+    "id" : "yaemiko-subdps-1",
+    "characterKey" : "yaemiko",
+    "characterName" : "Yae Miko",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/327533",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Kagura's Verity",
+    "artifactSets" : [ {
+      "name" : "Golden Troupe",
+      "key" : "goldentroupe",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK% or Energy Recharge",
+        "keys" : [ "atk_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Electro DMG Bonus",
+        "keys" : [ "electro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    } ]
+  }, {
+    "id" : "yanfei-dps-1",
+    "characterKey" : "yanfei",
+    "characterName" : "Yanfei",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/328765",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Lost Prayer to the Sacred Winds",
+    "artifactSets" : [ {
+      "name" : "Crimson Witch of Flames",
+      "key" : "crimsonwitchofflames",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Pyro DMG Bonus",
+        "keys" : [ "pyro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    } ]
+  }, {
+    "id" : "yaoyao-support-1",
+    "characterKey" : "yaoyao",
+    "characterName" : "Yaoyao",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/314174",
+    "buildName" : "Support",
+    "profileKey" : "energy",
+    "weaponName" : "Favonius Lance",
+    "artifactSets" : [ {
+      "name" : "Deepwood Memories",
+      "key" : "deepwoodmemories",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "Energy Recharge or HP%",
+        "keys" : [ "enerRech_", "hp_" ]
+      },
+      "goblet" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or Healing Bonus",
+        "keys" : [ "critRate_", "heal_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT Rate / DMG",
+      "keys" : [ "critRate_", "critDMG_" ]
+    }, {
+      "raw" : "Elemental Mastery",
+      "keys" : [ "eleMas" ]
+    }, {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    } ]
+  }, {
+    "id" : "yelan-subdps-1",
+    "characterKey" : "yelan",
+    "characterName" : "Yelan",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/372781",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "hp",
+    "weaponName" : "Aqua Simulacra",
+    "artifactSets" : [ {
+      "name" : "Emblem of Severed Fate",
+      "key" : "emblemofseveredfate",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP% or Energy Recharge",
+        "keys" : [ "hp_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "Hydro DMG Bonus",
+        "keys" : [ "hydro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "yoimiya-dps-1",
+    "characterKey" : "yoimiya",
+    "characterName" : "Yoimiya",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/333497",
+    "buildName" : "DPS",
+    "profileKey" : "attack",
+    "weaponName" : "Thundering Pulse",
+    "artifactSets" : [ {
+      "name" : "Shimenawa's Reminiscence",
+      "key" : "shimenawasreminiscence",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "ATK%",
+        "keys" : [ "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Pyro DMG Bonus",
+        "keys" : [ "pyro_dmg_" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "CRIT Rate. ATK%",
+      "keys" : [ "critRate_", "atk_" ]
+    } ]
+  }, {
+    "id" : "yunjin-buffer-1",
+    "characterKey" : "yunjin",
+    "characterName" : "Yun Jin",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/314345",
+    "buildName" : "Buffer",
+    "profileKey" : "defense",
+    "weaponName" : "Engulfing Lightning",
+    "artifactSets" : [ {
+      "name" : "Husk of Opulent Dreams",
+      "key" : "huskofopulentdreams",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "DEF% or Energy Recharge",
+        "keys" : [ "def_", "enerRech_" ]
+      },
+      "goblet" : {
+        "raw" : "DEF%",
+        "keys" : [ "def_" ]
+      },
+      "circlet" : {
+        "raw" : "DEF% or Crit Rate",
+        "keys" : [ "def_", "critRate_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "DEF%",
+      "keys" : [ "def_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    }, {
+      "raw" : "Crit Rate",
+      "keys" : [ "critRate_" ]
+    } ]
+  }, {
+    "id" : "zhongli-shielder-1",
+    "characterKey" : "zhongli",
+    "characterName" : "Zhongli",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/305858",
+    "buildName" : "Shielder",
+    "profileKey" : "energy",
+    "weaponName" : "Black Tassel",
+    "artifactSets" : [ {
+      "name" : "Tenacity of the Millelith",
+      "key" : "tenacityofthemillelith",
+      "count" : 4
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "goblet" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      },
+      "circlet" : {
+        "raw" : "HP%",
+        "keys" : [ "hp_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  }, {
+    "id" : "zhongli-subdps-2",
+    "characterKey" : "zhongli",
+    "characterName" : "Zhongli",
+    "characterUrl" : "https://game8.co/games/Genshin-Impact/archives/305858",
+    "buildName" : "Sub-DPS",
+    "profileKey" : "hp",
+    "weaponName" : "Staff of Homa",
+    "artifactSets" : [ {
+      "name" : "Noblesse Oblige",
+      "key" : "noblesseoblige",
+      "count" : 2
+    }, {
+      "name" : "Archaic Petra",
+      "key" : "archaicpetra",
+      "count" : 2
+    } ],
+    "mainStats" : {
+      "sands" : {
+        "raw" : "HP% or ATK%",
+        "keys" : [ "hp_", "atk_" ]
+      },
+      "goblet" : {
+        "raw" : "Geo DMG Bonus or HP",
+        "keys" : [ "geo_dmg_", "hp" ]
+      },
+      "circlet" : {
+        "raw" : "CRIT Rate or CRIT DMG",
+        "keys" : [ "critRate_", "critDMG_" ]
+      }
+    },
+    "substats" : [ {
+      "raw" : "ATK%",
+      "keys" : [ "atk_" ]
+    }, {
+      "raw" : "HP%",
+      "keys" : [ "hp_" ]
+    }, {
+      "raw" : "CRIT Rate",
+      "keys" : [ "critRate_" ]
+    }, {
+      "raw" : "CRIT DMG",
+      "keys" : [ "critDMG_" ]
+    }, {
+      "raw" : "Energy Recharge",
+      "keys" : [ "enerRech_" ]
+    } ]
+  } ]
+}

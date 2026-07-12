@@ -3,6 +3,10 @@ package de.tyro.genshinapp.model
 data class MaterialDefinition(
     val id: Int,
     val name: String,
+    val category: MaterialCategory = MaterialCategory.OTHER,
+    val craftingFamily: String? = null,
+    val craftingTier: Int? = null,
+    val conversionGroup: String? = null,
 )
 
 enum class MaterialCategory(val messageKey: String) {
@@ -21,6 +25,7 @@ data class MaterialCraftingInfo(
     val category: MaterialCategory,
     val familyKey: String? = null,
     val tier: Int? = null,
+    val conversionGroup: String? = null,
 )
 
 data class MaterialInventoryAvailability(

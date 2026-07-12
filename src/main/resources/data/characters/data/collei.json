@@ -1,0 +1,380 @@
+{
+  "id" : 10000067,
+  "name" : "Collei",
+  "title" : "Sprout of Rebirth",
+  "description" : "A trainee ranger active in Avidya Forest. Behind her enthusiastic words and actions hides a slightly introverted personality.",
+  "weaponType" : "WEAPON_BOW",
+  "weaponText" : "Bow",
+  "bodyType" : "BODY_GIRL",
+  "gender" : "Female",
+  "qualityType" : "QUALITY_PURPLE",
+  "rarity" : 4,
+  "birthdaymmdd" : "5/8",
+  "birthday" : "May 8",
+  "elementType" : "ELEMENT_DENDRO",
+  "elementText" : "Dendro",
+  "affiliation" : "Gandharva Ville",
+  "associationType" : "ASSOC_SUMERU",
+  "region" : "Sumeru",
+  "substatType" : "FIGHT_PROP_ATTACK_PERCENT",
+  "substatText" : "ATK",
+  "constellation" : "Leptailurus Cervarius",
+  "cv" : {
+    "english" : "Christina Costello",
+    "chinese" : "秦文静",
+    "japanese" : "前川涼子",
+    "korean" : "Bang Siu"
+  },
+  "costs" : {
+    "ascend1" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 20000
+    }, {
+      "id" : 104131,
+      "name" : "Nagadus Emerald Sliver",
+      "count" : 1
+    }, {
+      "id" : 101213,
+      "name" : "Rukkhashava Mushrooms",
+      "count" : 3
+    }, {
+      "id" : 112011,
+      "name" : "Firm Arrowhead",
+      "count" : 3
+    } ],
+    "ascend2" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 40000
+    }, {
+      "id" : 104132,
+      "name" : "Nagadus Emerald Fragment",
+      "count" : 3
+    }, {
+      "id" : 113036,
+      "name" : "Majestic Hooked Beak",
+      "count" : 2
+    }, {
+      "id" : 101213,
+      "name" : "Rukkhashava Mushrooms",
+      "count" : 10
+    }, {
+      "id" : 112011,
+      "name" : "Firm Arrowhead",
+      "count" : 15
+    } ],
+    "ascend3" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 60000
+    }, {
+      "id" : 104132,
+      "name" : "Nagadus Emerald Fragment",
+      "count" : 6
+    }, {
+      "id" : 113036,
+      "name" : "Majestic Hooked Beak",
+      "count" : 4
+    }, {
+      "id" : 101213,
+      "name" : "Rukkhashava Mushrooms",
+      "count" : 20
+    }, {
+      "id" : 112012,
+      "name" : "Sharp Arrowhead",
+      "count" : 12
+    } ],
+    "ascend4" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 80000
+    }, {
+      "id" : 104133,
+      "name" : "Nagadus Emerald Chunk",
+      "count" : 3
+    }, {
+      "id" : 113036,
+      "name" : "Majestic Hooked Beak",
+      "count" : 8
+    }, {
+      "id" : 101213,
+      "name" : "Rukkhashava Mushrooms",
+      "count" : 30
+    }, {
+      "id" : 112012,
+      "name" : "Sharp Arrowhead",
+      "count" : 18
+    } ],
+    "ascend5" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 100000
+    }, {
+      "id" : 104133,
+      "name" : "Nagadus Emerald Chunk",
+      "count" : 6
+    }, {
+      "id" : 113036,
+      "name" : "Majestic Hooked Beak",
+      "count" : 12
+    }, {
+      "id" : 101213,
+      "name" : "Rukkhashava Mushrooms",
+      "count" : 45
+    }, {
+      "id" : 112013,
+      "name" : "Weathered Arrowhead",
+      "count" : 12
+    } ],
+    "ascend6" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 120000
+    }, {
+      "id" : 104134,
+      "name" : "Nagadus Emerald Gemstone",
+      "count" : 6
+    }, {
+      "id" : 113036,
+      "name" : "Majestic Hooked Beak",
+      "count" : 20
+    }, {
+      "id" : 101213,
+      "name" : "Rukkhashava Mushrooms",
+      "count" : 60
+    }, {
+      "id" : 112013,
+      "name" : "Weathered Arrowhead",
+      "count" : 24
+    } ]
+  },
+  "images" : {
+    "cover1" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/08/23/2c752da0a5921583011a4ec36f83703c_2223942731920819478.png",
+    "cover2" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/08/23/2466e194064e0306c4290a252269593c_8578361332348289831.png",
+    "hoyolab-avatar" : "https://img-os-static.hoyolab.com/communityWeb/upload/7d6142936ebd4cfd4b5501f187cc4be7.png",
+    "filename_icon" : "UI_AvatarIcon_Collei",
+    "filename_iconCard" : "UI_AvatarIcon_Collei_Card",
+    "filename_sideIcon" : "UI_AvatarIcon_Side_Collei",
+    "filename_gachaSplash" : "UI_Gacha_AvatarImg_Collei",
+    "filename_gachaSlice" : "UI_Gacha_AvatarIcon_Collei",
+    "mihoyo_icon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Collei.png",
+    "mihoyo_sideIcon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_side_icon/UI_AvatarIcon_Side_Collei.png"
+  },
+  "version" : "3.0",
+  "talents" : {
+    "id" : 6701,
+    "name" : "Collei",
+    "combat1" : {
+      "name" : "Supplicant's Bowmanship",
+      "descriptionRaw" : "<color=#FFD780FF>Normal Attack</color>\nPerforms up to 4 consecutive shots with a bow.\n\n<color=#FFD780FF>Charged Attack</color>\nPerforms a more precise <color=#FFD780FF>Aimed Shot</color> with increased DMG.\nWhile aiming, Dendro energy will accumulate on the arrowhead. A fully charged arrow will deal <color=#99FF88FF>Dendro DMG</color>.\n\n<color=#FFD780FF>Plunging Attack</color>\nFires off a shower of arrows in mid-air before falling and striking the ground, dealing AoE DMG upon impact.",
+      "description" : "Normal Attack\nPerforms up to 4 consecutive shots with a bow.\n\nCharged Attack\nPerforms a more precise Aimed Shot with increased DMG.\nWhile aiming, Dendro energy will accumulate on the arrowhead. A fully charged arrow will deal Dendro DMG.\n\nPlunging Attack\nFires off a shower of arrows in mid-air before falling and striking the ground, dealing AoE DMG upon impact.",
+      "attributes" : {
+        "labels" : [ "1-Hit DMG|{param1:F1P}", "2-Hit DMG|{param2:F1P}", "3-Hit DMG|{param3:F1P}", "4-Hit DMG|{param4:F1P}", "Aimed Shot|{param5:F1P}", "Fully-Charged Aimed Shot|{param6:P}", "Plunge DMG|{param7:F1P}", "Low/High Plunge DMG|{param8:P}/{param9:P}" ],
+        "parameters" : {
+          "param1" : [ 0.43602, 0.47151, 0.507, 0.5577, 0.59319, 0.63375, 0.68952, 0.74529, 0.80106, 0.8619, 0.92274, 0.98358, 1.04442, 1.10526, 1.1661 ],
+          "param2" : [ 0.42656, 0.46128, 0.496, 0.5456, 0.58032, 0.62, 0.67456, 0.72912, 0.78368, 0.8432, 0.90272, 0.96224, 1.02176, 1.08128, 1.1408 ],
+          "param3" : [ 0.54094, 0.58497, 0.629, 0.6919, 0.73593, 0.78625, 0.85544, 0.92463, 0.99382, 1.0693, 1.14478, 1.22026, 1.29574, 1.37122, 1.4467 ],
+          "param4" : [ 0.68026, 0.73563, 0.791, 0.8701, 0.92547, 0.98875, 1.07576, 1.16277, 1.24978, 1.3447, 1.43962, 1.53454, 1.62946, 1.72438, 1.8193 ],
+          "param5" : [ 0.4386, 0.4743, 0.51, 0.561, 0.5967, 0.6375, 0.6936, 0.7497, 0.8058, 0.867, 0.9282, 0.9894, 1.0506, 1.1118, 1.173 ],
+          "param6" : [ 1.24, 1.333, 1.426, 1.55, 1.643, 1.736, 1.86, 1.984, 2.108, 2.232, 2.356, 2.48, 2.635, 2.79, 2.945 ],
+          "param7" : [ 0.568288, 0.614544, 0.6608, 0.72688, 0.773136, 0.826, 0.898688, 0.971376, 1.044064, 1.12336, 1.202656, 1.281952, 1.361248, 1.440544, 1.51984 ],
+          "param8" : [ 1.136335, 1.228828, 1.32132, 1.453452, 1.545944, 1.65165, 1.796995, 1.94234, 2.087686, 2.246244, 2.404802, 2.563361, 2.721919, 2.880478, 3.039036 ],
+          "param9" : [ 1.419344, 1.534872, 1.6504, 1.81544, 1.930968, 2.063, 2.244544, 2.426088, 2.607632, 2.80568, 3.003728, 3.201776, 3.399824, 3.597872, 3.79592 ]
+        }
+      }
+    },
+    "combat2" : {
+      "name" : "Floral Brush",
+      "descriptionRaw" : "Throws out a Floral Ring that deals 1 instance of <color=#99FF88FF>Dendro DMG</color> to targets it comes into contact with.\nThe Floral Ring will return after a set time, dealing <color=#99FF88FF>Dendro DMG</color> once again.\n\n<i>This is Collei's go-to gadget for dealing with unruly wild beasts. A few good thwacks from this tool will generally improve their behavior. This same principle works just as well on evildoers.</i>",
+      "description" : "Throws out a Floral Ring that deals 1 instance of Dendro DMG to targets it comes into contact with.\nThe Floral Ring will return after a set time, dealing Dendro DMG once again.",
+      "flavorText" : "This is Collei's go-to gadget for dealing with unruly wild beasts. A few good thwacks from this tool will generally improve their behavior. This same principle works just as well on evildoers.",
+      "attributes" : {
+        "labels" : [ "Skill DMG|{param1:F1P}", "CD|{param2:F1}s" ],
+        "parameters" : {
+          "param1" : [ 1.512, 1.6254, 1.7388, 1.89, 2.0034, 2.1168, 2.268, 2.4192, 2.5704, 2.7216, 2.8728, 3.024, 3.213, 3.402, 3.591 ],
+          "param2" : [ 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12 ]
+        }
+      }
+    },
+    "combat3" : {
+      "name" : "Trump-Card Kitty",
+      "descriptionRaw" : "Trusty Cuilein-Anbar comes to save the day!\nThrows the doll named Cuilein-Anbar, causing an explosion that deals <color=#99FF88FF>AoE Dendro DMG</color>, creating a Cuilein-Anbar Zone. Cuilein-Anbar will bounce around within this zone, dealing <color=#99FF88FF>AoE Dendro DMG</color>.\n\n<i>\"Pretty impressive, huh? ... Eh? You want to know how I came up with the name Cuilein-Anbar? Uh, well, I...\"</i>",
+      "description" : "Trusty Cuilein-Anbar comes to save the day!\nThrows the doll named Cuilein-Anbar, causing an explosion that deals AoE Dendro DMG, creating a Cuilein-Anbar Zone. Cuilein-Anbar will bounce around within this zone, dealing AoE Dendro DMG.",
+      "flavorText" : "\"Pretty impressive, huh? ... Eh? You want to know how I came up with the name Cuilein-Anbar? Uh, well, I...\"",
+      "attributes" : {
+        "labels" : [ "Explosion DMG|{param1:F1P}", "Leap DMG|{param2:F1P}", "Duration|{param3:F1}s", "CD|{param4:F1}s", "Energy Cost|{param5:I}" ],
+        "parameters" : {
+          "param1" : [ 2.01824, 2.169608, 2.320976, 2.5228, 2.674168, 2.825536, 3.02736, 3.229184, 3.431008, 3.632832, 3.834656, 4.03648, 4.28876, 4.54104, 4.79332 ],
+          "param2" : [ 0.43248, 0.464916, 0.497352, 0.5406, 0.573036, 0.605472, 0.64872, 0.691968, 0.735216, 0.778464, 0.821712, 0.86496, 0.91902, 0.97308, 1.02714 ],
+          "param3" : [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 ],
+          "param4" : [ 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 ],
+          "param5" : [ 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60 ]
+        }
+      }
+    },
+    "passive1" : {
+      "name" : "Floral Sidewinder",
+      "descriptionRaw" : "If one of your party members has triggered Burning, Quicken, Aggravate, Spread, Bloom, Hyperbloom, Burgeon, or Lunar-Bloom reactions before the <color=#FFD780FF>Floral Ring</color> returns, it will grant the character the Sprout effect upon return, which will continuously deal <color=#99FF88FF>Dendro DMG</color> equivalent to 40% of Collei's ATK to nearby opponents for 3s.\nIf another Sprout effect is triggered during its initial duration, the initial effect will be removed. DMG dealt by Sprout is considered Elemental Skill DMG.",
+      "description" : "If one of your party members has triggered Burning, Quicken, Aggravate, Spread, Bloom, Hyperbloom, Burgeon, or Lunar-Bloom reactions before the Floral Ring returns, it will grant the character the Sprout effect upon return, which will continuously deal Dendro DMG equivalent to 40% of Collei's ATK to nearby opponents for 3s.\nIf another Sprout effect is triggered during its initial duration, the initial effect will be removed. DMG dealt by Sprout is considered Elemental Skill DMG."
+    },
+    "passive2" : {
+      "name" : "The Languid Wood",
+      "descriptionRaw" : "When a character within the <color=#FFD780FF>Cuilein-Anbar Zone</color> triggers Burning, Quicken, Aggravate, Spread, Bloom, Hyperbloom, Burgeon, or Lunar-Bloom reactions, the Zone's duration will be increased by 1s.\nA single <color=#FFD780FF>Trump-Card Kitty</color> can be extended this way by up to 3s.",
+      "description" : "When a character within the Cuilein-Anbar Zone triggers Burning, Quicken, Aggravate, Spread, Bloom, Hyperbloom, Burgeon, or Lunar-Bloom reactions, the Zone's duration will be increased by 1s.\nA single Trump-Card Kitty can be extended this way by up to 3s."
+    },
+    "passive3" : {
+      "name" : "Gliding Champion of Sumeru",
+      "descriptionRaw" : "Decreases gliding Stamina consumption for your own party members by 20%.\nNot stackable with Passive Talents that provide the exact same effects.",
+      "description" : "Decreases gliding Stamina consumption for your own party members by 20%.\nNot stackable with Passive Talents that provide the exact same effects."
+    },
+    "costs" : {
+      "lvl2" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 12500
+      }, {
+        "id" : 104335,
+        "name" : "Teachings of Praxis",
+        "count" : 3
+      }, {
+        "id" : 112011,
+        "name" : "Firm Arrowhead",
+        "count" : 6
+      } ],
+      "lvl3" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 17500
+      }, {
+        "id" : 104336,
+        "name" : "Guide to Praxis",
+        "count" : 2
+      }, {
+        "id" : 112012,
+        "name" : "Sharp Arrowhead",
+        "count" : 3
+      } ],
+      "lvl4" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 25000
+      }, {
+        "id" : 104336,
+        "name" : "Guide to Praxis",
+        "count" : 4
+      }, {
+        "id" : 112012,
+        "name" : "Sharp Arrowhead",
+        "count" : 4
+      } ],
+      "lvl5" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 30000
+      }, {
+        "id" : 104336,
+        "name" : "Guide to Praxis",
+        "count" : 6
+      }, {
+        "id" : 112012,
+        "name" : "Sharp Arrowhead",
+        "count" : 6
+      } ],
+      "lvl6" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 37500
+      }, {
+        "id" : 104336,
+        "name" : "Guide to Praxis",
+        "count" : 9
+      }, {
+        "id" : 112012,
+        "name" : "Sharp Arrowhead",
+        "count" : 9
+      } ],
+      "lvl7" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 120000
+      }, {
+        "id" : 104337,
+        "name" : "Philosophies of Praxis",
+        "count" : 4
+      }, {
+        "id" : 112013,
+        "name" : "Weathered Arrowhead",
+        "count" : 4
+      }, {
+        "id" : 113033,
+        "name" : "Tears of the Calamitous God",
+        "count" : 1
+      } ],
+      "lvl8" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 260000
+      }, {
+        "id" : 104337,
+        "name" : "Philosophies of Praxis",
+        "count" : 6
+      }, {
+        "id" : 112013,
+        "name" : "Weathered Arrowhead",
+        "count" : 6
+      }, {
+        "id" : 113033,
+        "name" : "Tears of the Calamitous God",
+        "count" : 1
+      } ],
+      "lvl9" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 450000
+      }, {
+        "id" : 104337,
+        "name" : "Philosophies of Praxis",
+        "count" : 12
+      }, {
+        "id" : 112013,
+        "name" : "Weathered Arrowhead",
+        "count" : 9
+      }, {
+        "id" : 113033,
+        "name" : "Tears of the Calamitous God",
+        "count" : 2
+      } ],
+      "lvl10" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 700000
+      }, {
+        "id" : 104337,
+        "name" : "Philosophies of Praxis",
+        "count" : 16
+      }, {
+        "id" : 112013,
+        "name" : "Weathered Arrowhead",
+        "count" : 12
+      }, {
+        "id" : 113033,
+        "name" : "Tears of the Calamitous God",
+        "count" : 2
+      }, {
+        "id" : 104319,
+        "name" : "Crown of Insight",
+        "count" : 1
+      } ]
+    },
+    "images" : {
+      "filename_combat1" : "Skill_A_02",
+      "filename_combat2" : "Skill_S_Collei_01",
+      "filename_combat3" : "Skill_E_Collei_01_HD",
+      "filename_passive1" : "UI_Talent_S_Collei_05",
+      "filename_passive2" : "UI_Talent_S_Collei_06",
+      "filename_passive3" : "UI_Talent_Explosion_Glide"
+    },
+    "version" : "3.0"
+  }
+}

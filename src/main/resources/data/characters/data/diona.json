@@ -1,0 +1,392 @@
+{
+  "id" : 10000039,
+  "name" : "Diona",
+  "title" : "Kätzlein Cocktail",
+  "description" : "A young lady who has inherited trace amounts of non-human blood. She is the incredibly popular bartender of the Cat's Tail tavern.",
+  "weaponType" : "WEAPON_BOW",
+  "weaponText" : "Bow",
+  "bodyType" : "BODY_LOLI",
+  "gender" : "Female",
+  "qualityType" : "QUALITY_PURPLE",
+  "rarity" : 4,
+  "birthdaymmdd" : "1/18",
+  "birthday" : "January 18",
+  "elementType" : "ELEMENT_CRYO",
+  "elementText" : "Cryo",
+  "affiliation" : "The Cat's Tail",
+  "associationType" : "ASSOC_MONDSTADT",
+  "region" : "Mondstadt",
+  "substatType" : "FIGHT_PROP_ICE_ADD_HURT",
+  "substatText" : "Cryo DMG Bonus",
+  "constellation" : "Feles",
+  "cv" : {
+    "english" : "Dina Sherman",
+    "chinese" : "诺亚",
+    "japanese" : "井澤詩織",
+    "korean" : "Woo Jeong-shin"
+  },
+  "costs" : {
+    "ascend1" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 20000
+    }, {
+      "id" : 104161,
+      "name" : "Shivada Jade Sliver",
+      "count" : 1
+    }, {
+      "id" : 100056,
+      "name" : "Calla Lily",
+      "count" : 3
+    }, {
+      "id" : 112011,
+      "name" : "Firm Arrowhead",
+      "count" : 3
+    } ],
+    "ascend2" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 40000
+    }, {
+      "id" : 104162,
+      "name" : "Shivada Jade Fragment",
+      "count" : 3
+    }, {
+      "id" : 113010,
+      "name" : "Hoarfrost Core",
+      "count" : 2
+    }, {
+      "id" : 100056,
+      "name" : "Calla Lily",
+      "count" : 10
+    }, {
+      "id" : 112011,
+      "name" : "Firm Arrowhead",
+      "count" : 15
+    } ],
+    "ascend3" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 60000
+    }, {
+      "id" : 104162,
+      "name" : "Shivada Jade Fragment",
+      "count" : 6
+    }, {
+      "id" : 113010,
+      "name" : "Hoarfrost Core",
+      "count" : 4
+    }, {
+      "id" : 100056,
+      "name" : "Calla Lily",
+      "count" : 20
+    }, {
+      "id" : 112012,
+      "name" : "Sharp Arrowhead",
+      "count" : 12
+    } ],
+    "ascend4" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 80000
+    }, {
+      "id" : 104163,
+      "name" : "Shivada Jade Chunk",
+      "count" : 3
+    }, {
+      "id" : 113010,
+      "name" : "Hoarfrost Core",
+      "count" : 8
+    }, {
+      "id" : 100056,
+      "name" : "Calla Lily",
+      "count" : 30
+    }, {
+      "id" : 112012,
+      "name" : "Sharp Arrowhead",
+      "count" : 18
+    } ],
+    "ascend5" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 100000
+    }, {
+      "id" : 104163,
+      "name" : "Shivada Jade Chunk",
+      "count" : 6
+    }, {
+      "id" : 113010,
+      "name" : "Hoarfrost Core",
+      "count" : 12
+    }, {
+      "id" : 100056,
+      "name" : "Calla Lily",
+      "count" : 45
+    }, {
+      "id" : 112013,
+      "name" : "Weathered Arrowhead",
+      "count" : 12
+    } ],
+    "ascend6" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 120000
+    }, {
+      "id" : 104164,
+      "name" : "Shivada Jade Gemstone",
+      "count" : 6
+    }, {
+      "id" : 113010,
+      "name" : "Hoarfrost Core",
+      "count" : 20
+    }, {
+      "id" : 100056,
+      "name" : "Calla Lily",
+      "count" : 60
+    }, {
+      "id" : 112013,
+      "name" : "Weathered Arrowhead",
+      "count" : 24
+    } ]
+  },
+  "images" : {
+    "card" : "https://static.wikia.nocookie.net/gensin-impact/images/0/08/Character_Diona_Card.png",
+    "portrait" : "https://static.wikia.nocookie.net/gensin-impact/images/c/ce/Character_Diona_Portrait.png",
+    "cover1" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/07/22/fb11c57bf9789d760d70d35ce634ebe1_7535039246777100657.png",
+    "cover2" : "https://webstatic.hoyoverse.com/upload/uploadstatic/contentweb/20201106/2020110618595613115.png",
+    "hoyolab-avatar" : "https://img-os-static.hoyolab.com/communityWeb/upload/d4e511080346c2ce43636eeb10dd7226.png",
+    "filename_icon" : "UI_AvatarIcon_Diona",
+    "filename_iconCard" : "UI_AvatarIcon_Diona_Card",
+    "filename_sideIcon" : "UI_AvatarIcon_Side_Diona",
+    "filename_gachaSplash" : "UI_Gacha_AvatarImg_Diona",
+    "filename_gachaSlice" : "UI_Gacha_AvatarIcon_Diona",
+    "mihoyo_icon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Diona.png",
+    "mihoyo_sideIcon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_side_icon/UI_AvatarIcon_Side_Diona.png"
+  },
+  "url" : {
+    "fandom" : "https://genshin-impact.fandom.com/wiki/Diona"
+  },
+  "version" : "1.1",
+  "talents" : {
+    "id" : 3901,
+    "name" : "Diona",
+    "combat1" : {
+      "name" : "Kätzlein Style",
+      "descriptionRaw" : "<color=#FFD780FF>Normal Attack</color>\nPerforms up to 5 consecutive shots with a bow.\n\n<color=#FFD780FF>Charged Attack</color>\nPerforms a more precise <color=#FFD780FF>Aimed Shot</color> with increased DMG.\nWhile aiming, biting frost will accumulate on the arrowhead. A fully charged frost arrow will deal <color=#99FFFFFF>Cryo DMG</color>.\n\n<color=#FFD780FF>Plunging Attack</color>\nFires off a shower of arrows in mid-air before falling and striking the ground, dealing AoE DMG upon impact.",
+      "description" : "Normal Attack\nPerforms up to 5 consecutive shots with a bow.\n\nCharged Attack\nPerforms a more precise Aimed Shot with increased DMG.\nWhile aiming, biting frost will accumulate on the arrowhead. A fully charged frost arrow will deal Cryo DMG.\n\nPlunging Attack\nFires off a shower of arrows in mid-air before falling and striking the ground, dealing AoE DMG upon impact.",
+      "attributes" : {
+        "labels" : [ "1-Hit DMG|{param1:F1P}", "2-Hit DMG|{param2:F1P}", "3-Hit DMG|{param3:F1P}", "4-Hit DMG|{param4:F1P}", "5-Hit DMG|{param5:F1P}", "Aimed Shot|{param7:F1P}", "Fully-Charged Aimed Shot|{param8:P}", "Plunge DMG|{param9:F1P}", "Low/High Plunge DMG|{param10:P}/{param11:P}" ],
+        "parameters" : {
+          "param1" : [ 0.3612, 0.3906, 0.42, 0.462, 0.4914, 0.525, 0.5712, 0.6174, 0.6636, 0.714, 0.77175, 0.839664, 0.907578, 0.975492, 1.04958 ],
+          "param2" : [ 0.3354, 0.3627, 0.39, 0.429, 0.4563, 0.4875, 0.5304, 0.5733, 0.6162, 0.663, 0.716625, 0.779688, 0.842751, 0.905814, 0.97461 ],
+          "param3" : [ 0.4558, 0.4929, 0.53, 0.583, 0.6201, 0.6625, 0.7208, 0.7791, 0.8374, 0.901, 0.973875, 1.059576, 1.145277, 1.230978, 1.32447 ],
+          "param4" : [ 0.43, 0.465, 0.5, 0.55, 0.585, 0.625, 0.68, 0.735, 0.79, 0.85, 0.91875, 0.9996, 1.08045, 1.1613, 1.2495 ],
+          "param5" : [ 0.5375, 0.58125, 0.625, 0.6875, 0.73125, 0.78125, 0.85, 0.91875, 0.9875, 1.0625, 1.148438, 1.2495, 1.350562, 1.451625, 1.561875 ],
+          "param7" : [ 0.4386, 0.4743, 0.51, 0.561, 0.5967, 0.6375, 0.6936, 0.7497, 0.8058, 0.867, 0.937125, 1.019592, 1.102059, 1.184526, 1.27449 ],
+          "param8" : [ 1.24, 1.333, 1.426, 1.55, 1.643, 1.736, 1.86, 1.984, 2.108, 2.232, 2.36096, 2.5296, 2.69824, 2.86688, 3.03552 ],
+          "param9" : [ 0.568288, 0.614544, 0.6608, 0.72688, 0.773136, 0.826, 0.898688, 0.971376, 1.044064, 1.12336, 1.202656, 1.281952, 1.361248, 1.440544, 1.51984 ],
+          "param10" : [ 1.136335, 1.228828, 1.32132, 1.453452, 1.545944, 1.65165, 1.796995, 1.94234, 2.087686, 2.246244, 2.404802, 2.563361, 2.721919, 2.880478, 3.039036 ],
+          "param11" : [ 1.419344, 1.534872, 1.6504, 1.81544, 1.930968, 2.063, 2.244544, 2.426088, 2.607632, 2.80568, 3.003728, 3.201776, 3.399824, 3.597872, 3.79592 ]
+        }
+      }
+    },
+    "combat2" : {
+      "name" : "Icy Paws",
+      "descriptionRaw" : "#Fires an Icy Paw that deals <color=#99FFFFFF>Cryo DMG</color> to opponents and forms a shield on hit.\nThe shield's DMG Absorption scales based on Diona's Max HP, and its duration scales off the number of Icy Paws that hit their target.\n\n<color=#FFD780FF>{LAYOUT_MOBILE#Tap}{LAYOUT_PC#Press}{LAYOUT_PS#Press}</color>\nRapidly fires off 2 Icy Paws.\n\n<color=#FFD780FF>Hold</color>\nDashes back quickly before firing 5 Icy Paws.\nThe shield created by a Hold attack will gain a 75% DMG Absorption Bonus.\n\nThe shield has a 250% <color=#99FFFFFF>Cryo DMG</color> Absorption Bonus, and will cause your active character to become affected by <color=#99FFFFFF>Cryo</color> at the point of formation for a short duration.\n\n<i>When she first started bartending, Diona found that no matter how much ice she put in her cocktails, it would never do a drunkard any harm. That all changed when she received her Vision — now she can form ice cold enough to cause severe brainfreeze. Five out of five stars!</i>",
+      "description" : "Fires an Icy Paw that deals Cryo DMG to opponents and forms a shield on hit.\nThe shield's DMG Absorption scales based on Diona's Max HP, and its duration scales off the number of Icy Paws that hit their target.\n\nPress\nRapidly fires off 2 Icy Paws.\n\nHold\nDashes back quickly before firing 5 Icy Paws.\nThe shield created by a Hold attack will gain a 75% DMG Absorption Bonus.\n\nThe shield has a 250% Cryo DMG Absorption Bonus, and will cause your active character to become affected by Cryo at the point of formation for a short duration.",
+      "flavorText" : "When she first started bartending, Diona found that no matter how much ice she put in her cocktails, it would never do a drunkard any harm. That all changed when she received her Vision — now she can form ice cold enough to cause severe brainfreeze. Five out of five stars!",
+      "attributes" : {
+        "labels" : [ "Icy Paw DMG|{param1:F1P} per Paw", "Base Shield DMG Absorption|{param2:F1P} Max HP+{param3:I}", "Duration|{param6:F1}s per Paw", "Press CD|{param4:F1}s", "Hold CD|{param5:F1}s" ],
+        "parameters" : {
+          "param1" : [ 0.4192, 0.45064, 0.48208, 0.524, 0.55544, 0.58688, 0.6288, 0.67072, 0.71264, 0.75456, 0.79648, 0.8384, 0.8908, 0.9432, 0.9956 ],
+          "param2" : [ 0.072, 0.0774, 0.0828, 0.09, 0.0954, 0.1008, 0.108, 0.1152, 0.1224, 0.1296, 0.1368, 0.144, 0.153, 0.162, 0.171 ],
+          "param3" : [ 692.8066, 762.09686, 837.1613, 918, 1004.61285, 1096.9999, 1195.1611, 1299.0966, 1408.8062, 1524.29, 1645.548, 1772.5802, 1905.3866, 2043.9672, 2188.322 ],
+          "param4" : [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 ],
+          "param5" : [ 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 ],
+          "param6" : [ 1.8, 1.9, 2, 2.1, 2.2, 2.3, 2.4, 2.4, 2.4, 2.4, 2.4, 2.4, 2.4, 2.4, 2.4 ]
+        }
+      }
+    },
+    "combat3" : {
+      "name" : "Signature Mix",
+      "descriptionRaw" : "Tosses out a special cold brew that deals <color=#99FFFFFF>AoE Cryo DMG</color> and creates a Drunken Mist in an AoE.\n\n<color=#FFD780FF>Drunken Mist</color>\n·Deals continuous <color=#99FFFFFF>Cryo DMG</color> to opponents within the AoE.\n·Continuously regenerates the HP of characters within the AoE.\n\n<i>A horrific mix that even Diona considers inhumane. The horrifying foretaste should be left for one's opponents. It has a crisp aftertaste, but unfortunately, one can only feel it on one's nose and skin.</i>",
+      "description" : "Tosses out a special cold brew that deals AoE Cryo DMG and creates a Drunken Mist in an AoE.\n\nDrunken Mist\n·Deals continuous Cryo DMG to opponents within the AoE.\n·Continuously regenerates the HP of characters within the AoE.",
+      "flavorText" : "A horrific mix that even Diona considers inhumane. The horrifying foretaste should be left for one's opponents. It has a crisp aftertaste, but unfortunately, one can only feel it on one's nose and skin.",
+      "attributes" : {
+        "labels" : [ "Skill DMG|{param1:P}", "Continuous Field DMG|{param2:F1P}", "HP Regeneration Over Time|{param3:F2P} Max HP+{param4:I}", "Duration|{param7:F1}s", "CD|{param5:F1}s", "Energy Cost|{param6:I}" ],
+        "parameters" : {
+          "param1" : [ 0.8, 0.86, 0.92, 1, 1.06, 1.12, 1.2, 1.28, 1.36, 1.44, 1.52, 1.6, 1.7, 1.8, 1.9 ],
+          "param2" : [ 0.5264, 0.56588, 0.60536, 0.658, 0.69748, 0.73696, 0.7896, 0.84224, 0.89488, 0.94752, 1.00016, 1.0528, 1.1186, 1.1844, 1.2502 ],
+          "param3" : [ 0.05336, 0.057362, 0.061364, 0.0667, 0.070702, 0.074704, 0.08004, 0.085376, 0.090712, 0.096048, 0.101384, 0.10672, 0.11339, 0.12006, 0.12673 ],
+          "param4" : [ 513.19006, 564.5162, 620.1195, 680, 744.15765, 812.5925, 885.30457, 962.29376, 1043.5602, 1129.1038, 1218.9244, 1313.0223, 1411.3975, 1514.0498, 1620.9792 ],
+          "param5" : [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ],
+          "param6" : [ 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80 ],
+          "param7" : [ 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12 ]
+        }
+      }
+    },
+    "passive1" : {
+      "name" : "Cat's Tail Secret Menu",
+      "descriptionRaw" : "Characters shielded by <color=#FFD780FF>Icy Paws</color> have their Movement SPD increased by 10% and their Stamina Consumption decreased by 10%.",
+      "description" : "Characters shielded by Icy Paws have their Movement SPD increased by 10% and their Stamina Consumption decreased by 10%."
+    },
+    "passive2" : {
+      "name" : "Drunkards' Farce",
+      "descriptionRaw" : "Opponents who enter the AoE of <color=#FFD780FF>Signature Mix</color> have 10% decreased ATK for 15s.",
+      "description" : "Opponents who enter the AoE of Signature Mix have 10% decreased ATK for 15s."
+    },
+    "passive3" : {
+      "name" : "Complimentary Bar Food",
+      "descriptionRaw" : "When a Perfect Cooking is achieved on a dish with restorative effects, there is a 12% chance to obtain double the product.",
+      "description" : "When a Perfect Cooking is achieved on a dish with restorative effects, there is a 12% chance to obtain double the product."
+    },
+    "costs" : {
+      "lvl2" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 12500
+      }, {
+        "id" : 104301,
+        "name" : "Teachings of Freedom",
+        "count" : 3
+      }, {
+        "id" : 112011,
+        "name" : "Firm Arrowhead",
+        "count" : 6
+      } ],
+      "lvl3" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 17500
+      }, {
+        "id" : 104302,
+        "name" : "Guide to Freedom",
+        "count" : 2
+      }, {
+        "id" : 112012,
+        "name" : "Sharp Arrowhead",
+        "count" : 3
+      } ],
+      "lvl4" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 25000
+      }, {
+        "id" : 104302,
+        "name" : "Guide to Freedom",
+        "count" : 4
+      }, {
+        "id" : 112012,
+        "name" : "Sharp Arrowhead",
+        "count" : 4
+      } ],
+      "lvl5" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 30000
+      }, {
+        "id" : 104302,
+        "name" : "Guide to Freedom",
+        "count" : 6
+      }, {
+        "id" : 112012,
+        "name" : "Sharp Arrowhead",
+        "count" : 6
+      } ],
+      "lvl6" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 37500
+      }, {
+        "id" : 104302,
+        "name" : "Guide to Freedom",
+        "count" : 9
+      }, {
+        "id" : 112012,
+        "name" : "Sharp Arrowhead",
+        "count" : 9
+      } ],
+      "lvl7" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 120000
+      }, {
+        "id" : 104303,
+        "name" : "Philosophies of Freedom",
+        "count" : 4
+      }, {
+        "id" : 112013,
+        "name" : "Weathered Arrowhead",
+        "count" : 4
+      }, {
+        "id" : 113014,
+        "name" : "Shard of a Foul Legacy",
+        "count" : 1
+      } ],
+      "lvl8" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 260000
+      }, {
+        "id" : 104303,
+        "name" : "Philosophies of Freedom",
+        "count" : 6
+      }, {
+        "id" : 112013,
+        "name" : "Weathered Arrowhead",
+        "count" : 6
+      }, {
+        "id" : 113014,
+        "name" : "Shard of a Foul Legacy",
+        "count" : 1
+      } ],
+      "lvl9" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 450000
+      }, {
+        "id" : 104303,
+        "name" : "Philosophies of Freedom",
+        "count" : 12
+      }, {
+        "id" : 112013,
+        "name" : "Weathered Arrowhead",
+        "count" : 9
+      }, {
+        "id" : 113014,
+        "name" : "Shard of a Foul Legacy",
+        "count" : 2
+      } ],
+      "lvl10" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 700000
+      }, {
+        "id" : 104303,
+        "name" : "Philosophies of Freedom",
+        "count" : 16
+      }, {
+        "id" : 112013,
+        "name" : "Weathered Arrowhead",
+        "count" : 12
+      }, {
+        "id" : 113014,
+        "name" : "Shard of a Foul Legacy",
+        "count" : 2
+      }, {
+        "id" : 104319,
+        "name" : "Crown of Insight",
+        "count" : 1
+      } ]
+    },
+    "images" : {
+      "filename_combat1" : "Skill_A_02",
+      "filename_combat2" : "Skill_S_Diona_01",
+      "filename_combat3" : "Skill_E_Diona_01_HD",
+      "filename_passive1" : "UI_Talent_S_Diona_05",
+      "filename_passive2" : "UI_Talent_S_Diona_06",
+      "filename_passive3" : "UI_Talent_Cook_Heal"
+    },
+    "version" : "1.1"
+  }
+}

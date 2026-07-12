@@ -341,6 +341,12 @@ class GenshinDesktopApplication : Application() {
             maxWidth = Double.MAX_VALUE
             styleClass.add("capture-action")
         }
+        val reuseSession = Button("Reuse current Genshin session (dev)").apply {
+            maxWidth = Double.MAX_VALUE
+            styleClass.add("capture-action")
+            isVisible = irminsulIntegrationService.developmentMode()
+            isManaged = isVisible
+        }
         val card = VBox(
             8.0,
             Label("Game data capture").apply { styleClass.add("tool-title") },
@@ -353,6 +359,7 @@ class GenshinDesktopApplication : Application() {
             },
             description,
             action,
+            reuseSession,
         ).apply {
             styleClass.add("status-card")
             maxWidth = Double.MAX_VALUE
@@ -389,6 +396,12 @@ class GenshinDesktopApplication : Application() {
                 } else {
                     irminsulIntegrationService.startCapture()
                 }
+            }
+            reuseSession.isDisable = status.state.active ||
+                status.state == IrminsulCaptureState.UNAVAILABLE ||
+                !irminsulIntegrationService.hasCachedSessionKey()
+            reuseSession.setOnAction {
+                irminsulIntegrationService.startCapture(reuseSessionKey = true)
             }
         }
 

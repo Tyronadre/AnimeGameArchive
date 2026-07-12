@@ -2914,6 +2914,76 @@ code {
     gap: 0.75rem;
 }
 
+.balance-card[hidden] {
+    display: none;
+}
+
+.material-controls {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) auto;
+    align-items: end;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.material-search input,
+.material-sort select {
+    width: 100%;
+    min-height: 43px;
+    padding: 0.7rem 0.8rem;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    outline: none;
+    background: white;
+    font: inherit;
+}
+
+.material-sort span {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-weight: 750;
+    text-transform: uppercase;
+}
+
+.material-category-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-bottom: 1rem;
+}
+
+.material-category-chips button {
+    padding: 0.5rem 0.75rem;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.52);
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 750;
+    cursor: pointer;
+}
+
+.material-category-chips button:hover,
+.material-category-chips button.active {
+    color: var(--primary-ink);
+    border-color: rgba(167, 122, 49, 0.45);
+    background: var(--primary-bg);
+}
+
+.material-dialog {
+    width: min(920px, calc(100vw - 2rem));
+}
+
+@media (max-width: 640px) {
+    .material-controls {
+        grid-template-columns: 1fr;
+    }
+}
+
 .balance-card {
     display: grid;
     grid-template-columns: 64px minmax(0, 1fr);

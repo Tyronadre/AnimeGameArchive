@@ -1,0 +1,392 @@
+{
+  "id" : 10000050,
+  "name" : "Thoma",
+  "title" : "Protector From Afar",
+  "description" : "The Kamisato Clan's housekeeper. A well-known \"fixer\" in Inazuma.",
+  "weaponType" : "WEAPON_POLE",
+  "weaponText" : "Polearm",
+  "bodyType" : "BODY_MALE",
+  "gender" : "Male",
+  "qualityType" : "QUALITY_PURPLE",
+  "rarity" : 4,
+  "birthdaymmdd" : "1/9",
+  "birthday" : "January 9",
+  "elementType" : "ELEMENT_PYRO",
+  "elementText" : "Pyro",
+  "affiliation" : "Yashiro Commission",
+  "associationType" : "ASSOC_INAZUMA",
+  "region" : "Inazuma",
+  "substatType" : "FIGHT_PROP_ATTACK_PERCENT",
+  "substatText" : "ATK",
+  "constellation" : "Rubeum Scutum",
+  "cv" : {
+    "english" : "Christian Banas",
+    "chinese" : "张沛",
+    "japanese" : "森田成一",
+    "korean" : "Ryu Seung-kon"
+  },
+  "costs" : {
+    "ascend1" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 20000
+    }, {
+      "id" : 104111,
+      "name" : "Agnidus Agate Sliver",
+      "count" : 1
+    }, {
+      "id" : 101209,
+      "name" : "Fluorescent Fungus",
+      "count" : 3
+    }, {
+      "id" : 112035,
+      "name" : "Treasure Hoarder Insignia",
+      "count" : 3
+    } ],
+    "ascend2" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 40000
+    }, {
+      "id" : 104112,
+      "name" : "Agnidus Agate Fragment",
+      "count" : 3
+    }, {
+      "id" : 113024,
+      "name" : "Smoldering Pearl",
+      "count" : 2
+    }, {
+      "id" : 101209,
+      "name" : "Fluorescent Fungus",
+      "count" : 10
+    }, {
+      "id" : 112035,
+      "name" : "Treasure Hoarder Insignia",
+      "count" : 15
+    } ],
+    "ascend3" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 60000
+    }, {
+      "id" : 104112,
+      "name" : "Agnidus Agate Fragment",
+      "count" : 6
+    }, {
+      "id" : 113024,
+      "name" : "Smoldering Pearl",
+      "count" : 4
+    }, {
+      "id" : 101209,
+      "name" : "Fluorescent Fungus",
+      "count" : 20
+    }, {
+      "id" : 112036,
+      "name" : "Silver Raven Insignia",
+      "count" : 12
+    } ],
+    "ascend4" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 80000
+    }, {
+      "id" : 104113,
+      "name" : "Agnidus Agate Chunk",
+      "count" : 3
+    }, {
+      "id" : 113024,
+      "name" : "Smoldering Pearl",
+      "count" : 8
+    }, {
+      "id" : 101209,
+      "name" : "Fluorescent Fungus",
+      "count" : 30
+    }, {
+      "id" : 112036,
+      "name" : "Silver Raven Insignia",
+      "count" : 18
+    } ],
+    "ascend5" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 100000
+    }, {
+      "id" : 104113,
+      "name" : "Agnidus Agate Chunk",
+      "count" : 6
+    }, {
+      "id" : 113024,
+      "name" : "Smoldering Pearl",
+      "count" : 12
+    }, {
+      "id" : 101209,
+      "name" : "Fluorescent Fungus",
+      "count" : 45
+    }, {
+      "id" : 112037,
+      "name" : "Golden Raven Insignia",
+      "count" : 12
+    } ],
+    "ascend6" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 120000
+    }, {
+      "id" : 104114,
+      "name" : "Agnidus Agate Gemstone",
+      "count" : 6
+    }, {
+      "id" : 113024,
+      "name" : "Smoldering Pearl",
+      "count" : 20
+    }, {
+      "id" : 101209,
+      "name" : "Fluorescent Fungus",
+      "count" : 60
+    }, {
+      "id" : 112037,
+      "name" : "Golden Raven Insignia",
+      "count" : 24
+    } ]
+  },
+  "images" : {
+    "cover1" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/07/22/9d753f7cee1ed5c645340d6396c50c46_5113716789151737645.png",
+    "cover2" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/06/29/8c22510df84f59fbe30bc6e338ec01fc_1179446160895359895.png",
+    "hoyolab-avatar" : "https://img-os-static.hoyolab.com/communityWeb/upload/3efac14b33f37b567cc3f48f47b3158d.png",
+    "filename_icon" : "UI_AvatarIcon_Tohma",
+    "filename_iconCard" : "UI_AvatarIcon_Tohma_Card",
+    "filename_sideIcon" : "UI_AvatarIcon_Side_Tohma",
+    "filename_gachaSplash" : "UI_Gacha_AvatarImg_Tohma",
+    "filename_gachaSlice" : "UI_Gacha_AvatarIcon_Tohma",
+    "mihoyo_icon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Tohma.png",
+    "mihoyo_sideIcon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_side_icon/UI_AvatarIcon_Side_Tohma.png"
+  },
+  "url" : {
+    "fandom" : "https://genshin-impact.fandom.com/wiki/Thoma"
+  },
+  "version" : "2.2",
+  "talents" : {
+    "id" : 5001,
+    "name" : "Thoma",
+    "combat1" : {
+      "name" : "Swiftshatter Spear",
+      "descriptionRaw" : "<color=#FFD780FF>Normal Attack</color>\nPerforms up to 4 consecutive spear strikes.\n\n<color=#FFD780FF>Charged Attack</color>\nConsumes a certain amount of Stamina to lunge forward, dealing damage to opponents along the way.\n\n<color=#FFD780FF>Plunging Attack</color>\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "description" : "Normal Attack\nPerforms up to 4 consecutive spear strikes.\n\nCharged Attack\nConsumes a certain amount of Stamina to lunge forward, dealing damage to opponents along the way.\n\nPlunging Attack\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "attributes" : {
+        "labels" : [ "1-Hit DMG|{param1:F1P}", "2-Hit DMG|{param2:F1P}", "3-Hit DMG|{param3:F1P}×2", "4-Hit DMG|{param4:F1P}", "Charged Attack DMG|{param5:P}", "Charged Attack Stamina Cost|{param6:F1}", "Plunge DMG|{param7:F1P}", "Low/High Plunge DMG|{param8:P}/{param9:P}" ],
+        "parameters" : {
+          "param1" : [ 0.443932, 0.480066, 0.5162, 0.56782, 0.603954, 0.64525, 0.702032, 0.758814, 0.815596, 0.87754, 0.939484, 1.001428, 1.063372, 1.125316, 1.18726 ],
+          "param2" : [ 0.436278, 0.471789, 0.5073, 0.55803, 0.593541, 0.634125, 0.689928, 0.745731, 0.801534, 0.86241, 0.923286, 0.984162, 1.045038, 1.105914, 1.16679 ],
+          "param3" : [ 0.26789, 0.289695, 0.3115, 0.34265, 0.364455, 0.389375, 0.42364, 0.457905, 0.49217, 0.52955, 0.56693, 0.60431, 0.64169, 0.67907, 0.71645 ],
+          "param4" : [ 0.673552, 0.728376, 0.7832, 0.86152, 0.916344, 0.979, 1.065152, 1.151304, 1.237456, 1.33144, 1.425424, 1.519408, 1.613392, 1.707376, 1.80136 ],
+          "param5" : [ 1.12746, 1.21923, 1.311, 1.4421, 1.53387, 1.63875, 1.78296, 1.92717, 2.07138, 2.2287, 2.38602, 2.54334, 2.70066, 2.85798, 3.0153 ],
+          "param6" : [ 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25 ],
+          "param7" : [ 0.639324, 0.691362, 0.7434, 0.81774, 0.869778, 0.92925, 1.011024, 1.092798, 1.174572, 1.26378, 1.352988, 1.442196, 1.531404, 1.620612, 1.70982 ],
+          "param8" : [ 1.278377, 1.382431, 1.486485, 1.635134, 1.739187, 1.858106, 2.02162, 2.185133, 2.348646, 2.527025, 2.705403, 2.883781, 3.062159, 3.240537, 3.418915 ],
+          "param9" : [ 1.596762, 1.726731, 1.8567, 2.04237, 2.172339, 2.320875, 2.525112, 2.729349, 2.933586, 3.15639, 3.379194, 3.601998, 3.824802, 4.047606, 4.27041 ]
+        }
+      }
+    },
+    "combat2" : {
+      "name" : "Blazing Blessing",
+      "descriptionRaw" : "Thoma vaults forward with his polearm and delivers a flame-filled flying kick that deals <color=#FF9999FF>AoE Pyro DMG</color>, while also summoning a defensive Blazing Barrier. At the moment of casting, Thoma's Elemental Skill applies <color=#FF9999FF>Pyro</color> to himself.\nThe DMG Absorption of the Blazing Barrier scales off Thoma's Max HP.\nThe Blazing Barrier has the following traits:\n·Absorbs <color=#FF9999FF>Pyro DMG</color> 250% more effectively.\n·When a new Blazing Barrier is obtained, the remaining DMG Absorption of an existing Blazing Barrier will stack and its duration will be refreshed.\n\nThe maximum DMG Absorption of the Blazing Barrier will not exceed a certain percentage of Thoma's Max HP.\n\n<i>As a guest from afar, only the most burning passion would allow one to master the pure and precise spear arts of Inazuma. Thoma's mastery, indeed, is not limited to being the \"swiftest-studying student\" or \"a master of the spear,\" but he has imbued his will to protect others and fend off foes into his art as well.</i>",
+      "description" : "Thoma vaults forward with his polearm and delivers a flame-filled flying kick that deals AoE Pyro DMG, while also summoning a defensive Blazing Barrier. At the moment of casting, Thoma's Elemental Skill applies Pyro to himself.\nThe DMG Absorption of the Blazing Barrier scales off Thoma's Max HP.\nThe Blazing Barrier has the following traits:\n·Absorbs Pyro DMG 250% more effectively.\n·When a new Blazing Barrier is obtained, the remaining DMG Absorption of an existing Blazing Barrier will stack and its duration will be refreshed.\n\nThe maximum DMG Absorption of the Blazing Barrier will not exceed a certain percentage of Thoma's Max HP.",
+      "flavorText" : "As a guest from afar, only the most burning passion would allow one to master the pure and precise spear arts of Inazuma. Thoma's mastery, indeed, is not limited to being the \"swiftest-studying student\" or \"a master of the spear,\" but he has imbued his will to protect others and fend off foes into his art as well.",
+      "attributes" : {
+        "labels" : [ "Skill DMG|{param1:P}", "Shield DMG Absorption|{param2:F1P} Max HP+{param3:I}", "Shield Duration|{param4:F1}s", "Max Shield DMG Absorption|{param5:F1P} Max HP+{param6:I}", "CD|{param7:F1}s" ],
+        "parameters" : {
+          "param1" : [ 1.464, 1.5738, 1.6836, 1.83, 1.9398, 2.0496, 2.196, 2.3424, 2.4888, 2.6352, 2.7816, 2.928, 3.111, 3.294, 3.477 ],
+          "param2" : [ 0.072, 0.0774, 0.0828, 0.09, 0.0954, 0.1008, 0.108, 0.1152, 0.1224, 0.1296, 0.1368, 0.144, 0.153, 0.162, 0.171 ],
+          "param3" : [ 693.33484, 762.678, 837.7997, 918.7, 1005.3789, 1097.8364, 1196.0725, 1300.0872, 1409.8805, 1525.4523, 1646.8027, 1773.9319, 1906.8395, 2045.5258, 2189.9905 ],
+          "param4" : [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 ],
+          "param5" : [ 0.196, 0.2107, 0.2254, 0.245, 0.2597, 0.2744, 0.294, 0.3136, 0.3332, 0.3528, 0.3724, 0.392, 0.4165, 0.441, 0.4655 ],
+          "param6" : [ 1887.4199, 2076.1882, 2280.687, 2500.9167, 2736.877, 2988.5679, 3255.9897, 3539.142, 3838.025, 4152.6387, 4482.983, 4829.058, 5190.8643, 5568.4004, 5961.6675 ],
+          "param7" : [ 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 ]
+        }
+      }
+    },
+    "combat3" : {
+      "name" : "Crimson Ooyoroi",
+      "descriptionRaw" : "Thoma spins his polearm, slicing at his foes with roaring flames that deal <color=#FF9999FF>AoE Pyro DMG</color> and weave themselves into a Scorching Ooyoroi.\n\n<color=#FFD780FF>Scorching Ooyoroi</color>\nWhile Scorching Ooyoroi is in effect, the active character's Normal Attacks will trigger Fiery Collapse, dealing <color=#FF9999FF>AoE Pyro DMG</color> and summoning a Blazing Barrier.\nFiery Collapse can be triggered once every 1s.\n\nExcept for the amount of DMG they can absorb, the Blazing Barriers created in this way are identical to those created by Thoma's Elemental Skill, Blazing Blessing:\n·Absorbs <color=#FF9999FF>Pyro DMG</color> 250% more effectively.\n·When a new Blazing Barrier is obtained, the remaining DMG Absorption of an existing Blazing Barrier will stack and its duration will be refreshed.\n\nThe maximum DMG Absorption of the Blazing Barrier will not exceed a certain percentage of Thoma's Max HP.\n\nIf Thoma falls, the effects of Scorching Ooyoroi will be cleared.\n\n<i>\"I will not forget my initial promise. Let this burning flame protect those I cherish, and may it never be extinguished.\"</i>",
+      "description" : "Thoma spins his polearm, slicing at his foes with roaring flames that deal AoE Pyro DMG and weave themselves into a Scorching Ooyoroi.\n\nScorching Ooyoroi\nWhile Scorching Ooyoroi is in effect, the active character's Normal Attacks will trigger Fiery Collapse, dealing AoE Pyro DMG and summoning a Blazing Barrier.\nFiery Collapse can be triggered once every 1s.\n\nExcept for the amount of DMG they can absorb, the Blazing Barriers created in this way are identical to those created by Thoma's Elemental Skill, Blazing Blessing:\n·Absorbs Pyro DMG 250% more effectively.\n·When a new Blazing Barrier is obtained, the remaining DMG Absorption of an existing Blazing Barrier will stack and its duration will be refreshed.\n\nThe maximum DMG Absorption of the Blazing Barrier will not exceed a certain percentage of Thoma's Max HP.\n\nIf Thoma falls, the effects of Scorching Ooyoroi will be cleared.",
+      "flavorText" : "\"I will not forget my initial promise. Let this burning flame protect those I cherish, and may it never be extinguished.\"",
+      "attributes" : {
+        "labels" : [ "Skill DMG|{param1:P}", "Fiery Collapse DMG|{param2:P}", "Shield DMG Absorption|{param3:F1P} Max HP+{param4:I}", "Shield Duration|{param5:F1}s", "Scorching Ooyoroi Duration|{param7:F1}s", "CD|{param8:F1}s", "Energy Cost|{param9:I}" ],
+        "parameters" : {
+          "param1" : [ 0.88, 0.946, 1.012, 1.1, 1.166, 1.232, 1.32, 1.408, 1.496, 1.584, 1.672, 1.76, 1.87, 1.98, 2.09 ],
+          "param2" : [ 0.58, 0.6235, 0.667, 0.725, 0.7685, 0.812, 0.87, 0.928, 0.986, 1.044, 1.102, 1.16, 1.2325, 1.305, 1.3775 ],
+          "param3" : [ 0.01144, 0.012298, 0.013156, 0.0143, 0.015158, 0.016016, 0.01716, 0.018304, 0.019448, 0.020592, 0.021736, 0.02288, 0.02431, 0.02574, 0.02717 ],
+          "param4" : [ 110.03398, 121.03891, 132.96092, 145.8, 159.55617, 174.2294, 189.81972, 206.3271, 223.75157, 242.09312, 261.35175, 281.52744, 302.6202, 324.63007, 347.557 ],
+          "param5" : [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 ],
+          "param6" : [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
+          "param7" : [ 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 ],
+          "param8" : [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ],
+          "param9" : [ 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80 ]
+        }
+      }
+    },
+    "passive1" : {
+      "name" : "Imbricated Armor",
+      "descriptionRaw" : "When your current active character obtains or refreshes a <color=#FFD780FF>Blazing Barrier</color>, this character's Shield Strength will increase by 5% for 6s.\nThis effect can be triggered once every 0.3s seconds. Max 5 stacks.",
+      "description" : "When your current active character obtains or refreshes a Blazing Barrier, this character's Shield Strength will increase by 5% for 6s.\nThis effect can be triggered once every 0.3s seconds. Max 5 stacks."
+    },
+    "passive2" : {
+      "name" : "Flaming Assault",
+      "descriptionRaw" : "DMG dealt by <color=#FFD780FF>Crimson Ooyoroi</color>'s Fiery Collapse is increased by 2.2% of Thoma's Max HP.",
+      "description" : "DMG dealt by Crimson Ooyoroi's Fiery Collapse is increased by 2.2% of Thoma's Max HP."
+    },
+    "passive3" : {
+      "name" : "Snap and Swing",
+      "descriptionRaw" : "When you <color=#FFD780FF>fish</color> successfully in Inazuma, Thoma's help grants a 20% chance of scoring a double catch.",
+      "description" : "When you fish successfully in Inazuma, Thoma's help grants a 20% chance of scoring a double catch."
+    },
+    "costs" : {
+      "lvl2" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 12500
+      }, {
+        "id" : 104320,
+        "name" : "Teachings of Transience",
+        "count" : 3
+      }, {
+        "id" : 112035,
+        "name" : "Treasure Hoarder Insignia",
+        "count" : 6
+      } ],
+      "lvl3" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 17500
+      }, {
+        "id" : 104321,
+        "name" : "Guide to Transience",
+        "count" : 2
+      }, {
+        "id" : 112036,
+        "name" : "Silver Raven Insignia",
+        "count" : 3
+      } ],
+      "lvl4" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 25000
+      }, {
+        "id" : 104321,
+        "name" : "Guide to Transience",
+        "count" : 4
+      }, {
+        "id" : 112036,
+        "name" : "Silver Raven Insignia",
+        "count" : 4
+      } ],
+      "lvl5" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 30000
+      }, {
+        "id" : 104321,
+        "name" : "Guide to Transience",
+        "count" : 6
+      }, {
+        "id" : 112036,
+        "name" : "Silver Raven Insignia",
+        "count" : 6
+      } ],
+      "lvl6" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 37500
+      }, {
+        "id" : 104321,
+        "name" : "Guide to Transience",
+        "count" : 9
+      }, {
+        "id" : 112036,
+        "name" : "Silver Raven Insignia",
+        "count" : 9
+      } ],
+      "lvl7" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 120000
+      }, {
+        "id" : 104322,
+        "name" : "Philosophies of Transience",
+        "count" : 4
+      }, {
+        "id" : 112037,
+        "name" : "Golden Raven Insignia",
+        "count" : 4
+      }, {
+        "id" : 113026,
+        "name" : "Hellfire Butterfly",
+        "count" : 1
+      } ],
+      "lvl8" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 260000
+      }, {
+        "id" : 104322,
+        "name" : "Philosophies of Transience",
+        "count" : 6
+      }, {
+        "id" : 112037,
+        "name" : "Golden Raven Insignia",
+        "count" : 6
+      }, {
+        "id" : 113026,
+        "name" : "Hellfire Butterfly",
+        "count" : 1
+      } ],
+      "lvl9" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 450000
+      }, {
+        "id" : 104322,
+        "name" : "Philosophies of Transience",
+        "count" : 12
+      }, {
+        "id" : 112037,
+        "name" : "Golden Raven Insignia",
+        "count" : 9
+      }, {
+        "id" : 113026,
+        "name" : "Hellfire Butterfly",
+        "count" : 2
+      } ],
+      "lvl10" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 700000
+      }, {
+        "id" : 104322,
+        "name" : "Philosophies of Transience",
+        "count" : 16
+      }, {
+        "id" : 112037,
+        "name" : "Golden Raven Insignia",
+        "count" : 12
+      }, {
+        "id" : 113026,
+        "name" : "Hellfire Butterfly",
+        "count" : 2
+      }, {
+        "id" : 104319,
+        "name" : "Crown of Insight",
+        "count" : 1
+      } ]
+    },
+    "images" : {
+      "filename_combat1" : "Skill_A_03",
+      "filename_combat2" : "Skill_S_Tohma_01",
+      "filename_combat3" : "Skill_E_Tohma_01_HD",
+      "filename_passive1" : "UI_Talent_S_Tohma_05",
+      "filename_passive2" : "UI_Talent_S_Tohma_06",
+      "filename_passive3" : "UI_Talent_S_Tohma_07"
+    },
+    "version" : "2.2"
+  }
+}

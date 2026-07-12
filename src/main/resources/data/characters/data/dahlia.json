@@ -1,0 +1,378 @@
+{
+  "id" : 10000115,
+  "name" : "Dahlia",
+  "title" : "Ode and Oblation",
+  "description" : "Deacon of the Church of Favonius and the Anemo Archon's representative in the church.",
+  "weaponType" : "WEAPON_SWORD_ONE_HAND",
+  "weaponText" : "Sword",
+  "bodyType" : "BODY_BOY",
+  "gender" : "Male",
+  "qualityType" : "QUALITY_PURPLE",
+  "rarity" : 4,
+  "birthdaymmdd" : "5/25",
+  "birthday" : "May 25",
+  "elementType" : "ELEMENT_HYDRO",
+  "elementText" : "Hydro",
+  "affiliation" : "Church of Favonius",
+  "associationType" : "ASSOC_MONDSTADT",
+  "region" : "Mondstadt",
+  "substatType" : "FIGHT_PROP_HP_PERCENT",
+  "substatText" : "HP",
+  "constellation" : "Cantus Choralis",
+  "cv" : {
+    "english" : "Aileen Mythen",
+    "chinese" : "风袖",
+    "japanese" : "山本和臣",
+    "korean" : "Seok Seung-hoon"
+  },
+  "costs" : {
+    "ascend1" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 20000
+    }, {
+      "id" : 104121,
+      "name" : "Varunada Lazurite Sliver",
+      "count" : 1
+    }, {
+      "id" : 100056,
+      "name" : "Calla Lily",
+      "count" : 3
+    }, {
+      "id" : 112011,
+      "name" : "Firm Arrowhead",
+      "count" : 3
+    } ],
+    "ascend2" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 40000
+    }, {
+      "id" : 104122,
+      "name" : "Varunada Lazurite Fragment",
+      "count" : 3
+    }, {
+      "id" : 113076,
+      "name" : "Secret Source Airflow Accumulator",
+      "count" : 2
+    }, {
+      "id" : 100056,
+      "name" : "Calla Lily",
+      "count" : 10
+    }, {
+      "id" : 112011,
+      "name" : "Firm Arrowhead",
+      "count" : 15
+    } ],
+    "ascend3" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 60000
+    }, {
+      "id" : 104122,
+      "name" : "Varunada Lazurite Fragment",
+      "count" : 6
+    }, {
+      "id" : 113076,
+      "name" : "Secret Source Airflow Accumulator",
+      "count" : 4
+    }, {
+      "id" : 100056,
+      "name" : "Calla Lily",
+      "count" : 20
+    }, {
+      "id" : 112012,
+      "name" : "Sharp Arrowhead",
+      "count" : 12
+    } ],
+    "ascend4" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 80000
+    }, {
+      "id" : 104123,
+      "name" : "Varunada Lazurite Chunk",
+      "count" : 3
+    }, {
+      "id" : 113076,
+      "name" : "Secret Source Airflow Accumulator",
+      "count" : 8
+    }, {
+      "id" : 100056,
+      "name" : "Calla Lily",
+      "count" : 30
+    }, {
+      "id" : 112012,
+      "name" : "Sharp Arrowhead",
+      "count" : 18
+    } ],
+    "ascend5" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 100000
+    }, {
+      "id" : 104123,
+      "name" : "Varunada Lazurite Chunk",
+      "count" : 6
+    }, {
+      "id" : 113076,
+      "name" : "Secret Source Airflow Accumulator",
+      "count" : 12
+    }, {
+      "id" : 100056,
+      "name" : "Calla Lily",
+      "count" : 45
+    }, {
+      "id" : 112013,
+      "name" : "Weathered Arrowhead",
+      "count" : 12
+    } ],
+    "ascend6" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 120000
+    }, {
+      "id" : 104124,
+      "name" : "Varunada Lazurite Gemstone",
+      "count" : 6
+    }, {
+      "id" : 113076,
+      "name" : "Secret Source Airflow Accumulator",
+      "count" : 20
+    }, {
+      "id" : 100056,
+      "name" : "Calla Lily",
+      "count" : 60
+    }, {
+      "id" : 112013,
+      "name" : "Weathered Arrowhead",
+      "count" : 24
+    } ]
+  },
+  "images" : {
+    "filename_icon" : "UI_AvatarIcon_Dahlia",
+    "filename_iconCard" : "UI_AvatarIcon_Dahlia_Card",
+    "filename_sideIcon" : "UI_AvatarIcon_Side_Dahlia",
+    "filename_gachaSplash" : "UI_Gacha_AvatarImg_Dahlia",
+    "filename_gachaSlice" : "UI_Gacha_AvatarIcon_Dahlia",
+    "mihoyo_icon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Dahlia.png",
+    "mihoyo_sideIcon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_side_icon/UI_AvatarIcon_Side_Dahlia.png"
+  },
+  "version" : "5.7",
+  "talents" : {
+    "id" : 11501,
+    "name" : "Dahlia",
+    "combat1" : {
+      "name" : "Favonius Bladework - Ritual",
+      "descriptionRaw" : "<color=#FFD780FF>Normal Attack</color>\nPerforms up to 4 rapid strikes.\n\n<color=#FFD780FF>Charged Attack</color>\nConsumes a certain amount of Stamina to unleash 2 rapid sword strikes.\n\n<color=#FFD780FF>Plunging Attack</color>\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "description" : "Normal Attack\nPerforms up to 4 rapid strikes.\n\nCharged Attack\nConsumes a certain amount of Stamina to unleash 2 rapid sword strikes.\n\nPlunging Attack\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "attributes" : {
+        "labels" : [ "1-Hit DMG|{param1:F1P}", "2-Hit DMG|{param2:F1P}", "3-Hit DMG|{param3:F1P}+{param4:F1P}", "4-Hit DMG|{param5:F1P}", "Charged Attack DMG|{param6:F1P}+{param7:F1P}", "Charged Attack Stamina Cost|{param8:F1}", "Plunge DMG|{param9:F1P}", "Low/High Plunge DMG|{param10:P}/{param11:P}" ],
+        "parameters" : {
+          "param1" : [ 0.43547, 0.470915, 0.50636, 0.556996, 0.592441, 0.63295, 0.68865, 0.744349, 0.800049, 0.860812, 0.921575, 0.982338, 1.043102, 1.103865, 1.164628 ],
+          "param2" : [ 0.401001, 0.43364, 0.46628, 0.512908, 0.545548, 0.58285, 0.634141, 0.685432, 0.736722, 0.792676, 0.84863, 0.904583, 0.960537, 1.01649, 1.072444 ],
+          "param3" : [ 0.237446, 0.256773, 0.2761, 0.30371, 0.323037, 0.345125, 0.375496, 0.405867, 0.436238, 0.46937, 0.502502, 0.535634, 0.568766, 0.601898, 0.63503 ],
+          "param4" : [ 0.290164, 0.313782, 0.3374, 0.37114, 0.394758, 0.42175, 0.458864, 0.495978, 0.533092, 0.57358, 0.614068, 0.654556, 0.695044, 0.735532, 0.77602 ],
+          "param5" : [ 0.656576, 0.710018, 0.76346, 0.839806, 0.893248, 0.954325, 1.038306, 1.122286, 1.206267, 1.297882, 1.389497, 1.481112, 1.572728, 1.664343, 1.755958 ],
+          "param6" : [ 0.398765, 0.431222, 0.46368, 0.510048, 0.542506, 0.5796, 0.630605, 0.68161, 0.732614, 0.788256, 0.843898, 0.899539, 0.955181, 1.010822, 1.066464 ],
+          "param7" : [ 0.550675, 0.595498, 0.64032, 0.704352, 0.749174, 0.8004, 0.870835, 0.94127, 1.011706, 1.088544, 1.165382, 1.242221, 1.319059, 1.395898, 1.472736 ],
+          "param8" : [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ],
+          "param9" : [ 0.639324, 0.691362, 0.7434, 0.81774, 0.869778, 0.92925, 1.011024, 1.092798, 1.174572, 1.26378, 1.352988, 1.442196, 1.531404, 1.620612, 1.70982 ],
+          "param10" : [ 1.278377, 1.382431, 1.486485, 1.635134, 1.739187, 1.858106, 2.02162, 2.185133, 2.348646, 2.527025, 2.705403, 2.883781, 3.062159, 3.240537, 3.418915 ],
+          "param11" : [ 1.596762, 1.726731, 1.8567, 2.04237, 2.172339, 2.320875, 2.525112, 2.729349, 2.933586, 3.15639, 3.379194, 3.601998, 3.824802, 4.047606, 4.27041 ]
+        }
+      }
+    },
+    "combat2" : {
+      "name" : "Immersive Ordinance",
+      "descriptionRaw" : "Time for a fun little trick! Summons the Sacramental Shower in different ways depending on whether you Tap or Hold it.\n\n<color=#FFD780FF>Tap</color>\nAfter a short prayer, summons the Sacramental Shower in front.\n\n<color=#FFD780FF>Hold</color>\nEngages in continuous prayer, and when done, summons forth a Sacramental Shower in the designated position.\n\n<color=#FFD780FF>Sacramental Shower</color>\nWhen opponents or nearby party members touch the Sacramental Shower, different effects will occur depending on the one who touches it:\nIf an opponent touches the Shower, it will explode and deal <color=#80C0FFFF>AoE Hydro DMG</color> to nearby opponents.\nIf a nearby party member touches it, it will bounce the one who touches it high in the air.\n\nOnly 1 Sacramental Shower summoned by Dahlia himself can be on the field at once.",
+      "description" : "Time for a fun little trick! Summons the Sacramental Shower in different ways depending on whether you Tap or Hold it.\n\nTap\nAfter a short prayer, summons the Sacramental Shower in front.\n\nHold\nEngages in continuous prayer, and when done, summons forth a Sacramental Shower in the designated position.\n\nSacramental Shower\nWhen opponents or nearby party members touch the Sacramental Shower, different effects will occur depending on the one who touches it:\nIf an opponent touches the Shower, it will explode and deal AoE Hydro DMG to nearby opponents.\nIf a nearby party member touches it, it will bounce the one who touches it high in the air.\n\nOnly 1 Sacramental Shower summoned by Dahlia himself can be on the field at once.",
+      "attributes" : {
+        "labels" : [ "Skill DMG|{param1:F1P}", "Skill CD|{param2:F1}s" ],
+        "parameters" : {
+          "param1" : [ 2.328, 2.5026, 2.6772, 2.91, 3.0846, 3.2592, 3.492, 3.7248, 3.9576, 4.1904, 4.4232, 4.656, 4.947, 5.238, 5.529 ],
+          "param2" : [ 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 ]
+        }
+      }
+    },
+    "combat3" : {
+      "name" : "Radiant Psalter",
+      "descriptionRaw" : "Appeals to the divine with earnestness and song, dealing <color=#80C0FFFF>AoE Hydro DMG</color> to nearby opponents and granting his party members Favonian Favor, summoning a Shield of Sacred Favor.\nThe Shield of Sacred Favor's DMG absorption is based on Dahlia's Max HP, and it will absorb <color=#80C0FFFF>Hydro DMG</color> with 250% effectiveness.\n\n<color=#FFD780FF>Favonian Favor</color>\nWhile this effect is active, 1 Benison stack may be consumed to summon a new Shield of Sacred Favor when an existing Shield is broken via DMG.\n\nDahlia can obtain Benison via the following methods:\n· He will gain 1 Benison stack when his own active party member hits opponents 4 times with Normal Attacks while affected by Favonian Favor.\n· After triggering the effect of his Ascension Talent, \"The Wind's Gentle Grace\" (You must first unlock this Ascension Talent.)\nDahlia can gain a maximum of 4 Benison stacks per Favonian Favor duration.",
+      "description" : "Appeals to the divine with earnestness and song, dealing AoE Hydro DMG to nearby opponents and granting his party members Favonian Favor, summoning a Shield of Sacred Favor.\nThe Shield of Sacred Favor's DMG absorption is based on Dahlia's Max HP, and it will absorb Hydro DMG with 250% effectiveness.\n\nFavonian Favor\nWhile this effect is active, 1 Benison stack may be consumed to summon a new Shield of Sacred Favor when an existing Shield is broken via DMG.\n\nDahlia can obtain Benison via the following methods:\n· He will gain 1 Benison stack when his own active party member hits opponents 4 times with Normal Attacks while affected by Favonian Favor.\n· After triggering the effect of his Ascension Talent, \"The Wind's Gentle Grace\" (You must first unlock this Ascension Talent.)\nDahlia can gain a maximum of 4 Benison stacks per Favonian Favor duration.",
+      "attributes" : {
+        "labels" : [ "Skill DMG|{param1:F1P}", "Shield of Sacred Favor DMG Absorption|{param3:F1P} Max HP+{param2:I}", "Favonian Favor Duration|{param4:F1}s", "Energy Cost|{param5:I}", "CD|{param6:F1}s" ],
+        "parameters" : {
+          "param1" : [ 4.064, 4.3688, 4.6736, 5.08, 5.3848, 5.6896, 6.096, 6.5024, 6.9088, 7.3152, 7.7216, 8.128, 8.636, 9.144, 9.652 ],
+          "param2" : [ 323.5577, 355.91797, 390.97495, 428.72858, 469.17892, 512.3259, 558.1697, 606.7101, 657.94714, 711.8809, 768.5114, 827.83856, 889.8624, 954.58295, 1022.0002 ],
+          "param3" : [ 0.0336, 0.03612, 0.03864, 0.042, 0.04452, 0.04704, 0.0504, 0.05376, 0.05712, 0.06048, 0.06384, 0.0672, 0.0714, 0.0756, 0.0798 ],
+          "param4" : [ 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12 ],
+          "param5" : [ 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60 ],
+          "param6" : [ 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 ]
+        }
+      }
+    },
+    "passive1" : {
+      "name" : "The Wind's Gentle Grace",
+      "descriptionRaw" : "When characters affected by the Favonian Favor effect of the Elemental Burst <color=#FFD780FF>{LINK#S11155}Radiant Psalter{/LINK}</color> trigger Frozen reactions on opponents, they will grant Dahlia 2 Benison stacks. This effect can trigger once every 8s.",
+      "description" : "When characters affected by the Favonian Favor effect of the Elemental Burst **Radiant Psalter** trigger Frozen reactions on opponents, they will grant Dahlia 2 Benison stacks. This effect can trigger once every 8s."
+    },
+    "passive2" : {
+      "name" : "Prayer of Well-Wrought Joy",
+      "descriptionRaw" : "When your active party member is affected by the Favonian Favor effect of the Elemental Burst <color=#FFD780FF>{LINK#S11155}\"Radiant Psalter,\"{/LINK}</color> their ATK SPD will increase based on Dahlia's Max HP: Every 1,000 Max HP will cause an increase of 0.5%, up to a maximum of 20%.",
+      "description" : "When your active party member is affected by the Favonian Favor effect of the Elemental Burst **\"Radiant Psalter,\"** their ATK SPD will increase based on Dahlia's Max HP: Every 1,000 Max HP will cause an increase of 0.5%, up to a maximum of 20%."
+    },
+    "passive3" : {
+      "name" : "Pilgrimage Upon Returning Winds",
+      "descriptionRaw" : "During the day (06:00 – 18:00), your party members gain the Swift Stride effect: Movement SPD increased by 10%.\nDoes not take effect in Domains, Trounce Domains, or the Spiral Abyss. Swift Stride does not stack.",
+      "description" : "During the day (06:00 – 18:00), your party members gain the Swift Stride effect: Movement SPD increased by 10%.\nDoes not take effect in Domains, Trounce Domains, or the Spiral Abyss. Swift Stride does not stack."
+    },
+    "costs" : {
+      "lvl2" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 12500
+      }, {
+        "id" : 104307,
+        "name" : "Teachings of Ballad",
+        "count" : 3
+      }, {
+        "id" : 112011,
+        "name" : "Firm Arrowhead",
+        "count" : 6
+      } ],
+      "lvl3" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 17500
+      }, {
+        "id" : 104308,
+        "name" : "Guide to Ballad",
+        "count" : 2
+      }, {
+        "id" : 112012,
+        "name" : "Sharp Arrowhead",
+        "count" : 3
+      } ],
+      "lvl4" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 25000
+      }, {
+        "id" : 104308,
+        "name" : "Guide to Ballad",
+        "count" : 4
+      }, {
+        "id" : 112012,
+        "name" : "Sharp Arrowhead",
+        "count" : 4
+      } ],
+      "lvl5" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 30000
+      }, {
+        "id" : 104308,
+        "name" : "Guide to Ballad",
+        "count" : 6
+      }, {
+        "id" : 112012,
+        "name" : "Sharp Arrowhead",
+        "count" : 6
+      } ],
+      "lvl6" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 37500
+      }, {
+        "id" : 104308,
+        "name" : "Guide to Ballad",
+        "count" : 9
+      }, {
+        "id" : 112012,
+        "name" : "Sharp Arrowhead",
+        "count" : 9
+      } ],
+      "lvl7" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 120000
+      }, {
+        "id" : 104309,
+        "name" : "Philosophies of Ballad",
+        "count" : 4
+      }, {
+        "id" : 112013,
+        "name" : "Weathered Arrowhead",
+        "count" : 4
+      }, {
+        "id" : 113070,
+        "name" : "Eroded Scale-Feather",
+        "count" : 1
+      } ],
+      "lvl8" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 260000
+      }, {
+        "id" : 104309,
+        "name" : "Philosophies of Ballad",
+        "count" : 6
+      }, {
+        "id" : 112013,
+        "name" : "Weathered Arrowhead",
+        "count" : 6
+      }, {
+        "id" : 113070,
+        "name" : "Eroded Scale-Feather",
+        "count" : 1
+      } ],
+      "lvl9" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 450000
+      }, {
+        "id" : 104309,
+        "name" : "Philosophies of Ballad",
+        "count" : 12
+      }, {
+        "id" : 112013,
+        "name" : "Weathered Arrowhead",
+        "count" : 9
+      }, {
+        "id" : 113070,
+        "name" : "Eroded Scale-Feather",
+        "count" : 2
+      } ],
+      "lvl10" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 700000
+      }, {
+        "id" : 104309,
+        "name" : "Philosophies of Ballad",
+        "count" : 16
+      }, {
+        "id" : 112013,
+        "name" : "Weathered Arrowhead",
+        "count" : 12
+      }, {
+        "id" : 113070,
+        "name" : "Eroded Scale-Feather",
+        "count" : 2
+      }, {
+        "id" : 104319,
+        "name" : "Crown of Insight",
+        "count" : 1
+      } ]
+    },
+    "images" : {
+      "filename_combat1" : "Skill_A_01",
+      "filename_combat2" : "Skill_S_Dahlia_01",
+      "filename_combat3" : "Skill_E_Dahlia_01_HD",
+      "filename_passive1" : "UI_Talent_S_Dahlia_05",
+      "filename_passive2" : "UI_Talent_S_Dahlia_06",
+      "filename_passive3" : "UI_Talent_S_Dehya_07"
+    },
+    "version" : "5.7"
+  }
+}

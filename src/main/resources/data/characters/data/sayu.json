@@ -1,0 +1,396 @@
+{
+  "id" : 10000053,
+  "name" : "Sayu",
+  "title" : "Mujina Ninja",
+  "description" : "A pint-sized ninja attached to the Shuumatsuban, who always seems sleep-deprived.",
+  "weaponType" : "WEAPON_CLAYMORE",
+  "weaponText" : "Claymore",
+  "bodyType" : "BODY_LOLI",
+  "gender" : "Female",
+  "qualityType" : "QUALITY_PURPLE",
+  "rarity" : 4,
+  "birthdaymmdd" : "10/19",
+  "birthday" : "October 19",
+  "elementType" : "ELEMENT_ANEMO",
+  "elementText" : "Anemo",
+  "affiliation" : "Shuumatsuban",
+  "associationType" : "ASSOC_INAZUMA",
+  "region" : "Inazuma",
+  "substatType" : "FIGHT_PROP_ELEMENT_MASTERY",
+  "substatText" : "Elemental Mastery",
+  "constellation" : "Nyctereutes Minor",
+  "cv" : {
+    "english" : "Lilypichu (Lily Ki)",
+    "chinese" : "Sakula小舞",
+    "japanese" : "洲崎綾",
+    "korean" : "Lee Ji-hyeon"
+  },
+  "costs" : {
+    "ascend1" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 20000
+    }, {
+      "id" : 104151,
+      "name" : "Vayuda Turquoise Sliver",
+      "count" : 1
+    }, {
+      "id" : 101203,
+      "name" : "Crystal Marrow",
+      "count" : 3
+    }, {
+      "id" : 112038,
+      "name" : "Whopperflower Nectar",
+      "count" : 3
+    } ],
+    "ascend2" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 40000
+    }, {
+      "id" : 104152,
+      "name" : "Vayuda Turquoise Fragment",
+      "count" : 3
+    }, {
+      "id" : 113022,
+      "name" : "Marionette Core",
+      "count" : 2
+    }, {
+      "id" : 101203,
+      "name" : "Crystal Marrow",
+      "count" : 10
+    }, {
+      "id" : 112038,
+      "name" : "Whopperflower Nectar",
+      "count" : 15
+    } ],
+    "ascend3" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 60000
+    }, {
+      "id" : 104152,
+      "name" : "Vayuda Turquoise Fragment",
+      "count" : 6
+    }, {
+      "id" : 113022,
+      "name" : "Marionette Core",
+      "count" : 4
+    }, {
+      "id" : 101203,
+      "name" : "Crystal Marrow",
+      "count" : 20
+    }, {
+      "id" : 112039,
+      "name" : "Shimmering Nectar",
+      "count" : 12
+    } ],
+    "ascend4" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 80000
+    }, {
+      "id" : 104153,
+      "name" : "Vayuda Turquoise Chunk",
+      "count" : 3
+    }, {
+      "id" : 113022,
+      "name" : "Marionette Core",
+      "count" : 8
+    }, {
+      "id" : 101203,
+      "name" : "Crystal Marrow",
+      "count" : 30
+    }, {
+      "id" : 112039,
+      "name" : "Shimmering Nectar",
+      "count" : 18
+    } ],
+    "ascend5" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 100000
+    }, {
+      "id" : 104153,
+      "name" : "Vayuda Turquoise Chunk",
+      "count" : 6
+    }, {
+      "id" : 113022,
+      "name" : "Marionette Core",
+      "count" : 12
+    }, {
+      "id" : 101203,
+      "name" : "Crystal Marrow",
+      "count" : 45
+    }, {
+      "id" : 112040,
+      "name" : "Energy Nectar",
+      "count" : 12
+    } ],
+    "ascend6" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 120000
+    }, {
+      "id" : 104154,
+      "name" : "Vayuda Turquoise Gemstone",
+      "count" : 6
+    }, {
+      "id" : 113022,
+      "name" : "Marionette Core",
+      "count" : 20
+    }, {
+      "id" : 101203,
+      "name" : "Crystal Marrow",
+      "count" : 60
+    }, {
+      "id" : 112040,
+      "name" : "Energy Nectar",
+      "count" : 24
+    } ]
+  },
+  "images" : {
+    "cover1" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/07/22/982542a6c0e2dfb628a4f087fa6bde5d_2557212138563128041.png",
+    "cover2" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/06/29/495b155d1878702b72fed652e17ae61c_4028255231138738337.png",
+    "hoyolab-avatar" : "https://img-os-static.hoyolab.com/communityWeb/upload/94b60ed23cb102d39f99335e9658b17d.png",
+    "filename_icon" : "UI_AvatarIcon_Sayu",
+    "filename_iconCard" : "UI_AvatarIcon_Sayu_Card",
+    "filename_sideIcon" : "UI_AvatarIcon_Side_Sayu",
+    "filename_gachaSplash" : "UI_Gacha_AvatarImg_Sayu",
+    "filename_gachaSlice" : "UI_Gacha_AvatarIcon_Sayu",
+    "mihoyo_icon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Sayu.png",
+    "mihoyo_sideIcon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_side_icon/UI_AvatarIcon_Side_Sayu.png"
+  },
+  "url" : {
+    "fandom" : "https://genshin-impact.fandom.com/wiki/Sayu"
+  },
+  "version" : "2.0",
+  "talents" : {
+    "id" : 5301,
+    "name" : "Sayu",
+    "combat1" : {
+      "name" : "Shuumatsuban Ninja Blade",
+      "descriptionRaw" : "<color=#FFD780FF>Normal Attack</color>\nPerforms up to 4 consecutive strikes.\n\n<color=#FFD780FF>Charged Attack</color>\nDrains Stamina over time to perform continuous spinning attacks against all nearby opponents.\nAt the end of the sequence, performs a more powerful slash. \n\n<color=#FFD780FF>Plunging Attack</color>\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "description" : "Normal Attack\nPerforms up to 4 consecutive strikes.\n\nCharged Attack\nDrains Stamina over time to perform continuous spinning attacks against all nearby opponents.\nAt the end of the sequence, performs a more powerful slash. \n\nPlunging Attack\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "attributes" : {
+        "labels" : [ "1-Hit DMG|{param1:F1P}", "2-Hit DMG|{param2:F1P}", "3-Hit DMG|{param3:F1P}+{param4:F1P}", "4-Hit DMG|{param5:F1P}", "Charged Attack Spinning DMG|{param6:F1P}", "Charged Attack Final DMG|{param7:P}", "Charged Attack Stamina Cost|{param8:F1}/s", "Max Duration|{param9:F1}s", "Plunge DMG|{param10:F1P}", "Low/High Plunge DMG|{param11:P}/{param12:P}" ],
+        "parameters" : {
+          "param1" : [ 0.7224, 0.7812, 0.84, 0.924, 0.9828, 1.05, 1.1424, 1.2348, 1.3272, 1.428, 1.5435, 1.679328, 1.815156, 1.950984, 2.09916 ],
+          "param2" : [ 0.7138, 0.7719, 0.83, 0.913, 0.9711, 1.0375, 1.1288, 1.2201, 1.3114, 1.411, 1.525125, 1.659336, 1.793547, 1.927758, 2.07417 ],
+          "param3" : [ 0.4343, 0.46965, 0.505, 0.5555, 0.59085, 0.63125, 0.6868, 0.74235, 0.7979, 0.8585, 0.927937, 1.009596, 1.091255, 1.172913, 1.261995 ],
+          "param4" : [ 0.4343, 0.46965, 0.505, 0.5555, 0.59085, 0.63125, 0.6868, 0.74235, 0.7979, 0.8585, 0.927937, 1.009596, 1.091255, 1.172913, 1.261995 ],
+          "param5" : [ 0.98126, 1.06113, 1.141, 1.2551, 1.33497, 1.42625, 1.55176, 1.67727, 1.80278, 1.9397, 2.096588, 2.281087, 2.465587, 2.650087, 2.851359 ],
+          "param6" : [ 0.625455, 0.676364, 0.727273, 0.8, 0.850909, 0.909091, 0.989091, 1.069091, 1.149091, 1.236364, 1.336364, 1.453964, 1.571564, 1.689164, 1.817455 ],
+          "param7" : [ 1.1309, 1.22295, 1.315, 1.4465, 1.53855, 1.64375, 1.7884, 1.93305, 2.0777, 2.2355, 2.416313, 2.628948, 2.841584, 3.054219, 3.286185 ],
+          "param8" : [ 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40 ],
+          "param9" : [ 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5 ],
+          "param10" : [ 0.745878, 0.806589, 0.8673, 0.95403, 1.014741, 1.084125, 1.179528, 1.274931, 1.370334, 1.47441, 1.578486, 1.682562, 1.786638, 1.890714, 1.99479 ],
+          "param11" : [ 1.49144, 1.612836, 1.734233, 1.907656, 2.029052, 2.167791, 2.358556, 2.549322, 2.740087, 2.948195, 3.156303, 3.364411, 3.572519, 3.780627, 3.988735 ],
+          "param12" : [ 1.862889, 2.01452, 2.16615, 2.382765, 2.534396, 2.707688, 2.945964, 3.184241, 3.422517, 3.682455, 3.942393, 4.202331, 4.462269, 4.722207, 4.982145 ]
+        }
+      }
+    },
+    "combat2" : {
+      "name" : "Yoohoo Art: Fuuin Dash",
+      "descriptionRaw" : "#The special technique of the Yoohoo Ninja Arts!\nSayu curls up into a rolling Fuufuu Windwheel and smashes into opponents at high speed, dealing <color=#80FFD7FF>Anemo DMG</color>. When the duration ends, she unleashes a Fuufuu Whirlwind Kick, dealing <color=#80FFD7FF>AoE Anemo DMG</color>.\n\n<color=#FFD780FF>{LAYOUT_MOBILE#Tap}{LAYOUT_PC#Press}{LAYOUT_PS#Press}</color>\nEnters the Fuufuu Windwheel state, rolling forward a short distance before using the Fuufuu Whirlwind Kick.\n\n<color=#FFD780FF>Hold</color>\nRolls about continuously in the Fuufuu Windwheel state, increasing Sayu's resistance to interruption while within that state.\nDuring this time, Sayu can control the direction of her roll, and can use the skill again to end her Windwheel state early and unleash a stronger version of the Fuufuu Whirlwind Kick.\nThe Hold version of this skill can trigger Elemental Absorption.\n\nThis skill has a maximum duration of 10s and enters CD once its effects end. The longer Sayu remains in her Windwheel state, the longer the CD.\n\n<color=#FFD780FF>Elemental Absorption</color>\nIf Sayu comes into contact with <color=#80C0FFFF>Hydro</color>/<color=#FF9999FF>Pyro</color>/<color=#99FFFFFF>Cryo</color>/<color=#FFACFFFF>Electro</color> while in her Windwheel state, she will deal additional elemental DMG of that type.\nElemental Absorption may only occur once per use of this skill.\n\n<i>Sayu can pull this skill off with her eyes closed. This technique was originally created for escaping, but now that she's got a Vision, might as well make her foes eat dirt while she's at it.</i>",
+      "description" : "The special technique of the Yoohoo Ninja Arts!\nSayu curls up into a rolling Fuufuu Windwheel and smashes into opponents at high speed, dealing Anemo DMG. When the duration ends, she unleashes a Fuufuu Whirlwind Kick, dealing AoE Anemo DMG.\n\nPress\nEnters the Fuufuu Windwheel state, rolling forward a short distance before using the Fuufuu Whirlwind Kick.\n\nHold\nRolls about continuously in the Fuufuu Windwheel state, increasing Sayu's resistance to interruption while within that state.\nDuring this time, Sayu can control the direction of her roll, and can use the skill again to end her Windwheel state early and unleash a stronger version of the Fuufuu Whirlwind Kick.\nThe Hold version of this skill can trigger Elemental Absorption.\n\nThis skill has a maximum duration of 10s and enters CD once its effects end. The longer Sayu remains in her Windwheel state, the longer the CD.\n\nElemental Absorption\nIf Sayu comes into contact with Hydro/Pyro/Cryo/Electro while in her Windwheel state, she will deal additional elemental DMG of that type.\nElemental Absorption may only occur once per use of this skill.",
+      "flavorText" : "Sayu can pull this skill off with her eyes closed. This technique was originally created for escaping, but now that she's got a Vision, might as well make her foes eat dirt while she's at it.",
+      "attributes" : {
+        "labels" : [ "Fuufuu Windwheel DMG|{param1:F1P}", "Fuufuu Whirlwind Kick Press DMG|{param3:F1P}", "Fuufuu Whirlwind Kick Hold DMG|{param4:F1P}", "Fuufuu Windwheel Elemental DMG|{param2:F1P}", "Fuufuu Whirlwind Kick Elemental DMG|{param5:F1P}", "Max Duration (Hold)|{param6:F1}s", "CD|{param7:F1} to {param8:F1}s" ],
+        "parameters" : {
+          "param1" : [ 0.36, 0.387, 0.414, 0.45, 0.477, 0.504, 0.54, 0.576, 0.612, 0.648, 0.684, 0.72, 0.765, 0.81, 0.855 ],
+          "param2" : [ 0.168, 0.1806, 0.1932, 0.21, 0.2226, 0.2352, 0.252, 0.2688, 0.2856, 0.3024, 0.3192, 0.336, 0.357, 0.378, 0.399 ],
+          "param3" : [ 1.584, 1.7028, 1.8216, 1.98, 2.0988, 2.2176, 2.376, 2.5344, 2.6928, 2.8512, 3.0096, 3.168, 3.366, 3.564, 3.762 ],
+          "param4" : [ 2.176, 2.3392, 2.5024, 2.72, 2.8832, 3.0464, 3.264, 3.4816, 3.6992, 3.9168, 4.1344, 4.352, 4.624, 4.896, 5.168 ],
+          "param5" : [ 0.7616, 0.81872, 0.87584, 0.952, 1.00912, 1.06624, 1.1424, 1.21856, 1.29472, 1.37088, 1.44704, 1.5232, 1.6184, 1.7136, 1.8088 ],
+          "param6" : [ 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 ],
+          "param7" : [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 ],
+          "param8" : [ 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11 ]
+        }
+      }
+    },
+    "combat3" : {
+      "name" : "Yoohoo Art: Mujina Flurry",
+      "descriptionRaw" : "The other super special technique of the Yoohoo Ninja Arts! It summons a pair of helping hands for Sayu.\nDeals <color=#80FFD7FF>Anemo DMG</color> to nearby opponents and heals all nearby party members. The amount of HP restored is based on Sayu's ATK. This skill then summons a Muji-Muji Daruma.\n\n<color=#FFD780FF>Muji-Muji Daruma</color>\nAt specific intervals, the Daruma will take one of several actions based on the situation around it:\n·If the HP of nearby characters is above 70%, it will attack a nearby opponent, dealing <color=#80FFD7FF>Anemo DMG</color>.\n·If there are active characters with 70% or less HP nearby, it will heal the active character with the lowest percentage HP left. If there are no opponents nearby, it will heal active characters nearby even if they have 70% HP or more.\n\n<i>People who don't know the first thing about ninjutsu love to watch Sayu show off this skill, and some have tried to learn it from her. But Sayu just wants to sleep and not be disturbed.</i>",
+      "description" : "The other super special technique of the Yoohoo Ninja Arts! It summons a pair of helping hands for Sayu.\nDeals Anemo DMG to nearby opponents and heals all nearby party members. The amount of HP restored is based on Sayu's ATK. This skill then summons a Muji-Muji Daruma.\n\nMuji-Muji Daruma\nAt specific intervals, the Daruma will take one of several actions based on the situation around it:\n·If the HP of nearby characters is above 70%, it will attack a nearby opponent, dealing Anemo DMG.\n·If there are active characters with 70% or less HP nearby, it will heal the active character with the lowest percentage HP left. If there are no opponents nearby, it will heal active characters nearby even if they have 70% HP or more.",
+      "flavorText" : "People who don't know the first thing about ninjutsu love to watch Sayu show off this skill, and some have tried to learn it from her. But Sayu just wants to sleep and not be disturbed.",
+      "attributes" : {
+        "labels" : [ "Skill Activation DMG|{param1:P}", "Skill Activation Healing|{param3:F1P} ATK+{param2:I}", "Muji-Muji Daruma DMG|{param4:P}", "Muji-Muji Daruma Healing|{param6:F1P} ATK+{param5:I}", "Duration|{param7:F1}s", "CD|{param8:F1}s", "Energy Cost|{param9:I}" ],
+        "parameters" : {
+          "param1" : [ 1.168, 1.2556, 1.3432, 1.46, 1.5476, 1.6352, 1.752, 1.8688, 1.9856, 2.1024, 2.2192, 2.336, 2.482, 2.628, 2.774 ],
+          "param2" : [ 577.3388, 635.0807, 697.63446, 765, 837.17737, 914.16656, 995.96765, 1082.5804, 1174.0051, 1270.2417, 1371.29, 1477.1501, 1587.8221, 1703.3059, 1823.6016 ],
+          "param3" : [ 0.9216, 0.99072, 1.05984, 1.152, 1.22112, 1.29024, 1.3824, 1.47456, 1.56672, 1.65888, 1.75104, 1.8432, 1.9584, 2.0736, 2.1888 ],
+          "param4" : [ 0.52, 0.559, 0.598, 0.65, 0.689, 0.728, 0.78, 0.832, 0.884, 0.936, 0.988, 1.04, 1.105, 1.17, 1.235 ],
+          "param5" : [ 500.3603, 550.40326, 604.6165, 663, 725.5537, 792.2777, 863.17194, 938.2364, 1017.4711, 1100.8761, 1188.4513, 1280.1968, 1376.1125, 1476.1985, 1580.4547 ],
+          "param6" : [ 0.79872, 0.858624, 0.918528, 0.9984, 1.058304, 1.118208, 1.19808, 1.277952, 1.357824, 1.437696, 1.517568, 1.59744, 1.69728, 1.79712, 1.89696 ],
+          "param7" : [ 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12 ],
+          "param8" : [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ],
+          "param9" : [ 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80 ]
+        }
+      }
+    },
+    "passive1" : {
+      "name" : "Someone More Capable",
+      "descriptionRaw" : "When Sayu triggers a Swirl reaction while active, she heals all your characters and nearby allies for 300 HP. She will also heal an additional 1.2 HP for every point of Elemental Mastery she has.\nThis effect can be triggered once every 2s.",
+      "description" : "When Sayu triggers a Swirl reaction while active, she heals all your characters and nearby allies for 300 HP. She will also heal an additional 1.2 HP for every point of Elemental Mastery she has.\nThis effect can be triggered once every 2s."
+    },
+    "passive2" : {
+      "name" : "No Work Today!",
+      "descriptionRaw" : "The Muji-Muji Daruma created by <color=#FFD780FF>Yoohoo Art: Mujina Flurry</color> gains the following effects:\n·When healing a character, it will also heal characters near that healed character for 20% the amount of HP.\n·Increases the AoE of its attack against opponents.",
+      "description" : "The Muji-Muji Daruma created by Yoohoo Art: Mujina Flurry gains the following effects:\n·When healing a character, it will also heal characters near that healed character for 20% the amount of HP.\n·Increases the AoE of its attack against opponents."
+    },
+    "passive3" : {
+      "name" : "Yoohoo Art: Silencer's Secret",
+      "descriptionRaw" : "When Sayu is in the party, your characters will not startle Crystalflies and certain other animals when getting near them.\nCheck the \"Other\" sub-category of the \"Living Beings / Wildlife\" section in the Archive for creatures this skill works on.",
+      "description" : "When Sayu is in the party, your characters will not startle Crystalflies and certain other animals when getting near them.\nCheck the \"Other\" sub-category of the \"Living Beings / Wildlife\" section in the Archive for creatures this skill works on."
+    },
+    "costs" : {
+      "lvl2" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 12500
+      }, {
+        "id" : 104326,
+        "name" : "Teachings of Light",
+        "count" : 3
+      }, {
+        "id" : 112038,
+        "name" : "Whopperflower Nectar",
+        "count" : 6
+      } ],
+      "lvl3" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 17500
+      }, {
+        "id" : 104327,
+        "name" : "Guide to Light",
+        "count" : 2
+      }, {
+        "id" : 112039,
+        "name" : "Shimmering Nectar",
+        "count" : 3
+      } ],
+      "lvl4" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 25000
+      }, {
+        "id" : 104327,
+        "name" : "Guide to Light",
+        "count" : 4
+      }, {
+        "id" : 112039,
+        "name" : "Shimmering Nectar",
+        "count" : 4
+      } ],
+      "lvl5" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 30000
+      }, {
+        "id" : 104327,
+        "name" : "Guide to Light",
+        "count" : 6
+      }, {
+        "id" : 112039,
+        "name" : "Shimmering Nectar",
+        "count" : 6
+      } ],
+      "lvl6" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 37500
+      }, {
+        "id" : 104327,
+        "name" : "Guide to Light",
+        "count" : 9
+      }, {
+        "id" : 112039,
+        "name" : "Shimmering Nectar",
+        "count" : 9
+      } ],
+      "lvl7" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 120000
+      }, {
+        "id" : 104328,
+        "name" : "Philosophies of Light",
+        "count" : 4
+      }, {
+        "id" : 112040,
+        "name" : "Energy Nectar",
+        "count" : 4
+      }, {
+        "id" : 113019,
+        "name" : "Gilded Scale",
+        "count" : 1
+      } ],
+      "lvl8" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 260000
+      }, {
+        "id" : 104328,
+        "name" : "Philosophies of Light",
+        "count" : 6
+      }, {
+        "id" : 112040,
+        "name" : "Energy Nectar",
+        "count" : 6
+      }, {
+        "id" : 113019,
+        "name" : "Gilded Scale",
+        "count" : 1
+      } ],
+      "lvl9" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 450000
+      }, {
+        "id" : 104328,
+        "name" : "Philosophies of Light",
+        "count" : 12
+      }, {
+        "id" : 112040,
+        "name" : "Energy Nectar",
+        "count" : 9
+      }, {
+        "id" : 113019,
+        "name" : "Gilded Scale",
+        "count" : 2
+      } ],
+      "lvl10" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 700000
+      }, {
+        "id" : 104328,
+        "name" : "Philosophies of Light",
+        "count" : 16
+      }, {
+        "id" : 112040,
+        "name" : "Energy Nectar",
+        "count" : 12
+      }, {
+        "id" : 113019,
+        "name" : "Gilded Scale",
+        "count" : 2
+      }, {
+        "id" : 104319,
+        "name" : "Crown of Insight",
+        "count" : 1
+      } ]
+    },
+    "images" : {
+      "filename_combat1" : "Skill_A_04",
+      "filename_combat2" : "Skill_S_Sayu_01",
+      "filename_combat3" : "Skill_E_Sayu_01_HD",
+      "filename_passive1" : "UI_Talent_S_Sayu_05",
+      "filename_passive2" : "UI_Talent_S_Sayu_06",
+      "filename_passive3" : "UI_Talent_S_Sayu_07"
+    },
+    "version" : "2.0"
+  }
+}

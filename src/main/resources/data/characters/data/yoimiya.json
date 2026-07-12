@@ -1,0 +1,388 @@
+{
+  "id" : 10000049,
+  "name" : "Yoimiya",
+  "title" : "Frolicking Flames",
+  "description" : "Owner of Naganohara Fireworks. Known as the \"Queen of the Summer Festival,\" she excels in her craft of creating fireworks that symbolize people's hopes and dreams.",
+  "weaponType" : "WEAPON_BOW",
+  "weaponText" : "Bow",
+  "bodyType" : "BODY_GIRL",
+  "gender" : "Female",
+  "qualityType" : "QUALITY_ORANGE",
+  "rarity" : 5,
+  "birthdaymmdd" : "6/21",
+  "birthday" : "June 21",
+  "elementType" : "ELEMENT_PYRO",
+  "elementText" : "Pyro",
+  "affiliation" : "Naganohara Fireworks",
+  "associationType" : "ASSOC_INAZUMA",
+  "region" : "Inazuma",
+  "substatType" : "FIGHT_PROP_CRITICAL",
+  "substatText" : "CRIT Rate",
+  "constellation" : "Carassius Auratus",
+  "cv" : {
+    "english" : "Jenny Yokobori",
+    "chinese" : "金娜",
+    "japanese" : "植田佳奈",
+    "korean" : "Park Shin-hee"
+  },
+  "costs" : {
+    "ascend1" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 20000
+    }, {
+      "id" : 104111,
+      "name" : "Agnidus Agate Sliver",
+      "count" : 1
+    }, {
+      "id" : 101205,
+      "name" : "Naku Weed",
+      "count" : 3
+    }, {
+      "id" : 112008,
+      "name" : "Divining Scroll",
+      "count" : 3
+    } ],
+    "ascend2" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 40000
+    }, {
+      "id" : 104112,
+      "name" : "Agnidus Agate Fragment",
+      "count" : 3
+    }, {
+      "id" : 113024,
+      "name" : "Smoldering Pearl",
+      "count" : 2
+    }, {
+      "id" : 101205,
+      "name" : "Naku Weed",
+      "count" : 10
+    }, {
+      "id" : 112008,
+      "name" : "Divining Scroll",
+      "count" : 15
+    } ],
+    "ascend3" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 60000
+    }, {
+      "id" : 104112,
+      "name" : "Agnidus Agate Fragment",
+      "count" : 6
+    }, {
+      "id" : 113024,
+      "name" : "Smoldering Pearl",
+      "count" : 4
+    }, {
+      "id" : 101205,
+      "name" : "Naku Weed",
+      "count" : 20
+    }, {
+      "id" : 112009,
+      "name" : "Sealed Scroll",
+      "count" : 12
+    } ],
+    "ascend4" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 80000
+    }, {
+      "id" : 104113,
+      "name" : "Agnidus Agate Chunk",
+      "count" : 3
+    }, {
+      "id" : 113024,
+      "name" : "Smoldering Pearl",
+      "count" : 8
+    }, {
+      "id" : 101205,
+      "name" : "Naku Weed",
+      "count" : 30
+    }, {
+      "id" : 112009,
+      "name" : "Sealed Scroll",
+      "count" : 18
+    } ],
+    "ascend5" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 100000
+    }, {
+      "id" : 104113,
+      "name" : "Agnidus Agate Chunk",
+      "count" : 6
+    }, {
+      "id" : 113024,
+      "name" : "Smoldering Pearl",
+      "count" : 12
+    }, {
+      "id" : 101205,
+      "name" : "Naku Weed",
+      "count" : 45
+    }, {
+      "id" : 112010,
+      "name" : "Forbidden Curse Scroll",
+      "count" : 12
+    } ],
+    "ascend6" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 120000
+    }, {
+      "id" : 104114,
+      "name" : "Agnidus Agate Gemstone",
+      "count" : 6
+    }, {
+      "id" : 113024,
+      "name" : "Smoldering Pearl",
+      "count" : 20
+    }, {
+      "id" : 101205,
+      "name" : "Naku Weed",
+      "count" : 60
+    }, {
+      "id" : 112010,
+      "name" : "Forbidden Curse Scroll",
+      "count" : 24
+    } ]
+  },
+  "images" : {
+    "cover1" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/07/22/593e6a6d5d8836ca2ab5c27a98593e58_2669475025677636265.png",
+    "cover2" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/06/29/477828c8143db56cf4bf8f4794dc366a_6260604716479682113.png",
+    "hoyolab-avatar" : "https://img-os-static.hoyolab.com/communityWeb/upload/7c15028cb304de316e2cdb584bc33ff3.png",
+    "filename_icon" : "UI_AvatarIcon_Yoimiya",
+    "filename_iconCard" : "UI_AvatarIcon_Yoimiya_Card",
+    "filename_sideIcon" : "UI_AvatarIcon_Side_Yoimiya",
+    "filename_gachaSplash" : "UI_Gacha_AvatarImg_Yoimiya",
+    "filename_gachaSlice" : "UI_Gacha_AvatarIcon_Yoimiya",
+    "mihoyo_icon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Yoimiya.png",
+    "mihoyo_sideIcon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_side_icon/UI_AvatarIcon_Side_Yoimiya.png"
+  },
+  "url" : {
+    "fandom" : "https://genshin-impact.fandom.com/wiki/Yoimiya"
+  },
+  "version" : "2.0",
+  "talents" : {
+    "id" : 4901,
+    "name" : "Yoimiya",
+    "combat1" : {
+      "name" : "Firework Flare-Up",
+      "descriptionRaw" : "<color=#FFD780FF>Normal Attack</color>\nPerforms up to 5 consecutive shots with a bow.\n\n<color=#FFD780FF>Charged Attack</color>\nPerforms a more precise <color=#FFD780FF>Aimed Shot</color> with increased DMG.\nWhile aiming, flames will accumulate on the arrowhead before being fired off as an attack. Has different effects based on how long the energy has been charged:\n·Charge Level 1: Fires off a flaming arrow that deals <color=#FF9999FF>Pyro DMG</color>.\n·Charge Level 2: Generates a maximum of 3 Kindling Arrows based on time spent charging, releasing them as part of this Aimed Shot. Kindling Arrows will home in on nearby opponents, dealing <color=#FF9999FF>Pyro DMG</color> on hit.\n\n<color=#FFD780FF>Plunging Attack</color>\nFires off a shower of arrows in mid-air before falling and striking the ground, dealing AoE DMG upon impact.",
+      "description" : "Normal Attack\nPerforms up to 5 consecutive shots with a bow.\n\nCharged Attack\nPerforms a more precise Aimed Shot with increased DMG.\nWhile aiming, flames will accumulate on the arrowhead before being fired off as an attack. Has different effects based on how long the energy has been charged:\n·Charge Level 1: Fires off a flaming arrow that deals Pyro DMG.\n·Charge Level 2: Generates a maximum of 3 Kindling Arrows based on time spent charging, releasing them as part of this Aimed Shot. Kindling Arrows will home in on nearby opponents, dealing Pyro DMG on hit.\n\nPlunging Attack\nFires off a shower of arrows in mid-air before falling and striking the ground, dealing AoE DMG upon impact.",
+      "attributes" : {
+        "labels" : [ "1-Hit DMG|{param1:F1P}×2", "2-Hit DMG|{param2:F1P}", "3-Hit DMG|{param3:F1P}", "4-Hit DMG|{param4:F1P}×2", "5-Hit DMG|{param5:F1P}", "Aimed Shot|{param6:F1P}", "Fully-Charged Aimed Shot|{param7:P}", "Kindling Arrow DMG|{param8:P}", "Plunge DMG|{param9:F1P}", "Low/High Plunge DMG|{param10:P}/{param11:P}" ],
+        "parameters" : {
+          "param1" : [ 0.3564, 0.3807, 0.405, 0.4374, 0.4617, 0.49005, 0.5265, 0.56295, 0.5994, 0.63585, 0.6723, 0.70875, 0.7452, 0.78165, 0.8181 ],
+          "param2" : [ 0.68376, 0.73038, 0.777, 0.83916, 0.88578, 0.94017, 1.0101, 1.08003, 1.14996, 1.21989, 1.28982, 1.35975, 1.42968, 1.49961, 1.56954 ],
+          "param3" : [ 0.888888, 0.949494, 1.0101, 1.090908, 1.151514, 1.222221, 1.31313, 1.404039, 1.494948, 1.585857, 1.676766, 1.767675, 1.858584, 1.949493, 2.040402 ],
+          "param4" : [ 0.4642, 0.49585, 0.5275, 0.5697, 0.60135, 0.638275, 0.68575, 0.733225, 0.7807, 0.828175, 0.87565, 0.923125, 0.9706, 1.018075, 1.06555 ],
+          "param5" : [ 1.05864, 1.13082, 1.203, 1.29924, 1.37142, 1.45563, 1.5639, 1.67217, 1.78044, 1.88871, 1.99698, 2.10525, 2.21352, 2.32179, 2.43006 ],
+          "param6" : [ 0.4386, 0.4743, 0.51, 0.561, 0.5967, 0.6375, 0.6936, 0.7497, 0.8058, 0.867, 0.9282, 0.9894, 1.0506, 1.1118, 1.173 ],
+          "param7" : [ 1.24, 1.333, 1.426, 1.55, 1.643, 1.736, 1.86, 1.984, 2.108, 2.232, 2.356, 2.48, 2.635, 2.79, 2.945 ],
+          "param8" : [ 0.164, 0.1763, 0.1886, 0.205, 0.2173, 0.2296, 0.246, 0.2624, 0.2788, 0.2952, 0.3116, 0.328, 0.3485, 0.369, 0.3895 ],
+          "param9" : [ 0.568288, 0.614544, 0.6608, 0.72688, 0.773136, 0.826, 0.898688, 0.971376, 1.044064, 1.12336, 1.202656, 1.281952, 1.361248, 1.440544, 1.51984 ],
+          "param10" : [ 1.136335, 1.228828, 1.32132, 1.453452, 1.545944, 1.65165, 1.796995, 1.94234, 2.087686, 2.246244, 2.404802, 2.563361, 2.721919, 2.880478, 3.039036 ],
+          "param11" : [ 1.419344, 1.534872, 1.6504, 1.81544, 1.930968, 2.063, 2.244544, 2.426088, 2.607632, 2.80568, 3.003728, 3.201776, 3.399824, 3.597872, 3.79592 ]
+        }
+      }
+    },
+    "combat2" : {
+      "name" : "Niwabi Fire-Dance",
+      "descriptionRaw" : "Yoimiya waves a sparkler and causes a ring of saltpeter to surround her.\n\n<color=#FFD780FF>Niwabi Enshou</color>\nDuring this time, arrows fired by Yoimiya's Normal Attack will be Blazing Arrows, and their DMG will be increased and converted to <color=#FF9999FF>Pyro DMG</color>. During this time, Normal Attack: Firework Flare-Up will not generate Kindling Arrows at Charge Level 2.\n\nThis effect will deactivate when Yoimiya leaves the field.\n\n<i>\"Niwabi\" is a form of incense firework created by Yoimiya herself. Its ability to be lit without any prior training or preparation has made it a real hit. After many fire-related incidents, the Tenryou Commission ordered the use of \"Niwabi\" banned, but small, bright sparks can often still be seen springing up at night. If seen from above, they look almost like little twinkling stars.</i>",
+      "description" : "Yoimiya waves a sparkler and causes a ring of saltpeter to surround her.\n\nNiwabi Enshou\nDuring this time, arrows fired by Yoimiya's Normal Attack will be Blazing Arrows, and their DMG will be increased and converted to Pyro DMG. During this time, Normal Attack: Firework Flare-Up will not generate Kindling Arrows at Charge Level 2.\n\nThis effect will deactivate when Yoimiya leaves the field.",
+      "flavorText" : "\"Niwabi\" is a form of incense firework created by Yoimiya herself. Its ability to be lit without any prior training or preparation has made it a real hit. After many fire-related incidents, the Tenryou Commission ordered the use of \"Niwabi\" banned, but small, bright sparks can often still be seen springing up at night. If seen from above, they look almost like little twinkling stars.",
+      "attributes" : {
+        "labels" : [ "Blazing Arrow DMG|{param4:F1P} Normal Attack DMG", "Duration|{param2:F1}s", "CD|{param3:F1}s" ],
+        "parameters" : {
+          "param1" : [ 0.37909, 0.40179, 0.42449, 0.454, 0.4767, 0.4994, 0.52891, 0.55842, 0.58793, 0.61744, 0.64695, 0.67646, 0.70597, 0.73548, 0.76499 ],
+          "param2" : [ 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 ],
+          "param3" : [ 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18 ],
+          "param4" : [ 1.37909, 1.40179, 1.42449, 1.454, 1.4767, 1.4994, 1.52891, 1.55842, 1.58793, 1.61744, 1.64695, 1.67646, 1.70597, 1.73548, 1.76499 ]
+        }
+      }
+    },
+    "combat3" : {
+      "name" : "Ryuukin Saxifrage",
+      "descriptionRaw" : "Yoimiya leaps into the air along with her original creation, the \"Ryuukin Saxifrage,\" and fires forth blazing rockets bursting with surprises that deal <color=#FF9999FF>AoE Pyro DMG</color> and mark one of the hit opponents with Aurous Blaze.\n\n<color=#FFD780FF>Aurous Blaze</color>\nAll Normal/Charged/Plunging Attacks, Elemental Skills, and Elemental Bursts by any party member other than Yoimiya that hit an opponent marked by Aurous Blaze will trigger an explosion, dealing <color=#FF9999FF>AoE Pyro DMG</color>.\nWhen an opponent affected by Aurous Blaze is defeated before its duration expires, the effect will pass on to another nearby opponent, who will inherit the remaining duration.\n\nOne Aurous Blaze explosion can be triggered every 2s. When Yoimiya is down, Aurous Blaze effects created through her skills will be deactivated.\n\n<i>Fireworks are man-made starlight, comets fired into the sky. Though they last for but an instant, the memory of their brilliance shall surely live on.</i>",
+      "description" : "Yoimiya leaps into the air along with her original creation, the \"Ryuukin Saxifrage,\" and fires forth blazing rockets bursting with surprises that deal AoE Pyro DMG and mark one of the hit opponents with Aurous Blaze.\n\nAurous Blaze\nAll Normal/Charged/Plunging Attacks, Elemental Skills, and Elemental Bursts by any party member other than Yoimiya that hit an opponent marked by Aurous Blaze will trigger an explosion, dealing AoE Pyro DMG.\nWhen an opponent affected by Aurous Blaze is defeated before its duration expires, the effect will pass on to another nearby opponent, who will inherit the remaining duration.\n\nOne Aurous Blaze explosion can be triggered every 2s. When Yoimiya is down, Aurous Blaze effects created through her skills will be deactivated.",
+      "flavorText" : "Fireworks are man-made starlight, comets fired into the sky. Though they last for but an instant, the memory of their brilliance shall surely live on.",
+      "attributes" : {
+        "labels" : [ "Skill DMG|{param1:P}", "Aurous Blaze Explosion DMG|{param2:P}", "Duration|{param4:F1}s", "CD|{param5:F1}s", "Energy Cost|{param6:I}" ],
+        "parameters" : {
+          "param1" : [ 1.272, 1.3674, 1.4628, 1.59, 1.6854, 1.7808, 1.908, 2.0352, 2.1624, 2.2896, 2.4168, 2.544, 2.703, 2.862, 3.021 ],
+          "param2" : [ 1.22, 1.3115, 1.403, 1.525, 1.6165, 1.708, 1.83, 1.952, 2.074, 2.196, 2.318, 2.44, 2.5925, 2.745, 2.8975 ],
+          "param3" : [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ],
+          "param4" : [ 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 ],
+          "param5" : [ 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 ],
+          "param6" : [ 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60 ]
+        }
+      }
+    },
+    "passive1" : {
+      "name" : "Tricks of the Trouble-Maker",
+      "descriptionRaw" : "During <color=#FFD780FF>Niwabi Fire-Dance</color>, shots from Yoimiya's Normal Attack will increase her <color=#FF9999FF>Pyro DMG Bonus</color> by 2% on hit. This effect lasts for 3s and can have a maximum of 10 stacks.",
+      "description" : "During Niwabi Fire-Dance, shots from Yoimiya's Normal Attack will increase her Pyro DMG Bonus by 2% on hit. This effect lasts for 3s and can have a maximum of 10 stacks."
+    },
+    "passive2" : {
+      "name" : "Summer Night's Dawn",
+      "descriptionRaw" : "Using <color=#FFD780FF>Ryuukin Saxifrage</color> causes nearby party members (not including Yoimiya) to gain a 10% ATK increase for 15s. Additionally, a further ATK Bonus will be added on based on the number of Ascension Talent \"Tricks of the Trouble-Maker\" stacks Yoimiya possesses when using <color=#FFD780FF>Ryuukin Saxifrage</color>. Each stack increases this ATK Bonus by 1%.",
+      "description" : "Using Ryuukin Saxifrage causes nearby party members (not including Yoimiya) to gain a 10% ATK increase for 15s. Additionally, a further ATK Bonus will be added on based on the number of Ascension Talent \"Tricks of the Trouble-Maker\" stacks Yoimiya possesses when using Ryuukin Saxifrage. Each stack increases this ATK Bonus by 1%."
+    },
+    "passive3" : {
+      "name" : "Blazing Match",
+      "descriptionRaw" : "When Yoimiya crafts Decoration, Ornament, and Landscape-type Furnishings, she has a 100% chance to refund a portion of the materials used.",
+      "description" : "When Yoimiya crafts Decoration, Ornament, and Landscape-type Furnishings, she has a 100% chance to refund a portion of the materials used."
+    },
+    "costs" : {
+      "lvl2" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 12500
+      }, {
+        "id" : 104320,
+        "name" : "Teachings of Transience",
+        "count" : 3
+      }, {
+        "id" : 112008,
+        "name" : "Divining Scroll",
+        "count" : 6
+      } ],
+      "lvl3" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 17500
+      }, {
+        "id" : 104321,
+        "name" : "Guide to Transience",
+        "count" : 2
+      }, {
+        "id" : 112009,
+        "name" : "Sealed Scroll",
+        "count" : 3
+      } ],
+      "lvl4" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 25000
+      }, {
+        "id" : 104321,
+        "name" : "Guide to Transience",
+        "count" : 4
+      }, {
+        "id" : 112009,
+        "name" : "Sealed Scroll",
+        "count" : 4
+      } ],
+      "lvl5" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 30000
+      }, {
+        "id" : 104321,
+        "name" : "Guide to Transience",
+        "count" : 6
+      }, {
+        "id" : 112009,
+        "name" : "Sealed Scroll",
+        "count" : 6
+      } ],
+      "lvl6" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 37500
+      }, {
+        "id" : 104321,
+        "name" : "Guide to Transience",
+        "count" : 9
+      }, {
+        "id" : 112009,
+        "name" : "Sealed Scroll",
+        "count" : 9
+      } ],
+      "lvl7" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 120000
+      }, {
+        "id" : 104322,
+        "name" : "Philosophies of Transience",
+        "count" : 4
+      }, {
+        "id" : 112010,
+        "name" : "Forbidden Curse Scroll",
+        "count" : 4
+      }, {
+        "id" : 113017,
+        "name" : "Dragon Lord's Crown",
+        "count" : 1
+      } ],
+      "lvl8" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 260000
+      }, {
+        "id" : 104322,
+        "name" : "Philosophies of Transience",
+        "count" : 6
+      }, {
+        "id" : 112010,
+        "name" : "Forbidden Curse Scroll",
+        "count" : 6
+      }, {
+        "id" : 113017,
+        "name" : "Dragon Lord's Crown",
+        "count" : 1
+      } ],
+      "lvl9" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 450000
+      }, {
+        "id" : 104322,
+        "name" : "Philosophies of Transience",
+        "count" : 12
+      }, {
+        "id" : 112010,
+        "name" : "Forbidden Curse Scroll",
+        "count" : 9
+      }, {
+        "id" : 113017,
+        "name" : "Dragon Lord's Crown",
+        "count" : 2
+      } ],
+      "lvl10" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 700000
+      }, {
+        "id" : 104322,
+        "name" : "Philosophies of Transience",
+        "count" : 16
+      }, {
+        "id" : 112010,
+        "name" : "Forbidden Curse Scroll",
+        "count" : 12
+      }, {
+        "id" : 113017,
+        "name" : "Dragon Lord's Crown",
+        "count" : 2
+      }, {
+        "id" : 104319,
+        "name" : "Crown of Insight",
+        "count" : 1
+      } ]
+    },
+    "images" : {
+      "filename_combat1" : "Skill_A_02",
+      "filename_combat2" : "Skill_S_Yoimiya_01",
+      "filename_combat3" : "Skill_E_Yoimiya_01_HD",
+      "filename_passive1" : "UI_Talent_S_Yoimiya_05",
+      "filename_passive2" : "UI_Talent_S_Yoimiya_06",
+      "filename_passive3" : "UI_Talent_S_Yoimiya_07"
+    },
+    "version" : "2.0"
+  }
+}

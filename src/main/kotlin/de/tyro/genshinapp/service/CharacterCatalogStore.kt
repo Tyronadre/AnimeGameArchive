@@ -8,6 +8,7 @@ import de.tyro.genshinapp.model.CharacterDefinition
 import de.tyro.genshinapp.model.CharacterImageType
 import de.tyro.genshinapp.model.MaterialCost
 import de.tyro.genshinapp.model.MaterialDefinition
+import de.tyro.genshinapp.model.MaterialCategory
 import de.tyro.genshinapp.repository.GameCharacterRepository
 import de.tyro.genshinapp.repository.MaterialRepository
 import org.slf4j.LoggerFactory
@@ -87,6 +88,10 @@ class JpaCharacterCatalogStore(
         val entity = materialRepository.findByGameId(material.id)
             ?: Material().also { it.gameId = material.id }
         entity.name = material.name
+        entity.type = material.category.name
+        entity.craftingFamily = material.craftingFamily
+        entity.craftingTier = material.craftingTier
+        entity.conversionGroup = material.conversionGroup
         return materialRepository.save(entity)
     }
 
@@ -116,7 +121,15 @@ class JpaCharacterCatalogStore(
         }.getOrNull()
 
     private fun toDefinition(entity: Material): MaterialDefinition =
-        MaterialDefinition(entity.gameId, entity.name)
+        MaterialDefinition(
+            id = entity.gameId,
+            name = entity.name,
+            category = runCatching { MaterialCategory.valueOf(entity.type.orEmpty()) }
+                .getOrDefault(MaterialCategory.OTHER),
+            craftingFamily = entity.craftingFamily,
+            craftingTier = entity.craftingTier,
+            conversionGroup = entity.conversionGroup,
+        )
 
     private fun materialDefinitions(character: CharacterDefinition): List<MaterialDefinition> =
         (character.ascensionCosts.values.flatten() + character.talentCosts.values.flatten())

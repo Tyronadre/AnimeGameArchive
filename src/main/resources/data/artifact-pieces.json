@@ -1,0 +1,596 @@
+{
+  "adaycarvedfromrisingwinds": {
+    "setName": "A Day Carved From Rising Winds",
+    "pieces": {
+      "flower": "Windborne Flower's Spruchdichtung",
+      "plume": "Dawn's Brilliant Oath",
+      "sands": "A Note in Spring's Leich",
+      "goblet": "Heldenepos's Unspoken Tale",
+      "circlet": "Minnesang of Love and Lament"
+    }
+  },
+  "adventurer": {
+    "setName": "Adventurer",
+    "pieces": {
+      "flower": "Adventurer's Flower",
+      "plume": "Adventurer's Tail Feather",
+      "sands": "Adventurer's Pocket Watch",
+      "goblet": "Adventurer's Golden Goblet",
+      "circlet": "Adventurer's Bandana"
+    }
+  },
+  "archaicpetra": {
+    "setName": "Archaic Petra",
+    "pieces": {
+      "flower": "Flower of Creviced Cliff",
+      "plume": "Feather of Jagged Peaks",
+      "sands": "Sundial of Enduring Jade",
+      "goblet": "Goblet of Chiseled Crag",
+      "circlet": "Mask of Solitude Basalt"
+    }
+  },
+  "aubadeofmorningstarandmoon": {
+    "setName": "Aubade of Morningstar and Moon",
+    "pieces": {
+      "flower": "Moonlit Offering's Opulent Dream",
+      "plume": "Moonlit Offering's Parting Light",
+      "sands": "Moonlit Offering's Final Hour",
+      "goblet": "Moonlit Offering's Libation",
+      "circlet": "Moonlit Offering's Silver Crown"
+    }
+  },
+  "berserker": {
+    "setName": "Berserker",
+    "pieces": {
+      "flower": "Berserker's Rose",
+      "plume": "Berserker's Indigo Feather",
+      "sands": "Berserker's Timepiece",
+      "goblet": "Berserker's Bone Goblet",
+      "circlet": "Berserker's Battle Mask"
+    }
+  },
+  "blizzardstrayer": {
+    "setName": "Blizzard Strayer",
+    "pieces": {
+      "flower": "Snowswept Memory",
+      "plume": "Icebreaker's Resolve",
+      "sands": "Frozen Homeland's Demise",
+      "goblet": "Frost-Weaved Dignity",
+      "circlet": "Broken Rime's Echo"
+    }
+  },
+  "bloodstainedchivalry": {
+    "setName": "Bloodstained Chivalry",
+    "pieces": {
+      "flower": "Bloodstained Flower of Iron",
+      "plume": "Bloodstained Black Plume",
+      "sands": "Bloodstained Final Hour",
+      "goblet": "Bloodstained Chevalier's Goblet",
+      "circlet": "Bloodstained Iron Mask"
+    }
+  },
+  "braveheart": {
+    "setName": "Brave Heart",
+    "pieces": {
+      "flower": "Medal of the Brave",
+      "plume": "Prospect of the Brave",
+      "sands": "Fortitude of the Brave",
+      "goblet": "Outset of the Brave",
+      "circlet": "Crown of the Brave"
+    }
+  },
+  "celestialgift": {
+    "setName": "Celestial Gift",
+    "pieces": {
+      "flower": "Heavensent Fragrance",
+      "plume": "Heavensent Demise",
+      "sands": "Heavensent Decree",
+      "goblet": "Heavensent Reward",
+      "circlet": "Heavensent Crown"
+    }
+  },
+  "crimsonwitchofflames": {
+    "setName": "Crimson Witch of Flames",
+    "pieces": {
+      "flower": "Witch's Flower of Blaze",
+      "plume": "Witch's Ever-Burning Plume",
+      "sands": "Witch's End Time",
+      "goblet": "Witch's Heart Flames",
+      "circlet": "Witch's Scorching Hat"
+    }
+  },
+  "deepwoodmemories": {
+    "setName": "Deepwood Memories",
+    "pieces": {
+      "flower": "Labyrinth Wayfarer",
+      "plume": "Scholar of Vines",
+      "sands": "A Time of Insight",
+      "goblet": "Lamp of the Lost",
+      "circlet": "Laurel Coronet"
+    }
+  },
+  "defenderswill": {
+    "setName": "Defender's Will",
+    "pieces": {
+      "flower": "Guardian's Flower",
+      "plume": "Guardian's Sigil",
+      "sands": "Guardian's Clock",
+      "goblet": "Guardian's Vessel",
+      "circlet": "Guardian's Band"
+    }
+  },
+  "desertpavilionchronicle": {
+    "setName": "Desert Pavilion Chronicle",
+    "pieces": {
+      "flower": "The First Days of the City of Kings",
+      "plume": "End of the Golden Realm",
+      "sands": "Timepiece of the Lost Path",
+      "goblet": "Defender of the Enchanting Dream",
+      "circlet": "Legacy of the Desert High-Born"
+    }
+  },
+  "disenchantmentindeepshadow": {
+    "setName": "Disenchantment in Deep Shadow",
+    "pieces": {
+      "flower": "Iridescence That Ceased Amidst Glory",
+      "plume": "Sharpness That Ceased Upon Wondrous Creation",
+      "sands": "Moment That Ceased Upon Waking From Grand Dreams",
+      "goblet": "Ovations That Ceased Upon Festivity",
+      "circlet": "Pendulum That Ceased Amidst a Great Fall"
+    }
+  },
+  "echoesofanoffering": {
+    "setName": "Echoes of an Offering",
+    "pieces": {
+      "flower": "Soulscent Bloom",
+      "plume": "Jade Leaf",
+      "sands": "Symbol of Felicitation",
+      "goblet": "Chalice of the Font",
+      "circlet": "Flowing Rings"
+    }
+  },
+  "emblemofseveredfate": {
+    "setName": "Emblem of Severed Fate",
+    "pieces": {
+      "flower": "Magnificent Tsuba",
+      "plume": "Sundered Feather",
+      "sands": "Storm Cage",
+      "goblet": "Scarlet Vessel",
+      "circlet": "Ornate Kabuto"
+    }
+  },
+  "finaleofthedeepgalleries": {
+    "setName": "Finale of the Deep Galleries",
+    "pieces": {
+      "flower": "Deep Gallery's Echoing Song",
+      "plume": "Deep Gallery's Distant Pact",
+      "sands": "Deep Gallery's Moment of Oblivion",
+      "goblet": "Deep Gallery's Bestowed Banquet",
+      "circlet": "Deep Gallery's Lost Crown"
+    }
+  },
+  "flowerofparadiselost": {
+    "setName": "Flower of Paradise Lost",
+    "pieces": {
+      "flower": "Ay-Khanoum's Myriad",
+      "plume": "Wilting Feast",
+      "sands": "A Moment Congealed",
+      "goblet": "Secret-Keeper's Magic Bottle",
+      "circlet": "Amethyst Crown"
+    }
+  },
+  "fragmentofharmonicwhimsy": {
+    "setName": "Fragment of Harmonic Whimsy",
+    "pieces": {
+      "flower": "Harmonious Symphony Prelude",
+      "plume": "Ancient Sea's Nocturnal Musing",
+      "sands": "The Grand Jape of the Turning of Fate",
+      "goblet": "Ichor Shower Rhapsody",
+      "circlet": "Whimsical Dance of the Withered"
+    }
+  },
+  "gambler": {
+    "setName": "Gambler",
+    "pieces": {
+      "flower": "Gambler's Brooch",
+      "plume": "Gambler's Feather Accessory",
+      "sands": "Gambler's Pocket Watch",
+      "goblet": "Gambler's Dice Cup",
+      "circlet": "Gambler's Earrings"
+    }
+  },
+  "gildeddreams": {
+    "setName": "Gilded Dreams",
+    "pieces": {
+      "flower": "Dreaming Steelbloom",
+      "plume": "Feather of Judgment",
+      "sands": "The Sunken Years",
+      "goblet": "Honeyed Final Feast",
+      "circlet": "Shadow of the Sand King"
+    }
+  },
+  "gladiatorsfinale": {
+    "setName": "Gladiator's Finale",
+    "pieces": {
+      "flower": "Gladiator's Nostalgia",
+      "plume": "Gladiator's Destiny",
+      "sands": "Gladiator's Longing",
+      "goblet": "Gladiator's Intoxication",
+      "circlet": "Gladiator's Triumphus"
+    }
+  },
+  "goldentroupe": {
+    "setName": "Golden Troupe",
+    "pieces": {
+      "flower": "Golden Song's Variation",
+      "plume": "Golden Bird's Shedding",
+      "sands": "Golden Era's Prelude",
+      "goblet": "Golden Night's Bustle",
+      "circlet": "Golden Troupe's Reward"
+    }
+  },
+  "heartofdepth": {
+    "setName": "Heart of Depth",
+    "pieces": {
+      "flower": "Gilded Corsage",
+      "plume": "Gust of Nostalgia",
+      "sands": "Copper Compass",
+      "goblet": "Goblet of Thundering Deep",
+      "circlet": "Wine-Stained Tricorne"
+    }
+  },
+  "huskofopulentdreams": {
+    "setName": "Husk of Opulent Dreams",
+    "pieces": {
+      "flower": "Bloom Times",
+      "plume": "Plume of Luxury",
+      "sands": "Song of Life",
+      "goblet": "Calabash of Awakening",
+      "circlet": "Skeletal Hat"
+    }
+  },
+  "instructor": {
+    "setName": "Instructor",
+    "pieces": {
+      "flower": "Instructor's Brooch",
+      "plume": "Instructor's Feather Accessory",
+      "sands": "Instructor's Pocket Watch",
+      "goblet": "Instructor's Tea Cup",
+      "circlet": "Instructor's Cap"
+    }
+  },
+  "lavawalker": {
+    "setName": "Lavawalker",
+    "pieces": {
+      "flower": "Lavawalker's Resolution",
+      "plume": "Lavawalker's Salvation",
+      "sands": "Lavawalker's Torment",
+      "goblet": "Lavawalker's Epiphany",
+      "circlet": "Lavawalker's Wisdom"
+    }
+  },
+  "longnightsoath": {
+    "setName": "Long Night's Oath",
+    "pieces": {
+      "flower": "Lightkeeper's Pledge",
+      "plume": "Nightingale's Tail Feather",
+      "sands": "Undying One's Mourning Bell",
+      "goblet": "A Horn Unwinded",
+      "circlet": "Dyed Tassel"
+    }
+  },
+  "luckydog": {
+    "setName": "Lucky Dog",
+    "pieces": {
+      "flower": "Lucky Dog's Clover",
+      "plume": "Lucky Dog's Eagle Feather",
+      "sands": "Lucky Dog's Hourglass",
+      "goblet": "Lucky Dog's Goblet",
+      "circlet": "Lucky Dog's Silver Circlet"
+    }
+  },
+  "maidenbeloved": {
+    "setName": "Maiden Beloved",
+    "pieces": {
+      "flower": "Maiden's Distant Love",
+      "plume": "Maiden's Heart-stricken Infatuation",
+      "sands": "Maiden's Passing Youth",
+      "goblet": "Maiden's Fleeting Leisure",
+      "circlet": "Maiden's Fading Beauty"
+    }
+  },
+  "marechausseehunter": {
+    "setName": "Marechaussee Hunter",
+    "pieces": {
+      "flower": "Hunter's Brooch",
+      "plume": "Masterpiece's Overture",
+      "sands": "Moment of Judgment",
+      "goblet": "Forgotten Vessel",
+      "circlet": "Veteran's Visage"
+    }
+  },
+  "martialartist": {
+    "setName": "Martial Artist",
+    "pieces": {
+      "flower": "Martial Artist's Red Flower",
+      "plume": "Martial Artist's Feather Accessory",
+      "sands": "Martial Artist's Water Hourglass",
+      "goblet": "Martial Artist's Wine Cup",
+      "circlet": "Martial Artist's Bandana"
+    }
+  },
+  "nightoftheskysunveiling": {
+    "setName": "Night of the Sky's Unveiling",
+    "pieces": {
+      "flower": "Bloom of the Mind's Desire",
+      "plume": "Feather of Indelible Sin",
+      "sands": "Revelation's Toll",
+      "goblet": "Vessel of Plenty",
+      "circlet": "Crown of the Befallen"
+    }
+  },
+  "nighttimewhispersintheechoingwoods": {
+    "setName": "Nighttime Whispers in the Echoing Woods",
+    "pieces": {
+      "flower": "Selfless Floral Accessory",
+      "plume": "Honest Quill",
+      "sands": "Faithful Hourglass",
+      "goblet": "Magnanimous Ink Bottle",
+      "circlet": "Compassionate Ladies' Hat"
+    }
+  },
+  "noblesseoblige": {
+    "setName": "Noblesse Oblige",
+    "pieces": {
+      "flower": "Royal Flora",
+      "plume": "Royal Plume",
+      "sands": "Royal Pocket Watch",
+      "goblet": "Royal Silver Urn",
+      "circlet": "Royal Masque"
+    }
+  },
+  "nymphsdream": {
+    "setName": "Nymph's Dream",
+    "pieces": {
+      "flower": "Odyssean Flower",
+      "plume": "Wicked Mage's Plumule",
+      "sands": "Nymph's Constancy",
+      "goblet": "Heroes' Tea Party",
+      "circlet": "Fell Dragon's Monocle"
+    }
+  },
+  "obsidiancodex": {
+    "setName": "Obsidian Codex",
+    "pieces": {
+      "flower": "Reckoning of the Xenogenic",
+      "plume": "Root of the Spirit-Marrow",
+      "sands": "Myths of the Night Realm",
+      "goblet": "Pre-Banquet of the Contenders",
+      "circlet": "Crown of the Saints"
+    }
+  },
+  "oceanhuedclam": {
+    "setName": "Ocean-Hued Clam",
+    "pieces": {
+      "flower": "Sea-Dyed Blossom",
+      "plume": "Deep Palace's Plume",
+      "sands": "Cowry of Parting",
+      "goblet": "Pearl Cage",
+      "circlet": "Crown of Watatsumi"
+    }
+  },
+  "paleflame": {
+    "setName": "Pale Flame",
+    "pieces": {
+      "flower": "Stainless Bloom",
+      "plume": "Wise Doctor's Pinion",
+      "sands": "Moment of Cessation",
+      "goblet": "Surpassing Cup",
+      "circlet": "Mocking Mask"
+    }
+  },
+  "prayersfordestiny": {
+    "setName": "Prayers for Destiny",
+    "pieces": {
+      "circlet": "Tiara of Torrents"
+    }
+  },
+  "prayersforillumination": {
+    "setName": "Prayers for Illumination",
+    "pieces": {
+      "circlet": "Tiara of Flame"
+    }
+  },
+  "prayersforwisdom": {
+    "setName": "Prayers for Wisdom",
+    "pieces": {
+      "circlet": "Tiara of Thunder"
+    }
+  },
+  "prayerstospringtime": {
+    "setName": "Prayers to Springtime",
+    "pieces": {
+      "circlet": "Tiara of Frost"
+    }
+  },
+  "resolutionofsojourner": {
+    "setName": "Resolution of Sojourner",
+    "pieces": {
+      "flower": "Heart of Comradeship",
+      "plume": "Feather of Homecoming",
+      "sands": "Sundial of the Sojourner",
+      "goblet": "Goblet of the Sojourner",
+      "circlet": "Crown of Parting"
+    }
+  },
+  "retracingbolide": {
+    "setName": "Retracing Bolide",
+    "pieces": {
+      "flower": "Summer Night's Bloom",
+      "plume": "Summer Night's Finale",
+      "sands": "Summer Night's Moment",
+      "goblet": "Summer Night's Waterballoon",
+      "circlet": "Summer Night's Mask"
+    }
+  },
+  "scholar": {
+    "setName": "Scholar",
+    "pieces": {
+      "flower": "Scholar's Bookmark",
+      "plume": "Scholar's Quill Pen",
+      "sands": "Scholar's Clock",
+      "goblet": "Scholar's Ink Cup",
+      "circlet": "Scholar's Lens"
+    }
+  },
+  "scrolloftheheroofcindercity": {
+    "setName": "Scroll of the Hero of Cinder City",
+    "pieces": {
+      "flower": "Beast Tamer's Talisman",
+      "plume": "Mountain Ranger's Marker",
+      "sands": "Mystic's Gold Dial",
+      "goblet": "Wandering Scholar's Claw Cup",
+      "circlet": "Demon-Warrior's Feather Mask"
+    }
+  },
+  "shimenawasreminiscence": {
+    "setName": "Shimenawa's Reminiscence",
+    "pieces": {
+      "flower": "Entangling Bloom",
+      "plume": "Shaft of Remembrance",
+      "sands": "Morning Dew's Moment",
+      "goblet": "Hopeful Heart",
+      "circlet": "Capricious Visage"
+    }
+  },
+  "silkenmoonsserenade": {
+    "setName": "Silken Moon's Serenade",
+    "pieces": {
+      "flower": "Crystal Tear of the Wanderer",
+      "plume": "Pristine Plume of the Blessed",
+      "sands": "Frost Devotee's Delirium",
+      "goblet": "Joyous Glory of the Pure",
+      "circlet": "Holy Crown of the Believer"
+    }
+  },
+  "songofdayspast": {
+    "setName": "Song of Days Past",
+    "pieces": {
+      "flower": "Forgotten Oath of Days Past",
+      "plume": "Recollection of Days Past",
+      "sands": "Echoing Sound From Days Past",
+      "goblet": "Promised Dream of Days Past",
+      "circlet": "Poetry of Days Past"
+    }
+  },
+  "tenacityofthemillelith": {
+    "setName": "Tenacity of the Millelith",
+    "pieces": {
+      "flower": "Flower of Accolades",
+      "plume": "Ceremonial War-Plume",
+      "sands": "Orichalceous Time-Dial",
+      "goblet": "Noble's Pledging Vessel",
+      "circlet": "General's Ancient Helm"
+    }
+  },
+  "theexile": {
+    "setName": "The Exile",
+    "pieces": {
+      "flower": "Exile's Flower",
+      "plume": "Exile's Feather",
+      "sands": "Exile's Pocket Watch",
+      "goblet": "Exile's Goblet",
+      "circlet": "Exile's Circlet"
+    }
+  },
+  "thunderingfury": {
+    "setName": "Thundering Fury",
+    "pieces": {
+      "flower": "Thunderbird's Mercy",
+      "plume": "Survivor of Catastrophe",
+      "sands": "Hourglass of Thunder",
+      "goblet": "Omen of Thunderstorm",
+      "circlet": "Thunder Summoner's Crown"
+    }
+  },
+  "thundersoother": {
+    "setName": "Thundersoother",
+    "pieces": {
+      "flower": "Thundersoother's Heart",
+      "plume": "Thundersoother's Plume",
+      "sands": "Hour of Soothing Thunder",
+      "goblet": "Thundersoother's Goblet",
+      "circlet": "Thundersoother's Diadem"
+    }
+  },
+  "tinymiracle": {
+    "setName": "Tiny Miracle",
+    "pieces": {
+      "flower": "Tiny Miracle's Flower",
+      "plume": "Tiny Miracle's Feather",
+      "sands": "Tiny Miracle's Hourglass",
+      "goblet": "Tiny Miracle's Goblet",
+      "circlet": "Tiny Miracle's Earrings"
+    }
+  },
+  "travelingdoctor": {
+    "setName": "Traveling Doctor",
+    "pieces": {
+      "flower": "Traveling Doctor's Silver Lotus",
+      "plume": "Traveling Doctor's Owl Feather",
+      "sands": "Traveling Doctor's Pocket Watch",
+      "goblet": "Traveling Doctor's Medicine Pot",
+      "circlet": "Traveling Doctor's Handkerchief"
+    }
+  },
+  "unfinishedreverie": {
+    "setName": "Unfinished Reverie",
+    "pieces": {
+      "flower": "Dark Fruit of Bright Flowers",
+      "plume": "Faded Emerald Tail",
+      "sands": "Moment of Attainment",
+      "goblet": "The Wine-Flask Over Which the Plan Was Hatched",
+      "circlet": "Crownless Crown"
+    }
+  },
+  "vermillionhereafter": {
+    "setName": "Vermillion Hereafter",
+    "pieces": {
+      "flower": "Flowering Life",
+      "plume": "Feather of Nascent Light",
+      "sands": "Solar Relic",
+      "goblet": "Moment of the Pact",
+      "circlet": "Thundering Poise"
+    }
+  },
+  "viridescentvenerer": {
+    "setName": "Viridescent Venerer",
+    "pieces": {
+      "flower": "In Remembrance of Viridescent Fields",
+      "plume": "Viridescent Arrow Feather",
+      "sands": "Viridescent Venerer's Determination",
+      "goblet": "Viridescent Venerer's Vessel",
+      "circlet": "Viridescent Venerer's Diadem"
+    }
+  },
+  "vourukashasglow": {
+    "setName": "Vourukasha's Glow",
+    "pieces": {
+      "flower": "Stamen of Khvarena's Origin",
+      "plume": "Vibrant Pinion",
+      "sands": "Ancient Abscission",
+      "goblet": "Feast of Boundless Joy",
+      "circlet": "Heart of Khvarena's Brilliance"
+    }
+  },
+  "wandererstroupe": {
+    "setName": "Wanderer's Troupe",
+    "pieces": {
+      "flower": "Troupe's Dawnlight",
+      "plume": "Bard's Arrow Feather",
+      "sands": "Concert's Final Hour",
+      "goblet": "Wanderer's String-Kettle",
+      "circlet": "Conductor's Top Hat"
+    }
+  }
+}

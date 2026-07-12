@@ -1,0 +1,386 @@
+{
+  "id" : 10000055,
+  "name" : "Gorou",
+  "title" : "Canine Warrior",
+  "description" : "The great general of Watatsumi Island's forces. He is deeply trusted by his subordinates.",
+  "weaponType" : "WEAPON_BOW",
+  "weaponText" : "Bow",
+  "bodyType" : "BODY_BOY",
+  "gender" : "Male",
+  "qualityType" : "QUALITY_PURPLE",
+  "rarity" : 4,
+  "birthdaymmdd" : "5/18",
+  "birthday" : "May 18",
+  "elementType" : "ELEMENT_GEO",
+  "elementText" : "Geo",
+  "affiliation" : "Watatsumi Island",
+  "associationType" : "ASSOC_INAZUMA",
+  "region" : "Inazuma",
+  "substatType" : "FIGHT_PROP_ROCK_ADD_HURT",
+  "substatText" : "Geo DMG Bonus",
+  "constellation" : "Canis Bellatoris",
+  "cv" : {
+    "english" : "Cory Yee",
+    "chinese" : "杨昕燃",
+    "japanese" : "畠中祐",
+    "korean" : "Lee Sae-byeok"
+  },
+  "costs" : {
+    "ascend1" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 20000
+    }, {
+      "id" : 104171,
+      "name" : "Prithiva Topaz Sliver",
+      "count" : 1
+    }, {
+      "id" : 101207,
+      "name" : "Sango Pearl",
+      "count" : 3
+    }, {
+      "id" : 112053,
+      "name" : "Spectral Husk",
+      "count" : 3
+    } ],
+    "ascend2" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 40000
+    }, {
+      "id" : 104172,
+      "name" : "Prithiva Topaz Fragment",
+      "count" : 3
+    }, {
+      "id" : 113023,
+      "name" : "Perpetual Heart",
+      "count" : 2
+    }, {
+      "id" : 101207,
+      "name" : "Sango Pearl",
+      "count" : 10
+    }, {
+      "id" : 112053,
+      "name" : "Spectral Husk",
+      "count" : 15
+    } ],
+    "ascend3" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 60000
+    }, {
+      "id" : 104172,
+      "name" : "Prithiva Topaz Fragment",
+      "count" : 6
+    }, {
+      "id" : 113023,
+      "name" : "Perpetual Heart",
+      "count" : 4
+    }, {
+      "id" : 101207,
+      "name" : "Sango Pearl",
+      "count" : 20
+    }, {
+      "id" : 112054,
+      "name" : "Spectral Heart",
+      "count" : 12
+    } ],
+    "ascend4" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 80000
+    }, {
+      "id" : 104173,
+      "name" : "Prithiva Topaz Chunk",
+      "count" : 3
+    }, {
+      "id" : 113023,
+      "name" : "Perpetual Heart",
+      "count" : 8
+    }, {
+      "id" : 101207,
+      "name" : "Sango Pearl",
+      "count" : 30
+    }, {
+      "id" : 112054,
+      "name" : "Spectral Heart",
+      "count" : 18
+    } ],
+    "ascend5" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 100000
+    }, {
+      "id" : 104173,
+      "name" : "Prithiva Topaz Chunk",
+      "count" : 6
+    }, {
+      "id" : 113023,
+      "name" : "Perpetual Heart",
+      "count" : 12
+    }, {
+      "id" : 101207,
+      "name" : "Sango Pearl",
+      "count" : 45
+    }, {
+      "id" : 112055,
+      "name" : "Spectral Nucleus",
+      "count" : 12
+    } ],
+    "ascend6" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 120000
+    }, {
+      "id" : 104174,
+      "name" : "Prithiva Topaz Gemstone",
+      "count" : 6
+    }, {
+      "id" : 113023,
+      "name" : "Perpetual Heart",
+      "count" : 20
+    }, {
+      "id" : 101207,
+      "name" : "Sango Pearl",
+      "count" : 60
+    }, {
+      "id" : 112055,
+      "name" : "Spectral Nucleus",
+      "count" : 24
+    } ]
+  },
+  "images" : {
+    "cover1" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/07/22/33b7b5d2536416116765a3f55e47f51a_54142758600124938.png",
+    "cover2" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/06/29/3484c4fab13b8c8fec8ccbeff63ec50a_5464889942943679721.png",
+    "hoyolab-avatar" : "https://img-os-static.hoyolab.com/communityWeb/upload/781be06fd7f2106fbc28711aa9a46663.png",
+    "filename_icon" : "UI_AvatarIcon_Gorou",
+    "filename_iconCard" : "UI_AvatarIcon_Gorou_Card",
+    "filename_sideIcon" : "UI_AvatarIcon_Side_Gorou",
+    "filename_gachaSplash" : "UI_Gacha_AvatarImg_Gorou",
+    "filename_gachaSlice" : "UI_Gacha_AvatarIcon_Gorou",
+    "mihoyo_icon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Gorou.png",
+    "mihoyo_sideIcon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_side_icon/UI_AvatarIcon_Side_Gorou.png"
+  },
+  "url" : {
+    "fandom" : "https://genshin-impact.fandom.com/wiki/Gorou"
+  },
+  "version" : "2.3",
+  "talents" : {
+    "id" : 5501,
+    "name" : "Gorou",
+    "combat1" : {
+      "name" : "Ripping Fang Fletching",
+      "descriptionRaw" : "<color=#FFD780FF>Normal Attack</color>\nPerforms up to 4 consecutive shots with a bow.\n\n<color=#FFD780FF>Charged Attack</color>\nPerforms a more precise <color=#FFD780FF>Aimed Shot</color> with increased DMG.\nWhile aiming, stone crystals will accumulate on the arrowhead. A fully charged crystalline arrow will deal <color=#FFE699FF>Geo DMG</color>.\n\n<color=#FFD780FF>Plunging Attack</color>\nFires off a shower of arrows in mid-air before falling and striking the ground, dealing AoE DMG upon impact.",
+      "description" : "Normal Attack\nPerforms up to 4 consecutive shots with a bow.\n\nCharged Attack\nPerforms a more precise Aimed Shot with increased DMG.\nWhile aiming, stone crystals will accumulate on the arrowhead. A fully charged crystalline arrow will deal Geo DMG.\n\nPlunging Attack\nFires off a shower of arrows in mid-air before falling and striking the ground, dealing AoE DMG upon impact.",
+      "attributes" : {
+        "labels" : [ "1-Hit DMG|{param1:F1P}", "2-Hit DMG|{param2:F1P}", "3-Hit DMG|{param3:F1P}", "4-Hit DMG|{param4:F1P}", "Aimed Shot|{param5:F1P}", "Fully-Charged Aimed Shot|{param6:P}", "Plunge DMG|{param7:F1P}", "Low/High Plunge DMG|{param8:P}/{param9:P}" ],
+        "parameters" : {
+          "param1" : [ 0.37754, 0.40827, 0.439, 0.4829, 0.51363, 0.54875, 0.59704, 0.64533, 0.69362, 0.7463, 0.79898, 0.85166, 0.90434, 0.95702, 1.0097 ],
+          "param2" : [ 0.37152, 0.40176, 0.432, 0.4752, 0.50544, 0.54, 0.58752, 0.63504, 0.68256, 0.7344, 0.78624, 0.83808, 0.88992, 0.94176, 0.9936 ],
+          "param3" : [ 0.4945, 0.53475, 0.575, 0.6325, 0.67275, 0.71875, 0.782, 0.84525, 0.9085, 0.9775, 1.0465, 1.1155, 1.1845, 1.2535, 1.3225 ],
+          "param4" : [ 0.58996, 0.63798, 0.686, 0.7546, 0.80262, 0.8575, 0.93296, 1.00842, 1.08388, 1.1662, 1.24852, 1.33084, 1.41316, 1.49548, 1.5778 ],
+          "param5" : [ 0.4386, 0.4743, 0.51, 0.561, 0.5967, 0.6375, 0.6936, 0.7497, 0.8058, 0.867, 0.9282, 0.9894, 1.0506, 1.1118, 1.173 ],
+          "param6" : [ 1.24, 1.333, 1.426, 1.55, 1.643, 1.736, 1.86, 1.984, 2.108, 2.232, 2.356, 2.48, 2.635, 2.79, 2.945 ],
+          "param7" : [ 0.568288, 0.614544, 0.6608, 0.72688, 0.773136, 0.826, 0.898688, 0.971376, 1.044064, 1.12336, 1.202656, 1.281952, 1.361248, 1.440544, 1.51984 ],
+          "param8" : [ 1.136335, 1.228828, 1.32132, 1.453452, 1.545944, 1.65165, 1.796995, 1.94234, 2.087686, 2.246244, 2.404802, 2.563361, 2.721919, 2.880478, 3.039036 ],
+          "param9" : [ 1.419344, 1.534872, 1.6504, 1.81544, 1.930968, 2.063, 2.244544, 2.426088, 2.607632, 2.80568, 3.003728, 3.201776, 3.399824, 3.597872, 3.79592 ]
+        }
+      }
+    },
+    "combat2" : {
+      "name" : "Inuzaka All-Round Defense",
+      "descriptionRaw" : "Deals <color=#FFE699FF>AoE Geo DMG</color> and sets up a General's War Banner.\n\n<color=#FFD780FF>General's War Banner</color>\nProvides up to 3 buffs to active characters within the skill's AoE based on the number of <color=#FFE699FF>Geo</color> characters in the party at the time of casting:\n· 1 Geo character: Adds \"Standing Firm\" - DEF Bonus.\n· 2 Geo characters: Adds \"Impregnable\" - Increased resistance to interruption.\n· 3 Geo characters: Adds \"Crunch\" - <color=#FFE699FF>Geo DMG Bonus</color>.\n\nGorou can deploy only 1 General's War Banner on the field at any one time. Characters can only benefit from 1 General's War Banner at a time. When a party member leaves the field, the active buff will last for 2s.\n\n<color=#FFD780FF>Hold</color>\nAdjust the location of the skill.\n\n<i>\"Take up this formation and we'll be safe — I guarantee it!\" As a general and a leader of troops, the last thing Gorou wants is to see is those who follow him getting hurt.</i>",
+      "description" : "Deals AoE Geo DMG and sets up a General's War Banner.\n\nGeneral's War Banner\nProvides up to 3 buffs to active characters within the skill's AoE based on the number of Geo characters in the party at the time of casting:\n· 1 Geo character: Adds \"Standing Firm\" - DEF Bonus.\n· 2 Geo characters: Adds \"Impregnable\" - Increased resistance to interruption.\n· 3 Geo characters: Adds \"Crunch\" - Geo DMG Bonus.\n\nGorou can deploy only 1 General's War Banner on the field at any one time. Characters can only benefit from 1 General's War Banner at a time. When a party member leaves the field, the active buff will last for 2s.\n\nHold\nAdjust the location of the skill.",
+      "flavorText" : "\"Take up this formation and we'll be safe — I guarantee it!\" As a general and a leader of troops, the last thing Gorou wants is to see is those who follow him getting hurt.",
+      "attributes" : {
+        "labels" : [ "Skill DMG|{param1:F1P}", "DEF Increase|{param2:I}", "Geo DMG Bonus|{param3:P}", "Duration|{param4:F1}s", "CD|{param5:F1}s" ],
+        "parameters" : {
+          "param1" : [ 1.072, 1.1524, 1.2328, 1.34, 1.4204, 1.5008, 1.608, 1.7152, 1.8224, 1.9296, 2.0368, 2.144, 2.278, 2.412, 2.546 ],
+          "param2" : [ 206.16, 221.622, 237.084, 257.7, 273.162, 288.624, 309.24, 329.856, 350.472, 371.088, 391.704, 412.32, 438.09, 463.86, 489.63 ],
+          "param3" : [ 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15 ],
+          "param4" : [ 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 ],
+          "param5" : [ 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 ]
+        }
+      }
+    },
+    "combat3" : {
+      "name" : "Juuga: Forward Unto Victory",
+      "descriptionRaw" : "Displaying his valor as a general, Gorou deals <color=#FFE699FF>AoE Geo DMG</color> and creates a field known as General's Glory to embolden his comrades.\n\n<color=#FFD780FF>General's Glory</color>\nThis field has the following properties:\n· Like the General's War Banner created by Inuzaka All-Round Defense, provides buffs to active characters within the skill's AoE based on the number of <color=#FFE699FF>Geo</color> characters in the party. Also moves together with your active character.\n· Generates 1 Crystal Collapse every 1.5s that deals <color=#FFE699FF>AoE Geo DMG</color> to 1 opponent within the skill's AoE.\n· Pulls 1 elemental shard in the skill's AoE to your active character's position every 1.5s (elemental shards are created by Crystallize reactions).\n\nIf a General's War Banner created by Gorou currently exists on the field when this ability is used, it will be destroyed. In addition, for the duration of General's Glory, Gorou's Elemental Skill \"Inuzaka All-Round Defense\" will not create the General's War Banner.\n If Gorou falls, the effects of General's Glory will be cleared.\n\n<i>\"We have the high ground!\" Gorou can ever so slightly change the terrain of the battlefield to help win victory. This technique has seen him through many battles against seemingly superior opposition.</i>",
+      "description" : "Displaying his valor as a general, Gorou deals AoE Geo DMG and creates a field known as General's Glory to embolden his comrades.\n\nGeneral's Glory\nThis field has the following properties:\n· Like the General's War Banner created by Inuzaka All-Round Defense, provides buffs to active characters within the skill's AoE based on the number of Geo characters in the party. Also moves together with your active character.\n· Generates 1 Crystal Collapse every 1.5s that deals AoE Geo DMG to 1 opponent within the skill's AoE.\n· Pulls 1 elemental shard in the skill's AoE to your active character's position every 1.5s (elemental shards are created by Crystallize reactions).\n\nIf a General's War Banner created by Gorou currently exists on the field when this ability is used, it will be destroyed. In addition, for the duration of General's Glory, Gorou's Elemental Skill \"Inuzaka All-Round Defense\" will not create the General's War Banner.\n If Gorou falls, the effects of General's Glory will be cleared.",
+      "flavorText" : "\"We have the high ground!\" Gorou can ever so slightly change the terrain of the battlefield to help win victory. This technique has seen him through many battles against seemingly superior opposition.",
+      "attributes" : {
+        "labels" : [ "Skill DMG|{param1:P} DEF", "Crystal Collapse DMG|{param2:P} DEF", "Duration|{param3:F1}s", "CD|{param4:F1}s", "Energy Cost|{param5:I}" ],
+        "parameters" : {
+          "param1" : [ 0.98216, 1.055822, 1.129484, 1.2277, 1.301362, 1.375024, 1.47324, 1.571456, 1.669672, 1.767888, 1.866104, 1.96432, 2.08709, 2.20986, 2.33263 ],
+          "param2" : [ 0.613, 0.658975, 0.70495, 0.76625, 0.812225, 0.8582, 0.9195, 0.9808, 1.0421, 1.1034, 1.1647, 1.226, 1.302625, 1.37925, 1.455875 ],
+          "param3" : [ 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 ],
+          "param4" : [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ],
+          "param5" : [ 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80 ]
+        }
+      }
+    },
+    "passive1" : {
+      "name" : "Heedless of the Wind and Weather",
+      "descriptionRaw" : "After using <color=#FFD780FF>Juuga: Forward Unto Victory</color>, all nearby party members' DEF is increased by 25% for 12s.",
+      "description" : "After using Juuga: Forward Unto Victory, all nearby party members' DEF is increased by 25% for 12s."
+    },
+    "passive2" : {
+      "name" : "A Favor Repaid",
+      "descriptionRaw" : "Gorou receives the following DMG Bonuses to his attacks based on his DEF:\n· <color=#FFD780FF>Inuzaka All-Round Defense</color>: Skill DMG increased by 156% of DEF\n· <color=#FFD780FF>Juuga: Forward Unto Victory</color>: Skill DMG and Crystal Collapse DMG increased by 15.6% of DEF",
+      "description" : "Gorou receives the following DMG Bonuses to his attacks based on his DEF:\n· Inuzaka All-Round Defense: Skill DMG increased by 156% of DEF\n· Juuga: Forward Unto Victory: Skill DMG and Crystal Collapse DMG increased by 15.6% of DEF"
+    },
+    "passive3" : {
+      "name" : "Seeker of Shinies",
+      "descriptionRaw" : "Displays the location of nearby <color=#FFD780FF>resources unique to Inazuma</color> on the mini-map.",
+      "description" : "Displays the location of nearby resources unique to Inazuma on the mini-map."
+    },
+    "costs" : {
+      "lvl2" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 12500
+      }, {
+        "id" : 104326,
+        "name" : "Teachings of Light",
+        "count" : 3
+      }, {
+        "id" : 112053,
+        "name" : "Spectral Husk",
+        "count" : 6
+      } ],
+      "lvl3" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 17500
+      }, {
+        "id" : 104327,
+        "name" : "Guide to Light",
+        "count" : 2
+      }, {
+        "id" : 112054,
+        "name" : "Spectral Heart",
+        "count" : 3
+      } ],
+      "lvl4" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 25000
+      }, {
+        "id" : 104327,
+        "name" : "Guide to Light",
+        "count" : 4
+      }, {
+        "id" : 112054,
+        "name" : "Spectral Heart",
+        "count" : 4
+      } ],
+      "lvl5" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 30000
+      }, {
+        "id" : 104327,
+        "name" : "Guide to Light",
+        "count" : 6
+      }, {
+        "id" : 112054,
+        "name" : "Spectral Heart",
+        "count" : 6
+      } ],
+      "lvl6" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 37500
+      }, {
+        "id" : 104327,
+        "name" : "Guide to Light",
+        "count" : 9
+      }, {
+        "id" : 112054,
+        "name" : "Spectral Heart",
+        "count" : 9
+      } ],
+      "lvl7" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 120000
+      }, {
+        "id" : 104328,
+        "name" : "Philosophies of Light",
+        "count" : 4
+      }, {
+        "id" : 112055,
+        "name" : "Spectral Nucleus",
+        "count" : 4
+      }, {
+        "id" : 113025,
+        "name" : "Molten Moment",
+        "count" : 1
+      } ],
+      "lvl8" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 260000
+      }, {
+        "id" : 104328,
+        "name" : "Philosophies of Light",
+        "count" : 6
+      }, {
+        "id" : 112055,
+        "name" : "Spectral Nucleus",
+        "count" : 6
+      }, {
+        "id" : 113025,
+        "name" : "Molten Moment",
+        "count" : 1
+      } ],
+      "lvl9" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 450000
+      }, {
+        "id" : 104328,
+        "name" : "Philosophies of Light",
+        "count" : 12
+      }, {
+        "id" : 112055,
+        "name" : "Spectral Nucleus",
+        "count" : 9
+      }, {
+        "id" : 113025,
+        "name" : "Molten Moment",
+        "count" : 2
+      } ],
+      "lvl10" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 700000
+      }, {
+        "id" : 104328,
+        "name" : "Philosophies of Light",
+        "count" : 16
+      }, {
+        "id" : 112055,
+        "name" : "Spectral Nucleus",
+        "count" : 12
+      }, {
+        "id" : 113025,
+        "name" : "Molten Moment",
+        "count" : 2
+      }, {
+        "id" : 104319,
+        "name" : "Crown of Insight",
+        "count" : 1
+      } ]
+    },
+    "images" : {
+      "filename_combat1" : "Skill_A_02",
+      "filename_combat2" : "Skill_S_Gorou_01",
+      "filename_combat3" : "Skill_E_Gorou_01_HD",
+      "filename_passive1" : "UI_Talent_S_Gorou_05",
+      "filename_passive2" : "UI_Talent_S_Gorou_06",
+      "filename_passive3" : "UI_Talent_S_Gorou_07"
+    },
+    "version" : "2.3"
+  }
+}

@@ -22,4 +22,13 @@ class Material {
     var name: String = ""
 
     var type: String? = null
+
+    @Column(name = "crafting_family")
+    var craftingFamily: String? = null
+
+    @Column(name = "crafting_tier")
+    var craftingTier: Int? = null
+
+    @Column(name = "conversion_group")
+    var conversionGroup: String? = null
 }

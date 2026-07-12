@@ -6,6 +6,9 @@ import de.tyro.genshinapp.model.PlayerArtifactStat
 import de.tyro.genshinapp.model.PlayerCharacterState
 import de.tyro.genshinapp.model.PlayerSnapshot
 import org.springframework.stereotype.Service
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.security.MessageDigest
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.roundToLong
@@ -14,6 +17,7 @@ import kotlin.random.Random
 @Service
 class ArtifactOptimizationService(
     private val artifactCatalogService: ArtifactCatalogService,
+    private val artifactEvaluationCacheService: ArtifactEvaluationCacheService? = null,
 ) {
     fun inferProfile(artifacts: Collection<PlayerArtifact>): ArtifactOptimizationProfile {
         val variableMainStats = artifacts
@@ -251,7 +255,7 @@ class ArtifactOptimizationService(
         profile: ArtifactOptimizationProfile,
         targets: ArtifactOptimizationTargets = ArtifactOptimizationTargets.defaults(profile),
         contextTotals: Map<String, Double> = emptyMap(),
-    ): ArtifactEvaluation = evaluateArtifact(
+    ): ArtifactEvaluation = cachedEvaluateArtifact(
         artifact,
         ArtifactScoringStrategy(profile, targets),
         contextTotals,
@@ -463,7 +467,7 @@ class ArtifactOptimizationService(
         }
         scores.sort()
 
-        val evaluation = evaluateArtifact(artifact, strategy, contextTotals)
+        val evaluation = cachedEvaluateArtifact(artifact, strategy, contextTotals)
         return ArtifactLevelingCandidate(
             piece = scoredArtifact(candidate.indexedArtifact, evaluation, false),
             targetScore = targetScore,
@@ -899,7 +903,7 @@ class ArtifactOptimizationService(
     ): ScoredArtifact =
         scoredArtifact(
             indexedArtifact,
-            evaluateArtifact(indexedArtifact.artifact, strategy, contextTotals),
+            cachedEvaluateArtifact(indexedArtifact.artifact, strategy, contextTotals),
             currentArtifact,
         )
 
@@ -956,6 +960,19 @@ class ArtifactOptimizationService(
         return if (key.endsWith("_")) "$rounded %" else rounded
     }
 
+    private fun cachedEvaluateArtifact(
+        artifact: PlayerArtifact,
+        strategy: ArtifactScoringStrategy,
+        contextTotals: Map<String, Double> = emptyMap(),
+    ): ArtifactEvaluation {
+        val cacheService = artifactEvaluationCacheService
+            ?: return evaluateArtifact(artifact, strategy, contextTotals)
+        val cacheKey = evaluationCacheKey(artifact, strategy, contextTotals)
+        return cacheService.getOrCompute(cacheKey) {
+            evaluateArtifact(artifact, strategy, contextTotals)
+        }
+    }
+
     private fun evaluateArtifact(
         artifact: PlayerArtifact,
         strategy: ArtifactScoringStrategy,
@@ -999,8 +1016,12 @@ class ArtifactOptimizationService(
         val variableMainStat = artifact.slotKey.lowercase() in VARIABLE_MAIN_STAT_SLOTS
         val mainStatMaximum = MAIN_STAT_MAX_VALUES[artifact.rarity]?.get(artifact.mainStatKey)
         val mainStatQuality = if (mainStatMaximum != null && mainStatMaximum > 0.0) {
-            (artifactMainStatValue(artifact) / mainStatMaximum).coerceIn(0.0, 1.0) *
-                mainStatFit
+            val effectiveMainStatValue = strategy.effectiveValue(
+                artifact.mainStatKey,
+                artifactMainStatValue(artifact),
+                contextTotals,
+            )
+            (effectiveMainStatValue / mainStatMaximum).coerceIn(0.0, 1.0) * mainStatFit
         } else {
             mainStatFit
         }
@@ -1368,6 +1389,62 @@ class ArtifactOptimizationService(
     private fun stableSeed(vararg values: Any?): Int =
         values.fold(17) { result, value -> 31 * result + value.hashCode() }
 
+    private fun evaluationCacheKey(
+        artifact: PlayerArtifact,
+        strategy: ArtifactScoringStrategy,
+        contextTotals: Map<String, Double>,
+    ): String {
+        val rawKey = buildString {
+            append("v=").append(ARTIFACT_EVALUATION_CACHE_VERSION)
+            append("|profile=").append(strategy.profile.key)
+            append("|strategy=").append(strategy.seedKey)
+            append("|artifact=")
+            append(artifact.setKey).append(':')
+            append(artifact.slotKey.lowercase()).append(':')
+            append(artifact.level).append(':')
+            append(artifact.rarity).append(':')
+            append(artifact.mainStatKey).append(':')
+            append(artifact.totalRolls ?: "auto")
+            artifact.substats
+                .sortedBy(PlayerArtifactStat::key)
+                .forEach { stat ->
+                    append('|')
+                    append(stat.key)
+                    append('=')
+                    append(fingerprintNumber(stat.value))
+                }
+            append("|context=")
+            contextTotals
+                .filterValues(Double::isFinite)
+                .toSortedMap()
+                .forEach { (key, value) ->
+                    append(key)
+                    append('=')
+                    append(fingerprintNumber(value))
+                    append(',')
+                }
+        }
+        return sha256(rawKey)
+    }
+
+    private fun fingerprintNumber(value: Double): String =
+        BigDecimal.valueOf(value)
+            .setScale(6, RoundingMode.HALF_UP)
+            .stripTrailingZeros()
+            .toPlainString()
+
+    private fun sha256(value: String): String {
+        val bytes = MessageDigest.getInstance("SHA-256")
+            .digest(value.toByteArray(Charsets.UTF_8))
+        return buildString(bytes.size * 2) {
+            bytes.forEach { byte ->
+                val unsigned = byte.toInt() and 0xff
+                append(HEX_CHARS[unsigned ushr 4])
+                append(HEX_CHARS[unsigned and 0x0f])
+            }
+        }
+    }
+
     private data class IndexedArtifact(
         val index: Int,
         val artifact: PlayerArtifact,
@@ -1440,11 +1517,19 @@ class ArtifactOptimizationService(
 
         fun mainStatFit(slotKey: String, mainStatKey: String): Double {
             val explicitTarget = targets.mainStats[slotKey]
-            return if (targets.custom && explicitTarget != null) {
+            val baseFit = if (targets.custom && explicitTarget != null) {
                 if (mainStatKey == explicitTarget) 1.0 else CUSTOM_MAIN_STAT_MISMATCH
             } else {
                 profile.mainStatFit(slotKey, mainStatKey)
             }
+            if (targets.custom && explicitTarget != null) return baseFit
+            if (slotKey == "circlet" &&
+                mainStatKey !in CRIT_STAT_KEYS &&
+                isCritOriented()
+            ) {
+                return minOf(baseFit, NON_CRIT_CIRCLET_DAMAGE_FIT)
+            }
+            return baseFit
         }
 
         fun mainStatWeight(slotKey: String, mainStatKey: String): Double {
@@ -1464,18 +1549,17 @@ class ArtifactOptimizationService(
             value: Double,
             contextTotals: Map<String, Double>,
         ): Double {
-            val maximum = targets.maximumTargets[statKey] ?: return value
-            val context = contextTotals.getOrDefault(statKey, 0.0)
-            val cappedValue = minOf(
-                value,
-                (maximum - context).coerceAtLeast(0.0),
-            )
-            if (statKey != "critRate_" || cappedValue <= 0.0 || maximum <= 0.0) {
-                return cappedValue
+            val cappedValue = targets.maximumTargets[statKey]?.let { maximum ->
+                val context = contextTotals.getOrDefault(statKey, 0.0)
+                minOf(value, (maximum - context).coerceAtLeast(0.0))
+            } ?: value
+            return when {
+                statKey == "critRate_" ->
+                    effectiveCritRateValue(cappedValue, contextTotals)
+                statKey == "critDMG_" ->
+                    effectiveCritDamageValue(cappedValue, contextTotals)
+                else -> cappedValue
             }
-            val start = context.coerceIn(0.0, maximum)
-            val end = (start + cappedValue).coerceAtMost(maximum)
-            return (end - start) * (1.0 - (start + end) / (2.0 * maximum))
         }
 
         fun acceptsExplicitMainStat(slotKey: String, mainStatKey: String): Boolean {
@@ -1489,6 +1573,57 @@ class ArtifactOptimizationService(
             } else {
                 (statWeights[statKey] ?: 0.0) >= USEFUL_STAT_WEIGHT
             }
+
+        private fun isCritOriented(): Boolean =
+            CRIT_STAT_KEYS.any { key ->
+                key in targets.substatPriorities ||
+                    key in targets.minimumTargets ||
+                    (statWeights[key] ?: 0.0) >= CRIT_ORIENTED_STAT_WEIGHT
+            }
+
+        private fun effectiveCritRateValue(
+            value: Double,
+            contextTotals: Map<String, Double>,
+        ): Double {
+            val maximum = targets.maximumTargets["critRate_"] ?: CRIT_RATE_CAP
+            if (value <= 0.0 || maximum <= 0.0) return 0.0
+            val start = contextTotals.getOrDefault("critRate_", 0.0)
+                .coerceIn(0.0, maximum)
+            val end = (start + value).coerceAtMost(maximum)
+            val usableValue = (end - start).coerceAtLeast(0.0)
+            if (usableValue <= 0.0) return 0.0
+
+            val critDamage = contextTotals.getOrDefault("critDMG_", 0.0)
+                .coerceAtLeast(0.0)
+            val ratioFactor = (critDamage / (CRIT_DAMAGE_RATIO * maximum))
+                .coerceIn(CRIT_RATIO_MIN_FACTOR, CRIT_RATIO_MAX_FACTOR)
+            val averageCritRate = (start + end) / 2.0
+            return usableValue * ratioFactor * critRateCapFactor(averageCritRate, maximum)
+        }
+
+        private fun effectiveCritDamageValue(
+            value: Double,
+            contextTotals: Map<String, Double>,
+        ): Double {
+            if (value <= 0.0) return 0.0
+            val critRateTarget = targets.maximumTargets["critRate_"] ?: CRIT_RATE_CAP
+            val critRate = contextTotals.getOrDefault("critRate_", 0.0)
+                .coerceIn(0.0, critRateTarget)
+            val ratioFactor = (critRate / critRateTarget)
+                .coerceIn(CRIT_RATIO_MIN_FACTOR, 1.0)
+            return value * ratioFactor
+        }
+
+        private fun critRateCapFactor(
+            averageCritRate: Double,
+            maximum: Double,
+        ): Double {
+            val softCap = maximum * CRIT_RATE_SOFT_CAP_SHARE
+            if (averageCritRate <= softCap) return 1.0
+            val progress = ((averageCritRate - softCap) / (maximum - softCap))
+                .coerceIn(0.0, 1.0)
+            return 1.0 - progress * (1.0 - CRIT_RATE_MIN_CAP_FACTOR)
+        }
     }
 
     companion object {
@@ -1502,20 +1637,29 @@ class ArtifactOptimizationService(
         private const val LEVELING_PREFILTER_LIMIT = 48
         private const val LEVELING_RESULTS_PER_ARTIFACT = 3
         private const val ARTIFACT_FARMING_SIMULATIONS = 6_000
-        private const val MINIMUM_LEVELING_CHANCE = 0.05
+        private const val MINIMUM_LEVELING_CHANCE = 0.30
         private const val MINIMUM_LOADOUT_LEVEL = 16
         private const val LOADOUT_BEAM_WIDTH = 320
         private const val SCORE_EPSILON = 0.5
         private const val BUILD_COMPARISON_EPSILON = 0.01
         private const val MAIN_STAT_ROLL_EQUIVALENT = 8.0
-        private const val VARIABLE_MAIN_STAT_SCORE_SHARE = 0.6
+        private const val VARIABLE_MAIN_STAT_SCORE_SHARE = 0.8
         private const val USEFUL_STAT_WEIGHT = 0.4
+        private const val CRIT_ORIENTED_STAT_WEIGHT = 0.6
         private const val CUSTOM_MAIN_STAT_MISMATCH = 0.2
+        private const val NON_CRIT_CIRCLET_DAMAGE_FIT = 0.25
         private const val PRIORITY_WEIGHT_DECAY = 0.85
         private const val MINIMUM_TARGET_WEIGHT = 1.15
         private const val CRIT_RATE_CAP = 100.0
         private const val CRIT_DAMAGE_RATIO = 2.0
+        private const val CRIT_RATIO_MIN_FACTOR = 0.25
+        private const val CRIT_RATIO_MAX_FACTOR = 1.25
+        private const val CRIT_RATE_SOFT_CAP_SHARE = 0.85
+        private const val CRIT_RATE_MIN_CAP_FACTOR = 0.25
         private const val MAX_TARGET_VALUE = 100_000.0
+        private const val ARTIFACT_EVALUATION_CACHE_VERSION = 2
+        private const val HEX_CHARS = "0123456789abcdef"
+        private val CRIT_STAT_KEYS = setOf("critRate_", "critDMG_")
 
         private val SUBSTAT_ROLL_VALUES = mapOf(
             "hp" to listOf(209.13, 239.0, 268.88, 298.75),

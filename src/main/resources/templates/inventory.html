@@ -15,8 +15,8 @@
         <p class="eyebrow" th:text="#{planning.overall}">Overall planning</p>
         <h1 th:text="#{inventory.missing}">Missing Materials</h1>
         <p class="lead" th:text="#{planning.lead}">
-            The combined requirements of all imported characters for level 80, ascension 6,
-            and talents 9/9/9 — your inventory is deducted exactly once.
+            The combined requirements for each character's saved targets — your inventory is
+            deducted exactly once.
         </p>
     </section>
 
@@ -45,7 +45,8 @@
         </p>
     </section>
 
-    <div th:if="${plan != null}">
+    <div id="missing-material-content" th:if="${plan != null}"
+         th:attr="data-snapshot-revision=${plan.snapshot.revision}">
         <section class="import-summary">
             <div>
                 <span th:text="#{planning.format}">Format</span>
@@ -74,8 +75,9 @@
             <span th:text="${#strings.listJoin(plan.unmatchedCharacterKeys, ', ')}">Unknown</span>
         </section>
 
-        <section id="material-breakdown" class="material-breakdown"
-                 th:if="${selectedMaterial != null}">
+        <dialog id="material-breakdown" class="artifact-dialog material-dialog"
+                th:if="${selectedMaterial != null}">
+          <div class="artifact-dialog-shell">
             <div class="breakdown-heading">
                 <div class="material-icon">
                     <img th:if="${selectedMaterial.imageUrl != null}"
@@ -87,8 +89,8 @@
                     <p class="eyebrow" th:text="#{planning.byCharacter}">Breakdown by character</p>
                     <h2 th:text="${selectedMaterial.name}">Mora</h2>
                 </div>
-                <a class="breakdown-close" th:href="@{/inventory/missing}"
-                   th:attr="aria-label=#{planning.closeBreakdown}">×</a>
+                <button class="artifact-dialog-close" type="button" data-material-dialog-close
+                        th:attr="aria-label=#{planning.closeBreakdown}">×</button>
             </div>
             <dl class="breakdown-totals">
                 <div>
@@ -132,7 +134,8 @@
                     <b th:text="${#numbers.formatInteger(need.required, 1, 'POINT')}">0</b>
                 </a>
             </div>
-        </section>
+          </div>
+        </dialog>
 
         <section class="inventory-section">
             <div class="section-heading">
@@ -143,11 +146,41 @@
                 <span th:text="#{planning.inventoryDeductedOnce}">Inventory is deducted only once here</span>
             </div>
 
-            <div class="balance-grid" th:if="${!plan.missingMaterials.isEmpty()}">
+            <div class="material-controls" th:if="${!plan.missingMaterials.isEmpty()}">
+                <label class="material-search">
+                    <span class="sr-only" th:text="#{planning.searchMaterials}">Search materials</span>
+                    <input id="material-search" type="search"
+                           th:placeholder="#{planning.searchMaterialsPlaceholder}"
+                           placeholder="Search missing materials…">
+                </label>
+                <label class="material-sort">
+                    <span th:text="#{planning.sortBy}">Sort by</span>
+                    <select id="material-sort">
+                        <option value="alphabetical" th:text="#{planning.sortAlphabetical}">Alphabetical</option>
+                        <option value="type" th:text="#{planning.sortType}">Type and family</option>
+                    </select>
+                </label>
+            </div>
+            <div id="material-category-chips" class="material-category-chips"
+                 th:if="${!plan.missingMaterials.isEmpty()}" role="group"
+                 th:attr="aria-label=#{planning.filterCategories}">
+                <button type="button" class="active" data-category="all"
+                        th:text="#{planning.categoryAll}">All</button>
+                <button type="button" th:each="category : ${materialCategories}"
+                        th:attr="data-category=${category.name()}"
+                        th:text="${#messages.msg(category.messageKey)}">Gem</button>
+            </div>
+
+            <div id="missing-material-grid" class="balance-grid" th:if="${!plan.missingMaterials.isEmpty()}">
                 <a class="balance-card balance-card-link" th:each="material : ${plan.missingMaterials}"
                    th:classappend="${selectedMaterial != null && selectedMaterial.id == material.id
                        ? ' selected' : ''}"
-                   th:href="@{/inventory/missing(materialId=${material.id})}">
+                   th:href="@{/inventory/missing(materialId=${material.id})}"
+                   th:with="crafting=${materialCraftingInfo[material.id]}"
+                   th:attr="data-name=${#strings.toLowerCase(material.name)},
+                       data-category=${material.category.name()},
+                       data-family=${crafting != null && crafting.familyKey != null ? crafting.familyKey : material.name},
+                       data-tier=${crafting != null && crafting.tier != null ? crafting.tier : 0}">
                     <div class="material-icon">
                         <img th:if="${material.imageUrl != null}" th:src="${material.imageUrl}"
                              th:alt="${material.name}" loading="lazy" onerror="this.remove()">
@@ -187,5 +220,141 @@
 
     </div>
 </main>
+<script>
+(() => {
+    const stateKey = "missing-material-controls";
+    const readState = () => {
+        try {
+            return JSON.parse(sessionStorage.getItem(stateKey) || "{}");
+        } catch (_) {
+            sessionStorage.removeItem(stateKey);
+            return {};
+        }
+    };
+    const setupControls = () => {
+        const grid = document.getElementById("missing-material-grid");
+        if (!grid) return;
+        const savedState = readState();
+        const cards = [...grid.querySelectorAll(".balance-card")];
+        const search = document.getElementById("material-search");
+        const sort = document.getElementById("material-sort");
+        const chips = [...document.querySelectorAll("#material-category-chips button")];
+        let category = chips.some(chip => chip.dataset.category === savedState.category)
+            ? savedState.category : "all";
+        search.value = savedState.query || "";
+        sort.value = savedState.sort === "type" ? "type" : "alphabetical";
+        chips.forEach(chip => chip.classList.toggle("active", chip.dataset.category === category));
+
+        const saveState = () => sessionStorage.setItem(stateKey, JSON.stringify({
+            query: search.value,
+            sort: sort.value,
+            category
+        }));
+
+        const apply = () => {
+            const query = search.value.trim().toLocaleLowerCase();
+            cards.forEach(card => {
+                card.hidden = !(card.dataset.name.includes(query) &&
+                    (category === "all" || card.dataset.category === category));
+            });
+            cards.sort((a, b) => {
+                if (sort.value === "type") {
+                    return a.dataset.category.localeCompare(b.dataset.category) ||
+                        a.dataset.family.localeCompare(b.dataset.family) ||
+                        Number(a.dataset.tier) - Number(b.dataset.tier) ||
+                        a.dataset.name.localeCompare(b.dataset.name);
+                }
+                return a.dataset.name.localeCompare(b.dataset.name);
+            }).forEach(card => grid.append(card));
+            saveState();
+        };
+        search.addEventListener("input", apply);
+        sort.addEventListener("change", apply);
+        chips.forEach(chip => chip.addEventListener("click", () => {
+            category = chip.dataset.category;
+            chips.forEach(candidate => candidate.classList.toggle("active", candidate === chip));
+            apply();
+        }));
+        apply();
+    };
+
+    const setupDialog = () => {
+        const dialog = document.getElementById("material-breakdown");
+        if (!dialog) return;
+        dialog.showModal();
+        dialog.querySelector("[data-material-dialog-close]")?.addEventListener("click", () => dialog.close());
+        dialog.addEventListener("click", event => { if (event.target === dialog) dialog.close(); });
+        dialog.addEventListener("close", () => history.replaceState({}, "", window.location.pathname));
+    };
+
+    setupControls();
+    setupDialog();
+
+    const content = document.getElementById("missing-material-content");
+    if (content) {
+        let knownRevision = Number(content.dataset.snapshotRevision || 0);
+        let refreshing = false;
+        const refreshContent = async revision => {
+            const focusedControl = document.activeElement?.id;
+            const response = await fetch(window.location.href, {
+                headers: {"Accept": "text/html"},
+                cache: "no-store"
+            });
+            if (!response.ok) return;
+            const documentCopy = new DOMParser().parseFromString(await response.text(), "text/html");
+            const freshContent = documentCopy.getElementById("missing-material-content");
+            if (!freshContent) return;
+
+            const freshSummary = freshContent.querySelector(".import-summary");
+            const currentSummary = content.querySelector(".import-summary");
+            if (freshSummary && currentSummary) currentSummary.replaceWith(freshSummary);
+
+            const freshSection = freshContent.querySelector(".inventory-section");
+            const currentSection = content.querySelector(".inventory-section");
+            const currentDialog = document.getElementById("material-breakdown");
+            currentDialog?.remove();
+            if (freshSection && currentSection) currentSection.replaceWith(freshSection);
+
+            const freshDialog = freshContent.querySelector("#material-breakdown");
+            const insertedSection = content.querySelector(".inventory-section");
+            if (freshDialog && insertedSection) insertedSection.before(freshDialog);
+
+            knownRevision = revision;
+            content.dataset.snapshotRevision = String(revision);
+            setupControls();
+            setupDialog();
+            if (!freshDialog && new URL(window.location.href).searchParams.has("materialId")) {
+                history.replaceState({}, "", window.location.pathname);
+            }
+            if (focusedControl) {
+                const control = document.getElementById(focusedControl);
+                control?.focus({preventScroll: true});
+            }
+        };
+        const refresh = async () => {
+            if (document.hidden || refreshing) return;
+            try {
+                const response = await fetch("/inventory/api/revision", {
+                    headers: {"Accept": "application/json"},
+                    cache: "no-store"
+                });
+                if (!response.ok) return;
+                const revision = Number((await response.json()).revision || 0);
+                if (revision !== knownRevision) {
+                    refreshing = true;
+                    await refreshContent(revision);
+                }
+            } catch (_) {
+                // The next poll retries when the local backend is reachable again.
+            } finally {
+                refreshing = false;
+            }
+        };
+        window.setInterval(refresh, 3000);
+        document.addEventListener("visibilitychange", refresh);
+        refresh();
+    }
+})();
+</script>
 </body>
 </html>

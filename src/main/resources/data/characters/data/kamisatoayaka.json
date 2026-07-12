@@ -1,0 +1,399 @@
+{
+  "id" : 10000002,
+  "name" : "Kamisato Ayaka",
+  "title" : "Frostflake Heron",
+  "description" : "Daughter of the Yashiro Commission's Kamisato Clan. Dignified and elegant, as well as wise and strong.",
+  "weaponType" : "WEAPON_SWORD_ONE_HAND",
+  "weaponText" : "Sword",
+  "bodyType" : "BODY_GIRL",
+  "gender" : "Female",
+  "qualityType" : "QUALITY_ORANGE",
+  "rarity" : 5,
+  "birthdaymmdd" : "9/28",
+  "birthday" : "September 28",
+  "elementType" : "ELEMENT_CRYO",
+  "elementText" : "Cryo",
+  "affiliation" : "Yashiro Commission",
+  "associationType" : "ASSOC_INAZUMA",
+  "region" : "Inazuma",
+  "substatType" : "FIGHT_PROP_CRITICAL_HURT",
+  "substatText" : "CRIT DMG",
+  "constellation" : "Grus Nivis",
+  "cv" : {
+    "english" : "Erica Mendez",
+    "chinese" : "小N",
+    "japanese" : "早見沙織",
+    "korean" : "Lee Yoo-ri"
+  },
+  "costs" : {
+    "ascend1" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 20000
+    }, {
+      "id" : 104161,
+      "name" : "Shivada Jade Sliver",
+      "count" : 1
+    }, {
+      "id" : 101202,
+      "name" : "Sakura Bloom",
+      "count" : 3
+    }, {
+      "id" : 112044,
+      "name" : "Old Handguard",
+      "count" : 3
+    } ],
+    "ascend2" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 40000
+    }, {
+      "id" : 104162,
+      "name" : "Shivada Jade Fragment",
+      "count" : 3
+    }, {
+      "id" : 113023,
+      "name" : "Perpetual Heart",
+      "count" : 2
+    }, {
+      "id" : 101202,
+      "name" : "Sakura Bloom",
+      "count" : 10
+    }, {
+      "id" : 112044,
+      "name" : "Old Handguard",
+      "count" : 15
+    } ],
+    "ascend3" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 60000
+    }, {
+      "id" : 104162,
+      "name" : "Shivada Jade Fragment",
+      "count" : 6
+    }, {
+      "id" : 113023,
+      "name" : "Perpetual Heart",
+      "count" : 4
+    }, {
+      "id" : 101202,
+      "name" : "Sakura Bloom",
+      "count" : 20
+    }, {
+      "id" : 112045,
+      "name" : "Kageuchi Handguard",
+      "count" : 12
+    } ],
+    "ascend4" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 80000
+    }, {
+      "id" : 104163,
+      "name" : "Shivada Jade Chunk",
+      "count" : 3
+    }, {
+      "id" : 113023,
+      "name" : "Perpetual Heart",
+      "count" : 8
+    }, {
+      "id" : 101202,
+      "name" : "Sakura Bloom",
+      "count" : 30
+    }, {
+      "id" : 112045,
+      "name" : "Kageuchi Handguard",
+      "count" : 18
+    } ],
+    "ascend5" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 100000
+    }, {
+      "id" : 104163,
+      "name" : "Shivada Jade Chunk",
+      "count" : 6
+    }, {
+      "id" : 113023,
+      "name" : "Perpetual Heart",
+      "count" : 12
+    }, {
+      "id" : 101202,
+      "name" : "Sakura Bloom",
+      "count" : 45
+    }, {
+      "id" : 112046,
+      "name" : "Famed Handguard",
+      "count" : 12
+    } ],
+    "ascend6" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 120000
+    }, {
+      "id" : 104164,
+      "name" : "Shivada Jade Gemstone",
+      "count" : 6
+    }, {
+      "id" : 113023,
+      "name" : "Perpetual Heart",
+      "count" : 20
+    }, {
+      "id" : 101202,
+      "name" : "Sakura Bloom",
+      "count" : 60
+    }, {
+      "id" : 112046,
+      "name" : "Famed Handguard",
+      "count" : 24
+    } ]
+  },
+  "images" : {
+    "cover1" : "https://webstatic.hoyoverse.com/upload/uploadstatic/contentweb/20210715/2021071516533380974.png",
+    "cover2" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/06/29/3e70ceb4ff8af4cb953528cbe0ad978c_4989955667583935904.png",
+    "hoyolab-avatar" : "https://img-os-static.hoyolab.com/communityWeb/upload/dbb893c26e20822aabd876a52361fffa.png",
+    "filename_icon" : "UI_AvatarIcon_Ayaka",
+    "filename_iconCard" : "UI_AvatarIcon_Ayaka_Card",
+    "filename_sideIcon" : "UI_AvatarIcon_Side_Ayaka",
+    "filename_gachaSplash" : "UI_Gacha_AvatarImg_Ayaka",
+    "filename_gachaSlice" : "UI_Gacha_AvatarIcon_Ayaka",
+    "mihoyo_icon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Ayaka.png",
+    "mihoyo_sideIcon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_side_icon/UI_AvatarIcon_Side_Ayaka.png"
+  },
+  "url" : {
+    "fandom" : "https://genshin-impact.fandom.com/wiki/Kamisato_Ayaka"
+  },
+  "version" : "2.0",
+  "talents" : {
+    "id" : 201,
+    "name" : "Kamisato Ayaka",
+    "combat1" : {
+      "name" : "Kamisato Art: Kabuki",
+      "descriptionRaw" : "<color=#FFD780FF>Normal Attack</color>\nPerforms up to 5 rapid strikes.\n\n<color=#FFD780FF>Charged Attack</color>\nConsumes a certain amount of Stamina to unleash a flurry of sword ki.\n\n<color=#FFD780FF>Plunging Attack</color>\nPlunges from mid-air to strike the ground below, damaging enemies along the path and dealing AoE DMG upon impact.",
+      "description" : "Normal Attack\nPerforms up to 5 rapid strikes.\n\nCharged Attack\nConsumes a certain amount of Stamina to unleash a flurry of sword ki.\n\nPlunging Attack\nPlunges from mid-air to strike the ground below, damaging enemies along the path and dealing AoE DMG upon impact.",
+      "attributes" : {
+        "labels" : [ "1-Hit DMG|{param1:F1P}", "2-Hit DMG|{param2:F1P}", "3-Hit DMG|{param3:F1P}", "4-Hit DMG|{param4:F1P}×3", "5-Hit DMG|{param7:F1P}", "Charged Attack DMG|{param8:F1P}×3", "Charged Attack Stamina Cost|{param9:F1}", "Plunge DMG|{param10:P}", "Low/High Plunge DMG|{param11:P}/{param12:P}" ],
+        "parameters" : {
+          "param1" : [ 0.457253, 0.494472, 0.53169, 0.584859, 0.622077, 0.664613, 0.723098, 0.781584, 0.84007, 0.903873, 0.967676, 1.031479, 1.095281, 1.159084, 1.222887 ],
+          "param2" : [ 0.486846, 0.526473, 0.5661, 0.62271, 0.662337, 0.707625, 0.769896, 0.832167, 0.894438, 0.96237, 1.030302, 1.098234, 1.166166, 1.234098, 1.30203 ],
+          "param3" : [ 0.626218, 0.677189, 0.72816, 0.800976, 0.851947, 0.9102, 0.990298, 1.070395, 1.150493, 1.237872, 1.325251, 1.41263, 1.50001, 1.587389, 1.674768 ],
+          "param4" : [ 0.226464, 0.244897, 0.26333, 0.289663, 0.308096, 0.329163, 0.358129, 0.387095, 0.416061, 0.447661, 0.479261, 0.51086, 0.54246, 0.574059, 0.605659 ],
+          "param7" : [ 0.781817, 0.845454, 0.90909, 0.999999, 1.063635, 1.136363, 1.236362, 1.336362, 1.436362, 1.545453, 1.654544, 1.763635, 1.872725, 1.981816, 2.090907 ],
+          "param8" : [ 0.55126, 0.59613, 0.641, 0.7051, 0.74997, 0.80125, 0.87176, 0.94227, 1.01278, 1.0897, 1.16662, 1.24354, 1.32046, 1.39738, 1.4743 ],
+          "param9" : [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ],
+          "param10" : [ 0.639324, 0.691362, 0.7434, 0.81774, 0.869778, 0.92925, 1.011024, 1.092798, 1.174572, 1.26378, 1.352988, 1.442196, 1.531404, 1.620612, 1.70982 ],
+          "param11" : [ 1.278377, 1.382431, 1.486485, 1.635134, 1.739187, 1.858106, 2.02162, 2.185133, 2.348646, 2.527025, 2.705403, 2.883781, 3.062159, 3.240537, 3.418915 ],
+          "param12" : [ 1.596762, 1.726731, 1.8567, 2.04237, 2.172339, 2.320875, 2.525112, 2.729349, 2.933586, 3.15639, 3.379194, 3.601998, 3.824802, 4.047606, 4.27041 ]
+        }
+      }
+    },
+    "combat2" : {
+      "name" : "Kamisato Art: Hyouka",
+      "descriptionRaw" : "Summons blooming ice to launch nearby opponents, dealing <color=#99FFFFFF>AoE Cryo DMG</color>.\n\n<i>\"Clouds shroud the moonlit night. Longing descends like a fog, filling the one detained with wanderlust.\"</i>",
+      "description" : "Summons blooming ice to launch nearby opponents, dealing AoE Cryo DMG.",
+      "flavorText" : "\"Clouds shroud the moonlit night. Longing descends like a fog, filling the one detained with wanderlust.\"",
+      "attributes" : {
+        "labels" : [ "Skill DMG|{param1:P}", "CD|{param2:F1}s" ],
+        "parameters" : {
+          "param1" : [ 2.392, 2.5714, 2.7508, 2.99, 3.1694, 3.3488, 3.588, 3.8272, 4.0664, 4.3056, 4.5448, 4.784, 5.083, 5.382, 5.681 ],
+          "param2" : [ 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 ]
+        }
+      }
+    },
+    "combatsp" : {
+      "name" : "Kamisato Art: Senho",
+      "descriptionRaw" : "<color=#FFD780FF>Alternate Sprint</color>\nAyaka consumes Stamina and cloaks herself in a frozen fog that moves with her.\n\nIn Senho form, she moves swiftly upon water.\nWhen she reappears, the following effects occur:\n·Ayaka unleashes frigid energy to apply <color=#99FFFFFF>Cryo</color> on nearby opponents.\n·Coldness condenses around Ayaka's blade, infusing her attacks with <color=#99FFFFFF>Cryo</color> for a brief period.\n\n<i>\"Feathers fleeting wet / the white heron treads water / a sight without flaw\"</i>",
+      "description" : "Alternate Sprint\nAyaka consumes Stamina and cloaks herself in a frozen fog that moves with her.\n\nIn Senho form, she moves swiftly upon water.\nWhen she reappears, the following effects occur:\n·Ayaka unleashes frigid energy to apply Cryo on nearby opponents.\n·Coldness condenses around Ayaka's blade, infusing her attacks with Cryo for a brief period.",
+      "flavorText" : "\"Feathers fleeting wet / the white heron treads water / a sight without flaw\"",
+      "attributes" : {
+        "labels" : [ "Activation Stamina Consumption|{param1:F1}", "Stamina Drain|{param2:F1}/s", "Infusion Duration|{param3:F1}s" ],
+        "parameters" : {
+          "param1" : [ 10 ],
+          "param2" : [ 15 ],
+          "param3" : [ 5 ]
+        }
+      }
+    },
+    "combat3" : {
+      "name" : "Kamisato Art: Soumetsu",
+      "descriptionRaw" : "Summons forth a snowstorm with flawless poise, unleashing a Frostflake Seki no To that moves forward continuously.\n\n<color=#FFD780FF>Frostflake Seki no To</color>\n·A storm of whirling icy winds that slashes repeatedly at every enemy it touches, dealing <color=#99FFFFFF>Cryo DMG</color>.\n·The snowstorm explodes after its duration ends, dealing <color=#99FFFFFF>AoE Cryo DMG</color>.\n\n<i>\"The blizzard veils the heron's thoughts, pity heavy in its heart.\"</i>",
+      "description" : "Summons forth a snowstorm with flawless poise, unleashing a Frostflake Seki no To that moves forward continuously.\n\nFrostflake Seki no To\n·A storm of whirling icy winds that slashes repeatedly at every enemy it touches, dealing Cryo DMG.\n·The snowstorm explodes after its duration ends, dealing AoE Cryo DMG.",
+      "flavorText" : "\"The blizzard veils the heron's thoughts, pity heavy in its heart.\"",
+      "attributes" : {
+        "labels" : [ "Cutting DMG|{param1:P}", "Bloom DMG|{param2:P}", "Duration|{param3:F1}s", "CD|{param4:F1}s", "Energy Cost|{param5:I}" ],
+        "parameters" : {
+          "param1" : [ 1.123, 1.207225, 1.29145, 1.40375, 1.487975, 1.5722, 1.6845, 1.7968, 1.9091, 2.0214, 2.1337, 2.246, 2.386375, 2.52675, 2.667125 ],
+          "param2" : [ 1.6845, 1.810837, 1.937175, 2.105625, 2.231962, 2.3583, 2.52675, 2.6952, 2.86365, 3.0321, 3.20055, 3.369, 3.579562, 3.790125, 4.000687 ],
+          "param3" : [ 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5 ],
+          "param4" : [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ],
+          "param5" : [ 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80 ]
+        }
+      }
+    },
+    "passive1" : {
+      "name" : "Amatsumi Kunitsumi Sanctification",
+      "descriptionRaw" : "After using <color=#FFD780FF>Kamisato Art: Hyouka</color>, Kamisato Ayaka's Normal and Charged Attacks deal 30% increased DMG for 6s.",
+      "description" : "After using Kamisato Art: Hyouka, Kamisato Ayaka's Normal and Charged Attacks deal 30% increased DMG for 6s."
+    },
+    "passive2" : {
+      "name" : "Kanten Senmyou Blessing",
+      "descriptionRaw" : "When the Cryo application at the end of <color=#FFD780FF>Kamisato Art: Senho</color> hits an opponent, Kamisato Ayaka gains the following effects:\n·Restores 10 Stamina\n·Gains 18% <color=#99FFFFFF>Cryo DMG Bonus</color> for 10s.",
+      "description" : "When the Cryo application at the end of Kamisato Art: Senho hits an opponent, Kamisato Ayaka gains the following effects:\n·Restores 10 Stamina\n·Gains 18% Cryo DMG Bonus for 10s."
+    },
+    "passive3" : {
+      "name" : "Fruits of Shinsa",
+      "descriptionRaw" : "When Ayaka crafts Weapon Ascension Materials, she has a 10% chance to receive double the product.",
+      "description" : "When Ayaka crafts Weapon Ascension Materials, she has a 10% chance to receive double the product."
+    },
+    "costs" : {
+      "lvl2" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 12500
+      }, {
+        "id" : 104323,
+        "name" : "Teachings of Elegance",
+        "count" : 3
+      }, {
+        "id" : 112044,
+        "name" : "Old Handguard",
+        "count" : 6
+      } ],
+      "lvl3" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 17500
+      }, {
+        "id" : 104324,
+        "name" : "Guide to Elegance",
+        "count" : 2
+      }, {
+        "id" : 112045,
+        "name" : "Kageuchi Handguard",
+        "count" : 3
+      } ],
+      "lvl4" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 25000
+      }, {
+        "id" : 104324,
+        "name" : "Guide to Elegance",
+        "count" : 4
+      }, {
+        "id" : 112045,
+        "name" : "Kageuchi Handguard",
+        "count" : 4
+      } ],
+      "lvl5" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 30000
+      }, {
+        "id" : 104324,
+        "name" : "Guide to Elegance",
+        "count" : 6
+      }, {
+        "id" : 112045,
+        "name" : "Kageuchi Handguard",
+        "count" : 6
+      } ],
+      "lvl6" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 37500
+      }, {
+        "id" : 104324,
+        "name" : "Guide to Elegance",
+        "count" : 9
+      }, {
+        "id" : 112045,
+        "name" : "Kageuchi Handguard",
+        "count" : 9
+      } ],
+      "lvl7" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 120000
+      }, {
+        "id" : 104325,
+        "name" : "Philosophies of Elegance",
+        "count" : 4
+      }, {
+        "id" : 112046,
+        "name" : "Famed Handguard",
+        "count" : 4
+      }, {
+        "id" : 113018,
+        "name" : "Bloodjade Branch",
+        "count" : 1
+      } ],
+      "lvl8" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 260000
+      }, {
+        "id" : 104325,
+        "name" : "Philosophies of Elegance",
+        "count" : 6
+      }, {
+        "id" : 112046,
+        "name" : "Famed Handguard",
+        "count" : 6
+      }, {
+        "id" : 113018,
+        "name" : "Bloodjade Branch",
+        "count" : 1
+      } ],
+      "lvl9" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 450000
+      }, {
+        "id" : 104325,
+        "name" : "Philosophies of Elegance",
+        "count" : 12
+      }, {
+        "id" : 112046,
+        "name" : "Famed Handguard",
+        "count" : 9
+      }, {
+        "id" : 113018,
+        "name" : "Bloodjade Branch",
+        "count" : 2
+      } ],
+      "lvl10" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 700000
+      }, {
+        "id" : 104325,
+        "name" : "Philosophies of Elegance",
+        "count" : 16
+      }, {
+        "id" : 112046,
+        "name" : "Famed Handguard",
+        "count" : 12
+      }, {
+        "id" : 113018,
+        "name" : "Bloodjade Branch",
+        "count" : 2
+      }, {
+        "id" : 104319,
+        "name" : "Crown of Insight",
+        "count" : 1
+      } ]
+    },
+    "images" : {
+      "filename_combat1" : "Skill_A_01",
+      "filename_combat2" : "Skill_S_Ayaka_01",
+      "filename_combatsp" : "Skill_S_Ayaka_02",
+      "filename_combat3" : "Skill_E_Ayaka_HD",
+      "filename_passive1" : "UI_Talent_S_Ayaka_05",
+      "filename_passive2" : "UI_Talent_S_Ayaka_06",
+      "filename_passive3" : "UI_Talent_Combine_Weapon_Double"
+    },
+    "version" : "2.0"
+  }
+}

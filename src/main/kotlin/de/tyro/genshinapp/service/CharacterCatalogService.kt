@@ -37,6 +37,10 @@ class CharacterCatalogService(
             }
         }
         rememberMaterials(BASE_MATERIALS)
+        rememberMaterials(loadBundledWeaponMaterials())
+        val enrichedMaterials = MaterialCatalogMetadata.enrich(materialsById.values, getCharacters())
+        materialsById.clear()
+        rememberMaterials(enrichedMaterials)
         catalogStore?.saveMaterials(materialsById.values)
         contentLoader.registerDefaultImageLinks(getCharacters(), getMaterials())
     }
@@ -149,6 +153,17 @@ class CharacterCatalogService(
             .toMap()
     }
 
+    private fun loadBundledWeaponMaterials(): List<MaterialDefinition> =
+        BUNDLED_WEAPON_KEYS.asSequence().flatMap { key ->
+            val resource = ClassPathResource("data/weapons/data/$key.json")
+            if (!resource.exists()) return@flatMap emptySequence()
+            resource.inputStream.use(objectMapper::readTree).path("costs")
+                .flatMap { phase -> phase.map { cost ->
+                    MaterialDefinition(cost.path("id").asInt(), cost.path("name").asText())
+                } }
+                .asSequence()
+        }.filter { it.id > 0 && it.name.isNotBlank() }.distinctBy { it.id }.toList()
+
     fun materialImageUrl(id: Int): String? {
         if (id < 0) return null
         return UriComponentsBuilder.fromPath("/media/materials/{id}")
@@ -199,5 +214,6 @@ class CharacterCatalogService(
             MaterialDefinition(0, "Character EXP"),
             MaterialDefinition(104013, "Mystic Enhancement Ore"),
         )
+        private val BUNDLED_WEAPON_KEYS = listOf("rust", "sacrificialbow")
     }
 }

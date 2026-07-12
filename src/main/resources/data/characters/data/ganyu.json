@@ -1,0 +1,390 @@
+{
+  "id" : 10000037,
+  "name" : "Ganyu",
+  "title" : "Plenilune Gaze",
+  "description" : "The secretary at Yuehai Pavilion. The blood of the qilin, an illuminated beast, flows within her veins.",
+  "weaponType" : "WEAPON_BOW",
+  "weaponText" : "Bow",
+  "bodyType" : "BODY_GIRL",
+  "gender" : "Female",
+  "qualityType" : "QUALITY_ORANGE",
+  "rarity" : 5,
+  "birthdaymmdd" : "12/2",
+  "birthday" : "December 2",
+  "elementType" : "ELEMENT_CRYO",
+  "elementText" : "Cryo",
+  "affiliation" : "Yuehai Pavilion",
+  "associationType" : "ASSOC_LIYUE",
+  "region" : "Liyue",
+  "substatType" : "FIGHT_PROP_CRITICAL_HURT",
+  "substatText" : "CRIT DMG",
+  "constellation" : "Sinae Unicornis",
+  "cv" : {
+    "english" : "Jennifer Losi",
+    "chinese" : "林簌",
+    "japanese" : "上田麗奈",
+    "korean" : "Kim Seon-hye"
+  },
+  "costs" : {
+    "ascend1" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 20000
+    }, {
+      "id" : 104161,
+      "name" : "Shivada Jade Sliver",
+      "count" : 1
+    }, {
+      "id" : 100031,
+      "name" : "Qingxin",
+      "count" : 3
+    }, {
+      "id" : 112038,
+      "name" : "Whopperflower Nectar",
+      "count" : 3
+    } ],
+    "ascend2" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 40000
+    }, {
+      "id" : 104162,
+      "name" : "Shivada Jade Fragment",
+      "count" : 3
+    }, {
+      "id" : 113010,
+      "name" : "Hoarfrost Core",
+      "count" : 2
+    }, {
+      "id" : 100031,
+      "name" : "Qingxin",
+      "count" : 10
+    }, {
+      "id" : 112038,
+      "name" : "Whopperflower Nectar",
+      "count" : 15
+    } ],
+    "ascend3" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 60000
+    }, {
+      "id" : 104162,
+      "name" : "Shivada Jade Fragment",
+      "count" : 6
+    }, {
+      "id" : 113010,
+      "name" : "Hoarfrost Core",
+      "count" : 4
+    }, {
+      "id" : 100031,
+      "name" : "Qingxin",
+      "count" : 20
+    }, {
+      "id" : 112039,
+      "name" : "Shimmering Nectar",
+      "count" : 12
+    } ],
+    "ascend4" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 80000
+    }, {
+      "id" : 104163,
+      "name" : "Shivada Jade Chunk",
+      "count" : 3
+    }, {
+      "id" : 113010,
+      "name" : "Hoarfrost Core",
+      "count" : 8
+    }, {
+      "id" : 100031,
+      "name" : "Qingxin",
+      "count" : 30
+    }, {
+      "id" : 112039,
+      "name" : "Shimmering Nectar",
+      "count" : 18
+    } ],
+    "ascend5" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 100000
+    }, {
+      "id" : 104163,
+      "name" : "Shivada Jade Chunk",
+      "count" : 6
+    }, {
+      "id" : 113010,
+      "name" : "Hoarfrost Core",
+      "count" : 12
+    }, {
+      "id" : 100031,
+      "name" : "Qingxin",
+      "count" : 45
+    }, {
+      "id" : 112040,
+      "name" : "Energy Nectar",
+      "count" : 12
+    } ],
+    "ascend6" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 120000
+    }, {
+      "id" : 104164,
+      "name" : "Shivada Jade Gemstone",
+      "count" : 6
+    }, {
+      "id" : 113010,
+      "name" : "Hoarfrost Core",
+      "count" : 20
+    }, {
+      "id" : 100031,
+      "name" : "Qingxin",
+      "count" : 60
+    }, {
+      "id" : 112040,
+      "name" : "Energy Nectar",
+      "count" : 24
+    } ]
+  },
+  "images" : {
+    "card" : "https://static.wikia.nocookie.net/gensin-impact/images/8/8d/Character_Ganyu_Card.png",
+    "portrait" : "https://static.wikia.nocookie.net/gensin-impact/images/a/a0/Character_Ganyu_Portrait.png",
+    "cover1" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/07/22/1ae0d0aaad9ee9b55652ea7ec67f0465_3602224572622981451.png",
+    "cover2" : "https://webstatic.hoyoverse.com/upload/uploadstatic/contentweb/20210105/2021010519280045054.png",
+    "hoyolab-avatar" : "https://img-os-static.hoyolab.com/communityWeb/upload/4af4adf192a35db2dd76d9718acc7bc8.png",
+    "filename_icon" : "UI_AvatarIcon_Ganyu",
+    "filename_iconCard" : "UI_AvatarIcon_Ganyu_Card",
+    "filename_sideIcon" : "UI_AvatarIcon_Side_Ganyu",
+    "filename_gachaSplash" : "UI_Gacha_AvatarImg_Ganyu",
+    "filename_gachaSlice" : "UI_Gacha_AvatarIcon_Ganyu",
+    "mihoyo_icon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Ganyu.png",
+    "mihoyo_sideIcon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_side_icon/UI_AvatarIcon_Side_Ganyu.png"
+  },
+  "url" : {
+    "fandom" : "https://genshin-impact.fandom.com/wiki/Ganyu"
+  },
+  "version" : "1.2",
+  "talents" : {
+    "id" : 3701,
+    "name" : "Ganyu",
+    "combat1" : {
+      "name" : "Liutian Archery",
+      "descriptionRaw" : "<color=#FFD780FF>Normal Attack</color>\nPerforms up to 6 consecutive shots with a bow.\n\n<color=#FFD780FF>Charged Attack</color>\nPerforms a more precise <color=#FFD780FF>Aimed Shot</color> with increased DMG.\nWhile aiming, an icy aura will accumulate on the arrowhead before the arrow is fired. Has different effects based on how long the energy has been charged:\n·Charge Level 1: Fires off an icy arrow that deals <color=#99FFFFFF>Cryo DMG</color>.\n·Charge Level 2: Fires off a Frostflake Arrow that deals <color=#99FFFFFF>Cryo DMG</color>. The Frostflake Arrow blooms after hitting its target, dealing <color=#99FFFFFF>AoE Cryo DMG</color>.\n\n<color=#FFD780FF>Plunging Attack</color>\nFires off a shower of arrows in mid-air before falling and striking the ground, dealing AoE DMG upon impact.",
+      "description" : "Normal Attack\nPerforms up to 6 consecutive shots with a bow.\n\nCharged Attack\nPerforms a more precise Aimed Shot with increased DMG.\nWhile aiming, an icy aura will accumulate on the arrowhead before the arrow is fired. Has different effects based on how long the energy has been charged:\n·Charge Level 1: Fires off an icy arrow that deals Cryo DMG.\n·Charge Level 2: Fires off a Frostflake Arrow that deals Cryo DMG. The Frostflake Arrow blooms after hitting its target, dealing AoE Cryo DMG.\n\nPlunging Attack\nFires off a shower of arrows in mid-air before falling and striking the ground, dealing AoE DMG upon impact.",
+      "attributes" : {
+        "labels" : [ "1-Hit DMG|{param1:F1P}", "2-Hit DMG|{param2:F1P}", "3-Hit DMG|{param3:F1P}", "4-Hit DMG|{param4:F1P}", "5-Hit DMG|{param5:F1P}", "6-Hit DMG|{param6:F1P}", "Aimed Shot|{param7:F1P}", "Aimed Shot Charge Level 1|{param8:P}", "Frostflake Arrow DMG|{param9:P}", "Frostflake Arrow Bloom DMG|{param10:P}", "Plunge DMG|{param11:F1P}", "Low/High Plunge DMG|{param12:P}/{param13:P}" ],
+        "parameters" : {
+          "param1" : [ 0.31734, 0.34317, 0.369, 0.4059, 0.43173, 0.46125, 0.50184, 0.54243, 0.58302, 0.6273, 0.678037, 0.737705, 0.797372, 0.857039, 0.922131 ],
+          "param2" : [ 0.35604, 0.38502, 0.414, 0.4554, 0.48438, 0.5175, 0.56304, 0.60858, 0.65412, 0.7038, 0.760725, 0.827669, 0.894613, 0.961556, 1.034586 ],
+          "param3" : [ 0.45494, 0.49197, 0.529, 0.5819, 0.61893, 0.66125, 0.71944, 0.77763, 0.83582, 0.8993, 0.972038, 1.057577, 1.143116, 1.228655, 1.321971 ],
+          "param4" : [ 0.45494, 0.49197, 0.529, 0.5819, 0.61893, 0.66125, 0.71944, 0.77763, 0.83582, 0.8993, 0.972038, 1.057577, 1.143116, 1.228655, 1.321971 ],
+          "param5" : [ 0.48246, 0.52173, 0.561, 0.6171, 0.65637, 0.70125, 0.76296, 0.82467, 0.88638, 0.9537, 1.030838, 1.121551, 1.212265, 1.302979, 1.401939 ],
+          "param6" : [ 0.5762, 0.6231, 0.67, 0.737, 0.7839, 0.8375, 0.9112, 0.9849, 1.0586, 1.139, 1.231125, 1.339464, 1.447803, 1.556142, 1.67433 ],
+          "param7" : [ 0.4386, 0.4743, 0.51, 0.561, 0.5967, 0.6375, 0.6936, 0.7497, 0.8058, 0.867, 0.9282, 0.9894, 1.0506, 1.1118, 1.173 ],
+          "param8" : [ 1.24, 1.333, 1.426, 1.55, 1.643, 1.736, 1.86, 1.984, 2.108, 2.232, 2.356, 2.48, 2.635, 2.79, 2.945 ],
+          "param9" : [ 1.28, 1.376, 1.472, 1.6, 1.696, 1.792, 1.92, 2.048, 2.176, 2.304, 2.432, 2.56, 2.72, 2.88, 3.04 ],
+          "param10" : [ 2.176, 2.3392, 2.5024, 2.72, 2.8832, 3.0464, 3.264, 3.4816, 3.6992, 3.9168, 4.1344, 4.352, 4.624, 4.896, 5.168 ],
+          "param11" : [ 0.568288, 0.614544, 0.6608, 0.72688, 0.773136, 0.826, 0.898688, 0.971376, 1.044064, 1.12336, 1.202656, 1.281952, 1.361248, 1.440544, 1.51984 ],
+          "param12" : [ 1.136335, 1.228828, 1.32132, 1.453452, 1.545944, 1.65165, 1.796995, 1.94234, 2.087686, 2.246244, 2.404802, 2.563361, 2.721919, 2.880478, 3.039036 ],
+          "param13" : [ 1.419344, 1.534872, 1.6504, 1.81544, 1.930968, 2.063, 2.244544, 2.426088, 2.607632, 2.80568, 3.003728, 3.201776, 3.399824, 3.597872, 3.79592 ]
+        }
+      }
+    },
+    "combat2" : {
+      "name" : "Trail of the Qilin",
+      "descriptionRaw" : "Leaving a single Ice Lotus behind, Ganyu dashes backward, shunning all impurity and dealing <color=#99FFFFFF>AoE Cryo DMG</color>.\n\n<color=#FFD780FF>Ice Lotus</color>\n·Continuously taunts surrounding opponents, attracting them to attack it.\n·Endurance scales based on Ganyu's Max HP.\n·Blooms profusely when destroyed or once its duration ends, dealing <color=#99FFFFFF>AoE Cryo DMG</color>.\n\n<i>\"You saw me, you say? You must be mistaken. I was working overtime then.\"</i>",
+      "description" : "Leaving a single Ice Lotus behind, Ganyu dashes backward, shunning all impurity and dealing AoE Cryo DMG.\n\nIce Lotus\n·Continuously taunts surrounding opponents, attracting them to attack it.\n·Endurance scales based on Ganyu's Max HP.\n·Blooms profusely when destroyed or once its duration ends, dealing AoE Cryo DMG.",
+      "flavorText" : "\"You saw me, you say? You must be mistaken. I was working overtime then.\"",
+      "attributes" : {
+        "labels" : [ "Inherited HP|{param1:P}", "Skill DMG|{param2:P}", "Duration|{param3:F1}s", "CD|{param4:F1}s" ],
+        "parameters" : {
+          "param1" : [ 1.2, 1.29, 1.38, 1.5, 1.59, 1.68, 1.8, 1.92, 2.04, 2.16, 2.28, 2.4, 2.55, 2.7, 2.85 ],
+          "param2" : [ 1.32, 1.419, 1.518, 1.65, 1.749, 1.848, 1.98, 2.112, 2.244, 2.376, 2.508, 2.64, 2.805, 2.97, 3.135 ],
+          "param3" : [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 ],
+          "param4" : [ 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 ]
+        }
+      }
+    },
+    "combat3" : {
+      "name" : "Celestial Shower",
+      "descriptionRaw" : "Coalesces atmospheric frost and snow to summon a Sacred Cryo Pearl that exorcises evil.\nDuring its ability duration, the Sacred Cryo Pearl will continuously rain down shards of ice, striking opponents within an AoE and dealing <color=#99FFFFFF>Cryo DMG</color>.\n\n<i>Ganyu can bring down sweet rains as a matter of course. But against demons and heretics, they become bitter, freezing snow.</i>",
+      "description" : "Coalesces atmospheric frost and snow to summon a Sacred Cryo Pearl that exorcises evil.\nDuring its ability duration, the Sacred Cryo Pearl will continuously rain down shards of ice, striking opponents within an AoE and dealing Cryo DMG.",
+      "flavorText" : "Ganyu can bring down sweet rains as a matter of course. But against demons and heretics, they become bitter, freezing snow.",
+      "attributes" : {
+        "labels" : [ "Ice Shard DMG|{param1:P}", "Duration|{param2:F1}s", "CD|{param3:F1}s", "Energy Cost|{param4:I}" ],
+        "parameters" : {
+          "param1" : [ 0.70272, 0.755424, 0.808128, 0.8784, 0.931104, 0.983808, 1.05408, 1.124352, 1.194624, 1.264896, 1.335168, 1.40544, 1.49328, 1.58112, 1.66896 ],
+          "param2" : [ 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 ],
+          "param3" : [ 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 ],
+          "param4" : [ 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60 ]
+        }
+      }
+    },
+    "passive1" : {
+      "name" : "Undivided Heart",
+      "descriptionRaw" : "After firing a Frostflake Arrow, the CRIT Rate of subsequent Frostflake Arrows and their resulting bloom effects is increased by 20% for 5s.",
+      "description" : "After firing a Frostflake Arrow, the CRIT Rate of subsequent Frostflake Arrows and their resulting bloom effects is increased by 20% for 5s."
+    },
+    "passive2" : {
+      "name" : "Harmony Between Heaven and Earth",
+      "descriptionRaw" : "<color=#FFD780FF>Celestial Shower</color> grants a 20% <color=#99FFFFFF>Cryo DMG Bonus</color> to active party members in the AoE.",
+      "description" : "Celestial Shower grants a 20% Cryo DMG Bonus to active party members in the AoE."
+    },
+    "passive3" : {
+      "name" : "Preserved for the Hunt",
+      "descriptionRaw" : "Refunds 15% of the ore used when crafting Bow-type weapons.",
+      "description" : "Refunds 15% of the ore used when crafting Bow-type weapons."
+    },
+    "costs" : {
+      "lvl2" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 12500
+      }, {
+        "id" : 104313,
+        "name" : "Teachings of Diligence",
+        "count" : 3
+      }, {
+        "id" : 112038,
+        "name" : "Whopperflower Nectar",
+        "count" : 6
+      } ],
+      "lvl3" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 17500
+      }, {
+        "id" : 104314,
+        "name" : "Guide to Diligence",
+        "count" : 2
+      }, {
+        "id" : 112039,
+        "name" : "Shimmering Nectar",
+        "count" : 3
+      } ],
+      "lvl4" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 25000
+      }, {
+        "id" : 104314,
+        "name" : "Guide to Diligence",
+        "count" : 4
+      }, {
+        "id" : 112039,
+        "name" : "Shimmering Nectar",
+        "count" : 4
+      } ],
+      "lvl5" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 30000
+      }, {
+        "id" : 104314,
+        "name" : "Guide to Diligence",
+        "count" : 6
+      }, {
+        "id" : 112039,
+        "name" : "Shimmering Nectar",
+        "count" : 6
+      } ],
+      "lvl6" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 37500
+      }, {
+        "id" : 104314,
+        "name" : "Guide to Diligence",
+        "count" : 9
+      }, {
+        "id" : 112039,
+        "name" : "Shimmering Nectar",
+        "count" : 9
+      } ],
+      "lvl7" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 120000
+      }, {
+        "id" : 104315,
+        "name" : "Philosophies of Diligence",
+        "count" : 4
+      }, {
+        "id" : 112040,
+        "name" : "Energy Nectar",
+        "count" : 4
+      }, {
+        "id" : 113015,
+        "name" : "Shadow of the Warrior",
+        "count" : 1
+      } ],
+      "lvl8" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 260000
+      }, {
+        "id" : 104315,
+        "name" : "Philosophies of Diligence",
+        "count" : 6
+      }, {
+        "id" : 112040,
+        "name" : "Energy Nectar",
+        "count" : 6
+      }, {
+        "id" : 113015,
+        "name" : "Shadow of the Warrior",
+        "count" : 1
+      } ],
+      "lvl9" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 450000
+      }, {
+        "id" : 104315,
+        "name" : "Philosophies of Diligence",
+        "count" : 12
+      }, {
+        "id" : 112040,
+        "name" : "Energy Nectar",
+        "count" : 9
+      }, {
+        "id" : 113015,
+        "name" : "Shadow of the Warrior",
+        "count" : 2
+      } ],
+      "lvl10" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 700000
+      }, {
+        "id" : 104315,
+        "name" : "Philosophies of Diligence",
+        "count" : 16
+      }, {
+        "id" : 112040,
+        "name" : "Energy Nectar",
+        "count" : 12
+      }, {
+        "id" : 113015,
+        "name" : "Shadow of the Warrior",
+        "count" : 2
+      }, {
+        "id" : 104319,
+        "name" : "Crown of Insight",
+        "count" : 1
+      } ]
+    },
+    "images" : {
+      "filename_combat1" : "Skill_A_02",
+      "filename_combat2" : "Skill_S_Ganyu_01",
+      "filename_combat3" : "Skill_E_Ganyu_01_HD",
+      "filename_passive1" : "UI_Talent_S_Ganyu_05",
+      "filename_passive2" : "UI_Talent_S_Ganyu_06",
+      "filename_passive3" : "UI_Talent_Forge_Bow"
+    },
+    "version" : "1.2"
+  }
+}

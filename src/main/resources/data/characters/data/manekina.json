@@ -1,0 +1,255 @@
+{
+  "id" : 10000118,
+  "name" : "Manekina",
+  "title" : "",
+  "description" : "A Manekin gifted to you and Paimon by a witch who uses the pseudonym \"Octavia.\" They are gifted at exploring the mysteries sealed within the Miliastra Wonderland.",
+  "weaponType" : "WEAPON_SWORD_ONE_HAND",
+  "weaponText" : "Sword",
+  "bodyType" : "BODY_GIRL",
+  "gender" : "Female",
+  "qualityType" : "QUALITY_ORANGE_SP",
+  "rarity" : 5,
+  "birthdaymmdd" : "0/0",
+  "birthday" : "November 30",
+  "elementType" : "ELEMENT_NONE",
+  "elementText" : "None",
+  "affiliation" : "——",
+  "associationType" : "ASSOC_MAINACTOR",
+  "region" : "",
+  "substatType" : "FIGHT_PROP_ATTACK_PERCENT",
+  "substatText" : "ATK",
+  "constellation" : "——",
+  "cv" : {
+    "english" : "——",
+    "chinese" : "——",
+    "japanese" : "——",
+    "korean" : "——"
+  },
+  "costs" : {
+    "ascend1" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 0
+    } ],
+    "ascend2" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 0
+    } ],
+    "ascend3" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 0
+    } ],
+    "ascend4" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 0
+    } ],
+    "ascend5" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 0
+    } ],
+    "ascend6" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 0
+    } ]
+  },
+  "images" : {
+    "filename_icon" : "UI_AvatarIcon_MannequinGirl",
+    "filename_iconCard" : "UI_AvatarIcon_MannequinGirl_Card",
+    "filename_sideIcon" : "UI_AvatarIcon_Side_MannequinGirl",
+    "filename_gachaSplash" : "UI_Gacha_AvatarImg_MannequinGirl",
+    "filename_gachaSlice" : "UI_Gacha_AvatarIcon_MannequinGirl",
+    "mihoyo_icon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_MannequinGirl.png",
+    "mihoyo_sideIcon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_side_icon/UI_AvatarIcon_Side_MannequinGirl.png"
+  },
+  "version" : "6.1",
+  "talents" : {
+    "id" : 11801,
+    "name" : "Manekina",
+    "combat1" : {
+      "name" : "Outlander Arts: Vigilant Watch",
+      "descriptionRaw" : "<color=#FFD780FF>Normal Attack</color>\nPerforms up to 4 rapid strikes.\n\n<color=#FFD780FF>Charged Attack</color>\nConsumes a certain amount of Stamina to unleash 2 rapid sword strikes.\n\n<color=#FFD780FF>Plunging Attack</color>\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "description" : "Normal Attack\nPerforms up to 4 rapid strikes.\n\nCharged Attack\nConsumes a certain amount of Stamina to unleash 2 rapid sword strikes.\n\nPlunging Attack\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "attributes" : {
+        "labels" : [ "1-Hit DMG|{param1:F1P}", "2-Hit DMG|{param2:F1P}", "3-Hit DMG|{param3:F1P}×2", "4-Hit DMG|{param4:F1P}", "Charged Attack DMG|{param5:F1P}+{param6:F1P}", "Charged Attack Stamina Cost|{param7:F1}", "Plunge DMG|{param8:F1P}", "Low/High Plunge DMG|{param9:P}/{param10:P}" ],
+        "parameters" : {
+          "param1" : [ 0.517995, 0.560158, 0.60232, 0.662552, 0.704714, 0.7529, 0.819155, 0.88541, 0.951666, 1.023944, 1.096222, 1.168501, 1.240779, 1.313058, 1.385336 ],
+          "param2" : [ 0.497114, 0.537577, 0.57804, 0.635844, 0.676307, 0.72255, 0.786134, 0.849719, 0.913303, 0.982668, 1.052033, 1.121398, 1.190762, 1.260127, 1.329492 ],
+          "param3" : [ 0.336965, 0.364393, 0.39182, 0.431002, 0.458429, 0.489775, 0.532875, 0.575975, 0.619076, 0.666094, 0.713112, 0.760131, 0.807149, 0.854168, 0.901186 ],
+          "param4" : [ 0.809337, 0.875214, 0.94109, 1.035199, 1.101075, 1.176362, 1.279882, 1.383402, 1.486922, 1.599853, 1.712784, 1.825715, 1.938645, 2.051576, 2.164507 ],
+          "param5" : [ 0.52632, 0.56916, 0.612, 0.6732, 0.71604, 0.765, 0.83232, 0.89964, 0.96696, 1.0404, 1.11384, 1.18728, 1.26072, 1.33416, 1.4076 ],
+          "param6" : [ 0.59082, 0.63891, 0.687, 0.7557, 0.80379, 0.85875, 0.93432, 1.00989, 1.08546, 1.1679, 1.25034, 1.33278, 1.41522, 1.49766, 1.5801 ],
+          "param7" : [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ],
+          "param8" : [ 0.639324, 0.691362, 0.7434, 0.81774, 0.869778, 0.92925, 1.011024, 1.092798, 1.174572, 1.26378, 1.352988, 1.442196, 1.531404, 1.620612, 1.70982 ],
+          "param9" : [ 1.278377, 1.382431, 1.486485, 1.635134, 1.739187, 1.858106, 2.02162, 2.185133, 2.348646, 2.527025, 2.705403, 2.883781, 3.062159, 3.240537, 3.418915 ],
+          "param10" : [ 1.596762, 1.726731, 1.8567, 2.04237, 2.172339, 2.320875, 2.525112, 2.729349, 2.933586, 3.15639, 3.379194, 3.601998, 3.824802, 4.047606, 4.27041 ]
+        }
+      }
+    },
+    "passive1" : {
+      "name" : "Battlelines Redrawn",
+      "descriptionRaw" : "When the Manekin leaves the field, if a Restricted Area that they summoned is still active, it will explode, dealing AoE DMG of the Manekin's Elemental Type equal to 200% of the Manekin's ATK.",
+      "description" : "When the Manekin leaves the field, if a Restricted Area that they summoned is still active, it will explode, dealing AoE DMG of the Manekin's Elemental Type equal to 200% of the Manekin's ATK."
+    },
+    "passive2" : {
+      "name" : "Combat Readiness",
+      "descriptionRaw" : "When the Manekin is not on the field and their Elemental Energy is below 30%, they will recover 2 Elemental Energy per second.",
+      "description" : "When the Manekin is not on the field and their Elemental Energy is below 30%, they will recover 2 Elemental Energy per second."
+    },
+    "passive3" : {
+      "name" : "Agile Stance",
+      "descriptionRaw" : "When the Manekin unleashes an Elemental Skill or Burst, it will change to one of its existing Cosmetic Plans at random.",
+      "description" : "When the Manekin unleashes an Elemental Skill or Burst, it will change to one of its existing Cosmetic Plans at random."
+    },
+    "costs" : {
+      "lvl2" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 12500
+      }, {
+        "id" : 104353,
+        "name" : "Teachings of Conflict",
+        "count" : 3
+      }, {
+        "id" : 112104,
+        "name" : "Sentry's Wooden Whistle",
+        "count" : 6
+      } ],
+      "lvl3" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 17500
+      }, {
+        "id" : 104354,
+        "name" : "Guide to Conflict",
+        "count" : 2
+      }, {
+        "id" : 112105,
+        "name" : "Warrior's Metal Whistle",
+        "count" : 3
+      } ],
+      "lvl4" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 25000
+      }, {
+        "id" : 104354,
+        "name" : "Guide to Conflict",
+        "count" : 4
+      }, {
+        "id" : 112105,
+        "name" : "Warrior's Metal Whistle",
+        "count" : 4
+      } ],
+      "lvl5" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 30000
+      }, {
+        "id" : 104354,
+        "name" : "Guide to Conflict",
+        "count" : 6
+      }, {
+        "id" : 112105,
+        "name" : "Warrior's Metal Whistle",
+        "count" : 6
+      } ],
+      "lvl6" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 37500
+      }, {
+        "id" : 104354,
+        "name" : "Guide to Conflict",
+        "count" : 9
+      }, {
+        "id" : 112105,
+        "name" : "Warrior's Metal Whistle",
+        "count" : 9
+      } ],
+      "lvl7" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 120000
+      }, {
+        "id" : 104355,
+        "name" : "Philosophies of Conflict",
+        "count" : 4
+      }, {
+        "id" : 112106,
+        "name" : "Saurian-Crowned Warrior's Golden Whistle",
+        "count" : 4
+      }, {
+        "id" : 113069,
+        "name" : "Eroded Sunfire",
+        "count" : 1
+      } ],
+      "lvl8" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 260000
+      }, {
+        "id" : 104355,
+        "name" : "Philosophies of Conflict",
+        "count" : 6
+      }, {
+        "id" : 112106,
+        "name" : "Saurian-Crowned Warrior's Golden Whistle",
+        "count" : 6
+      }, {
+        "id" : 113069,
+        "name" : "Eroded Sunfire",
+        "count" : 1
+      } ],
+      "lvl9" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 450000
+      }, {
+        "id" : 104355,
+        "name" : "Philosophies of Conflict",
+        "count" : 12
+      }, {
+        "id" : 112106,
+        "name" : "Saurian-Crowned Warrior's Golden Whistle",
+        "count" : 9
+      }, {
+        "id" : 113069,
+        "name" : "Eroded Sunfire",
+        "count" : 2
+      } ],
+      "lvl10" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 700000
+      }, {
+        "id" : 104355,
+        "name" : "Philosophies of Conflict",
+        "count" : 16
+      }, {
+        "id" : 112106,
+        "name" : "Saurian-Crowned Warrior's Golden Whistle",
+        "count" : 12
+      }, {
+        "id" : 113069,
+        "name" : "Eroded Sunfire",
+        "count" : 2
+      }, {
+        "id" : 104319,
+        "name" : "Crown of Insight",
+        "count" : 1
+      } ]
+    },
+    "images" : {
+      "filename_combat1" : "Skill_A_01",
+      "filename_passive1" : "UI_Talent_S_LittleIdol_05",
+      "filename_passive2" : "UI_Talent_S_LittleIdol_06",
+      "filename_passive3" : "UI_Talent_S_LittleIdol_07"
+    },
+    "version" : "6.1"
+  }
+}

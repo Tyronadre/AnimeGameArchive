@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
@@ -155,12 +156,24 @@ class PlayerInventoryController(
         model: Model,
     ): String {
         val snapshot = snapshotStore.current(principal.id)
-        val plan = snapshot?.let(planningService::createPlan)
+        val plan = snapshot?.let {
+            planningService.createPlan(it, characterTargetService.findAll(principal.id))
+        }
         val selectedMaterial = materialId?.let { id ->
             plan?.missingMaterials?.find { it.id == id }
         }
         model.addAttribute("plan", plan)
         model.addAttribute("selectedMaterial", selectedMaterial)
+        model.addAttribute(
+            "materialCraftingInfo",
+            plan?.missingMaterials.orEmpty().associate { material ->
+                material.id to materialCraftingService.infoFor(material.id)
+            },
+        )
+        model.addAttribute(
+            "materialCategories",
+            plan?.missingMaterials.orEmpty().map { it.category }.distinct(),
+        )
         model.addAttribute(
             "characterNeeds",
             selectedMaterial?.let { plan?.characterNeeds(it.id).orEmpty() }.orEmpty(),
@@ -168,6 +181,14 @@ class PlayerInventoryController(
         model.addAttribute("snapshotFile", snapshotStore.filePath(principal.id).toString())
         return "inventory"
     }
+
+    @GetMapping("/api/revision")
+    @ResponseBody
+    fun inventoryRevision(
+        @AuthenticationPrincipal principal: AppUserPrincipal,
+    ): Map<String, Long> = mapOf(
+        "revision" to (snapshotStore.current(principal.id)?.revision ?: 0L),
+    )
 
     @GetMapping("/artifacts")
     fun artifacts(

@@ -1,0 +1,388 @@
+{
+  "id" : 10000038,
+  "name" : "Albedo",
+  "title" : "Kreideprinz",
+  "description" : "A genius known as the Kreideprinz, he is the Chief Alchemist and Captain of the Investigation Team of the Knights of Favonius.",
+  "weaponType" : "WEAPON_SWORD_ONE_HAND",
+  "weaponText" : "Sword",
+  "bodyType" : "BODY_BOY",
+  "gender" : "Male",
+  "qualityType" : "QUALITY_ORANGE",
+  "rarity" : 5,
+  "birthdaymmdd" : "9/13",
+  "birthday" : "September 13",
+  "elementType" : "ELEMENT_GEO",
+  "elementText" : "Geo",
+  "affiliation" : "Knights of Favonius",
+  "associationType" : "ASSOC_MONDSTADT",
+  "region" : "Mondstadt",
+  "substatType" : "FIGHT_PROP_ROCK_ADD_HURT",
+  "substatText" : "Geo DMG Bonus",
+  "constellation" : "Princeps Cretaceus",
+  "cv" : {
+    "english" : "Khoi Dao",
+    "chinese" : "Mace",
+    "japanese" : "野島健児",
+    "korean" : "Kim Myeong-joon"
+  },
+  "costs" : {
+    "ascend1" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 20000
+    }, {
+      "id" : 104171,
+      "name" : "Prithiva Topaz Sliver",
+      "count" : 1
+    }, {
+      "id" : 100023,
+      "name" : "Cecilia",
+      "count" : 3
+    }, {
+      "id" : 112008,
+      "name" : "Divining Scroll",
+      "count" : 3
+    } ],
+    "ascend2" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 40000
+    }, {
+      "id" : 104172,
+      "name" : "Prithiva Topaz Fragment",
+      "count" : 3
+    }, {
+      "id" : 113009,
+      "name" : "Basalt Pillar",
+      "count" : 2
+    }, {
+      "id" : 100023,
+      "name" : "Cecilia",
+      "count" : 10
+    }, {
+      "id" : 112008,
+      "name" : "Divining Scroll",
+      "count" : 15
+    } ],
+    "ascend3" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 60000
+    }, {
+      "id" : 104172,
+      "name" : "Prithiva Topaz Fragment",
+      "count" : 6
+    }, {
+      "id" : 113009,
+      "name" : "Basalt Pillar",
+      "count" : 4
+    }, {
+      "id" : 100023,
+      "name" : "Cecilia",
+      "count" : 20
+    }, {
+      "id" : 112009,
+      "name" : "Sealed Scroll",
+      "count" : 12
+    } ],
+    "ascend4" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 80000
+    }, {
+      "id" : 104173,
+      "name" : "Prithiva Topaz Chunk",
+      "count" : 3
+    }, {
+      "id" : 113009,
+      "name" : "Basalt Pillar",
+      "count" : 8
+    }, {
+      "id" : 100023,
+      "name" : "Cecilia",
+      "count" : 30
+    }, {
+      "id" : 112009,
+      "name" : "Sealed Scroll",
+      "count" : 18
+    } ],
+    "ascend5" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 100000
+    }, {
+      "id" : 104173,
+      "name" : "Prithiva Topaz Chunk",
+      "count" : 6
+    }, {
+      "id" : 113009,
+      "name" : "Basalt Pillar",
+      "count" : 12
+    }, {
+      "id" : 100023,
+      "name" : "Cecilia",
+      "count" : 45
+    }, {
+      "id" : 112010,
+      "name" : "Forbidden Curse Scroll",
+      "count" : 12
+    } ],
+    "ascend6" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 120000
+    }, {
+      "id" : 104174,
+      "name" : "Prithiva Topaz Gemstone",
+      "count" : 6
+    }, {
+      "id" : 113009,
+      "name" : "Basalt Pillar",
+      "count" : 20
+    }, {
+      "id" : 100023,
+      "name" : "Cecilia",
+      "count" : 60
+    }, {
+      "id" : 112010,
+      "name" : "Forbidden Curse Scroll",
+      "count" : 24
+    } ]
+  },
+  "images" : {
+    "card" : "https://static.wikia.nocookie.net/gensin-impact/images/f/f8/Character_Albedo_Card.png",
+    "portrait" : "https://static.wikia.nocookie.net/gensin-impact/images/2/23/Character_Albedo_Portrait.png",
+    "cover1" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/07/22/f95b03a7d7370aa4f5de3ac9a5f161bc_9195254471817551468.png",
+    "cover2" : "https://webstatic.hoyoverse.com/upload/uploadstatic/contentweb/20201216/2020121611271023422.png",
+    "hoyolab-avatar" : "https://img-os-static.hoyolab.com/communityWeb/upload/94dd9e0cc9d8311e58887a45b9b14861.png",
+    "filename_icon" : "UI_AvatarIcon_Albedo",
+    "filename_iconCard" : "UI_AvatarIcon_Albedo_Card",
+    "filename_sideIcon" : "UI_AvatarIcon_Side_Albedo",
+    "filename_gachaSplash" : "UI_Gacha_AvatarImg_Albedo",
+    "filename_gachaSlice" : "UI_Gacha_AvatarIcon_Albedo",
+    "mihoyo_icon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Albedo.png",
+    "mihoyo_sideIcon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_side_icon/UI_AvatarIcon_Side_Albedo.png"
+  },
+  "url" : {
+    "fandom" : "https://genshin-impact.fandom.com/wiki/Albedo"
+  },
+  "version" : "1.2",
+  "talents" : {
+    "id" : 3801,
+    "name" : "Albedo",
+    "combat1" : {
+      "name" : "Favonius Bladework - Weiss",
+      "descriptionRaw" : "<color=#FFD780FF>Normal Attack</color>\nPerforms up to 5 rapid strikes.\n\n<color=#FFD780FF>Charged Attack</color>\nConsumes a certain amount of Stamina to unleash 2 rapid sword strikes.\n\n<color=#FFD780FF>Plunging Attack</color>\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "description" : "Normal Attack\nPerforms up to 5 rapid strikes.\n\nCharged Attack\nConsumes a certain amount of Stamina to unleash 2 rapid sword strikes.\n\nPlunging Attack\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "attributes" : {
+        "labels" : [ "1-Hit DMG|{param1:F1P}", "2-Hit DMG|{param2:F1P}", "3-Hit DMG|{param3:F1P}", "4-Hit DMG|{param4:F1P}", "5-Hit DMG|{param5:F1P}", "Charged Attack DMG|{param6:F1P}+{param7:F1P}", "Charged Attack Stamina Cost|{param8:F1}", "Plunge DMG|{param9:F1P}", "Low/High Plunge DMG|{param10:P}/{param11:P}" ],
+        "parameters" : {
+          "param1" : [ 0.367392, 0.397296, 0.4272, 0.46992, 0.499824, 0.534, 0.580992, 0.627984, 0.674976, 0.72624, 0.78498, 0.854058, 0.923136, 0.992215, 1.067573 ],
+          "param2" : [ 0.367392, 0.397296, 0.4272, 0.46992, 0.499824, 0.534, 0.580992, 0.627984, 0.674976, 0.72624, 0.78498, 0.854058, 0.923136, 0.992215, 1.067573 ],
+          "param3" : [ 0.474548, 0.513174, 0.5518, 0.60698, 0.645606, 0.68975, 0.750448, 0.811146, 0.871844, 0.93806, 1.013932, 1.103159, 1.192385, 1.281611, 1.378948 ],
+          "param4" : [ 0.49751, 0.538005, 0.5785, 0.63635, 0.676845, 0.723125, 0.78676, 0.850395, 0.91403, 0.98345, 1.062994, 1.156537, 1.250081, 1.343624, 1.445671 ],
+          "param5" : [ 0.620739, 0.671265, 0.72179, 0.793969, 0.844494, 0.902238, 0.981634, 1.061031, 1.140428, 1.227043, 1.326289, 1.443003, 1.559716, 1.676429, 1.803753 ],
+          "param6" : [ 0.473, 0.5115, 0.55, 0.605, 0.6435, 0.6875, 0.748, 0.8085, 0.869, 0.935, 1.010625, 1.09956, 1.188495, 1.27743, 1.37445 ],
+          "param7" : [ 0.602, 0.651, 0.7, 0.77, 0.819, 0.875, 0.952, 1.029, 1.106, 1.19, 1.28625, 1.39944, 1.51263, 1.62582, 1.7493 ],
+          "param8" : [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ],
+          "param9" : [ 0.639324, 0.691362, 0.7434, 0.81774, 0.869778, 0.92925, 1.011024, 1.092798, 1.174572, 1.26378, 1.352988, 1.442196, 1.531404, 1.620612, 1.70982 ],
+          "param10" : [ 1.278377, 1.382431, 1.486485, 1.635134, 1.739187, 1.858106, 2.02162, 2.185133, 2.348646, 2.527025, 2.705403, 2.883781, 3.062159, 3.240537, 3.418915 ],
+          "param11" : [ 1.596762, 1.726731, 1.8567, 2.04237, 2.172339, 2.320875, 2.525112, 2.729349, 2.933586, 3.15639, 3.379194, 3.601998, 3.824802, 4.047606, 4.27041 ]
+        }
+      }
+    },
+    "combat2" : {
+      "name" : "Abiogenesis: Solar Isotoma",
+      "descriptionRaw" : "Albedo creates a Solar Isotoma using alchemy, which deals <color=#FFE699FF>AoE Geo DMG</color> on appearance.\n\n<color=#FFD780FF>Solar Isotoma</color>\nhas the following properties:\n·When opponents within the Solar Isotoma field take DMG, the Solar Isotoma will generate Transient Blossoms which deal <color=#FFE699FF>AoE Geo DMG</color>. DMG dealt scales off Albedo's DEF. \n·Transient Blossoms can only be generated once every 2s.\n·When a character is located at the locus of the Solar Isotoma, the Solar Isotoma will accumulate Geo power to form a crystallized platform that lifts the character up to a certain height. Only one crystallized platform can exist at a time.\n·Solar Isotoma is considered a <color=#FFE699FF>Geo construct</color>. Only one Solar Isotoma created by Albedo himself can exist at a time. \n\n<color=#FFD780FF>Hold</color> to designate the location of the skill.\n\n<i>This Geo bloom has an unusual property mirrored in the aim of alchemy. To rise from the earth, soar into the sky, and become the sun.</i>",
+      "description" : "Albedo creates a Solar Isotoma using alchemy, which deals AoE Geo DMG on appearance.\n\nSolar Isotoma\nhas the following properties:\n·When opponents within the Solar Isotoma field take DMG, the Solar Isotoma will generate Transient Blossoms which deal AoE Geo DMG. DMG dealt scales off Albedo's DEF. \n·Transient Blossoms can only be generated once every 2s.\n·When a character is located at the locus of the Solar Isotoma, the Solar Isotoma will accumulate Geo power to form a crystallized platform that lifts the character up to a certain height. Only one crystallized platform can exist at a time.\n·Solar Isotoma is considered a Geo construct. Only one Solar Isotoma created by Albedo himself can exist at a time. \n\nHold to designate the location of the skill.",
+      "flavorText" : "This Geo bloom has an unusual property mirrored in the aim of alchemy. To rise from the earth, soar into the sky, and become the sun.",
+      "attributes" : {
+        "labels" : [ "Skill DMG|{param1:P}", "Transient Blossom DMG|{param2:P} DEF", "Duration|{param3:F1}s", "Skill CD|{param4:F1}s" ],
+        "parameters" : {
+          "param1" : [ 1.304, 1.4018, 1.4996, 1.63, 1.7278, 1.8256, 1.956, 2.0864, 2.2168, 2.3472, 2.4776, 2.608, 2.771, 2.934, 3.097 ],
+          "param2" : [ 1.336, 1.4362, 1.5364, 1.67, 1.7702, 1.8704, 2.004, 2.1376, 2.2712, 2.4048, 2.5384, 2.672, 2.839, 3.006, 3.173 ],
+          "param3" : [ 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30 ],
+          "param4" : [ 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 ]
+        }
+      }
+    },
+    "combat3" : {
+      "name" : "Rite of Progeniture: Tectonic Tide",
+      "descriptionRaw" : "Under Albedo's command, Geo crystals surge and burst forth, dealing <color=#FFE699FF>AoE Geo DMG</color> in front of him.\nIf a Solar Isotoma created by Albedo himself is on the field, 7 Fatal Blossoms will be generated in the Solar Isotoma field, bursting violently into bloom and dealing <color=#FFE699FF>AoE Geo DMG</color>.\n\nTectonic Tide DMG and Fatal Blossom DMG will not generate Transient Blossoms.\n\n<i>Under the Kreideprinz's command, the tectonic tide of creation seethes into life.</i>",
+      "description" : "Under Albedo's command, Geo crystals surge and burst forth, dealing AoE Geo DMG in front of him.\nIf a Solar Isotoma created by Albedo himself is on the field, 7 Fatal Blossoms will be generated in the Solar Isotoma field, bursting violently into bloom and dealing AoE Geo DMG.\n\nTectonic Tide DMG and Fatal Blossom DMG will not generate Transient Blossoms.",
+      "flavorText" : "Under the Kreideprinz's command, the tectonic tide of creation seethes into life.",
+      "attributes" : {
+        "labels" : [ "Burst DMG|{param1:P}", "Fatal Blossom DMG|{param2:F1P} each", "CD|{param3:F1}s", "Energy Cost|{param4:I}" ],
+        "parameters" : {
+          "param1" : [ 3.672, 3.9474, 4.2228, 4.59, 4.8654, 5.1408, 5.508, 5.8752, 6.2424, 6.6096, 6.9768, 7.344, 7.803, 8.262, 8.721 ],
+          "param2" : [ 0.72, 0.774, 0.828, 0.9, 0.954, 1.008, 1.08, 1.152, 1.224, 1.296, 1.368, 1.44, 1.53, 1.62, 1.71 ],
+          "param3" : [ 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12 ],
+          "param4" : [ 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40 ]
+        }
+      }
+    },
+    "passive1" : {
+      "name" : "Calcite Might",
+      "descriptionRaw" : "Transient Blossoms generated by <color=#FFD780FF>Abiogenesis: Solar Isotoma</color> deal 25% more DMG to opponents whose HP is below 50%.",
+      "description" : "Transient Blossoms generated by Abiogenesis: Solar Isotoma deal 25% more DMG to opponents whose HP is below 50%."
+    },
+    "passive2" : {
+      "name" : "Homuncular Nature",
+      "descriptionRaw" : "Using <color=#FFD780FF>Rite of Progeniture: Tectonic Tide</color> increases the Elemental Mastery of nearby party members by 125 for 10s.",
+      "description" : "Using Rite of Progeniture: Tectonic Tide increases the Elemental Mastery of nearby party members by 125 for 10s."
+    },
+    "passive3" : {
+      "name" : "Flash of Genius",
+      "descriptionRaw" : "When Albedo crafts Weapon Ascension Materials, he has a 10% chance to receive double the product.",
+      "description" : "When Albedo crafts Weapon Ascension Materials, he has a 10% chance to receive double the product."
+    },
+    "costs" : {
+      "lvl2" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 12500
+      }, {
+        "id" : 104307,
+        "name" : "Teachings of Ballad",
+        "count" : 3
+      }, {
+        "id" : 112008,
+        "name" : "Divining Scroll",
+        "count" : 6
+      } ],
+      "lvl3" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 17500
+      }, {
+        "id" : 104308,
+        "name" : "Guide to Ballad",
+        "count" : 2
+      }, {
+        "id" : 112009,
+        "name" : "Sealed Scroll",
+        "count" : 3
+      } ],
+      "lvl4" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 25000
+      }, {
+        "id" : 104308,
+        "name" : "Guide to Ballad",
+        "count" : 4
+      }, {
+        "id" : 112009,
+        "name" : "Sealed Scroll",
+        "count" : 4
+      } ],
+      "lvl5" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 30000
+      }, {
+        "id" : 104308,
+        "name" : "Guide to Ballad",
+        "count" : 6
+      }, {
+        "id" : 112009,
+        "name" : "Sealed Scroll",
+        "count" : 6
+      } ],
+      "lvl6" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 37500
+      }, {
+        "id" : 104308,
+        "name" : "Guide to Ballad",
+        "count" : 9
+      }, {
+        "id" : 112009,
+        "name" : "Sealed Scroll",
+        "count" : 9
+      } ],
+      "lvl7" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 120000
+      }, {
+        "id" : 104309,
+        "name" : "Philosophies of Ballad",
+        "count" : 4
+      }, {
+        "id" : 112010,
+        "name" : "Forbidden Curse Scroll",
+        "count" : 4
+      }, {
+        "id" : 113013,
+        "name" : "Tusk of Monoceros Caeli",
+        "count" : 1
+      } ],
+      "lvl8" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 260000
+      }, {
+        "id" : 104309,
+        "name" : "Philosophies of Ballad",
+        "count" : 6
+      }, {
+        "id" : 112010,
+        "name" : "Forbidden Curse Scroll",
+        "count" : 6
+      }, {
+        "id" : 113013,
+        "name" : "Tusk of Monoceros Caeli",
+        "count" : 1
+      } ],
+      "lvl9" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 450000
+      }, {
+        "id" : 104309,
+        "name" : "Philosophies of Ballad",
+        "count" : 12
+      }, {
+        "id" : 112010,
+        "name" : "Forbidden Curse Scroll",
+        "count" : 9
+      }, {
+        "id" : 113013,
+        "name" : "Tusk of Monoceros Caeli",
+        "count" : 2
+      } ],
+      "lvl10" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 700000
+      }, {
+        "id" : 104309,
+        "name" : "Philosophies of Ballad",
+        "count" : 16
+      }, {
+        "id" : 112010,
+        "name" : "Forbidden Curse Scroll",
+        "count" : 12
+      }, {
+        "id" : 113013,
+        "name" : "Tusk of Monoceros Caeli",
+        "count" : 2
+      }, {
+        "id" : 104319,
+        "name" : "Crown of Insight",
+        "count" : 1
+      } ]
+    },
+    "images" : {
+      "filename_combat1" : "Skill_A_01",
+      "filename_combat2" : "Skill_S_Albedo_01",
+      "filename_combat3" : "Skill_E_Albedo_01_HD",
+      "filename_passive1" : "UI_Talent_S_Albedo_05",
+      "filename_passive2" : "UI_Talent_S_Albedo_06",
+      "filename_passive3" : "UI_Talent_Combine_Weapon_Double"
+    },
+    "version" : "1.2"
+  }
+}

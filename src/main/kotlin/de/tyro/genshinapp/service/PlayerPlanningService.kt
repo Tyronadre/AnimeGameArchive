@@ -2,6 +2,7 @@ package de.tyro.genshinapp.service
 
 import de.tyro.genshinapp.model.CharacterDefinition
 import de.tyro.genshinapp.model.CharacterProgress
+import de.tyro.genshinapp.model.CharacterProgressForm
 import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.model.InventoryMaterialBalance
 import de.tyro.genshinapp.model.MaterialRequirement
@@ -17,7 +18,10 @@ class PlayerPlanningService(
     private val materialCalculator: MaterialCalculator,
     private val materialCraftingService: MaterialCraftingService,
 ) {
-    fun createPlan(snapshot: PlayerSnapshot): PlayerMaterialPlan {
+    fun createPlan(
+        snapshot: PlayerSnapshot,
+        targets: Map<String, CharacterTargetValues> = emptyMap(),
+    ): PlayerMaterialPlan {
         val catalogByKey = catalogService.getCharacters().associateBy {
             GoodKeyNormalizer.normalize(it.key)
         }
@@ -34,7 +38,14 @@ class PlayerPlanningService(
                 return@mapNotNull null
             }
 
-            createCharacterPlan(character, state, snapshot)
+            val form = CharacterProgressForm().also { it.apply(state) }
+            val savedTarget = targets[normalizedKey]
+                ?: targets[GoodKeyNormalizer.normalize(character.key)]
+            savedTarget?.applyTo(form)
+            val progress = form.normalized()
+            if (!progress.owned) return@mapNotNull null
+
+            createCharacterPlan(character, state, snapshot, progress)
         }
 
         val aggregateRequirements = linkedMapOf<MaterialIdentity, AggregatedRequirement>()

@@ -1,0 +1,389 @@
+{
+  "id" : 10000006,
+  "name" : "Lisa",
+  "title" : "Witch of Purple Rose",
+  "description" : "The languid but knowledgeable Librarian of the Knights of Favonius, deemed by Sumeru Akademiya to be their most distinguished graduate in the past two centuries.",
+  "weaponType" : "WEAPON_CATALYST",
+  "weaponText" : "Catalyst",
+  "bodyType" : "BODY_LADY",
+  "gender" : "Female",
+  "qualityType" : "QUALITY_PURPLE",
+  "rarity" : 4,
+  "birthdaymmdd" : "6/9",
+  "birthday" : "June 9",
+  "elementType" : "ELEMENT_ELECTRO",
+  "elementText" : "Electro",
+  "affiliation" : "Knights of Favonius",
+  "associationType" : "ASSOC_MONDSTADT",
+  "region" : "Mondstadt",
+  "substatType" : "FIGHT_PROP_ELEMENT_MASTERY",
+  "substatText" : "Elemental Mastery",
+  "constellation" : "Tempus Fugit",
+  "cv" : {
+    "english" : "Mara Junot",
+    "chinese" : "钟可",
+    "japanese" : "田中理恵",
+    "korean" : "Park Go-woon"
+  },
+  "costs" : {
+    "ascend1" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 20000
+    }, {
+      "id" : 104141,
+      "name" : "Vajrada Amethyst Sliver",
+      "count" : 1
+    }, {
+      "id" : 100022,
+      "name" : "Valberry",
+      "count" : 3
+    }, {
+      "id" : 112002,
+      "name" : "Slime Condensate",
+      "count" : 3
+    } ],
+    "ascend2" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 40000
+    }, {
+      "id" : 104142,
+      "name" : "Vajrada Amethyst Fragment",
+      "count" : 3
+    }, {
+      "id" : 113002,
+      "name" : "Lightning Prism",
+      "count" : 2
+    }, {
+      "id" : 100022,
+      "name" : "Valberry",
+      "count" : 10
+    }, {
+      "id" : 112002,
+      "name" : "Slime Condensate",
+      "count" : 15
+    } ],
+    "ascend3" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 60000
+    }, {
+      "id" : 104142,
+      "name" : "Vajrada Amethyst Fragment",
+      "count" : 6
+    }, {
+      "id" : 113002,
+      "name" : "Lightning Prism",
+      "count" : 4
+    }, {
+      "id" : 100022,
+      "name" : "Valberry",
+      "count" : 20
+    }, {
+      "id" : 112003,
+      "name" : "Slime Secretions",
+      "count" : 12
+    } ],
+    "ascend4" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 80000
+    }, {
+      "id" : 104143,
+      "name" : "Vajrada Amethyst Chunk",
+      "count" : 3
+    }, {
+      "id" : 113002,
+      "name" : "Lightning Prism",
+      "count" : 8
+    }, {
+      "id" : 100022,
+      "name" : "Valberry",
+      "count" : 30
+    }, {
+      "id" : 112003,
+      "name" : "Slime Secretions",
+      "count" : 18
+    } ],
+    "ascend5" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 100000
+    }, {
+      "id" : 104143,
+      "name" : "Vajrada Amethyst Chunk",
+      "count" : 6
+    }, {
+      "id" : 113002,
+      "name" : "Lightning Prism",
+      "count" : 12
+    }, {
+      "id" : 100022,
+      "name" : "Valberry",
+      "count" : 45
+    }, {
+      "id" : 112004,
+      "name" : "Slime Concentrate",
+      "count" : 12
+    } ],
+    "ascend6" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 120000
+    }, {
+      "id" : 104144,
+      "name" : "Vajrada Amethyst Gemstone",
+      "count" : 6
+    }, {
+      "id" : 113002,
+      "name" : "Lightning Prism",
+      "count" : 20
+    }, {
+      "id" : 100022,
+      "name" : "Valberry",
+      "count" : 60
+    }, {
+      "id" : 112004,
+      "name" : "Slime Concentrate",
+      "count" : 24
+    } ]
+  },
+  "images" : {
+    "card" : "https://static.wikia.nocookie.net/gensin-impact/images/d/dc/Character_Lisa_Card.jpg",
+    "portrait" : "https://static.wikia.nocookie.net/gensin-impact/images/f/fa/Character_Lisa_Portrait.png",
+    "cover1" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/07/22/43922f5162840c215638affedad0459a_3369229991804918602.png",
+    "cover2" : "https://webstatic.hoyoverse.com/upload/uploadstatic/contentweb/20191009/2019100915140016827.png",
+    "hoyolab-avatar" : "https://img-os-static.hoyolab.com/communityWeb/upload/06b5a07d8f98649e5e09c58aa7904752.png",
+    "filename_icon" : "UI_AvatarIcon_Lisa",
+    "filename_iconCard" : "UI_AvatarIcon_Lisa_Card",
+    "filename_sideIcon" : "UI_AvatarIcon_Side_Lisa",
+    "filename_gachaSplash" : "UI_Gacha_AvatarImg_Lisa",
+    "filename_gachaSlice" : "UI_Gacha_AvatarIcon_Lisa",
+    "mihoyo_icon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Lisa.png",
+    "mihoyo_sideIcon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_side_icon/UI_AvatarIcon_Side_Lisa.png"
+  },
+  "url" : {
+    "fandom" : "https://genshin-impact.fandom.com/wiki/Lisa"
+  },
+  "version" : "1.0",
+  "talents" : {
+    "id" : 601,
+    "name" : "Lisa",
+    "combat1" : {
+      "name" : "Lightning Touch",
+      "descriptionRaw" : "<color=#FFD780FF>Normal Attack</color>\nPerforms up to 4 lightning attacks that deal <color=#FFACFFFF>Electro DMG</color>.\n\n<color=#FFD780FF>Charged Attack</color>\nConsumes a certain amount of Stamina to deal <color=#FFACFFFF>AoE Electro DMG</color> after a short casting time.\n\n<color=#FFD780FF>Plunging Attack</color>\nGathering the might of Electro, Lisa plunges towards the ground from mid-air, damaging all opponents in her path. Deals <color=#FFACFFFF>AoE Electro DMG</color> upon impact with the ground.",
+      "description" : "Normal Attack\nPerforms up to 4 lightning attacks that deal Electro DMG.\n\nCharged Attack\nConsumes a certain amount of Stamina to deal AoE Electro DMG after a short casting time.\n\nPlunging Attack\nGathering the might of Electro, Lisa plunges towards the ground from mid-air, damaging all opponents in her path. Deals AoE Electro DMG upon impact with the ground.",
+      "attributes" : {
+        "labels" : [ "1-Hit DMG|{param1:F1P}", "2-Hit DMG|{param2:F1P}", "3-Hit DMG|{param3:F1P}", "4-Hit DMG|{param4:F1P}", "Charged Attack DMG|{param5:P}", "Charged Attack Stamina Cost|{param6:F1}", "Plunge DMG|{param7:F1P}", "Low/High Plunge DMG|{param8:P}/{param9:P}" ],
+        "parameters" : {
+          "param1" : [ 0.396, 0.4257, 0.4554, 0.495, 0.5247, 0.5544, 0.594, 0.6336, 0.6732, 0.7128, 0.753984, 0.80784, 0.861696, 0.915552, 0.969408 ],
+          "param2" : [ 0.3592, 0.38614, 0.41308, 0.449, 0.47594, 0.50288, 0.5388, 0.57472, 0.61064, 0.64656, 0.683917, 0.732768, 0.781619, 0.83047, 0.879322 ],
+          "param3" : [ 0.428, 0.4601, 0.4922, 0.535, 0.5671, 0.5992, 0.642, 0.6848, 0.7276, 0.7704, 0.814912, 0.87312, 0.931328, 0.989536, 1.047744 ],
+          "param4" : [ 0.5496, 0.59082, 0.63204, 0.687, 0.72822, 0.76944, 0.8244, 0.87936, 0.93432, 0.98928, 1.046438, 1.121184, 1.19593, 1.270675, 1.345421 ],
+          "param5" : [ 1.7712, 1.90404, 2.03688, 2.214, 2.34684, 2.47968, 2.6568, 2.83392, 3.01104, 3.18816, 3.372365, 3.613248, 3.854131, 4.095014, 4.335898 ],
+          "param6" : [ 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50 ],
+          "param7" : [ 0.568288, 0.614544, 0.6608, 0.72688, 0.773136, 0.826, 0.898688, 0.971376, 1.044064, 1.12336, 1.202656, 1.281952, 1.361248, 1.440544, 1.51984 ],
+          "param8" : [ 1.136335, 1.228828, 1.32132, 1.453452, 1.545944, 1.65165, 1.796995, 1.94234, 2.087686, 2.246244, 2.404802, 2.563361, 2.721919, 2.880478, 3.039036 ],
+          "param9" : [ 1.419344, 1.534872, 1.6504, 1.81544, 1.930968, 2.063, 2.244544, 2.426088, 2.607632, 2.80568, 3.003728, 3.201776, 3.399824, 3.597872, 3.79592 ]
+        }
+      }
+    },
+    "combat2" : {
+      "name" : "Violet Arc",
+      "descriptionRaw" : "#Channels the power of lightning to sweep bothersome matters away.\n\n<color=#FFD780FF>{LAYOUT_MOBILE#Tap}{LAYOUT_PC#Press}{LAYOUT_PS#Press}</color>\nReleases a homing Lightning Orb.\nOn hit, it deals <color=#FFACFFFF>Electro DMG</color> and applies a stack of the Conductive status (max 3 stacks) to opponents in a small AoE.\n\n<color=#FFD780FF>Hold</color>\nAfter an extended casting time, calls down lightning from the heavens, dealing massive <color=#FFACFFFF>Electro DMG</color> to all nearby opponents.\nDeals great amounts of extra damage to opponents based on the number of Conductive stacks applied to them, and clears their Conductive status.\n\n<i>Electro Purple is the raiment of the Witch of Purple Rose.</i>",
+      "description" : "Channels the power of lightning to sweep bothersome matters away.\n\nPress\nReleases a homing Lightning Orb.\nOn hit, it deals Electro DMG and applies a stack of the Conductive status (max 3 stacks) to opponents in a small AoE.\n\nHold\nAfter an extended casting time, calls down lightning from the heavens, dealing massive Electro DMG to all nearby opponents.\nDeals great amounts of extra damage to opponents based on the number of Conductive stacks applied to them, and clears their Conductive status.",
+      "flavorText" : "Electro Purple is the raiment of the Witch of Purple Rose.",
+      "attributes" : {
+        "labels" : [ "Press DMG|{param6:F1P}", "Press CD|{param7:F1}s", "Non-Conductive Hold DMG|{param1:P}", "Stack 1 Conductive Hold DMG|{param2:P}", "Stack 2 Conductive Hold DMG|{param3:P}", "Stack 3 Conductive Hold DMG|{param4:P}", "Holding CD|{param5:F1}s" ],
+        "parameters" : {
+          "param1" : [ 3.2, 3.44, 3.68, 4, 4.24, 4.48, 4.8, 5.12, 5.44, 5.76, 6.08, 6.4, 6.8, 7.2, 7.6 ],
+          "param2" : [ 3.68, 3.956, 4.232, 4.6, 4.876, 5.152, 5.52, 5.888, 6.256, 6.624, 6.992, 7.36, 7.82, 8.28, 8.74 ],
+          "param3" : [ 4.24, 4.558, 4.876, 5.3, 5.618, 5.936, 6.36, 6.784, 7.208, 7.632, 8.056, 8.48, 9.01, 9.54, 10.07 ],
+          "param4" : [ 4.872, 5.2374, 5.6028, 6.09, 6.4554, 6.8208, 7.308, 7.7952, 8.2824, 8.7696, 9.2568, 9.744, 10.353, 10.962, 11.571 ],
+          "param5" : [ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 ],
+          "param6" : [ 0.8, 0.86, 0.92, 1, 1.06, 1.12, 1.2, 1.28, 1.36, 1.44, 1.52, 1.6, 1.7, 1.8, 1.9 ],
+          "param7" : [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ]
+        }
+      }
+    },
+    "combat3" : {
+      "name" : "Lightning Rose",
+      "descriptionRaw" : "Summons a Lightning Rose that unleashes powerful lightning bolts, launching surrounding opponents and dealing <color=#FFACFFFF>Electro DMG</color>.\nThe Lightning Rose will continuously emit lightning to knock back opponents and deal <color=#FFACFFFF>Electro DMG</color> throughout the ability's duration.\n\n<i>This rose is beautiful, but beware its mortal thorns.</i>",
+      "description" : "Summons a Lightning Rose that unleashes powerful lightning bolts, launching surrounding opponents and dealing Electro DMG.\nThe Lightning Rose will continuously emit lightning to knock back opponents and deal Electro DMG throughout the ability's duration.",
+      "flavorText" : "This rose is beautiful, but beware its mortal thorns.",
+      "attributes" : {
+        "labels" : [ "Discharge DMG|{param1:F1P}", "Duration|{param2:F1}s", "CD|{param3:F1}s", "Energy Cost|{param4:I}" ],
+        "parameters" : {
+          "param1" : [ 0.3656, 0.39302, 0.42044, 0.457, 0.48442, 0.51184, 0.5484, 0.58496, 0.62152, 0.65808, 0.69464, 0.7312, 0.7769, 0.8226, 0.8683 ],
+          "param2" : [ 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 ],
+          "param3" : [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ],
+          "param4" : [ 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80 ]
+        }
+      }
+    },
+    "passive1" : {
+      "name" : "Induced Aftershock",
+      "descriptionRaw" : "Hits by Charged Attacks apply <color=#FFD780FF>Violet Arc</color>'s Conductive status to opponents.",
+      "description" : "Hits by Charged Attacks apply Violet Arc's Conductive status to opponents."
+    },
+    "passive2" : {
+      "name" : "Static Electricity Field",
+      "descriptionRaw" : "Opponents hit by <color=#FFD780FF>Lightning Rose</color> have their DEF decreased by 15% for 10s.",
+      "description" : "Opponents hit by Lightning Rose have their DEF decreased by 15% for 10s."
+    },
+    "passive3" : {
+      "name" : "General Pharmaceutics",
+      "descriptionRaw" : "When Lisa crafts a potion, she has a 20% chance to refund a portion of the crafting materials used.",
+      "description" : "When Lisa crafts a potion, she has a 20% chance to refund a portion of the crafting materials used."
+    },
+    "costs" : {
+      "lvl2" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 12500
+      }, {
+        "id" : 104307,
+        "name" : "Teachings of Ballad",
+        "count" : 3
+      }, {
+        "id" : 112002,
+        "name" : "Slime Condensate",
+        "count" : 6
+      } ],
+      "lvl3" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 17500
+      }, {
+        "id" : 104308,
+        "name" : "Guide to Ballad",
+        "count" : 2
+      }, {
+        "id" : 112003,
+        "name" : "Slime Secretions",
+        "count" : 3
+      } ],
+      "lvl4" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 25000
+      }, {
+        "id" : 104308,
+        "name" : "Guide to Ballad",
+        "count" : 4
+      }, {
+        "id" : 112003,
+        "name" : "Slime Secretions",
+        "count" : 4
+      } ],
+      "lvl5" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 30000
+      }, {
+        "id" : 104308,
+        "name" : "Guide to Ballad",
+        "count" : 6
+      }, {
+        "id" : 112003,
+        "name" : "Slime Secretions",
+        "count" : 6
+      } ],
+      "lvl6" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 37500
+      }, {
+        "id" : 104308,
+        "name" : "Guide to Ballad",
+        "count" : 9
+      }, {
+        "id" : 112003,
+        "name" : "Slime Secretions",
+        "count" : 9
+      } ],
+      "lvl7" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 120000
+      }, {
+        "id" : 104309,
+        "name" : "Philosophies of Ballad",
+        "count" : 4
+      }, {
+        "id" : 112004,
+        "name" : "Slime Concentrate",
+        "count" : 4
+      }, {
+        "id" : 113004,
+        "name" : "Dvalin's Claw",
+        "count" : 1
+      } ],
+      "lvl8" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 260000
+      }, {
+        "id" : 104309,
+        "name" : "Philosophies of Ballad",
+        "count" : 6
+      }, {
+        "id" : 112004,
+        "name" : "Slime Concentrate",
+        "count" : 6
+      }, {
+        "id" : 113004,
+        "name" : "Dvalin's Claw",
+        "count" : 1
+      } ],
+      "lvl9" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 450000
+      }, {
+        "id" : 104309,
+        "name" : "Philosophies of Ballad",
+        "count" : 12
+      }, {
+        "id" : 112004,
+        "name" : "Slime Concentrate",
+        "count" : 9
+      }, {
+        "id" : 113004,
+        "name" : "Dvalin's Claw",
+        "count" : 2
+      } ],
+      "lvl10" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 700000
+      }, {
+        "id" : 104309,
+        "name" : "Philosophies of Ballad",
+        "count" : 16
+      }, {
+        "id" : 112004,
+        "name" : "Slime Concentrate",
+        "count" : 12
+      }, {
+        "id" : 113004,
+        "name" : "Dvalin's Claw",
+        "count" : 2
+      }, {
+        "id" : 104319,
+        "name" : "Crown of Insight",
+        "count" : 1
+      } ]
+    },
+    "images" : {
+      "filename_combat1" : "Skill_A_Catalyst_MD",
+      "filename_combat2" : "Skill_S_Lisa_01",
+      "filename_combat3" : "Skill_E_Lisa_01_HD",
+      "filename_passive1" : "UI_Talent_S_Lisa_05",
+      "filename_passive2" : "UI_Talent_S_Lisa_06",
+      "filename_passive3" : "UI_Talent_Combine_Potion"
+    },
+    "version" : "1.0"
+  }
+}

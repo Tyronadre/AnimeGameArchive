@@ -1,0 +1,387 @@
+{
+  "id" : 10000072,
+  "name" : "Candace",
+  "title" : "Golden Vow",
+  "description" : "A descendant of King Deshret with an amber left eye. The defender of Aaru Village.",
+  "weaponType" : "WEAPON_POLE",
+  "weaponText" : "Polearm",
+  "bodyType" : "BODY_LADY",
+  "gender" : "Female",
+  "qualityType" : "QUALITY_PURPLE",
+  "rarity" : 4,
+  "birthdaymmdd" : "5/3",
+  "birthday" : "May 3",
+  "elementType" : "ELEMENT_HYDRO",
+  "elementText" : "Hydro",
+  "affiliation" : "Aaru Village",
+  "associationType" : "ASSOC_SUMERU",
+  "region" : "Sumeru",
+  "substatType" : "FIGHT_PROP_HP_PERCENT",
+  "substatText" : "HP",
+  "constellation" : "Sagitta Scutum",
+  "cv" : {
+    "english" : "Shara Kirby & Anonymous",
+    "chinese" : "张琦",
+    "japanese" : "柚木涼香",
+    "korean" : "Jun Young-soo"
+  },
+  "costs" : {
+    "ascend1" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 20000
+    }, {
+      "id" : 104121,
+      "name" : "Varunada Lazurite Sliver",
+      "count" : 1
+    }, {
+      "id" : 101220,
+      "name" : "Henna Berry",
+      "count" : 3
+    }, {
+      "id" : 112065,
+      "name" : "Faded Red Satin",
+      "count" : 3
+    } ],
+    "ascend2" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 40000
+    }, {
+      "id" : 104122,
+      "name" : "Varunada Lazurite Fragment",
+      "count" : 3
+    }, {
+      "id" : 113039,
+      "name" : "Light Guiding Tetrahedron",
+      "count" : 2
+    }, {
+      "id" : 101220,
+      "name" : "Henna Berry",
+      "count" : 10
+    }, {
+      "id" : 112065,
+      "name" : "Faded Red Satin",
+      "count" : 15
+    } ],
+    "ascend3" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 60000
+    }, {
+      "id" : 104122,
+      "name" : "Varunada Lazurite Fragment",
+      "count" : 6
+    }, {
+      "id" : 113039,
+      "name" : "Light Guiding Tetrahedron",
+      "count" : 4
+    }, {
+      "id" : 101220,
+      "name" : "Henna Berry",
+      "count" : 20
+    }, {
+      "id" : 112066,
+      "name" : "Trimmed Red Silk",
+      "count" : 12
+    } ],
+    "ascend4" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 80000
+    }, {
+      "id" : 104123,
+      "name" : "Varunada Lazurite Chunk",
+      "count" : 3
+    }, {
+      "id" : 113039,
+      "name" : "Light Guiding Tetrahedron",
+      "count" : 8
+    }, {
+      "id" : 101220,
+      "name" : "Henna Berry",
+      "count" : 30
+    }, {
+      "id" : 112066,
+      "name" : "Trimmed Red Silk",
+      "count" : 18
+    } ],
+    "ascend5" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 100000
+    }, {
+      "id" : 104123,
+      "name" : "Varunada Lazurite Chunk",
+      "count" : 6
+    }, {
+      "id" : 113039,
+      "name" : "Light Guiding Tetrahedron",
+      "count" : 12
+    }, {
+      "id" : 101220,
+      "name" : "Henna Berry",
+      "count" : 45
+    }, {
+      "id" : 112067,
+      "name" : "Rich Red Brocade",
+      "count" : 12
+    } ],
+    "ascend6" : [ {
+      "id" : 202,
+      "name" : "Mora",
+      "count" : 120000
+    }, {
+      "id" : 104124,
+      "name" : "Varunada Lazurite Gemstone",
+      "count" : 6
+    }, {
+      "id" : 113039,
+      "name" : "Light Guiding Tetrahedron",
+      "count" : 20
+    }, {
+      "id" : 101220,
+      "name" : "Henna Berry",
+      "count" : 60
+    }, {
+      "id" : 112067,
+      "name" : "Rich Red Brocade",
+      "count" : 24
+    } ]
+  },
+  "images" : {
+    "cover1" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/09/22/d0226e61c64dbd14f3041775ceebb59a_2656769579196461401.png",
+    "cover2" : "https://act-webstatic.hoyoverse.com/upload/contentweb/2022/09/22/c12a433c36d75fbbf77a6e7619d86cc5_2978398623185018654.png",
+    "hoyolab-avatar" : "https://upload-os-bbs.hoyolab.com/upload/2022/09/27/776150fc42d323732b988b6a80150f34_8066483729031867205.png",
+    "filename_icon" : "UI_AvatarIcon_Candace",
+    "filename_iconCard" : "UI_AvatarIcon_Candace_Card",
+    "filename_sideIcon" : "UI_AvatarIcon_Side_Candace",
+    "filename_gachaSplash" : "UI_Gacha_AvatarImg_Candace",
+    "filename_gachaSlice" : "UI_Gacha_AvatarIcon_Candace",
+    "mihoyo_icon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Candace.png",
+    "mihoyo_sideIcon" : "https://upload-os-bbs.mihoyo.com/game_record/genshin/character_side_icon/UI_AvatarIcon_Side_Candace.png"
+  },
+  "version" : "3.1",
+  "talents" : {
+    "id" : 7201,
+    "name" : "Candace",
+    "combat1" : {
+      "name" : "Gleaming Spear - Guardian Stance",
+      "descriptionRaw" : "<color=#FFD780FF>Normal Attack</color>\nPerforms up to 4 consecutive spear strikes.\n\n<color=#FFD780FF>Charged Attack</color>\nConsumes a certain amount of Stamina to lunge forward, dealing damage to opponents along the way.\n\n<color=#FFD780FF>Plunging Attack</color>\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "description" : "Normal Attack\nPerforms up to 4 consecutive spear strikes.\n\nCharged Attack\nConsumes a certain amount of Stamina to lunge forward, dealing damage to opponents along the way.\n\nPlunging Attack\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.",
+      "attributes" : {
+        "labels" : [ "1-Hit DMG|{param1:F1P}", "2-Hit DMG|{param2:F1P}", "3-Hit DMG|{param3:F1P}+{param4:F1P}", "4-Hit DMG|{param5:F1P}", "Charged Attack DMG|{param6:F1P}", "Charged Attack Stamina Cost|{param7:F1}", "Plunge DMG|{param8:F1P}", "Low/High Plunge DMG|{param9:P}/{param10:P}" ],
+        "parameters" : {
+          "param1" : [ 0.60802, 0.65751, 0.707, 0.7777, 0.82719, 0.88375, 0.96152, 1.03929, 1.11706, 1.2019, 1.28674, 1.37158, 1.45642, 1.54126, 1.6261 ],
+          "param2" : [ 0.61146, 0.66123, 0.711, 0.7821, 0.83187, 0.88875, 0.96696, 1.04517, 1.12338, 1.2087, 1.29402, 1.37934, 1.46466, 1.54998, 1.6353 ],
+          "param3" : [ 0.354879, 0.383765, 0.41265, 0.453915, 0.4828, 0.515813, 0.561204, 0.606596, 0.651987, 0.701505, 0.751023, 0.800541, 0.850059, 0.899577, 0.949095 ],
+          "param4" : [ 0.433741, 0.469046, 0.50435, 0.554785, 0.59009, 0.630438, 0.685916, 0.741395, 0.796873, 0.857395, 0.917917, 0.978439, 1.038961, 1.099483, 1.160005 ],
+          "param5" : [ 0.94944, 1.02672, 1.104, 1.2144, 1.29168, 1.38, 1.50144, 1.62288, 1.74432, 1.8768, 2.00928, 2.14176, 2.27424, 2.40672, 2.5392 ],
+          "param6" : [ 1.24184, 1.34292, 1.444, 1.5884, 1.68948, 1.805, 1.96384, 2.12268, 2.28152, 2.4548, 2.62808, 2.80136, 2.97464, 3.14792, 3.3212 ],
+          "param7" : [ 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25 ],
+          "param8" : [ 0.639324, 0.691362, 0.7434, 0.81774, 0.869778, 0.92925, 1.011024, 1.092798, 1.174572, 1.26378, 1.352988, 1.442196, 1.531404, 1.620612, 1.70982 ],
+          "param9" : [ 1.278377, 1.382431, 1.486485, 1.635134, 1.739187, 1.858106, 2.02162, 2.185133, 2.348646, 2.527025, 2.705403, 2.883781, 3.062159, 3.240537, 3.418915 ],
+          "param10" : [ 1.596762, 1.726731, 1.8567, 2.04237, 2.172339, 2.320875, 2.525112, 2.729349, 2.933586, 3.15639, 3.379194, 3.601998, 3.824802, 4.047606, 4.27041 ]
+        }
+      }
+    },
+    "combat2" : {
+      "name" : "Sacred Rite: Heron's Sanctum",
+      "descriptionRaw" : "Candace's fighting style is capable of warding off an entire tide of foes.\n\n<color=#FFD780FF>Tap</color>\nRushes forward with her shield, dealing <color=#80C0FFFF>Hydro DMG</color> to opponents in front of her.\n\n<color=#FFD780FF>Hold</color>\nRaises her shield to block incoming attacks from nearby opponents, forming a barrier that absorbs DMG based on her Max HP and absorbs <color=#80C0FFFF>Hydro DMG</color> 250% more effectively. This barrier lasts until the Elemental Skill is unleashed.\nAfter holding for a certain period of time, Candace will finish charging, and when the skill button is released, the skill duration expires, or when the barrier is broken, she will perform a leaping strike that deals <color=#80C0FFFF>Hydro DMG</color> to opponents in front of her.\n\n<i>The oath of the guardians is more stalwart yet than the shields they inherit.</i>",
+      "description" : "Candace's fighting style is capable of warding off an entire tide of foes.\n\nTap\nRushes forward with her shield, dealing Hydro DMG to opponents in front of her.\n\nHold\nRaises her shield to block incoming attacks from nearby opponents, forming a barrier that absorbs DMG based on her Max HP and absorbs Hydro DMG 250% more effectively. This barrier lasts until the Elemental Skill is unleashed.\nAfter holding for a certain period of time, Candace will finish charging, and when the skill button is released, the skill duration expires, or when the barrier is broken, she will perform a leaping strike that deals Hydro DMG to opponents in front of her.",
+      "flavorText" : "The oath of the guardians is more stalwart yet than the shields they inherit.",
+      "attributes" : {
+        "labels" : [ "Shield DMG Absorption|{param1:F1P} Max HP+{param2:I}", "Basic DMG|{param3:F1P} Max HP", "Charged Up DMG|{param4:F1P} Max HP", "Press CD|{param5:F1}s", "Hold CD|{param6:F1}s" ],
+        "parameters" : {
+          "param1" : [ 0.12, 0.129, 0.138, 0.15, 0.159, 0.168, 0.18, 0.192, 0.204, 0.216, 0.228, 0.24, 0.255, 0.27, 0.285 ],
+          "param2" : [ 1155.5629, 1271.1353, 1396.3386, 1531.173, 1675.6384, 1829.7349, 1993.4624, 2166.8208, 2349.8105, 2542.4312, 2744.6826, 2956.5652, 3178.0789, 3409.2236, 3649.9995 ],
+          "param3" : [ 0.12, 0.129, 0.138, 0.15, 0.159, 0.168, 0.18, 0.192, 0.204, 0.216, 0.228, 0.24, 0.255, 0.27, 0.285 ],
+          "param4" : [ 0.1904, 0.20468, 0.21896, 0.238, 0.25228, 0.26656, 0.2856, 0.30464, 0.32368, 0.34272, 0.36176, 0.3808, 0.4046, 0.4284, 0.4522 ],
+          "param5" : [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 ],
+          "param6" : [ 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 ]
+        }
+      }
+    },
+    "combat3" : {
+      "name" : "Sacred Rite: Wagtail's Tide",
+      "descriptionRaw" : "Raising her weapon on high, Candace calls upon a divine blessing that deals <color=#80C0FFFF>AoE Hydro DMG</color> based on her Max HP and continuously confers the Prayer of the Crimson Crown on your active character.\n\n<color=#FFD780FF>Prayer of the Crimson Crown</color>\nThis effect has the following properties:\n·Characters deal increased Elemental DMG with their Normal Attacks.\n·Whenever a character takes the field, they will unleash a rippling wave of water that deals <color=#80C0FFFF>Hydro DMG</color> to nearby opponents. There is a limited number of waves that can be triggered in the duration of this skill.\n·Sword, Claymore, and Polearm-wielding characters under this effect will obtain a <color=#80C0FFFF>Hydro Infusion</color>.\n\n<i>This secret rite has been passed down through Candace's clan from generation to generation. Though the old faiths have become lost over the years, the sands still protect the heirs of the ancient realm.</i>",
+      "description" : "Raising her weapon on high, Candace calls upon a divine blessing that deals AoE Hydro DMG based on her Max HP and continuously confers the Prayer of the Crimson Crown on your active character.\n\nPrayer of the Crimson Crown\nThis effect has the following properties:\n·Characters deal increased Elemental DMG with their Normal Attacks.\n·Whenever a character takes the field, they will unleash a rippling wave of water that deals Hydro DMG to nearby opponents. There is a limited number of waves that can be triggered in the duration of this skill.\n·Sword, Claymore, and Polearm-wielding characters under this effect will obtain a Hydro Infusion.",
+      "flavorText" : "This secret rite has been passed down through Candace's clan from generation to generation. Though the old faiths have become lost over the years, the sands still protect the heirs of the ancient realm.",
+      "attributes" : {
+        "labels" : [ "Skill DMG|{param1:F1P} Max HP", "Duration|{param2:F1}s", "DMG Bonus|{param3:F1P}", "Wave Impact DMG|{param4:F1P} Max HP", "Wave Instances|{param5:I}", "CD|{param6:F1}s", "Energy Cost|{param7:I}" ],
+        "parameters" : {
+          "param1" : [ 0.066104, 0.071062, 0.07602, 0.08263, 0.087588, 0.092546, 0.099156, 0.105766, 0.112377, 0.118987, 0.125598, 0.132208, 0.140471, 0.148734, 0.156997 ],
+          "param2" : [ 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 ],
+          "param3" : [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ],
+          "param4" : [ 0.066104, 0.071062, 0.07602, 0.08263, 0.087588, 0.092546, 0.099156, 0.105766, 0.112377, 0.118987, 0.125598, 0.132208, 0.140471, 0.148734, 0.156997 ],
+          "param5" : [ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 ],
+          "param6" : [ 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 ],
+          "param7" : [ 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60 ]
+        }
+      }
+    },
+    "passive1" : {
+      "name" : "Aegis of Crossed Arrows",
+      "descriptionRaw" : "If Candace is hit by an attack in the Hold duration of <color=#FFD780FF>Sacred Rite: Heron's Sanctum</color>, that skill will finish charging instantly.",
+      "description" : "If Candace is hit by an attack in the Hold duration of Sacred Rite: Heron's Sanctum, that skill will finish charging instantly."
+    },
+    "passive2" : {
+      "name" : "Celestial Dome of Sand",
+      "descriptionRaw" : "Characters affected by the Prayer of the Crimson Crown caused by <color=#FFD780FF>Sacred Rite: Wagtail's Tide</color> will deal 0.5% increased DMG to opponents for every 1,000 points of Candace's Max HP when they deal Elemental DMG with their Normal Attacks.",
+      "description" : "Characters affected by the Prayer of the Crimson Crown caused by Sacred Rite: Wagtail's Tide will deal 0.5% increased DMG to opponents for every 1,000 points of Candace's Max HP when they deal Elemental DMG with their Normal Attacks."
+    },
+    "passive3" : {
+      "name" : "To Dawn's First Light",
+      "descriptionRaw" : "Decreases climbing Stamina consumption for your own party members by 20%.\nNot stackable with Passive Talents that provide the exact same effects.",
+      "description" : "Decreases climbing Stamina consumption for your own party members by 20%.\nNot stackable with Passive Talents that provide the exact same effects."
+    },
+    "costs" : {
+      "lvl2" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 12500
+      }, {
+        "id" : 104329,
+        "name" : "Teachings of Admonition",
+        "count" : 3
+      }, {
+        "id" : 112065,
+        "name" : "Faded Red Satin",
+        "count" : 6
+      } ],
+      "lvl3" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 17500
+      }, {
+        "id" : 104330,
+        "name" : "Guide to Admonition",
+        "count" : 2
+      }, {
+        "id" : 112066,
+        "name" : "Trimmed Red Silk",
+        "count" : 3
+      } ],
+      "lvl4" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 25000
+      }, {
+        "id" : 104330,
+        "name" : "Guide to Admonition",
+        "count" : 4
+      }, {
+        "id" : 112066,
+        "name" : "Trimmed Red Silk",
+        "count" : 4
+      } ],
+      "lvl5" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 30000
+      }, {
+        "id" : 104330,
+        "name" : "Guide to Admonition",
+        "count" : 6
+      }, {
+        "id" : 112066,
+        "name" : "Trimmed Red Silk",
+        "count" : 6
+      } ],
+      "lvl6" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 37500
+      }, {
+        "id" : 104330,
+        "name" : "Guide to Admonition",
+        "count" : 9
+      }, {
+        "id" : 112066,
+        "name" : "Trimmed Red Silk",
+        "count" : 9
+      } ],
+      "lvl7" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 120000
+      }, {
+        "id" : 104331,
+        "name" : "Philosophies of Admonition",
+        "count" : 4
+      }, {
+        "id" : 112067,
+        "name" : "Rich Red Brocade",
+        "count" : 4
+      }, {
+        "id" : 113033,
+        "name" : "Tears of the Calamitous God",
+        "count" : 1
+      } ],
+      "lvl8" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 260000
+      }, {
+        "id" : 104331,
+        "name" : "Philosophies of Admonition",
+        "count" : 6
+      }, {
+        "id" : 112067,
+        "name" : "Rich Red Brocade",
+        "count" : 6
+      }, {
+        "id" : 113033,
+        "name" : "Tears of the Calamitous God",
+        "count" : 1
+      } ],
+      "lvl9" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 450000
+      }, {
+        "id" : 104331,
+        "name" : "Philosophies of Admonition",
+        "count" : 12
+      }, {
+        "id" : 112067,
+        "name" : "Rich Red Brocade",
+        "count" : 9
+      }, {
+        "id" : 113033,
+        "name" : "Tears of the Calamitous God",
+        "count" : 2
+      } ],
+      "lvl10" : [ {
+        "id" : 202,
+        "name" : "Mora",
+        "count" : 700000
+      }, {
+        "id" : 104331,
+        "name" : "Philosophies of Admonition",
+        "count" : 16
+      }, {
+        "id" : 112067,
+        "name" : "Rich Red Brocade",
+        "count" : 12
+      }, {
+        "id" : 113033,
+        "name" : "Tears of the Calamitous God",
+        "count" : 2
+      }, {
+        "id" : 104319,
+        "name" : "Crown of Insight",
+        "count" : 1
+      } ]
+    },
+    "images" : {
+      "filename_combat1" : "Skill_A_03",
+      "filename_combat2" : "Skill_S_Candace_01",
+      "filename_combat3" : "Skill_E_Candace_01_HD",
+      "filename_passive1" : "UI_Talent_S_Candace_05",
+      "filename_passive2" : "UI_Talent_S_Candace_06",
+      "filename_passive3" : "UI_Talent_Explosion_Climb"
+    },
+    "version" : "3.1"
+  }
+}
