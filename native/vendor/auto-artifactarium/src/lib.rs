@@ -416,6 +416,20 @@ pub fn matches_achievement_packet(game_command: &GameCommand) -> Option<Vec<Achi
     return matches_achievement_all_data_notify(game_command.proto_data.clone());
 }
 
+#[cfg(test)]
+mod session_key_tests {
+    use super::GameSniffer;
+
+    #[test]
+    fn restores_and_exposes_only_a_session_key() {
+        let key = vec![42; 4096];
+        let sniffer = GameSniffer::new().set_session_key(key.clone());
+
+        assert_eq!(sniffer.session_key(), Some(key.as_slice()));
+        assert!(GameSniffer::new().session_key().is_none());
+    }
+}
+
 pub fn matches_item_packet(game_command: &GameCommand) -> Option<Vec<r#gen::protos::Item>> {
     if !game_command.is_player_store_notify() {
         return None;
