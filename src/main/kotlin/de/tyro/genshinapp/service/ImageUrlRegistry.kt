@@ -40,6 +40,7 @@ class ImageUrlRegistry(
     fun registerDefaults(
         characters: Collection<CharacterDefinition>,
         materials: Collection<Pair<MaterialDefinition, String>>,
+        talents: Collection<TalentImageDefault> = emptyList(),
     ) = synchronized(lock) {
         refreshIfChanged()
         var changed = false
@@ -76,6 +77,16 @@ class ImageUrlRegistry(
             changed = entry.updateDefaults(material.name, defaultUrl) || changed
         }
 
+        talents.forEach { talent ->
+            val entry = document.talents.getOrPut(
+                talentEntryKey(talent.characterKey, talent.talentKey),
+            ) {
+                changed = true
+                EditableImageLink()
+            }
+            changed = entry.updateDefaults(talent.name, talent.defaultUrl) || changed
+        }
+
         if (changed) writeDocument()
     }
 
@@ -91,6 +102,12 @@ class ImageUrlRegistry(
         refreshIfChanged()
         document.materials[id.toString()]?.copy()
     }
+
+    fun talentLink(characterKey: String, talentKey: String): EditableImageLink? =
+        synchronized(lock) {
+            refreshIfChanged()
+            document.talents[talentEntryKey(characterKey, talentKey)]?.copy()
+        }
 
     fun setCharacterOverride(
         key: String,
@@ -117,6 +134,21 @@ class ImageUrlRegistry(
         writeDocument()
     }
 
+    fun setTalentOverride(
+        characterKey: String,
+        talentKey: String,
+        name: String,
+        url: String,
+    ) = synchronized(lock) {
+        refreshIfChanged()
+        val entry = document.talents.getOrPut(talentEntryKey(characterKey, talentKey)) {
+            EditableImageLink(name = name)
+        }
+        entry.name = name
+        entry.url = url
+        writeDocument()
+    }
+
     fun resetCharacterOverride(
         key: String,
         imageType: CharacterImageType,
@@ -136,10 +168,21 @@ class ImageUrlRegistry(
         }
     }
 
+    fun resetTalentOverride(characterKey: String, talentKey: String) = synchronized(lock) {
+        refreshIfChanged()
+        document.talents[talentEntryKey(characterKey, talentKey)]?.let {
+            it.url = ""
+            writeDocument()
+        }
+    }
+
     fun filePath(): Path = registryFile
 
     private fun characterEntryKey(key: String, imageType: CharacterImageType): String =
         "${key.lowercase()}:${imageType.key}"
+
+    private fun talentEntryKey(characterKey: String, talentKey: String): String =
+        "${characterKey.lowercase()}:${talentKey.lowercase()}"
 
     private fun refreshIfChanged() {
         val currentStamp = currentFileStamp()
@@ -202,14 +245,23 @@ class ImageUrlRegistry(
 data class ImageLinksDocument(
     var characters: MutableMap<String, EditableImageLink> = linkedMapOf(),
     var materials: MutableMap<String, EditableImageLink> = linkedMapOf(),
+    var talents: MutableMap<String, EditableImageLink> = linkedMapOf(),
 ) {
     fun sorted(): ImageLinksDocument = ImageLinksDocument(
         characters = characters.toSortedMap(),
         materials = materials.toSortedMap(
             compareBy<String> { it.toIntOrNull() ?: Int.MAX_VALUE }.thenBy { it },
         ),
+        talents = talents.toSortedMap(),
     )
 }
+
+data class TalentImageDefault(
+    val characterKey: String,
+    val talentKey: String,
+    val name: String,
+    val defaultUrl: String,
+)
 
 data class EditableImageLink(
     var name: String = "",

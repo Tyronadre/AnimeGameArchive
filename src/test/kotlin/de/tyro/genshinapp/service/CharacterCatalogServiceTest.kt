@@ -4,6 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import de.tyro.genshinapp.configuration.GenshinContentProperties
 import de.tyro.genshinapp.model.CharacterDefinition
 import de.tyro.genshinapp.model.CharacterProgress
+import de.tyro.genshinapp.model.CharacterTalentKind
 import de.tyro.genshinapp.model.MaterialDefinition
 import de.tyro.genshinapp.model.PlayerCharacterState
 import de.tyro.genshinapp.model.PlayerWeapon
@@ -46,6 +47,46 @@ class CharacterCatalogServiceTest {
         assertEquals("Hydro", furina.element)
         assertTrue(furina.ascensionCosts.isNotEmpty())
         assertTrue(furina.talentCosts.isNotEmpty())
+        assertEquals(
+            listOf(
+                CharacterTalentKind.NORMAL_ATTACK,
+                CharacterTalentKind.ELEMENTAL_SKILL,
+                CharacterTalentKind.ELEMENTAL_BURST,
+            ),
+            furina.combatTalents.take(3).map { it.kind },
+        )
+        assertEquals("Salon Solitaire", furina.combatTalents[1].name)
+        assertTrue(furina.passiveTalents.size >= 3)
+        assertTrue(furina.talents.all { it.name.isNotBlank() && it.description.isNotBlank() })
+    }
+
+    @Test
+    fun `loads every available talent kit from the local catalog`() {
+        val charactersMissingTalents = catalog.getCharacters()
+            .filterNot { it.key in setOf("aether", "lumine") }
+            .filter { it.talents.isEmpty() }
+
+        assertTrue(
+            charactersMissingTalents.isEmpty(),
+            "Missing talent data for: ${charactersMissingTalents.joinToString { it.key }}",
+        )
+    }
+
+    @Test
+    fun `formats talent scaling values for every available level`() {
+        val ayaka = assertNotNull(catalog.findCharacter("kamisatoayaka"))
+        val normalAttack = ayaka.combatTalents.first { it.kind == CharacterTalentKind.NORMAL_ATTACK }
+        val skill = ayaka.combatTalents.first { it.kind == CharacterTalentKind.ELEMENTAL_SKILL }
+        val specialMovement = ayaka.combatTalents.first {
+            it.kind == CharacterTalentKind.SPECIAL_MOVEMENT
+        }
+
+        assertEquals("1-Hit DMG", normalAttack.attributes.first().label)
+        assertEquals("45.7%", normalAttack.attributes.first().values.first())
+        assertEquals("90.4%", normalAttack.attributes.first().values[9])
+        assertEquals("239.2%", skill.attributes.first().values.first())
+        assertEquals("10.0s", skill.attributes[1].values.first())
+        assertEquals("10.0", specialMovement.attributes.first().values.single())
     }
 
     @Test

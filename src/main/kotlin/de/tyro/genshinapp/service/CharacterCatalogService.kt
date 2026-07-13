@@ -5,12 +5,19 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.tyro.genshinapp.model.CharacterDefinition
 import de.tyro.genshinapp.model.CharacterImageType
+import de.tyro.genshinapp.model.CharacterTalent
+import de.tyro.genshinapp.model.CharacterTalentAttribute
+import de.tyro.genshinapp.model.CharacterTalentKind
 import de.tyro.genshinapp.model.MaterialCost
 import de.tyro.genshinapp.model.MaterialDefinition
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Service
 import org.springframework.web.util.UriComponentsBuilder
+import java.math.RoundingMode
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 
 @Service
@@ -30,7 +37,16 @@ class CharacterCatalogService(
         catalogStore?.getMaterials().orEmpty().forEach(::rememberMaterials)
 
         configuredKeys.forEach { key ->
-            if (!charactersByKey.containsKey(key)) {
+            val storedCharacter = charactersByKey[key]
+            val needsTalentRefresh = storedCharacter != null &&
+                key !in TALENTLESS_CHARACTER_KEYS &&
+                (
+                    storedCharacter.talents.isEmpty() ||
+                        storedCharacter.combatTalents
+                            .filter { it.kind.progressField != null }
+                            .any { it.attributes.isEmpty() }
+                    )
+            if (storedCharacter == null || needsTalentRefresh) {
                 loadCharacterFromExistingSources(key)?.let { character ->
                     rememberCharacter(saveCharacter(character))
                 }
@@ -132,7 +148,77 @@ class CharacterCatalogService(
             remoteImageUrls = remoteImageUrls,
             ascensionCosts = readCosts(root.path("costs"), "ascend"),
             talentCosts = readCosts(root.path("talents").path("costs"), "lvl"),
+            talents = readTalents(root.path("talents")),
         )
+    }
+
+    private fun readTalents(talentsNode: JsonNode): List<CharacterTalent> {
+        if (!talentsNode.isObject) return emptyList()
+
+        return TALENT_NODES.mapNotNull { (key, kind) ->
+            val talentNode = talentsNode.path(key)
+            val name = talentNode.optionalText("name") ?: return@mapNotNull null
+            val description = talentNode.optionalText("description") ?: return@mapNotNull null
+            CharacterTalent(
+                key = key,
+                kind = kind,
+                name = name,
+                description = description,
+                flavorText = talentNode.optionalText("flavorText"),
+                attributes = readTalentAttributes(talentNode.path("attributes")),
+            )
+        }
+    }
+
+    private fun readTalentAttributes(attributesNode: JsonNode): List<CharacterTalentAttribute> {
+        val labels = attributesNode.path("labels")
+        val parameters = attributesNode.path("parameters")
+        if (!labels.isArray || !parameters.isObject) return emptyList()
+
+        return labels.mapNotNull { labelNode ->
+            val rawLabel = labelNode.asText()
+            val separatorIndex = rawLabel.indexOf('|')
+            if (separatorIndex < 1 || separatorIndex == rawLabel.lastIndex) {
+                return@mapNotNull null
+            }
+            val label = rawLabel.substring(0, separatorIndex).trim()
+            val valueTemplate = rawLabel.substring(separatorIndex + 1).trim()
+            val parameterTokens = TALENT_PARAMETER.findAll(valueTemplate).toList()
+            val levelCount = parameterTokens.maxOfOrNull { match ->
+                parameters.path(match.groupValues[1]).takeIf(JsonNode::isArray)?.size() ?: 0
+            } ?: 0
+            if (label.isBlank() || levelCount == 0) return@mapNotNull null
+
+            CharacterTalentAttribute(
+                label = label,
+                values = (0 until levelCount).map { levelIndex ->
+                    TALENT_PARAMETER.replace(valueTemplate) { match ->
+                        val valueNode = parameters.path(match.groupValues[1]).path(levelIndex)
+                        if (valueNode.isNumber) {
+                            formatTalentParameter(valueNode.asDouble(), match.groupValues[2])
+                        } else {
+                            "-"
+                        }
+                    }
+                },
+            )
+        }
+    }
+
+    private fun formatTalentParameter(value: Double, format: String): String {
+        val percentage = format.endsWith('P')
+        val numberFormat = format.removeSuffix("P")
+        val pattern = when (numberFormat) {
+            "I" -> "0"
+            "F1" -> "0.0"
+            "F2" -> "0.00"
+            else -> "0.##"
+        }
+        val formatter = DecimalFormat(pattern, DecimalFormatSymbols.getInstance(Locale.ROOT)).apply {
+            roundingMode = RoundingMode.HALF_UP
+        }
+        val displayValue = if (percentage) value * 100 else value
+        return formatter.format(displayValue) + if (percentage) "%" else ""
     }
 
     private fun readCosts(costsNode: JsonNode, prefix: String): Map<Int, List<MaterialCost>> {
@@ -215,5 +301,18 @@ class CharacterCatalogService(
             MaterialDefinition(104013, "Mystic Enhancement Ore"),
         )
         private val BUNDLED_WEAPON_KEYS = listOf("rust", "sacrificialbow")
+        private val TALENTLESS_CHARACTER_KEYS = setOf("aether", "lumine")
+        private val TALENT_NODES = listOf(
+            "combat1" to CharacterTalentKind.NORMAL_ATTACK,
+            "combat2" to CharacterTalentKind.ELEMENTAL_SKILL,
+            "combat3" to CharacterTalentKind.ELEMENTAL_BURST,
+            "combatsp" to CharacterTalentKind.SPECIAL_MOVEMENT,
+            "combatju" to CharacterTalentKind.SPECIAL_MOVEMENT,
+            "passive1" to CharacterTalentKind.PASSIVE,
+            "passive2" to CharacterTalentKind.PASSIVE,
+            "passive3" to CharacterTalentKind.PASSIVE,
+            "passive4" to CharacterTalentKind.PASSIVE,
+        )
+        private val TALENT_PARAMETER = Regex("\\{(param\\d+):([A-Z0-9]+)}")
     }
 }

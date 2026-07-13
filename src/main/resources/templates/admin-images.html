@@ -45,6 +45,8 @@
                             th:text="#{common.all}">All</option>
                     <option value="character" th:selected="${selectedType == 'character'}"
                             th:text="#{nav.characters}">Characters</option>
+                    <option value="talent" th:selected="${selectedType == 'talent'}"
+                            th:text="#{images.talents}">Talents</option>
                     <option value="material" th:selected="${selectedType == 'material'}"
                             th:text="#{images.materials}">Materials</option>
                 </select>

@@ -2,6 +2,7 @@ package de.tyro.genshinapp.controller
 
 import de.tyro.genshinapp.configuration.LocalizedMessages
 import de.tyro.genshinapp.model.CharacterProgressForm
+import de.tyro.genshinapp.model.CharacterTalentKind
 import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.security.AppUserPrincipal
 import de.tyro.genshinapp.service.ArtifactCatalogService
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
@@ -138,6 +140,17 @@ class CharacterController(
 
         model.addAttribute("character", character)
         model.addAttribute("progress", progress)
+        model.addAttribute(
+            "talentLevels",
+            character.combatTalents.associate { talent ->
+                talent.key to when (talent.kind) {
+                    CharacterTalentKind.NORMAL_ATTACK -> progress.normalTalent
+                    CharacterTalentKind.ELEMENTAL_SKILL -> progress.skillTalent
+                    CharacterTalentKind.ELEMENTAL_BURST -> progress.burstTalent
+                    else -> 1
+                }
+            },
+        )
         model.addAttribute("playerState", playerState)
         model.addAttribute("equipment", equipment)
         model.addAttribute("equippedStats", equippedStats)
@@ -185,6 +198,23 @@ class CharacterController(
             messages.get("character.progress.saved", character.name),
         )
         return "redirect:/characters/${character.key}"
+    }
+
+    @PostMapping("/characters/{key}/progress")
+    @ResponseBody
+    fun saveCharacterProgressAsync(
+        @PathVariable key: String,
+        @ModelAttribute progressForm: CharacterProgressForm,
+        @AuthenticationPrincipal principal: AppUserPrincipal,
+    ): Map<String, Int?> {
+        val character = catalogService.findCharacter(key)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Character not found")
+        val saved = targetService.save(principal.id, character.key, progressForm.normalized())
+        return mapOf(
+            "normalTalent" to saved.currentNormalTalent,
+            "skillTalent" to saved.currentSkillTalent,
+            "burstTalent" to saved.currentBurstTalent,
+        )
     }
 
     @PostMapping("/characters/{key}/stats")

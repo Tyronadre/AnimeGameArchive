@@ -101,6 +101,32 @@ class ImageAdminController(
         return "redirect:/admin/images"
     }
 
+    @PostMapping("/characters/{characterKey}/talents/{talentKey}")
+    fun updateTalent(
+        @PathVariable characterKey: String,
+        @PathVariable talentKey: String,
+        @RequestParam(defaultValue = "") url: String,
+        @RequestParam(defaultValue = "save") action: String,
+        redirectAttributes: RedirectAttributes,
+    ): String {
+        val character = catalogService.findCharacter(characterKey)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        val talent = character.talents.firstOrNull { it.key == talentKey.lowercase() }
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        val result = if (action == "reset") {
+            contentLoader.resetTalentImageUrl(character, talent)
+            DynamicContentLoader.ImageUpdateResult(
+                true,
+                "images.update.talentReset",
+                arrayOf(talent.name, character.name),
+            )
+        } else {
+            contentLoader.updateTalentImageUrl(character, talent, url)
+        }
+        addResult(result, redirectAttributes)
+        return "redirect:/admin/images"
+    }
+
     private fun imageRows(): List<AdminImageRow> {
         val characterRows = catalogService.getCharacters().flatMap { character ->
             CharacterImageType.entries.map { imageType ->
@@ -142,7 +168,27 @@ class ImageAdminController(
                 updatePath = "/admin/images/materials/${material.id}",
             )
         }
-        return characterRows + materialRows
+        val talentRows = catalogService.getCharacters().flatMap { character ->
+            character.talents.map { talent ->
+                val link = imageUrlRegistry.talentLink(character.key, talent.key)
+                    ?: EditableImageLink("${character.name} - ${talent.name}")
+                val state = contentLoader.talentImageState(character, talent)
+                AdminImageRow(
+                    type = "talent",
+                    typeLabel = messages.get("images.type.talent", character.name),
+                    key = "${character.key}:${talent.key}",
+                    name = talent.name,
+                    currentUrl = link.effectiveUrl.orEmpty(),
+                    defaultUrl = link.defaultUrl,
+                    hasOverride = link.hasOverride,
+                    state = state,
+                    previewUrl = "/media/characters/${character.key}/talents/${talent.key}"
+                        .takeIf { state.hasPreview },
+                    updatePath = "/admin/images/characters/${character.key}/talents/${talent.key}",
+                )
+            }
+        }
+        return characterRows + talentRows + materialRows
     }
 
     private fun addResult(

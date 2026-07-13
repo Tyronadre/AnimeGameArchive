@@ -6,6 +6,7 @@
     <title th:text="#{character.title(${character.name})}">Character · Genshin Archive</title>
     <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
     <script th:src="@{/js/theme.js}" src="/js/theme.js"></script>
+    <script defer th:src="@{/js/character-talents.js}" src="/js/character-talents.js"></script>
 </head>
 <body>
 <header th:replace="~{fragments :: siteHeader('characters')}"></header>
@@ -33,26 +34,41 @@
                 Description
             </p>
             <div class="facts">
-                <span th:if="${character.rarity > 0}">
-                    <b th:text="${character.rarity + ' ★'}">5 ★</b>
-                    Rarity
-                </span>
-                <span th:if="${character.weapon != null}">
-                    <b th:text="${character.weapon}">Sword</b>
-                    Weapon
-                </span>
-                <span th:if="${character.region != null}">
-                    <b th:text="${character.region}">Fontaine</b>
-                   Region
-                </span>
-                <span th:if="${character.birthday != null}">
-                    <b th:text="${character.birthday}">October 13</b>
-                    Birthday
-                </span>
-                <span th:if="${character.constellation != null}">
-                    <b th:text="${character.constellation}">Constellation</b>
-                    Constellation
-                </span>
+                <div class="fact" th:if="${character.rarity > 0}">
+                    <span class="fact-icon" aria-hidden="true">★</span>
+                    <span class="fact-copy">
+                        <small>Rarity</small>
+                        <b th:text="${character.rarity + ' ★'}">5 ★</b>
+                    </span>
+                </div>
+                <div class="fact" th:if="${character.weapon != null}">
+                    <span class="fact-icon" aria-hidden="true">⚔</span>
+                    <span class="fact-copy">
+                        <small>Weapon</small>
+                        <b th:text="${character.weapon}">Sword</b>
+                    </span>
+                </div>
+                <div class="fact" th:if="${character.region != null}">
+                    <span class="fact-icon" aria-hidden="true">⌖</span>
+                    <span class="fact-copy">
+                        <small>Region</small>
+                        <b th:text="${character.region}">Fontaine</b>
+                    </span>
+                </div>
+                <div class="fact" th:if="${character.birthday != null}">
+                    <span class="fact-icon" aria-hidden="true">✦</span>
+                    <span class="fact-copy">
+                        <small>Birthday</small>
+                        <b th:text="${character.birthday}">October 13</b>
+                    </span>
+                </div>
+                <div class="fact" th:if="${character.constellation != null}">
+                    <span class="fact-icon" aria-hidden="true">✧</span>
+                    <span class="fact-copy">
+                        <small>Constellation</small>
+                        <b th:text="${character.constellation}">Constellation</b>
+                    </span>
+                </div>
             </div>
             <div class="good-character-state" th:classappend="${progress.owned ? ' owned' : ' unowned'}">
                 <span class="good-label"
@@ -123,7 +139,7 @@
                 The material list updates from your current and desired progress.
             </p>
 
-            <form class="progress-form" method="post"
+            <form id="character-progress-form" class="progress-form" method="post"
                   th:action="@{/characters/{key}(key=${character.key})}">
                 <label class="ownership-toggle">
                     <input type="checkbox" name="owned" value="true" th:checked="${progress.owned}">
@@ -271,6 +287,159 @@
             </div>
         </section>
     </div>
+
+    <section class="character-talents" data-talent-section
+             th:attr="data-talent-save-url=@{/characters/{key}/progress(key=${character.key})}"
+             th:classappend="${character.element != null
+                ? ' element-' + #strings.toLowerCase(character.element)
+                : ' element-neutral'}">
+        <div class="section-heading talent-section-heading">
+            <div>
+                <p class="eyebrow" th:text="#{character.talent.eyebrow}">Abilities</p>
+                <h2 th:text="#{character.talent.heading}">Talents &amp; Passives</h2>
+            </div>
+            <p th:text="#{character.talent.lead}">
+                Combat techniques and passive effects from the character's kit.
+            </p>
+        </div>
+
+        <div class="talent-columns" th:if="${!character.talents.isEmpty()}">
+            <section class="talent-group" th:if="${!character.combatTalents.isEmpty()}">
+                <h3 th:text="#{character.talent.combatHeading}">Combat talents</h3>
+                <div class="combat-talent-list">
+                    <details class="talent-disclosure"
+                             th:each="talent, talentStat : ${character.combatTalents}"
+                             th:open="${talentStat.first}">
+                        <summary>
+                            <span class="talent-marker">
+                                <span class="talent-marker-fallback"
+                                      th:text="${talent.kind.marker}">E</span>
+                                <img th:src="@{/media/characters/{characterKey}/talents/{talentKey}(characterKey=${character.key}, talentKey=${talent.key})}"
+                                     alt=""
+                                     loading="lazy"
+                                     onerror="this.remove()">
+                            </span>
+                            <span class="talent-summary-copy">
+                                <small th:text="${#messages.msg(talent.kind.messageKey)}">
+                                    Elemental Skill
+                                </small>
+                                <b th:text="${talent.name}">Kamisato Art: Hyouka</b>
+                            </span>
+                            <span class="talent-chevron" aria-hidden="true">⌄</span>
+                        </summary>
+                        <div class="talent-description">
+                            <p th:text="${talent.description}">
+                                Summons blooming ice to launch nearby opponents.
+                            </p>
+                            <div class="talent-scaling" th:if="${!talent.attributes.isEmpty()}">
+                                <div class="talent-scaling-heading">
+                                    <div>
+                                        <small th:text="#{character.talent.attributes}">
+                                            Talent scaling
+                                        </small>
+                                        <b th:if="${talent.kind.progressField != null}">
+                                            <span th:text="#{character.talent.level}">Level</span>
+                                            <span data-talent-level-output
+                                                  th:text="${talentLevels[talent.key]}">1</span>
+                                        </b>
+                                        <b th:unless="${talent.kind.progressField != null}"
+                                           th:text="#{character.talent.fixedValues}">
+                                            Fixed values
+                                        </b>
+                                    </div>
+                                    <div class="talent-level-picker"
+                                         role="radiogroup"
+                                         th:if="${talent.kind.progressField != null}"
+                                         th:attr="data-progress-field=${talent.kind.progressField},
+                                                  data-selected-level=${talentLevels[talent.key]},
+                                                  aria-label=${#messages.msg('character.talent.level')}">
+                                        <button type="button"
+                                                role="radio"
+                                                th:each="level : ${#numbers.sequence(1, 10)}"
+                                                th:classappend="${level == talentLevels[talent.key]
+                                                    ? ' is-selected' : ''}"
+                                                th:attr="data-level=${level},
+                                                         aria-checked=${level == talentLevels[talent.key]},
+                                                         aria-label=${#messages.msg('character.talent.level') + ' ' + level}">
+                                            <span class="talent-level-dot" aria-hidden="true"></span>
+                                            <span class="talent-level-number"
+                                                  th:text="${level}">1</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <dl class="talent-scaling-grid">
+                                    <div th:each="attribute : ${talent.attributes}">
+                                        <dt th:text="${attribute.label}">Skill DMG</dt>
+                                        <dd>
+                                            <span th:each="value, valueStat : ${attribute.values}"
+                                                  th:attr="data-scaling-level=${valueStat.index + 1}"
+                                                  th:hidden="${valueStat.index + 1 != talentLevels[talent.key]}"
+                                                  th:text="${value}">239.2%</span>
+                                        </dd>
+                                    </div>
+                                </dl>
+                            </div>
+                            <blockquote th:if="${talent.flavorText != null}"
+                                        th:text="${talent.flavorText}">
+                                Clouds shroud the moonlit night.
+                            </blockquote>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section class="talent-group passive-talent-group"
+                     th:if="${!character.passiveTalents.isEmpty()}">
+                <h3 th:text="#{character.talent.passiveHeading}">Passive talents</h3>
+                <div class="passive-talent-list">
+                    <article class="passive-talent" th:each="talent : ${character.passiveTalents}">
+                        <div class="passive-talent-heading">
+                            <span class="talent-marker">
+                                <span class="talent-marker-fallback"
+                                      th:text="${talent.kind.marker}">P</span>
+                                <img th:src="@{/media/characters/{characterKey}/talents/{talentKey}(characterKey=${character.key}, talentKey=${talent.key})}"
+                                     alt=""
+                                     loading="lazy"
+                                     onerror="this.remove()">
+                            </span>
+                            <div>
+                                <small th:text="${#messages.msg(talent.kind.messageKey)}">Passive</small>
+                                <h4 th:text="${talent.name}">Fruits of Shinsa</h4>
+                            </div>
+                        </div>
+                        <p th:text="${talent.description}">
+                            Has a chance to receive double the crafted product.
+                        </p>
+                    </article>
+                </div>
+            </section>
+        </div>
+
+        <div class="talent-empty" th:if="${character.talents.isEmpty()}">
+            <span class="talent-marker">?</span>
+            <p th:text="#{character.talent.unavailable}">
+                Talent details are unavailable for this character entry.
+            </p>
+        </div>
+
+        <div data-talent-costs hidden>
+            <div th:each="costEntry : ${character.talentCosts}"
+                 th:attr="data-talent-cost-level=${costEntry.key}">
+                <span th:each="cost : ${costEntry.value}"
+                      th:attr="data-material-id=${cost.id},
+                               data-material-name=${cost.name},
+                               data-material-count=${cost.count}"></span>
+            </div>
+        </div>
+        <div class="talent-material-tooltip"
+             data-talent-material-tooltip
+             role="tooltip"
+             hidden>
+            <small th:text="#{character.talent.upgradeMaterials}">Upgrade materials</small>
+            <strong data-talent-cost-range>Lv. 1 - 2</strong>
+            <ul data-talent-cost-list></ul>
+        </div>
+    </section>
 
     <section class="character-equipment" th:if="${equipment != null}">
         <div class="section-heading">

@@ -1,6 +1,7 @@
 package de.tyro.genshinapp.controller
 
 import de.tyro.genshinapp.model.CharacterImageType
+import de.tyro.genshinapp.model.CharacterTalentKind
 import de.tyro.genshinapp.service.ArtifactCatalogService
 import de.tyro.genshinapp.service.CharacterCatalogService
 import de.tyro.genshinapp.service.DynamicContentLoader
@@ -34,6 +35,27 @@ class ContentMediaController(
         val imageType = CharacterImageType.fromKey(type)
             ?: return ResponseEntity.notFound().build()
         val image = contentLoader.loadCharacterImage(character, imageType)
+            ?: return ResponseEntity.notFound().build()
+        return imageResponse(image)
+    }
+
+    @GetMapping("/characters/{characterKey}/talents/{talentKey}")
+    fun talentImage(
+        @PathVariable characterKey: String,
+        @PathVariable talentKey: String,
+    ): ResponseEntity<ByteArray> {
+        val character = catalogService.findCharacter(characterKey)
+            ?: return ResponseEntity.notFound().build()
+        val talent = character.talents.firstOrNull { it.key == talentKey.lowercase() }
+            ?: return ResponseEntity.notFound().build()
+        val normalAttack = talent.kind == CharacterTalentKind.NORMAL_ATTACK
+        val image = contentLoader.loadTalentImage(
+            character.key,
+            talent.key,
+            talent.name,
+            normalAttackWeapon = character.weapon.takeIf { normalAttack },
+            normalAttackElement = character.element.takeIf { normalAttack },
+        )
             ?: return ResponseEntity.notFound().build()
         return imageResponse(image)
     }

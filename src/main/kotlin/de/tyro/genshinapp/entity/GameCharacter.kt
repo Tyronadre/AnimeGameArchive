@@ -61,4 +61,7 @@ class GameCharacter {
     @Lob
     @Column(nullable = false)
     var talentCostsJson: String = "{}"
+
+    @Lob
+    var talentsJson: String? = null
 }

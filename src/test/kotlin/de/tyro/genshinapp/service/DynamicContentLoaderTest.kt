@@ -4,6 +4,9 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
 import de.tyro.genshinapp.configuration.GenshinContentProperties
+import de.tyro.genshinapp.model.CharacterDefinition
+import de.tyro.genshinapp.model.CharacterTalent
+import de.tyro.genshinapp.model.CharacterTalentKind
 import de.tyro.genshinapp.model.MaterialDefinition
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -178,6 +181,85 @@ class DynamicContentLoaderTest {
     }
 
     @Test
+    fun `downloads a talent icon from its sanitized Wikia talent path and reuses the cache`() {
+        val imageRequests = AtomicInteger()
+        val requestedPaths = mutableListOf<String>()
+        val pngBytes = byteArrayOf(
+            0x89.toByte(),
+            0x50,
+            0x4E,
+            0x47,
+            0x0D,
+            0x0A,
+            0x1A,
+            0x0A,
+        )
+        val testServer = startServer()
+        testServer.createContext("/material/") { exchange ->
+            imageRequests.incrementAndGet()
+            synchronized(requestedPaths) {
+                requestedPaths += exchange.requestURI.rawPath
+            }
+            exchange.respond("image/png", pngBytes)
+        }
+        testServer.start()
+
+        val loader = loaderFor(testServer)
+        val firstLoad = assertNotNull(
+            loader.loadTalentImage("kamisatoayaka", "combat2", "Kamisato Art: Hyouka"),
+        )
+        val secondLoad = assertNotNull(
+            loader.loadTalentImage("kamisatoayaka", "combat2", "Kamisato Art: Hyouka"),
+        )
+
+        assertContentEquals(pngBytes, firstLoad.bytes)
+        assertContentEquals(pngBytes, secondLoad.bytes)
+        assertEquals(1, imageRequests.get())
+        assertTrue(requestedPaths.single().endsWith("/5/56/Talent_Kamisato_Art_Hyouka.png"))
+        assertTrue(
+            Files.isRegularFile(
+                cacheDirectory.resolve("characters/talents/kamisatoayaka-combat2.image"),
+            ),
+        )
+    }
+
+    @Test
+    fun `uses the shared weapon element icon for a normal attack`() {
+        val requestedPaths = mutableListOf<String>()
+        val pngBytes = byteArrayOf(
+            0x89.toByte(),
+            0x50,
+            0x4E,
+            0x47,
+            0x0D,
+            0x0A,
+            0x1A,
+            0x0A,
+        )
+        val testServer = startServer()
+        testServer.createContext("/material/") { exchange ->
+            synchronized(requestedPaths) {
+                requestedPaths += exchange.requestURI.rawPath
+            }
+            exchange.respond("image/png", pngBytes)
+        }
+        testServer.start()
+
+        val image = assertNotNull(
+            loaderFor(testServer).loadTalentImage(
+                "kamisatoayaka",
+                "combat1",
+                "Kamisato Art: Kabuki",
+                normalAttackWeapon = "Sword",
+                normalAttackElement = "Cryo",
+            ),
+        )
+
+        assertContentEquals(pngBytes, image.bytes)
+        assertTrue(requestedPaths.single().endsWith("/6/6a/Sword_Cryo.png"))
+    }
+
+    @Test
     fun `persists an admin url only after loading the image successfully`() {
         val imageRequests = AtomicInteger()
         val pngBytes = byteArrayOf(
@@ -213,6 +295,60 @@ class DynamicContentLoaderTest {
         assertTrue(Files.readString(cacheDirectory.resolve("image-links.json")).contains(correctedUrl))
     }
 
+    @Test
+    fun `registers and serves an admin override for a talent image`() {
+        val pngBytes = byteArrayOf(
+            0x89.toByte(),
+            0x50,
+            0x4E,
+            0x47,
+            0x0D,
+            0x0A,
+            0x1A,
+            0x0A,
+        )
+        val testServer = startServer()
+        testServer.createContext("/custom-talent.png") { exchange ->
+            exchange.respond("image/png", pngBytes)
+        }
+        testServer.start()
+
+        val fixture = fixtureFor(testServer)
+        val talent = CharacterTalent(
+            key = "combat2",
+            kind = CharacterTalentKind.ELEMENTAL_SKILL,
+            name = "Kamisato Art: Hyouka",
+            description = "Deals Cryo DMG.",
+            flavorText = null,
+        )
+        val character = characterWith(talent)
+        fixture.loader.registerDefaultImageLinks(listOf(character), emptyList())
+        val correctedUrl =
+            "http://127.0.0.1:${testServer.address.port}/custom-talent.png"
+
+        assertTrue(
+            fixture.registry.talentLink(character.key, talent.key)
+                ?.defaultUrl
+                .orEmpty()
+                .endsWith("/5/56/Talent_Kamisato_Art_Hyouka.png"),
+        )
+
+        val result = fixture.loader.updateTalentImageUrl(character, talent, correctedUrl)
+        val cachedImage = assertNotNull(
+            fixture.loader.loadTalentImage(character.key, talent.key, talent.name),
+        )
+
+        assertTrue(result.successful)
+        assertEquals(correctedUrl, fixture.registry.talentLink(character.key, talent.key)?.url)
+        assertContentEquals(pngBytes, cachedImage.bytes)
+        assertTrue(
+            Files.isRegularFile(
+                cacheDirectory.resolve("characters/talents/kamisatoayaka-combat2.image"),
+            ),
+        )
+        assertTrue(Files.readString(cacheDirectory.resolve("image-links.json")).contains("talents"))
+    }
+
     private fun startServer(): HttpServer =
         HttpServer.create(InetSocketAddress("127.0.0.1", 0), 0).also { server = it }
 
@@ -239,6 +375,27 @@ class DynamicContentLoaderTest {
             registry = registry,
         )
     }
+
+    private fun characterWith(talent: CharacterTalent): CharacterDefinition = CharacterDefinition(
+        key = "kamisatoayaka",
+        id = 10000002,
+        name = "Kamisato Ayaka",
+        title = null,
+        description = null,
+        weapon = "Sword",
+        rarity = 5,
+        birthday = null,
+        element = "Cryo",
+        affiliation = null,
+        region = "Inazuma",
+        constellation = null,
+        ascensionStatType = null,
+        imageUrls = emptyMap(),
+        remoteImageUrls = emptyMap(),
+        ascensionCosts = emptyMap(),
+        talentCosts = emptyMap(),
+        talents = listOf(talent),
+    )
 
     private fun HttpExchange.respond(contentType: String, bytes: ByteArray) {
         responseHeaders.add("Content-Type", contentType)

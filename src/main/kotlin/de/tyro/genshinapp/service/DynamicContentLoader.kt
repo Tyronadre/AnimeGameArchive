@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import de.tyro.genshinapp.configuration.GenshinContentProperties
 import de.tyro.genshinapp.model.CharacterDefinition
 import de.tyro.genshinapp.model.CharacterImageType
+import de.tyro.genshinapp.model.CharacterTalent
+import de.tyro.genshinapp.model.CharacterTalentKind
 import de.tyro.genshinapp.model.MaterialDefinition
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.ClassPathResource
@@ -114,6 +116,35 @@ class DynamicContentLoader(
         )
     }
 
+    fun loadTalentImage(
+        characterKey: String,
+        talentKey: String,
+        talentName: String,
+        normalAttackWeapon: String? = null,
+        normalAttackElement: String? = null,
+    ): LoadedImage? {
+        val normalizedCharacterKey = normalizeCharacterKey(characterKey) ?: return null
+        val normalizedTalentKey = talentKey.trim().lowercase()
+            .takeIf { it.matches(ARTIFACT_KEY_PATTERN) }
+            ?: return null
+        if (talentName.isBlank() || talentName.length > MAX_MATERIAL_NAME_LENGTH) return null
+
+        val defaultUrl = defaultTalentImageUrl(
+            talentName,
+            normalAttackWeapon,
+            normalAttackElement,
+        )
+        val remoteUrl = imageUrlRegistry
+            .talentLink(normalizedCharacterKey, normalizedTalentKey)
+            ?.effectiveUrl
+            ?: defaultUrl
+
+        return loadRemoteImage(
+            talentImagePath(normalizedCharacterKey, normalizedTalentKey),
+            remoteUrl,
+        )
+    }
+
     fun registerDefaultImageLinks(
         characters: Collection<CharacterDefinition>,
         materials: Collection<MaterialDefinition>,
@@ -122,6 +153,16 @@ class DynamicContentLoader(
             characters = characters,
             materials = materials.map { material ->
                 material to if (material.id > 0) defaultMaterialImageUrl(material.name) else ""
+            },
+            talents = characters.flatMap { character ->
+                character.talents.map { talent ->
+                    TalentImageDefault(
+                        characterKey = character.key,
+                        talentKey = talent.key,
+                        name = "${character.name} - ${talent.name}",
+                        defaultUrl = defaultTalentImageUrl(character, talent),
+                    )
+                }
             },
         )
     }
@@ -183,6 +224,44 @@ class DynamicContentLoader(
         }
     }
 
+    fun updateTalentImageUrl(
+        character: CharacterDefinition,
+        talent: CharacterTalent,
+        url: String,
+    ): ImageUpdateResult {
+        val validatedUrl = validateImageUrl(url) ?: return ImageUpdateResult(
+            successful = false,
+            messageKey = "images.update.invalidUrl",
+        )
+        val image = downloadImage(URI.create(validatedUrl)) ?: return ImageUpdateResult(
+            successful = false,
+            messageKey = "images.update.downloadFailed",
+        )
+
+        return runCatching {
+            writeCachedImage(talentImagePath(character.key, talent.key), image, validatedUrl)
+            imageUrlRegistry.setTalentOverride(
+                character.key,
+                talent.key,
+                "${character.name} - ${talent.name}",
+                validatedUrl,
+            )
+            ImageUpdateResult(
+                true,
+                "images.update.talentSaved",
+                arrayOf(talent.name, character.name),
+            )
+        }.getOrElse {
+            logger.error(
+                "Could not save talent image URL for {}:{}",
+                character.key,
+                talent.key,
+                it,
+            )
+            ImageUpdateResult(false, "images.update.saveFailed")
+        }
+    }
+
     fun resetCharacterImageUrl(
         character: CharacterDefinition,
         imageType: CharacterImageType,
@@ -192,6 +271,10 @@ class DynamicContentLoader(
 
     fun resetMaterialImageUrl(material: MaterialDefinition) {
         imageUrlRegistry.resetMaterialOverride(material.id)
+    }
+
+    fun resetTalentImageUrl(character: CharacterDefinition, talent: CharacterTalent) {
+        imageUrlRegistry.resetTalentOverride(character.key, talent.key)
     }
 
     fun characterImageState(
@@ -217,6 +300,20 @@ class DynamicContentLoader(
             ClassPathResource(
                 "static/images/materials/${safeMaterialFileName(material.name)}.png",
             ).exists() -> ImageState.BUNDLED
+            else -> ImageState.MISSING
+        }
+    }
+
+    fun talentImageState(
+        character: CharacterDefinition,
+        talent: CharacterTalent,
+    ): ImageState {
+        val effectiveUrl = imageUrlRegistry.talentLink(character.key, talent.key)?.effectiveUrl
+            ?: defaultTalentImageUrl(character, talent)
+        return when {
+            cachedImageMatches(talentImagePath(character.key, talent.key), effectiveUrl) ->
+                ImageState.CACHED
+            effectiveUrl.isNotBlank() -> ImageState.REMOTE
             else -> ImageState.MISSING
         }
     }
@@ -297,6 +394,27 @@ class DynamicContentLoader(
     private fun defaultMaterialImageUrl(name: String): String {
         return fandomImageUrlResolver.itemImageUrl(name)
     }
+
+    private fun defaultTalentImageUrl(
+        talentName: String,
+        normalAttackWeapon: String?,
+        normalAttackElement: String?,
+    ): String = if (
+        !normalAttackWeapon.isNullOrBlank() && !normalAttackElement.isNullOrBlank()
+    ) {
+        fandomImageUrlResolver.normalAttackImageUrl(normalAttackWeapon, normalAttackElement)
+    } else {
+        fandomImageUrlResolver.talentImageUrl(talentName)
+    }
+
+    private fun defaultTalentImageUrl(
+        character: CharacterDefinition,
+        talent: CharacterTalent,
+    ): String = defaultTalentImageUrl(
+        talent.name,
+        character.weapon.takeIf { talent.kind == CharacterTalentKind.NORMAL_ATTACK },
+        character.element.takeIf { talent.kind == CharacterTalentKind.NORMAL_ATTACK },
+    )
 
     private fun readClasspathJson(path: String): JsonNode? {
         val resource = ClassPathResource(path)
@@ -424,6 +542,13 @@ class DynamicContentLoader(
         .resolve("images")
         .resolve("${key}-${imageType.key}.image")
         .normalize()
+
+    private fun talentImagePath(characterKey: String, talentKey: String): Path =
+        cacheDirectory
+            .resolve("characters")
+            .resolve("talents")
+            .resolve("$characterKey-$talentKey.image")
+            .normalize()
 
     private fun materialImagePath(id: Int): Path =
         cacheDirectory.resolve("materials").resolve("$id.image").normalize()

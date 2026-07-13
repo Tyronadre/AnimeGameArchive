@@ -27,6 +27,19 @@ class FandomImageUrlResolver(
         return hashedImageUrl("Weapon_${normalizedName}.png")
     }
 
+    fun talentImageUrl(talentName: String): String {
+        val normalizedName = talentName
+            .replace(TALENT_SPECIAL_CHARACTERS, "")
+            .trim()
+            .replace(WHITESPACE, "_")
+        return hashedImageUrl("Talent_${normalizedName}.png")
+    }
+
+    fun normalAttackImageUrl(weaponName: String, elementName: String): String {
+        val normalizedName = "$weaponName $elementName".trim().replace(WHITESPACE, "_")
+        return hashedImageUrl("$normalizedName.png")
+    }
+
     private fun hashedImageUrl(rawFileName: String): String {
         val fileName = Normalizer.normalize(rawFileName, Normalizer.Form.NFC)
         val hash = MessageDigest.getInstance("MD5")
@@ -41,5 +54,6 @@ class FandomImageUrlResolver(
 
     companion object {
         private val WHITESPACE = Regex("\\s+")
+        private val TALENT_SPECIAL_CHARACTERS = Regex("[^\\p{L}\\p{N}\\s]")
     }
 }

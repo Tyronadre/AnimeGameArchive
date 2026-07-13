@@ -6,6 +6,7 @@ import de.tyro.genshinapp.entity.GameCharacter
 import de.tyro.genshinapp.entity.Material
 import de.tyro.genshinapp.model.CharacterDefinition
 import de.tyro.genshinapp.model.CharacterImageType
+import de.tyro.genshinapp.model.CharacterTalent
 import de.tyro.genshinapp.model.MaterialCost
 import de.tyro.genshinapp.model.MaterialDefinition
 import de.tyro.genshinapp.model.MaterialCategory
@@ -67,6 +68,7 @@ class JpaCharacterCatalogStore(
         entity.remoteImageUrlsJson = writeImageUrls(character.remoteImageUrls)
         entity.ascensionCostsJson = writeCosts(character.ascensionCosts)
         entity.talentCostsJson = writeCosts(character.talentCosts)
+        entity.talentsJson = objectMapper.writeValueAsString(character.talents)
 
         return toDefinition(characterRepository.save(entity)) ?: character
     }
@@ -115,6 +117,7 @@ class JpaCharacterCatalogStore(
                 remoteImageUrls = readImageUrls(entity.remoteImageUrlsJson),
                 ascensionCosts = readCosts(entity.ascensionCostsJson),
                 talentCosts = readCosts(entity.talentCostsJson),
+                talents = readTalents(entity.talentsJson),
             )
         }.onFailure {
             logger.warn("Stored character data for '{}' is invalid", entity.key, it)
@@ -145,6 +148,11 @@ class JpaCharacterCatalogStore(
     private fun readCosts(json: String): Map<Int, List<MaterialCost>> =
         objectMapper.readValue(json, COSTS_TYPE)
 
+    private fun readTalents(json: String?): List<CharacterTalent> =
+        json?.takeIf(String::isNotBlank)
+            ?.let { objectMapper.readValue(it, TALENTS_TYPE) }
+            .orEmpty()
+
     private fun writeImageUrls(imageUrls: Map<CharacterImageType, String>): String =
         objectMapper.writeValueAsString(
             imageUrls.mapKeys { (imageType, _) -> imageType.key },
@@ -159,6 +167,7 @@ class JpaCharacterCatalogStore(
 
     companion object {
         private val COSTS_TYPE = object : TypeReference<Map<Int, List<MaterialCost>>>() {}
+        private val TALENTS_TYPE = object : TypeReference<List<CharacterTalent>>() {}
         private val IMAGE_URLS_TYPE = object : TypeReference<Map<String, String>>() {}
     }
 }
