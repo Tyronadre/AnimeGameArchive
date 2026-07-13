@@ -41,5 +41,4 @@ out/
 
 ### Rust ###
 **/target/
-/native/vendor/auto-artifactarium/keys/
 /.tmp/
