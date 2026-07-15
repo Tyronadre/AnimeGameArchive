@@ -8,4 +8,6 @@ interface CharacterWeaponTargetRepository : JpaRepository<CharacterWeaponTarget,
         userId: Long,
         characterKey: String,
     ): CharacterWeaponTarget?
+
+    fun findAllByUser_Id(userId: Long): List<CharacterWeaponTarget>
 }

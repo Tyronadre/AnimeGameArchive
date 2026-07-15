@@ -42,6 +42,7 @@ data class CharacterProgress(
 
 class CharacterProgressForm {
     var owned: Boolean = false
+    var ownershipExplicit: Boolean = false
     var level: Int = 1
     var ascension: Int = 0
     var constellation: Int = 0
@@ -69,17 +70,26 @@ class CharacterProgressForm {
         targetBurstTalent = maxOf(DEFAULT_TARGET_TALENT, state.burstTalent)
     }
 
+    fun applyShared(state: PlayerCharacterState) {
+        owned = true
+        level = state.level
+        ascension = state.ascension
+        targetLevel = maxOf(DEFAULT_TARGET_LEVEL, state.level)
+        targetAscension = maxOf(DEFAULT_TARGET_ASCENSION, state.ascension)
+    }
+
     fun normalized(): CharacterProgress {
-        val safeLevel = if (owned) level.coerceIn(1, 90) else 1
-        val safeAscension = if (owned) {
+        val effectiveOwned = owned || (!ownershipExplicit && hasCurrentProgress())
+        val safeLevel = if (effectiveOwned) level.coerceIn(1, 90) else 1
+        val safeAscension = if (effectiveOwned) {
             ascension.coerceIn(CharacterProgress.minimumAscensionFor(safeLevel), 6)
         } else {
             0
         }
-        val safeConstellation = if (owned) constellation.coerceIn(0, 6) else 0
-        val safeNormal = if (owned) normalTalent.coerceIn(1, 10) else 1
-        val safeSkill = if (owned) skillTalent.coerceIn(1, 10) else 1
-        val safeBurst = if (owned) burstTalent.coerceIn(1, 10) else 1
+        val safeConstellation = if (effectiveOwned) constellation.coerceIn(0, 6) else 0
+        val safeNormal = if (effectiveOwned) normalTalent.coerceIn(1, 10) else 1
+        val safeSkill = if (effectiveOwned) skillTalent.coerceIn(1, 10) else 1
+        val safeBurst = if (effectiveOwned) burstTalent.coerceIn(1, 10) else 1
         val safeTargetLevel = targetLevel.coerceIn(safeLevel, 90)
         val minimumTargetAscension = maxOf(
             safeAscension,
@@ -87,7 +97,7 @@ class CharacterProgressForm {
         )
 
         return CharacterProgress(
-            owned = owned,
+            owned = effectiveOwned,
             level = safeLevel,
             ascension = safeAscension,
             constellation = safeConstellation,
@@ -101,6 +111,10 @@ class CharacterProgressForm {
             targetBurstTalent = targetBurstTalent.coerceIn(safeBurst, 10),
         )
     }
+
+    private fun hasCurrentProgress(): Boolean =
+        level > 1 || ascension > 0 || constellation > 0 ||
+            normalTalent > 1 || skillTalent > 1 || burstTalent > 1
 
     companion object {
         const val DEFAULT_TARGET_LEVEL = 80

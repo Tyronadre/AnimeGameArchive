@@ -44,6 +44,31 @@ class GoodImportServiceTest {
     }
 
     @Test
+    fun `accepts the canonical GOOD traveler key`() {
+        val snapshot = service.parse(
+            """
+            {
+              "format": "GOOD",
+              "version": 3,
+              "source": "test",
+              "characters": [{
+                "key": "Traveler",
+                "level": 80,
+                "constellation": 4,
+                "ascension": 5,
+                "talent": {"auto": 6, "skill": 8, "burst": 8}
+              }],
+              "materials": {},
+              "artifacts": [],
+              "weapons": []
+            }
+            """.trimIndent().toByteArray(),
+        )
+
+        assertEquals("Traveler", snapshot.characters.single().key)
+    }
+
+    @Test
     fun `stores and reloads the validated GOOD export`() {
         val properties = GenshinContentProperties().also {
             it.cacheDirectory = temporaryDirectory.toString()

@@ -2,7 +2,34 @@
     const section = document.querySelector("[data-talent-section]");
     const progressForm = document.querySelector("#character-progress-form");
     const tooltip = section?.querySelector("[data-talent-material-tooltip]");
-    if (!section || !progressForm || !(tooltip instanceof HTMLElement)) return;
+    if (!(progressForm instanceof HTMLFormElement)) return;
+
+    const ownershipInput = progressForm.elements.namedItem("owned");
+    const ownershipExplicitInput = progressForm.elements.namedItem("ownershipExplicit");
+    const markCharacterOwned = () => {
+        if (ownershipInput instanceof HTMLInputElement) ownershipInput.checked = true;
+        if (ownershipExplicitInput instanceof HTMLInputElement) {
+            ownershipExplicitInput.value = "false";
+        }
+    };
+
+    if (ownershipInput instanceof HTMLInputElement) {
+        ownershipInput.addEventListener("change", () => {
+            if (ownershipExplicitInput instanceof HTMLInputElement) {
+                ownershipExplicitInput.value = "true";
+            }
+        });
+    }
+
+    ["level", "ascension", "constellation", "normalTalent", "skillTalent", "burstTalent"]
+        .forEach((fieldName) => {
+            const input = progressForm.elements.namedItem(fieldName);
+            if (input instanceof HTMLInputElement) {
+                input.addEventListener("input", markCharacterOwned);
+            }
+        });
+
+    if (!section || !(tooltip instanceof HTMLElement)) return;
 
     const tooltipRange = tooltip.querySelector("[data-talent-cost-range]");
     const tooltipList = tooltip.querySelector("[data-talent-cost-list]");
@@ -49,6 +76,7 @@
     };
 
     const syncProgress = (picker, level) => {
+        markCharacterOwned();
         const progressField = picker.dataset.progressField;
         const progressInput = progressForm.elements.namedItem(progressField);
         if (!(progressInput instanceof HTMLInputElement)) return;
@@ -243,5 +271,45 @@
             );
             if (picker instanceof HTMLElement) selectLevel(picker, input.value, false);
         });
+    });
+})();
+
+(() => {
+    const switcher = document.querySelector("[data-traveler-switcher]");
+    if (!(switcher instanceof HTMLFormElement)) return;
+
+    const select = async (type, value) => {
+        if (switcher.getAttribute("aria-busy") === "true") return;
+        switcher.setAttribute("aria-busy", "true");
+        switcher.classList.remove("is-error");
+        switcher.querySelectorAll("button").forEach((button) => {
+            button.disabled = true;
+        });
+
+        const formData = new FormData(switcher);
+        formData.set(type, value);
+        try {
+            const response = await fetch(switcher.action, {
+                method: "POST",
+                headers: {Accept: "application/json"},
+                body: formData,
+            });
+            if (!response.ok) throw new Error(`Traveler selection failed with ${response.status}`);
+            window.location.assign("/characters/traveler");
+        } catch (error) {
+            switcher.removeAttribute("aria-busy");
+            switcher.classList.add("is-error");
+            switcher.querySelectorAll("button").forEach((button) => {
+                button.disabled = false;
+            });
+            console.error(error);
+        }
+    };
+
+    switcher.querySelectorAll("[data-traveler-appearance]").forEach((button) => {
+        button.addEventListener("click", () => select("appearance", button.dataset.travelerAppearance));
+    });
+    switcher.querySelectorAll("[data-traveler-element]").forEach((button) => {
+        button.addEventListener("click", () => select("element", button.dataset.travelerElement));
     });
 })();

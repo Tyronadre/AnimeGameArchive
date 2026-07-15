@@ -22,6 +22,7 @@ class PlayerSnapshotStore(
     private val goodImportService: GoodImportService,
     private val objectMapper: ObjectMapper,
     private val snapshotActivityService: SnapshotActivityService? = null,
+    private val travelerService: TravelerService? = null,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val playerDataDirectory = Path.of(properties.cacheDirectory)
@@ -45,6 +46,7 @@ class PlayerSnapshotStore(
             state.revision.incrementAndGet()
         }
         val saved = current(userId) ?: snapshot
+        travelerService?.importSnapshot(userId, saved)
         snapshotActivityService?.record(userId, previous, saved)
         return saved
     }

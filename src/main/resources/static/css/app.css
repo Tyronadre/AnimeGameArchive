@@ -762,6 +762,124 @@ h2 {
     font-size: clamp(1.3rem, 2.4vw, 2rem);
 }
 
+.traveler-switcher {
+    display: grid;
+    gap: 0.85rem;
+    margin-top: 1.35rem;
+    padding: 0.9rem;
+    border: 1px solid color-mix(in srgb, var(--hero-accent) 28%, rgba(255, 255, 255, 0.72));
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.48);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    transition: border-color 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
+}
+
+.traveler-switcher[aria-busy="true"] {
+    opacity: 0.72;
+}
+
+.traveler-switcher.is-error {
+    border-color: #bd4f47;
+    box-shadow: 0 0 0 3px rgba(189, 79, 71, 0.14);
+}
+
+.traveler-switch-group {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.traveler-switch-label {
+    color: var(--hero-accent-deep);
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.traveler-segments {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.35rem;
+}
+
+.traveler-element-segments {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.traveler-element-segments button {
+    min-height: 42px;
+    padding: 0.3rem;
+}
+
+.traveler-element-segments button img {
+    width: 31px;
+    height: 31px;
+    border-radius: 0;
+    object-fit: contain;
+    filter: saturate(0.86) brightness(0.96);
+    transition: transform 140ms ease, filter 140ms ease;
+}
+
+.traveler-element-segments button:hover img,
+.traveler-element-segments button.is-selected img {
+    transform: scale(1.08);
+    filter: saturate(1.12) brightness(1.12);
+}
+
+.traveler-segments button {
+    display: inline-flex;
+    min-width: 0;
+    min-height: 38px;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.42rem 0.58rem;
+    overflow: hidden;
+    color: #33404a;
+    border: 1px solid rgba(44, 58, 68, 0.18);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.64);
+    font: inherit;
+    font-size: 0.7rem;
+    font-weight: 750;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: transform 140ms ease, color 140ms ease, border-color 140ms ease,
+        background 140ms ease, box-shadow 140ms ease;
+}
+
+.traveler-segments button:hover {
+    transform: translateY(-1px);
+    color: var(--hero-accent-deep);
+    border-color: color-mix(in srgb, var(--hero-accent) 55%, transparent);
+    box-shadow: 0 5px 14px color-mix(in srgb, var(--hero-accent) 16%, transparent);
+}
+
+.traveler-segments button.is-selected {
+    color: #fff;
+    border-color: var(--hero-accent-deep);
+    background: var(--hero-accent-deep);
+    box-shadow: 0 5px 14px color-mix(in srgb, var(--hero-accent-deep) 28%, transparent);
+}
+
+.traveler-segments button img {
+    width: 25px;
+    height: 25px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.traveler-import-note {
+    margin: 0;
+    padding-left: 7.25rem;
+    color: #6f4b18;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
 .facts {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(155px, 100%), 1fr));
@@ -990,6 +1108,13 @@ h2 {
         drop-shadow(0 24px 24px rgba(21, 35, 51, 0.22))
         drop-shadow(0 0 28px color-mix(in srgb, var(--hero-accent) 25%, transparent));
     animation: wish-art-float 8s ease-in-out infinite;
+}
+
+.traveler-hero .hero-art img {
+    inset: 0;
+    width: min(72%, 400px);
+    height: min(72%, 400px);
+    margin: auto;
 }
 
 .hero-art-fallback {
@@ -8045,6 +8170,34 @@ html[data-theme="dark"] .character-hero {
 
 html[data-theme="dark"] .character-hero h1 {
     text-shadow: 0 2px 18px rgba(0, 0, 0, 0.36);
+}
+
+html[data-theme="dark"] .traveler-switcher {
+    border-color: color-mix(in srgb, var(--hero-accent) 34%, #313943);
+    background: rgba(17, 22, 27, 0.72);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+html[data-theme="dark"] .traveler-segments button {
+    color: #d4dbe1;
+    border-color: #424d58;
+    background: #222a31;
+}
+
+html[data-theme="dark"] .traveler-segments button:hover {
+    color: #fff;
+    border-color: var(--hero-accent);
+    background: #2a343d;
+}
+
+html[data-theme="dark"] .traveler-segments button.is-selected {
+    color: #fff;
+    border-color: var(--hero-accent);
+    background: color-mix(in srgb, var(--hero-accent-deep) 72%, #151a1f);
+}
+
+html[data-theme="dark"] .traveler-import-note {
+    color: #e2b66e;
 }
 
 html[data-theme="dark"] .character-icon {

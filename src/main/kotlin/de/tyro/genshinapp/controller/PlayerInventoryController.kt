@@ -4,6 +4,8 @@ import de.tyro.genshinapp.configuration.LocalizedMessages
 import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.model.PlayerArtifact
 import de.tyro.genshinapp.model.PlayerWeapon
+import de.tyro.genshinapp.model.TravelerElement
+import de.tyro.genshinapp.model.TravelerIdentity
 import de.tyro.genshinapp.security.AppUserPrincipal
 import de.tyro.genshinapp.service.ArtifactCatalogService
 import de.tyro.genshinapp.service.ArtifactMutationRequest
@@ -28,6 +30,7 @@ import de.tyro.genshinapp.service.PlayerArtifactManagementService
 import de.tyro.genshinapp.service.PlayerSnapshotStore
 import de.tyro.genshinapp.service.WeaponCatalogService
 import de.tyro.genshinapp.service.WeaponDataService
+import de.tyro.genshinapp.service.TravelerService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -58,6 +61,7 @@ class PlayerInventoryController(
     private val characterTargetService: CharacterTargetService,
     private val weaponDataService: WeaponDataService,
     private val optimizerCombatStatService: OptimizerCombatStatService,
+    private val travelerService: TravelerService,
     private val messages: LocalizedMessages,
 ) {
     @GetMapping
@@ -157,7 +161,11 @@ class PlayerInventoryController(
     ): String {
         val snapshot = snapshotStore.current(principal.id)
         val plan = snapshot?.let {
-            planningService.createPlan(it, characterTargetService.findAll(principal.id))
+            planningService.createPlan(
+                it,
+                characterTargetService.findAll(principal.id),
+                principal.id,
+            )
         }
         val selectedMaterial = materialId?.let { id ->
             plan?.missingMaterials?.find { it.id == id }
@@ -364,6 +372,7 @@ class PlayerInventoryController(
     @GetMapping("/artifact-optimizer")
     fun artifactOptimizer(
         @RequestParam(required = false) character: String?,
+        @RequestParam(required = false) element: String?,
         @RequestParam(required = false) profile: String?,
         @RequestParam(required = false) customTargets: Boolean?,
         @RequestParam(required = false) sandsMain: String?,
@@ -393,65 +402,80 @@ class PlayerInventoryController(
         val snapshot = snapshotStore.current(principal.id)
         val artifactCounts = snapshot?.artifacts.orEmpty()
             .mapNotNull { it.location }
-            .groupingBy(GoodKeyNormalizer::normalize)
+            .groupingBy(TravelerIdentity::canonicalCharacterKey)
             .eachCount()
         val characters = snapshot?.characters.orEmpty()
             .map { state ->
                 val definition = catalogService.findCharacter(state.key.lowercase())
+                val canonicalKey = TravelerIdentity.canonicalCharacterKey(state.key)
                 OptimizerCharacterOption(
-                    key = state.key,
+                    key = canonicalKey,
                     name = definition?.name ?: GoodKeyNormalizer.humanize(state.key),
                     iconUrl = definition?.iconImageUrl,
-                    artifactCount = artifactCounts[GoodKeyNormalizer.normalize(state.key)] ?: 0,
+                    artifactCount = artifactCounts[canonicalKey] ?: 0,
                 )
             }
-            .distinctBy { GoodKeyNormalizer.normalize(it.key) }
+            .distinctBy { TravelerIdentity.canonicalCharacterKey(it.key) }
             .sortedWith(
                 compareByDescending<OptimizerCharacterOption> { it.artifactCount }
                     .thenBy { it.name },
             )
         val selectedCharacter = characters.find {
-            GoodKeyNormalizer.normalize(it.key) == GoodKeyNormalizer.normalize(character.orEmpty())
+            TravelerIdentity.canonicalCharacterKey(it.key) ==
+                TravelerIdentity.canonicalCharacterKey(character.orEmpty())
         } ?: characters.firstOrNull()
         val selectedState = selectedCharacter?.let { selected ->
             snapshot?.characters?.find {
-                GoodKeyNormalizer.normalize(it.key) == GoodKeyNormalizer.normalize(selected.key)
+                TravelerIdentity.canonicalCharacterKey(it.key) ==
+                    TravelerIdentity.canonicalCharacterKey(selected.key)
             }
         }
         val selectedArtifacts = selectedCharacter?.let { selected ->
             snapshot?.artifacts?.filter {
-                GoodKeyNormalizer.normalize(it.location.orEmpty()) ==
-                    GoodKeyNormalizer.normalize(selected.key)
+                TravelerIdentity.canonicalCharacterKey(it.location.orEmpty()) ==
+                    TravelerIdentity.canonicalCharacterKey(selected.key)
             }
         }.orEmpty()
-        val availableSets = availableArtifactSets(snapshot?.artifacts.orEmpty())
-        val savedProfile = selectedCharacter?.let {
-            artifactOptimizerProfileService.find(principal.id, it.key)
+        val selectedTravelerElement = if (
+            selectedCharacter?.key == TravelerIdentity.KEY
+        ) {
+            TravelerElement.fromKey(element)
+                ?: TravelerElement.fromKey(character)
+                ?: travelerService.selection(principal.id).element
+        } else {
+            null
         }
-        val customProfiles = selectedCharacter?.let {
-            artifactOptimizerCustomProfileService.findAll(principal.id, it.key)
+        val optimizerCharacterKey = selectedCharacter?.let {
+            selectedTravelerElement?.variantKey ?: it.key
+        }
+        val availableSets = availableArtifactSets(snapshot?.artifacts.orEmpty())
+        val savedProfile = optimizerCharacterKey?.let {
+            artifactOptimizerProfileService.find(principal.id, it)
+        }
+        val customProfiles = optimizerCharacterKey?.let {
+            artifactOptimizerCustomProfileService.findAll(principal.id, it)
         }.orEmpty()
-        val sourceProfiles = selectedCharacter?.let {
-            artifactOptimizerBuildProfileService.findAll(it.key)
+        val sourceProfiles = optimizerCharacterKey?.let {
+            artifactOptimizerBuildProfileService.findAll(it)
         }.orEmpty()
         val requestedCustomProfileId = profile
             ?.removePrefix(CUSTOM_PROFILE_PREFIX)
             ?.takeIf { profile.startsWith(CUSTOM_PROFILE_PREFIX) }
             ?.toLongOrNull()
-        val requestedCustomProfile = selectedCharacter?.let {
+        val requestedCustomProfile = optimizerCharacterKey?.let {
             artifactOptimizerCustomProfileService.find(
                 principal.id,
-                it.key,
+                it,
                 requestedCustomProfileId,
             )
         }
-        val requestedSourceProfile = selectedCharacter?.let {
-            artifactOptimizerBuildProfileService.find(it.key, profile)
+        val requestedSourceProfile = optimizerCharacterKey?.let {
+            artifactOptimizerBuildProfileService.find(it, profile)
         }
-        val savedCustomProfile = selectedCharacter?.let {
+        val savedCustomProfile = optimizerCharacterKey?.let {
             artifactOptimizerCustomProfileService.find(
                 principal.id,
-                it.key,
+                it,
                 savedProfile?.customProfileId,
             )
         }
@@ -580,8 +604,8 @@ class PlayerInventoryController(
         )
         val selectedWeapon = selectedCharacter?.let { selected ->
             snapshot?.weapons?.find {
-                GoodKeyNormalizer.normalize(it.location.orEmpty()) ==
-                    GoodKeyNormalizer.normalize(selected.key)
+                TravelerIdentity.canonicalCharacterKey(it.location.orEmpty()) ==
+                    TravelerIdentity.canonicalCharacterKey(selected.key)
             }
         }
         val result = if (snapshot != null && selectedState != null) {
@@ -605,6 +629,8 @@ class PlayerInventoryController(
         model.addAttribute("snapshot", snapshot)
         model.addAttribute("optimizerCharacters", characters)
         model.addAttribute("selectedCharacter", selectedCharacter)
+        model.addAttribute("optimizerCharacterKey", optimizerCharacterKey)
+        model.addAttribute("selectedTravelerElement", selectedTravelerElement)
         model.addAttribute("profiles", ArtifactOptimizationProfile.entries)
         model.addAttribute("customProfiles", customProfiles)
         model.addAttribute("sourceProfiles", sourceProfiles)
@@ -662,6 +688,7 @@ class PlayerInventoryController(
     @PostMapping("/artifact-optimizer/profile")
     fun saveArtifactOptimizerProfile(
         @RequestParam character: String,
+        @RequestParam optimizerCharacter: String,
         @RequestParam profile: String,
         @RequestParam(required = false) baseProfile: String?,
         @RequestParam(defaultValue = "false") customTargets: Boolean,
@@ -691,7 +718,8 @@ class PlayerInventoryController(
     ): String {
         val snapshot = snapshotStore.current(principal.id)
         val selectedCharacter = snapshot?.characters?.find {
-            GoodKeyNormalizer.normalize(it.key) == GoodKeyNormalizer.normalize(character)
+            TravelerIdentity.canonicalCharacterKey(it.key) ==
+                TravelerIdentity.canonicalCharacterKey(character)
         }
         if (snapshot == null || selectedCharacter == null) {
             redirectAttributes.addFlashAttribute(
@@ -707,11 +735,11 @@ class PlayerInventoryController(
             ?.toLongOrNull()
         val selectedCustomProfile = artifactOptimizerCustomProfileService.find(
             principal.id,
-            selectedCharacter.key,
+            optimizerCharacter,
             selectedCustomProfileId,
         )
         val selectedSourceProfile = artifactOptimizerBuildProfileService.find(
-            selectedCharacter.key,
+            optimizerCharacter,
             profile,
         )
         val requestedCustomProfileName = customProfileName
@@ -782,7 +810,7 @@ class PlayerInventoryController(
             )?.let { profileName ->
             artifactOptimizerCustomProfileService.save(
                 userId = principal.id,
-                characterKey = selectedCharacter.key,
+                characterKey = optimizerCharacter,
                 id = selectedCustomProfile?.id,
                 name = profileName,
                 profile = selectedProfile,
@@ -792,7 +820,7 @@ class PlayerInventoryController(
         }
         artifactOptimizerProfileService.save(
             userId = principal.id,
-            characterKey = selectedCharacter.key,
+            characterKey = optimizerCharacter,
             profile = selectedProfile,
             targets = targets,
             setSelection = setSelection,
@@ -803,41 +831,49 @@ class PlayerInventoryController(
             messages.get("optimizer.profile.saved", selectedCharacter.key),
         )
         redirectAttributes.addAttribute("character", selectedCharacter.key)
+        TravelerElement.fromKey(optimizerCharacter)?.let {
+            redirectAttributes.addAttribute("element", it.key)
+        }
         return "redirect:/inventory/artifact-optimizer"
     }
 
     @PostMapping("/artifact-optimizer/profile/reset")
     fun resetArtifactOptimizerProfile(
         @RequestParam character: String,
+        @RequestParam optimizerCharacter: String,
         @AuthenticationPrincipal principal: AppUserPrincipal,
         redirectAttributes: RedirectAttributes,
     ): String {
-        artifactOptimizerProfileService.delete(principal.id, character)
+        artifactOptimizerProfileService.delete(principal.id, optimizerCharacter)
         redirectAttributes.addFlashAttribute(
             "successMessage",
             messages.get("optimizer.profile.reset"),
         )
         redirectAttributes.addAttribute("character", character)
+        TravelerElement.fromKey(optimizerCharacter)?.let {
+            redirectAttributes.addAttribute("element", it.key)
+        }
         return "redirect:/inventory/artifact-optimizer"
     }
 
     @PostMapping("/artifact-optimizer/profile/custom/delete")
     fun deleteCustomArtifactOptimizerProfile(
         @RequestParam character: String,
+        @RequestParam optimizerCharacter: String,
         @RequestParam customProfileId: Long,
         @AuthenticationPrincipal principal: AppUserPrincipal,
         redirectAttributes: RedirectAttributes,
     ): String {
-        val activeProfile = artifactOptimizerProfileService.find(principal.id, character)
+        val activeProfile = artifactOptimizerProfileService.find(principal.id, optimizerCharacter)
         artifactOptimizerCustomProfileService.delete(
             principal.id,
-            character,
+            optimizerCharacter,
             customProfileId,
         )
         if (activeProfile?.customProfileId == customProfileId) {
             artifactOptimizerProfileService.save(
                 userId = principal.id,
-                characterKey = character,
+                characterKey = optimizerCharacter,
                 profile = activeProfile.profile,
                 targets = activeProfile.targets,
                 setSelection = activeProfile.setSelection,
@@ -849,12 +885,16 @@ class PlayerInventoryController(
             messages.get("optimizer.profile.customDeleted"),
         )
         redirectAttributes.addAttribute("character", character)
+        TravelerElement.fromKey(optimizerCharacter)?.let {
+            redirectAttributes.addAttribute("element", it.key)
+        }
         return "redirect:/inventory/artifact-optimizer"
     }
 
     @PostMapping("/artifact-optimizer/profile/share")
     fun shareArtifactOptimizerProfile(
         @RequestParam character: String,
+        @RequestParam optimizerCharacter: String,
         @RequestParam profile: String,
         @RequestParam(defaultValue = "false") customTargets: Boolean,
         @RequestParam(defaultValue = "auto") sandsMain: String,
@@ -888,9 +928,13 @@ class PlayerInventoryController(
             ?.toLongOrNull()
         val selectedProfile = artifactOptimizerCustomProfileService.find(
             principal.id,
-            character,
+            optimizerCharacter,
             selectedCustomProfileId,
-        )?.profile ?: ArtifactOptimizationProfile.fromKey(profile)
+        )?.profile ?: artifactOptimizerBuildProfileService.find(
+            optimizerCharacter,
+            profile,
+        )?.let(artifactOptimizerBuildProfileService::profileFor)
+            ?: ArtifactOptimizationProfile.fromKey(profile)
         val targets = artifactOptimizationService.createTargets(
             profile = selectedProfile,
             custom = customTargets,
@@ -940,6 +984,9 @@ class PlayerInventoryController(
             messages.get("optimizer.share.created"),
         )
         redirectAttributes.addAttribute("character", character)
+        TravelerElement.fromKey(optimizerCharacter)?.let {
+            redirectAttributes.addAttribute("element", it.key)
+        }
         redirectAttributes.addAttribute("shared", sharedConfiguration.token)
         return "redirect:/inventory/artifact-optimizer"
     }

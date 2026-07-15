@@ -1,6 +1,7 @@
 package de.tyro.genshinapp.service
 
 import de.tyro.genshinapp.model.GoodKeyNormalizer
+import de.tyro.genshinapp.model.TravelerIdentity
 import de.tyro.genshinapp.model.PlayerArtifact
 import de.tyro.genshinapp.model.PlayerArtifactStat
 import de.tyro.genshinapp.model.PlayerCharacterState
@@ -157,10 +158,11 @@ class ArtifactOptimizationService(
     ): ArtifactOptimizationResult {
         val strategy = ArtifactScoringStrategy(profile, targets)
         val indexedArtifacts = snapshot.artifacts.mapIndexed(::IndexedArtifact)
-        val characterKey = GoodKeyNormalizer.normalize(character.key)
+        val characterKey = TravelerIdentity.canonicalCharacterKey(character.key)
         val currentArtifacts = indexedArtifacts
             .filter {
-                GoodKeyNormalizer.normalize(it.artifact.location.orEmpty()) == characterKey
+                TravelerIdentity.canonicalCharacterKey(it.artifact.location.orEmpty()) ==
+                    characterKey
             }
             .sortedBy { SLOT_ORDER[it.artifact.slotKey.lowercase()] ?: Int.MAX_VALUE }
         val currentContexts = currentArtifacts.associate { target ->
@@ -570,7 +572,9 @@ class ArtifactOptimizationService(
             scoreGain = optimizedAverage - currentAverage,
             buildStats = bestCandidate.buildStats,
             transferredPieces = contextualBestPieces.count {
-                val owner = GoodKeyNormalizer.normalize(it.artifact.location.orEmpty())
+                val owner = TravelerIdentity.canonicalCharacterKey(
+                    it.artifact.location.orEmpty(),
+                )
                 owner.isNotBlank() && owner != selectedCharacterKey
             },
         )

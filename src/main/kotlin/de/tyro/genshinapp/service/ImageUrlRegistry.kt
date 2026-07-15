@@ -46,11 +46,13 @@ class ImageUrlRegistry(
         var changed = false
 
         characters.forEach { character ->
-            val legacyEntry = document.characters.remove(character.key)
+            val legacyEntry = document.characters.remove(character.imageResourceKey)
             if (legacyEntry != null) changed = true
 
             CharacterImageType.entries.forEach { imageType ->
-                val entry = document.characters.getOrPut(characterEntryKey(character.key, imageType)) {
+                val entry = document.characters.getOrPut(
+                    characterEntryKey(character.imageResourceKey, imageType),
+                ) {
                     changed = true
                     EditableImageLink()
                 }

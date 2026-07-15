@@ -2,6 +2,7 @@ package de.tyro.genshinapp.controller
 
 import de.tyro.genshinapp.configuration.LocalizedMessages
 import de.tyro.genshinapp.model.CharacterImageType
+import de.tyro.genshinapp.model.TravelerIdentity
 import de.tyro.genshinapp.service.CharacterCatalogService
 import de.tyro.genshinapp.service.DynamicContentLoader
 import de.tyro.genshinapp.service.EditableImageLink
@@ -60,7 +61,7 @@ class ImageAdminController(
         @RequestParam(defaultValue = "save") action: String,
         redirectAttributes: RedirectAttributes,
     ): String {
-        val character = catalogService.findCharacter(key)
+        val character = catalogService.findMediaCharacter(key)
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
         val imageType = CharacterImageType.fromKey(type)
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
@@ -109,7 +110,7 @@ class ImageAdminController(
         @RequestParam(defaultValue = "save") action: String,
         redirectAttributes: RedirectAttributes,
     ): String {
-        val character = catalogService.findCharacter(characterKey)
+        val character = catalogService.findMediaCharacter(characterKey)
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
         val talent = character.talents.firstOrNull { it.key == talentKey.lowercase() }
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
@@ -128,9 +129,12 @@ class ImageAdminController(
     }
 
     private fun imageRows(): List<AdminImageRow> {
-        val characterRows = catalogService.getCharacters().flatMap { character ->
+        val imageCharacters = catalogService.getCharacters()
+            .filterNot { it.key == TravelerIdentity.KEY } +
+            catalogService.travelerAppearanceCharacters()
+        val characterRows = imageCharacters.flatMap { character ->
             CharacterImageType.entries.map { imageType ->
-                val link = imageUrlRegistry.characterLink(character.key, imageType)
+                val link = imageUrlRegistry.characterLink(character.imageResourceKey, imageType)
                     ?: EditableImageLink(
                         "${character.name} ${imageType.label}",
                         character.remoteImageUrl(imageType).orEmpty(),
@@ -139,14 +143,15 @@ class ImageAdminController(
                 AdminImageRow(
                     type = "character",
                     typeLabel = messages.get("images.type.character", imageType.label),
-                    key = "${character.key}:${imageType.key}",
+                    key = "${character.imageResourceKey}:${imageType.key}",
                     name = character.name,
                     currentUrl = link.effectiveUrl.orEmpty(),
                     defaultUrl = link.defaultUrl,
                     hasOverride = link.hasOverride,
                     state = state,
                     previewUrl = character.imageUrls[imageType].takeIf { state.hasPreview },
-                    updatePath = "/admin/images/characters/${character.key}/${imageType.key}",
+                    updatePath = "/admin/images/characters/" +
+                        "${character.imageResourceKey}/${imageType.key}",
                 )
             }
         }
@@ -168,23 +173,29 @@ class ImageAdminController(
                 updatePath = "/admin/images/materials/${material.id}",
             )
         }
-        val talentRows = catalogService.getCharacters().flatMap { character ->
+        val talentCharacters = catalogService.getCharacters()
+            .filterNot { it.key == TravelerIdentity.KEY } +
+            catalogService.travelerElementCharacters()
+        val talentRows = talentCharacters.flatMap { character ->
             character.talents.map { talent ->
-                val link = imageUrlRegistry.talentLink(character.key, talent.key)
+                val link = imageUrlRegistry.talentLink(character.talentResourceKey, talent.key)
                     ?: EditableImageLink("${character.name} - ${talent.name}")
                 val state = contentLoader.talentImageState(character, talent)
                 AdminImageRow(
                     type = "talent",
                     typeLabel = messages.get("images.type.talent", character.name),
-                    key = "${character.key}:${talent.key}",
+                    key = "${character.talentResourceKey}:${talent.key}",
                     name = talent.name,
                     currentUrl = link.effectiveUrl.orEmpty(),
                     defaultUrl = link.defaultUrl,
                     hasOverride = link.hasOverride,
                     state = state,
-                    previewUrl = "/media/characters/${character.key}/talents/${talent.key}"
-                        .takeIf { state.hasPreview },
-                    updatePath = "/admin/images/characters/${character.key}/talents/${talent.key}",
+                    previewUrl = (
+                        "/media/characters/" +
+                            "${character.talentResourceKey}/talents/${talent.key}"
+                        ).takeIf { state.hasPreview },
+                    updatePath = "/admin/images/characters/" +
+                        "${character.talentResourceKey}/talents/${talent.key}",
                 )
             }
         }

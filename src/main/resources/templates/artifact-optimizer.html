@@ -69,6 +69,8 @@
         </aside>
         <section class="optimizer-controls">
             <form th:action="@{/inventory/artifact-optimizer/profile}" method="post">
+                <input type="hidden" name="optimizerCharacter"
+                       th:value="${optimizerCharacterKey}">
                 <label>
                     <span th:text="#{optimizer.character}">Character</span>
                     <select name="character" id="optimizer-character-select">

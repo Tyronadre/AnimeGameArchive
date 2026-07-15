@@ -9,6 +9,7 @@ import de.tyro.genshinapp.model.CharacterImageType
 import de.tyro.genshinapp.model.CharacterTalent
 import de.tyro.genshinapp.model.CharacterTalentKind
 import de.tyro.genshinapp.model.MaterialDefinition
+import de.tyro.genshinapp.model.TravelerElement
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Service
@@ -68,7 +69,7 @@ class DynamicContentLoader(
         imageType: CharacterImageType,
     ): LoadedImage? {
         val remoteUrl = effectiveCharacterImageUrl(character, imageType) ?: return null
-        return loadRemoteImage(characterImagePath(character.key, imageType), remoteUrl)
+        return loadRemoteImage(characterImagePath(character.imageResourceKey, imageType), remoteUrl)
     }
 
     fun loadMaterialImage(id: Int, name: String): LoadedImage? {
@@ -157,7 +158,7 @@ class DynamicContentLoader(
             talents = characters.flatMap { character ->
                 character.talents.map { talent ->
                     TalentImageDefault(
-                        characterKey = character.key,
+                        characterKey = character.talentResourceKey,
                         talentKey = talent.key,
                         name = "${character.name} - ${talent.name}",
                         defaultUrl = defaultTalentImageUrl(character, talent),
@@ -182,9 +183,13 @@ class DynamicContentLoader(
         )
 
         return runCatching {
-            writeCachedImage(characterImagePath(character.key, imageType), image, validatedUrl)
+            writeCachedImage(
+                characterImagePath(character.imageResourceKey, imageType),
+                image,
+                validatedUrl,
+            )
             imageUrlRegistry.setCharacterOverride(
-                character.key,
+                character.imageResourceKey,
                 imageType,
                 character.name,
                 validatedUrl,
@@ -195,7 +200,11 @@ class DynamicContentLoader(
                 arrayOf(imageType.label, character.name),
             )
         }.getOrElse {
-            logger.error("Could not save character image URL for {}", character.key, it)
+            logger.error(
+                "Could not save character image URL for {}",
+                character.imageResourceKey,
+                it,
+            )
             ImageUpdateResult(false, "images.update.saveFailed")
         }
     }
@@ -239,9 +248,13 @@ class DynamicContentLoader(
         )
 
         return runCatching {
-            writeCachedImage(talentImagePath(character.key, talent.key), image, validatedUrl)
+            writeCachedImage(
+                talentImagePath(character.talentResourceKey, talent.key),
+                image,
+                validatedUrl,
+            )
             imageUrlRegistry.setTalentOverride(
-                character.key,
+                character.talentResourceKey,
                 talent.key,
                 "${character.name} - ${talent.name}",
                 validatedUrl,
@@ -254,7 +267,7 @@ class DynamicContentLoader(
         }.getOrElse {
             logger.error(
                 "Could not save talent image URL for {}:{}",
-                character.key,
+                character.talentResourceKey,
                 talent.key,
                 it,
             )
@@ -266,7 +279,7 @@ class DynamicContentLoader(
         character: CharacterDefinition,
         imageType: CharacterImageType,
     ) {
-        imageUrlRegistry.resetCharacterOverride(character.key, imageType)
+        imageUrlRegistry.resetCharacterOverride(character.imageResourceKey, imageType)
     }
 
     fun resetMaterialImageUrl(material: MaterialDefinition) {
@@ -274,7 +287,7 @@ class DynamicContentLoader(
     }
 
     fun resetTalentImageUrl(character: CharacterDefinition, talent: CharacterTalent) {
-        imageUrlRegistry.resetTalentOverride(character.key, talent.key)
+        imageUrlRegistry.resetTalentOverride(character.talentResourceKey, talent.key)
     }
 
     fun characterImageState(
@@ -283,7 +296,10 @@ class DynamicContentLoader(
     ): ImageState {
         val effectiveUrl = effectiveCharacterImageUrl(character, imageType)
         return when {
-            cachedImageMatches(characterImagePath(character.key, imageType), effectiveUrl) ->
+            cachedImageMatches(
+                characterImagePath(character.imageResourceKey, imageType),
+                effectiveUrl,
+            ) ->
                 ImageState.CACHED
             effectiveUrl != null -> ImageState.REMOTE
             else -> ImageState.MISSING
@@ -308,10 +324,15 @@ class DynamicContentLoader(
         character: CharacterDefinition,
         talent: CharacterTalent,
     ): ImageState {
-        val effectiveUrl = imageUrlRegistry.talentLink(character.key, talent.key)?.effectiveUrl
+        val effectiveUrl = imageUrlRegistry
+            .talentLink(character.talentResourceKey, talent.key)
+            ?.effectiveUrl
             ?: defaultTalentImageUrl(character, talent)
         return when {
-            cachedImageMatches(talentImagePath(character.key, talent.key), effectiveUrl) ->
+            cachedImageMatches(
+                talentImagePath(character.talentResourceKey, talent.key),
+                effectiveUrl,
+            ) ->
                 ImageState.CACHED
             effectiveUrl.isNotBlank() -> ImageState.REMOTE
             else -> ImageState.MISSING
@@ -319,8 +340,25 @@ class DynamicContentLoader(
     }
 
     private fun downloadCharacterJson(key: String): JsonNode? {
-        val encodedKey = URLEncoder.encode(key, StandardCharsets.UTF_8)
         val baseUrl = properties.characterApiUrl.trimEnd('/')
+        val travelerElement = TravelerElement.fromKey(key)
+            ?.takeIf { it.variantKey == key }
+        if (travelerElement != null) {
+            val encodedQuery = URLEncoder.encode(travelerElement.queryName, StandardCharsets.UTF_8)
+            val talents = downloadJson(URI.create("$baseUrl/talents?query=$encodedQuery"))
+                ?.takeIf(JsonNode::isObject)
+                ?: return null
+            val character = (readClasspathJson("data/characters/data/aether.json") as? ObjectNode)
+                ?.deepCopy()
+                ?: return null
+            character.put("name", travelerElement.queryName)
+            character.put("elementText", travelerElement.displayName)
+            character.set<JsonNode>("talents", talents)
+            writeCachedJson(characterDataPath(key), character)
+            return character
+        }
+
+        val encodedKey = URLEncoder.encode(key, StandardCharsets.UTF_8)
         val character = downloadJson(URI.create("$baseUrl/characters?query=$encodedKey"))
             ?.takeIf(::validCharacterJson)
             ?: return null
@@ -586,7 +624,9 @@ class DynamicContentLoader(
     private fun effectiveCharacterImageUrl(
         character: CharacterDefinition,
         imageType: CharacterImageType,
-    ): String? = imageUrlRegistry.characterLink(character.key, imageType)?.effectiveUrl
+    ): String? = imageUrlRegistry
+        .characterLink(character.imageResourceKey, imageType)
+        ?.effectiveUrl
         ?: character.remoteImageUrl(imageType)
 
     private fun validateImageUrl(url: String): String? {

@@ -2,6 +2,7 @@ package de.tyro.genshinapp.service
 
 import de.tyro.genshinapp.entity.CharacterWeaponTarget
 import de.tyro.genshinapp.model.GoodKeyNormalizer
+import de.tyro.genshinapp.model.TravelerIdentity
 import de.tyro.genshinapp.repository.CharacterWeaponTargetRepository
 import de.tyro.genshinapp.repository.UserRepository
 import org.springframework.stereotype.Service
@@ -14,10 +15,7 @@ class CharacterWeaponTargetService(
 ) {
     @Transactional(readOnly = true)
     fun find(userId: Long, characterKey: String): SavedWeaponTarget? =
-        targetRepository.findByUser_IdAndCharacterKey(
-            userId,
-            GoodKeyNormalizer.normalize(characterKey),
-        )?.toValues()
+        findTarget(userId, characterKey)?.toValues()
 
     @Transactional
     fun save(
@@ -28,17 +26,14 @@ class CharacterWeaponTargetService(
         requestedTargetLevel: Int,
         maxLevel: Int = 90,
     ): SavedWeaponTarget {
-        val normalizedCharacterKey = GoodKeyNormalizer.normalize(characterKey)
+        val normalizedCharacterKey = TravelerIdentity.canonicalCharacterKey(characterKey)
         val normalizedWeaponKey = GoodKeyNormalizer.normalize(weaponKey)
         require(normalizedCharacterKey.isNotBlank() && normalizedWeaponKey.isNotBlank())
         val targetLevel = WeaponPlanningService.validTargetLevels(currentLevel, maxLevel)
             .filter { it >= requestedTargetLevel }
             .minOrNull()
             ?: WeaponPlanningService.validTargetLevels(currentLevel, maxLevel).last()
-        val target = targetRepository.findByUser_IdAndCharacterKey(
-            userId,
-            normalizedCharacterKey,
-        ) ?: CharacterWeaponTarget().also {
+        val target = findTarget(userId, normalizedCharacterKey) ?: CharacterWeaponTarget().also {
             it.user = userRepository.findById(userId)
                 .orElseThrow { IllegalArgumentException("User not found") }
             it.characterKey = normalizedCharacterKey
@@ -50,10 +45,18 @@ class CharacterWeaponTargetService(
 
     @Transactional
     fun delete(userId: Long, characterKey: String) {
-        targetRepository.findByUser_IdAndCharacterKey(
-            userId,
-            GoodKeyNormalizer.normalize(characterKey),
-        )?.let(targetRepository::delete)
+        findTarget(userId, characterKey)?.let(targetRepository::delete)
+    }
+
+    private fun findTarget(userId: Long, characterKey: String): CharacterWeaponTarget? {
+        val normalizedKey = TravelerIdentity.canonicalCharacterKey(characterKey)
+        return targetRepository.findByUser_IdAndCharacterKey(userId, normalizedKey)
+            ?: if (normalizedKey == TravelerIdentity.KEY) {
+                targetRepository.findAllByUser_Id(userId)
+                    .firstOrNull { TravelerIdentity.isTraveler(it.characterKey) }
+            } else {
+                null
+            }
     }
 
     private fun CharacterWeaponTarget.toValues(): SavedWeaponTarget =

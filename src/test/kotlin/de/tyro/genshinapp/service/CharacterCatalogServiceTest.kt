@@ -63,13 +63,25 @@ class CharacterCatalogServiceTest {
     @Test
     fun `loads every available talent kit from the local catalog`() {
         val charactersMissingTalents = catalog.getCharacters()
-            .filterNot { it.key in setOf("aether", "lumine") }
+            .filterNot { it.key == "traveler" }
             .filter { it.talents.isEmpty() }
 
         assertTrue(
             charactersMissingTalents.isEmpty(),
             "Missing talent data for: ${charactersMissingTalents.joinToString { it.key }}",
         )
+    }
+
+    @Test
+    fun `exposes one canonical traveler character`() {
+        val traveler = assertNotNull(catalog.findCharacter("traveler"))
+
+        assertEquals("Traveler", traveler.name)
+        assertEquals("traveler", traveler.key)
+        assertEquals(1, catalog.getCharacters().count { it.key == "traveler" })
+        assertTrue(catalog.getCharacters().none { it.key in setOf("aether", "lumine") })
+        assertEquals("traveler", catalog.findCharacter("aether")?.key)
+        assertEquals("traveler", catalog.findCharacter("lumine")?.key)
     }
 
     @Test

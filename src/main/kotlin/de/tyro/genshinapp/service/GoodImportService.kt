@@ -9,6 +9,7 @@ import de.tyro.genshinapp.model.PlayerArtifactStat
 import de.tyro.genshinapp.model.PlayerCharacterState
 import de.tyro.genshinapp.model.PlayerSnapshot
 import de.tyro.genshinapp.model.PlayerWeapon
+import de.tyro.genshinapp.model.TravelerIdentity
 import org.springframework.stereotype.Service
 import java.time.Instant
 
@@ -45,7 +46,7 @@ class GoodImportService(
             parseCharacter(node, index)
         }
         val duplicateCharacter = characters
-            .groupBy { GoodKeyNormalizer.normalize(it.key) }
+            .groupBy { TravelerIdentity.canonicalCharacterKey(it.key) }
             .entries
             .firstOrNull { it.value.size > 1 }
         if (duplicateCharacter != null) {

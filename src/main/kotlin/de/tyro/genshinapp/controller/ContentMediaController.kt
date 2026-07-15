@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.time.Duration
 
 @RestController
 @RequestMapping("/media")
@@ -30,7 +29,7 @@ class ContentMediaController(
         @PathVariable key: String,
         @PathVariable type: String,
     ): ResponseEntity<ByteArray> {
-        val character = catalogService.findCharacter(key)
+        val character = catalogService.findMediaCharacter(key)
             ?: return ResponseEntity.notFound().build()
         val imageType = CharacterImageType.fromKey(type)
             ?: return ResponseEntity.notFound().build()
@@ -44,13 +43,13 @@ class ContentMediaController(
         @PathVariable characterKey: String,
         @PathVariable talentKey: String,
     ): ResponseEntity<ByteArray> {
-        val character = catalogService.findCharacter(characterKey)
+        val character = catalogService.findMediaCharacter(characterKey)
             ?: return ResponseEntity.notFound().build()
         val talent = character.talents.firstOrNull { it.key == talentKey.lowercase() }
             ?: return ResponseEntity.notFound().build()
         val normalAttack = talent.kind == CharacterTalentKind.NORMAL_ATTACK
         val image = contentLoader.loadTalentImage(
-            character.key,
+            character.talentResourceKey,
             talent.key,
             talent.name,
             normalAttackWeapon = character.weapon.takeIf { normalAttack },
@@ -94,7 +93,7 @@ class ContentMediaController(
     private fun imageResponse(image: DynamicContentLoader.LoadedImage): ResponseEntity<ByteArray> =
         ResponseEntity.ok()
             .contentType(MediaType.parseMediaType(image.contentType))
-            .cacheControl(CacheControl.maxAge(Duration.ofDays(30)).cachePublic())
+            .cacheControl(CacheControl.noCache())
             .contentLength(image.bytes.size.toLong())
             .body(image.bytes)
 }

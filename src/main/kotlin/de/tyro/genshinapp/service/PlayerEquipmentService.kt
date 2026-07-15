@@ -6,6 +6,7 @@ import de.tyro.genshinapp.model.PlayerArtifact
 import de.tyro.genshinapp.model.PlayerCharacterEquipment
 import de.tyro.genshinapp.model.PlayerCharacterState
 import de.tyro.genshinapp.model.PlayerSnapshot
+import de.tyro.genshinapp.model.TravelerIdentity
 import org.springframework.stereotype.Service
 
 @Service
@@ -14,12 +15,14 @@ class PlayerEquipmentService {
         snapshot: PlayerSnapshot,
         state: PlayerCharacterState,
     ): PlayerCharacterEquipment {
-        val characterKey = GoodKeyNormalizer.normalize(state.key)
+        val characterKey = TravelerIdentity.canonicalCharacterKey(state.key)
         val artifacts = snapshot.artifacts
-            .filter { GoodKeyNormalizer.normalize(it.location.orEmpty()) == characterKey }
+            .filter {
+                TravelerIdentity.canonicalCharacterKey(it.location.orEmpty()) == characterKey
+            }
             .sortedBy { SLOT_ORDER[it.slotKey.lowercase()] ?: Int.MAX_VALUE }
         val weapon = snapshot.weapons.firstOrNull {
-            GoodKeyNormalizer.normalize(it.location.orEmpty()) == characterKey
+            TravelerIdentity.canonicalCharacterKey(it.location.orEmpty()) == characterKey
         }
 
         return PlayerCharacterEquipment(

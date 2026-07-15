@@ -3,6 +3,7 @@ package de.tyro.genshinapp.controller
 import de.tyro.genshinapp.configuration.LocalizedMessages
 import de.tyro.genshinapp.model.CharacterProgressForm
 import de.tyro.genshinapp.model.GoodKeyNormalizer
+import de.tyro.genshinapp.model.TravelerIdentity
 import de.tyro.genshinapp.model.PlayerSnapshot
 import de.tyro.genshinapp.security.AppUserPrincipal
 import de.tyro.genshinapp.service.CharacterCatalogService
@@ -155,7 +156,7 @@ class DashboardController(
         val targets = targetService.findAll(userId)
 
         return catalogService.getCharacters().mapNotNull { character ->
-            val normalizedKey = GoodKeyNormalizer.normalize(character.key)
+            val normalizedKey = TravelerIdentity.canonicalCharacterKey(character.key)
             val state = snapshot?.let {
                 planningService.findCharacterState(it, character.key)
             }

@@ -13,9 +13,9 @@
 
 <main class="detail-page">
     <section class="character-hero"
-             th:classappend="${character.element != null
+             th:classappend="${(character.element != null
                 ? ' element-' + #strings.toLowerCase(character.element)
-                : ' element-neutral'}">
+                : ' element-neutral') + (isTraveler ? ' traveler-hero' : '')}">
         <div class="hero-copy">
             <p class="eyebrow"
                th:text="${character.element ?: #messages.msg('character.fallback')}">Hydro</p>
@@ -33,6 +33,52 @@
             <p class="lead" th:if="${character.description != null}" th:text="${character.description}">
                 Description
             </p>
+            <form class="traveler-switcher"
+                 th:if="${isTraveler}"
+                 data-traveler-switcher
+                 method="post"
+                 th:action="@{/characters/traveler/selection}">
+                <div class="traveler-switch-group">
+                    <span class="traveler-switch-label"
+                          th:text="#{character.traveler.appearance}">Traveler</span>
+                    <div class="traveler-segments" role="group"
+                         th:attr="aria-label=#{character.traveler.appearance}">
+                        <button type="button"
+                                th:each="appearance : ${travelerAppearances}"
+                                th:classappend="${appearance == travelerSelection.appearance
+                                    ? ' is-selected' : ''}"
+                                th:attr="data-traveler-appearance=${appearance.key},
+                                         aria-pressed=${appearance == travelerSelection.appearance}">
+                            <img th:src="@{/media/characters/{key}/icon(key=${appearance.resourceKey})}"
+                                 alt="" onerror="this.remove()">
+                            <span th:text="${#messages.msg(appearance.messageKey)}">Aether</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="traveler-switch-group traveler-element-group">
+                    <span class="traveler-switch-label"
+                          th:text="#{character.traveler.resonance}">Resonance</span>
+                    <div class="traveler-segments traveler-element-segments" role="group"
+                         th:attr="aria-label=#{character.traveler.resonance}">
+                        <button type="button"
+                                th:each="element : ${travelerElements}"
+                                th:classappend="${element == travelerSelection.element
+                                    ? ' is-selected element-' + element.key : ''}"
+                                th:attr="data-traveler-element=${element.key},
+                                         aria-pressed=${element == travelerSelection.element},
+                                         aria-label=${element.displayName},
+                                         title=${element.displayName}">
+                            <img th:src="${element.iconUrl}" alt="" onerror="this.remove()">
+                            <span class="sr-only" th:text="${element.displayName}">Anemo</span>
+                        </button>
+                    </div>
+                </div>
+                <p class="traveler-import-note"
+                   th:if="${!travelerSelection.elementConfigured && playerState != null}"
+                   th:text="#{character.traveler.assignImported}">
+                    Select the active resonance to assign imported talents.
+                </p>
+            </form>
             <div class="facts">
                 <div class="fact" th:if="${character.rarity > 0}">
                     <span class="fact-icon" aria-hidden="true">★</span>
@@ -97,7 +143,8 @@
                 Import a GOOD export to include ownership and inventory →
             </a>
             <a class="optimizer-character-link" th:if="${inventoryAvailable}"
-               th:href="@{/inventory/artifact-optimizer(character=${character.key})}">
+               th:href="@{/inventory/artifact-optimizer(character=${character.key},
+                    element=${isTraveler ? travelerSelection.element.key : null})}">
                 <span aria-hidden="true">✦</span>
                 <span th:text="#{character.openOptimizer}">
                     Optimize this character's artifacts
@@ -141,6 +188,8 @@
 
             <form id="character-progress-form" class="progress-form" method="post"
                   th:action="@{/characters/{key}(key=${character.key})}">
+                <input type="hidden" name="ownershipExplicit" th:value="${progress.owned}"
+                       data-ownership-explicit>
                 <label class="ownership-toggle">
                     <input type="checkbox" name="owned" value="true" th:checked="${progress.owned}">
                     <span class="ownership-switch" aria-hidden="true"></span>
@@ -314,7 +363,7 @@
                             <span class="talent-marker">
                                 <span class="talent-marker-fallback"
                                       th:text="${talent.kind.marker}">E</span>
-                                <img th:src="@{/media/characters/{characterKey}/talents/{talentKey}(characterKey=${character.key}, talentKey=${talent.key})}"
+                                <img th:src="@{/media/characters/{characterKey}/talents/{talentKey}(characterKey=${character.talentResourceKey}, talentKey=${talent.key})}"
                                      alt=""
                                      loading="lazy"
                                      onerror="this.remove()">
@@ -397,7 +446,7 @@
                             <span class="talent-marker">
                                 <span class="talent-marker-fallback"
                                       th:text="${talent.kind.marker}">P</span>
-                                <img th:src="@{/media/characters/{characterKey}/talents/{talentKey}(characterKey=${character.key}, talentKey=${talent.key})}"
+                                <img th:src="@{/media/characters/{characterKey}/talents/{talentKey}(characterKey=${character.talentResourceKey}, talentKey=${talent.key})}"
                                      alt=""
                                      loading="lazy"
                                      onerror="this.remove()">

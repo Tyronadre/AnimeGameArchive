@@ -2,6 +2,7 @@ package de.tyro.genshinapp.service
 
 import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.model.PlayerArtifact
+import de.tyro.genshinapp.model.TravelerIdentity
 import de.tyro.genshinapp.model.PlayerArtifactStat
 import de.tyro.genshinapp.model.PlayerSnapshot
 import org.springframework.stereotype.Service
@@ -33,8 +34,9 @@ class PlayerArtifactManagementService(
                 artifacts.indices.firstOrNull { index ->
                     index != artifactIndex &&
                         artifacts[index].slotKey.equals(updatedArtifact.slotKey, ignoreCase = true) &&
-                        GoodKeyNormalizer.normalize(artifacts[index].location.orEmpty()) ==
-                        GoodKeyNormalizer.normalize(updatedArtifact.location)
+                        TravelerIdentity.canonicalCharacterKey(
+                            artifacts[index].location.orEmpty(),
+                        ) == TravelerIdentity.canonicalCharacterKey(updatedArtifact.location)
                 }?.let { collisionIndex ->
                     updated[collisionIndex] = artifacts[collisionIndex].copy(location = null)
                 }
@@ -75,8 +77,9 @@ class PlayerArtifactManagementService(
                 artifacts.indices.firstOrNull { index ->
                     index != artifactIndex &&
                         artifacts[index].slotKey.equals(selected.slotKey, ignoreCase = true) &&
-                        GoodKeyNormalizer.normalize(artifacts[index].location.orEmpty()) ==
-                        GoodKeyNormalizer.normalize(target)
+                        TravelerIdentity.canonicalCharacterKey(
+                            artifacts[index].location.orEmpty(),
+                        ) == TravelerIdentity.canonicalCharacterKey(target)
                 }
             }
             updated[artifactIndex] = selected.copy(location = targetCharacter)

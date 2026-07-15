@@ -10,6 +10,7 @@ import de.tyro.genshinapp.model.PlayerCharacterPlan
 import de.tyro.genshinapp.model.PlayerCharacterState
 import de.tyro.genshinapp.model.PlayerMaterialPlan
 import de.tyro.genshinapp.model.PlayerSnapshot
+import de.tyro.genshinapp.model.TravelerIdentity
 import org.springframework.stereotype.Service
 
 @Service
@@ -17,10 +18,12 @@ class PlayerPlanningService(
     private val catalogService: CharacterCatalogService,
     private val materialCalculator: MaterialCalculator,
     private val materialCraftingService: MaterialCraftingService,
+    private val travelerService: TravelerService? = null,
 ) {
     fun createPlan(
         snapshot: PlayerSnapshot,
         targets: Map<String, CharacterTargetValues> = emptyMap(),
+        userId: Long? = null,
     ): PlayerMaterialPlan {
         val catalogByKey = catalogService.getCharacters().associateBy {
             GoodKeyNormalizer.normalize(it.key)
@@ -28,20 +31,34 @@ class PlayerPlanningService(
         val unmatched = mutableListOf<String>()
 
         val characterPlans = snapshot.characters.mapNotNull { state ->
-            val normalizedKey = GoodKeyNormalizer.normalize(state.key)
-            val character = when (normalizedKey) {
-                TRAVELER_KEY -> catalogByKey[AETHER_KEY]
-                else -> catalogByKey[normalizedKey] ?: catalogService.findCharacter(normalizedKey)
+            val normalizedKey = TravelerIdentity.canonicalCharacterKey(state.key)
+            val travelerSelection = userId
+                ?.takeIf { normalizedKey == TravelerIdentity.KEY }
+                ?.let { travelerService?.selection(it) }
+            val character = if (travelerSelection != null) {
+                catalogService.findTraveler(
+                    travelerSelection.element,
+                    travelerSelection.appearance,
+                )
+            } else {
+                catalogByKey[normalizedKey] ?: catalogService.findCharacter(normalizedKey)
             }
             if (character == null) {
                 unmatched += state.key
                 return@mapNotNull null
             }
 
-            val form = CharacterProgressForm().also { it.apply(state) }
+            val form = CharacterProgressForm().also {
+                if (travelerSelection != null) it.applyShared(state) else it.apply(state)
+            }
             val savedTarget = targets[normalizedKey]
                 ?: targets[GoodKeyNormalizer.normalize(character.key)]
-            savedTarget?.applyTo(form)
+            if (travelerSelection != null) {
+                savedTarget?.applySharedTo(form)
+                travelerService?.progress(userId, travelerSelection.element)?.applyTo(form)
+            } else {
+                savedTarget?.applyTo(form)
+            }
             val progress = form.normalized()
             if (!progress.owned) return@mapNotNull null
 
@@ -87,14 +104,9 @@ class PlayerPlanningService(
         snapshot: PlayerSnapshot,
         characterKey: String,
     ): PlayerCharacterState? {
-        val normalizedCharacterKey = GoodKeyNormalizer.normalize(characterKey)
+        val normalizedCharacterKey = TravelerIdentity.canonicalCharacterKey(characterKey)
         return snapshot.characters.find { state ->
-            val normalizedStateKey = GoodKeyNormalizer.normalize(state.key)
-            normalizedStateKey == normalizedCharacterKey ||
-                (
-                    normalizedStateKey == TRAVELER_KEY &&
-                        normalizedCharacterKey in setOf(AETHER_KEY, LUMINE_KEY)
-                    )
+            TravelerIdentity.canonicalCharacterKey(state.key) == normalizedCharacterKey
         }
     }
 
@@ -207,9 +219,6 @@ class PlayerPlanningService(
     )
 
     companion object {
-        private const val TRAVELER_KEY = "traveler"
-        private const val AETHER_KEY = "aether"
-        private const val LUMINE_KEY = "lumine"
         private const val CHARACTER_EXPERIENCE_ID = 0
         private const val HEROS_WIT_KEY = "heroswit"
         private const val ADVENTURERS_EXPERIENCE_KEY = "adventurersexperience"

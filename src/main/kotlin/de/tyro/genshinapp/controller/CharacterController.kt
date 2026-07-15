@@ -4,6 +4,9 @@ import de.tyro.genshinapp.configuration.LocalizedMessages
 import de.tyro.genshinapp.model.CharacterProgressForm
 import de.tyro.genshinapp.model.CharacterTalentKind
 import de.tyro.genshinapp.model.GoodKeyNormalizer
+import de.tyro.genshinapp.model.TravelerAppearance
+import de.tyro.genshinapp.model.TravelerElement
+import de.tyro.genshinapp.model.TravelerIdentity
 import de.tyro.genshinapp.security.AppUserPrincipal
 import de.tyro.genshinapp.service.ArtifactCatalogService
 import de.tyro.genshinapp.service.ArtifactOptimizationService
@@ -13,6 +16,7 @@ import de.tyro.genshinapp.service.CharacterWeaponTargetService
 import de.tyro.genshinapp.service.PlayerEquipmentService
 import de.tyro.genshinapp.service.PlayerPlanningService
 import de.tyro.genshinapp.service.PlayerSnapshotStore
+import de.tyro.genshinapp.service.TravelerService
 import de.tyro.genshinapp.service.OptimizerCombatStatService
 import de.tyro.genshinapp.service.WeaponCatalogService
 import de.tyro.genshinapp.service.WeaponDataService
@@ -44,6 +48,7 @@ class CharacterController(
     private val weaponCatalogService: WeaponCatalogService,
     private val weaponDataService: WeaponDataService,
     private val weaponPlanningService: WeaponPlanningService,
+    private val travelerService: TravelerService,
     private val messages: LocalizedMessages,
 ) {
     @GetMapping("/characters")
@@ -53,17 +58,37 @@ class CharacterController(
         model: Model,
     ): String {
         val normalizedQuery = query.trim()
+        val travelerSelection = travelerService.selection(principal.id)
         val characters = catalogService.getCharacters()
+            .map { character ->
+                if (character.key == TravelerIdentity.KEY) {
+                    catalogService.findTravelerAppearance(travelerSelection.appearance).copy(
+                        element = travelerSelection.element.displayName,
+                    )
+                } else {
+                    character
+                }
+            }
             .filter {
                 normalizedQuery.isBlank() ||
                     it.name.contains(normalizedQuery, ignoreCase = true) ||
                     it.element?.contains(normalizedQuery, ignoreCase = true) == true ||
-                    it.region?.contains(normalizedQuery, ignoreCase = true) == true
+                    it.region?.contains(normalizedQuery, ignoreCase = true) == true ||
+                    (
+                        it.key == TravelerIdentity.KEY &&
+                            (
+                                TravelerElement.entries.any { element ->
+                                    element.displayName.contains(normalizedQuery, ignoreCase = true)
+                                } || TravelerAppearance.entries.any { appearance ->
+                                    appearance.key.contains(normalizedQuery, ignoreCase = true)
+                                }
+                            )
+                        )
             }
         val snapshot = snapshotStore.current(principal.id)
         val ownershipOverrides = targetService.ownershipOverrides(principal.id)
         val ownershipByCharacter = characters.associate { character ->
-            val normalizedKey = GoodKeyNormalizer.normalize(character.key)
+            val normalizedKey = TravelerIdentity.canonicalCharacterKey(character.key)
             val importedOwnership = snapshot?.let {
                 planningService.findCharacterState(it, character.key) != null
             } ?: false
@@ -85,18 +110,47 @@ class CharacterController(
         @AuthenticationPrincipal principal: AppUserPrincipal,
         model: Model,
     ): String {
-        val character = catalogService.findCharacter(key)
+        val normalizedRouteKey = GoodKeyNormalizer.normalize(key)
+        TravelerAppearance.fromKey(normalizedRouteKey)
+            ?.takeIf { normalizedRouteKey in setOf("aether", "lumine") }
+            ?.let { appearance ->
+                travelerService.selectAppearance(principal.id, appearance)
+                return "redirect:/characters/${TravelerIdentity.KEY}"
+            }
+
+        val baseCharacter = catalogService.findCharacter(key)
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Character not found")
+        val travelerSelection = travelerService.selection(principal.id)
+        val isTraveler = baseCharacter.key == TravelerIdentity.KEY
+        val character = if (isTraveler) {
+            catalogService.findTraveler(
+                travelerSelection.element,
+                travelerSelection.appearance,
+            )
+        } else {
+            baseCharacter
+        }
         val snapshot = snapshotStore.current(principal.id)
         val playerState = snapshot?.let {
-            planningService.findCharacterState(it, character.key)
+            planningService.findCharacterState(it, baseCharacter.key)
         }
-        if (requestParameters.isEmpty() && playerState != null) {
-            progressForm.apply(playerState)
-        }
-        val savedTarget = targetService.find(principal.id, character.key)
+        val savedTarget = targetService.find(principal.id, baseCharacter.key)
         if (requestParameters.isEmpty()) {
-            savedTarget?.applyTo(progressForm)
+            if (isTraveler) {
+                if (playerState != null) {
+                    if (travelerSelection.elementConfigured) {
+                        progressForm.applyShared(playerState)
+                    } else {
+                        progressForm.apply(playerState)
+                    }
+                }
+                savedTarget?.applySharedTo(progressForm)
+                travelerService.progress(principal.id, travelerSelection.element)
+                    ?.applyTo(progressForm)
+            } else {
+                playerState?.let(progressForm::apply)
+                savedTarget?.applyTo(progressForm)
+            }
         }
         val progress = progressForm.normalized()
         val equipment = if (progress.owned && snapshot != null && playerState != null) {
@@ -119,7 +173,7 @@ class CharacterController(
         val equippedWeapon = equipment?.weapon
         val weaponDefinition = equippedWeapon?.let { weaponDataService.find(it.key) }
         val savedWeaponTarget = equippedWeapon?.let { weapon ->
-            characterWeaponTargetService.find(principal.id, character.key)?.takeIf {
+            characterWeaponTargetService.find(principal.id, baseCharacter.key)?.takeIf {
                 it.weaponKey == GoodKeyNormalizer.normalize(weapon.key)
             }
         }
@@ -139,6 +193,10 @@ class CharacterController(
         }
 
         model.addAttribute("character", character)
+        model.addAttribute("isTraveler", isTraveler)
+        model.addAttribute("travelerSelection", travelerSelection)
+        model.addAttribute("travelerAppearances", TravelerAppearance.entries)
+        model.addAttribute("travelerElements", TravelerElement.entries)
         model.addAttribute("progress", progress)
         model.addAttribute(
             "talentLevels",
@@ -192,7 +250,14 @@ class CharacterController(
     ): String {
         val character = catalogService.findCharacter(key)
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Character not found")
-        targetService.save(principal.id, character.key, progressForm.normalized())
+        val progress = progressForm.normalized()
+        if (character.key == TravelerIdentity.KEY) {
+            val selection = ensureTravelerElementSelected(principal.id)
+            targetService.saveShared(principal.id, character.key, progress)
+            travelerService.saveProgress(principal.id, selection.element, progress)
+        } else {
+            targetService.save(principal.id, character.key, progress)
+        }
         redirectAttributes.addFlashAttribute(
             "successMessage",
             messages.get("character.progress.saved", character.name),
@@ -209,11 +274,56 @@ class CharacterController(
     ): Map<String, Int?> {
         val character = catalogService.findCharacter(key)
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Character not found")
-        val saved = targetService.save(principal.id, character.key, progressForm.normalized())
+        val progress = progressForm.normalized()
+        if (character.key == TravelerIdentity.KEY) {
+            val selection = ensureTravelerElementSelected(principal.id)
+            targetService.saveShared(principal.id, character.key, progress)
+            val saved = travelerService.saveProgress(principal.id, selection.element, progress)
+            return mapOf(
+                "normalTalent" to saved.normalTalent,
+                "skillTalent" to saved.skillTalent,
+                "burstTalent" to saved.burstTalent,
+            )
+        }
+        val saved = targetService.save(principal.id, character.key, progress)
         return mapOf(
             "normalTalent" to saved.currentNormalTalent,
             "skillTalent" to saved.currentSkillTalent,
             "burstTalent" to saved.currentBurstTalent,
+        )
+    }
+
+    @PostMapping("/characters/traveler/selection")
+    @ResponseBody
+    fun saveTravelerSelection(
+        @RequestParam(required = false) appearance: String?,
+        @RequestParam(required = false) element: String?,
+        @AuthenticationPrincipal principal: AppUserPrincipal,
+    ): Map<String, Any> {
+        val requestedAppearance = TravelerAppearance.fromKey(appearance)
+        val requestedElement = TravelerElement.fromKey(element)
+        if (appearance != null && requestedAppearance == null) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown Traveler appearance")
+        }
+        if (element != null && requestedElement == null) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown Traveler element")
+        }
+        if (requestedAppearance == null && requestedElement == null) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "No Traveler selection supplied")
+        }
+
+        requestedAppearance?.let { travelerService.selectAppearance(principal.id, it) }
+        requestedElement?.let { selectedElement ->
+            val importedState = snapshotStore.current(principal.id)?.let { snapshot ->
+                planningService.findCharacterState(snapshot, TravelerIdentity.KEY)
+            }
+            travelerService.selectElement(principal.id, selectedElement, importedState)
+        }
+        val selection = travelerService.selection(principal.id)
+        return mapOf(
+            "appearance" to selection.appearance.key,
+            "element" to selection.element.key,
+            "elementConfigured" to selection.elementConfigured,
         )
     }
 
@@ -274,6 +384,18 @@ class CharacterController(
         )
         return "redirect:/characters/${character.key}"
     }
+
+    private fun ensureTravelerElementSelected(userId: Long) =
+        travelerService.selection(userId).let { selection ->
+            if (selection.elementConfigured) {
+                selection
+            } else {
+                val importedState = snapshotStore.current(userId)?.let { snapshot ->
+                    planningService.findCharacterState(snapshot, TravelerIdentity.KEY)
+                }
+                travelerService.selectElement(userId, selection.element, importedState)
+            }
+        }
 
     companion object {
         private const val MAX_ADDITIONAL_STAT = 100_000.0

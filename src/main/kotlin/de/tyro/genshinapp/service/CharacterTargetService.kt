@@ -4,6 +4,7 @@ import de.tyro.genshinapp.entity.CharacterTarget
 import de.tyro.genshinapp.model.CharacterProgress
 import de.tyro.genshinapp.model.CharacterProgressForm
 import de.tyro.genshinapp.model.GoodKeyNormalizer
+import de.tyro.genshinapp.model.TravelerIdentity
 import de.tyro.genshinapp.repository.CharacterTargetRepository
 import de.tyro.genshinapp.repository.UserRepository
 import org.springframework.stereotype.Service
@@ -16,23 +17,21 @@ class CharacterTargetService(
 ) {
     @Transactional(readOnly = true)
     fun find(userId: Long, characterKey: String): CharacterTargetValues? =
-        targetRepository.findByUser_IdAndCharacterKey(
-            userId,
-            GoodKeyNormalizer.normalize(characterKey),
-        )?.toValues()
+        findTarget(userId, characterKey)?.toValues()
 
     @Transactional(readOnly = true)
     fun ownershipOverrides(userId: Long): Map<String, Boolean> =
-        targetRepository.findAllByUser_Id(userId)
-            .mapNotNull { target ->
-                target.owned?.let { target.characterKey to it }
+        canonicalTargets(userId)
+            .mapNotNull { (characterKey, target) ->
+                target.owned?.let {
+                    characterKey to it
+                }
             }
             .toMap()
 
     @Transactional(readOnly = true)
     fun findAll(userId: Long): Map<String, CharacterTargetValues> =
-        targetRepository.findAllByUser_Id(userId)
-            .associate { it.characterKey to it.toValues() }
+        canonicalTargets(userId).mapValues { (_, target) -> target.toValues() }
 
     @Transactional
     fun save(
@@ -40,7 +39,7 @@ class CharacterTargetService(
         characterKey: String,
         progress: CharacterProgress,
     ): CharacterTargetValues {
-        val normalizedKey = GoodKeyNormalizer.normalize(characterKey)
+        val normalizedKey = TravelerIdentity.canonicalCharacterKey(characterKey)
         require(normalizedKey.isNotBlank()) { "Invalid character key" }
 
         val target = findOrCreate(userId, normalizedKey)
@@ -60,12 +59,30 @@ class CharacterTargetService(
     }
 
     @Transactional
+    fun saveShared(
+        userId: Long,
+        characterKey: String,
+        progress: CharacterProgress,
+    ): CharacterTargetValues {
+        val normalizedKey = TravelerIdentity.canonicalCharacterKey(characterKey)
+        require(normalizedKey.isNotBlank()) { "Invalid character key" }
+
+        val target = findOrCreate(userId, normalizedKey)
+        target.owned = progress.owned
+        target.currentLevel = progress.level
+        target.currentAscension = progress.ascension
+        target.targetLevel = progress.targetLevel
+        target.targetAscension = progress.targetAscension
+        return targetRepository.save(target).toValues()
+    }
+
+    @Transactional
     fun saveAdditionalStats(
         userId: Long,
         characterKey: String,
         additionalStats: Map<String, Double>,
     ): CharacterTargetValues {
-        val normalizedKey = GoodKeyNormalizer.normalize(characterKey)
+        val normalizedKey = TravelerIdentity.canonicalCharacterKey(characterKey)
         require(normalizedKey.isNotBlank()) { "Invalid character key" }
         val target = findOrCreate(userId, normalizedKey)
         target.additionalStats = encodeStats(additionalStats)
@@ -73,11 +90,31 @@ class CharacterTargetService(
     }
 
     private fun findOrCreate(userId: Long, normalizedKey: String): CharacterTarget =
-        targetRepository.findByUser_IdAndCharacterKey(userId, normalizedKey)
+        findTarget(userId, normalizedKey)
             ?: CharacterTarget().also {
                 it.user = userRepository.findById(userId)
                     .orElseThrow { IllegalArgumentException("User not found") }
                 it.characterKey = normalizedKey
+            }
+
+    private fun findTarget(userId: Long, characterKey: String): CharacterTarget? {
+        val normalizedKey = TravelerIdentity.canonicalCharacterKey(characterKey)
+        return targetRepository.findByUser_IdAndCharacterKey(userId, normalizedKey)
+            ?: if (normalizedKey == TravelerIdentity.KEY) {
+                targetRepository.findAllByUser_Id(userId)
+                    .firstOrNull { TravelerIdentity.isTraveler(it.characterKey) }
+            } else {
+                null
+            }
+    }
+
+    private fun canonicalTargets(userId: Long): Map<String, CharacterTarget> =
+        targetRepository.findAllByUser_Id(userId)
+            .groupBy { TravelerIdentity.canonicalCharacterKey(it.characterKey) }
+            .mapValues { (canonicalKey, targets) ->
+                targets.firstOrNull {
+                    GoodKeyNormalizer.normalize(it.characterKey) == canonicalKey
+                } ?: targets.first()
             }
 
     private fun CharacterTarget.toValues(): CharacterTargetValues =
@@ -129,6 +166,14 @@ data class CharacterTargetValues(
     val targetSkillTalent: Int,
     val targetBurstTalent: Int,
 ) {
+    fun applySharedTo(form: CharacterProgressForm) {
+        owned?.let { form.owned = it }
+        currentLevel?.let { form.level = it }
+        currentAscension?.let { form.ascension = it }
+        form.targetLevel = targetLevel
+        form.targetAscension = targetAscension
+    }
+
     fun applyTo(form: CharacterProgressForm) {
         owned?.let { form.owned = it }
         currentLevel?.let { form.level = it }

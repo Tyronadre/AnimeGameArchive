@@ -10,6 +10,9 @@ import de.tyro.genshinapp.model.CharacterTalentAttribute
 import de.tyro.genshinapp.model.CharacterTalentKind
 import de.tyro.genshinapp.model.MaterialCost
 import de.tyro.genshinapp.model.MaterialDefinition
+import de.tyro.genshinapp.model.TravelerAppearance
+import de.tyro.genshinapp.model.TravelerElement
+import de.tyro.genshinapp.model.TravelerIdentity
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Service
@@ -30,6 +33,8 @@ class CharacterCatalogService(
     private val logger = LoggerFactory.getLogger(javaClass)
     private val configuredKeys = loadCharacterKeys()
     private val charactersByKey = ConcurrentHashMap<String, CharacterDefinition>()
+    private val travelerAppearances = ConcurrentHashMap<String, CharacterDefinition>()
+    private val travelerVariants = ConcurrentHashMap<String, CharacterDefinition>()
     private val materialsById = ConcurrentHashMap<Int, MaterialDefinition>()
 
     init {
@@ -64,14 +69,19 @@ class CharacterCatalogService(
     fun getCharacters(): List<CharacterDefinition> {
         val configuredCharacters = configuredKeys.mapNotNull(charactersByKey::get)
         val dynamicallyLoadedCharacters = charactersByKey
-            .filterKeys { it !in configuredKeys }
+            .filterKeys { it !in configuredKeys && it !in HIDDEN_CHARACTER_KEYS }
             .values
             .sortedBy { it.name }
         return configuredCharacters + dynamicallyLoadedCharacters
     }
 
     fun findCharacter(key: String): CharacterDefinition? {
-        val normalizedKey = key.trim().lowercase()
+        val requestedKey = key.trim().lowercase()
+        val normalizedKey = if (TravelerIdentity.isTraveler(requestedKey)) {
+            TravelerIdentity.KEY
+        } else {
+            requestedKey
+        }
         charactersByKey[normalizedKey]?.let { return it }
 
         catalogStore?.findCharacter(normalizedKey)?.let { character ->
@@ -94,6 +104,80 @@ class CharacterCatalogService(
         }
     }
 
+    fun findTraveler(
+        element: TravelerElement,
+        appearance: TravelerAppearance,
+    ): CharacterDefinition {
+        val cacheKey = "${appearance.key}:${element.key}"
+        return travelerVariants.computeIfAbsent(cacheKey) {
+            val appearanceRoot = contentLoader.loadCharacterJson(appearance.characterKey)
+                ?: throw IllegalStateException("Traveler appearance data is unavailable")
+            val talentRoot = contentLoader.loadCharacterJson(element.variantKey)
+            val character = mapCharacter(
+                key = TravelerIdentity.KEY,
+                root = appearanceRoot,
+                displayName = "Traveler",
+                element = element.displayName,
+                imageSourceName = appearanceRoot.requiredText("name"),
+                imageResourceKey = appearance.resourceKey,
+                talentResourceKey = element.variantKey,
+                talentsRoot = talentRoot?.path("talents"),
+                remoteImageOverrides = travelerRemoteImageUrls(appearanceRoot),
+            )
+            rememberMaterials(materialsOf(listOf(character)))
+            catalogStore?.saveMaterials(materialsOf(listOf(character)))
+            contentLoader.registerDefaultImageLinks(
+                listOf(character),
+                materialsOf(listOf(character)),
+            )
+            character
+        }
+    }
+
+    fun findTravelerAppearance(appearance: TravelerAppearance): CharacterDefinition =
+        travelerAppearances.computeIfAbsent(appearance.key) {
+            val root = contentLoader.loadCharacterJson(appearance.characterKey)
+                ?: throw IllegalStateException("Traveler appearance data is unavailable")
+            val character = mapCharacter(
+                key = TravelerIdentity.KEY,
+                root = root,
+                displayName = "Traveler",
+                element = "All Elements",
+                imageSourceName = root.requiredText("name"),
+                imageResourceKey = appearance.resourceKey,
+                talentResourceKey = TravelerElement.ANEMO.variantKey,
+                remoteImageOverrides = travelerRemoteImageUrls(root),
+            )
+            contentLoader.registerDefaultImageLinks(listOf(character), emptyList())
+            character
+        }
+
+    fun findMediaCharacter(key: String): CharacterDefinition? {
+        val appearance = TravelerAppearance.fromKey(key)
+        if (appearance != null && key.lowercase().startsWith(TravelerIdentity.KEY)) {
+            return findTravelerAppearance(appearance)
+        }
+        val element = TravelerElement.fromKey(key)
+        if (element != null && key.lowercase().startsWith(TravelerIdentity.KEY)) {
+            return findTraveler(element, TravelerAppearance.AETHER)
+        }
+        return findCharacter(key)
+    }
+
+    fun travelerAppearanceCharacters(): List<CharacterDefinition> =
+        TravelerAppearance.entries.map { appearance ->
+            findTravelerAppearance(appearance).copy(
+                name = "Traveler (${appearance.key.replaceFirstChar(Char::uppercase)})",
+            )
+        }
+
+    fun travelerElementCharacters(): List<CharacterDefinition> =
+        TravelerElement.entries.map { element ->
+            findTraveler(element, TravelerAppearance.AETHER).copy(
+                name = element.queryName,
+            )
+        }
+
     fun getMaterials(): List<MaterialDefinition> =
         materialsById.values.sortedBy { it.name }
 
@@ -111,21 +195,46 @@ class CharacterCatalogService(
     }
 
     private fun loadCharacterFromExistingSources(key: String): CharacterDefinition? = runCatching {
-        val root = contentLoader.loadCharacterJson(key)
+        val sourceKey = if (key == TravelerIdentity.KEY) TravelerAppearance.AETHER.characterKey else key
+        val root = contentLoader.loadCharacterJson(sourceKey)
             ?: throw IllegalStateException("Character data for $key is unavailable")
-        mapCharacter(key, root)
+        if (key == TravelerIdentity.KEY) {
+            mapCharacter(
+                key = key,
+                root = root,
+                displayName = "Traveler",
+                element = "All Elements",
+                imageSourceName = root.requiredText("name"),
+                imageResourceKey = TravelerAppearance.AETHER.resourceKey,
+                talentResourceKey = TravelerElement.ANEMO.variantKey,
+                remoteImageOverrides = travelerRemoteImageUrls(root),
+            )
+        } else {
+            mapCharacter(key, root)
+        }
     }.onFailure {
         logger.warn("Could not load character '{}'", key, it)
     }.getOrNull()
 
-    private fun mapCharacter(key: String, root: JsonNode): CharacterDefinition {
-        val name = root.requiredText("name")
+    private fun mapCharacter(
+        key: String,
+        root: JsonNode,
+        displayName: String = root.requiredText("name"),
+        element: String? = root.optionalText("elementText"),
+        imageSourceName: String = displayName,
+        imageResourceKey: String = key,
+        talentResourceKey: String = key,
+        talentsRoot: JsonNode? = null,
+        remoteImageOverrides: Map<CharacterImageType, String> = emptyMap(),
+    ): CharacterDefinition {
         val remoteImageUrls = CharacterImageType.entries.associateWith { type ->
-            fandomImageUrlResolver.characterImageUrl(name, type)
+            remoteImageOverrides[type]
+                ?: fandomImageUrlResolver.characterImageUrl(imageSourceName, type)
         }
         val imageUrls = CharacterImageType.entries.associateWith { type ->
             UriComponentsBuilder.fromPath("/media/characters/{key}/{type}")
-                .buildAndExpand(key, type.key)
+                .queryParam("source", Integer.toHexString(remoteImageUrls[type].orEmpty().hashCode()))
+                .buildAndExpand(imageResourceKey, type.key)
                 .encode()
                 .toUriString()
         }
@@ -133,13 +242,13 @@ class CharacterCatalogService(
         return CharacterDefinition(
             key = key,
             id = root.path("id").asLong(),
-            name = name,
+            name = displayName,
             title = root.optionalText("title"),
             description = root.optionalText("description"),
             weapon = root.optionalText("weaponText"),
             rarity = root.path("rarity").asInt(),
             birthday = root.optionalText("birthday"),
-            element = root.optionalText("elementText"),
+            element = element,
             affiliation = root.optionalText("affiliation"),
             region = root.optionalText("region"),
             constellation = root.optionalText("constellation"),
@@ -147,8 +256,10 @@ class CharacterCatalogService(
             imageUrls = imageUrls,
             remoteImageUrls = remoteImageUrls,
             ascensionCosts = readCosts(root.path("costs"), "ascend"),
-            talentCosts = readCosts(root.path("talents").path("costs"), "lvl"),
-            talents = readTalents(root.path("talents")),
+            talentCosts = readCosts((talentsRoot ?: root.path("talents")).path("costs"), "lvl"),
+            talents = readTalents(talentsRoot ?: root.path("talents")),
+            imageResourceKey = imageResourceKey,
+            talentResourceKey = talentResourceKey,
         )
     }
 
@@ -168,6 +279,16 @@ class CharacterCatalogService(
                 attributes = readTalentAttributes(talentNode.path("attributes")),
             )
         }
+    }
+
+    private fun travelerRemoteImageUrls(root: JsonNode): Map<CharacterImageType, String> {
+        val images = root.path("images")
+        return listOfNotNull(
+            images.firstText("mihoyo_icon", "image")?.let { CharacterImageType.ICON to it },
+            images.firstText("mihoyo_icon", "card")?.let { CharacterImageType.CARD to it },
+            images.firstText("mihoyo_icon", "mihoyo_sideIcon", "portrait", "card")
+                ?.let { CharacterImageType.WISH to it },
+        ).toMap()
     }
 
     private fun readTalentAttributes(attributesNode: JsonNode): List<CharacterTalentAttribute> {
@@ -259,7 +380,11 @@ class CharacterCatalogService(
     }
 
     private fun saveCharacter(character: CharacterDefinition): CharacterDefinition {
-        return catalogStore?.saveCharacter(character) ?: character
+        val stored = catalogStore?.saveCharacter(character) ?: return character
+        return stored.copy(
+            imageResourceKey = character.imageResourceKey,
+            talentResourceKey = character.talentResourceKey,
+        )
     }
 
     private fun rememberCharacter(character: CharacterDefinition) {
@@ -295,13 +420,21 @@ class CharacterCatalogService(
     private fun JsonNode.optionalText(field: String): String? =
         path(field).takeIf { it.isTextual && !it.asText().isBlank() }?.asText()
 
+    private fun JsonNode.firstText(vararg fields: String): String? =
+        fields.firstNotNullOfOrNull { field -> optionalText(field) }
+
     companion object {
         private val BASE_MATERIALS = listOf(
             MaterialDefinition(0, "Character EXP"),
             MaterialDefinition(104013, "Mystic Enhancement Ore"),
         )
         private val BUNDLED_WEAPON_KEYS = listOf("rust", "sacrificialbow")
-        private val TALENTLESS_CHARACTER_KEYS = setOf("aether", "lumine")
+        private val TALENTLESS_CHARACTER_KEYS = setOf(TravelerIdentity.KEY)
+        private val HIDDEN_CHARACTER_KEYS = buildSet {
+            add("aether")
+            add("lumine")
+            TravelerElement.entries.mapTo(this) { it.variantKey }
+        }
         private val TALENT_NODES = listOf(
             "combat1" to CharacterTalentKind.NORMAL_ATTACK,
             "combat2" to CharacterTalentKind.ELEMENTAL_SKILL,

@@ -19,6 +19,8 @@ data class CharacterDefinition(
     val ascensionCosts: Map<Int, List<MaterialCost>>,
     val talentCosts: Map<Int, List<MaterialCost>>,
     val talents: List<CharacterTalent> = emptyList(),
+    val imageResourceKey: String = key,
+    val talentResourceKey: String = key,
 ) {
     val iconImageUrl: String?
         get() = imageUrls[CharacterImageType.ICON]

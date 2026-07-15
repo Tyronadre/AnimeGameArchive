@@ -9,6 +9,7 @@ import de.tyro.genshinapp.model.MaterialCategory
 import de.tyro.genshinapp.model.MaterialRequirement
 import de.tyro.genshinapp.model.PlayerArtifact
 import de.tyro.genshinapp.model.PlayerSnapshot
+import de.tyro.genshinapp.model.TravelerIdentity
 import org.springframework.stereotype.Service
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.roundToInt
@@ -27,6 +28,7 @@ class FarmingDashboardService(
     private val characterWeaponTargetService: CharacterWeaponTargetService,
     private val weaponDataService: WeaponDataService,
     private val weaponPlanningService: WeaponPlanningService,
+    private val travelerService: TravelerService,
 ) {
     fun create(
         userId: Long,
@@ -38,6 +40,7 @@ class FarmingDashboardService(
             GoodKeyNormalizer.normalize(it.key)
         }
         val savedTargets = targetService.findAll(userId)
+        val travelerSelection = travelerService.selection(userId)
         val summaries = mutableListOf<DashboardGoalProgress>()
         val characterRequirements = mutableListOf<CharacterGoalRequirements>()
 
@@ -45,11 +48,25 @@ class FarmingDashboardService(
             compareBy<DashboardGoalSelection> { it.type.ordinal }
                 .thenBy { charactersByKey[it.characterKey]?.name ?: it.characterKey },
         ).forEach { selection ->
-            val character = charactersByKey[selection.characterKey] ?: return@forEach
+            val listedCharacter = charactersByKey[selection.characterKey] ?: return@forEach
+            val isTraveler = listedCharacter.key == TravelerIdentity.KEY
+            val character = if (isTraveler) {
+                catalogService.findTraveler(
+                    travelerSelection.element,
+                    travelerSelection.appearance,
+                )
+            } else {
+                listedCharacter
+            }
             val state = planningService.findCharacterState(snapshot, character.key)
             when (selection.type) {
                 DashboardGoalType.CHARACTER -> {
-                    val progress = progressFor(state, savedTargets[selection.characterKey])
+                    val progress = progressFor(
+                        userId,
+                        state,
+                        savedTargets[selection.characterKey],
+                        isTraveler,
+                    )
                     if (!progress.owned) return@forEach
                     val requirements = materialCalculator.calculate(character, progress)
                     characterRequirements += CharacterGoalRequirements(character, requirements)
@@ -75,7 +92,15 @@ class FarmingDashboardService(
                 DashboardGoalType.ARTIFACTS -> {
                     if (state == null) return@forEach
                     val artifacts = equippedArtifacts(snapshot, character.key)
-                    val savedProfile = artifactOptimizerProfileService.find(userId, character.key)
+                    val profileCharacterKey = if (isTraveler) {
+                        travelerSelection.element.variantKey
+                    } else {
+                        character.key
+                    }
+                    val savedProfile = artifactOptimizerProfileService.find(
+                        userId,
+                        profileCharacterKey,
+                    )
                     val profile = savedProfile?.profile
                         ?: artifactOptimizationService.inferProfile(artifacts)
                     val targets = savedProfile?.targets
@@ -140,6 +165,7 @@ class FarmingDashboardService(
 
         val recommendations = linkedMapOf<String, MutableFarmRecommendation>()
         val rosterRequirements = rosterCharacterRequirements(
+            userId,
             snapshot,
             charactersByKey,
             savedTargets,
@@ -201,12 +227,21 @@ class FarmingDashboardService(
     }
 
     private fun progressFor(
+        userId: Long,
         state: de.tyro.genshinapp.model.PlayerCharacterState?,
         target: CharacterTargetValues?,
+        traveler: Boolean,
     ): CharacterProgress {
         val form = CharacterProgressForm()
-        state?.let(form::apply)
-        target?.applyTo(form)
+        if (traveler) {
+            state?.let(form::applyShared)
+            target?.applySharedTo(form)
+            val selection = travelerService.selection(userId)
+            travelerService.progress(userId, selection.element)?.applyTo(form)
+        } else {
+            state?.let(form::apply)
+            target?.applyTo(form)
+        }
         return form.normalized()
     }
 
@@ -320,22 +355,29 @@ class FarmingDashboardService(
     }
 
     private fun rosterCharacterRequirements(
+        userId: Long,
         snapshot: PlayerSnapshot,
         charactersByKey: Map<String, CharacterDefinition>,
         savedTargets: Map<String, CharacterTargetValues>,
         limit: Int,
     ): List<CharacterGoalRequirements> =
         snapshot.characters.mapNotNull { state ->
-            val normalizedKey = GoodKeyNormalizer.normalize(state.key)
-            val character = charactersByKey[normalizedKey]
-                ?: if (normalizedKey == TRAVELER_KEY) {
-                    charactersByKey[AETHER_KEY] ?: charactersByKey[LUMINE_KEY]
-                } else {
-                    catalogService.findCharacter(normalizedKey)
-                }
+            val normalizedKey = TravelerIdentity.canonicalCharacterKey(state.key)
+            val listedCharacter = charactersByKey[normalizedKey]
+                ?: catalogService.findCharacter(normalizedKey)
                 ?: return@mapNotNull null
+            val isTraveler = normalizedKey == TravelerIdentity.KEY
+            val travelerSelection = travelerService.selection(userId)
+            val character = if (isTraveler) {
+                catalogService.findTraveler(
+                    travelerSelection.element,
+                    travelerSelection.appearance,
+                )
+            } else {
+                listedCharacter
+            }
             val targetKey = GoodKeyNormalizer.normalize(character.key)
-            val progress = progressFor(state, savedTargets[targetKey])
+            val progress = progressFor(userId, state, savedTargets[targetKey], isTraveler)
             if (!progress.owned) return@mapNotNull null
             if (
                 progress.level >= progress.targetLevel &&
@@ -423,7 +465,12 @@ class FarmingDashboardService(
         artifactGoals.forEach { goal ->
             val artifacts = equippedArtifacts(snapshot, goal.characterKey)
             if (artifacts.isEmpty()) return@forEach
-            val savedProfile = artifactOptimizerProfileService.find(userId, goal.characterKey)
+            val profileCharacterKey = if (goal.characterKey == TravelerIdentity.KEY) {
+                travelerService.selection(userId).element.variantKey
+            } else {
+                goal.characterKey
+            }
+            val savedProfile = artifactOptimizerProfileService.find(userId, profileCharacterKey)
             val profile = savedProfile?.profile ?: artifactOptimizationService.inferProfile(artifacts)
             val targets = savedProfile?.targets ?: ArtifactOptimizationTargets.defaults(profile)
             val scoredArtifacts = artifacts.map { artifact ->
@@ -492,9 +539,9 @@ class FarmingDashboardService(
     }
 
     private fun equippedArtifacts(snapshot: PlayerSnapshot, characterKey: String): List<PlayerArtifact> {
-        val normalizedKey = GoodKeyNormalizer.normalize(characterKey)
+        val normalizedKey = TravelerIdentity.canonicalCharacterKey(characterKey)
         return snapshot.artifacts.filter {
-            GoodKeyNormalizer.normalize(it.location.orEmpty()) == normalizedKey
+            TravelerIdentity.canonicalCharacterKey(it.location.orEmpty()) == normalizedKey
         }
     }
 
@@ -618,9 +665,6 @@ class FarmingDashboardService(
         private const val MYSTIC_ENHANCEMENT_ORE_ID = 104013
         private const val AUTOMATIC_ROSTER_CHARACTER_COUNT = 24
         private const val MAX_MATERIAL_BALANCE_CACHE_ENTRIES = 128
-        private const val TRAVELER_KEY = "traveler"
-        private const val AETHER_KEY = "aether"
-        private const val LUMINE_KEY = "lumine"
     }
 
     private val materialBalanceCache =

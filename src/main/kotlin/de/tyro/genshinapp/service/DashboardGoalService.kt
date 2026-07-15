@@ -2,6 +2,7 @@ package de.tyro.genshinapp.service
 
 import de.tyro.genshinapp.entity.DashboardGoal
 import de.tyro.genshinapp.model.GoodKeyNormalizer
+import de.tyro.genshinapp.model.TravelerIdentity
 import de.tyro.genshinapp.repository.DashboardGoalRepository
 import de.tyro.genshinapp.repository.UserRepository
 import org.springframework.stereotype.Service
@@ -17,7 +18,10 @@ class DashboardGoalService(
         goalRepository.findAllByUser_Id(userId)
             .mapNotNullTo(linkedSetOf()) { entity ->
                 val type = DashboardGoalType.fromKey(entity.goalType) ?: return@mapNotNullTo null
-                DashboardGoalSelection(entity.characterKey, type)
+                DashboardGoalSelection(
+                    TravelerIdentity.canonicalCharacterKey(entity.characterKey),
+                    type,
+                )
             }
 
     @Transactional
@@ -26,7 +30,7 @@ class DashboardGoalService(
         selections: Collection<DashboardGoalSelection>,
     ): Set<DashboardGoalSelection> {
         val normalized = selections.mapNotNullTo(linkedSetOf()) { selection ->
-            val characterKey = GoodKeyNormalizer.normalize(selection.characterKey)
+            val characterKey = TravelerIdentity.canonicalCharacterKey(selection.characterKey)
             characterKey.takeIf(String::isNotBlank)?.let {
                 DashboardGoalSelection(it, selection.type)
             }
@@ -34,13 +38,13 @@ class DashboardGoalService(
         val existing = goalRepository.findAllByUser_Id(userId)
         val existingBySelection = existing.associateBy {
             DashboardGoalSelection(
-                characterKey = it.characterKey,
+                characterKey = TravelerIdentity.canonicalCharacterKey(it.characterKey),
                 type = requireNotNull(DashboardGoalType.fromKey(it.goalType)),
             )
         }
         existing.filter { entity ->
             DashboardGoalSelection(
-                entity.characterKey,
+                TravelerIdentity.canonicalCharacterKey(entity.characterKey),
                 requireNotNull(DashboardGoalType.fromKey(entity.goalType)),
             ) !in normalized
         }.forEach(goalRepository::delete)
