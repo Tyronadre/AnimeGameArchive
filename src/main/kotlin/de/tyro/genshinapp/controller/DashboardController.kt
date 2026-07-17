@@ -66,6 +66,7 @@ class DashboardController(
                     it,
                     effectiveSelections,
                     automaticPlan = selections.isEmpty(),
+                    activeMaterialKeys = activeMaterialKeys(principal.id),
                 )
             },
         )
@@ -97,6 +98,7 @@ class DashboardController(
             snapshot,
             selections.ifEmpty { automaticSelections(options) },
             automaticPlan = selections.isEmpty(),
+            activeMaterialKeys = activeMaterialKeys(principal.id),
         )
         return DashboardPlanResponse(
             revision = snapshot.revision,
@@ -353,6 +355,22 @@ class DashboardController(
     private fun recentActivityViews(userId: Long): List<DashboardActivityView> =
         activityService.recent(userId).map(::activityView)
 
+    private fun activeMaterialKeys(userId: Long): Set<String> {
+        val now = Instant.now()
+        return activityService.recent(userId, ACTIVE_MATERIAL_EVENT_LIMIT)
+            .asSequence()
+            .filter { it.type == SnapshotActivityType.MATERIAL_GAIN }
+            .filter { event ->
+                val age = Duration.between(event.occurredAt, now)
+                !age.isNegative && age <= ACTIVE_MATERIAL_WINDOW
+            }
+            .mapNotNull { event ->
+                event.materialKey?.takeIf(String::isNotBlank)
+                    ?: GoodKeyNormalizer.normalize(event.name).takeIf(String::isNotBlank)
+            }
+            .mapTo(linkedSetOf(), GoodKeyNormalizer::normalize)
+    }
+
     private fun recommendationGroup(
         recommendations: List<FarmingRecommendation>,
         visibleLimit: Int,
@@ -414,6 +432,8 @@ class DashboardController(
         private const val AUTOMATIC_ARTIFACT_COUNT = 1
         private const val WEEKLY_VISIBLE_COUNT = 3
         private const val TASK_VISIBLE_COUNT = 5
+        private const val ACTIVE_MATERIAL_EVENT_LIMIT = 20
+        private val ACTIVE_MATERIAL_WINDOW: Duration = Duration.ofHours(4)
     }
 
     private data class PlayerArtifactLocation(

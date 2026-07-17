@@ -6,6 +6,7 @@ import de.tyro.genshinapp.model.CharacterProgressForm
 import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.model.InventoryMaterialBalance
 import de.tyro.genshinapp.model.MaterialCategory
+import de.tyro.genshinapp.model.MaterialDefinition
 import de.tyro.genshinapp.model.MaterialRequirement
 import de.tyro.genshinapp.model.PlayerArtifact
 import de.tyro.genshinapp.model.PlayerSnapshot
@@ -35,6 +36,7 @@ class FarmingDashboardService(
         snapshot: PlayerSnapshot,
         selections: Set<DashboardGoalSelection>,
         automaticPlan: Boolean = false,
+        activeMaterialKeys: Set<String> = emptySet(),
     ): FarmingDashboard {
         val charactersByKey = catalogService.getCharacters().associateBy {
             GoodKeyNormalizer.normalize(it.key)
@@ -214,11 +216,20 @@ class FarmingDashboardService(
                 recommendations,
             )
         }
+        val normalizedActiveMaterialKeys = activeMaterialKeys.mapTo(linkedSetOf()) {
+            GoodKeyNormalizer.normalize(it)
+        }
+        val activeRecommendationKeys = activeRecommendationKeys(normalizedActiveMaterialKeys)
 
         return FarmingDashboard(
             goals = summaries,
             recommendations = recommendations.values
-                .map(MutableFarmRecommendation::toRecommendation)
+                .map {
+                    it.toRecommendation(
+                        activeMaterialKeys = normalizedActiveMaterialKeys,
+                        activeRecommendationKeys = activeRecommendationKeys,
+                    )
+                }
                 .sortedWith(
                     compareByDescending<FarmingRecommendation> { it.priority }
                         .thenBy { it.title },
@@ -417,27 +428,47 @@ class FarmingDashboardService(
     }
 
     private fun farmDescriptor(balance: InventoryMaterialBalance): FarmDescriptor {
-        if (balance.id == CHARACTER_EXPERIENCE_ID) {
+        return farmDescriptor(
+            materialId = balance.id,
+            materialName = balance.name,
+            category = balance.category,
+        )
+    }
+
+    private fun farmDescriptor(material: MaterialDefinition): FarmDescriptor {
+        return farmDescriptor(
+            materialId = material.id,
+            materialName = material.name,
+            category = material.category,
+        )
+    }
+
+    private fun farmDescriptor(
+        materialId: Int,
+        materialName: String,
+        category: MaterialCategory,
+    ): FarmDescriptor {
+        if (materialId == CHARACTER_EXPERIENCE_ID) {
             return FarmDescriptor(
                 "ley-line:experience",
                 FarmingActivity.CHARACTER_EXPERIENCE,
-                balance.name,
+                materialName,
             )
         }
-        if (balance.id == MORA_ID || balance.name.equals("Mora", ignoreCase = true)) {
-            return FarmDescriptor("ley-line:mora", FarmingActivity.MORA, balance.name)
+        if (materialId == MORA_ID || materialName.equals("Mora", ignoreCase = true)) {
+            return FarmDescriptor("ley-line:mora", FarmingActivity.MORA, materialName)
         }
-        if (balance.id == MYSTIC_ENHANCEMENT_ORE_ID) {
+        if (materialId == MYSTIC_ENHANCEMENT_ORE_ID) {
             return FarmDescriptor(
                 "weapon-ore",
                 FarmingActivity.WEAPON_ORE,
-                balance.name,
+                materialName,
             )
         }
 
-        val info = materialCraftingService.infoFor(balance.id)
-        val category = info?.category ?: balance.category
-        val activity = when (category) {
+        val info = materialCraftingService.infoFor(materialId)
+        val effectiveCategory = info?.category ?: category
+        val activity = when (effectiveCategory) {
             MaterialCategory.TALENT_BOOK -> FarmingActivity.TALENT_DOMAIN
             MaterialCategory.WEAPON_ASCENSION -> FarmingActivity.WEAPON_DOMAIN
             MaterialCategory.WEEKLY_BOSS -> FarmingActivity.WEEKLY_BOSS
@@ -448,12 +479,26 @@ class FarmingDashboardService(
             MaterialCategory.ENEMY_DROP -> FarmingActivity.ENEMY_DROPS
             MaterialCategory.OTHER -> FarmingActivity.OTHER
         }
-        val familyKey = info?.familyKey ?: balance.id.toString()
+        val familyKey = info?.familyKey ?: materialId.toString()
         return FarmDescriptor(
             key = "${activity.key}:$familyKey",
             activity = activity,
-            title = balance.name,
+            title = materialName,
         )
+    }
+
+    private fun activeRecommendationKeys(activeMaterialKeys: Set<String>): Set<String> {
+        if (activeMaterialKeys.isEmpty()) return emptySet()
+        val normalizedActiveKeys = activeMaterialKeys.mapTo(linkedSetOf()) {
+            GoodKeyNormalizer.normalize(it)
+        }
+        val materialByInventoryKey = catalogService.getMaterials().associateBy {
+            GoodKeyNormalizer.normalize(it.name)
+        }
+        return normalizedActiveKeys.mapNotNullTo(linkedSetOf()) { key ->
+            ACTIVE_MATERIAL_RECOMMENDATION_ALIASES[key]
+                ?: materialByInventoryKey[key]?.let(::farmDescriptor)?.key
+        }
     }
 
     private fun addArtifactRecommendations(
@@ -635,7 +680,10 @@ class FarmingDashboardService(
             urgencySamples++
         }
 
-        fun toRecommendation(): FarmingRecommendation {
+        fun toRecommendation(
+            activeMaterialKeys: Set<String>,
+            activeRecommendationKeys: Set<String>,
+        ): FarmingRecommendation {
             val urgency = if (urgencySamples == 0) 0.0 else urgencyTotal / urgencySamples
             val recommendationHref = if (
                 activity != FarmingActivity.ARTIFACTS && characters.size == 1
@@ -644,6 +692,11 @@ class FarmingDashboardService(
             } else {
                 href
             }
+            val activeMaterial = activeRecommendationKeys.contains(key) ||
+                materials.values.any { material ->
+                    GoodKeyNormalizer.normalize(material.name) in activeMaterialKeys
+                }
+            val priorityBoost = if (activeMaterial) ACTIVE_MATERIAL_PRIORITY_BOOST else 0
             return FarmingRecommendation(
                 key = key,
                 activity = activity,
@@ -653,7 +706,9 @@ class FarmingDashboardService(
                 materials = materials.values.sortedByDescending(FarmingMaterialNeed::missing),
                 artifactScore = artifactScores.takeIf(List<Double>::isNotEmpty)?.average(),
                 impactPercent = (urgency * 100).roundToInt(),
-                priority = characters.size * 1_000 + (urgency * 100).roundToInt(),
+                priority = priorityBoost +
+                    characters.size * 1_000 +
+                    (urgency * 100).roundToInt(),
                 href = recommendationHref,
             )
         }
@@ -665,6 +720,15 @@ class FarmingDashboardService(
         private const val MYSTIC_ENHANCEMENT_ORE_ID = 104013
         private const val AUTOMATIC_ROSTER_CHARACTER_COUNT = 24
         private const val MAX_MATERIAL_BALANCE_CACHE_ENTRIES = 128
+        private const val ACTIVE_MATERIAL_PRIORITY_BOOST = 1_000_000
+        private val ACTIVE_MATERIAL_RECOMMENDATION_ALIASES = mapOf(
+            "heroswit" to "ley-line:experience",
+            "adventurersexperience" to "ley-line:experience",
+            "wanderersadvice" to "ley-line:experience",
+            "characterexp" to "ley-line:experience",
+            "mora" to "ley-line:mora",
+            "mysticenhancementore" to "weapon-ore",
+        )
     }
 
     private val materialBalanceCache =

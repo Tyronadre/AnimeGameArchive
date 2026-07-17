@@ -35,6 +35,7 @@ data class SnapshotActivityEvent(
     val type: SnapshotActivityType = SnapshotActivityType.MATERIAL_GAIN,
     val occurredAt: Instant = Instant.EPOCH,
     val name: String = "",
+    val materialKey: String? = null,
     val detailName: String? = null,
     val amount: Long? = null,
     val total: Long? = null,
@@ -177,6 +178,7 @@ class SnapshotActivityDetector {
                     name = current.inventoryNames[key]
                         ?: previous.inventoryNames[key]
                         ?: GoodKeyNormalizer.humanize(key),
+                    materialKey = key,
                     amount = kotlin.math.abs(delta),
                     total = newAmount,
                 )

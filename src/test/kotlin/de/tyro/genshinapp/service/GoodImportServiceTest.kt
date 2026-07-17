@@ -111,6 +111,7 @@ class GoodImportServiceTest {
 
         assertEquals(999L, updated.inventory["heroswit"])
         assertEquals(SnapshotActivityType.MATERIAL_GAIN, activity.type)
+        assertEquals("heroswit", activity.materialKey)
         assertEquals(921L, activity.amount)
         assertEquals(999L, activity.total)
     }
@@ -133,7 +134,7 @@ class GoodImportServiceTest {
     }
 
     companion object {
-        val SAMPLE_EXPORT: Path = Path.of("src", "data", "genshin_export_1.json")
+        val SAMPLE_EXPORT: Path = Path.of("src", "test", "genshin_export_1.json")
         const val USER_ONE_ID = 11L
         const val USER_TWO_ID = 22L
     }

@@ -59,6 +59,10 @@ class SnapshotActivityServiceTest {
             events.map { it.type },
         )
         assertEquals(250, events.first { it.type == SnapshotActivityType.MATERIAL_GAIN }.amount)
+        assertEquals(
+            "mora",
+            events.first { it.type == SnapshotActivityType.MATERIAL_GAIN }.materialKey,
+        )
         assertEquals(8, events.first().currentLevel)
     }
 
