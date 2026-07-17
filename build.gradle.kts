@@ -1,4 +1,6 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
+import org.gradle.api.tasks.bundling.Zip
+import org.gradle.api.tasks.bundling.ZipEntryCompression
 
 
 plugins {
@@ -10,7 +12,7 @@ plugins {
 }
 
 group = "de.tyro"
-version = "0.1.2"
+version = "0.1.4"
 description = "GenshinApp"
 
 java {
@@ -77,6 +79,36 @@ val inputDirectory = layout.buildDirectory.dir("desktop-input").get().asFile
 val javaHome = javaToolchains.launcherFor {
     languageVersion = JavaLanguageVersion.of(21)
 }.get().metadata.installationPath.asFile
+val onlineInstallerSources = layout.projectDirectory.dir("installer/windows-online")
+val onlineInstallerBuildDirectory = layout.buildDirectory.dir("online-installer")
+val onlineInstallerBinDirectory = onlineInstallerBuildDirectory.map { it.dir("bin") }
+val onlineInstallerPayloadDirectory = onlineInstallerBuildDirectory.map { it.dir("payload") }
+val onlineInstallerPayloadArchive = onlineInstallerBuildDirectory.map {
+    it.file("online-app-payload.zip")
+}
+val onlineLauncherExecutable = onlineInstallerBinDirectory.map { it.file("launcher.exe") }
+val onlineUninstallerExecutable = onlineInstallerBinDirectory.map { it.file("uninstaller.exe") }
+val onlineVersionFile = onlineInstallerBuildDirectory.map { it.file("version.txt") }
+val onlineInstallerExecutable = installerDirectory.map {
+    it.file("$appName Online Installer-${project.version}.exe")
+}
+val windowsDirectory = System.getenv("WINDIR") ?: "C:/Windows"
+val csharpCompilerCandidates = listOf(
+    file("$windowsDirectory/Microsoft.NET/Framework64/v4.0.30319/csc.exe"),
+    file("$windowsDirectory/Microsoft.NET/Framework/v4.0.30319/csc.exe"),
+)
+val csharpCompiler = csharpCompilerCandidates.firstOrNull(File::isFile)
+    ?: csharpCompilerCandidates.first()
+val csharpReferences = listOf(
+    "Microsoft.CSharp.dll",
+    "System.dll",
+    "System.Core.dll",
+    "System.Drawing.dll",
+    "System.IO.Compression.dll",
+    "System.IO.Compression.FileSystem.dll",
+    "System.Web.Extensions.dll",
+    "System.Windows.Forms.dll",
+)
 
 val buildIrminsulHelper by tasks.registering(Exec::class) {
     group = "desktop"
@@ -104,6 +136,115 @@ val desktopBootJar by tasks.registering(BootJar::class) {
     mainClass.set(desktopMainClass)
     targetJavaVersion.set(JavaVersion.VERSION_21)
     classpath(sourceSets.main.get().runtimeClasspath)
+}
+
+val compileOnlineLauncher by tasks.registering(Exec::class) {
+    group = "desktop"
+    description = "Builds the Java-independent Windows desktop launcher."
+    inputs.file(onlineInstallerSources.file("Launcher.cs"))
+    inputs.file(appIcon)
+    outputs.file(onlineLauncherExecutable)
+
+    doFirst {
+        check(csharpCompiler.isFile) {
+            "The .NET Framework C# compiler was not found: $csharpCompiler"
+        }
+        onlineInstallerBinDirectory.get().asFile.mkdirs()
+        commandLine(
+            csharpCompiler,
+            "/nologo",
+            "/target:winexe",
+            "/optimize+",
+            "/platform:x64",
+            "/out:${onlineLauncherExecutable.get().asFile.absolutePath}",
+            "/win32icon:${appIcon.asFile.absolutePath}",
+            *csharpReferences.map { "/reference:$it" }.toTypedArray(),
+            onlineInstallerSources.file("Launcher.cs").asFile.absolutePath,
+        )
+    }
+}
+
+val compileOnlineUninstaller by tasks.registering(Exec::class) {
+    group = "desktop"
+    description = "Builds the per-user Windows uninstaller."
+    inputs.file(onlineInstallerSources.file("Uninstaller.cs"))
+    inputs.file(appIcon)
+    outputs.file(onlineUninstallerExecutable)
+
+    doFirst {
+        check(csharpCompiler.isFile) {
+            "The .NET Framework C# compiler was not found: $csharpCompiler"
+        }
+        onlineInstallerBinDirectory.get().asFile.mkdirs()
+        commandLine(
+            csharpCompiler,
+            "/nologo",
+            "/target:winexe",
+            "/optimize+",
+            "/platform:x64",
+            "/out:${onlineUninstallerExecutable.get().asFile.absolutePath}",
+            "/win32icon:${appIcon.asFile.absolutePath}",
+            *csharpReferences.map { "/reference:$it" }.toTypedArray(),
+            onlineInstallerSources.file("Uninstaller.cs").asFile.absolutePath,
+        )
+    }
+}
+
+val writeOnlineInstallerVersion by tasks.registering {
+    inputs.property("version", project.version.toString())
+    outputs.file(onlineVersionFile)
+    doLast {
+        onlineVersionFile.get().asFile.apply {
+            parentFile.mkdirs()
+            writeText(project.version.toString())
+        }
+    }
+}
+
+val prepareOnlineInstallerPayload by tasks.registering(Sync::class) {
+    group = "desktop"
+    description = "Stages the application-only payload for the online installer."
+    dependsOn(
+        desktopBootJar,
+        buildIrminsulHelper,
+        compileOnlineLauncher,
+        compileOnlineUninstaller,
+        writeOnlineInstallerVersion,
+    )
+    from(onlineLauncherExecutable) {
+        rename { "$appName.exe" }
+    }
+    from(onlineUninstallerExecutable) {
+        rename { "Uninstall.exe" }
+    }
+    from(desktopBootJar.flatMap { it.archiveFile }) {
+        into("app")
+        rename { "app.jar" }
+    }
+    from(irminsulExecutable) {
+        into("app")
+    }
+    from("native/irminsul-helper/LICENSE") {
+        into("app")
+        rename { "IRMINSUL-LICENSE.txt" }
+    }
+    from(onlineVersionFile) {
+        into("app")
+        rename { "version.txt" }
+    }
+    into(onlineInstallerPayloadDirectory)
+}
+
+val onlineInstallerPayload by tasks.registering(Zip::class) {
+    group = "desktop"
+    description = "Compresses the application-only online-installer payload."
+    dependsOn(prepareOnlineInstallerPayload)
+    from(onlineInstallerPayloadDirectory)
+    destinationDirectory.set(onlineInstallerBuildDirectory)
+    archiveFileName.set(onlineInstallerPayloadArchive.map { it.asFile.name })
+    entryCompression = ZipEntryCompression.DEFLATED
+    isPreserveFileTimestamps = false
+    isReproducibleFileOrder = true
 }
 
 tasks.register<JavaExec>("desktopRun") {
@@ -170,9 +311,9 @@ tasks.register<Exec>("packageDesktop") {
     }
 }
 
-tasks.register<Exec>("packageDesktopInstaller") {
+tasks.register<Exec>("packageDesktopOfflineInstaller") {
     group = "desktop"
-    description = "Creates a Windows installer for the desktop application."
+    description = "Creates an offline Windows installer with a bundled Java runtime."
     dependsOn("packageDesktop")
 
     doFirst {
@@ -214,6 +355,36 @@ tasks.register<Exec>("packageDesktopInstaller") {
             // Important: keep this UUID stable across releases.
             "--win-upgrade-uuid",
             "7b3f3b9b-2c86-4b54-9873-5d1f3a9b6c21"
+        )
+    }
+}
+
+tasks.register<Exec>("packageDesktopInstaller") {
+    group = "desktop"
+    description = "Creates a small online installer that downloads a private Java 21 runtime."
+    dependsOn(onlineInstallerPayload)
+    inputs.file(onlineInstallerSources.file("OnlineInstaller.cs"))
+    inputs.file(onlineInstallerPayloadArchive)
+    inputs.file(appIcon)
+    outputs.file(onlineInstallerExecutable)
+
+    doFirst {
+        check(csharpCompiler.isFile) {
+            "The .NET Framework C# compiler was not found: $csharpCompiler"
+        }
+        delete(installerDirectory)
+        installerDirectory.get().asFile.mkdirs()
+        commandLine(
+            csharpCompiler,
+            "/nologo",
+            "/target:winexe",
+            "/optimize+",
+            "/platform:x64",
+            "/out:${onlineInstallerExecutable.get().asFile.absolutePath}",
+            "/win32icon:${appIcon.asFile.absolutePath}",
+            "/resource:${onlineInstallerPayloadArchive.get().asFile.absolutePath},AppPayload.zip",
+            *csharpReferences.map { "/reference:$it" }.toTypedArray(),
+            onlineInstallerSources.file("OnlineInstaller.cs").asFile.absolutePath,
         )
     }
 }

@@ -56,6 +56,24 @@ The runnable image is written to:
 build\desktop\Genshin Archive\Genshin Archive.exe
 ```
 
+To create the smaller per-user Windows installer:
+
+```powershell
+.\gradlew.bat packageDesktopInstaller
+```
+
+The online installer contains the application and downloads the latest Eclipse
+Temurin Java 21 JRE during installation. It verifies the runtime's SHA-256
+checksum and installs Java privately beside the application, without modifying
+the system `PATH` or requiring administrator access. The installer is written to
+`build\desktop-installer`.
+
+For an installer that also contains Java and works without internet access, use:
+
+```powershell
+.\gradlew.bat packageDesktopOfflineInstaller
+```
+
 The `desktop` Spring profile is the boundary for future local-only features,
 including the elevated Irminsul capture helper. Normal web deployments never
 activate that profile.
