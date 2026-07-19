@@ -18,7 +18,7 @@ class FandomImageUrlResolver(
     ): String = hashedImageUrl(imageType.fileName(characterName))
 
     fun itemImageUrl(itemName: String): String {
-        val normalizedName = itemName.trim().replace(WHITESPACE, "_")
+        val normalizedName = itemName.trim().replace(WHITESPACE, "_").replace(":", "")
         return hashedImageUrl("Item_${normalizedName}.png")
     }
 

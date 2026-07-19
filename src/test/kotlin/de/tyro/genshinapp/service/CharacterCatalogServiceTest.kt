@@ -3,17 +3,21 @@ package de.tyro.genshinapp.service
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import de.tyro.genshinapp.configuration.GenshinContentProperties
 import de.tyro.genshinapp.model.CharacterDefinition
+import de.tyro.genshinapp.model.CharacterImageType
 import de.tyro.genshinapp.model.CharacterProgress
 import de.tyro.genshinapp.model.CharacterTalentKind
+import de.tyro.genshinapp.model.MaterialCategory
 import de.tyro.genshinapp.model.MaterialDefinition
 import de.tyro.genshinapp.model.PlayerCharacterState
 import de.tyro.genshinapp.model.PlayerWeapon
+import de.tyro.genshinapp.model.TravelerAppearance
 import java.nio.file.Files
 import java.time.Duration
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -85,6 +89,50 @@ class CharacterCatalogServiceTest {
     }
 
     @Test
+    fun `uses wikia defaults for traveler character images`() {
+        val aether = catalog.findTravelerAppearance(TravelerAppearance.AETHER)
+        val lumine = catalog.findTravelerAppearance(TravelerAppearance.LUMINE)
+
+        val travelerImageUrls = CharacterImageType.entries.flatMap { imageType ->
+            listOf(
+                assertNotNull(aether.remoteImageUrl(imageType)),
+                assertNotNull(lumine.remoteImageUrl(imageType)),
+            )
+        }
+
+        assertTrue(travelerImageUrls.all { it.startsWith(WIKIA_IMAGE_PREFIX) })
+        assertFalse(travelerImageUrls.any { it.startsWith(MIHOYO_IMAGE_PREFIX) })
+        assertEquals(
+            "https://static.wikia.nocookie.net/gensin-impact/images/1/1c/Traveler_Male_Card.jpg",
+            aether.remoteImageUrl(CharacterImageType.CARD),
+        )
+        assertEquals(
+            "https://static.wikia.nocookie.net/gensin-impact/images/c/c8/Traveler_Female_Card.jpg",
+            lumine.remoteImageUrl(CharacterImageType.CARD),
+        )
+    }
+
+    @Test
+    fun `refreshes stale persisted traveler image defaults`() {
+        val staleTraveler = assertNotNull(catalog.findTravelerAppearance(TravelerAppearance.AETHER))
+            .copy(
+                imageUrls = emptyMap(),
+                remoteImageUrls = CharacterImageType.entries.associateWith {
+                    "$MIHOYO_IMAGE_PREFIX/stale-${it.key}.png"
+                },
+            )
+        val store = InMemoryCatalogStore(
+            catalog.getCharacters().filterNot { it.key == "traveler" } + staleTraveler,
+        )
+
+        catalogWithStore(store)
+
+        val refreshedTraveler = assertNotNull(store.findCharacter("traveler"))
+        assertTrue(refreshedTraveler.remoteImageUrls.values.all { it.startsWith(WIKIA_IMAGE_PREFIX) })
+        assertFalse(refreshedTraveler.remoteImageUrls.values.any { it.startsWith(MIHOYO_IMAGE_PREFIX) })
+    }
+
+    @Test
     fun `formats talent scaling values for every available level`() {
         val ayaka = assertNotNull(catalog.findCharacter("kamisatoayaka"))
         val normalAttack = ayaka.combatTalents.first { it.kind == CharacterTalentKind.NORMAL_ATTACK }
@@ -130,6 +178,18 @@ class CharacterCatalogServiceTest {
         assertTrue("albedo" in store.savedCharacterKeys)
         assertNotNull(store.findCharacter("albedo"))
         assertNotNull(store.findMaterial(104101))
+    }
+
+    @Test
+    fun `refreshes persisted material metadata from stored character usage`() {
+        val store = InMemoryCatalogStore(catalog.getCharacters())
+
+        catalogWithStore(store)
+
+        assertEquals(MaterialCategory.COLLECTABLE, store.findMaterial(100058)?.category)
+        assertEquals(MaterialCategory.WEEKLY_BOSS, store.findMaterial(113005)?.category)
+        assertEquals(MaterialCategory.ENEMY_DROP, store.findMaterial(112010)?.category)
+        assertEquals(MaterialCategory.TALENT_BOOK, store.findMaterial(104309)?.category)
     }
 
     @Test
@@ -331,5 +391,10 @@ class CharacterCatalogServiceTest {
                     materialsById[material.id] = MaterialDefinition(material.id, material.name)
                 }
         }
+    }
+
+    private companion object {
+        private const val WIKIA_IMAGE_PREFIX = "https://static.wikia.nocookie.net"
+        private const val MIHOYO_IMAGE_PREFIX = "https://upload-os-bbs.mihoyo.com"
     }
 }

@@ -167,7 +167,10 @@ data class CharacterTargetValues(
     val targetBurstTalent: Int,
 ) {
     fun applySharedTo(form: CharacterProgressForm) {
-        owned?.let { form.owned = it }
+        owned?.let {
+            form.owned = it
+            form.ownershipExplicit = true
+        }
         currentLevel?.let { form.level = it }
         currentAscension?.let { form.ascension = it }
         form.targetLevel = targetLevel
@@ -175,7 +178,10 @@ data class CharacterTargetValues(
     }
 
     fun applyTo(form: CharacterProgressForm) {
-        owned?.let { form.owned = it }
+        owned?.let {
+            form.owned = it
+            form.ownershipExplicit = true
+        }
         currentLevel?.let { form.level = it }
         currentAscension?.let { form.ascension = it }
         currentConstellation?.let { form.constellation = it }

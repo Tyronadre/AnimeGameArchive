@@ -44,6 +44,22 @@ class MaterialCraftingServiceTest {
     }
 
     @Test
+    fun `classifies reported farmable materials as concrete persisted categories`() {
+        assertEquals(MaterialCategory.COLLECTABLE, categoryOf("Cor Lapis"))
+        assertEquals(MaterialCategory.COLLECTABLE, categoryOf("Noctilucous Jade"))
+        assertEquals(MaterialCategory.COLLECTABLE, categoryOf("Starconch"))
+        assertEquals(MaterialCategory.COLLECTABLE, categoryOf("Violetgrass"))
+        assertEquals(MaterialCategory.COLLECTABLE, categoryOf("Wolfhook"))
+        assertEquals(MaterialCategory.WEEKLY_BOSS, categoryOf("Dvalin's Sigh"))
+        assertEquals(MaterialCategory.ENEMY_DROP, categoryOf("Forbidden Curse Scroll"))
+        assertEquals(MaterialCategory.ENEMY_DROP, categoryOf("Ominous Mask"))
+        assertEquals(MaterialCategory.TALENT_BOOK, categoryOf("Guide to Resistance"))
+        assertEquals(MaterialCategory.TALENT_BOOK, categoryOf("Philosophies of Ballad"))
+        assertEquals(MaterialCategory.TALENT_BOOK, categoryOf("Philosophies of Freedom"))
+        assertEquals(MaterialCategory.TALENT_BOOK, categoryOf("Philosophies of Resistance"))
+    }
+
+    @Test
     fun `calculates maximum tiered crafting from lower inventory levels`() {
         val fragment = material("Varunada Lazurite Fragment")
         val chunk = material("Varunada Lazurite Chunk")

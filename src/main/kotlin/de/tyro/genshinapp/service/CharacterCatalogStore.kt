@@ -135,12 +135,15 @@ class JpaCharacterCatalogStore(
         )
 
     private fun materialDefinitions(character: CharacterDefinition): List<MaterialDefinition> =
-        (character.ascensionCosts.values.flatten() + character.talentCosts.values.flatten())
-            .asSequence()
-            .filter { it.id > 0 }
-            .distinctBy { it.id }
-            .map { MaterialDefinition(it.id, it.name) }
-            .toList()
+        MaterialCatalogMetadata.enrich(
+            (character.ascensionCosts.values.flatten() + character.talentCosts.values.flatten())
+                .asSequence()
+                .filter { it.id > 0 }
+                .distinctBy { it.id }
+                .map { MaterialDefinition(it.id, it.name) }
+                .toList(),
+            listOf(character),
+        )
 
     private fun writeCosts(costs: Map<Int, List<MaterialCost>>): String =
         objectMapper.writeValueAsString(costs)

@@ -59,6 +59,10 @@ html[data-theme="dark"] {
     box-sizing: border-box;
 }
 
+[hidden] {
+    display: none !important;
+}
+
 body {
     position: relative;
     isolation: isolate;

@@ -38,7 +38,14 @@ class CharacterCatalogService(
     private val materialsById = ConcurrentHashMap<Int, MaterialDefinition>()
 
     init {
-        catalogStore?.getCharacters().orEmpty().forEach(::rememberCharacter)
+        catalogStore?.let { store ->
+            store.getCharacters().forEach { storedCharacter ->
+                val refreshedCharacter = rememberCharacter(storedCharacter)
+                if (refreshedCharacter.hasDifferentImageUrlsThan(storedCharacter)) {
+                    store.saveCharacter(refreshedCharacter)
+                }
+            }
+        }
         catalogStore?.getMaterials().orEmpty().forEach(::rememberMaterials)
 
         configuredKeys.forEach { key ->
@@ -59,10 +66,7 @@ class CharacterCatalogService(
         }
         rememberMaterials(BASE_MATERIALS)
         rememberMaterials(loadBundledWeaponMaterials())
-        val enrichedMaterials = MaterialCatalogMetadata.enrich(materialsById.values, getCharacters())
-        materialsById.clear()
-        rememberMaterials(enrichedMaterials)
-        catalogStore?.saveMaterials(materialsById.values)
+        refreshMaterialMetadata()
         contentLoader.registerDefaultImageLinks(getCharacters(), getMaterials())
     }
 
@@ -84,8 +88,12 @@ class CharacterCatalogService(
         }
         charactersByKey[normalizedKey]?.let { return it }
 
-        catalogStore?.findCharacter(normalizedKey)?.let { character ->
-            rememberCharacter(character)
+        val store = catalogStore
+        store?.findCharacter(normalizedKey)?.let { storedCharacter ->
+            val character = rememberCharacter(storedCharacter)
+            if (character.hasDifferentImageUrlsThan(storedCharacter)) {
+                store.saveCharacter(character)
+            }
             contentLoader.registerDefaultImageLinks(
                 listOf(character),
                 materialsOf(listOf(character)),
@@ -94,8 +102,8 @@ class CharacterCatalogService(
         }
 
         return loadCharacterFromExistingSources(normalizedKey)?.let { loadedCharacter ->
-            val character = saveCharacter(loadedCharacter)
-            rememberCharacter(character)
+            val character = rememberCharacter(saveCharacter(loadedCharacter))
+            refreshMaterialMetadata()
             contentLoader.registerDefaultImageLinks(
                 listOf(character),
                 materialsOf(listOf(character)),
@@ -122,10 +130,9 @@ class CharacterCatalogService(
                 imageResourceKey = appearance.resourceKey,
                 talentResourceKey = element.variantKey,
                 talentsRoot = talentRoot?.path("talents"),
-                remoteImageOverrides = travelerRemoteImageUrls(appearanceRoot),
             )
             rememberMaterials(materialsOf(listOf(character)))
-            catalogStore?.saveMaterials(materialsOf(listOf(character)))
+            refreshMaterialMetadata(listOf(character))
             contentLoader.registerDefaultImageLinks(
                 listOf(character),
                 materialsOf(listOf(character)),
@@ -146,7 +153,6 @@ class CharacterCatalogService(
                 imageSourceName = root.requiredText("name"),
                 imageResourceKey = appearance.resourceKey,
                 talentResourceKey = TravelerElement.ANEMO.variantKey,
-                remoteImageOverrides = travelerRemoteImageUrls(root),
             )
             contentLoader.registerDefaultImageLinks(listOf(character), emptyList())
             character
@@ -207,7 +213,6 @@ class CharacterCatalogService(
                 imageSourceName = root.requiredText("name"),
                 imageResourceKey = TravelerAppearance.AETHER.resourceKey,
                 talentResourceKey = TravelerElement.ANEMO.variantKey,
-                remoteImageOverrides = travelerRemoteImageUrls(root),
             )
         } else {
             mapCharacter(key, root)
@@ -225,19 +230,9 @@ class CharacterCatalogService(
         imageResourceKey: String = key,
         talentResourceKey: String = key,
         talentsRoot: JsonNode? = null,
-        remoteImageOverrides: Map<CharacterImageType, String> = emptyMap(),
     ): CharacterDefinition {
-        val remoteImageUrls = CharacterImageType.entries.associateWith { type ->
-            remoteImageOverrides[type]
-                ?: fandomImageUrlResolver.characterImageUrl(imageSourceName, type)
-        }
-        val imageUrls = CharacterImageType.entries.associateWith { type ->
-            UriComponentsBuilder.fromPath("/media/characters/{key}/{type}")
-                .queryParam("source", Integer.toHexString(remoteImageUrls[type].orEmpty().hashCode()))
-                .buildAndExpand(imageResourceKey, type.key)
-                .encode()
-                .toUriString()
-        }
+        val remoteImageUrls = defaultCharacterImageUrls(imageResourceKey, imageSourceName)
+        val imageUrls = localCharacterImageUrls(imageResourceKey, remoteImageUrls)
 
         return CharacterDefinition(
             key = key,
@@ -281,15 +276,71 @@ class CharacterCatalogService(
         }
     }
 
-    private fun travelerRemoteImageUrls(root: JsonNode): Map<CharacterImageType, String> {
-        val images = root.path("images")
-        return listOfNotNull(
-            images.firstText("mihoyo_icon", "image")?.let { CharacterImageType.ICON to it },
-            images.firstText("mihoyo_icon", "card")?.let { CharacterImageType.CARD to it },
-            images.firstText("mihoyo_icon", "mihoyo_sideIcon", "portrait", "card")
-                ?.let { CharacterImageType.WISH to it },
-        ).toMap()
+    private fun defaultCharacterImageUrls(
+        imageResourceKey: String,
+        imageSourceName: String,
+    ): Map<CharacterImageType, String> =
+        CharacterImageType.entries.associateWith { imageType ->
+            internalCharacterImageDefaultOverride(imageResourceKey, imageType)
+                ?: calculatedFandomCharacterImageUrl(imageSourceName, imageType)
+        }
+
+    private fun calculatedFandomCharacterImageUrl(
+        imageSourceName: String,
+        imageType: CharacterImageType,
+    ): String = fandomImageUrlResolver.characterImageUrl(imageSourceName, imageType)
+
+    private fun internalCharacterImageDefaultOverride(
+        imageResourceKey: String,
+        imageType: CharacterImageType,
+    ): String? = CHARACTER_IMAGE_DEFAULT_OVERRIDES[
+        CharacterImageDefaultKey(imageResourceKey, imageType),
+    ]
+
+    private fun localCharacterImageUrls(
+        imageResourceKey: String,
+        remoteImageUrls: Map<CharacterImageType, String>,
+    ): Map<CharacterImageType, String> =
+        CharacterImageType.entries.associateWith { imageType ->
+            UriComponentsBuilder.fromPath("/media/characters/{key}/{type}")
+                .queryParam(
+                    "source",
+                    Integer.toHexString(remoteImageUrls[imageType].orEmpty().hashCode()),
+                )
+                .buildAndExpand(imageResourceKey, imageType.key)
+                .encode()
+                .toUriString()
+        }
+
+    private fun refreshPersistedCharacterImageUrls(character: CharacterDefinition): CharacterDefinition {
+        if (character.imageResourceKey !in INTERNAL_CHARACTER_IMAGE_DEFAULT_RESOURCE_KEYS) {
+            return character
+        }
+        return refreshCharacterImageUrls(character)
     }
+
+    private fun refreshCharacterImageUrls(character: CharacterDefinition): CharacterDefinition {
+        val remoteImageUrls = defaultCharacterImageUrls(
+            character.imageResourceKey,
+            defaultCharacterImageSourceName(character),
+        )
+        return character.copy(
+            remoteImageUrls = remoteImageUrls,
+            imageUrls = localCharacterImageUrls(character.imageResourceKey, remoteImageUrls),
+        )
+    }
+
+    private fun defaultCharacterImageSourceName(character: CharacterDefinition): String =
+        when (character.imageResourceKey) {
+            TravelerAppearance.AETHER.resourceKey -> AETHER_IMAGE_SOURCE_NAME
+            TravelerAppearance.LUMINE.resourceKey -> LUMINE_IMAGE_SOURCE_NAME
+            else -> character.name
+        }
+
+    private fun CharacterDefinition.hasDifferentImageUrlsThan(
+        other: CharacterDefinition,
+    ): Boolean =
+        imageUrls != other.imageUrls || remoteImageUrls != other.remoteImageUrls
 
     private fun readTalentAttributes(attributesNode: JsonNode): List<CharacterTalentAttribute> {
         val labels = attributesNode.path("labels")
@@ -387,9 +438,28 @@ class CharacterCatalogService(
         )
     }
 
-    private fun rememberCharacter(character: CharacterDefinition) {
-        charactersByKey[character.key] = character
-        rememberMaterials(materialsOf(listOf(character)))
+    private fun refreshMaterialMetadata(
+        extraCharacters: Collection<CharacterDefinition> = emptyList(),
+    ) {
+        val enrichedMaterials = MaterialCatalogMetadata.enrich(
+            materialsById.values,
+            loadedCharactersForMetadata() + extraCharacters,
+        )
+        materialsById.clear()
+        rememberMaterials(enrichedMaterials)
+        catalogStore?.saveMaterials(materialsById.values)
+    }
+
+    private fun loadedCharactersForMetadata(): List<CharacterDefinition> =
+        (charactersByKey.values + travelerVariants.values + travelerAppearances.values)
+            .distinctBy { "${it.key}:${it.element}:${it.talentResourceKey}" }
+            .toList()
+
+    private fun rememberCharacter(character: CharacterDefinition): CharacterDefinition {
+        val refreshedCharacter = refreshPersistedCharacterImageUrls(character)
+        charactersByKey[refreshedCharacter.key] = refreshedCharacter
+        rememberMaterials(materialsOf(listOf(refreshedCharacter)))
+        return refreshedCharacter
     }
 
     private fun rememberMaterials(materials: Collection<MaterialDefinition>) {
@@ -420,14 +490,46 @@ class CharacterCatalogService(
     private fun JsonNode.optionalText(field: String): String? =
         path(field).takeIf { it.isTextual && !it.asText().isBlank() }?.asText()
 
-    private fun JsonNode.firstText(vararg fields: String): String? =
-        fields.firstNotNullOfOrNull { field -> optionalText(field) }
+    private data class CharacterImageDefaultKey(
+        val imageResourceKey: String,
+        val imageType: CharacterImageType,
+    )
 
     companion object {
+        private const val AETHER_IMAGE_SOURCE_NAME = "Aether"
+        private const val LUMINE_IMAGE_SOURCE_NAME = "Lumine"
+        private const val WIKIA_IMAGE_BASE_URL =
+            "https://static.wikia.nocookie.net/"
         private val BASE_MATERIALS = listOf(
             MaterialDefinition(0, "Character EXP"),
             MaterialDefinition(104013, "Mystic Enhancement Ore"),
         )
+        private val CHARACTER_IMAGE_DEFAULT_OVERRIDES = mapOf(
+            characterImageDefaultOverride(
+                TravelerAppearance.AETHER.resourceKey,
+                CharacterImageType.CARD,
+                wikiaImage("gensin-impact/images/0/0d/Traveler_Male_Card.png"),
+            ),
+            characterImageDefaultOverride(
+                TravelerAppearance.AETHER.resourceKey,
+                CharacterImageType.WISH,
+                wikiaImage("topstrongest/images/0/0f/TravelersInfo.jpg"),
+            ),
+            characterImageDefaultOverride(
+                TravelerAppearance.LUMINE.resourceKey,
+                CharacterImageType.CARD,
+                wikiaImage("gensin-impact/images/d/d2/Traveler_Female_Card.png"),
+            ),
+            characterImageDefaultOverride(
+                TravelerAppearance.LUMINE.resourceKey,
+                CharacterImageType.WISH,
+                wikiaImage("topstrongest/images/0/0f/TravelersInfo.jpg"),
+            ),
+        )
+        private val INTERNAL_CHARACTER_IMAGE_DEFAULT_RESOURCE_KEYS =
+            CHARACTER_IMAGE_DEFAULT_OVERRIDES.keys.mapTo(mutableSetOf()) {
+                it.imageResourceKey
+            }
         private val BUNDLED_WEAPON_KEYS = listOf("rust", "sacrificialbow")
         private val TALENTLESS_CHARACTER_KEYS = setOf(TravelerIdentity.KEY)
         private val HIDDEN_CHARACTER_KEYS = buildSet {
@@ -447,5 +549,15 @@ class CharacterCatalogService(
             "passive4" to CharacterTalentKind.PASSIVE,
         )
         private val TALENT_PARAMETER = Regex("\\{(param\\d+):([A-Z0-9]+)}")
+
+        private fun characterImageDefaultOverride(
+            imageResourceKey: String,
+            imageType: CharacterImageType,
+            url: String,
+        ): Pair<CharacterImageDefaultKey, String> =
+            CharacterImageDefaultKey(imageResourceKey, imageType) to url
+
+        private fun wikiaImage(path: String): String =
+            "$WIKIA_IMAGE_BASE_URL/$path"
     }
 }

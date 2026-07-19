@@ -267,7 +267,9 @@ data class TalentImageDefault(
 
 data class EditableImageLink(
     var name: String = "",
+    /** Generated or internal code default. Refreshed automatically and overridden by [url]. */
     var defaultUrl: String = "",
+    /** User/admin override. Preserved across default refreshes and used before [defaultUrl]. */
     var url: String = "",
 ) {
     val effectiveUrl: String?
