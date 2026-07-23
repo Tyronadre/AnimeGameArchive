@@ -48,8 +48,10 @@
                              loading="lazy">
                     </div>
                     <strong>
-                        <span th:if="${weapon.locked}">🔒 </span>
-                        <span th:text="${weapon.name}">Weapon</span>
+                        <a th:href="@{/weapons/{key}(key=${weapon.imageKey})}">
+                            <span th:if="${weapon.locked}">🔒 </span>
+                            <span th:text="${weapon.name}">Weapon</span>
+                        </a>
                     </strong>
                 </div>
                 <span th:text="${weapon.level}">90</span>

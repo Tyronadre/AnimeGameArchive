@@ -14,6 +14,10 @@ class WeaponCatalogServiceTest {
     fun `resolves GOOD keys to official weapon names and icon routes`() {
         assertEquals("Wolf's Gravestone", catalog.officialName("WolfsGravestone"))
         assertEquals(
+            "A Teaspoon of Transcendence",
+            catalog.officialName("ateaspoonoftranscendence"),
+        )
+        assertEquals(
             "/media/weapons/WolfsGravestone",
             catalog.imageUrl("WolfsGravestone"),
         )

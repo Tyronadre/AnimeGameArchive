@@ -16,6 +16,11 @@ class GenshinContentProperties {
     var fandomImageBaseUrl: String =
         "https://static.wikia.nocookie.net/gensin-impact/images"
 
+    var hoyolabWikiApiUrl: String =
+        "https://sg-wiki-api.hoyolab.com/hoyowiki/wapi"
+
+    var hoyolabWikiEnabled: Boolean = true
+
     var connectTimeout: Duration = Duration.ofSeconds(8)
 
     var requestTimeout: Duration = Duration.ofSeconds(20)

@@ -23,6 +23,7 @@ class PlayerSnapshotStore(
     private val objectMapper: ObjectMapper,
     private val snapshotActivityService: SnapshotActivityService? = null,
     private val travelerService: TravelerService? = null,
+    private val playerWeaponService: PlayerWeaponService? = null,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val playerDataDirectory = Path.of(properties.cacheDirectory)
@@ -45,6 +46,7 @@ class PlayerSnapshotStore(
             state.baseSnapshot.set(snapshot)
             state.revision.incrementAndGet()
         }
+        playerWeaponService?.replaceAll(userId, snapshot.weapons)
         val saved = current(userId) ?: snapshot
         travelerService?.importSnapshot(userId, saved)
         snapshotActivityService?.record(userId, previous, saved)
@@ -58,6 +60,7 @@ class PlayerSnapshotStore(
             revision = state.revision.get(),
             inventory = snapshot.inventory + state.inventoryOverrides.get(),
             artifacts = state.artifactOverrides.get() ?: snapshot.artifacts,
+            weapons = playerWeaponService?.findAll(userId) ?: snapshot.weapons,
         )
     }
 
@@ -129,18 +132,20 @@ class PlayerSnapshotStore(
             inventoryOverridesFile = userDirectory.resolve("inventory-overrides.json"),
             artifactOverridesFile = userDirectory.resolve("artifact-overrides.json"),
         )
-        loadStoredSnapshot(state)
+        loadStoredSnapshot(userId, state)
         loadInventoryOverrides(state)
         loadArtifactOverrides(state)
         return state
     }
 
-    private fun loadStoredSnapshot(state: PlayerSnapshotState) {
+    private fun loadStoredSnapshot(userId: Long, state: PlayerSnapshotState) {
         if (!Files.isRegularFile(state.snapshotFile)) return
 
         runCatching {
             val importedAt = Files.getLastModifiedTime(state.snapshotFile).toInstant()
-            goodImportService.parse(Files.readAllBytes(state.snapshotFile), importedAt)
+            goodImportService.parse(Files.readAllBytes(state.snapshotFile), importedAt).also {
+                playerWeaponService?.replaceAll(userId, it.weapons)
+            }
         }.onSuccess(state.baseSnapshot::set)
             .onFailure {
                 logger.error("Stored GOOD file {} could not be loaded", state.snapshotFile, it)

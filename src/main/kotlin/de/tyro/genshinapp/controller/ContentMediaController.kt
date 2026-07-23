@@ -90,6 +90,18 @@ class ContentMediaController(
         return imageResponse(image)
     }
 
+    @GetMapping("/weapons/{key}/full")
+    fun weaponFullImage(@PathVariable key: String): ResponseEntity<ByteArray> {
+        val weapon = weaponCatalogService.find(key)
+            ?: return ResponseEntity.notFound().build()
+        val image = contentLoader.loadWeaponFullImage(
+            weapon.key,
+            weapon.name,
+            weapon.fullImageUrl,
+        ) ?: return ResponseEntity.notFound().build()
+        return imageResponse(image)
+    }
+
     private fun imageResponse(image: DynamicContentLoader.LoadedImage): ResponseEntity<ByteArray> =
         ResponseEntity.ok()
             .contentType(MediaType.parseMediaType(image.contentType))

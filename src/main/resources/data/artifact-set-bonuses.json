@@ -1,0 +1,489 @@
+{
+  "version": 1,
+  "sets": [
+    {
+      "setKey": "adaycarvedfromrisingwinds",
+      "setName": "A Day Carved From Rising Winds",
+      "bonuses": [
+        {"pieces": 2, "effect": "ATK +18%.", "stats": {"atk_": 18.0}},
+        {"pieces": 4, "effect": "After a Normal Attack, Charged Attack, Skill, or Burst hits, ATK increases by 25% for 6s. With Witch's Homework completed, CRIT Rate also increases by 20%.", "assumption": "Assumes a hit triggered the upgraded Resolve of Pastoral Winds effect and Witch's Homework is complete.", "stats": {"atk_": 25.0, "critRate_": 20.0}}
+      ]
+    },
+    {
+      "setKey": "adventurer",
+      "setName": "Adventurer",
+      "bonuses": [
+        {"pieces": 2, "effect": "Max HP +1,000.", "stats": {"hp": 1000.0}},
+        {"pieces": 4, "effect": "Opening a chest regenerates 30% Max HP over 5s.", "assumption": "The healing effect is noted but is not a persistent optimizer stat.", "stats": {}}
+      ]
+    },
+    {
+      "setKey": "archaicpetra",
+      "setName": "Archaic Petra",
+      "bonuses": [
+        {"pieces": 2, "effect": "Geo DMG Bonus +15%.", "stats": {"geo_dmg_": 15.0}},
+        {"pieces": 4, "effect": "Collecting a Crystallize shard or triggering Lunar-Crystallize gives the party a 35% DMG Bonus for the corresponding element for 10s.", "assumption": "Assumes the shard for the optimized damage element was collected and the 10s effect is active.", "stats": {"elemental_dmg_": 35.0}}
+      ]
+    },
+    {
+      "setKey": "aubadeofmorningstarandmoon",
+      "setName": "Aubade of Morningstar and Moon",
+      "bonuses": [
+        {"pieces": 2, "effect": "Elemental Mastery +80.", "stats": {"eleMas": 80.0}},
+        {"pieces": 4, "effect": "While off-field, Lunar Reaction DMG increases by 20%, plus another 40% at Ascendant Gleam.", "assumption": "Assumes the wearer is off-field and the party's Moonsign is Ascendant Gleam.", "stats": {"lunar_reaction_dmg_": 60.0}}
+      ]
+    },
+    {
+      "setKey": "berserker",
+      "setName": "Berserker",
+      "bonuses": [
+        {"pieces": 2, "effect": "CRIT Rate +12%.", "stats": {"critRate_": 12.0}},
+        {"pieces": 4, "effect": "CRIT Rate increases by another 24% while HP is below 70%.", "assumption": "Assumes the wearer is below 70% HP.", "stats": {"critRate_": 24.0}}
+      ]
+    },
+    {
+      "setKey": "blizzardstrayer",
+      "setName": "Blizzard Strayer",
+      "bonuses": [
+        {"pieces": 2, "effect": "Cryo DMG Bonus +15%.", "stats": {"cryo_dmg_": 15.0}},
+        {"pieces": 4, "effect": "CRIT Rate increases by 20% against Cryo-affected opponents and by another 20% when they are Frozen.", "assumption": "Assumes the opponent is Frozen.", "stats": {"critRate_": 40.0}}
+      ]
+    },
+    {
+      "setKey": "bloodstainedchivalry",
+      "setName": "Bloodstained Chivalry",
+      "bonuses": [
+        {"pieces": 2, "effect": "Physical DMG Bonus +25%.", "stats": {"physical_dmg_": 25.0}},
+        {"pieces": 4, "effect": "After defeating an opponent, Charged Attack DMG increases by 50% and its Stamina cost becomes 0 for 10s.", "assumption": "Assumes an opponent was defeated within the last 10s.", "stats": {"charged_dmg_": 50.0}}
+      ]
+    },
+    {
+      "setKey": "braveheart",
+      "setName": "Brave Heart",
+      "bonuses": [
+        {"pieces": 2, "effect": "ATK +18%.", "stats": {"atk_": 18.0}},
+        {"pieces": 4, "effect": "DMG increases by 30% against opponents above 50% HP.", "assumption": "Assumes the opponent is above 50% HP.", "stats": {"dmg_": 30.0}}
+      ]
+    },
+    {
+      "setKey": "celestialgift",
+      "setName": "Celestial Gift",
+      "bonuses": [
+        {"pieces": 2, "effect": "Energy Recharge +20%.", "stats": {"enerRech_": 20.0}},
+        {"pieces": 4, "effect": "After using a Skill, grants nearby party members a 20% matching Elemental DMG Bonus, upgraded to 40% by Witch's Homework and Hexerei: Secret Rite.", "assumption": "Assumes the Skill-triggered Mortal Hymn upgrade is active; same-element bonuses do not stack.", "stats": {"elemental_dmg_": 40.0}}
+      ]
+    },
+    {
+      "setKey": "crimsonwitchofflames",
+      "setName": "Crimson Witch of Flames",
+      "bonuses": [
+        {"pieces": 2, "effect": "Pyro DMG Bonus +15%.", "stats": {"pyro_dmg_": 15.0}},
+        {"pieces": 4, "effect": "Overloaded, Burning, and Burgeon DMG +40%; Vaporize and Melt DMG +15%. Skill use boosts the 2-piece Pyro bonus by 50% per stack, up to 3 stacks.", "assumption": "Assumes all 3 Skill stacks are active.", "stats": {"pyro_dmg_": 22.5, "overloaded_dmg_": 40.0, "burning_dmg_": 40.0, "burgeon_dmg_": 40.0, "vaporize_dmg_": 15.0, "melt_dmg_": 15.0}}
+      ]
+    },
+    {
+      "setKey": "deepwoodmemories",
+      "setName": "Deepwood Memories",
+      "bonuses": [
+        {"pieces": 2, "effect": "Dendro DMG Bonus +15%.", "stats": {"dendro_dmg_": 15.0}},
+        {"pieces": 4, "effect": "Skill or Burst hits reduce the target's Dendro RES by 30% for 8s, including when triggered off-field.", "assumption": "Assumes the target was hit and the resistance reduction is active.", "stats": {"dendro_res_shred_": 30.0}}
+      ]
+    },
+    {
+      "setKey": "defenderswill",
+      "setName": "Defender's Will",
+      "bonuses": [
+        {"pieces": 2, "effect": "DEF +30%.", "stats": {"def_": 30.0}},
+        {"pieces": 4, "effect": "For every different element in the party, the wearer gains 30% RES to that element.", "assumption": "Shows the 30% resistance granted for each represented element; party composition determines which elements receive it.", "stats": {"elemental_res_": 30.0}}
+      ]
+    },
+    {
+      "setKey": "desertpavilionchronicle",
+      "setName": "Desert Pavilion Chronicle",
+      "bonuses": [
+        {"pieces": 2, "effect": "Anemo DMG Bonus +15%.", "stats": {"anemo_dmg_": 15.0}},
+        {"pieces": 4, "effect": "After a Charged Attack hits, Normal Attack SPD +10% and Normal, Charged, and Plunging Attack DMG +40% for 15s.", "assumption": "Assumes a Charged Attack hit within the last 15s.", "stats": {"normal_speed_": 10.0, "normal_dmg_": 40.0, "charged_dmg_": 40.0, "plunging_dmg_": 40.0}}
+      ]
+    },
+    {
+      "setKey": "disenchantmentindeepshadow",
+      "setName": "Disenchantment in Deep Shadow",
+      "bonuses": [
+        {"pieces": 2, "effect": "ATK +18%.", "stats": {"atk_": 18.0}},
+        {"pieces": 4, "effect": "Superconduct DMG +80% and Stellar-Conduct DMG +40%. Attacks against affected opponents gain 16% CRIT Rate.", "assumption": "Assumes the opponent is affected by Superconduct or Stellar-Conduct.", "stats": {"superconduct_dmg_": 80.0, "stellar_conduct_dmg_": 40.0, "critRate_": 16.0}}
+      ]
+    },
+    {
+      "setKey": "echoesofanoffering",
+      "setName": "Echoes of an Offering",
+      "bonuses": [
+        {"pieces": 2, "effect": "ATK +18%.", "stats": {"atk_": 18.0}},
+        {"pieces": 4, "effect": "Normal Attack hits can trigger Valley Rite, adding damage equal to 70% of ATK; failed triggers increase the next trigger chance.", "assumption": "Valley Rite is treated as active, but its ATK-scaled proc is not represented as a persistent stat.", "stats": {}}
+      ]
+    },
+    {
+      "setKey": "emblemofseveredfate",
+      "setName": "Emblem of Severed Fate",
+      "bonuses": [
+        {"pieces": 2, "effect": "Energy Recharge +20%.", "stats": {"enerRech_": 20.0}},
+        {"pieces": 4, "effect": "Burst DMG increases by 25% of Energy Recharge, up to 75%.", "assumption": "Uses the maximum 75% bonus; reaching it requires 300% Energy Recharge.", "stats": {"burst_dmg_": 75.0}}
+      ]
+    },
+    {
+      "setKey": "finaleofthedeepgalleries",
+      "setName": "Finale of the Deep Galleries",
+      "bonuses": [
+        {"pieces": 2, "effect": "Cryo DMG Bonus +15%.", "stats": {"cryo_dmg_": 15.0}},
+        {"pieces": 4, "effect": "At 0 Energy, Normal Attack DMG and Burst DMG each gain 60%, but dealing one type disables the other bonus for 6s.", "assumption": "Assumes 0 Energy. Both potential bonuses are shown, though their post-hit windows are mutually exclusive.", "stats": {"normal_dmg_": 60.0, "burst_dmg_": 60.0}}
+      ]
+    },
+    {
+      "setKey": "flowerofparadiselost",
+      "setName": "Flower of Paradise Lost",
+      "bonuses": [
+        {"pieces": 2, "effect": "Elemental Mastery +80.", "stats": {"eleMas": 80.0}},
+        {"pieces": 4, "effect": "Bloom, Hyperbloom, and Burgeon DMG +40%, and Lunar-Bloom DMG +10%; triggering those reactions can double these bonuses at 4 stacks.", "assumption": "Assumes all 4 reaction-triggered stacks are active.", "stats": {"bloom_dmg_": 80.0, "hyperbloom_dmg_": 80.0, "burgeon_dmg_": 80.0, "lunar_reaction_dmg_": 20.0}}
+      ]
+    },
+    {
+      "setKey": "fragmentofharmonicwhimsy",
+      "setName": "Fragment of Harmonic Whimsy",
+      "bonuses": [
+        {"pieces": 2, "effect": "ATK +18%.", "stats": {"atk_": 18.0}},
+        {"pieces": 4, "effect": "When Bond of Life changes, DMG increases by 18% for 6s, up to 3 stacks.", "assumption": "Assumes all 3 Bond of Life stacks are active.", "stats": {"dmg_": 54.0}}
+      ]
+    },
+    {
+      "setKey": "gambler",
+      "setName": "Gambler",
+      "bonuses": [
+        {"pieces": 2, "effect": "Skill DMG +20%.", "stats": {"skill_dmg_": 20.0}},
+        {"pieces": 4, "effect": "Defeating an opponent resets Skill cooldown, once every 15s.", "assumption": "The cooldown reset is noted but is not a persistent optimizer stat.", "stats": {}}
+      ]
+    },
+    {
+      "setKey": "gildeddreams",
+      "setName": "Gilded Dreams",
+      "bonuses": [
+        {"pieces": 2, "effect": "Elemental Mastery +80.", "stats": {"eleMas": 80.0}},
+        {"pieces": 4, "effect": "After a reaction, each same-element ally grants 14% ATK and each different-element ally grants 50 Elemental Mastery for 8s.", "assumption": "Assumes three different-element allies, giving the reaction-focused maximum of 150 Elemental Mastery.", "stats": {"eleMas": 150.0}}
+      ]
+    },
+    {
+      "setKey": "gladiatorsfinale",
+      "setName": "Gladiator's Finale",
+      "bonuses": [
+        {"pieces": 2, "effect": "ATK +18%.", "stats": {"atk_": 18.0}},
+        {"pieces": 4, "effect": "Normal Attack DMG +35% for Sword, Claymore, or Polearm users.", "assumption": "Assumes the wearer uses a Sword, Claymore, or Polearm.", "stats": {"normal_dmg_": 35.0}}
+      ]
+    },
+    {
+      "setKey": "goldentroupe",
+      "setName": "Golden Troupe",
+      "bonuses": [
+        {"pieces": 2, "effect": "Skill DMG +20%.", "stats": {"skill_dmg_": 20.0}},
+        {"pieces": 4, "effect": "Skill DMG +25%, with another +25% while off-field.", "assumption": "Assumes the wearer is off-field.", "stats": {"skill_dmg_": 50.0}}
+      ]
+    },
+    {
+      "setKey": "heartofdepth",
+      "setName": "Heart of Depth",
+      "bonuses": [
+        {"pieces": 2, "effect": "Hydro DMG Bonus +15%.", "stats": {"hydro_dmg_": 15.0}},
+        {"pieces": 4, "effect": "After using a Skill, Normal and Charged Attack DMG +30% for 15s.", "assumption": "Assumes a Skill was used within the last 15s.", "stats": {"normal_dmg_": 30.0, "charged_dmg_": 30.0}}
+      ]
+    },
+    {
+      "setKey": "huskofopulentdreams",
+      "setName": "Husk of Opulent Dreams",
+      "bonuses": [
+        {"pieces": 2, "effect": "DEF +30%.", "stats": {"def_": 30.0}},
+        {"pieces": 4, "effect": "Geo hits on-field or time off-field build up to 4 Curiosity stacks; each grants 6% DEF and 6% Geo DMG.", "assumption": "Assumes all 4 Curiosity stacks are active.", "stats": {"def_": 24.0, "geo_dmg_": 24.0}}
+      ]
+    },
+    {
+      "setKey": "instructor",
+      "setName": "Instructor",
+      "bonuses": [
+        {"pieces": 2, "effect": "Elemental Mastery +80.", "stats": {"eleMas": 80.0}},
+        {"pieces": 4, "effect": "Triggering a reaction grants all party members 120 Elemental Mastery for 8s.", "assumption": "Assumes a reaction was triggered within the last 8s.", "stats": {"eleMas": 120.0}}
+      ]
+    },
+    {
+      "setKey": "lavawalker",
+      "setName": "Lavawalker",
+      "bonuses": [
+        {"pieces": 2, "effect": "Pyro RES +40%.", "stats": {"pyro_res_": 40.0}},
+        {"pieces": 4, "effect": "DMG +35% against opponents affected by Pyro.", "assumption": "Assumes the opponent is affected by Pyro.", "stats": {"dmg_": 35.0}}
+      ]
+    },
+    {
+      "setKey": "longnightsoath",
+      "setName": "Long Night's Oath",
+      "bonuses": [
+        {"pieces": 2, "effect": "Plunging Attack DMG +25%.", "stats": {"plunging_dmg_": 25.0}},
+        {"pieces": 4, "effect": "Plunging, Charged, and Skill hits build up to 5 Radiance Everlasting stacks; each grants 15% Plunging Attack DMG for 6s.", "assumption": "Assumes all 5 Radiance Everlasting stacks are active.", "stats": {"plunging_dmg_": 75.0}}
+      ]
+    },
+    {
+      "setKey": "luckydog",
+      "setName": "Lucky Dog",
+      "bonuses": [
+        {"pieces": 2, "effect": "DEF +100.", "stats": {"def": 100.0}},
+        {"pieces": 4, "effect": "Picking up Mora restores 300 HP.", "assumption": "The pickup healing is noted but is not a persistent optimizer stat.", "stats": {}}
+      ]
+    },
+    {
+      "setKey": "maidenbeloved",
+      "setName": "Maiden Beloved",
+      "bonuses": [
+        {"pieces": 2, "effect": "Healing Bonus +15%.", "stats": {"heal_": 15.0}},
+        {"pieces": 4, "effect": "Using a Skill or Burst increases healing received by the party by 20% for 10s.", "assumption": "Assumes a Skill or Burst was used within the last 10s.", "stats": {"incoming_heal_": 20.0}}
+      ]
+    },
+    {
+      "setKey": "marechausseehunter",
+      "setName": "Marechaussee Hunter",
+      "bonuses": [
+        {"pieces": 2, "effect": "Normal and Charged Attack DMG +15%.", "stats": {"normal_dmg_": 15.0, "charged_dmg_": 15.0}},
+        {"pieces": 4, "effect": "When HP changes, CRIT Rate +12% for 5s, up to 3 stacks.", "assumption": "Assumes all 3 HP-change stacks are active.", "stats": {"critRate_": 36.0}}
+      ]
+    },
+    {
+      "setKey": "martialartist",
+      "setName": "Martial Artist",
+      "bonuses": [
+        {"pieces": 2, "effect": "Normal and Charged Attack DMG +15%.", "stats": {"normal_dmg_": 15.0, "charged_dmg_": 15.0}},
+        {"pieces": 4, "effect": "After using a Skill, Normal and Charged Attack DMG +25% for 8s.", "assumption": "Assumes a Skill was used within the last 8s.", "stats": {"normal_dmg_": 25.0, "charged_dmg_": 25.0}}
+      ]
+    },
+    {
+      "setKey": "nightoftheskysunveiling",
+      "setName": "Night of the Sky's Unveiling",
+      "bonuses": [
+        {"pieces": 2, "effect": "Elemental Mastery +80.", "stats": {"eleMas": 80.0}},
+        {"pieces": 4, "effect": "Nearby Lunar Reactions grant 15%/30% CRIT Rate at Nascent/Ascendant Gleam. Each different Gleaming Moon effect in the party adds 10% Lunar Reaction DMG.", "assumption": "Assumes Ascendant Gleam and both currently available Gleaming Moon effects in the party.", "stats": {"critRate_": 30.0, "lunar_reaction_dmg_": 20.0}}
+      ]
+    },
+    {
+      "setKey": "nighttimewhispersintheechoingwoods",
+      "setName": "Nighttime Whispers in the Echoing Woods",
+      "bonuses": [
+        {"pieces": 2, "effect": "ATK +18%.", "stats": {"atk_": 18.0}},
+        {"pieces": 4, "effect": "After using a Skill, Geo DMG +20% for 10s; a Crystallize shield or nearby Lunar-Crystallize Moondrifts increase that effect by 150%.", "assumption": "Assumes the Skill effect and the Crystallize/Lunar-Crystallize upgrade are active.", "stats": {"geo_dmg_": 50.0}}
+      ]
+    },
+    {
+      "setKey": "noblesseoblige",
+      "setName": "Noblesse Oblige",
+      "bonuses": [
+        {"pieces": 2, "effect": "Burst DMG +20%.", "stats": {"burst_dmg_": 20.0}},
+        {"pieces": 4, "effect": "Using a Burst grants the party 20% ATK for 12s; this does not stack.", "assumption": "Assumes a Burst was used within the last 12s.", "stats": {"atk_": 20.0}}
+      ]
+    },
+    {
+      "setKey": "nymphsdream",
+      "setName": "Nymph's Dream",
+      "bonuses": [
+        {"pieces": 2, "effect": "Hydro DMG Bonus +15%.", "stats": {"hydro_dmg_": 15.0}},
+        {"pieces": 4, "effect": "Different attack types build Mirrored Nymph stacks; at 3 stacks ATK +25% and Hydro DMG +15% for 8s.", "assumption": "Assumes 3 or more Mirrored Nymph stacks are active.", "stats": {"atk_": 25.0, "hydro_dmg_": 15.0}}
+      ]
+    },
+    {
+      "setKey": "obsidiancodex",
+      "setName": "Obsidian Codex",
+      "bonuses": [
+        {"pieces": 2, "effect": "While on-field in Nightsoul's Blessing, DMG +15%.", "assumption": "Assumes the wearer is on-field in Nightsoul's Blessing.", "stats": {"dmg_": 15.0}},
+        {"pieces": 4, "effect": "Consuming a Nightsoul point on-field grants 40% CRIT Rate for 6s.", "assumption": "Assumes a Nightsoul point was consumed within the last 6s.", "stats": {"critRate_": 40.0}}
+      ]
+    },
+    {
+      "setKey": "oceanhuedclam",
+      "setName": "Ocean-Hued Clam",
+      "bonuses": [
+        {"pieces": 2, "effect": "Healing Bonus +15%.", "stats": {"heal_": 15.0}},
+        {"pieces": 4, "effect": "Healing creates a Sea-Dyed Foam that records up to 30,000 healing and deals damage based on 90% of the recorded amount.", "assumption": "The healing-triggered damage proc is noted but is not a persistent optimizer stat.", "stats": {}}
+      ]
+    },
+    {
+      "setKey": "paleflame",
+      "setName": "Pale Flame",
+      "bonuses": [
+        {"pieces": 2, "effect": "Physical DMG Bonus +25%.", "stats": {"physical_dmg_": 25.0}},
+        {"pieces": 4, "effect": "Skill hits grant 9% ATK for 7s, up to 2 stacks; at 2 stacks the 2-piece Physical bonus is doubled.", "assumption": "Assumes both Skill-hit stacks are active.", "stats": {"atk_": 18.0, "physical_dmg_": 25.0}}
+      ]
+    },
+    {
+      "setKey": "prayersfordestiny",
+      "setName": "Prayers for Destiny",
+      "bonuses": [
+        {"pieces": 1, "effect": "Hydro affects the wearer for 40% less time.", "stats": {}}
+      ]
+    },
+    {
+      "setKey": "prayersforillumination",
+      "setName": "Prayers for Illumination",
+      "bonuses": [
+        {"pieces": 1, "effect": "Pyro affects the wearer for 40% less time.", "stats": {}}
+      ]
+    },
+    {
+      "setKey": "prayersforwisdom",
+      "setName": "Prayers for Wisdom",
+      "bonuses": [
+        {"pieces": 1, "effect": "Electro affects the wearer for 40% less time.", "stats": {}}
+      ]
+    },
+    {
+      "setKey": "prayerstospringtime",
+      "setName": "Prayers to Springtime",
+      "bonuses": [
+        {"pieces": 1, "effect": "Cryo affects the wearer for 40% less time.", "stats": {}}
+      ]
+    },
+    {
+      "setKey": "resolutionofsojourner",
+      "setName": "Resolution of Sojourner",
+      "bonuses": [
+        {"pieces": 2, "effect": "ATK +18%.", "stats": {"atk_": 18.0}},
+        {"pieces": 4, "effect": "Charged Attack CRIT Rate +30%.", "stats": {"charged_crit_rate_": 30.0}}
+      ]
+    },
+    {
+      "setKey": "retracingbolide",
+      "setName": "Retracing Bolide",
+      "bonuses": [
+        {"pieces": 2, "effect": "Shield Strength +35%.", "stats": {"shield_": 35.0}},
+        {"pieces": 4, "effect": "While protected by a shield, Normal and Charged Attack DMG +40%.", "assumption": "Assumes the wearer is protected by a shield.", "stats": {"normal_dmg_": 40.0, "charged_dmg_": 40.0}}
+      ]
+    },
+    {
+      "setKey": "scholar",
+      "setName": "Scholar",
+      "bonuses": [
+        {"pieces": 2, "effect": "Energy Recharge +20%.", "stats": {"enerRech_": 20.0}},
+        {"pieces": 4, "effect": "Collecting particles or orbs gives 3 Energy to Bow and Catalyst party members, once every 3s.", "assumption": "The periodic party Energy gain is noted but is not a persistent optimizer stat.", "stats": {}}
+      ]
+    },
+    {
+      "setKey": "scrolloftheheroofcindercity",
+      "setName": "Scroll of the Hero of Cinder City",
+      "bonuses": [
+        {"pieces": 2, "effect": "A nearby party member's Nightsoul Burst restores 6 Energy to the wearer.", "assumption": "The triggered Energy restoration is noted but is not a persistent Energy Recharge stat.", "stats": {}},
+        {"pieces": 4, "effect": "Triggering a related reaction grants the party 12% Elemental DMG for the involved elements, plus 28% when triggered in Nightsoul's Blessing.", "assumption": "Assumes the reaction was triggered during Nightsoul's Blessing and the 40% total bonus is active.", "stats": {"elemental_dmg_": 40.0}}
+      ]
+    },
+    {
+      "setKey": "shimenawasreminiscence",
+      "setName": "Shimenawa's Reminiscence",
+      "bonuses": [
+        {"pieces": 2, "effect": "ATK +18%.", "stats": {"atk_": 18.0}},
+        {"pieces": 4, "effect": "Using a Skill at 15 or more Energy consumes 15 Energy and grants 50% Normal, Charged, and Plunging Attack DMG for 10s.", "assumption": "Assumes the wearer had enough Energy and paid the 15-Energy cost within the last 10s.", "stats": {"normal_dmg_": 50.0, "charged_dmg_": 50.0, "plunging_dmg_": 50.0}}
+      ]
+    },
+    {
+      "setKey": "silkenmoonsserenade",
+      "setName": "Silken Moon's Serenade",
+      "bonuses": [
+        {"pieces": 2, "effect": "Energy Recharge +20%.", "stats": {"enerRech_": 20.0}},
+        {"pieces": 4, "effect": "Dealing Elemental DMG grants the party 60/120 Elemental Mastery at Nascent/Ascendant Gleam. Each different Gleaming Moon effect adds 10% Lunar Reaction DMG.", "assumption": "Assumes Ascendant Gleam and both currently available Gleaming Moon effects in the party.", "stats": {"eleMas": 120.0, "lunar_reaction_dmg_": 20.0}}
+      ]
+    },
+    {
+      "setKey": "songofdayspast",
+      "setName": "Song of Days Past",
+      "bonuses": [
+        {"pieces": 2, "effect": "Healing Bonus +15%.", "stats": {"heal_": 15.0}},
+        {"pieces": 4, "effect": "Healing records up to 15,000 HP, then empowers 5 attacks by 8% of the recorded healing.", "assumption": "The healing-scaled attack proc is noted but is not a persistent optimizer stat.", "stats": {}}
+      ]
+    },
+    {
+      "setKey": "tenacityofthemillelith",
+      "setName": "Tenacity of the Millelith",
+      "bonuses": [
+        {"pieces": 2, "effect": "HP +20%.", "stats": {"hp_": 20.0}},
+        {"pieces": 4, "effect": "Skill hits grant nearby party members 20% ATK and 30% Shield Strength for 3s, including from off-field.", "assumption": "Assumes a Skill hit occurred within the last 3s.", "stats": {"atk_": 20.0, "shield_": 30.0}}
+      ]
+    },
+    {
+      "setKey": "theexile",
+      "setName": "The Exile",
+      "bonuses": [
+        {"pieces": 2, "effect": "Energy Recharge +20%.", "stats": {"enerRech_": 20.0}},
+        {"pieces": 4, "effect": "Using a Burst restores 2 Energy to other party members every 2s for 6s.", "assumption": "The party Energy restoration is noted but is not a persistent Energy Recharge stat.", "stats": {}}
+      ]
+    },
+    {
+      "setKey": "thunderingfury",
+      "setName": "Thundering Fury",
+      "bonuses": [
+        {"pieces": 2, "effect": "Electro DMG Bonus +15%.", "stats": {"electro_dmg_": 15.0}},
+        {"pieces": 4, "effect": "Overloaded, Electro-Charged, Superconduct, and Hyperbloom DMG +40%; Aggravate +20%; Lunar-Charged and Stellar-Conduct +20%. Relevant reactions also reduce Skill cooldown.", "assumption": "Assumes the relevant reaction bonus is active; cooldown reduction is not a persistent stat.", "stats": {"overloaded_dmg_": 40.0, "electro_charged_dmg_": 40.0, "superconduct_dmg_": 40.0, "hyperbloom_dmg_": 40.0, "aggravate_dmg_": 20.0, "lunar_charged_dmg_": 20.0, "stellar_conduct_dmg_": 20.0}}
+      ]
+    },
+    {
+      "setKey": "thundersoother",
+      "setName": "Thundersoother",
+      "bonuses": [
+        {"pieces": 2, "effect": "Electro RES +40%.", "stats": {"electro_res_": 40.0}},
+        {"pieces": 4, "effect": "DMG +35% against opponents affected by Electro.", "assumption": "Assumes the opponent is affected by Electro.", "stats": {"dmg_": 35.0}}
+      ]
+    },
+    {
+      "setKey": "tinymiracle",
+      "setName": "Tiny Miracle",
+      "bonuses": [
+        {"pieces": 2, "effect": "All Elemental RES +20%.", "stats": {"elemental_res_": 20.0}},
+        {"pieces": 4, "effect": "Taking elemental damage grants another 30% RES to that element for 10s.", "assumption": "Assumes matching elemental damage was taken within the last 10s.", "stats": {"elemental_res_": 30.0}}
+      ]
+    },
+    {
+      "setKey": "travelingdoctor",
+      "setName": "Traveling Doctor",
+      "bonuses": [
+        {"pieces": 2, "effect": "Incoming Healing +20%.", "stats": {"incoming_heal_": 20.0}},
+        {"pieces": 4, "effect": "Using a Burst restores 20% HP.", "assumption": "The one-time Burst healing is noted but is not a persistent optimizer stat.", "stats": {}}
+      ]
+    },
+    {
+      "setKey": "unfinishedreverie",
+      "setName": "Unfinished Reverie",
+      "bonuses": [
+        {"pieces": 2, "effect": "ATK +18%.", "stats": {"atk_": 18.0}},
+        {"pieces": 4, "effect": "DMG increases up to 50%; in combat it rises near Burning opponents and falls when none are nearby.", "assumption": "Assumes the maximum 50% effect is active with a Burning opponent nearby.", "stats": {"dmg_": 50.0}}
+      ]
+    },
+    {
+      "setKey": "vermillionhereafter",
+      "setName": "Vermillion Hereafter",
+      "bonuses": [
+        {"pieces": 2, "effect": "ATK +18%.", "stats": {"atk_": 18.0}},
+        {"pieces": 4, "effect": "Using a Burst grants 8% ATK for 16s; HP losses grant another 10% ATK up to 4 times.", "assumption": "Assumes the Burst effect and all 4 HP-loss stacks are active while the wearer remains on-field.", "stats": {"atk_": 48.0}}
+      ]
+    },
+    {
+      "setKey": "viridescentvenerer",
+      "setName": "Viridescent Venerer",
+      "bonuses": [
+        {"pieces": 2, "effect": "Anemo DMG Bonus +15%.", "stats": {"anemo_dmg_": 15.0}},
+        {"pieces": 4, "effect": "Swirl DMG +60% and the target's RES to the Swirled element is reduced by 40% for 10s.", "assumption": "Assumes the target was Swirled with the optimized element within the last 10s.", "stats": {"swirl_dmg_": 60.0, "elemental_res_shred_": 40.0}}
+      ]
+    },
+    {
+      "setKey": "vourukashasglow",
+      "setName": "Vourukasha's Glow",
+      "bonuses": [
+        {"pieces": 2, "effect": "HP +20%.", "stats": {"hp_": 20.0}},
+        {"pieces": 4, "effect": "Skill and Burst DMG +10%; taking damage increases that effect by 80% per stack, up to 5 stacks.", "assumption": "Assumes all 5 damage-taken stacks are active.", "stats": {"skill_dmg_": 50.0, "burst_dmg_": 50.0}}
+      ]
+    },
+    {
+      "setKey": "wandererstroupe",
+      "setName": "Wanderer's Troupe",
+      "bonuses": [
+        {"pieces": 2, "effect": "Elemental Mastery +80.", "stats": {"eleMas": 80.0}},
+        {"pieces": 4, "effect": "Charged Attack DMG +35% for Catalyst or Bow users.", "assumption": "Assumes the wearer uses a Catalyst or Bow.", "stats": {"charged_dmg_": 35.0}}
+      ]
+    }
+  ]
+}

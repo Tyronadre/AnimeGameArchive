@@ -19,6 +19,7 @@ import kotlin.random.Random
 class ArtifactOptimizationService(
     private val artifactCatalogService: ArtifactCatalogService,
     private val artifactEvaluationCacheService: ArtifactEvaluationCacheService? = null,
+    private val artifactSetBonusProvider: ArtifactSetBonusProvider? = null,
 ) {
     fun inferProfile(artifacts: Collection<PlayerArtifact>): ArtifactOptimizationProfile {
         val variableMainStats = artifacts
@@ -172,6 +173,7 @@ class ArtifactOptimizationService(
                     .map(IndexedArtifact::artifact),
                 baseStats = baseStats,
                 targets = targets,
+                setBonusArtifacts = currentArtifacts.map(IndexedArtifact::artifact),
             ).totalValues
         }
         val currentPieces = currentArtifacts.map {
@@ -591,6 +593,7 @@ class ArtifactOptimizationService(
                 .map(ScoredArtifact::artifact),
             baseStats = baseStats,
             targets = strategy.targets,
+            setBonusArtifacts = pieces.map(ScoredArtifact::artifact),
         ).totalValues
         score(
             indexedArtifact = IndexedArtifact(target.inventoryIndex, target.artifact),
@@ -697,6 +700,7 @@ class ArtifactOptimizationService(
         baseStats: OptimizerBaseStats,
         targets: ArtifactOptimizationTargets,
         includeAllStats: Boolean = false,
+        setBonusArtifacts: Collection<PlayerArtifact> = artifacts,
     ): ArtifactBuildStats {
         val artifactStats = linkedMapOf<String, Double>()
         artifacts.forEach { artifact ->
@@ -709,17 +713,21 @@ class ArtifactOptimizationService(
                     artifactStats.getOrDefault(artifact.mainStatKey, 0.0) + mainStatValue
             }
         }
+        val setBonuses = artifactSetBonusProvider?.activeBonuses(setBonusArtifacts)
+            ?: ArtifactSetBonusTotals()
         val trackedKeys = (
             CORE_BUILD_STATS +
                 targets.minimumTargets.keys +
                 targets.maximumTargets.keys +
                 targets.substatPriorities +
                 baseStats.totals.keys +
-                artifactStats.keys
+                artifactStats.keys +
+                setBonuses.stats.keys
             ).distinct()
         val totalValues = trackedKeys.associateWith { key ->
             baseStats.totals.getOrDefault(key, 0.0) +
-                artifactStats.getOrDefault(key, 0.0)
+                artifactStats.getOrDefault(key, 0.0) +
+                setBonuses.stats.getOrDefault(key, 0.0)
         }
         val completions = targets.minimumTargets.map { (key, target) ->
             (totalValues.getOrDefault(key, 0.0) / target).coerceIn(0.0, 1.0)
@@ -737,7 +745,8 @@ class ArtifactOptimizationService(
                     key in CORE_BUILD_STATS ||
                     key in targets.minimumTargets ||
                     key in targets.maximumTargets ||
-                    key in targets.substatPriorities
+                    key in targets.substatPriorities ||
+                    key in setBonuses.stats
             }
             .map { key ->
                 val minimum = targets.minimumTargets[key]
@@ -747,6 +756,7 @@ class ArtifactOptimizationService(
                     characterValue = baseStats.characterStats.getOrDefault(key, 0.0),
                     weaponValue = baseStats.weaponStats.getOrDefault(key, 0.0),
                     bonusValue = baseStats.bonusStats.getOrDefault(key, 0.0),
+                    setBonusValue = setBonuses.stats.getOrDefault(key, 0.0),
                     artifactValue = artifactStats.getOrDefault(key, 0.0),
                     totalValue = totalValues.getOrDefault(key, 0.0),
                     minimumTarget = minimum,
@@ -772,6 +782,7 @@ class ArtifactOptimizationService(
             minimumCompletionSum = completions.sum(),
             allMaximumTargetsMet = maximumViolations.all { it <= BUILD_COMPARISON_EPSILON },
             maximumViolation = maximumViolations.sum(),
+            activeSetBonuses = setBonuses.activations,
         )
     }
 
@@ -1824,6 +1835,36 @@ class ArtifactOptimizationService(
             "anemo_dmg_" -> "artifact.stat.anemoDamage"
             "geo_dmg_" -> "artifact.stat.geoDamage"
             "dendro_dmg_" -> "artifact.stat.dendroDamage"
+            "dmg_" -> "artifact.stat.allDamage"
+            "elemental_dmg_" -> "artifact.stat.elementalDamage"
+            "normal_dmg_" -> "artifact.stat.normalDamage"
+            "charged_dmg_" -> "artifact.stat.chargedDamage"
+            "plunging_dmg_" -> "artifact.stat.plungingDamage"
+            "skill_dmg_" -> "artifact.stat.skillDamage"
+            "burst_dmg_" -> "artifact.stat.burstDamage"
+            "lunar_reaction_dmg_" -> "artifact.stat.lunarReactionDamage"
+            "bloom_dmg_" -> "artifact.stat.bloomDamage"
+            "hyperbloom_dmg_" -> "artifact.stat.hyperbloomDamage"
+            "burgeon_dmg_" -> "artifact.stat.burgeonDamage"
+            "overloaded_dmg_" -> "artifact.stat.overloadedDamage"
+            "burning_dmg_" -> "artifact.stat.burningDamage"
+            "vaporize_dmg_" -> "artifact.stat.vaporizeDamage"
+            "melt_dmg_" -> "artifact.stat.meltDamage"
+            "superconduct_dmg_" -> "artifact.stat.superconductDamage"
+            "stellar_conduct_dmg_" -> "artifact.stat.stellarConductDamage"
+            "electro_charged_dmg_" -> "artifact.stat.electroChargedDamage"
+            "aggravate_dmg_" -> "artifact.stat.aggravateDamage"
+            "lunar_charged_dmg_" -> "artifact.stat.lunarChargedDamage"
+            "swirl_dmg_" -> "artifact.stat.swirlDamage"
+            "charged_crit_rate_" -> "artifact.stat.chargedCritRate"
+            "shield_" -> "artifact.stat.shieldStrength"
+            "incoming_heal_" -> "artifact.stat.incomingHealing"
+            "normal_speed_" -> "artifact.stat.normalSpeed"
+            "elemental_res_" -> "artifact.stat.elementalResistance"
+            "pyro_res_" -> "artifact.stat.pyroResistance"
+            "electro_res_" -> "artifact.stat.electroResistance"
+            "dendro_res_shred_" -> "artifact.stat.dendroResistanceReduction"
+            "elemental_res_shred_" -> "artifact.stat.elementalResistanceReduction"
             else -> "artifact.stat.other"
         }
     }
@@ -2112,6 +2153,7 @@ data class ArtifactBuildStats(
     val minimumCompletionSum: Double,
     val allMaximumTargetsMet: Boolean,
     val maximumViolation: Double,
+    val activeSetBonuses: List<ActiveArtifactSetBonus>,
 )
 
 data class ArtifactBuildStat(
@@ -2120,6 +2162,7 @@ data class ArtifactBuildStat(
     val characterValue: Double,
     val weaponValue: Double,
     val bonusValue: Double,
+    val setBonusValue: Double,
     val artifactValue: Double,
     val totalValue: Double,
     val minimumTarget: Double?,

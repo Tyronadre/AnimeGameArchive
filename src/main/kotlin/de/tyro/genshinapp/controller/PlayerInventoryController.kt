@@ -504,6 +504,14 @@ class PlayerInventoryController(
                     savedCustomProfile == null
             }
         val activeSourceProfile = requestedSourceProfile ?: defaultSourceProfile
+        val recommendationOwnership = activeSourceProfile?.let { build ->
+            artifactOptimizerBuildProfileService.recommendationOwnership(
+                build = build,
+                snapshot = snapshot,
+                characterOwnershipOverrides = characterTargetService
+                    .ownershipOverrides(principal.id),
+            )
+        }
         val selectedProfile = when {
             activeSourceProfile != null ->
                 artifactOptimizerBuildProfileService.profileFor(activeSourceProfile)
@@ -634,6 +642,15 @@ class PlayerInventoryController(
         model.addAttribute("profiles", ArtifactOptimizationProfile.entries)
         model.addAttribute("customProfiles", customProfiles)
         model.addAttribute("sourceProfiles", sourceProfiles)
+        model.addAttribute("selectedSourceProfile", activeSourceProfile)
+        model.addAttribute(
+            "sourceCharacterOwnership",
+            recommendationOwnership?.characters.orEmpty(),
+        )
+        model.addAttribute(
+            "sourceWeaponOwnership",
+            recommendationOwnership?.weapons.orEmpty(),
+        )
         model.addAttribute(
             "selectedProfileSelection",
             when {

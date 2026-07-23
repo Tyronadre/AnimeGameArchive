@@ -3500,6 +3500,15 @@ code {
     line-height: 1.25;
 }
 
+.weapon-name-cell strong a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.weapon-name-cell strong a:hover {
+    color: var(--blue);
+}
+
 .weapon-icon {
     display: grid;
     flex: 0 0 52px;
@@ -3545,6 +3554,139 @@ code {
     font-size: 0.65rem;
     font-weight: 800;
     text-transform: uppercase;
+}
+
+.weapon-detail-hero {
+    min-height: min(560px, 72vh);
+}
+
+.weapon-detail-hero h1 {
+    font-size: clamp(2.7rem, 5vw, 5.2rem);
+}
+
+.weapon-detail-icon img {
+    padding: 0.35rem;
+    object-fit: contain;
+}
+
+.weapon-hero-art {
+    min-height: 460px;
+}
+
+.weapon-hero-art img {
+    inset: auto;
+    top: 50%;
+    left: 50%;
+    width: min(156%, 1040px);
+    height: min(156%, 1040px);
+    margin: 0;
+    translate: -50% -50%;
+}
+
+.weapon-gallery-credit {
+    position: absolute;
+    z-index: 3;
+    right: 1rem;
+    bottom: 0.75rem;
+    padding: 0.32rem 0.55rem;
+    color: var(--muted);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.62);
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-decoration: none;
+    backdrop-filter: blur(8px);
+}
+
+.weapon-gallery-credit:hover {
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.82);
+}
+
+.weapon-detail-layout {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.28fr);
+    gap: 1rem;
+    align-items: start;
+}
+
+.weapon-copy-list,
+.weapon-ascension-grid {
+    display: grid;
+    gap: 0.65rem;
+    margin-top: 1rem;
+}
+
+.weapon-copy-list article,
+.weapon-ascension-grid article {
+    padding: 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 13px;
+    background: var(--surface-soft);
+}
+
+.weapon-copy-list article {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.35rem 0.8rem;
+}
+
+.weapon-copy-list article > div,
+.weapon-copy-list article > div strong,
+.weapon-copy-list article > div span {
+    display: block;
+}
+
+.weapon-copy-list article > div span,
+.weapon-copy-list article > span,
+.weapon-copy-list article > a,
+.weapon-copy-list article > small {
+    font-size: 0.7rem;
+}
+
+.weapon-copy-list article > div span,
+.weapon-copy-list article > span,
+.weapon-copy-list article > small {
+    color: var(--muted);
+}
+
+.weapon-copy-list article > a {
+    color: var(--blue);
+    font-weight: 750;
+}
+
+.weapon-copy-list article > small {
+    grid-column: 1 / -1;
+}
+
+.weapon-ascension-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.weapon-ascension-grid h3 {
+    margin: 0 0 0.55rem;
+    font-size: 0.78rem;
+}
+
+.weapon-ascension-grid article > div {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.35rem 0;
+    border-top: 1px solid var(--line);
+    font-size: 0.7rem;
+}
+
+.weapon-ascension-grid img {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+}
+
+.weapon-ascension-grid b {
+    color: var(--muted);
 }
 
 .pagination {
@@ -4614,6 +4756,217 @@ code {
     font-size: 0.8rem;
 }
 
+.optimizer-source-guidance {
+    margin-top: 1rem;
+    padding: 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: rgba(49, 93, 120, 0.04);
+}
+
+.optimizer-source-guidance header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.optimizer-source-guidance header div,
+.optimizer-source-guidance header small {
+    display: block;
+}
+
+.optimizer-source-guidance header small,
+.optimizer-source-notes {
+    margin-top: 0.2rem;
+    color: var(--muted);
+    font-size: 0.68rem;
+}
+
+.optimizer-source-guidance header a {
+    color: var(--blue);
+    font-size: 0.7rem;
+    font-weight: 750;
+}
+
+.optimizer-source-guidance table {
+    width: 100%;
+    margin-top: 0.75rem;
+    border-collapse: collapse;
+    font-size: 0.72rem;
+}
+
+.optimizer-source-guidance th,
+.optimizer-source-guidance td {
+    padding: 0.45rem 0.55rem;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--line);
+}
+
+.optimizer-source-guidance td:last-child {
+    white-space: pre-line;
+}
+
+.optimizer-source-notes p {
+    margin: 0.55rem 0 0;
+    line-height: 1.55;
+}
+
+.optimizer-source-weapons,
+.optimizer-source-teams {
+    margin-top: 1rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--line);
+}
+
+.optimizer-source-weapons h4,
+.optimizer-source-teams h4 {
+    margin: 0 0 0.65rem;
+    font-size: 0.76rem;
+}
+
+.optimizer-source-weapons ol {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.4rem 1.6rem;
+    margin: 0;
+    padding-left: 1.5rem;
+    font-size: 0.72rem;
+}
+
+.optimizer-source-weapons li {
+    padding-left: 0.2rem;
+}
+
+.optimizer-source-weapons a,
+.optimizer-source-lineup a {
+    color: var(--blue);
+    font-weight: 750;
+}
+
+.optimizer-source-weapons small {
+    margin-left: 0.35rem;
+    color: var(--muted);
+}
+
+.optimizer-source-weapons .optimizer-source-f2p {
+    padding: 0.08rem 0.3rem;
+    color: #397258;
+    border-radius: 999px;
+    background: rgba(57, 114, 88, 0.1);
+    font-weight: 800;
+}
+
+.optimizer-source-ownership {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    padding: 0.08rem 0.32rem;
+    border-radius: 999px;
+    font-size: 0.54rem;
+    font-weight: 800;
+    line-height: 1.35;
+    white-space: nowrap;
+}
+
+.optimizer-source-ownership.owned {
+    color: #397258;
+    background: rgba(57, 114, 88, 0.12);
+}
+
+.optimizer-source-ownership.unowned {
+    color: var(--muted);
+    background: rgba(101, 112, 129, 0.1);
+}
+
+.optimizer-source-teams {
+    display: grid;
+    gap: 0.45rem;
+}
+
+.optimizer-source-teams h4 {
+    margin-bottom: 0.2rem;
+}
+
+.optimizer-source-teams details {
+    padding: 0.55rem 0.65rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.55);
+}
+
+.optimizer-source-teams summary {
+    font-size: 0.72rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.optimizer-source-lineup {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.4rem;
+    margin-top: 0.55rem;
+}
+
+.optimizer-source-lineup article {
+    min-width: 0;
+    padding: 0.45rem;
+    border-radius: 8px;
+    background: rgba(49, 93, 120, 0.06);
+}
+
+.optimizer-source-lineup article > small,
+.optimizer-source-team-name,
+.optimizer-source-team-member {
+    display: block;
+}
+
+.optimizer-source-lineup article > small {
+    margin-bottom: 0.12rem;
+    overflow: hidden;
+    color: var(--muted);
+    font-size: 0.55rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.optimizer-source-team-name {
+    overflow: hidden;
+    font-size: 0.68rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.optimizer-source-team-member + .optimizer-source-team-member {
+    margin-top: 0.2rem;
+    padding-top: 0.2rem;
+    border-top: 1px solid rgba(49, 93, 120, 0.1);
+}
+
+.optimizer-source-team-member .optimizer-source-ownership {
+    margin-top: 0.18rem;
+}
+
+@media (max-width: 900px) {
+    .weapon-detail-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 620px) {
+    .weapon-ascension-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.optimizer-source-team-notes p {
+    margin: 0.45rem 0 0;
+    color: var(--muted);
+    font-size: 0.64rem;
+    line-height: 1.5;
+}
+
 .optimizer-targets {
     grid-column: 1 / -1;
     margin-top: 0.25rem;
@@ -5146,6 +5499,88 @@ code {
     margin: 0.6rem 0 0;
     color: var(--muted);
     font-size: 0.6rem;
+}
+
+.optimizer-active-set-bonuses {
+    margin-top: 0.9rem;
+    padding: 0.85rem;
+    border: 1px solid rgba(167, 122, 49, 0.2);
+    border-radius: 14px;
+    background: rgba(167, 122, 49, 0.045);
+}
+
+.optimizer-active-set-bonuses > header,
+.optimizer-active-set-bonuses > header > div,
+.optimizer-active-set-grid article > div {
+    display: flex;
+    align-items: center;
+}
+
+.optimizer-active-set-bonuses > header {
+    justify-content: space-between;
+    gap: 0.8rem;
+}
+
+.optimizer-active-set-bonuses > header > div {
+    align-items: baseline;
+    gap: 0.6rem;
+}
+
+.optimizer-active-set-bonuses > header strong {
+    font-size: 0.78rem;
+}
+
+.optimizer-active-set-bonuses > header span {
+    color: var(--muted);
+    font-size: 0.62rem;
+}
+
+.optimizer-active-set-bonuses > header > b,
+.optimizer-active-set-grid article > div b {
+    padding: 0.25rem 0.45rem;
+    color: #765017;
+    border-radius: 999px;
+    background: rgba(167, 122, 49, 0.12);
+    font-size: 0.55rem;
+    white-space: nowrap;
+}
+
+.optimizer-active-set-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+    margin-top: 0.7rem;
+}
+
+.optimizer-active-set-grid article {
+    padding: 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    background: var(--surface);
+}
+
+.optimizer-active-set-grid article > div {
+    justify-content: space-between;
+    gap: 0.6rem;
+}
+
+.optimizer-active-set-grid article > div strong {
+    font-size: 0.72rem;
+}
+
+.optimizer-active-set-grid p {
+    margin: 0.5rem 0 0;
+    color: var(--text);
+    font-size: 0.65rem;
+    line-height: 1.45;
+}
+
+.optimizer-active-set-grid small {
+    display: block;
+    margin-top: 0.45rem;
+    color: var(--muted);
+    font-size: 0.58rem;
+    line-height: 1.4;
 }
 
 .optimizer-overcap-warning {
@@ -6087,6 +6522,11 @@ code {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    .optimizer-source-weapons ol,
+    .optimizer-source-lineup {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .optimizer-priority-board {
         grid-template-columns: 1fr;
     }
@@ -6205,8 +6645,15 @@ code {
     .optimizer-piece-grid,
     .suggested-loadout-grid,
     .optimizer-stat-grid,
-    .loadout-stat-comparison {
+    .loadout-stat-comparison,
+    .optimizer-active-set-grid {
         grid-template-columns: 1fr;
+    }
+
+    .optimizer-active-set-bonuses > header,
+    .optimizer-active-set-bonuses > header > div {
+        align-items: flex-start;
+        flex-direction: column;
     }
 
     .farming-card dl,
@@ -8174,6 +8621,10 @@ html[data-theme="dark"] .character-hero {
 
 html[data-theme="dark"] .character-hero h1 {
     text-shadow: 0 2px 18px rgba(0, 0, 0, 0.36);
+}
+
+html[data-theme="dark"] .optimizer-source-teams details {
+    background: var(--surface-soft);
 }
 
 html[data-theme="dark"] .traveler-switcher {

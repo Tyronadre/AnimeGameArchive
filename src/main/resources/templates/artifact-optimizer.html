@@ -386,6 +386,110 @@
                th:text="${#messages.msg(selectedProfile.descriptionKey)}">
                 Prioritizes CRIT, ATK, Energy Recharge, and Elemental Mastery.
             </p>
+            <aside class="optimizer-source-guidance"
+                   th:if="${selectedSourceProfile != null
+                       && (!selectedSourceProfile.goalStats.isEmpty()
+                           || !selectedSourceProfile.goalNotes.isEmpty()
+                           || !selectedSourceProfile.recommendedWeapons.isEmpty()
+                           || !selectedSourceProfile.recommendedTeams.isEmpty())}">
+                <header>
+                    <div>
+                        <strong th:text="#{optimizer.sourceGuidance.heading}">
+                            Game8 build guidance
+                        </strong>
+                        <small th:text="#{optimizer.sourceGuidance.help}">
+                            Goal stats, weapons, and teams from the character guide.
+                        </small>
+                    </div>
+                    <a th:href="@{/characters/{key}(key=${selectedSourceProfile.characterPageKey})}"
+                       th:text="#{optimizer.sourceGuidance.openSource}">
+                        Character page
+                    </a>
+                </header>
+                <table th:if="${!selectedSourceProfile.goalStats.isEmpty()}">
+                    <thead>
+                    <tr>
+                        <th th:text="#{optimizer.sourceGuidance.stat}">Stat</th>
+                        <th th:text="#{optimizer.sourceGuidance.goal}">Goal value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="goal : ${selectedSourceProfile.goalStats}">
+                        <td th:text="${goal.stat}">Elemental Mastery</td>
+                        <td th:text="${goal.goalValue}">700~800</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="optimizer-source-notes"
+                     th:if="${!selectedSourceProfile.goalNotes.isEmpty()}">
+                    <p th:each="note : ${selectedSourceProfile.goalNotes}"
+                       th:text="${note}">Source guidance.</p>
+                </div>
+                <section class="optimizer-source-weapons"
+                         th:if="${!selectedSourceProfile.recommendedWeapons.isEmpty()}">
+                    <h4 th:text="#{optimizer.sourceGuidance.weapons}">Optimal weapons</h4>
+                    <ol>
+                        <li th:each="weapon : ${selectedSourceProfile.recommendedWeapons}">
+                            <a th:if="${weapon.hasInternalPage}"
+                               th:href="@{/weapons/{key}(key=${weapon.weaponKey})}"
+                               th:text="${weapon.name}">Flame-Forged Insight</a>
+                            <span th:if="${!weapon.hasInternalPage}"
+                                  th:text="${weapon.name}">Weapon</span>
+                            <small class="optimizer-source-ownership"
+                                   th:classappend="${sourceWeaponOwnership[weapon.name]
+                                        ? ' owned' : ' unowned'}"
+                                   th:text="${sourceWeaponOwnership[weapon.name]
+                                        ? #messages.msg('optimizer.sourceGuidance.owned')
+                                        : #messages.msg('optimizer.sourceGuidance.notOwned')}">
+                                Owned
+                            </small>
+                            <small th:if="${weapon.obtainMethod != null}"
+                                   th:text="${weapon.obtainMethod}">Crafted</small>
+                            <small class="optimizer-source-f2p"
+                                   th:if="${weapon.freeToPlay}"
+                                   th:text="#{optimizer.sourceGuidance.freeToPlay}">F2P</small>
+                        </li>
+                    </ol>
+                </section>
+                <section class="optimizer-source-teams"
+                         th:if="${!selectedSourceProfile.recommendedTeams.isEmpty()}">
+                    <h4 th:text="#{optimizer.sourceGuidance.teams}">Proposed teams</h4>
+                    <details th:each="team : ${selectedSourceProfile.recommendedTeams}">
+                        <summary th:text="${team.name}">Aino Lunar Charged Team</summary>
+                        <div class="optimizer-source-lineup" th:each="lineup : ${team.lineups}">
+                            <article th:each="slot : ${lineup.displaySlots}">
+                                <small th:text="${slot.role}">Support</small>
+                                <div class="optimizer-source-team-options">
+                                    <span class="optimizer-source-team-member"
+                                          th:each="member : ${slot.members}">
+                                        <a class="optimizer-source-team-name"
+                                           th:if="${member.characterKey != null}"
+                                           th:href="@{/characters/{key}(key=${member.characterKey})}"
+                                           th:text="${member.name}">Aino</a>
+                                        <span class="optimizer-source-team-name"
+                                              th:if="${member.characterKey == null}"
+                                              th:text="${member.name}">Aino</span>
+                                        <small class="optimizer-source-ownership"
+                                               th:classappend="${sourceCharacterOwnership[member.name]
+                                                    ? ' owned' : ' unowned'}"
+                                               th:text="${sourceCharacterOwnership[member.name]
+                                                    ? #messages.msg('optimizer.sourceGuidance.owned')
+                                                    : #messages.msg('optimizer.sourceGuidance.notOwned')}">
+                                            Owned
+                                        </small>
+                                    </span>
+                                </div>
+                            </article>
+                        </div>
+                        <div class="optimizer-source-team-notes"
+                             th:if="${!team.notes.isEmpty()}">
+                            <p th:each="note : ${team.notes}" th:text="${note}">
+                                Team explanation.
+                            </p>
+                        </div>
+                    </details>
+                </section>
+            </aside>
         </section>
 
         <div class="optimizer-results" th:if="${optimization != null}">
@@ -437,11 +541,11 @@
                             Complete build values
                         </p>
                         <h2 th:text="#{optimizer.stats.heading}">
-                            Basis, weapon, bonuses, and artifacts
+                            Basis, weapon, bonuses, set effects, and artifacts
                         </h2>
                     </div>
                     <span th:text="#{optimizer.stats.help}">
-                        Main stats and substats from all five artifacts are included.
+                        Main stats, substats, and active set effects are included.
                     </span>
                 </div>
                 <div class="optimizer-stat-grid">
@@ -489,6 +593,11 @@
                                     + (stat.percentage ? '%' : '')}">0.0%</dd>
                             </div>
                             <div>
+                                <dt th:text="#{optimizer.stats.setBonus}">Set bonus</dt>
+                                <dd th:text="${#numbers.formatDecimal(stat.setBonusValue, 1, 1)
+                                    + (stat.percentage ? '%' : '')}">0.0%</dd>
+                            </div>
+                            <div>
                                 <dt th:text="#{optimizer.stats.artifacts}">Artifacts</dt>
                                 <dd th:text="${#numbers.formatDecimal(stat.artifactValue, 1, 1)
                                     + (stat.percentage ? '%' : '')}">67.4%</dd>
@@ -507,6 +616,37 @@
                             Maximum: 100.0%
                         </p>
                     </article>
+                </div>
+                <div class="optimizer-active-set-bonuses"
+                     th:if="${!optimization.currentBuildStats.activeSetBonuses.isEmpty()}">
+                    <header>
+                        <div>
+                            <strong th:text="#{optimizer.setEffects.heading}">
+                                Active set effects
+                            </strong>
+                            <span th:text="#{optimizer.setEffects.help}">
+                                Conditional effects use the active assumptions below.
+                            </span>
+                        </div>
+                        <b th:text="#{optimizer.setEffects.assumedActive}">
+                            Assumed active
+                        </b>
+                    </header>
+                    <div class="optimizer-active-set-grid">
+                        <article th:each="bonus : ${optimization.currentBuildStats.activeSetBonuses}">
+                            <div>
+                                <strong th:text="${bonus.setName}">Artifact set</strong>
+                                <b th:text="#{optimizer.setEffects.pieces(${bonus.pieces})}">
+                                    2-piece
+                                </b>
+                            </div>
+                            <p th:text="${bonus.effect}">Set effect.</p>
+                            <small th:if="${bonus.assumption != null}">
+                                <b th:text="#{optimizer.setEffects.prerequisite}">Assumption:</b>
+                                <span th:text="${bonus.assumption}">Condition is active.</span>
+                            </small>
+                        </article>
+                    </div>
                 </div>
                 <p class="optimizer-overcap-warning"
                    th:if="${optimization.currentBuildStats.critRateOverflow > 0}"
@@ -937,6 +1077,37 @@
                                     + (stat.percentage ? '%' : '')}">72.0%</span>
                             </strong>
                         </article>
+                    </div>
+                    <div class="optimizer-active-set-bonuses"
+                         th:if="${!optimization.loadout.buildStats.activeSetBonuses.isEmpty()}">
+                        <header>
+                            <div>
+                                <strong th:text="#{optimizer.setEffects.loadoutHeading}">
+                                    Suggested loadout set effects
+                                </strong>
+                                <span th:text="#{optimizer.setEffects.help}">
+                                    Conditional effects use the active assumptions below.
+                                </span>
+                            </div>
+                            <b th:text="#{optimizer.setEffects.assumedActive}">
+                                Assumed active
+                            </b>
+                        </header>
+                        <div class="optimizer-active-set-grid">
+                            <article th:each="bonus : ${optimization.loadout.buildStats.activeSetBonuses}">
+                                <div>
+                                    <strong th:text="${bonus.setName}">Artifact set</strong>
+                                    <b th:text="#{optimizer.setEffects.pieces(${bonus.pieces})}">
+                                        2-piece
+                                    </b>
+                                </div>
+                                <p th:text="${bonus.effect}">Set effect.</p>
+                                <small th:if="${bonus.assumption != null}">
+                                    <b th:text="#{optimizer.setEffects.prerequisite}">Assumption:</b>
+                                    <span th:text="${bonus.assumption}">Condition is active.</span>
+                                </small>
+                            </article>
+                        </div>
                     </div>
                     <p class="loadout-transfer-warning"
                        th:if="${optimization.loadout.transferredPieces > 0}"

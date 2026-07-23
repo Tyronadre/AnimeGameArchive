@@ -92,6 +92,33 @@ class ImageUrlRegistry(
         if (changed) writeDocument()
     }
 
+    fun registerWeaponDefaults(weapons: Collection<WeaponImageDefault>) = synchronized(lock) {
+        refreshIfChanged()
+        var changed = false
+        weapons.forEach { weapon ->
+            val entry = document.weapons.getOrPut(weapon.key.lowercase()) {
+                changed = true
+                EditableImageLink()
+            }
+            changed = entry.updateDefaults(weapon.name, weapon.defaultUrl) || changed
+        }
+        if (changed) writeDocument()
+    }
+
+    fun registerWeaponFullDefaults(weapons: Collection<WeaponFullImageDefault>) =
+        synchronized(lock) {
+            refreshIfChanged()
+            var changed = false
+            weapons.forEach { weapon ->
+                val entry = document.weaponFullViews.getOrPut(weapon.key.lowercase()) {
+                    changed = true
+                    EditableImageLink()
+                }
+                changed = entry.updateDefaults(weapon.name, weapon.defaultUrl) || changed
+            }
+            if (changed) writeDocument()
+        }
+
     fun characterLink(
         key: String,
         imageType: CharacterImageType,
@@ -110,6 +137,16 @@ class ImageUrlRegistry(
             refreshIfChanged()
             document.talents[talentEntryKey(characterKey, talentKey)]?.copy()
         }
+
+    fun weaponLink(key: String): EditableImageLink? = synchronized(lock) {
+        refreshIfChanged()
+        document.weapons[key.lowercase()]?.copy()
+    }
+
+    fun weaponFullLink(key: String): EditableImageLink? = synchronized(lock) {
+        refreshIfChanged()
+        document.weaponFullViews[key.lowercase()]?.copy()
+    }
 
     fun setCharacterOverride(
         key: String,
@@ -151,6 +188,26 @@ class ImageUrlRegistry(
         writeDocument()
     }
 
+    fun setWeaponOverride(key: String, name: String, url: String) = synchronized(lock) {
+        refreshIfChanged()
+        val entry = document.weapons.getOrPut(key.lowercase()) {
+            EditableImageLink(name = name)
+        }
+        entry.name = name
+        entry.url = url
+        writeDocument()
+    }
+
+    fun setWeaponFullOverride(key: String, name: String, url: String) = synchronized(lock) {
+        refreshIfChanged()
+        val entry = document.weaponFullViews.getOrPut(key.lowercase()) {
+            EditableImageLink(name = name)
+        }
+        entry.name = name
+        entry.url = url
+        writeDocument()
+    }
+
     fun resetCharacterOverride(
         key: String,
         imageType: CharacterImageType,
@@ -173,6 +230,22 @@ class ImageUrlRegistry(
     fun resetTalentOverride(characterKey: String, talentKey: String) = synchronized(lock) {
         refreshIfChanged()
         document.talents[talentEntryKey(characterKey, talentKey)]?.let {
+            it.url = ""
+            writeDocument()
+        }
+    }
+
+    fun resetWeaponOverride(key: String) = synchronized(lock) {
+        refreshIfChanged()
+        document.weapons[key.lowercase()]?.let {
+            it.url = ""
+            writeDocument()
+        }
+    }
+
+    fun resetWeaponFullOverride(key: String) = synchronized(lock) {
+        refreshIfChanged()
+        document.weaponFullViews[key.lowercase()]?.let {
             it.url = ""
             writeDocument()
         }
@@ -248,6 +321,8 @@ data class ImageLinksDocument(
     var characters: MutableMap<String, EditableImageLink> = linkedMapOf(),
     var materials: MutableMap<String, EditableImageLink> = linkedMapOf(),
     var talents: MutableMap<String, EditableImageLink> = linkedMapOf(),
+    var weapons: MutableMap<String, EditableImageLink> = linkedMapOf(),
+    var weaponFullViews: MutableMap<String, EditableImageLink> = linkedMapOf(),
 ) {
     fun sorted(): ImageLinksDocument = ImageLinksDocument(
         characters = characters.toSortedMap(),
@@ -255,12 +330,26 @@ data class ImageLinksDocument(
             compareBy<String> { it.toIntOrNull() ?: Int.MAX_VALUE }.thenBy { it },
         ),
         talents = talents.toSortedMap(),
+        weapons = weapons.toSortedMap(),
+        weaponFullViews = weaponFullViews.toSortedMap(),
     )
 }
 
 data class TalentImageDefault(
     val characterKey: String,
     val talentKey: String,
+    val name: String,
+    val defaultUrl: String,
+)
+
+data class WeaponImageDefault(
+    val key: String,
+    val name: String,
+    val defaultUrl: String,
+)
+
+data class WeaponFullImageDefault(
+    val key: String,
     val name: String,
     val defaultUrl: String,
 )

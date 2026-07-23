@@ -7,6 +7,7 @@ import de.tyro.genshinapp.service.CharacterCatalogService
 import de.tyro.genshinapp.service.DynamicContentLoader
 import de.tyro.genshinapp.service.EditableImageLink
 import de.tyro.genshinapp.service.ImageUrlRegistry
+import de.tyro.genshinapp.service.WeaponCatalogService
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -24,6 +25,7 @@ class ImageAdminController(
     private val catalogService: CharacterCatalogService,
     private val contentLoader: DynamicContentLoader,
     private val imageUrlRegistry: ImageUrlRegistry,
+    private val weaponCatalogService: WeaponCatalogService,
     private val messages: LocalizedMessages,
 ) {
     @GetMapping
@@ -97,6 +99,52 @@ class ImageAdminController(
             )
         } else {
             contentLoader.updateMaterialImageUrl(material, url)
+        }
+        addResult(result, redirectAttributes)
+        return "redirect:/admin/images"
+    }
+
+    @PostMapping("/weapons/{key}")
+    fun updateWeapon(
+        @PathVariable key: String,
+        @RequestParam(defaultValue = "") url: String,
+        @RequestParam(defaultValue = "save") action: String,
+        redirectAttributes: RedirectAttributes,
+    ): String {
+        val weapon = weaponCatalogService.find(key)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        val result = if (action == "reset") {
+            contentLoader.resetWeaponImageUrl(weapon.key)
+            DynamicContentLoader.ImageUpdateResult(
+                true,
+                "images.update.weaponReset",
+                arrayOf(weapon.name),
+            )
+        } else {
+            contentLoader.updateWeaponImageUrl(weapon.key, weapon.name, url)
+        }
+        addResult(result, redirectAttributes)
+        return "redirect:/admin/images"
+    }
+
+    @PostMapping("/weapons/{key}/full")
+    fun updateWeaponFull(
+        @PathVariable key: String,
+        @RequestParam(defaultValue = "") url: String,
+        @RequestParam(defaultValue = "save") action: String,
+        redirectAttributes: RedirectAttributes,
+    ): String {
+        val weapon = weaponCatalogService.find(key)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        val result = if (action == "reset") {
+            contentLoader.resetWeaponFullImageUrl(weapon.key)
+            DynamicContentLoader.ImageUpdateResult(
+                true,
+                "images.update.weaponFullReset",
+                arrayOf(weapon.name),
+            )
+        } else {
+            contentLoader.updateWeaponFullImageUrl(weapon.key, weapon.name, url)
         }
         addResult(result, redirectAttributes)
         return "redirect:/admin/images"
@@ -199,7 +247,43 @@ class ImageAdminController(
                 )
             }
         }
-        return characterRows + talentRows + materialRows
+        val weaponRows = weaponCatalogService.getWeapons().map { weapon ->
+            val link = imageUrlRegistry.weaponLink(weapon.key)
+                ?: EditableImageLink(weapon.name, weapon.remoteImageUrl.orEmpty())
+            val state = contentLoader.weaponImageState(weapon.key, weapon.name)
+            AdminImageRow(
+                type = "weapon",
+                typeLabel = messages.get("images.type.weapon"),
+                key = weapon.key,
+                name = weapon.name,
+                currentUrl = link.effectiveUrl.orEmpty(),
+                defaultUrl = link.defaultUrl,
+                hasOverride = link.hasOverride,
+                state = state,
+                previewUrl = weaponCatalogService.imageUrl(weapon.key)
+                    .takeIf { state.hasPreview },
+                updatePath = "/admin/images/weapons/${weapon.key}",
+            )
+        }
+        val weaponFullRows = weaponCatalogService.getWeapons().map { weapon ->
+            val link = imageUrlRegistry.weaponFullLink(weapon.key)
+                ?: EditableImageLink("${weapon.name} full view", weapon.fullImageUrl.orEmpty())
+            val state = contentLoader.weaponFullImageState(weapon.key, weapon.fullImageUrl)
+            AdminImageRow(
+                type = "weapon-full",
+                typeLabel = messages.get("images.type.weaponFull"),
+                key = weapon.key,
+                name = weapon.name,
+                currentUrl = link.effectiveUrl.orEmpty(),
+                defaultUrl = link.defaultUrl,
+                hasOverride = link.hasOverride,
+                state = state,
+                previewUrl = weaponCatalogService.fullImageUrl(weapon.key)
+                    .takeIf { state.hasPreview },
+                updatePath = "/admin/images/weapons/${weapon.key}/full",
+            )
+        }
+        return characterRows + talentRows + weaponRows + weaponFullRows + materialRows
     }
 
     private fun addResult(

@@ -68,6 +68,7 @@ tasks.withType<Test> {
 }
 
 val desktopMainClass = "de.tyro.genshinapp.desktop.DesktopLauncherKt"
+val scraperMainClass = "de.tyro.genshinapp.tools.Game8BuildProfileScraperKt"
 val irminsulManifest = layout.projectDirectory.file("native/irminsul-helper/Cargo.toml")
 val irminsulExecutable = layout.projectDirectory.file("native/irminsul-helper/target/release/genshin-irminsul-helper.exe")
 val appName = "Another Anime Game Archive"

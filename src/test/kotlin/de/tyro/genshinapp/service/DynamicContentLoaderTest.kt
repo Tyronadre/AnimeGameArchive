@@ -181,6 +181,95 @@ class DynamicContentLoaderTest {
     }
 
     @Test
+    fun `registers and serves an admin override for a weapon image`() {
+        val pngBytes = byteArrayOf(
+            0x89.toByte(),
+            0x50,
+            0x4E,
+            0x47,
+            0x0D,
+            0x0A,
+            0x1A,
+            0x0A,
+        )
+        val testServer = startServer()
+        testServer.createContext("/custom-weapon.png") { exchange ->
+            exchange.respond("image/png", pngBytes)
+        }
+        testServer.start()
+
+        val fixture = fixtureFor(testServer)
+        val correctedUrl =
+            "http://127.0.0.1:${testServer.address.port}/custom-weapon.png"
+        fixture.registry.registerWeaponDefaults(
+            listOf(
+                WeaponImageDefault(
+                    key = "wolfsgravestone",
+                    name = "Wolf's Gravestone",
+                    defaultUrl = "http://127.0.0.1:${testServer.address.port}/default.png",
+                ),
+            ),
+        )
+
+        val result = fixture.loader.updateWeaponImageUrl(
+            "wolfsgravestone",
+            "Wolf's Gravestone",
+            correctedUrl,
+        )
+        val cachedImage = assertNotNull(
+            fixture.loader.loadWeaponImage("wolfsgravestone", "Wolf's Gravestone"),
+        )
+
+        assertTrue(result.successful)
+        assertEquals(correctedUrl, fixture.registry.weaponLink("wolfsgravestone")?.url)
+        assertContentEquals(pngBytes, cachedImage.bytes)
+        assertTrue(Files.readString(cacheDirectory.resolve("image-links.json")).contains("weapons"))
+    }
+
+    @Test
+    fun `downloads and caches a discovered full weapon image`() {
+        val imageRequests = AtomicInteger()
+        val pngBytes = byteArrayOf(
+            0x89.toByte(),
+            0x50,
+            0x4E,
+            0x47,
+            0x0D,
+            0x0A,
+            0x1A,
+            0x0A,
+        )
+        val testServer = startServer()
+        testServer.createContext("/skyward-awakened.png") { exchange ->
+            imageRequests.incrementAndGet()
+            exchange.respond("image/png", pngBytes)
+        }
+        testServer.start()
+
+        val fixture = fixtureFor(testServer)
+        val imageUrl = "http://127.0.0.1:${testServer.address.port}/skyward-awakened.png"
+        fixture.registry.registerWeaponFullDefaults(
+            listOf(WeaponFullImageDefault("skywardblade", "Skyward Blade full view", imageUrl)),
+        )
+
+        val first = assertNotNull(
+            fixture.loader.loadWeaponFullImage("skywardblade", "Skyward Blade", imageUrl),
+        )
+        val second = assertNotNull(
+            fixture.loader.loadWeaponFullImage("skywardblade", "Skyward Blade", imageUrl),
+        )
+
+        assertContentEquals(pngBytes, first.bytes)
+        assertContentEquals(pngBytes, second.bytes)
+        assertEquals(1, imageRequests.get())
+        assertEquals(
+            DynamicContentLoader.ImageState.CACHED,
+            fixture.loader.weaponFullImageState("skywardblade", imageUrl),
+        )
+        assertTrue(Files.isRegularFile(cacheDirectory.resolve("weapons/skywardblade-full.image")))
+    }
+
+    @Test
     fun `downloads a talent icon from its sanitized Wikia talent path and reuses the cache`() {
         val imageRequests = AtomicInteger()
         val requestedPaths = mutableListOf<String>()

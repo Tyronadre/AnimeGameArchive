@@ -1,9 +1,12 @@
 package de.tyro.genshinapp.service
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.tyro.genshinapp.model.GoodKeyNormalizer
+import de.tyro.genshinapp.model.PlayerSnapshot
+import de.tyro.genshinapp.model.TravelerIdentity
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Service
 
@@ -43,7 +46,9 @@ class ArtifactOptimizerBuildProfileService(
             profile = profileFor(build),
             custom = true,
             requestedMainStats = build.fixedMainStats,
-            requestedPriorityStats = build.substatKeys,
+            requestedPriorityStats = build.goalStatKeys + build.substatKeys,
+            requestedMinimumTargets = build.goalMinimumTargets,
+            requestedMaximumTargets = build.goalMaximumTargets,
         )
 
     fun setSelectionFor(
@@ -62,6 +67,37 @@ class ArtifactOptimizerBuildProfileService(
             },
             availableSetKeys = availableSetKeys,
         )
+
+    fun recommendationOwnership(
+        build: ArtifactOptimizerBuildProfile,
+        snapshot: PlayerSnapshot?,
+        characterOwnershipOverrides: Map<String, Boolean>,
+    ): ArtifactOptimizerBuildRecommendationOwnership {
+        val importedCharacterKeys = snapshot?.characters.orEmpty()
+            .mapTo(mutableSetOf()) {
+                TravelerIdentity.canonicalCharacterKey(it.key)
+            }
+        val importedWeaponKeys = snapshot?.weapons.orEmpty()
+            .mapTo(mutableSetOf()) { GoodKeyNormalizer.normalize(it.key) }
+        val characters = build.recommendedTeams
+            .flatMap(ArtifactOptimizerBuildTeamRecommendation::lineups)
+            .flatMap(ArtifactOptimizerBuildTeamLineup::displaySlots)
+            .flatMap(ArtifactOptimizerBuildTeamSlot::members)
+            .distinctBy(ArtifactOptimizerBuildTeamMember::name)
+            .associate { member ->
+                val characterKey = TravelerIdentity.canonicalCharacterKey(
+                    member.characterKey ?: member.name,
+                )
+                member.name to (
+                    characterOwnershipOverrides[characterKey]
+                        ?: (characterKey in importedCharacterKeys)
+                    )
+            }
+        val weapons = build.recommendedWeapons.associate { weapon ->
+            weapon.name to (weapon.weaponKey in importedWeaponKeys)
+        }
+        return ArtifactOptimizerBuildRecommendationOwnership(characters, weapons)
+    }
 
     companion object {
         const val SOURCE_PROFILE_PREFIX = "source-"
@@ -92,7 +128,19 @@ data class ArtifactOptimizerBuildProfile(
     val artifactSets: List<ArtifactOptimizerBuildSetRecommendation> = emptyList(),
     val mainStats: Map<String, ArtifactOptimizerBuildStatRecommendation> = emptyMap(),
     val substats: List<ArtifactOptimizerBuildStatRecommendation> = emptyList(),
+    val goalStats: List<ArtifactOptimizerBuildGoalStatRecommendation> = emptyList(),
+    val goalNotes: List<String> = emptyList(),
+    val recommendedWeapons: List<ArtifactOptimizerBuildWeaponRecommendation> = emptyList(),
+    val recommendedTeams: List<ArtifactOptimizerBuildTeamRecommendation> = emptyList(),
 ) {
+    @get:JsonIgnore
+    val characterPageKey: String
+        get() = if (GoodKeyNormalizer.normalize(characterKey).startsWith("traveler")) {
+            "traveler"
+        } else {
+            characterKey
+        }
+
     @get:JsonIgnore
     val selectionKey: String
         get() = ArtifactOptimizerBuildProfileService.SOURCE_PROFILE_PREFIX + id
@@ -113,6 +161,29 @@ data class ArtifactOptimizerBuildProfile(
         get() = substats
             .flatMap(ArtifactOptimizerBuildStatRecommendation::keys)
             .distinct()
+
+    @get:JsonIgnore
+    val goalStatKeys: List<String>
+        get() = goalStats
+            .filter { it.primaryRange != null }
+            .flatMap(ArtifactOptimizerBuildGoalStatRecommendation::keys)
+            .distinct()
+
+    @get:JsonIgnore
+    val goalMinimumTargets: Map<String, Double>
+        get() = goalStats.mapNotNull { recommendation ->
+            recommendation.keys.singleOrNull()?.let { key ->
+                recommendation.primaryRange?.minimum?.let { key to it }
+            }
+        }.toMap()
+
+    @get:JsonIgnore
+    val goalMaximumTargets: Map<String, Double>
+        get() = goalStats.mapNotNull { recommendation ->
+            recommendation.keys.singleOrNull()?.let { key ->
+                recommendation.primaryRange?.maximum?.let { key to it }
+            }
+        }.toMap()
 }
 
 data class ArtifactOptimizerBuildSetRecommendation(
@@ -136,3 +207,86 @@ data class ArtifactOptimizerBuildStatRecommendation(
         private val FLEXIBLE_CRIT_CIRCLET_KEYS = setOf("critRate_", "critDMG_")
     }
 }
+
+data class ArtifactOptimizerBuildGoalStatRecommendation(
+    val stat: String = "",
+    val goalValue: String = "",
+    val keys: List<String> = emptyList(),
+    val ranges: List<ArtifactOptimizerBuildGoalRange> = emptyList(),
+) {
+    @get:JsonIgnore
+    val primaryRange: ArtifactOptimizerBuildGoalRange?
+        get() = ranges.firstOrNull()
+}
+
+data class ArtifactOptimizerBuildGoalRange(
+    val minimum: Double? = null,
+    val maximum: Double? = null,
+    val condition: String? = null,
+)
+
+data class ArtifactOptimizerBuildWeaponRecommendation(
+    val rank: Int = 0,
+    val name: String = "",
+    val url: String? = null,
+    val category: String? = null,
+    val obtainMethod: String? = null,
+) {
+    @get:JsonIgnore
+    val weaponKey: String
+        get() = GoodKeyNormalizer.normalize(name)
+
+    @get:JsonIgnore
+    val hasInternalPage: Boolean
+        get() = weaponKey !in GENERIC_WEAPON_KEYS
+
+    @get:JsonIgnore
+    val freeToPlay: Boolean
+        get() = category?.let {
+            "free-to-play" in it.lowercase() || "f2p" in it.lowercase()
+        } == true
+
+    companion object {
+        private val GENERIC_WEAPON_KEYS = setOf("weapon", "weapons", "recommendedweapons")
+    }
+}
+
+data class ArtifactOptimizerBuildTeamRecommendation(
+    val name: String = "",
+    val lineups: List<ArtifactOptimizerBuildTeamLineup> = emptyList(),
+    val notes: List<String> = emptyList(),
+)
+
+data class ArtifactOptimizerBuildTeamLineup(
+    @get:JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val members: List<ArtifactOptimizerBuildTeamMember> = emptyList(),
+    @get:JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val slots: List<ArtifactOptimizerBuildTeamSlot> = emptyList(),
+) {
+    @get:JsonIgnore
+    val displaySlots: List<ArtifactOptimizerBuildTeamSlot>
+        get() = slots.ifEmpty {
+            members.map { member ->
+                ArtifactOptimizerBuildTeamSlot(member.role, listOf(member))
+            }
+        }
+}
+
+data class ArtifactOptimizerBuildTeamSlot(
+    val role: String = "",
+    val members: List<ArtifactOptimizerBuildTeamMember> = emptyList(),
+)
+
+data class ArtifactOptimizerBuildTeamMember(
+    @get:JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val role: String = "",
+    val name: String = "",
+    val url: String? = null,
+    @get:JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val characterKey: String? = null,
+)
+
+data class ArtifactOptimizerBuildRecommendationOwnership(
+    val characters: Map<String, Boolean> = emptyMap(),
+    val weapons: Map<String, Boolean> = emptyMap(),
+)

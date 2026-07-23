@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{weapon.detail.title(${weaponName})}">Weapon · Genshin Archive</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+    <script th:src="@{/js/theme.js}" src="/js/theme.js"></script>
+</head>
+<body>
+<header th:replace="~{fragments :: siteHeader('inventory')}"></header>
+
+<main class="detail-page weapon-detail-page">
+    <section class="character-hero weapon-detail-hero element-neutral">
+        <div class="hero-copy">
+            <p class="eyebrow" th:text="#{weapon.detail.eyebrow}">Weapon archive</p>
+            <div class="character-heading">
+                <div class="character-icon weapon-detail-icon">
+                    <span aria-hidden="true">⚔</span>
+                    <img th:if="${weaponIcon != null}" th:src="${weaponIcon}"
+                         th:alt="${weaponName}" onerror="this.remove()">
+                </div>
+                <h1 th:text="${weaponName}">Sacrificial Bow</h1>
+            </div>
+            <p class="lead" th:text="#{weapon.detail.lead}">
+                Weapon information and copies found in your imported inventory.
+            </p>
+            <div class="facts" th:if="${weaponDefinition != null}">
+                <div class="fact">
+                    <span class="fact-icon" aria-hidden="true">★</span>
+                    <span class="fact-copy">
+                        <small th:text="#{character.rarity}">Rarity</small>
+                        <b th:text="${weaponDefinition.rarity + ' ★'}">4 ★</b>
+                    </span>
+                </div>
+                <div class="fact" th:if="${secondaryStatName != null}">
+                    <span class="fact-icon" aria-hidden="true">✦</span>
+                    <span class="fact-copy">
+                        <small th:text="#{weapon.detail.secondaryStat}">Secondary stat</small>
+                        <b th:text="${secondaryStatName}">Energy Recharge</b>
+                    </span>
+                </div>
+                <div class="fact" th:if="${weaponDefinition.baseSecondaryStat != null}">
+                    <span class="fact-icon" aria-hidden="true">◇</span>
+                    <span class="fact-copy">
+                        <small th:text="#{weapon.detail.baseSecondaryStat}">Base secondary stat</small>
+                        <b th:text="${#numbers.formatDecimal(weaponDefinition.baseSecondaryStat, 1, 1)
+                            + (secondaryStatKey != null && secondaryStatKey.endsWith('_') ? '%' : '')}">
+                            6.7%
+                        </b>
+                    </span>
+                </div>
+            </div>
+            <div class="good-character-state"
+                 th:classappend="${inventoryAvailable ? (owned ? ' owned' : ' unowned') : ' unowned'}">
+                <span class="good-label"
+                      th:text="${!inventoryAvailable
+                        ? #messages.msg('weapon.detail.inventoryUnknown')
+                        : (owned ? #messages.msg('character.owned')
+                                 : #messages.msg('character.unowned'))}">Owned</span>
+                <strong th:if="${owned}"
+                        th:text="#{weapon.detail.copies(${ownedCopies.size()})}">1 copy</strong>
+                <span class="good-source" th:if="${owned}"
+                      th:text="#{character.fromGood}">Imported from GOOD</span>
+                <span th:if="${inventoryAvailable && !owned}"
+                      th:text="#{weapon.detail.notOwnedNote}">No copy was found in your inventory.</span>
+            </div>
+            <a class="optimizer-character-link" th:href="@{/inventory/weapons(query=${weaponName})}">
+                <span aria-hidden="true">⚔</span>
+                <span th:text="#{weapon.detail.openInventory}">Open weapon inventory</span>
+                <b aria-hidden="true">→</b>
+            </a>
+        </div>
+        <div class="hero-art weapon-hero-art">
+            <div class="hero-orbit orbit-one" aria-hidden="true"></div>
+            <div class="hero-orbit orbit-two" aria-hidden="true"></div>
+            <span class="hero-spark spark-one" aria-hidden="true">✦</span>
+            <span class="hero-spark spark-two" aria-hidden="true">✧</span>
+            <span class="hero-spark spark-three" aria-hidden="true">✦</span>
+            <span class="hero-art-fallback" aria-hidden="true">⚔</span>
+            <img th:if="${weaponFullImage != null}" th:src="${weaponFullImage}"
+                 th:alt="${weaponName}" onerror="this.remove()">
+            <img th:if="${weaponFullImage == null && weaponIcon != null}" th:src="${weaponIcon}"
+                 th:alt="${weaponName}" onerror="this.remove()">
+            <a class="weapon-gallery-credit" th:if="${weaponGallerySourceUrl != null}"
+               th:href="${weaponGallerySourceUrl}" target="_blank" rel="noopener noreferrer"
+               th:text="#{weapon.detail.imageSource}">Full view from HoYoWiki</a>
+        </div>
+    </section>
+
+    <div class="weapon-detail-layout">
+        <section class="panel weapon-copy-panel">
+            <p class="eyebrow" th:text="#{weapon.detail.inventoryEyebrow}">Your inventory</p>
+            <h2 th:text="#{weapon.detail.copiesHeading}">Owned copies</h2>
+            <p class="muted" th:if="${ownedCopies.isEmpty()}"
+               th:text="${inventoryAvailable
+                    ? #messages.msg('weapon.detail.noCopies')
+                    : #messages.msg('weapon.detail.importFirst')}">
+                No copies found.
+            </p>
+            <div class="weapon-copy-list" th:if="${!ownedCopies.isEmpty()}">
+                <article th:each="copy : ${ownedCopies}">
+                    <div>
+                        <strong th:text="#{character.levelAscension(${copy.level},${copy.ascension})}">
+                            Level 90 · Ascension 6
+                        </strong>
+                        <span th:text="#{weapon.detail.refinement(${copy.refinement})}">Refinement 1</span>
+                    </div>
+                    <a th:if="${copy.ownerKey != null}"
+                       th:href="@{/characters/{key}(key=${copy.ownerKey})}"
+                       th:text="${copy.ownerName}">Furina</a>
+                    <span th:if="${copy.ownerKey == null}"
+                          th:text="${copy.ownerName ?: #messages.msg('weapon.detail.unassigned')}">
+                        Unassigned
+                    </span>
+                    <small th:if="${copy.locked}" th:text="#{weapon.detail.locked}">Locked</small>
+                </article>
+            </div>
+        </section>
+
+        <section class="panel weapon-material-panel">
+            <p class="eyebrow" th:text="#{weapon.detail.materialEyebrow}">Ascension</p>
+            <h2 th:text="#{weapon.detail.materialHeading}">Ascension materials</h2>
+            <p class="muted" th:if="${weaponDefinition == null
+                    || weaponDefinition.ascensionCosts.isEmpty()}"
+               th:text="#{weapon.detail.dataUnavailable}">
+                Detailed ascension data is not available for this weapon yet.
+            </p>
+            <div class="weapon-ascension-grid"
+                 th:if="${weaponDefinition != null
+                    && !weaponDefinition.ascensionCosts.isEmpty()}">
+                <article th:each="phase : ${weaponDefinition.ascensionCosts}">
+                    <h3 th:text="#{weapon.detail.ascensionPhase(${phase.key})}">Ascension 1</h3>
+                    <div th:each="material : ${phase.value}">
+                        <img th:src="@{/media/materials/{id}(id=${material.id})}"
+                             th:alt="${material.name}" loading="lazy" onerror="this.remove()">
+                        <span th:text="${material.name}">Mora</span>
+                        <b th:text="${#numbers.formatInteger(material.count, 1, 'POINT')}">5,000</b>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </div>
+</main>
+</body>
+</html>

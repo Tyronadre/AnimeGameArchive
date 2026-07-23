@@ -4,8 +4,12 @@ import de.tyro.genshinapp.configuration.DesktopUserProvider
 import de.tyro.genshinapp.desktop.irminsul.IrminsulCaptureState
 import de.tyro.genshinapp.desktop.irminsul.IrminsulIntegrationService
 import de.tyro.genshinapp.desktop.irminsul.IrminsulStatusEvent
+import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.repository.UserRepository
+import de.tyro.genshinapp.repository.GameWeaponRepository
+import de.tyro.genshinapp.repository.PlayerWeaponInstanceRepository
 import de.tyro.genshinapp.service.GoodImportServiceTest
+import de.tyro.genshinapp.service.ImageUrlRegistry
 import de.tyro.genshinapp.service.PlayerSnapshotStore
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.not
@@ -34,6 +38,7 @@ import kotlin.test.assertTrue
         "spring.jpa.hibernate.ddl-auto=create-drop",
         "spring.jpa.show-sql=false",
         "genshin.content.cache-directory=build/test-desktop-cache",
+        "genshin.content.hoyolab-wiki-enabled=false",
     ],
 )
 @ActiveProfiles("desktop")
@@ -43,6 +48,9 @@ class DesktopModeIntegrationTest @Autowired constructor(
     private val userRepository: UserRepository,
     private val integrationService: IrminsulIntegrationService,
     private val snapshotStore: PlayerSnapshotStore,
+    private val gameWeaponRepository: GameWeaponRepository,
+    private val playerWeaponRepository: PlayerWeaponInstanceRepository,
+    private val imageUrlRegistry: ImageUrlRegistry,
 ) {
     @Test
     fun `desktop mode creates a local user and opens without a login`() {
@@ -61,6 +69,44 @@ class DesktopModeIntegrationTest @Autowired constructor(
         mockMvc.perform(get("/login"))
             .andExpect(status().is3xxRedirection)
             .andExpect(redirectedUrl("/"))
+    }
+
+    @Test
+    fun `weapon detail page renders bundled weapon data`() {
+        mockMvc.perform(get("/weapons/rust"))
+            .andExpect(status().isOk)
+            .andExpect(content().string(containsString("Rust")))
+            .andExpect(content().string(containsString("Ascension materials")))
+
+        assertEquals(4, gameWeaponRepository.findByKey("rust")?.rarity)
+    }
+
+    @Test
+    fun `weapon catalog and owned copies are persisted`() {
+        val user = assertNotNull(
+            userRepository.findByEmailIgnoreCase(DesktopUserProvider.DESKTOP_EMAIL),
+        )
+        val snapshot = snapshotStore.save(
+            requireNotNull(user.id),
+            Files.readAllBytes(GoodImportServiceTest.SAMPLE_EXPORT),
+        )
+        val storedCopies = playerWeaponRepository
+            .findAllByUser_IdOrderByImportPositionAscIdAsc(requireNotNull(user.id))
+
+        assertNotNull(gameWeaponRepository.findByKey("wolfsgravestone"))
+        assertEquals(snapshot.weapons.size, storedCopies.size)
+        assertEquals(
+            GoodKeyNormalizer.normalize(snapshot.weapons.first().key),
+            storedCopies.first().weapon.key,
+        )
+        assertNotNull(imageUrlRegistry.weaponLink("wolfsgravestone")?.effectiveUrl)
+    }
+
+    @Test
+    fun `image management includes weapon image links`() {
+        mockMvc.perform(get("/admin/images").param("type", "weapon").param("query", "Rust"))
+            .andExpect(status().isOk)
+            .andExpect(content().string(containsString("/admin/images/weapons/rust")))
     }
 
     @Test
