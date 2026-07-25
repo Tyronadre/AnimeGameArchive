@@ -6,12 +6,16 @@
     <title th:text="#{weapon.detail.title(${weaponName})}">Weapon · Genshin Archive</title>
     <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
     <script th:src="@{/js/theme.js}" src="/js/theme.js"></script>
+    <script defer th:src="@{/js/weapon-hero.js}" src="/js/weapon-hero.js"></script>
 </head>
 <body>
 <header th:replace="~{fragments :: siteHeader('inventory')}"></header>
 
 <main class="detail-page weapon-detail-page">
-    <section class="character-hero weapon-detail-hero element-neutral">
+    <section class="character-hero weapon-detail-hero element-neutral"
+             th:attr="data-weapon-type=${weaponDefinition != null
+                && weaponDefinition.weaponType != null
+                    ? weaponDefinition.weaponType : 'Unknown'}">
         <div class="hero-copy">
             <p class="eyebrow" th:text="#{weapon.detail.eyebrow}">Weapon archive</p>
             <div class="character-heading">
@@ -72,19 +76,35 @@
             </a>
         </div>
         <div class="hero-art weapon-hero-art">
+            <div class="weapon-vfx" aria-hidden="true"></div>
             <div class="hero-orbit orbit-one" aria-hidden="true"></div>
             <div class="hero-orbit orbit-two" aria-hidden="true"></div>
             <span class="hero-spark spark-one" aria-hidden="true">✦</span>
             <span class="hero-spark spark-two" aria-hidden="true">✧</span>
             <span class="hero-spark spark-three" aria-hidden="true">✦</span>
             <span class="hero-art-fallback" aria-hidden="true">⚔</span>
-            <img th:if="${weaponFullImage != null}" th:src="${weaponFullImage}"
-                 th:alt="${weaponName}" onerror="this.remove()">
-            <img th:if="${weaponFullImage == null && weaponIcon != null}" th:src="${weaponIcon}"
-                 th:alt="${weaponName}" onerror="this.remove()">
-            <a class="weapon-gallery-credit" th:if="${weaponGallerySourceUrl != null}"
-               th:href="${weaponGallerySourceUrl}" target="_blank" rel="noopener noreferrer"
-               th:text="#{weapon.detail.imageSource}">Full view from HoYoWiki</a>
+            <img class="weapon-display-image" th:if="${weaponFullImage != null}"
+                 th:src="${weaponFullImage}"
+                 th:alt="${weaponName}">
+            <img class="weapon-display-image"
+                 th:if="${weaponFullImage == null && weaponIcon != null}" th:src="${weaponIcon}"
+                 th:alt="${weaponName}">
+            <button class="weapon-image-toggle" type="button"
+                    th:if="${weaponOriginalImage != null && weaponFullImage != null}"
+                    aria-pressed="true"
+                    th:aria-label="#{weapon.detail.switchImage}"
+                    th:attr="data-original-url=${weaponOriginalImage},
+                        data-ascended-url=${weaponFullImage},
+                        data-original-label=#{weapon.detail.originalImage},
+                        data-ascended-label=#{weapon.detail.ascendedImage}">
+                <span class="weapon-image-toggle-icon" aria-hidden="true">◇</span>
+                <span>
+                    <small th:text="#{weapon.detail.weaponForm}">Weapon form</small>
+                    <b data-weapon-form-label
+                       th:text="#{weapon.detail.ascendedImage}">Ascended</b>
+                </span>
+                <span class="weapon-image-toggle-swap" aria-hidden="true">⇄</span>
+            </button>
         </div>
     </section>
 

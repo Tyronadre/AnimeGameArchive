@@ -135,6 +135,23 @@ class DynamicContentLoader(
         return loadRemoteImage(weaponFullImagePath(normalizedKey), remoteUrl)
     }
 
+    fun loadWeaponGalleryImage(
+        key: String,
+        weaponName: String,
+        index: Int,
+        sourceUrl: String,
+    ): LoadedImage? {
+        val normalizedKey = key.trim().lowercase()
+            .takeIf { it.matches(ARTIFACT_KEY_PATTERN) }
+            ?: return null
+        if (
+            weaponName.isBlank() ||
+            weaponName.length > MAX_MATERIAL_NAME_LENGTH ||
+            index !in 0..MAX_WEAPON_GALLERY_INDEX
+        ) return null
+        return loadRemoteImage(weaponGalleryImagePath(normalizedKey, index), sourceUrl)
+    }
+
     fun loadTalentImage(
         characterKey: String,
         talentKey: String,
@@ -702,6 +719,9 @@ class DynamicContentLoader(
     private fun weaponFullImagePath(key: String): Path =
         cacheDirectory.resolve("weapons").resolve("$key-full.image").normalize()
 
+    private fun weaponGalleryImagePath(key: String, index: Int): Path =
+        cacheDirectory.resolve("weapons").resolve("$key-gallery-$index.image").normalize()
+
     private fun weaponDataPath(key: String): Path =
         cacheDirectory.resolve("weapons").resolve("data").resolve("$key.json").normalize()
 
@@ -789,5 +809,6 @@ class DynamicContentLoader(
         private const val MAX_IMAGE_SIZE = 20 * 1024 * 1024
         private const val MAX_MATERIAL_NAME_LENGTH = 160
         private const val MAX_URL_LENGTH = 4_096
+        private const val MAX_WEAPON_GALLERY_INDEX = 20
     }
 }

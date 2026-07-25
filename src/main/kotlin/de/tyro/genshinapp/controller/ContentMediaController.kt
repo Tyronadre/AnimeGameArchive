@@ -102,6 +102,24 @@ class ContentMediaController(
         return imageResponse(image)
     }
 
+    @GetMapping("/weapons/{key}/gallery/{index}")
+    fun weaponGalleryImage(
+        @PathVariable key: String,
+        @PathVariable index: Int,
+    ): ResponseEntity<ByteArray> {
+        val weapon = weaponCatalogService.find(key)
+            ?: return ResponseEntity.notFound().build()
+        val galleryImage = weapon.galleryImages.getOrNull(index)
+            ?: return ResponseEntity.notFound().build()
+        val image = contentLoader.loadWeaponGalleryImage(
+            weapon.key,
+            weapon.name,
+            index,
+            galleryImage.url,
+        ) ?: return ResponseEntity.notFound().build()
+        return imageResponse(image)
+    }
+
     private fun imageResponse(image: DynamicContentLoader.LoadedImage): ResponseEntity<ByteArray> =
         ResponseEntity.ok()
             .contentType(MediaType.parseMediaType(image.contentType))

@@ -58,14 +58,20 @@ class WeaponController(
         val secondaryStatKey = OptimizerCombatStatService.combatStatKey(
             definition?.secondaryStatType,
         )
+        val originalImageIndex = definition?.galleryImages
+            ?.indexOfFirst { image ->
+                image.label.equals("Original", ignoreCase = true) ||
+                    image.description?.contains("before", ignoreCase = true) == true
+            }
+            ?.takeIf { it >= 0 }
 
         model.addAttribute("weaponKey", weaponKey)
         model.addAttribute("weaponName", weaponName)
         model.addAttribute("weaponIcon", weaponCatalogService.imageUrl(weaponKey))
         model.addAttribute("weaponFullImage", weaponCatalogService.fullImageUrl(weaponKey))
         model.addAttribute(
-            "weaponGallerySourceUrl",
-            definition?.hoyolabEntryId?.let { "https://wiki.hoyolab.com/pc/genshin/entry/$it" },
+            "weaponOriginalImage",
+            originalImageIndex?.let { weaponCatalogService.galleryImageUrl(weaponKey, it) },
         )
         model.addAttribute("weaponDefinition", definition)
         model.addAttribute("secondaryStatKey", secondaryStatKey)

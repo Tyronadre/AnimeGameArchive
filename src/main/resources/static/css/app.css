@@ -1,3 +1,51 @@
+@property --weapon-primary {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #5d7f94;
+}
+
+@property --weapon-secondary {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #a8d9e9;
+}
+
+@property --weapon-deep {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #274454;
+}
+
+@property --weapon-primary-rgb {
+    syntax: "<number>#";
+    inherits: true;
+    initial-value: 93, 127, 148;
+}
+
+@property --weapon-secondary-rgb {
+    syntax: "<number>#";
+    inherits: true;
+    initial-value: 168, 217, 233;
+}
+
+@property --hero-accent {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #5d7f94;
+}
+
+@property --hero-accent-deep {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #274454;
+}
+
+@property --hero-glow {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: rgba(123, 173, 194, 0.4);
+}
+
 :root {
     --ink: #172332;
     --muted: #657081;
@@ -3557,7 +3605,37 @@ code {
 }
 
 .weapon-detail-hero {
+    --weapon-primary: #5d7f94;
+    --weapon-secondary: #a8d9e9;
+    --weapon-deep: #274454;
+    --weapon-primary-rgb: 93, 127, 148;
+    --weapon-secondary-rgb: 168, 217, 233;
     min-height: min(560px, 72vh);
+    transition:
+        --weapon-primary 900ms ease,
+        --weapon-secondary 900ms ease,
+        --weapon-deep 900ms ease,
+        --weapon-primary-rgb 900ms ease,
+        --weapon-secondary-rgb 900ms ease,
+        --hero-accent 900ms ease,
+        --hero-accent-deep 900ms ease,
+        --hero-glow 900ms ease,
+        background 900ms ease,
+        border-color 900ms ease,
+        box-shadow 900ms ease;
+}
+
+.weapon-detail-hero.weapon-palette-ready {
+    border-color: rgba(var(--weapon-secondary-rgb), 0.48);
+    background:
+        linear-gradient(105deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 38%,
+            rgba(var(--weapon-primary-rgb), 0.08) 72%),
+        radial-gradient(circle at 82% 42%, rgba(var(--weapon-primary-rgb), 0.42), transparent 43%),
+        radial-gradient(circle at 70% 18%, rgba(var(--weapon-secondary-rgb), 0.2), transparent 28%),
+        linear-gradient(145deg, #f9f5eb, rgba(var(--weapon-primary-rgb), 0.2));
+    box-shadow:
+        0 30px 90px rgba(var(--weapon-primary-rgb), 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .weapon-detail-hero h1 {
@@ -3570,37 +3648,651 @@ code {
 }
 
 .weapon-hero-art {
+    isolation: isolate;
     min-height: 460px;
+}
+
+.weapon-hero-art .hero-art-fallback {
+    transition: opacity 180ms ease, visibility 180ms ease;
+}
+
+.weapon-hero-art.weapon-image-loaded .hero-art-fallback {
+    visibility: hidden;
+    opacity: 0;
 }
 
 .weapon-hero-art img {
     inset: auto;
     top: 50%;
     left: 50%;
-    width: min(156%, 1040px);
-    height: min(156%, 1040px);
+    width: min(156%, 460px);
+    height: min(156%, 460px);
     margin: 0;
+    scale: var(--weapon-art-scale, 1);
+    translate:
+        calc(-50% + var(--weapon-art-shift-x, 0%))
+        calc(-50% + var(--weapon-art-shift-y, 0%));
+    transition: opacity 700ms ease-in-out,
+        scale 650ms cubic-bezier(0.2, 0.75, 0.25, 1),
+        translate 650ms cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+
+.weapon-hero-art img.weapon-image-incoming {
+    opacity: 0;
+}
+
+.weapon-hero-art img.weapon-image-outgoing {
+    z-index: 2;
+    pointer-events: none;
+}
+
+.weapon-palette-ready .weapon-hero-art img.weapon-image-outgoing.is-leaving {
+    opacity: 0;
+}
+
+.weapon-palette-ready .weapon-hero-art img {
+    filter:
+        drop-shadow(0 28px 28px rgba(16, 25, 35, 0.24))
+        drop-shadow(0 0 34px rgba(var(--weapon-primary-rgb), 0.48))
+        drop-shadow(0 0 14px rgba(var(--weapon-secondary-rgb), 0.28));
+}
+
+.weapon-vfx {
+    position: absolute;
+    z-index: 1;
+    inset: 2%;
+    overflow: visible;
+    pointer-events: none;
+}
+
+.weapon-vfx::before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 74%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(var(--weapon-secondary-rgb), 0.2) 0%,
+        rgba(var(--weapon-primary-rgb), 0.12) 30%,
+        transparent 68%
+    );
+    content: "";
+    filter: blur(10px);
+    translate: -50% -50%;
+    animation: weapon-aura-breathe 4.8s ease-in-out infinite;
+}
+
+.weapon-vfx-core,
+.weapon-vfx-ring,
+.weapon-vfx-trail,
+.weapon-vfx-mote {
+    position: absolute;
+    pointer-events: none;
+}
+
+.weapon-vfx-core {
+    z-index: 0;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    width: 32%;
+    aspect-ratio: 1;
+    place-items: center;
+    color: rgba(var(--weapon-secondary-rgb), 0.55);
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.72),
+        rgba(var(--weapon-primary-rgb), 0.18) 32%,
+        transparent 67%
+    );
+    font-family: Georgia, serif;
+    font-size: clamp(3.8rem, 8vw, 7rem);
+    line-height: 1;
+    text-shadow:
+        0 0 18px rgba(var(--weapon-secondary-rgb), 0.75),
+        0 0 48px rgba(var(--weapon-primary-rgb), 0.45);
+    translate: -50% -50%;
+    animation: weapon-core-pulse 4.2s ease-in-out infinite;
+}
+
+.weapon-vfx-ring {
+    z-index: 0;
+    top: 50%;
+    left: 50%;
+    aspect-ratio: 1;
+    border: 1px solid rgba(var(--weapon-primary-rgb), 0.38);
+    border-radius: 50%;
+    box-shadow:
+        0 0 22px rgba(var(--weapon-primary-rgb), 0.12),
+        inset 0 0 22px rgba(var(--weapon-secondary-rgb), 0.08);
     translate: -50% -50%;
 }
 
-.weapon-gallery-credit {
+.weapon-vfx-ring.ring-1 {
+    width: 61%;
+    border-style: dashed;
+    animation: weapon-ring-clockwise 18s linear infinite;
+}
+
+.weapon-vfx-ring.ring-2 {
+    width: 82%;
+    opacity: 0.68;
+    animation: weapon-ring-counter 25s linear infinite;
+}
+
+.weapon-vfx-mote {
+    z-index: 1;
+    top: calc(50% + var(--mote-y));
+    left: calc(50% + var(--mote-x));
+    width: 5px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--weapon-secondary);
+    box-shadow:
+        0 0 8px rgba(var(--weapon-secondary-rgb), 0.9),
+        0 0 18px rgba(var(--weapon-primary-rgb), 0.62);
+    animation: weapon-mote var(--mote-duration) ease-in-out var(--mote-delay) infinite;
+}
+
+.weapon-vfx-mote:nth-of-type(3n) {
+    width: 3px;
+    background: white;
+}
+
+.weapon-vfx-trail {
+    display: none;
+    z-index: 1;
+}
+
+/* Sword: crossing energy cuts that flash behind the blade. */
+.weapon-kind-sword .weapon-vfx-ring {
+    border-radius: 42% 58% 50% 50%;
+}
+
+.weapon-kind-sword .weapon-vfx-trail {
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: 78%;
+    height: 2px;
+    border-radius: 999px;
+    opacity: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(var(--weapon-primary-rgb), 0.28) 20%,
+        rgba(255, 255, 255, 0.96) 63%,
+        transparent
+    );
+    box-shadow: 0 0 13px rgba(var(--weapon-secondary-rgb), 0.82);
+    animation: weapon-sword-slash 4.6s cubic-bezier(0.2, 0.75, 0.25, 1)
+        var(--trail-delay) infinite;
+}
+
+.weapon-kind-sword .weapon-vfx-trail:nth-of-type(n + 7) {
+    display: none;
+}
+
+.weapon-kind-sword .weapon-display-image {
+    animation: weapon-sword-hover 6.4s ease-in-out infinite;
+}
+
+/* Bow: luminous arrows repeatedly cross the field at staggered heights. */
+.weapon-kind-bow .weapon-vfx-ring {
+    transform: scaleY(0.56);
+}
+
+.weapon-kind-bow .weapon-vfx-ring.ring-1 {
+    animation-duration: 12s;
+}
+
+.weapon-kind-bow .weapon-vfx-trail {
+    top: var(--trail-y);
+    left: -28%;
+    display: block;
+    width: 48%;
+    height: 2px;
+    opacity: 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, var(--weapon-primary), white);
+    box-shadow: 0 0 12px rgba(var(--weapon-secondary-rgb), 0.72);
+    animation: weapon-bow-shot 3.7s cubic-bezier(0.2, 0.65, 0.3, 1)
+        var(--trail-delay) infinite;
+}
+
+.weapon-kind-bow .weapon-vfx-trail::after {
+    position: absolute;
+    top: 50%;
+    right: -2px;
+    width: 8px;
+    aspect-ratio: 1;
+    border-top: 2px solid white;
+    border-right: 2px solid white;
+    content: "";
+    rotate: 45deg;
+    translate: 0 -50%;
+}
+
+.weapon-kind-bow .weapon-display-image {
+    animation: weapon-bow-hover 5.8s ease-in-out infinite;
+}
+
+/* Claymore: heavy radial impacts and fragments, deliberately slower and weightier. */
+.weapon-kind-claymore .weapon-vfx-ring {
+    border-width: 2px;
+    animation: weapon-claymore-impact 4.4s cubic-bezier(0.12, 0.65, 0.22, 1) infinite;
+}
+
+.weapon-kind-claymore .weapon-vfx-ring.ring-2 {
+    animation-delay: -2.2s;
+}
+
+.weapon-kind-claymore .weapon-vfx-trail {
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: 24%;
+    height: 3px;
+    overflow: visible;
+    border-radius: 100% 0 0 100%;
+    opacity: 0;
+    transform-origin: 0 50%;
+    rotate: var(--trail-angle);
+    background: linear-gradient(90deg, white, var(--weapon-primary), transparent);
+    animation: weapon-claymore-shard 4.4s ease-out var(--trail-delay) infinite;
+}
+
+.weapon-kind-claymore .weapon-display-image {
+    animation: weapon-claymore-hover 6.8s ease-in-out infinite;
+}
+
+/* Polearm: a rotating crown of thin thrust lines. */
+.weapon-kind-polearm .weapon-vfx-ring.ring-1 {
+    width: 48%;
+    border-style: solid;
+    animation-duration: 7s;
+}
+
+.weapon-kind-polearm .weapon-vfx-ring.ring-2 {
+    border-style: dashed;
+    animation-duration: 11s;
+}
+
+.weapon-kind-polearm .weapon-vfx-trail {
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: 46%;
+    height: 1px;
+    opacity: 0.34;
+    transform-origin: 0 50%;
+    rotate: var(--trail-angle);
+    background: linear-gradient(90deg, white, var(--weapon-secondary), transparent 82%);
+    box-shadow: 0 0 9px rgba(var(--weapon-primary-rgb), 0.75);
+    animation: weapon-polearm-thrust 3.6s ease-in-out var(--trail-delay) infinite;
+}
+
+.weapon-kind-polearm .weapon-display-image {
+    animation: weapon-polearm-hover 7.2s ease-in-out infinite;
+}
+
+/* Catalyst: nested arcane circles, a floating sigil, and brighter orbiting motes. */
+.weapon-kind-catalyst .weapon-vfx-core {
+    animation: weapon-catalyst-core 7s linear infinite;
+}
+
+.weapon-kind-catalyst .weapon-vfx-ring.ring-1 {
+    width: 52%;
+    border: 2px dotted rgba(var(--weapon-secondary-rgb), 0.58);
+    animation-duration: 8s;
+}
+
+.weapon-kind-catalyst .weapon-vfx-ring.ring-2 {
+    width: 76%;
+    border: 1px dashed rgba(var(--weapon-primary-rgb), 0.48);
+    animation-duration: 13s;
+}
+
+.weapon-kind-catalyst .weapon-vfx-mote {
+    width: 6px;
+    animation-name: weapon-catalyst-mote;
+}
+
+.weapon-kind-catalyst .weapon-display-image {
+    animation: weapon-catalyst-hover 5.6s ease-in-out infinite;
+}
+
+.weapon-kind-unknown .weapon-vfx-ring.ring-1 {
+    animation-duration: 14s;
+}
+
+.weapon-image-toggle {
     position: absolute;
     z-index: 3;
     right: 1rem;
     bottom: 0.75rem;
-    padding: 0.32rem 0.55rem;
-    color: var(--muted);
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr) 24px;
+    min-width: 154px;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.55rem;
+    color: var(--ink);
+    border: 1px solid rgba(var(--weapon-secondary-rgb), 0.34);
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.62);
-    font-size: 0.62rem;
-    font-weight: 700;
-    text-decoration: none;
+    background: rgba(255, 255, 255, 0.68);
+    box-shadow:
+        0 8px 24px rgba(18, 28, 38, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    font: inherit;
+    text-align: left;
     backdrop-filter: blur(8px);
+    cursor: pointer;
+    transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
 }
 
-.weapon-gallery-credit:hover {
-    color: var(--ink);
-    background: rgba(255, 255, 255, 0.82);
+.weapon-image-toggle:hover:not(:disabled) {
+    transform: translateY(-2px);
+    border-color: rgba(var(--weapon-secondary-rgb), 0.65);
+    background: rgba(255, 255, 255, 0.86);
+}
+
+.weapon-image-toggle:disabled {
+    cursor: wait;
+    opacity: 0.62;
+}
+
+.weapon-image-toggle-icon {
+    display: grid;
+    width: 28px;
+    aspect-ratio: 1;
+    place-items: center;
+    color: var(--weapon-secondary);
+    border: 1px solid rgba(var(--weapon-primary-rgb), 0.28);
+    border-radius: 50%;
+    background: rgba(var(--weapon-primary-rgb), 0.12);
+    box-shadow: 0 0 14px rgba(var(--weapon-primary-rgb), 0.18);
+    font-family: Georgia, serif;
+}
+
+.weapon-image-toggle > span:nth-child(2) {
+    display: grid;
+    gap: 0.02rem;
+}
+
+.weapon-image-toggle small {
+    color: var(--muted);
+    font-size: 0.48rem;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.weapon-image-toggle b {
+    font-size: 0.68rem;
+    line-height: 1.2;
+}
+
+.weapon-image-toggle-swap {
+    color: var(--weapon-primary);
+    font-size: 1rem;
+    text-align: center;
+    transition: rotate 240ms ease;
+}
+
+.weapon-image-toggle[aria-pressed="false"] .weapon-image-toggle-swap {
+    rotate: 180deg;
+}
+
+@keyframes weapon-aura-breathe {
+    0%,
+    100% {
+        opacity: 0.58;
+        transform: scale(0.88);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.08);
+    }
+}
+
+@keyframes weapon-core-pulse {
+    0%,
+    100% {
+        opacity: 0.32;
+        transform: scale(0.82) rotate(-4deg);
+    }
+
+    50% {
+        opacity: 0.68;
+        transform: scale(1.08) rotate(4deg);
+    }
+}
+
+@keyframes weapon-ring-clockwise {
+    to {
+        rotate: 360deg;
+    }
+}
+
+@keyframes weapon-ring-counter {
+    to {
+        rotate: -360deg;
+    }
+}
+
+@keyframes weapon-mote {
+    0%,
+    100% {
+        opacity: 0.18;
+        transform: translateY(8px) scale(0.55);
+    }
+
+    45% {
+        opacity: 0.95;
+        transform: translateY(-5px) scale(1.25);
+    }
+}
+
+@keyframes weapon-sword-slash {
+    0%,
+    58% {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(var(--trail-angle)) scaleX(0.04);
+    }
+
+    64% {
+        opacity: 0.95;
+    }
+
+    80% {
+        opacity: 0.75;
+        transform: translate(-50%, -50%) rotate(var(--trail-angle)) scaleX(1);
+    }
+
+    92%,
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(var(--trail-angle)) scaleX(1.08);
+    }
+}
+
+@keyframes weapon-sword-hover {
+    0%,
+    100% {
+        transform: translate3d(0, 4px, 0) rotate(-0.35deg) scale(0.99);
+    }
+
+    50% {
+        transform: translate3d(0, -9px, 0) rotate(0.45deg) scale(1.012);
+    }
+}
+
+@keyframes weapon-bow-shot {
+    0%,
+    14% {
+        opacity: 0;
+        transform: translateX(0) scaleX(0.25);
+    }
+
+    22% {
+        opacity: 0.88;
+    }
+
+    58% {
+        opacity: 0.68;
+        transform: translateX(245%) scaleX(1);
+    }
+
+    70%,
+    100% {
+        opacity: 0;
+        transform: translateX(300%) scaleX(0.72);
+    }
+}
+
+@keyframes weapon-bow-hover {
+    0%,
+    100% {
+        transform: translate3d(-4px, 1px, 0) scale(0.995);
+    }
+
+    50% {
+        transform: translate3d(6px, -8px, 0) scale(1.014);
+    }
+}
+
+@keyframes weapon-claymore-impact {
+    0% {
+        opacity: 0;
+        transform: scale(0.42);
+        border-color: rgba(var(--weapon-secondary-rgb), 0.85);
+    }
+
+    18% {
+        opacity: 0.88;
+    }
+
+    52%,
+    100% {
+        opacity: 0;
+        transform: scale(1.28);
+        border-color: rgba(var(--weapon-primary-rgb), 0.05);
+    }
+}
+
+@keyframes weapon-claymore-shard {
+    0%,
+    8% {
+        opacity: 0;
+        transform: translateX(0) scaleX(0.2);
+    }
+
+    15% {
+        opacity: 0.88;
+    }
+
+    42%,
+    100% {
+        opacity: 0;
+        transform: translateX(62%) scaleX(1.05);
+    }
+}
+
+@keyframes weapon-claymore-hover {
+    0%,
+    100% {
+        transform: translate3d(0, -4px, 0) scale(1.006);
+    }
+
+    45% {
+        transform: translate3d(0, 4px, 0) scale(0.994);
+    }
+
+    52% {
+        transform: translate3d(0, 7px, 0) scale(0.99);
+    }
+
+    64% {
+        transform: translate3d(0, -6px, 0) scale(1.009);
+    }
+}
+
+@keyframes weapon-polearm-thrust {
+    0%,
+    100% {
+        opacity: 0.12;
+        transform: translateX(-8%) scaleX(0.2);
+    }
+
+    48% {
+        opacity: 0.72;
+        transform: translateX(4%) scaleX(1);
+    }
+
+    70% {
+        opacity: 0.18;
+        transform: translateX(16%) scaleX(1.08);
+    }
+}
+
+@keyframes weapon-polearm-hover {
+    0%,
+    100% {
+        transform: translate3d(0, 4px, 0) rotate(-0.55deg) scale(0.995);
+    }
+
+    50% {
+        transform: translate3d(0, -10px, 0) rotate(0.55deg) scale(1.01);
+    }
+}
+
+@keyframes weapon-catalyst-core {
+    from {
+        opacity: 0.38;
+        rotate: 0deg;
+        transform: scale(0.92);
+    }
+
+    50% {
+        opacity: 0.76;
+        transform: scale(1.08);
+    }
+
+    to {
+        opacity: 0.38;
+        rotate: 360deg;
+        transform: scale(0.92);
+    }
+}
+
+@keyframes weapon-catalyst-mote {
+    0%,
+    100% {
+        opacity: 0.24;
+        transform: scale(0.45) rotate(0deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.4) rotate(180deg);
+    }
+}
+
+@keyframes weapon-catalyst-hover {
+    0%,
+    100% {
+        transform: translate3d(0, 5px, 0) rotate(-0.7deg) scale(0.985);
+    }
+
+    50% {
+        transform: translate3d(0, -9px, 0) rotate(0.7deg) scale(1.022);
+    }
 }
 
 .weapon-detail-layout {
@@ -4575,6 +5267,11 @@ code {
     .dashboard-hero-route span::after,
     .dashboard-step::before,
     .dashboard-step::after,
+    .weapon-vfx::before,
+    .weapon-vfx-core,
+    .weapon-vfx-ring,
+    .weapon-vfx-trail,
+    .weapon-vfx-mote,
     .hero-art img,
     .hero-orbit,
     .hero-spark,
@@ -4587,6 +5284,10 @@ code {
     .artifact-selected-roll,
     .artifact-value-mode button,
     .theme-toggle-icon,
+    .weapon-detail-hero,
+    .weapon-display-image,
+    .weapon-image-toggle,
+    .weapon-image-toggle-swap,
     .fact,
     .fact::after,
     .fact-icon {
@@ -8617,6 +9318,34 @@ html[data-theme="dark"] .character-hero {
     box-shadow:
         0 34px 90px rgba(0, 0, 0, 0.38),
         inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme="dark"] .weapon-detail-hero.weapon-palette-ready {
+    border-color: rgba(var(--weapon-secondary-rgb), 0.2);
+    background:
+        linear-gradient(105deg, rgba(13, 21, 30, 0.97) 0%, rgba(15, 25, 35, 0.9) 42%,
+            rgba(var(--weapon-primary-rgb), 0.12) 74%),
+        radial-gradient(circle at 82% 42%, rgba(var(--weapon-primary-rgb), 0.42), transparent 43%),
+        radial-gradient(circle at 70% 18%, rgba(var(--weapon-secondary-rgb), 0.13), transparent 28%),
+        linear-gradient(145deg, #0e1822, rgba(var(--weapon-primary-rgb), 0.17));
+    box-shadow:
+        0 34px 96px rgba(0, 0, 0, 0.42),
+        0 0 54px rgba(var(--weapon-primary-rgb), 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme="dark"] .weapon-image-toggle {
+    color: #eef5f8;
+    border-color: rgba(var(--weapon-secondary-rgb), 0.24);
+    background: rgba(17, 27, 38, 0.76);
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+html[data-theme="dark"] .weapon-image-toggle:hover:not(:disabled) {
+    border-color: rgba(var(--weapon-secondary-rgb), 0.5);
+    background: rgba(25, 39, 52, 0.9);
 }
 
 html[data-theme="dark"] .character-hero h1 {

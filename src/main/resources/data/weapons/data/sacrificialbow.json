@@ -1,6 +1,7 @@
 {
   "name": "Sacrificial Bow",
   "rarity": 4,
+  "weaponText": "Bow",
   "mainStatType": "FIGHT_PROP_CHARGE_EFFICIENCY",
   "baseStatText": "6.7%",
   "costs": {

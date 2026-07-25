@@ -1,6 +1,7 @@
 {
   "name": "Rust",
   "rarity": 4,
+  "weaponText": "Bow",
   "mainStatType": "FIGHT_PROP_ATTACK_PERCENT",
   "baseStatText": "9%",
   "costs": {

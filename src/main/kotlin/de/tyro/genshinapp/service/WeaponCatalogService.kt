@@ -96,6 +96,16 @@ class WeaponCatalogService(
         return localFullImageUrl(normalizedKey).takeIf { !effectiveUrl.isNullOrBlank() }
     }
 
+    fun galleryImageUrl(key: String, index: Int): String? {
+        val normalizedKey = validKey(key) ?: return null
+        val galleryImage = find(normalizedKey)?.galleryImages?.getOrNull(index) ?: return null
+        if (galleryImage.url.isBlank()) return null
+        return UriComponentsBuilder.fromPath("/media/weapons/{key}/gallery/{index}")
+            .buildAndExpand(normalizedKey, index)
+            .encode()
+            .toUriString()
+    }
+
     private fun baseDefinition(key: String, name: String): WeaponDefinition = WeaponDefinition(
         key = key,
         name = name,

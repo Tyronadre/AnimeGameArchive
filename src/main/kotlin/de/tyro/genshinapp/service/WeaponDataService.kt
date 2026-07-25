@@ -17,13 +17,15 @@ class WeaponDataService(
 
     fun find(key: String): WeaponDefinition? {
         val normalizedKey = GoodKeyNormalizer.normalize(key)
-        definitions[normalizedKey]?.let { return it }
+        definitions[normalizedKey]
+            ?.takeIf { !it.weaponType.isNullOrBlank() }
+            ?.let { return it }
         val stored = catalogStore?.findWeapon(normalizedKey)
-        if (stored?.hasDetails == true) {
+        if (stored?.hasDetails == true && !stored.weaponType.isNullOrBlank()) {
             definitions[normalizedKey] = stored
             return stored
         }
-        return contentLoader.loadWeaponJson(normalizedKey)
+        val refreshed = contentLoader.loadWeaponJson(normalizedKey)
             ?.let { mapDefinition(normalizedKey, it) }
             ?.let { loaded ->
                 loaded.copy(
@@ -36,9 +38,12 @@ class WeaponDataService(
             }
             ?.let { loaded -> catalogStore?.saveWeapon(loaded) ?: loaded }
             ?.also {
-                definitions.putIfAbsent(normalizedKey, it)
+                definitions[normalizedKey] = it
                 weaponCatalogService?.rememberPersisted(it)
             }
+        if (refreshed != null) return refreshed
+
+        return stored?.also { definitions.putIfAbsent(normalizedKey, it) }
     }
 
     fun findKnownMaterial(id: Int): MaterialDefinition? =
