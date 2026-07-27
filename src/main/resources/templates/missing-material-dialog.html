@@ -24,19 +24,23 @@
             <dl class="breakdown-totals">
                 <div>
                     <dt th:text="#{material.totalRequired}">Total required</dt>
-                    <dd th:text="${#numbers.formatInteger(selectedMaterial.required, 1, 'POINT')}">0</dd>
+                    <dd data-material-value="required"
+                        th:text="${#numbers.formatInteger(selectedMaterial.required, 1, 'POINT')}">0</dd>
                 </div>
                 <div>
                     <dt th:text="#{material.inInventory}">In inventory</dt>
-                    <dd th:text="${#numbers.formatInteger(selectedMaterial.owned, 1, 'POINT')}">0</dd>
+                    <dd data-material-value="owned"
+                        th:text="${#numbers.formatInteger(selectedMaterial.owned, 1, 'POINT')}">0</dd>
                 </div>
                 <div>
                     <dt th:text="#{material.craftable}">Craftable</dt>
-                    <dd th:text="${#numbers.formatInteger(selectedMaterial.craftable, 1, 'POINT')}">0</dd>
+                    <dd data-material-value="craftable"
+                        th:text="${#numbers.formatInteger(selectedMaterial.craftable, 1, 'POINT')}">0</dd>
                 </div>
                 <div>
                     <dt th:text="#{material.totalMissing}">Total missing</dt>
-                    <dd th:text="${#numbers.formatInteger(selectedMaterial.needed, 1, 'POINT')}">0</dd>
+                    <dd data-material-value="needed"
+                        th:text="${#numbers.formatInteger(selectedMaterial.needed, 1, 'POINT')}">0</dd>
                 </div>
             </dl>
             <p class="breakdown-note" th:text="#{planning.breakdownNote}">

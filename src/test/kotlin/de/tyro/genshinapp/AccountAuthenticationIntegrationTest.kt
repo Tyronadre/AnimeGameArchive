@@ -562,12 +562,19 @@ class AccountAuthenticationIntegrationTest @Autowired constructor(
             .andExpect(content().string(containsString("Grouped by source")))
             .andExpect(content().string(containsString("data-snapshot-revision=")))
             .andExpect(content().string(containsString("/materials/api/revision")))
+            .andExpect(content().string(containsString("/materials/api/state")))
+            .andExpect(content().string(containsString("applyLiveState")))
             .andExpect(content().string(containsString("new DOMParser()")))
+            .andExpect(content().string(org.hamcrest.Matchers.not(containsString("fetch(window.location.href"))))
             .andExpect(content().string(org.hamcrest.Matchers.not(containsString("window.location.reload()"))))
 
         mockMvc.perform(get("/materials/api/revision").session(session))
             .andExpect(status().isOk)
             .andExpect(content().string(containsString("\"revision\":")))
+
+        mockMvc.perform(get("/materials/api/state").session(session))
+            .andExpect(status().isOk)
+            .andExpect(content().string(containsString("\"materials\":")))
 
         mockMvc.perform(get("/admin/images").session(session))
             .andExpect(status().isOk)

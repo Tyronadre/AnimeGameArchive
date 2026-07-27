@@ -82,4 +82,58 @@ class MissingMaterialsController(
     ): Map<String, Long> = mapOf(
         "revision" to (snapshotStore.current(principal.id)?.revision ?: 0L),
     )
+
+    @GetMapping("/api/state")
+    @ResponseBody
+    fun liveState(
+        @AuthenticationPrincipal principal: AppUserPrincipal,
+    ): MissingMaterialsLiveState {
+        val snapshot = snapshotStore.current(principal.id)
+            ?: return MissingMaterialsLiveState(revision = 0L, materials = emptyMap())
+        val plan = planningService.createPlan(
+            snapshot,
+            characterTargetService.findAll(principal.id),
+            principal.id,
+        )
+        val materials = pageService.create(plan).allItemsById.mapValues { (_, item) ->
+            MissingMaterialLiveValue(
+                owned = item.owned,
+                required = item.required,
+                craftable = item.craftable,
+                needed = item.needed,
+                freeToUse = item.freeToUse,
+            )
+        }
+        return MissingMaterialsLiveState(
+            revision = snapshot.revision,
+            summary = MissingMaterialsLiveSummary(
+                matchedCharacters = plan.matchedCharacters,
+                characterCount = snapshot.characters.size,
+                inventoryEntries = snapshot.exportedInventoryKeys,
+                missingMaterialKinds = plan.missingMaterialKinds,
+            ),
+            materials = materials,
+        )
+    }
 }
+
+data class MissingMaterialsLiveState(
+    val revision: Long,
+    val summary: MissingMaterialsLiveSummary? = null,
+    val materials: Map<Int, MissingMaterialLiveValue>,
+)
+
+data class MissingMaterialsLiveSummary(
+    val matchedCharacters: Int,
+    val characterCount: Int,
+    val inventoryEntries: Int,
+    val missingMaterialKinds: Int,
+)
+
+data class MissingMaterialLiveValue(
+    val owned: Long,
+    val required: Long,
+    val craftable: Long,
+    val needed: Long,
+    val freeToUse: Long,
+)

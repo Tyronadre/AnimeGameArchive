@@ -89,6 +89,8 @@ class MissingMaterialsIntegrationTest @Autowired constructor(
             .andExpect(content().string(containsString("Still need")))
             .andExpect(content().string(containsString("data-snapshot-revision=")))
             .andExpect(content().string(containsString("/materials/api/revision")))
+            .andExpect(content().string(containsString("/materials/api/state")))
+            .andExpect(content().string(containsString("applyLiveState")))
             .andExpect(content().string(containsString("new DOMParser()")))
             .andExpect(content().string(containsString("openMaterialDialog(link.href)")))
             .andExpect(content().string(containsString("event.preventDefault()")))
@@ -96,6 +98,8 @@ class MissingMaterialsIntegrationTest @Autowired constructor(
             .andExpect(content().string(containsString("/materials/popup?materialId=")))
             .andExpect(content().string(not(containsString("showModal()"))))
             .andExpect(content().string(not(containsString("window.location.assign(materialUrl)"))))
+            .andExpect(content().string(not(containsString("fetch(window.location.href"))))
+            .andExpect(content().string(not(containsString("current.replaceWith(fresh)"))))
             .andExpect(content().string(not(containsString("window.location.reload()"))))
 
         mockMvc.perform(get("/materials/popup").param("materialId", "104303").session(session))
@@ -106,6 +110,15 @@ class MissingMaterialsIntegrationTest @Autowired constructor(
         mockMvc.perform(get("/materials/api/revision").session(session))
             .andExpect(status().isOk)
             .andExpect(content().string(containsString("\"revision\":")))
+
+        mockMvc.perform(get("/materials/api/state").session(session))
+            .andExpect(status().isOk)
+            .andExpect(content().string(containsString("\"revision\":")))
+            .andExpect(content().string(containsString("\"summary\":")))
+            .andExpect(content().string(containsString("\"materials\":")))
+            .andExpect(content().string(containsString("\"104303\":")))
+            .andExpect(content().string(containsString("\"owned\":")))
+            .andExpect(content().string(containsString("\"needed\":")))
 
         val freedomGuide = assertNotNull(materialRepository.findByGameId(104302))
         assertEquals("TALENT_BOOK", freedomGuide.type)
