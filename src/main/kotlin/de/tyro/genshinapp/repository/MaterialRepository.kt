@@ -7,4 +7,8 @@ interface MaterialRepository : CrudRepository<Material, Long> {
     fun findByGameId(gameId: Int): Material?
 
     fun findAllByOrderByNameAsc(): List<Material>
+
+    fun findAllByGameIdInOrderByNameAsc(gameIds: Collection<Int>): List<Material>
+
+    fun findAllByTypeInOrderByNameAsc(types: Collection<String>): List<Material>
 }

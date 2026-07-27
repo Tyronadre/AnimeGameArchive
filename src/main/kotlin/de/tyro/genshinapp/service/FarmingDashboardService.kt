@@ -18,6 +18,7 @@ import kotlin.math.roundToInt
 @Service
 class FarmingDashboardService(
     private val catalogService: CharacterCatalogService,
+    private val materialCatalogService: MaterialCatalogService,
     private val targetService: CharacterTargetService,
     private val materialCalculator: MaterialCalculator,
     private val planningService: PlayerPlanningService,
@@ -302,7 +303,7 @@ class FarmingDashboardService(
                     activity = descriptor.activity,
                     title = descriptor.title,
                     imageUrl = balance.imageUrl,
-                    href = "/inventory/missing?materialId=${balance.id}",
+                    href = "/materials?materialId=${balance.id}",
                 )
             }
             recommendation.addMaterial(balance)
@@ -492,7 +493,7 @@ class FarmingDashboardService(
         val normalizedActiveKeys = activeMaterialKeys.mapTo(linkedSetOf()) {
             GoodKeyNormalizer.normalize(it)
         }
-        val materialByInventoryKey = catalogService.getMaterials().associateBy {
+        val materialByInventoryKey = materialCatalogService.getMaterials().associateBy {
             GoodKeyNormalizer.normalize(it.name)
         }
         return normalizedActiveKeys.mapNotNullTo(linkedSetOf()) { key ->

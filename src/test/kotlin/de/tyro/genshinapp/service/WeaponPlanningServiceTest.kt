@@ -8,7 +8,7 @@ import kotlin.test.assertEquals
 class WeaponPlanningServiceTest {
     private val service = WeaponPlanningService(
         mock(WeaponDataService::class.java),
-        mock(CharacterCatalogService::class.java),
+        mock(MaterialCatalogService::class.java),
         mock(PlayerPlanningService::class.java),
     )
 

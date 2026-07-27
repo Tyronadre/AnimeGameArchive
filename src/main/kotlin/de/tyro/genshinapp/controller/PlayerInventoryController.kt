@@ -24,8 +24,8 @@ import de.tyro.genshinapp.service.CharacterTargetService
 import de.tyro.genshinapp.service.GoodImportException
 import de.tyro.genshinapp.service.GoodImportService
 import de.tyro.genshinapp.service.MaterialCraftingService
+import de.tyro.genshinapp.service.MaterialCatalogService
 import de.tyro.genshinapp.service.OptimizerCombatStatService
-import de.tyro.genshinapp.service.PlayerPlanningService
 import de.tyro.genshinapp.service.PlayerArtifactManagementService
 import de.tyro.genshinapp.service.PlayerSnapshotStore
 import de.tyro.genshinapp.service.WeaponCatalogService
@@ -39,7 +39,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
@@ -47,8 +46,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes
 @RequestMapping("/inventory")
 class PlayerInventoryController(
     private val snapshotStore: PlayerSnapshotStore,
-    private val planningService: PlayerPlanningService,
     private val catalogService: CharacterCatalogService,
+    private val materialCatalogService: MaterialCatalogService,
     private val artifactCatalogService: ArtifactCatalogService,
     private val artifactManagementService: PlayerArtifactManagementService,
     private val weaponCatalogService: WeaponCatalogService,
@@ -75,7 +74,7 @@ class PlayerInventoryController(
     ): String {
         val snapshot = snapshotStore.current(principal.id)
         val normalizedQuery = query.trim()
-        val catalogMaterials = catalogService.getMaterials()
+        val catalogMaterials = materialCatalogService.getMaterials()
             .filter { it.id > 0 }
             .associateBy { GoodKeyNormalizer.normalize(it.name) }
         val keys = buildSet {
@@ -101,7 +100,7 @@ class PlayerInventoryController(
                 key = key,
                 name = name,
                 amount = snapshot?.inventory?.getOrDefault(key, 0L) ?: 0L,
-                imageUrl = catalogMaterial?.let { catalogService.materialImageUrl(it.id) },
+                imageUrl = catalogMaterial?.let { materialCatalogService.materialImageUrl(it.id) },
                 buildMaterial = catalogMaterial != null || key in EXPERIENCE_ITEM_KEYS,
                 categoryMessageKey = craftingInfo?.category?.messageKey,
                 craftableAmount = availability?.craftable ?: 0L,
@@ -154,49 +153,10 @@ class PlayerInventoryController(
     }
 
     @GetMapping("/missing")
-    fun missing(
+    fun missingRedirect(
         @RequestParam(required = false) materialId: Int?,
-        @AuthenticationPrincipal principal: AppUserPrincipal,
-        model: Model,
-    ): String {
-        val snapshot = snapshotStore.current(principal.id)
-        val plan = snapshot?.let {
-            planningService.createPlan(
-                it,
-                characterTargetService.findAll(principal.id),
-                principal.id,
-            )
-        }
-        val selectedMaterial = materialId?.let { id ->
-            plan?.missingMaterials?.find { it.id == id }
-        }
-        model.addAttribute("plan", plan)
-        model.addAttribute("selectedMaterial", selectedMaterial)
-        model.addAttribute(
-            "materialCraftingInfo",
-            plan?.missingMaterials.orEmpty().associate { material ->
-                material.id to materialCraftingService.infoFor(material.id)
-            },
-        )
-        model.addAttribute(
-            "materialCategories",
-            plan?.missingMaterials.orEmpty().map { it.category }.distinct(),
-        )
-        model.addAttribute(
-            "characterNeeds",
-            selectedMaterial?.let { plan?.characterNeeds(it.id).orEmpty() }.orEmpty(),
-        )
-        model.addAttribute("snapshotFile", snapshotStore.filePath(principal.id).toString())
-        return "inventory"
-    }
-
-    @GetMapping("/api/revision")
-    @ResponseBody
-    fun inventoryRevision(
-        @AuthenticationPrincipal principal: AppUserPrincipal,
-    ): Map<String, Long> = mapOf(
-        "revision" to (snapshotStore.current(principal.id)?.revision ?: 0L),
-    )
+    ): String = materialId?.let { "redirect:/materials?materialId=$it" }
+        ?: "redirect:/materials"
 
     @GetMapping("/artifacts")
     fun artifacts(

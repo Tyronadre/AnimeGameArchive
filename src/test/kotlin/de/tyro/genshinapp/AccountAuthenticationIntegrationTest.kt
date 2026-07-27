@@ -550,14 +550,22 @@ class AccountAuthenticationIntegrationTest @Autowired constructor(
             .andExpect(content().string(containsString("Wie schwer ist die nächste Verbesserung?")))
 
         mockMvc.perform(get("/inventory/missing").session(session))
+            .andExpect(status().is3xxRedirection)
+            .andExpect(redirectedUrl("/materials"))
+
+        mockMvc.perform(get("/materials").session(session))
             .andExpect(status().isOk)
             .andExpect(content().string(containsString("Overall planning")))
+            .andExpect(content().string(containsString("Materials by source")))
+            .andExpect(content().string(containsString("Forsaken Rift")))
+            .andExpect(content().string(containsString("Every domain and book family")))
+            .andExpect(content().string(containsString("Grouped by source")))
             .andExpect(content().string(containsString("data-snapshot-revision=")))
-            .andExpect(content().string(containsString("/inventory/api/revision")))
+            .andExpect(content().string(containsString("/materials/api/revision")))
             .andExpect(content().string(containsString("new DOMParser()")))
             .andExpect(content().string(org.hamcrest.Matchers.not(containsString("window.location.reload()"))))
 
-        mockMvc.perform(get("/inventory/api/revision").session(session))
+        mockMvc.perform(get("/materials/api/revision").session(session))
             .andExpect(status().isOk)
             .andExpect(content().string(containsString("\"revision\":")))
 

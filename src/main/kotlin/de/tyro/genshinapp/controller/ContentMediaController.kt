@@ -5,6 +5,7 @@ import de.tyro.genshinapp.model.CharacterTalentKind
 import de.tyro.genshinapp.service.ArtifactCatalogService
 import de.tyro.genshinapp.service.CharacterCatalogService
 import de.tyro.genshinapp.service.DynamicContentLoader
+import de.tyro.genshinapp.service.MaterialCatalogService
 import de.tyro.genshinapp.service.WeaponCatalogService
 import de.tyro.genshinapp.service.WeaponDataService
 import org.springframework.http.CacheControl
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/media")
 class ContentMediaController(
     private val catalogService: CharacterCatalogService,
+    private val materialCatalogService: MaterialCatalogService,
     private val artifactCatalogService: ArtifactCatalogService,
     private val weaponCatalogService: WeaponCatalogService,
     private val weaponDataService: WeaponDataService,
@@ -61,7 +63,7 @@ class ContentMediaController(
 
     @GetMapping("/materials/{id}")
     fun materialImage(@PathVariable id: Int): ResponseEntity<ByteArray> {
-        val material = catalogService.findMaterial(id)
+        val material = materialCatalogService.findMaterial(id)
             ?: weaponDataService.findKnownMaterial(id)
             ?: return ResponseEntity.notFound().build()
         val image = contentLoader.loadMaterialImage(material.id, material.name)

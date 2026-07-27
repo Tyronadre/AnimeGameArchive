@@ -3,15 +3,11 @@ package de.tyro.genshinapp.service
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.tyro.genshinapp.entity.GameCharacter
-import de.tyro.genshinapp.entity.Material
 import de.tyro.genshinapp.model.CharacterDefinition
 import de.tyro.genshinapp.model.CharacterImageType
 import de.tyro.genshinapp.model.CharacterTalent
 import de.tyro.genshinapp.model.MaterialCost
-import de.tyro.genshinapp.model.MaterialDefinition
-import de.tyro.genshinapp.model.MaterialCategory
 import de.tyro.genshinapp.repository.GameCharacterRepository
-import de.tyro.genshinapp.repository.MaterialRepository
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -22,19 +18,12 @@ interface CharacterCatalogStore {
     fun findCharacter(key: String): CharacterDefinition?
 
     fun saveCharacter(character: CharacterDefinition): CharacterDefinition
-
-    fun getMaterials(): List<MaterialDefinition>
-
-    fun findMaterial(id: Int): MaterialDefinition?
-
-    fun saveMaterials(materials: Collection<MaterialDefinition>)
 }
 
 @Service
 class JpaCharacterCatalogStore(
     private val objectMapper: ObjectMapper,
     private val characterRepository: GameCharacterRepository,
-    private val materialRepository: MaterialRepository,
 ) : CharacterCatalogStore {
     private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -48,7 +37,6 @@ class JpaCharacterCatalogStore(
 
     @Transactional
     override fun saveCharacter(character: CharacterDefinition): CharacterDefinition {
-        materialDefinitions(character).forEach(::upsertMaterial)
         val entity = characterRepository.findByKey(character.key)
             ?: GameCharacter().also { it.key = character.key }
 
@@ -71,30 +59,6 @@ class JpaCharacterCatalogStore(
         entity.talentsJson = objectMapper.writeValueAsString(character.talents)
 
         return toDefinition(characterRepository.save(entity)) ?: character
-    }
-
-    @Transactional(readOnly = true)
-    override fun getMaterials(): List<MaterialDefinition> =
-        materialRepository.findAllByOrderByNameAsc().map(::toDefinition)
-
-    @Transactional(readOnly = true)
-    override fun findMaterial(id: Int): MaterialDefinition? =
-        materialRepository.findByGameId(id)?.let(::toDefinition)
-
-    @Transactional
-    override fun saveMaterials(materials: Collection<MaterialDefinition>) {
-        materials.forEach(::upsertMaterial)
-    }
-
-    private fun upsertMaterial(material: MaterialDefinition): Material {
-        val entity = materialRepository.findByGameId(material.id)
-            ?: Material().also { it.gameId = material.id }
-        entity.name = material.name
-        entity.type = material.category.name
-        entity.craftingFamily = material.craftingFamily
-        entity.craftingTier = material.craftingTier
-        entity.conversionGroup = material.conversionGroup
-        return materialRepository.save(entity)
     }
 
     private fun toDefinition(entity: GameCharacter): CharacterDefinition? =
@@ -122,28 +86,6 @@ class JpaCharacterCatalogStore(
         }.onFailure {
             logger.warn("Stored character data for '{}' is invalid", entity.key, it)
         }.getOrNull()
-
-    private fun toDefinition(entity: Material): MaterialDefinition =
-        MaterialDefinition(
-            id = entity.gameId,
-            name = entity.name,
-            category = runCatching { MaterialCategory.valueOf(entity.type.orEmpty()) }
-                .getOrDefault(MaterialCategory.OTHER),
-            craftingFamily = entity.craftingFamily,
-            craftingTier = entity.craftingTier,
-            conversionGroup = entity.conversionGroup,
-        )
-
-    private fun materialDefinitions(character: CharacterDefinition): List<MaterialDefinition> =
-        MaterialCatalogMetadata.enrich(
-            (character.ascensionCosts.values.flatten() + character.talentCosts.values.flatten())
-                .asSequence()
-                .filter { it.id > 0 }
-                .distinctBy { it.id }
-                .map { MaterialDefinition(it.id, it.name) }
-                .toList(),
-            listOf(character),
-        )
 
     private fun writeCosts(costs: Map<Int, List<MaterialCost>>): String =
         objectMapper.writeValueAsString(costs)

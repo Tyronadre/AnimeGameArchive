@@ -31,6 +31,7 @@ class CharacterCatalogServiceTest {
     }
     private val imageUrlRegistry = ImageUrlRegistry(objectMapper, properties)
     private val fandomImageUrlResolver = FandomImageUrlResolver(properties)
+    private val materialCatalog = MaterialCatalogService(objectMapper)
     private val catalog = CharacterCatalogService(
         objectMapper,
         DynamicContentLoader(
@@ -41,6 +42,10 @@ class CharacterCatalogServiceTest {
         ),
         fandomImageUrlResolver,
     )
+
+    init {
+        materialCatalog.synchronizeCharacters(catalog.getCharacters())
+    }
 
     @Test
     fun `loads the local character catalog`() {
@@ -177,25 +182,25 @@ class CharacterCatalogServiceTest {
 
         assertTrue("albedo" in store.savedCharacterKeys)
         assertNotNull(store.findCharacter("albedo"))
-        assertNotNull(store.findMaterial(104101))
     }
 
     @Test
     fun `refreshes persisted material metadata from stored character usage`() {
         val store = InMemoryCatalogStore(catalog.getCharacters())
+        val materialStore = InMemoryMaterialCatalogStore()
 
-        catalogWithStore(store)
+        catalogWithStore(store, materialStore)
 
-        assertEquals(MaterialCategory.COLLECTABLE, store.findMaterial(100058)?.category)
-        assertEquals(MaterialCategory.WEEKLY_BOSS, store.findMaterial(113005)?.category)
-        assertEquals(MaterialCategory.ENEMY_DROP, store.findMaterial(112010)?.category)
-        assertEquals(MaterialCategory.TALENT_BOOK, store.findMaterial(104309)?.category)
+        assertEquals(MaterialCategory.COLLECTABLE, materialStore.findMaterial(100058)?.category)
+        assertEquals(MaterialCategory.WEEKLY_BOSS, materialStore.findMaterial(113005)?.category)
+        assertEquals(MaterialCategory.ENEMY_DROP, materialStore.findMaterial(112010)?.category)
+        assertEquals(MaterialCategory.TALENT_BOOK, materialStore.findMaterial(104309)?.category)
     }
 
     @Test
     fun `calculates level and talent materials from the loaded data`() {
         val furina = assertNotNull(catalog.findCharacter("furina"))
-        val materials = MaterialCalculator(catalog).calculate(furina, CharacterProgress())
+        val materials = MaterialCalculator(materialCatalog).calculate(furina, CharacterProgress())
 
         assertEquals(168L, materials.first { it.name == "Lakelight Lily" }.amount)
         assertEquals(66L, materials.first { it.name == "Philosophies of Justice" }.amount)
@@ -211,8 +216,8 @@ class CharacterCatalogServiceTest {
         )
         val plan = PlayerPlanningService(
             catalog,
-            MaterialCalculator(catalog),
-            MaterialCraftingService(catalog),
+            MaterialCalculator(materialCatalog),
+            MaterialCraftingService(materialCatalog),
         ).createPlan(snapshot)
         val smallLampGrass = plan.aggregateMaterials.first { it.name == "Small Lamp Grass" }
         val characterExperience = plan.aggregateMaterials.first { it.name == "Character EXP" }
@@ -241,8 +246,8 @@ class CharacterCatalogServiceTest {
         val furina = assertNotNull(snapshot.characters.find { it.key.equals("Furina", true) })
         val service = PlayerPlanningService(
             catalog,
-            MaterialCalculator(catalog),
-            MaterialCraftingService(catalog),
+            MaterialCalculator(materialCatalog),
+            MaterialCraftingService(materialCatalog),
         )
         val targets = mapOf(
             "amber" to targetValues(owned = false),
@@ -311,8 +316,11 @@ class CharacterCatalogServiceTest {
         assertEquals(100.0, stats.totals.getValue("enerRech_"), 0.01)
     }
 
-    private fun catalogWithStore(store: CharacterCatalogStore): CharacterCatalogService =
-        CharacterCatalogService(
+    private fun catalogWithStore(
+        store: CharacterCatalogStore,
+        materialStore: MaterialCatalogStore = InMemoryMaterialCatalogStore(),
+    ): CharacterCatalogService {
+        val characterCatalog = CharacterCatalogService(
             objectMapper,
             DynamicContentLoader(
                 objectMapper,
@@ -323,6 +331,10 @@ class CharacterCatalogServiceTest {
             fandomImageUrlResolver,
             store,
         )
+        MaterialCatalogService(objectMapper, materialStore)
+            .synchronizeCharacters(characterCatalog.getCharacters())
+        return characterCatalog
+    }
 
     private fun targetValues(
         owned: Boolean,
@@ -352,7 +364,6 @@ class CharacterCatalogServiceTest {
         characters: Collection<CharacterDefinition>,
     ) : CharacterCatalogStore {
         private val charactersByKey = linkedMapOf<String, CharacterDefinition>()
-        private val materialsById = linkedMapOf<Int, MaterialDefinition>()
         val savedCharacterKeys = mutableListOf<String>()
 
         init {
@@ -371,26 +382,34 @@ class CharacterCatalogServiceTest {
             return character
         }
 
-        override fun getMaterials(): List<MaterialDefinition> =
-            materialsById.values.sortedBy { it.name }
+        private fun remember(character: CharacterDefinition) {
+            charactersByKey[character.key] = character
+        }
+    }
 
-        override fun findMaterial(id: Int): MaterialDefinition? =
-            materialsById[id]
+    private class InMemoryMaterialCatalogStore : MaterialCatalogStore {
+        private val materialsById = linkedMapOf<Int, MaterialDefinition>()
+
+        override fun getMaterials(): List<MaterialDefinition> = materialsById.values.toList()
+
+        override fun getMaterialsByIds(ids: Collection<Int>): List<MaterialDefinition> =
+            ids.mapNotNull(materialsById::get)
+
+        override fun getMaterialsByCategories(
+            categories: Collection<MaterialCategory>,
+        ): List<MaterialDefinition> = materialsById.values.filter { it.category in categories }
+
+        override fun findMaterial(id: Int): MaterialDefinition? = materialsById[id]
 
         override fun saveMaterials(materials: Collection<MaterialDefinition>) {
             materials.forEach { material -> materialsById[material.id] = material }
         }
 
-        private fun remember(character: CharacterDefinition) {
-            charactersByKey[character.key] = character
-            val materials = character.ascensionCosts.values.flatten() +
-                character.talentCosts.values.flatten()
-            materials
-                .filter { it.id > 0 }
-                .forEach { material ->
-                    materialsById[material.id] = MaterialDefinition(material.id, material.name)
-                }
-        }
+        override fun ensureSources(sources: Collection<MaterialSourceSeed>) = Unit
+
+        override fun getSources(
+            types: Collection<de.tyro.genshinapp.model.MaterialSourceType>,
+        ) = emptyList<de.tyro.genshinapp.model.MaterialSourceDefinition>()
     }
 
     private companion object {

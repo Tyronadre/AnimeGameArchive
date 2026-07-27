@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{planning.title}">Missing Materials · Genshin Archive</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+    <script th:src="@{/js/theme.js}" src="/js/theme.js"></script>
+</head>
+<body>
+<header th:replace="~{fragments :: siteHeader('materials')}"></header>
+
+<main class="inventory-page missing-materials-page">
+    <section class="inventory-intro">
+        <p class="eyebrow" th:text="#{planning.overall}">Overall planning</p>
+        <h1 th:text="#{inventory.missing}">Missing Materials</h1>
+        <p class="lead" th:text="#{planning.lead}">
+            The combined requirements for each character's saved targets — your inventory is
+            deducted exactly once.
+        </p>
+    </section>
+
+    <section class="empty-state inventory-empty" th:if="${plan == null}">
+        <span>◇</span>
+        <h2 th:text="#{inventory.empty.heading}">No GOOD export imported yet</h2>
+        <p th:text="#{planning.empty.text}">
+            After uploading, your total material requirements and all character plans appear here.
+        </p>
+        <a class="primary-button empty-action" th:href="@{/inventory/items}"
+           th:text="#{materials.importInventory}">Import inventory</a>
+    </section>
+
+    <div id="missing-material-content" th:if="${plan != null}"
+         th:attr="data-snapshot-revision=${plan.snapshot.revision}">
+        <section class="import-summary">
+            <div>
+                <span th:text="#{planning.format}">Format</span>
+                <strong th:text="${'GOOD v' + plan.snapshot.formatVersion}">GOOD v3</strong>
+            </div>
+            <div>
+                <span th:text="#{planning.source}">Source</span>
+                <strong th:text="${plan.snapshot.source ?: #messages.msg('common.unknown')}">Irminsul</strong>
+            </div>
+            <div>
+                <span th:text="#{nav.characters}">Characters</span>
+                <strong th:text="${plan.matchedCharacters + ' / ' + plan.snapshot.characters.size()}">81</strong>
+            </div>
+            <div>
+                <span th:text="#{planning.inventoryEntries}">Inventory entries</span>
+                <strong th:text="${plan.snapshot.exportedInventoryKeys}">0</strong>
+            </div>
+            <div>
+                <span th:text="#{planning.missingKinds}">Missing material types</span>
+                <strong th:text="${plan.missingMaterialKinds}">0</strong>
+            </div>
+        </section>
+
+        <section class="unmatched-warning" th:if="${!plan.unmatchedCharacterKeys.isEmpty()}">
+            <strong th:text="#{planning.unmatched}">Unmatched characters:</strong>
+            <span th:text="${#strings.listJoin(plan.unmatchedCharacterKeys, ', ')}">Unknown</span>
+        </section>
+
+        <th:block th:if="${selectedMaterial != null}"
+                  th:replace="~{missing-material-dialog :: materialDialog}"></th:block>
+
+        <section class="materials-overview inventory-section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow" th:text="#{materials.organizedEyebrow}">Farming overview</p>
+                    <h2 th:text="#{materials.organizedHeading}">Materials by source</h2>
+                </div>
+            </div>
+
+            <div class="material-controls">
+                <label class="material-search">
+                    <span class="sr-only" th:text="#{planning.searchMaterials}">Search materials</span>
+                    <input id="material-search" type="search"
+                           th:placeholder="#{planning.searchMaterialsPlaceholder}"
+                           placeholder="Search materials or sources…">
+                </label>
+                <label class="material-sort">
+                    <span th:text="#{materials.view}">View</span>
+                    <select id="material-sort">
+                        <option value="type" th:text="#{materials.viewGrouped}">Grouped by source</option>
+                        <option value="alphabetical" th:text="#{planning.sortAlphabetical}">Alphabetical</option>
+                    </select>
+                </label>
+            </div>
+            <div id="material-category-chips" class="material-category-chips" role="group"
+                 th:attr="aria-label=#{planning.filterCategories}">
+                <button type="button" class="active" data-category="all"
+                        th:text="#{planning.categoryAll}">All</button>
+                <button type="button" data-category="TALENT_BOOK"
+                        th:text="#{material.category.talentBook}">Talent books</button>
+                <button type="button" data-category="WORLD_BOSS"
+                        th:text="#{material.category.worldBoss}">World bosses</button>
+                <button type="button" data-category="WEEKLY_BOSS"
+                        th:text="#{material.category.weeklyBoss}">Weekly bosses</button>
+                <button type="button" data-category="ENEMY_DROP"
+                        th:text="#{material.category.enemyDrop}">Enemy drops</button>
+                <button type="button" data-category="GEM"
+                        th:text="#{material.category.gem}">Gems</button>
+                <button type="button" data-category="COLLECTABLE"
+                        th:text="#{material.category.collectable}">Collectables</button>
+                <button type="button" data-category="OTHER"
+                        th:text="#{material.category.other}">Other</button>
+            </div>
+
+            <p class="material-allocation-help" th:text="#{materials.allocationHelp}">
+                Keep is reserved for exact-item character needs. The third value shows what is
+                free to use or still needed, and Can make comes from other materials.
+            </p>
+
+            <div id="grouped-materials" class="grouped-materials">
+                <section class="material-source-section" data-section-category="TALENT_BOOK">
+                    <div class="material-source-heading">
+                        <div><p class="eyebrow" th:text="#{materials.domains}">Domains</p>
+                            <h2 th:text="#{materials.talentBooks}">Talent books</h2></div>
+                    </div>
+                    <div class="talent-domain-list">
+                        <article class="talent-domain-row" th:each="domain : ${materialsPage.talentDomains}">
+                            <header>
+                                <span th:text="${domain.region}">Mondstadt</span>
+                                <h3 th:text="${domain.name}">Forsaken Rift</h3>
+                            </header>
+                            <div class="talent-family-grid">
+                                <section class="talent-family" th:each="family : ${domain.families}"
+                                         th:classappend="${family.farmableToday ? ' farmable-today' : ''}"
+                                         data-material-group
+                                         th:attr="data-search=${#strings.toLowerCase(domain.name + ' ' + domain.region + ' ' + family.name)}">
+                                    <div class="talent-family-heading">
+                                        <div><h4 th:text="${family.name}">Freedom</h4>
+                                            <span th:text="${#messages.msg(family.daysMessageKey)}">Monday / Thursday / Sunday</span></div>
+                                        <b th:if="${family.farmableToday}" th:text="#{materials.availableToday}">Available today</b>
+                                    </div>
+                                    <div class="source-material-list">
+                                        <a class="source-material"
+                                           th:each="book : ${family.materials}"
+                                           th:classappend="${book.needed == 0 ? ' covered' : ''}"
+                                           th:href="@{/materials(materialId=${book.id})}"
+                                           th:attr="data-material-item='true',
+                                                    data-name=${#strings.toLowerCase(book.name)},
+                                                    data-category=${book.category.name()}">
+                                            <span class="source-material-icon">
+                                                <img th:if="${book.imageUrl != null}"
+                                                     th:src="${book.imageUrl}"
+                                                     th:alt="${book.name}" loading="lazy"
+                                                     onerror="this.remove()">
+                                            </span>
+                                            <span class="source-material-copy">
+                                                <strong th:text="${book.name}">Teachings of Freedom</strong>
+                                                <span class="source-material-counts">
+                                                    <span>
+                                                        <small th:text="#{material.owned}">Owned</small>
+                                                        <b th:text="${#numbers.formatInteger(book.owned, 1, 'POINT')}">0</b>
+                                                    </span>
+                                                    <span>
+                                                        <small th:text="#{materials.keep}">Keep</small>
+                                                        <b th:text="${#numbers.formatInteger(book.required, 1, 'POINT')}">0</b>
+                                                    </span>
+                                                    <span class="missing" th:if="${book.needed > 0}">
+                                                        <small th:text="#{materials.stillNeeded}">Still need</small>
+                                                        <b th:text="${#numbers.formatInteger(book.needed, 1, 'POINT')}">0</b>
+                                                    </span>
+                                                    <span class="free" th:unless="${book.needed > 0}">
+                                                        <small th:text="#{materials.freeToUse}">Free to use</small>
+                                                        <b th:text="${#numbers.formatInteger(book.freeToUse, 1, 'POINT')}">0</b>
+                                                    </span>
+                                                </span>
+                                                <span class="source-material-status" th:if="${book.craftable > 0}">
+                                                    <span class="craftable">
+                                                        <small th:text="#{materials.canMake}">Can make</small>
+                                                        <b th:text="${#numbers.formatInteger(book.craftable, 1, 'POINT')}">0</b>
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </section>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="material-source-section" data-section-category="WORLD_BOSS"
+                         th:if="${!materialsPage.worldBosses.isEmpty()}">
+                    <div class="material-source-heading">
+                        <div><p class="eyebrow" th:text="#{materials.resinBosses}">Resin bosses</p>
+                            <h2 th:text="#{materials.worldBosses}">World bosses</h2></div>
+                        <p th:text="#{materials.worldBossesLead}">The required boss drop comes first, followed by every gem family the boss can drop.</p>
+                    </div>
+                    <div class="boss-source-grid">
+                        <article class="boss-source-card" th:each="boss : ${materialsPage.worldBosses}"
+                                 data-material-group th:attr="data-search=${#strings.toLowerCase(boss.name)}">
+                            <h3 th:text="${boss.name}">Anemo Hypostasis</h3>
+                            <span class="source-label" th:text="#{materials.bossDrops}">Boss drop</span>
+                            <div class="source-material-list boss-drop-list">
+                                <th:block th:replace="~{missing-material-fragments :: sourceItems(${boss.drops})}"></th:block>
+                            </div>
+                            <span class="source-label" th:text="#{materials.possibleGems}">Possible gems</span>
+                            <div class="boss-gem-list">
+                                <th:block th:replace="~{missing-material-fragments :: gemFamilies(${boss.gemFamilies})}"></th:block>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="material-source-section" data-section-category="WEEKLY_BOSS"
+                         th:if="${!materialsPage.weeklyBosses.isEmpty()}">
+                    <div class="material-source-heading">
+                        <div><p class="eyebrow" th:text="#{materials.trounceDomains}">Trounce domains</p>
+                            <h2 th:text="#{materials.weeklyBosses}">Weekly bosses</h2></div>
+                        <p th:text="#{materials.weeklyBossesLead}">All three talent drops for each relevant weekly boss, plus possible gems.</p>
+                    </div>
+                    <div class="boss-source-grid weekly-boss-grid">
+                        <article class="boss-source-card" th:each="boss : ${materialsPage.weeklyBosses}"
+                                 data-material-group th:attr="data-search=${#strings.toLowerCase(boss.name)}">
+                            <h3 th:text="${boss.name}">Stormterror</h3>
+                            <span class="source-label" th:text="#{materials.weeklyDrops}">Weekly drops</span>
+                            <div class="source-material-list boss-drop-list">
+                                <th:block th:replace="~{missing-material-fragments :: sourceItems(${boss.drops})}"></th:block>
+                            </div>
+                            <span class="source-label" th:text="#{materials.possibleGems}">Possible gems</span>
+                            <div class="boss-gem-list">
+                                <th:block th:replace="~{missing-material-fragments :: gemFamilies(${boss.gemFamilies})}"></th:block>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="material-source-section" data-section-category="ENEMY_DROP">
+                    <div class="material-source-heading">
+                        <div><p class="eyebrow" th:text="#{materials.overworldEnemies}">Overworld enemies</p>
+                            <h2 th:text="#{materials.enemyDrops}">Enemy drops</h2></div>
+                        <p th:text="#{materials.enemyDropsLead}">Each material family is grouped under the enemy that drops it.</p>
+                    </div>
+                    <div class="enemy-source-grid">
+                        <article class="enemy-source-card" th:each="family : ${materialsPage.enemyDrops}"
+                                 data-material-group th:attr="data-search=${#strings.toLowerCase(family.enemyName)}">
+                            <span class="source-label" th:text="#{materials.droppedBy}">Dropped by</span>
+                            <h3 th:text="${family.enemyName}">Slimes</h3>
+                            <div class="source-material-list">
+                                <th:block th:replace="~{missing-material-fragments :: sourceItems(${family.materials})}"></th:block>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="material-source-section" data-section-category="GEM"
+                         th:if="${!materialsPage.gemFamilies.isEmpty()}">
+                    <div class="material-source-heading">
+                        <div><p class="eyebrow" th:text="#{materials.ascension}">Ascension</p>
+                            <h2 th:text="#{materials.gems}">Elemental gems</h2></div>
+                        <p th:text="#{materials.gemsLead}">All currently missing gem tiers, grouped by element.</p>
+                    </div>
+                    <div class="gem-family-grid">
+                        <article class="enemy-source-card" th:each="family : ${materialsPage.gemFamilies}"
+                                 data-material-group th:attr="data-search=${#strings.toLowerCase(family.name)}">
+                            <h3 th:text="${family.name}">Agnidus Agate</h3>
+                            <div class="source-material-list">
+                                <th:block th:replace="~{missing-material-fragments :: sourceItems(${family.materials})}"></th:block>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="material-source-section" data-section-category="COLLECTABLE"
+                         th:if="${!materialsPage.collectables.isEmpty()}">
+                    <div class="material-source-heading">
+                        <div><p class="eyebrow" th:text="#{materials.overworld}">Overworld</p>
+                            <h2 th:text="#{materials.collectables}">Collectables</h2></div>
+                        <p th:text="#{materials.collectablesLead}">Regional specialties and collectable ascension items.</p>
+                    </div>
+                    <div class="balance-grid simple-material-list">
+                        <th:block th:replace="~{missing-material-fragments :: sourceItems(${materialsPage.collectables})}"></th:block>
+                    </div>
+                </section>
+
+                <section class="material-source-section" data-section-category="OTHER"
+                         th:if="${!materialsPage.otherMaterials.isEmpty()}">
+                    <div class="material-source-heading">
+                        <div><p class="eyebrow" th:text="#{materials.remaining}">Remaining</p>
+                            <h2 th:text="#{materials.other}">Other materials</h2></div>
+                        <p th:text="#{materials.otherLead}">Weapon materials, currency, experience, and special items.</p>
+                    </div>
+                    <div class="balance-grid simple-material-list">
+                        <th:block th:replace="~{missing-material-fragments :: sourceItems(${materialsPage.otherMaterials})}"></th:block>
+                    </div>
+                </section>
+            </div>
+
+            <div id="alphabetical-materials" class="balance-grid" hidden>
+                <a class="balance-card balance-card-link" th:each="material : ${materialsPage.alphabeticalMaterials}"
+                   th:href="@{/materials(materialId=${material.id})}"
+                   th:attr="data-material-item='true',
+                            data-name=${#strings.toLowerCase(material.name)},
+                            data-category=${material.category.name()}">
+                    <div class="material-icon">
+                        <img th:if="${material.imageUrl != null}" th:src="${material.imageUrl}"
+                             th:alt="${material.name}" loading="lazy" onerror="this.remove()">
+                    </div>
+                    <div class="balance-copy">
+                        <h3 th:text="${material.name}">Mora</h3>
+                        <span class="material-category"
+                              th:text="${#messages.msg(material.category.messageKey)}">Collectable</span>
+                        <dl>
+                            <div><dt th:text="#{material.owned}">Owned</dt>
+                                <dd th:text="${#numbers.formatInteger(material.owned, 1, 'POINT')}">0</dd></div>
+                            <div><dt th:text="#{materials.keep}">Keep</dt>
+                                <dd th:text="${#numbers.formatInteger(material.required, 1, 'POINT')}">0</dd></div>
+                            <div class="missing-value" th:if="${material.needed > 0}">
+                                <dt th:text="#{materials.stillNeeded}">Still need</dt>
+                                <dd th:text="${#numbers.formatInteger(material.needed, 1, 'POINT')}">0</dd>
+                            </div>
+                            <div class="free-value" th:unless="${material.needed > 0}">
+                                <dt th:text="#{materials.freeToUse}">Free to use</dt>
+                                <dd th:text="${#numbers.formatInteger(material.freeToUse, 1, 'POINT')}">0</dd>
+                            </div>
+                        </dl>
+                        <div class="balance-allocation-status" th:if="${material.craftable > 0}">
+                            <span class="craftable">
+                                <small th:text="#{materials.canMake}">Can make</small>
+                                <b th:text="${#numbers.formatInteger(material.craftable, 1, 'POINT')}">0</b>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="empty-state compact" th:if="${plan.missingMaterials.isEmpty()}">
+                <span>✓</span>
+                <h3 th:text="#{planning.allAvailable}">All materials available</h3>
+            </div>
+        </section>
+    </div>
+</main>
+<script>
+(() => {
+    const stateKey = "missing-material-controls-v2";
+    const readState = () => {
+        try { return JSON.parse(sessionStorage.getItem(stateKey) || "{}"); }
+        catch (_) { sessionStorage.removeItem(stateKey); return {}; }
+    };
+    const setupControls = () => {
+        const grouped = document.getElementById("grouped-materials");
+        const alphabetical = document.getElementById("alphabetical-materials");
+        if (!grouped || !alphabetical) return;
+        const saved = readState();
+        const search = document.getElementById("material-search");
+        const view = document.getElementById("material-sort");
+        const chips = [...document.querySelectorAll("#material-category-chips button")];
+        let category = chips.some(chip => chip.dataset.category === saved.category)
+            ? saved.category : "all";
+        search.value = saved.query || "";
+        view.value = saved.sort === "alphabetical" ? "alphabetical" : "type";
+        chips.forEach(chip => chip.classList.toggle("active", chip.dataset.category === category));
+
+        const save = () => sessionStorage.setItem(stateKey, JSON.stringify({
+            query: search.value, sort: view.value, category
+        }));
+        const apply = () => {
+            const query = search.value.trim().toLocaleLowerCase();
+            const groupedMode = view.value === "type";
+            grouped.hidden = !groupedMode;
+            alphabetical.hidden = groupedMode;
+
+            if (groupedMode) {
+                grouped.querySelectorAll("[data-material-group]").forEach(group => {
+                    const materialNames = [...group.querySelectorAll("[data-material-item]")]
+                        .map(item => item.dataset.name || "").join(" ");
+                    group.hidden = Boolean(query) &&
+                        !`${group.dataset.search || ""} ${materialNames}`.includes(query);
+                });
+                grouped.querySelectorAll(".talent-domain-row").forEach(row => {
+                    row.hidden = ![...row.querySelectorAll("[data-material-group]")]
+                        .some(group => !group.hidden);
+                });
+                grouped.querySelectorAll("[data-section-category]").forEach(section => {
+                    const categoryMatches = category === "all" ||
+                        section.dataset.sectionCategory === category;
+                    const groups = [...section.querySelectorAll("[data-material-group]")];
+                    section.hidden = !categoryMatches || (groups.length > 0 &&
+                        !groups.some(group => !group.hidden));
+                });
+            } else {
+                alphabetical.querySelectorAll(".balance-card").forEach(card => {
+                    card.hidden = !(card.dataset.name.includes(query) &&
+                        (category === "all" || card.dataset.category === category));
+                });
+            }
+            save();
+        };
+        search.addEventListener("input", apply);
+        view.addEventListener("change", apply);
+        chips.forEach(chip => chip.addEventListener("click", () => {
+            category = chip.dataset.category;
+            chips.forEach(candidate => candidate.classList.toggle("active", candidate === chip));
+            apply();
+        }));
+        apply();
+    };
+
+    const removeMaterialFromUrl = () => {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("materialId");
+        history.replaceState(history.state, "", `${url.pathname}${url.search}${url.hash}`);
+    };
+
+    const setupPopup = () => {
+        const overlay = document.getElementById("material-breakdown");
+        if (!overlay || overlay.dataset.popupReady === "true") return;
+        overlay.dataset.popupReady = "true";
+        const listeners = new AbortController();
+        const close = () => {
+            listeners.abort();
+            overlay.remove();
+            removeMaterialFromUrl();
+        };
+        overlay.querySelector("[data-material-dialog-close]")?.addEventListener(
+            "click", close, {signal: listeners.signal}
+        );
+        overlay.addEventListener("click", event => {
+            if (event.target === overlay) close();
+        }, {signal: listeners.signal});
+        document.addEventListener("keydown", event => {
+            if (event.key === "Escape") close();
+        }, {signal: listeners.signal});
+        overlay.querySelector("[data-material-dialog-close]")?.focus({preventScroll: true});
+    };
+
+    setupControls();
+    setupPopup();
+
+    const content = document.getElementById("missing-material-content");
+    if (content) {
+        let loadingMaterialDialog = false;
+        const openMaterialDialog = async materialUrl => {
+            if (loadingMaterialDialog) return;
+            loadingMaterialDialog = true;
+            const scrollPosition = {left: window.scrollX, top: window.scrollY};
+            try {
+                const targetUrl = new URL(materialUrl, window.location.href);
+                const materialId = targetUrl.searchParams.get("materialId");
+                if (!materialId) return;
+                const response = await fetch(`/materials/popup?materialId=${encodeURIComponent(materialId)}`, {
+                    headers: {"Accept": "text/html"}, cache: "no-store"
+                });
+                if (!response.ok) throw new Error(`Material popup request failed: ${response.status}`);
+                const documentCopy = new DOMParser().parseFromString(await response.text(), "text/html");
+                const freshPopup = documentCopy.getElementById("material-breakdown");
+                if (!freshPopup) return;
+
+                document.getElementById("material-breakdown")?.remove();
+                content.append(freshPopup);
+                setupPopup();
+                requestAnimationFrame(() => window.scrollTo({
+                    left: scrollPosition.left,
+                    top: scrollPosition.top,
+                    behavior: "instant"
+                }));
+            } catch (error) {
+                console.error("Could not load the material popup", error);
+            } finally {
+                loadingMaterialDialog = false;
+            }
+        };
+
+        content.addEventListener("click", event => {
+            const element = event.target instanceof Element ? event.target : null;
+            const link = element?.closest("a[data-material-item]");
+            if (!link || event.button !== 0 || event.metaKey || event.ctrlKey ||
+                event.shiftKey || event.altKey) return;
+            event.preventDefault();
+            openMaterialDialog(link.href);
+        });
+
+        let knownRevision = Number(content.dataset.snapshotRevision || 0);
+        let refreshing = false;
+        const refreshContent = async revision => {
+            const focusedControl = document.activeElement?.id;
+            const response = await fetch(window.location.href, {
+                headers: {"Accept": "text/html"}, cache: "no-store"
+            });
+            if (!response.ok) return;
+            const documentCopy = new DOMParser().parseFromString(await response.text(), "text/html");
+            const freshContent = documentCopy.getElementById("missing-material-content");
+            if (!freshContent) return;
+
+            [".import-summary", ".unmatched-warning", ".materials-overview"].forEach(selector => {
+                const current = content.querySelector(selector);
+                const fresh = freshContent.querySelector(selector);
+                if (current && fresh) current.replaceWith(fresh);
+                else if (current && !fresh) current.remove();
+            });
+            const freshPopup = freshContent.querySelector("#material-breakdown");
+            if (freshPopup) {
+                document.getElementById("material-breakdown")?.remove();
+                content.append(freshPopup);
+            }
+
+            knownRevision = revision;
+            content.dataset.snapshotRevision = String(revision);
+            setupControls();
+            setupPopup();
+            if (!freshPopup && !document.getElementById("material-breakdown") &&
+                new URL(window.location.href).searchParams.has("materialId")) {
+                removeMaterialFromUrl();
+            }
+            document.getElementById(focusedControl)?.focus({preventScroll: true});
+        };
+        const refresh = async () => {
+            if (document.hidden || refreshing) return;
+            try {
+                const response = await fetch("/materials/api/revision", {
+                    headers: {"Accept": "application/json"}, cache: "no-store"
+                });
+                if (!response.ok) return;
+                const revision = Number((await response.json()).revision || 0);
+                if (revision !== knownRevision) {
+                    refreshing = true;
+                    await refreshContent(revision);
+                }
+            } catch (_) {
+                // The next poll retries when the local backend is reachable again.
+            } finally { refreshing = false; }
+        };
+        window.setInterval(refresh, 3000);
+        document.addEventListener("visibilitychange", refresh);
+        refresh();
+    }
+})();
+</script>
+</body>
+</html>

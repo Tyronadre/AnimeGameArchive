@@ -28,7 +28,6 @@
 
     <nav class="inventory-tabs" th:attr="aria-label=#{inventory.sections}">
         <a th:href="@{/inventory/items}" th:text="#{inventory.items}">Items</a>
-        <a th:href="@{/inventory/missing}" th:text="#{inventory.missing}">Missing Materials</a>
         <a th:href="@{/inventory/artifacts}" th:text="#{inventory.artifacts}">Artifacts</a>
         <a class="active" th:href="@{/inventory/artifact-optimizer}"
            th:text="#{inventory.optimizer}">Optimizer</a>

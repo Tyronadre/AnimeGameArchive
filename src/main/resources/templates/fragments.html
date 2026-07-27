@@ -13,6 +13,8 @@
            th:href="@{/characters}" th:text="#{nav.characters}">Characters</a>
         <a class="back-link" th:classappend="${activeSection == 'inventory'} ? ' active' : ''"
            th:href="@{/inventory}" th:text="#{nav.inventory}">Inventory</a>
+        <a class="back-link" th:classappend="${activeSection == 'materials'} ? ' active' : ''"
+           th:href="@{/materials}" th:text="#{nav.materials}">Materials</a>
         <a class="back-link" th:classappend="${activeSection == 'images'} ? ' active' : ''"
            th:href="@{/admin/images}" th:text="#{nav.images}">Image management</a>
     </nav>

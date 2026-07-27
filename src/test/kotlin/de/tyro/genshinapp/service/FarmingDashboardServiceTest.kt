@@ -20,8 +20,9 @@ import kotlin.test.assertTrue
 
 class FarmingDashboardServiceTest {
     private val catalogService = mock(CharacterCatalogService::class.java)
+    private val materialCatalogService = mock(MaterialCatalogService::class.java)
     private val targetService = mock(CharacterTargetService::class.java)
-    private val materialCalculator = MaterialCalculator(catalogService)
+    private val materialCalculator = MaterialCalculator(materialCatalogService)
     private val planningService = mock(PlayerPlanningService::class.java)
     private val materialCraftingService = mock(MaterialCraftingService::class.java)
     private val domainScheduleService = mock(DomainScheduleService::class.java)
@@ -35,6 +36,7 @@ class FarmingDashboardServiceTest {
 
     private val service = FarmingDashboardService(
         catalogService,
+        materialCatalogService,
         targetService,
         materialCalculator,
         planningService,

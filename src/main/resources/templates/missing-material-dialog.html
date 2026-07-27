@@ -1,0 +1,72 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div id="material-breakdown" class="material-dialog-overlay"
+     th:fragment="materialDialog"
+     th:if="${selectedMaterial != null}"
+     th:attr="data-material-id=${selectedMaterial.id}">
+    <section class="artifact-dialog material-dialog" role="dialog" aria-modal="true"
+             aria-labelledby="material-breakdown-title">
+        <div class="artifact-dialog-shell">
+            <div class="breakdown-heading">
+                <div class="material-icon">
+                    <img th:if="${selectedMaterial.imageUrl != null}"
+                         th:src="${selectedMaterial.imageUrl}"
+                         th:alt="${selectedMaterial.name}" onerror="this.remove()">
+                </div>
+                <div>
+                    <p class="eyebrow" th:text="#{planning.byCharacter}">Breakdown by character</p>
+                    <h2 id="material-breakdown-title" th:text="${selectedMaterial.name}">Mora</h2>
+                </div>
+                <button class="artifact-dialog-close" type="button" data-material-dialog-close
+                        th:attr="aria-label=#{planning.closeBreakdown}">×</button>
+            </div>
+            <dl class="breakdown-totals">
+                <div>
+                    <dt th:text="#{material.totalRequired}">Total required</dt>
+                    <dd th:text="${#numbers.formatInteger(selectedMaterial.required, 1, 'POINT')}">0</dd>
+                </div>
+                <div>
+                    <dt th:text="#{material.inInventory}">In inventory</dt>
+                    <dd th:text="${#numbers.formatInteger(selectedMaterial.owned, 1, 'POINT')}">0</dd>
+                </div>
+                <div>
+                    <dt th:text="#{material.craftable}">Craftable</dt>
+                    <dd th:text="${#numbers.formatInteger(selectedMaterial.craftable, 1, 'POINT')}">0</dd>
+                </div>
+                <div>
+                    <dt th:text="#{material.totalMissing}">Total missing</dt>
+                    <dd th:text="${#numbers.formatInteger(selectedMaterial.needed, 1, 'POINT')}">0</dd>
+                </div>
+            </dl>
+            <p class="breakdown-note" th:text="#{planning.breakdownNote}">
+                Each value is the character's contribution to the combined requirement.
+            </p>
+            <div class="character-need-grid" th:if="${!characterNeeds.isEmpty()}">
+                <a class="character-need-row" th:each="need : ${characterNeeds}"
+                   th:href="@{/characters/{key}(key=${need.character.key})}">
+                    <div class="player-character-icon">
+                        <span th:text="${#strings.substring(need.character.name, 0, 1)}">F</span>
+                        <img th:if="${need.character.iconImageUrl != null}"
+                             th:src="${need.character.iconImageUrl}"
+                             th:alt="${need.character.name}" loading="lazy" onerror="this.remove()">
+                    </div>
+                    <div>
+                        <strong th:text="${need.character.name}">Furina</strong>
+                        <span th:text="#{character.levelTalents(${need.state.level},
+                            ${need.state.normalTalent},${need.state.skillTalent},${need.state.burstTalent})}">
+                            Lv. 80
+                        </span>
+                    </div>
+                    <b th:text="${#numbers.formatInteger(need.required, 1, 'POINT')}">0</b>
+                </a>
+            </div>
+            <div class="empty-state compact" th:if="${characterNeeds.isEmpty()}">
+                <span>✓</span>
+                <h3 th:text="#{materials.noCharacterNeeds}">No character currently needs this material</h3>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

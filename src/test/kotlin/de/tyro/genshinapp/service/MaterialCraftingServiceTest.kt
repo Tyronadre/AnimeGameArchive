@@ -2,6 +2,7 @@ package de.tyro.genshinapp.service
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import de.tyro.genshinapp.configuration.GenshinContentProperties
+import de.tyro.genshinapp.model.CharacterProgress
 import de.tyro.genshinapp.model.InventoryMaterialBalance
 import de.tyro.genshinapp.model.MaterialCategory
 import java.nio.file.Files
@@ -9,6 +10,7 @@ import java.time.Duration
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class MaterialCraftingServiceTest {
@@ -21,6 +23,7 @@ class MaterialCraftingServiceTest {
     }
     private val imageUrlRegistry = ImageUrlRegistry(objectMapper, properties)
     private val fandomImageUrlResolver = FandomImageUrlResolver(properties)
+    private val materialCatalog = MaterialCatalogService(objectMapper)
     private val catalog = CharacterCatalogService(
         objectMapper,
         DynamicContentLoader(
@@ -31,7 +34,11 @@ class MaterialCraftingServiceTest {
         ),
         fandomImageUrlResolver,
     )
-    private val service = MaterialCraftingService(catalog)
+    private val service = MaterialCraftingService(materialCatalog)
+
+    init {
+        materialCatalog.synchronizeCharacters(catalog.getCharacters())
+    }
 
     @Test
     fun `classifies all six character material categories`() {
@@ -41,6 +48,39 @@ class MaterialCraftingServiceTest {
         assertEquals(MaterialCategory.COLLECTABLE, categoryOf("Lakelight Lily"))
         assertEquals(MaterialCategory.WEEKLY_BOSS, categoryOf("Lightless Mass"))
         assertEquals(MaterialCategory.WORLD_BOSS, categoryOf("Water That Failed To Transcend"))
+    }
+
+    @Test
+    fun `brilliant diamonds remain traveler requirements but are not craftable gems`() {
+        val fragment = material("Brilliant Diamond Fragment")
+        val info = assertNotNull(service.infoFor(fragment.id))
+
+        assertEquals(MaterialCategory.OTHER, info.category)
+        assertNull(info.familyKey)
+        assertNull(info.tier)
+        assertNull(info.conversionGroup)
+        assertTrue(
+            materialCatalog.getMaterialsByCategories(setOf(MaterialCategory.GEM))
+                .none { it.id in 104101..104104 },
+        )
+
+        val availability = service.inventoryAvailability(
+            fragment.id,
+            mapOf(
+                "brilliantdiamondsliver" to 99L,
+                "brilliantdiamondfragment" to 2L,
+                "dustofazoth" to 999L,
+            ),
+        )
+        assertEquals(2L, availability.owned)
+        assertEquals(0L, availability.craftable)
+
+        val traveler = assertNotNull(catalog.findCharacter("traveler"))
+        val diamondRequirements = MaterialCalculator(materialCatalog)
+            .calculate(traveler, CharacterProgress())
+            .filter { it.name.startsWith("Brilliant Diamond ") }
+        assertEquals(4, diamondRequirements.size)
+        assertTrue(diamondRequirements.all { it.amount > 0 })
     }
 
     @Test
@@ -117,7 +157,7 @@ class MaterialCraftingServiceTest {
 
     @Test
     fun `all crafting metadata has complete and valid persisted relationships`() {
-        val craftingMaterials = catalog.getMaterials().filter { it.category in setOf(
+        val craftingMaterials = materialCatalog.getMaterials().filter { it.category in setOf(
             MaterialCategory.GEM,
             MaterialCategory.TALENT_BOOK,
             MaterialCategory.WEAPON_ASCENSION,
@@ -155,7 +195,7 @@ class MaterialCraftingServiceTest {
         assertNotNull(service.infoFor(material(name).id)).category
 
     private fun material(name: String) =
-        assertNotNull(catalog.getMaterials().find { it.name == name })
+        assertNotNull(materialCatalog.getMaterials().find { it.name == name })
 
     private fun balance(
         id: Int,

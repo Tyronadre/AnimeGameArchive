@@ -9,7 +9,6 @@ import de.tyro.genshinapp.model.CharacterTalent
 import de.tyro.genshinapp.model.CharacterTalentAttribute
 import de.tyro.genshinapp.model.CharacterTalentKind
 import de.tyro.genshinapp.model.MaterialCost
-import de.tyro.genshinapp.model.MaterialDefinition
 import de.tyro.genshinapp.model.TravelerAppearance
 import de.tyro.genshinapp.model.TravelerElement
 import de.tyro.genshinapp.model.TravelerIdentity
@@ -35,7 +34,6 @@ class CharacterCatalogService(
     private val charactersByKey = ConcurrentHashMap<String, CharacterDefinition>()
     private val travelerAppearances = ConcurrentHashMap<String, CharacterDefinition>()
     private val travelerVariants = ConcurrentHashMap<String, CharacterDefinition>()
-    private val materialsById = ConcurrentHashMap<Int, MaterialDefinition>()
 
     init {
         catalogStore?.let { store ->
@@ -46,8 +44,6 @@ class CharacterCatalogService(
                 }
             }
         }
-        catalogStore?.getMaterials().orEmpty().forEach(::rememberMaterials)
-
         configuredKeys.forEach { key ->
             val storedCharacter = charactersByKey[key]
             val needsTalentRefresh = storedCharacter != null &&
@@ -64,10 +60,7 @@ class CharacterCatalogService(
                 }
             }
         }
-        rememberMaterials(BASE_MATERIALS)
-        rememberMaterials(loadBundledWeaponMaterials())
-        refreshMaterialMetadata()
-        contentLoader.registerDefaultImageLinks(getCharacters(), getMaterials())
+        contentLoader.registerDefaultImageLinks(getCharacters(), emptyList())
     }
 
     fun getCharacters(): List<CharacterDefinition> {
@@ -96,17 +89,16 @@ class CharacterCatalogService(
             }
             contentLoader.registerDefaultImageLinks(
                 listOf(character),
-                materialsOf(listOf(character)),
+                emptyList(),
             )
             return character
         }
 
         return loadCharacterFromExistingSources(normalizedKey)?.let { loadedCharacter ->
             val character = rememberCharacter(saveCharacter(loadedCharacter))
-            refreshMaterialMetadata()
             contentLoader.registerDefaultImageLinks(
                 listOf(character),
-                materialsOf(listOf(character)),
+                emptyList(),
             )
             character
         }
@@ -131,11 +123,9 @@ class CharacterCatalogService(
                 talentResourceKey = element.variantKey,
                 talentsRoot = talentRoot?.path("talents"),
             )
-            rememberMaterials(materialsOf(listOf(character)))
-            refreshMaterialMetadata(listOf(character))
             contentLoader.registerDefaultImageLinks(
                 listOf(character),
-                materialsOf(listOf(character)),
+                emptyList(),
             )
             character
         }
@@ -183,13 +173,6 @@ class CharacterCatalogService(
                 name = element.queryName,
             )
         }
-
-    fun getMaterials(): List<MaterialDefinition> =
-        materialsById.values.sortedBy { it.name }
-
-    fun findMaterial(id: Int): MaterialDefinition? =
-        materialsById[id]
-            ?: catalogStore?.findMaterial(id)?.also(::rememberMaterials)
 
     private fun loadCharacterKeys(): List<String> {
         val listResource = ClassPathResource("data/characters/char_list.json")
@@ -411,25 +394,6 @@ class CharacterCatalogService(
             .toMap()
     }
 
-    private fun loadBundledWeaponMaterials(): List<MaterialDefinition> =
-        BUNDLED_WEAPON_KEYS.asSequence().flatMap { key ->
-            val resource = ClassPathResource("data/weapons/data/$key.json")
-            if (!resource.exists()) return@flatMap emptySequence()
-            resource.inputStream.use(objectMapper::readTree).path("costs")
-                .flatMap { phase -> phase.map { cost ->
-                    MaterialDefinition(cost.path("id").asInt(), cost.path("name").asText())
-                } }
-                .asSequence()
-        }.filter { it.id > 0 && it.name.isNotBlank() }.distinctBy { it.id }.toList()
-
-    fun materialImageUrl(id: Int): String? {
-        if (id < 0) return null
-        return UriComponentsBuilder.fromPath("/media/materials/{id}")
-            .buildAndExpand(id)
-            .encode()
-            .toUriString()
-    }
-
     private fun saveCharacter(character: CharacterDefinition): CharacterDefinition {
         val stored = catalogStore?.saveCharacter(character) ?: return character
         return stored.copy(
@@ -438,50 +402,11 @@ class CharacterCatalogService(
         )
     }
 
-    private fun refreshMaterialMetadata(
-        extraCharacters: Collection<CharacterDefinition> = emptyList(),
-    ) {
-        val enrichedMaterials = MaterialCatalogMetadata.enrich(
-            materialsById.values,
-            loadedCharactersForMetadata() + extraCharacters,
-        )
-        materialsById.clear()
-        rememberMaterials(enrichedMaterials)
-        catalogStore?.saveMaterials(materialsById.values)
-    }
-
-    private fun loadedCharactersForMetadata(): List<CharacterDefinition> =
-        (charactersByKey.values + travelerVariants.values + travelerAppearances.values)
-            .distinctBy { "${it.key}:${it.element}:${it.talentResourceKey}" }
-            .toList()
-
     private fun rememberCharacter(character: CharacterDefinition): CharacterDefinition {
         val refreshedCharacter = refreshPersistedCharacterImageUrls(character)
         charactersByKey[refreshedCharacter.key] = refreshedCharacter
-        rememberMaterials(materialsOf(listOf(refreshedCharacter)))
         return refreshedCharacter
     }
-
-    private fun rememberMaterials(materials: Collection<MaterialDefinition>) {
-        materials.forEach(::rememberMaterials)
-    }
-
-    private fun rememberMaterials(material: MaterialDefinition) {
-        materialsById[material.id] = material
-    }
-
-    private fun materialsOf(
-        characters: Collection<CharacterDefinition>,
-    ): List<MaterialDefinition> = characters
-        .asSequence()
-        .flatMap { character ->
-            (character.ascensionCosts.values.flatten() + character.talentCosts.values.flatten()).asSequence()
-        }
-        .filter { it.id > 0 }
-        .distinctBy { it.id }
-        .map { MaterialDefinition(it.id, it.name) }
-        .sortedBy { it.name }
-        .toList()
 
     private fun JsonNode.requiredText(field: String): String =
         path(field).takeIf { it.isTextual }?.asText()
@@ -500,10 +425,6 @@ class CharacterCatalogService(
         private const val LUMINE_IMAGE_SOURCE_NAME = "Lumine"
         private const val WIKIA_IMAGE_BASE_URL =
             "https://static.wikia.nocookie.net/"
-        private val BASE_MATERIALS = listOf(
-            MaterialDefinition(0, "Character EXP"),
-            MaterialDefinition(104013, "Mystic Enhancement Ore"),
-        )
         private val CHARACTER_IMAGE_DEFAULT_OVERRIDES = mapOf(
             characterImageDefaultOverride(
                 TravelerAppearance.AETHER.resourceKey,
@@ -530,7 +451,6 @@ class CharacterCatalogService(
             CHARACTER_IMAGE_DEFAULT_OVERRIDES.keys.mapTo(mutableSetOf()) {
                 it.imageResourceKey
             }
-        private val BUNDLED_WEAPON_KEYS = listOf("rust", "sacrificialbow")
         private val TALENTLESS_CHARACTER_KEYS = setOf(TravelerIdentity.KEY)
         private val HIDDEN_CHARACTER_KEYS = buildSet {
             add("aether")

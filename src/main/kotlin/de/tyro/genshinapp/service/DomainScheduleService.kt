@@ -1,5 +1,6 @@
 package de.tyro.genshinapp.service
 
+import de.tyro.genshinapp.model.MaterialSchedule
 import org.springframework.stereotype.Service
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -8,6 +9,11 @@ import java.time.ZonedDateTime
 
 @Service
 class DomainScheduleService {
+    fun isFarmable(
+        schedule: MaterialSchedule,
+        date: LocalDate = currentGameDate(),
+    ): Boolean = isFarmable(schedule.ordinal, date.dayOfWeek)
+
     fun isTalentBookFarmable(
         materialId: Int,
         date: LocalDate = currentGameDate(),

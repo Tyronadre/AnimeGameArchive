@@ -35,3 +35,38 @@ data class MaterialInventoryAvailability(
     val available: Long
         get() = owned + craftable
 }
+
+enum class MaterialSourceType {
+    TALENT_DOMAIN,
+    WORLD_BOSS,
+    WEEKLY_BOSS,
+    ENEMY,
+}
+
+enum class MaterialSourceRole {
+    DROP,
+    GEM,
+}
+
+enum class MaterialSchedule(val messageKey: String) {
+    MONDAY_THURSDAY("materials.days.mondayThursday"),
+    TUESDAY_FRIDAY("materials.days.tuesdayFriday"),
+    WEDNESDAY_SATURDAY("materials.days.wednesdaySaturday"),
+}
+
+data class MaterialSourceDefinition(
+    val key: String,
+    val name: String,
+    val type: MaterialSourceType,
+    val region: String? = null,
+    val displayOrder: Int = 0,
+    val materials: List<MaterialSourceMaterialDefinition> = emptyList(),
+)
+
+data class MaterialSourceMaterialDefinition(
+    val material: MaterialDefinition,
+    val role: MaterialSourceRole,
+    val familyOrder: Int = 0,
+    val materialOrder: Int = 0,
+    val schedule: MaterialSchedule? = null,
+)

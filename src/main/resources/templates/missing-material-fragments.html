@@ -1,0 +1,62 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="sourceItems(items)">
+    <a class="source-material" th:each="materialItem : ${items}"
+       th:classappend="${materialItem.needed == 0 ? ' covered' : ''}"
+       th:href="@{/materials(materialId=${materialItem.id})}"
+       th:attr="data-material-item='true',data-name=${#strings.toLowerCase(materialItem.name)},
+                data-category=${materialItem.category.name()}">
+        <span class="source-material-icon">
+            <img th:if="${materialItem.imageUrl != null}" th:src="${materialItem.imageUrl}"
+                 th:alt="${materialItem.name}" loading="lazy" onerror="this.remove()">
+        </span>
+        <span class="source-material-copy">
+            <strong th:text="${materialItem.name}">Teachings of Freedom</strong>
+            <span class="source-material-counts">
+                <span><small th:text="#{material.owned}">Owned</small>
+                    <b th:text="${#numbers.formatInteger(materialItem.owned, 1, 'POINT')}">0</b></span>
+                <span><small th:text="#{materials.keep}">Keep</small>
+                    <b th:text="${#numbers.formatInteger(materialItem.required, 1, 'POINT')}">0</b></span>
+                <span class="missing" th:if="${materialItem.needed > 0}">
+                    <small th:text="#{materials.stillNeeded}">Still need</small>
+                    <b th:text="${#numbers.formatInteger(materialItem.needed, 1, 'POINT')}">0</b>
+                </span>
+                <span class="free" th:unless="${materialItem.needed > 0}">
+                    <small th:text="#{materials.freeToUse}">Free to use</small>
+                    <b th:text="${#numbers.formatInteger(materialItem.freeToUse, 1, 'POINT')}">0</b>
+                </span>
+            </span>
+            <span class="source-material-status" th:if="${materialItem.craftable > 0}">
+                <span class="craftable">
+                    <small th:text="#{materials.canMake}">Can make</small>
+                    <b th:text="${#numbers.formatInteger(materialItem.craftable, 1, 'POINT')}">0</b>
+                </span>
+            </span>
+        </span>
+    </a>
+</th:block>
+
+<th:block th:fragment="gemFamilies(families)">
+    <div class="boss-gemstone-row">
+        <th:block th:each="gemFamily : ${families}" th:if="${gemFamily.topTier != null}"
+                  th:with="gemstone=${gemFamily.topTier}">
+            <a class="boss-gemstone"
+               th:classappend="${gemstone.needed > 0 ? ' missing' : ''}"
+               th:href="@{/materials(materialId=${gemstone.id})}"
+               th:attr="title=${gemstone.name},data-material-item='true',
+                        data-name=${#strings.toLowerCase(gemstone.name)},
+                        data-category=${gemstone.category.name()}">
+                <img th:if="${gemstone.imageUrl != null}" th:src="${gemstone.imageUrl}"
+                     th:alt="${gemstone.name}" loading="lazy" onerror="this.remove()">
+                <strong th:text="${gemFamily.name}">Agnidus Agate</strong>
+                <span>
+                    <small th:text="#{material.missing}">Missing</small>
+                    <b th:text="${#numbers.formatInteger(gemstone.needed, 1, 'POINT')}">0</b>
+                </span>
+            </a>
+        </th:block>
+    </div>
+</th:block>
+</body>
+</html>

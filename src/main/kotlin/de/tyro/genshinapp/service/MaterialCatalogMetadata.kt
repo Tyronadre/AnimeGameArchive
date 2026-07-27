@@ -7,6 +7,9 @@ import de.tyro.genshinapp.model.MaterialDefinition
 
 /** Builds the metadata that is persisted with a material. Crafting code never has to infer it. */
 object MaterialCatalogMetadata {
+    fun isNonCraftableSpecial(materialId: Int): Boolean =
+        materialId in BRILLIANT_DIAMOND_RANGE
+
     fun enrich(
         materials: Collection<MaterialDefinition>,
         characters: Collection<CharacterDefinition>,
@@ -76,6 +79,8 @@ object MaterialCatalogMetadata {
         material: MaterialDefinition,
         usage: Usage?,
     ): MaterialCategory {
+        if (isNonCraftableSpecial(material.id)) return MaterialCategory.OTHER
+
         val usageCategory = usage?.let { category(material.id, it) }
             ?.takeUnless { it == MaterialCategory.OTHER }
         if (usageCategory != null) return usageCategory
@@ -143,7 +148,8 @@ object MaterialCatalogMetadata {
     private val WEAPON_RANGE = 114001..114999
     private val ENEMY_DROP_RANGE = 112000..112999
     private val COLLECTABLE_RANGE = 100000..101999
-    private val GEM_RANGE = 104100..104999
+    private val BRILLIANT_DIAMOND_RANGE = 104101..104104
+    private val GEM_RANGE = 104110..104199
     private val GEM_SUFFIXES = listOf(" Sliver", " Fragment", " Chunk", " Gemstone")
     private val TALENT_PREFIXES = listOf("Teachings of ", "Guide to ", "Philosophies of ")
     private val TIERED = setOf(

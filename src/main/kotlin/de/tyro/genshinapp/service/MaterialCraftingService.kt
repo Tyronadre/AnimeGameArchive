@@ -4,12 +4,13 @@ import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.model.InventoryMaterialBalance
 import de.tyro.genshinapp.model.MaterialCategory
 import de.tyro.genshinapp.model.MaterialCraftingInfo
+import de.tyro.genshinapp.model.MaterialDefinition
 import de.tyro.genshinapp.model.MaterialInventoryAvailability
 import org.springframework.stereotype.Service
 
 @Service
 class MaterialCraftingService(
-    private val catalogService: CharacterCatalogService,
+    private val materialCatalogService: MaterialCatalogService,
 ) {
     private val craftingInfoById: Map<Int, MaterialCraftingInfo> by lazy {
         buildCraftingCatalog()
@@ -20,13 +21,15 @@ class MaterialCraftingService(
             .groupBy { requireNotNull(it.familyKey) }
     }
 
-    fun infoFor(materialId: Int): MaterialCraftingInfo? = craftingInfoById[materialId]
+    fun infoFor(materialId: Int): MaterialCraftingInfo? =
+        craftingInfoById[materialId]
+            ?: materialCatalogService.findMaterial(materialId)?.let(::craftingInfo)
 
     fun inventoryAvailability(
         materialId: Int,
         inventory: Map<String, Long>,
     ): MaterialInventoryAvailability {
-        val info = craftingInfoById[materialId]
+        val info = infoFor(materialId)
             ?: return MaterialInventoryAvailability(owned = 0, craftable = 0)
         val owned = quantity(info, inventory)
         val family = info.familyKey?.let(craftingFamilies::get).orEmpty()
@@ -207,16 +210,20 @@ class MaterialCraftingService(
     )
 
     private fun buildCraftingCatalog(): Map<Int, MaterialCraftingInfo> {
-        return catalogService.getMaterials().associate { material ->
-            material.id to MaterialCraftingInfo(
-                material = material,
-                category = material.category,
-                familyKey = material.craftingFamily,
-                tier = material.craftingTier,
-                conversionGroup = material.conversionGroup,
-            )
+        return materialCatalogService.getMaterialsByCategories(CRAFTING_CATEGORIES)
+            .associate { material ->
+            material.id to craftingInfo(material)
         }
     }
+
+    private fun craftingInfo(material: MaterialDefinition) =
+        MaterialCraftingInfo(
+            material = material,
+            category = material.category,
+            familyKey = material.craftingFamily,
+            tier = material.craftingTier,
+            conversionGroup = material.conversionGroup,
+        )
 
     private fun saturatingAdd(first: Long, second: Long): Long =
         if (Long.MAX_VALUE - first < second) Long.MAX_VALUE else first + second
@@ -232,5 +239,6 @@ class MaterialCraftingService(
             MaterialCategory.WEAPON_ASCENSION,
             MaterialCategory.ENEMY_DROP,
         )
+        private val CRAFTING_CATEGORIES = TIERED_CATEGORIES + MaterialCategory.WEEKLY_BOSS
     }
 }

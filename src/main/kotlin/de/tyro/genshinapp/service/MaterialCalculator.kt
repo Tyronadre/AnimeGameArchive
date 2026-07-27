@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class MaterialCalculator(
-    private val catalogService: CharacterCatalogService,
+    private val materialCatalogService: MaterialCatalogService,
 ) {
     fun calculate(
         character: CharacterDefinition,
@@ -37,7 +37,7 @@ class MaterialCalculator(
                     id = material.id,
                     name = material.name,
                     amount = amount,
-                    imageUrl = catalogService.materialImageUrl(material.id),
+                    imageUrl = materialCatalogService.materialImageUrl(material.id),
                 )
             }
     }

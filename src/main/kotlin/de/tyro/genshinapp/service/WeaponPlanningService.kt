@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 @Service
 class WeaponPlanningService(
     private val weaponDataService: WeaponDataService,
-    private val catalogService: CharacterCatalogService,
+    private val materialCatalogService: MaterialCatalogService,
     private val planningService: PlayerPlanningService,
 ) {
     fun createPlan(
@@ -66,7 +66,7 @@ class WeaponPlanningService(
                 id = identity.first,
                 name = identity.second,
                 amount = amount,
-                imageUrl = catalogService.materialImageUrl(identity.first),
+                imageUrl = materialCatalogService.materialImageUrl(identity.first),
             )
         }
     }

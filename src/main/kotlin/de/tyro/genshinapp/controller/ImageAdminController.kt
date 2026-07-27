@@ -7,6 +7,7 @@ import de.tyro.genshinapp.service.CharacterCatalogService
 import de.tyro.genshinapp.service.DynamicContentLoader
 import de.tyro.genshinapp.service.EditableImageLink
 import de.tyro.genshinapp.service.ImageUrlRegistry
+import de.tyro.genshinapp.service.MaterialCatalogService
 import de.tyro.genshinapp.service.WeaponCatalogService
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes
 @RequestMapping("/admin/images")
 class ImageAdminController(
     private val catalogService: CharacterCatalogService,
+    private val materialCatalogService: MaterialCatalogService,
     private val contentLoader: DynamicContentLoader,
     private val imageUrlRegistry: ImageUrlRegistry,
     private val weaponCatalogService: WeaponCatalogService,
@@ -88,7 +90,7 @@ class ImageAdminController(
         @RequestParam(defaultValue = "save") action: String,
         redirectAttributes: RedirectAttributes,
     ): String {
-        val material = catalogService.findMaterial(id)
+        val material = materialCatalogService.findMaterial(id)
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
         val result = if (action == "reset") {
             contentLoader.resetMaterialImageUrl(material)
@@ -203,7 +205,7 @@ class ImageAdminController(
                 )
             }
         }
-        val materialRows = catalogService.getMaterials().map { material ->
+        val materialRows = materialCatalogService.getMaterials().map { material ->
             val link = imageUrlRegistry.materialLink(material.id)
                 ?: EditableImageLink(material.name)
             val state = contentLoader.materialImageState(material)
@@ -216,7 +218,7 @@ class ImageAdminController(
                 defaultUrl = link.defaultUrl,
                 hasOverride = link.hasOverride,
                 state = state,
-                previewUrl = catalogService.materialImageUrl(material.id)
+                previewUrl = materialCatalogService.materialImageUrl(material.id)
                     .takeIf { state.hasPreview },
                 updatePath = "/admin/images/materials/${material.id}",
             )
