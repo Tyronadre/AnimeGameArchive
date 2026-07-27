@@ -78,8 +78,13 @@ class MaterialCraftingService(
         val effectiveFamilies = effectiveInfoById.values
             .filter { it.familyKey != null }
             .groupBy { requireNotNull(it.familyKey) }
+        val catalogMaterialsById = materialCatalogService
+            .getMaterialsByIds(balances.map(InventoryMaterialBalance::id))
+            .associateBy(MaterialDefinition::id)
         val result = balances.associate { balance ->
-            val category = effectiveInfoById[balance.id]?.category ?: MaterialCategory.OTHER
+            val category = effectiveInfoById[balance.id]?.category
+                ?: catalogMaterialsById[balance.id]?.category
+                ?: MaterialCategory.OTHER
             balance.id to balance.copy(category = category)
         }.toMutableMap()
 

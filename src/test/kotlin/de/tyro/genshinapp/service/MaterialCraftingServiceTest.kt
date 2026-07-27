@@ -84,6 +84,18 @@ class MaterialCraftingServiceTest {
     }
 
     @Test
+    fun `non-craftable boss drops retain their catalog category`() {
+        val bossDrop = material("Water That Failed To Transcend")
+
+        val result = service.applyCrafting(
+            listOf(balance(bossDrop.id, bossDrop.name, required = 5)),
+            emptyMap(),
+        ).single()
+
+        assertEquals(MaterialCategory.WORLD_BOSS, result.category)
+    }
+
+    @Test
     fun `classifies reported farmable materials as concrete persisted categories`() {
         assertEquals(MaterialCategory.COLLECTABLE, categoryOf("Cor Lapis"))
         assertEquals(MaterialCategory.COLLECTABLE, categoryOf("Noctilucous Jade"))

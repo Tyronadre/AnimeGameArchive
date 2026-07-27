@@ -14,10 +14,6 @@
     <section class="inventory-intro">
         <p class="eyebrow" th:text="#{planning.overall}">Overall planning</p>
         <h1 th:text="#{inventory.missing}">Missing Materials</h1>
-        <p class="lead" th:text="#{planning.lead}">
-            The combined requirements for each character's saved targets — your inventory is
-            deducted exactly once.
-        </p>
     </section>
 
     <section class="empty-state inventory-empty" th:if="${plan == null}">
@@ -106,10 +102,6 @@
                         th:text="#{material.category.other}">Other</button>
             </div>
 
-            <p class="material-allocation-help" th:text="#{materials.allocationHelp}">
-                Keep is reserved for exact-item character needs. The third value shows what is
-                free to use or still needed, and Can make comes from other materials.
-            </p>
 
             <div id="grouped-materials" class="grouped-materials">
                 <section class="material-source-section" data-section-category="TALENT_BOOK">
@@ -187,7 +179,6 @@
                     <div class="material-source-heading">
                         <div><p class="eyebrow" th:text="#{materials.resinBosses}">Resin bosses</p>
                             <h2 th:text="#{materials.worldBosses}">World bosses</h2></div>
-                        <p th:text="#{materials.worldBossesLead}">The required boss drop comes first, followed by every gem family the boss can drop.</p>
                     </div>
                     <div class="boss-source-grid">
                         <article class="boss-source-card" th:each="boss : ${materialsPage.worldBosses}"
@@ -210,7 +201,6 @@
                     <div class="material-source-heading">
                         <div><p class="eyebrow" th:text="#{materials.trounceDomains}">Trounce domains</p>
                             <h2 th:text="#{materials.weeklyBosses}">Weekly bosses</h2></div>
-                        <p th:text="#{materials.weeklyBossesLead}">All three talent drops for each relevant weekly boss, plus possible gems.</p>
                     </div>
                     <div class="boss-source-grid weekly-boss-grid">
                         <article class="boss-source-card" th:each="boss : ${materialsPage.weeklyBosses}"
@@ -232,7 +222,6 @@
                     <div class="material-source-heading">
                         <div><p class="eyebrow" th:text="#{materials.overworldEnemies}">Overworld enemies</p>
                             <h2 th:text="#{materials.enemyDrops}">Enemy drops</h2></div>
-                        <p th:text="#{materials.enemyDropsLead}">Each material family is grouped under the enemy that drops it.</p>
                     </div>
                     <div class="enemy-source-grid">
                         <article class="enemy-source-card" th:each="family : ${materialsPage.enemyDrops}"
@@ -251,7 +240,6 @@
                     <div class="material-source-heading">
                         <div><p class="eyebrow" th:text="#{materials.ascension}">Ascension</p>
                             <h2 th:text="#{materials.gems}">Elemental gems</h2></div>
-                        <p th:text="#{materials.gemsLead}">All currently missing gem tiers, grouped by element.</p>
                     </div>
                     <div class="gem-family-grid">
                         <article class="enemy-source-card" th:each="family : ${materialsPage.gemFamilies}"
@@ -269,7 +257,6 @@
                     <div class="material-source-heading">
                         <div><p class="eyebrow" th:text="#{materials.overworld}">Overworld</p>
                             <h2 th:text="#{materials.collectables}">Collectables</h2></div>
-                        <p th:text="#{materials.collectablesLead}">Regional specialties and collectable ascension items.</p>
                     </div>
                     <div class="balance-grid simple-material-list">
                         <th:block th:replace="~{missing-material-fragments :: sourceItems(${materialsPage.collectables})}"></th:block>
@@ -281,7 +268,6 @@
                     <div class="material-source-heading">
                         <div><p class="eyebrow" th:text="#{materials.remaining}">Remaining</p>
                             <h2 th:text="#{materials.other}">Other materials</h2></div>
-                        <p th:text="#{materials.otherLead}">Weapon materials, currency, experience, and special items.</p>
                     </div>
                     <div class="balance-grid simple-material-list">
                         <th:block th:replace="~{missing-material-fragments :: sourceItems(${materialsPage.otherMaterials})}"></th:block>

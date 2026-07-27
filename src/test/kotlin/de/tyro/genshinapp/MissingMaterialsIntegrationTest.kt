@@ -84,7 +84,6 @@ class MissingMaterialsIntegrationTest @Autowired constructor(
             .andExpect(content().string(containsString("Philosophies of Freedom")))
             .andExpect(content().string(containsString("Philosophies of Vagrancy")))
             .andExpect(content().string(containsString("Grouped by source")))
-            .andExpect(content().string(containsString("Keep is reserved for exact-item character needs")))
             .andExpect(content().string(containsString("Free to use")))
             .andExpect(content().string(containsString("Can make")))
             .andExpect(content().string(containsString("Still need")))
