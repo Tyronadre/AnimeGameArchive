@@ -41,7 +41,11 @@ available as a secondary way to reopen or stop the application. The dashboard
 keeps the ten latest detected inventory changes and refreshes that feed while it
 is open. Packet heartbeats, recognized changes, and snapshot saves are shown in
 the launcher's live log and persisted at
-`%USERPROFILE%\.genshinapp\desktop\irminsul\live-capture.log`.
+`%USERPROFILE%\.genshinapp\desktop\irminsul\live-capture.log`. For exploratory
+capture work, the helper also writes decoded game-command inspection entries as
+JSON Lines to
+`%USERPROFILE%\.genshinapp\desktop\irminsul\packet-inspection.jsonl`. That file
+is local-only but should be treated as private account/game data.
 
 To create a Windows application image containing both the application and its
 Java runtime:

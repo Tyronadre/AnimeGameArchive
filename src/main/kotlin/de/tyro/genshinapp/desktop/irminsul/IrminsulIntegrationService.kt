@@ -139,7 +139,9 @@ class IrminsulIntegrationService(
         Files.createDirectories(logDirectory)
         val launchLog = logDirectory.resolve("launcher.log").toFile()
         val captureLog = captureLogPath()
+        val packetInspectionLog = packetInspectionLogPath()
         rotateCaptureLog(captureLog)
+        rotatePacketInspectionLog(packetInspectionLog)
         if (developmentMode() && !reuseSessionKey) {
             Files.deleteIfExists(sessionKeyPath())
         }
@@ -155,6 +157,8 @@ class IrminsulIntegrationService(
                 session,
                 "--log-file",
                 captureLog.toString(),
+                "--packet-log-file",
+                packetInspectionLog.toString(),
             )
             if (developmentMode()) {
                 command += listOf("--session-key-file", sessionKeyPath().toString())
@@ -265,6 +269,9 @@ class IrminsulIntegrationService(
 
     fun captureLogPath(): Path = desktopHome().resolve("irminsul").resolve("live-capture.log")
 
+    fun packetInspectionLogPath(): Path =
+        desktopHome().resolve("irminsul").resolve("packet-inspection.jsonl")
+
     fun developmentMode(): Boolean = System.getProperty("jpackage.app-path").isNullOrBlank()
 
     fun hasCachedSessionKey(): Boolean =
@@ -372,6 +379,17 @@ class IrminsulIntegrationService(
             Files.move(
                 path,
                 path.resolveSibling("live-capture.previous.log"),
+                StandardCopyOption.REPLACE_EXISTING,
+            )
+        }
+    }
+
+    private fun rotatePacketInspectionLog(path: Path) {
+        Files.createDirectories(path.parent)
+        if (Files.isRegularFile(path)) {
+            Files.move(
+                path,
+                path.resolveSibling("packet-inspection.previous.jsonl"),
                 StandardCopyOption.REPLACE_EXISTING,
             )
         }

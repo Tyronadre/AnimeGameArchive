@@ -23,6 +23,11 @@ version-specific command IDs or outer field numbers. Changes are merged by item
 GUID and exported after a 750 ms quiet period. When `--log-file` is supplied,
 the helper records ten-second traffic heartbeats, recognized changes, and every
 snapshot save so live-capture failures can be diagnosed without console access.
+When `--packet-log-file` is supplied, it additionally records each decoded game
+command as a JSON Lines inspection entry with command ID, payload size,
+best-known category, and a bounded generic protobuf field tree. The packet log is
+intended for local reverse-engineering decisions and may contain private
+account/game data.
 
 Live updates currently cover artifacts, weapons, and materials. Character
 progression and equipped item locations are refreshed by starting a new capture.

@@ -275,6 +275,64 @@ class CharacterCatalogServiceTest {
     }
 
     @Test
+    fun `aggregate plan can include every catalog character with saved targets`() {
+        val snapshot = GoodImportService(objectMapper).parse(
+            Files.readAllBytes(GoodImportServiceTest.SAMPLE_EXPORT),
+        )
+        val unownedCharacter = assertNotNull(
+            catalog.getCharacters().firstOrNull { character ->
+                character.key != "traveler" && snapshot.characters.none { state ->
+                    state.key.equals(character.key, ignoreCase = true)
+                }
+            },
+        )
+        val service = PlayerPlanningService(
+            catalog,
+            MaterialCalculator(materialCatalog),
+            MaterialCraftingService(materialCatalog),
+        )
+        val targets = mapOf(
+            unownedCharacter.key to targetValues(
+                owned = false,
+                targetLevel = 20,
+                targetAscension = 0,
+                targetNormalTalent = 1,
+                targetSkillTalent = 1,
+                targetBurstTalent = 1,
+            ),
+        )
+
+        val ownedOnlyPlan = service.createPlan(snapshot, targets)
+        val allCharactersPlan = service.createPlan(
+            snapshot,
+            targets,
+            includeUnownedCharacters = true,
+        )
+
+        assertTrue(ownedOnlyPlan.characters.none { it.character.key == unownedCharacter.key })
+        val included = assertNotNull(
+            allCharactersPlan.characters.find { it.character.key == unownedCharacter.key },
+        )
+        val expected = MaterialCalculator(materialCatalog).calculate(
+            unownedCharacter,
+            CharacterProgress(
+                owned = true,
+                targetLevel = 20,
+                targetAscension = 0,
+                targetNormalTalent = 1,
+                targetSkillTalent = 1,
+                targetBurstTalent = 1,
+            ),
+        )
+        assertEquals(1, included.state.level)
+        assertEquals(
+            expected.associate { it.id to it.amount },
+            included.materials.associate { it.id to it.required },
+        )
+        assertTrue(allCharactersPlan.characters.size > ownedOnlyPlan.characters.size)
+    }
+
+    @Test
     fun `resolves ascension weapon and manual crit rate before artifacts`() {
         val weaponDataService = mock(WeaponDataService::class.java)
         `when`(weaponDataService.find("SkywardHarp")).thenReturn(

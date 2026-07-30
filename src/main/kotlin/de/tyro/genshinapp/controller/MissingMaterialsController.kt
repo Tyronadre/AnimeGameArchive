@@ -24,6 +24,7 @@ class MissingMaterialsController(
     @GetMapping
     fun missingMaterials(
         @RequestParam(required = false) materialId: Int?,
+        @RequestParam(defaultValue = "false") includeUnowned: Boolean,
         @AuthenticationPrincipal principal: AppUserPrincipal,
         model: Model,
     ): String {
@@ -33,6 +34,7 @@ class MissingMaterialsController(
                 it,
                 characterTargetService.findAll(principal.id),
                 principal.id,
+                includeUnownedCharacters = includeUnowned,
             )
         }
         val materialsPage = plan?.let(pageService::create)
@@ -41,6 +43,11 @@ class MissingMaterialsController(
         model.addAttribute("plan", plan)
         model.addAttribute("materialsPage", materialsPage)
         model.addAttribute("selectedMaterial", selectedMaterial)
+        model.addAttribute("includeUnowned", includeUnowned)
+        model.addAttribute(
+            "planningCharacterCount",
+            plan?.let { it.matchedCharacters + it.unmatchedCharacterKeys.size } ?: 0,
+        )
         model.addAttribute(
             "characterNeeds",
             selectedMaterial?.let { plan?.characterNeeds(it.id) }.orEmpty(),
@@ -51,6 +58,7 @@ class MissingMaterialsController(
     @GetMapping("/popup")
     fun materialPopup(
         @RequestParam materialId: Int,
+        @RequestParam(defaultValue = "false") includeUnowned: Boolean,
         @AuthenticationPrincipal principal: AppUserPrincipal,
         model: Model,
     ): String {
@@ -60,6 +68,7 @@ class MissingMaterialsController(
                 it,
                 characterTargetService.findAll(principal.id),
                 principal.id,
+                includeUnownedCharacters = includeUnowned,
             )
         }
         val selectedMaterial = plan
@@ -86,6 +95,7 @@ class MissingMaterialsController(
     @GetMapping("/api/state")
     @ResponseBody
     fun liveState(
+        @RequestParam(defaultValue = "false") includeUnowned: Boolean,
         @AuthenticationPrincipal principal: AppUserPrincipal,
     ): MissingMaterialsLiveState {
         val snapshot = snapshotStore.current(principal.id)
@@ -94,6 +104,7 @@ class MissingMaterialsController(
             snapshot,
             characterTargetService.findAll(principal.id),
             principal.id,
+            includeUnownedCharacters = includeUnowned,
         )
         val materials = pageService.create(plan).allItemsById.mapValues { (_, item) ->
             MissingMaterialLiveValue(
@@ -108,7 +119,7 @@ class MissingMaterialsController(
             revision = snapshot.revision,
             summary = MissingMaterialsLiveSummary(
                 matchedCharacters = plan.matchedCharacters,
-                characterCount = snapshot.characters.size,
+                characterCount = plan.matchedCharacters + plan.unmatchedCharacterKeys.size,
                 inventoryEntries = snapshot.exportedInventoryKeys,
                 missingMaterialKinds = plan.missingMaterialKinds,
             ),

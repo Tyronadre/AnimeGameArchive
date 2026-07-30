@@ -27,7 +27,8 @@
     </section>
 
     <div id="missing-material-content" th:if="${plan != null}"
-         th:attr="data-snapshot-revision=${plan.snapshot.revision}">
+         th:attr="data-snapshot-revision=${plan.snapshot.revision},
+                  data-include-unowned=${includeUnowned}">
         <section class="import-summary">
             <div>
                 <span th:text="#{planning.format}">Format</span>
@@ -40,7 +41,7 @@
             <div>
                 <span th:text="#{nav.characters}">Characters</span>
                 <strong data-material-summary="characters"
-                        th:text="${plan.matchedCharacters + ' / ' + plan.snapshot.characters.size()}">81</strong>
+                        th:text="${plan.matchedCharacters + ' / ' + planningCharacterCount}">81</strong>
             </div>
             <div>
                 <span th:text="#{planning.inventoryEntries}">Inventory entries</span>
@@ -84,6 +85,21 @@
                         <option value="alphabetical" th:text="#{planning.sortAlphabetical}">Alphabetical</option>
                     </select>
                 </label>
+                <form class="material-character-scope" method="get" th:action="@{/materials}">
+                    <label>
+                        <input type="checkbox" name="includeUnowned" value="true"
+                               th:checked="${includeUnowned}"
+                               onchange="this.form.requestSubmit()">
+                        <span class="material-character-scope-switch" aria-hidden="true"></span>
+                        <span class="material-character-scope-copy">
+                            <b th:text="#{materials.includeUnowned}">Include unowned characters</b>
+                            <small th:text="#{materials.includeUnownedHelp}">
+                                Assume every character is owned and use their saved or default goals.
+                            </small>
+                        </span>
+                    </label>
+                    <button class="sr-only" type="submit" th:text="#{action.filter}">Apply</button>
+                </form>
             </div>
             <div id="material-category-chips" class="material-category-chips" role="group"
                  th:attr="aria-label=#{planning.filterCategories}">
@@ -132,7 +148,7 @@
                                         <a class="source-material"
                                            th:each="book : ${family.materials}"
                                            th:classappend="${book.needed == 0 ? ' covered' : ''}"
-                                           th:href="@{/materials(materialId=${book.id})}"
+                                           th:href="@{/materials(materialId=${book.id},includeUnowned=${includeUnowned})}"
                                            th:attr="data-material-item='true',
                                                     data-material-id=${book.id},
                                                     data-name=${#strings.toLowerCase(book.name)},
@@ -285,7 +301,7 @@
 
             <div id="alphabetical-materials" class="balance-grid" hidden>
                 <a class="balance-card balance-card-link" th:each="material : ${materialsPage.alphabeticalMaterials}"
-                   th:href="@{/materials(materialId=${material.id})}"
+                   th:href="@{/materials(materialId=${material.id},includeUnowned=${includeUnowned})}"
                    th:attr="data-material-item='true',
                             data-material-id=${material.id},
                             data-name=${#strings.toLowerCase(material.name)},
@@ -441,9 +457,12 @@
                 const targetUrl = new URL(materialUrl, window.location.href);
                 const materialId = targetUrl.searchParams.get("materialId");
                 if (!materialId) return;
-                const response = await fetch(`/materials/popup?materialId=${encodeURIComponent(materialId)}`, {
-                    headers: {"Accept": "text/html"}, cache: "no-store"
-                });
+                const includeUnowned = targetUrl.searchParams.get("includeUnowned") === "true";
+                const response = await fetch(
+                    `/materials/popup?materialId=${encodeURIComponent(materialId)}` +
+                    `&includeUnowned=${includeUnowned}`,
+                    {headers: {"Accept": "text/html"}, cache: "no-store"}
+                );
                 if (!response.ok) throw new Error(`Material popup request failed: ${response.status}`);
                 const documentCopy = new DOMParser().parseFromString(await response.text(), "text/html");
                 const freshPopup = documentCopy.getElementById("material-breakdown");
@@ -528,7 +547,8 @@
         };
         const refreshMaterialState = async revision => {
             if (revision === knownRevision) return;
-            const response = await fetch("/materials/api/state", {
+            const includeUnowned = content.dataset.includeUnowned === "true";
+            const response = await fetch(`/materials/api/state?includeUnowned=${includeUnowned}`, {
                 headers: {"Accept": "application/json"}, cache: "no-store"
             });
             if (!response.ok) return;

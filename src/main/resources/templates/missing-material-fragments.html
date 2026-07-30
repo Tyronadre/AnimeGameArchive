@@ -4,7 +4,7 @@
 <th:block th:fragment="sourceItems(items)">
     <a class="source-material" th:each="materialItem : ${items}"
        th:classappend="${materialItem.needed == 0 ? ' covered' : ''}"
-       th:href="@{/materials(materialId=${materialItem.id})}"
+       th:href="@{/materials(materialId=${materialItem.id},includeUnowned=${includeUnowned})}"
        th:attr="data-material-item='true',data-material-id=${materialItem.id},
                 data-name=${#strings.toLowerCase(materialItem.name)},
                 data-category=${materialItem.category.name()}">
@@ -48,7 +48,7 @@
                   th:with="gemstone=${gemFamily.topTier}">
             <a class="boss-gemstone"
                th:classappend="${gemstone.needed > 0 ? ' missing' : ''}"
-               th:href="@{/materials(materialId=${gemstone.id})}"
+               th:href="@{/materials(materialId=${gemstone.id},includeUnowned=${includeUnowned})}"
                th:attr="title=${gemstone.name},data-material-item='true',
                         data-material-id=${gemstone.id},
                         data-name=${#strings.toLowerCase(gemstone.name)},

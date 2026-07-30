@@ -4,6 +4,7 @@ import de.tyro.genshinapp.service.GoodImportServiceTest
 import de.tyro.genshinapp.repository.MaterialRepository
 import de.tyro.genshinapp.repository.MaterialSourceRepository
 import org.hamcrest.Matchers.containsString
+import org.hamcrest.Matchers.greaterThan
 import org.hamcrest.Matchers.not
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.nio.file.Files
@@ -84,6 +86,9 @@ class MissingMaterialsIntegrationTest @Autowired constructor(
             .andExpect(content().string(containsString("Philosophies of Freedom")))
             .andExpect(content().string(containsString("Philosophies of Vagrancy")))
             .andExpect(content().string(containsString("Grouped by source")))
+            .andExpect(content().string(containsString("Include unowned characters")))
+            .andExpect(content().string(containsString("name=\"includeUnowned\"")))
+            .andExpect(content().string(containsString("data-include-unowned=\"false\"")))
             .andExpect(content().string(containsString("Free to use")))
             .andExpect(content().string(containsString("Can make")))
             .andExpect(content().string(containsString("Still need")))
@@ -119,6 +124,24 @@ class MissingMaterialsIntegrationTest @Autowired constructor(
             .andExpect(content().string(containsString("\"104303\":")))
             .andExpect(content().string(containsString("\"owned\":")))
             .andExpect(content().string(containsString("\"needed\":")))
+
+        mockMvc.perform(
+            get("/materials")
+                .param("includeUnowned", "true")
+                .session(session),
+        )
+            .andExpect(status().isOk)
+            .andExpect(content().string(containsString("data-include-unowned=\"true\"")))
+            .andExpect(content().string(containsString("name=\"includeUnowned\"")))
+            .andExpect(content().string(containsString("checked=\"checked\"")))
+
+        mockMvc.perform(
+            get("/materials/api/state")
+                .param("includeUnowned", "true")
+                .session(session),
+        )
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.summary.matchedCharacters").value(greaterThan(77)))
 
         val freedomGuide = assertNotNull(materialRepository.findByGameId(104302))
         assertEquals("TALENT_BOOK", freedomGuide.type)

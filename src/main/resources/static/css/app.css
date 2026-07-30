@@ -4460,10 +4460,87 @@ code {
 
 .material-controls {
     display: grid;
-    grid-template-columns: minmax(220px, 1fr) auto;
+    grid-template-columns: minmax(220px, 1fr) minmax(140px, auto) minmax(270px, 360px);
     align-items: end;
     gap: 0.75rem;
     margin-bottom: 0.75rem;
+}
+
+.material-character-scope {
+    margin: 0;
+}
+
+.material-character-scope > label {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr);
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 43px;
+    padding: 0.48rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    background: var(--surface-subtle);
+    cursor: pointer;
+}
+
+.material-character-scope input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.material-character-scope-switch {
+    position: relative;
+    width: 38px;
+    height: 22px;
+    border-radius: 999px;
+    background: #aeb5bf;
+    box-shadow: inset 0 1px 4px rgba(23, 35, 50, 0.18);
+    transition: background 180ms ease;
+}
+
+.material-character-scope-switch::after {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    content: "";
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 2px 6px rgba(23, 35, 50, 0.24);
+    transition: transform 180ms ease;
+}
+
+.material-character-scope input:checked + .material-character-scope-switch {
+    background: #4d9974;
+}
+
+.material-character-scope input:checked + .material-character-scope-switch::after {
+    transform: translateX(16px);
+}
+
+.material-character-scope input:focus-visible + .material-character-scope-switch {
+    outline: 3px solid rgba(49, 93, 120, 0.2);
+    outline-offset: 2px;
+}
+
+.material-character-scope-copy b,
+.material-character-scope-copy small {
+    display: block;
+}
+
+.material-character-scope-copy b {
+    color: var(--ink);
+    font-size: 0.7rem;
+}
+
+.material-character-scope-copy small {
+    margin-top: 0.12rem;
+    color: var(--muted);
+    font-size: 0.6rem;
+    line-height: 1.3;
 }
 
 .material-search input,
@@ -4903,6 +4980,16 @@ code {
 .simple-material-list .source-material-icon {
     width: 52px;
     height: 52px;
+}
+
+@media (max-width: 900px) {
+    .material-controls {
+        grid-template-columns: minmax(220px, 1fr) auto;
+    }
+
+    .material-character-scope {
+        grid-column: 1 / -1;
+    }
 }
 
 @media (max-width: 640px) {
@@ -10087,6 +10174,20 @@ html[data-theme="dark"] .missing-materials-page :is(
     color: var(--ink);
     border-color: rgba(202, 216, 230, 0.16);
     background: #172534;
+}
+
+html[data-theme="dark"] .missing-materials-page .material-character-scope > label {
+    border-color: rgba(202, 216, 230, 0.16);
+    background: #172534;
+}
+
+html[data-theme="dark"] .missing-materials-page .material-character-scope-switch {
+    background: #536170;
+}
+
+html[data-theme="dark"] .missing-materials-page
+    .material-character-scope input:checked + .material-character-scope-switch {
+    background: #4d9974;
 }
 
 html[data-theme="dark"] .missing-materials-page :is(

@@ -417,11 +417,25 @@ class GenshinDesktopApplication : Application() {
 
     private fun createCaptureLogCard(): VBox {
         val path = irminsulIntegrationService.captureLogPath()
+        val packetPath = irminsulIntegrationService.packetInspectionLogPath()
         val log = TextArea().apply {
             isEditable = false
             isWrapText = false
             prefRowCount = 6
             styleClass.add("capture-log-area")
+        }
+        fun openLogFile(target: Path) {
+            runCatching {
+                Files.createDirectories(target.parent)
+                if (!Files.exists(target)) Files.createFile(target)
+                if (Desktop.isDesktopSupported() &&
+                    Desktop.getDesktop().isSupported(Desktop.Action.OPEN)
+                ) {
+                    Desktop.getDesktop().open(target.toFile())
+                }
+            }.onFailure {
+                log.text = "The log file could not be opened: ${it.message}"
+            }
         }
         fun refresh() {
             log.text = if (!Files.isRegularFile(path)) {
@@ -448,27 +462,22 @@ class GenshinDesktopApplication : Application() {
                 VBox(
                     2.0,
                     Label("Live capture log").apply { styleClass.add("tool-title") },
-                    Label("Packets, recognized changes, and snapshot saves").apply {
+                    Label("Heartbeat below; decoded packet inspection is saved as JSONL.").apply {
                         styleClass.add("tool-copy")
                     },
                 ),
                 Region().apply { HBox.setHgrow(this, Priority.ALWAYS) },
-                Button("Open log file").apply {
-                    styleClass.add("capture-log-open")
-                    setOnAction {
-                        runCatching {
-                            Files.createDirectories(path.parent)
-                            if (!Files.exists(path)) Files.createFile(path)
-                            if (Desktop.isDesktopSupported() &&
-                                Desktop.getDesktop().isSupported(Desktop.Action.OPEN)
-                            ) {
-                                Desktop.getDesktop().open(path.toFile())
-                            }
-                        }.onFailure {
-                            log.text = "The capture log could not be opened: ${it.message}"
-                        }
-                    }
-                },
+                HBox(
+                    6.0,
+                    Button("Open live log").apply {
+                        styleClass.add("capture-log-open")
+                        setOnAction { openLogFile(path) }
+                    },
+                    Button("Open packet JSONL").apply {
+                        styleClass.add("capture-log-open")
+                        setOnAction { openLogFile(packetPath) }
+                    },
+                ),
             ).apply { alignment = Pos.CENTER_LEFT },
             log,
         ).apply {

@@ -24,18 +24,17 @@ class PlayerPlanningService(
         snapshot: PlayerSnapshot,
         targets: Map<String, CharacterTargetValues> = emptyMap(),
         userId: Long? = null,
+        includeUnownedCharacters: Boolean = false,
     ): PlayerMaterialPlan {
-        val catalogByKey = catalogService.getCharacters().associateBy {
+        val catalog = catalogService.getCharacters()
+        val catalogByKey = catalog.associateBy {
             GoodKeyNormalizer.normalize(it.key)
         }
         val unmatched = mutableListOf<String>()
+        val travelerSelection = userId?.let { travelerService?.selection(it) }
 
-        val characterPlans = snapshot.characters.mapNotNull { state ->
-            val normalizedKey = TravelerIdentity.canonicalCharacterKey(state.key)
-            val travelerSelection = userId
-                ?.takeIf { normalizedKey == TravelerIdentity.KEY }
-                ?.let { travelerService?.selection(it) }
-            val character = if (travelerSelection != null) {
+        fun findCharacter(normalizedKey: String): CharacterDefinition? =
+            if (normalizedKey == TravelerIdentity.KEY && travelerSelection != null) {
                 catalogService.findTraveler(
                     travelerSelection.element,
                     travelerSelection.appearance,
@@ -43,21 +42,56 @@ class PlayerPlanningService(
             } else {
                 catalogByKey[normalizedKey] ?: catalogService.findCharacter(normalizedKey)
             }
+
+        fun savedTarget(normalizedKey: String, character: CharacterDefinition) =
+            targets[normalizedKey] ?: targets[GoodKeyNormalizer.normalize(character.key)]
+
+        val candidates = linkedMapOf<String, Pair<CharacterDefinition, PlayerCharacterState>>()
+        snapshot.characters.forEach { state ->
+            val normalizedKey = TravelerIdentity.canonicalCharacterKey(state.key)
+            val character = findCharacter(normalizedKey)
             if (character == null) {
                 unmatched += state.key
-                return@mapNotNull null
+            } else {
+                candidates.putIfAbsent(normalizedKey, character to state)
             }
+        }
+        catalog.forEach { catalogCharacter ->
+            val normalizedKey = TravelerIdentity.canonicalCharacterKey(catalogCharacter.key)
+            if (normalizedKey in candidates) return@forEach
+            val character = findCharacter(normalizedKey) ?: return@forEach
+            val target = savedTarget(normalizedKey, character)
+            if (!includeUnownedCharacters && target?.owned != true) return@forEach
+            candidates[normalizedKey] = character to PlayerCharacterState(
+                key = character.key,
+                level = 1,
+                constellation = 0,
+                ascension = 0,
+                normalTalent = 1,
+                skillTalent = 1,
+                burstTalent = 1,
+            )
+        }
 
+        val characterPlans = candidates.mapNotNull { (normalizedKey, candidate) ->
+            val (character, state) = candidate
             val form = CharacterProgressForm().also {
-                if (travelerSelection != null) it.applyShared(state) else it.apply(state)
+                if (normalizedKey == TravelerIdentity.KEY && travelerSelection != null) {
+                    it.applyShared(state)
+                } else {
+                    it.apply(state)
+                }
             }
-            val savedTarget = targets[normalizedKey]
-                ?: targets[GoodKeyNormalizer.normalize(character.key)]
-            if (travelerSelection != null) {
+            val savedTarget = savedTarget(normalizedKey, character)
+            if (normalizedKey == TravelerIdentity.KEY && travelerSelection != null) {
                 savedTarget?.applySharedTo(form)
                 travelerService?.progress(userId, travelerSelection.element)?.applyTo(form)
             } else {
                 savedTarget?.applyTo(form)
+            }
+            if (includeUnownedCharacters) {
+                form.owned = true
+                form.ownershipExplicit = true
             }
             val progress = form.normalized()
             if (!progress.owned) return@mapNotNull null

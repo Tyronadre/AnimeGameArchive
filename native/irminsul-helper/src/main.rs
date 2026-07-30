@@ -17,17 +17,20 @@ use tokio::time::{MissedTickBehavior, interval};
 
 use crate::capture::PacketCapture;
 use crate::live_updates::{parse_item_changes, parse_item_deletions};
+use crate::packet_inspector::{CommandInspection, PacketInspectionLogger};
 use crate::player_data::{ExportSettings, PlayerData};
 
 mod admin;
 mod capture;
 mod good;
 mod live_updates;
+mod packet_inspector;
 mod player_data;
 
 const TOKEN_HEADER: &str = "X-Genshin-Desktop-Token";
 const SESSION_HEADER: &str = "X-Genshin-Capture-Session";
 const SESSION_KEY_LENGTH: usize = 4096;
+const DEFAULT_PACKET_LOG_MAX_BYTES: u64 = 16 * 1024 * 1024;
 
 #[derive(Deserialize, Serialize)]
 struct CachedSession {
@@ -51,6 +54,12 @@ struct Args {
 
     #[arg(long)]
     log_file: Option<PathBuf>,
+
+    #[arg(long)]
+    packet_log_file: Option<PathBuf>,
+
+    #[arg(long, default_value_t = DEFAULT_PACKET_LOG_MAX_BYTES)]
+    packet_log_max_bytes: u64,
 
     /// Development-only location used to persist the current game session key.
     #[arg(long)]
@@ -122,6 +131,8 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
     let mut player_data = PlayerData::new(database);
     let keys = load_keys()?;
     let mut sniffer = GameSniffer::new().set_initial_keys(keys);
+    let mut packet_inspection =
+        PacketInspectionLogger::open(args.packet_log_file.as_deref(), args.packet_log_max_bytes);
     let mut restored_session = false;
     if args.reuse_session_key {
         let path = args
@@ -276,6 +287,7 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
                 };
 
                 for command in commands {
+                    let mut inspection = CommandInspection::unknown();
                     if initial_snapshot_uploaded {
                         commands_since_report += 1;
                         *command_ids_since_report
@@ -284,6 +296,10 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
                     }
                     if let Some(items) = matches_item_packet(&command) {
                         let changed = player_data.process_items(&items);
+                        inspection = CommandInspection::new(
+                            "full_inventory_snapshot",
+                            format!("{} inventory item records; changed={changed}", items.len()),
+                        );
                         if !captured_items {
                             captured_items = true;
                             tracing::info!(
@@ -310,6 +326,10 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
                         }
                     } else if let Some(characters) = matches_avatar_packet(&command) {
                         let changed = player_data.process_characters(&characters);
+                        inspection = CommandInspection::new(
+                            "full_character_snapshot",
+                            format!("{} character records; changed={changed}", characters.len()),
+                        );
                         if !captured_characters {
                             captured_characters = true;
                             tracing::info!(
@@ -331,6 +351,10 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
                     } else if captured_items {
                         if let Some(items) = parse_item_changes(&command) {
                             let changed = player_data.process_item_changes(&items);
+                            inspection = CommandInspection::new(
+                                "live_item_update",
+                                format!("{} item records; changed={changed}", items.len()),
+                            );
                             if changed > 0 {
                                 pending_changes += changed;
                                 recognized_since_report += changed;
@@ -341,21 +365,36 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
                                     "Captured live item additions or updates"
                                 );
                             }
-                        } else if let Some(guids) = parse_item_deletions(&command)
-                            && player_data.contains_all_item_guids(&guids)
-                        {
-                            let changed = player_data.process_item_deletions(&guids);
-                            if changed > 0 {
-                                pending_changes += changed;
-                                recognized_since_report += changed;
-                                last_change = Some(Instant::now());
-                                tracing::info!(
-                                    command_id = command.command_id,
-                                    deleted_items = changed,
-                                    "Captured live item deletions"
+                        } else if let Some(guids) = parse_item_deletions(&command) {
+                            if player_data.contains_all_item_guids(&guids) {
+                                let changed = player_data.process_item_deletions(&guids);
+                                inspection = CommandInspection::new(
+                                    "live_item_deletion",
+                                    format!("{} GUID candidates; changed={changed}", guids.len()),
+                                );
+                                if changed > 0 {
+                                    pending_changes += changed;
+                                    recognized_since_report += changed;
+                                    last_change = Some(Instant::now());
+                                    tracing::info!(
+                                        command_id = command.command_id,
+                                        deleted_items = changed,
+                                        "Captured live item deletions"
+                                    );
+                                }
+                            } else {
+                                inspection = CommandInspection::new(
+                                    "possible_item_deletion_ignored",
+                                    format!(
+                                        "{} GUID candidates, but not all were in the captured inventory",
+                                        guids.len()
+                                    ),
                                 );
                             }
                         }
+                    }
+                    if let Some(logger) = packet_inspection.as_mut() {
+                        logger.log_command(&command, &inspection);
                     }
                 }
             }
