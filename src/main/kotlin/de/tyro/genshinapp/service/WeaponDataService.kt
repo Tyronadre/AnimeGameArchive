@@ -32,8 +32,16 @@ class WeaponDataService(
                     imageUrl = stored?.imageUrl,
                     remoteImageUrl = stored?.remoteImageUrl,
                     hoyolabEntryId = stored?.hoyolabEntryId,
+                    hoyolabIconUrl = stored?.hoyolabIconUrl,
+                    hoyolabPageVersion = stored?.hoyolabPageVersion,
+                    hoyolabDataVersion = stored?.hoyolabDataVersion ?: 0,
                     fullImageUrl = stored?.fullImageUrl,
                     galleryImages = stored?.galleryImages.orEmpty(),
+                    region = stored?.region,
+                    obtainMethod = stored?.obtainMethod,
+                    releaseVersion = stored?.releaseVersion,
+                    story = stored?.story,
+                    hoyolabAscension = stored?.hoyolabAscension.orEmpty(),
                 )
             }
             ?.let { loaded -> catalogStore?.saveWeapon(loaded) ?: loaded }
@@ -69,13 +77,21 @@ class WeaponDataService(
                         baseAttack = candidate.baseAttack ?: current.baseAttack,
                         baseSecondaryStat = candidate.baseSecondaryStat ?: current.baseSecondaryStat,
                         description = candidate.description ?: current.description,
+                        region = current.region,
+                        obtainMethod = current.obtainMethod,
+                        releaseVersion = current.releaseVersion,
                         passiveName = candidate.passiveName ?: current.passiveName,
                         passiveDescription = candidate.passiveDescription ?: current.passiveDescription,
+                        story = current.story,
                         imageUrl = current.imageUrl,
                         remoteImageUrl = current.remoteImageUrl,
                         hoyolabEntryId = current.hoyolabEntryId,
+                        hoyolabIconUrl = current.hoyolabIconUrl,
+                        hoyolabPageVersion = current.hoyolabPageVersion,
+                        hoyolabDataVersion = current.hoyolabDataVersion,
                         fullImageUrl = current.fullImageUrl,
                         galleryImages = current.galleryImages,
+                        hoyolabAscension = current.hoyolabAscension,
                         ascensionCosts = candidate.ascensionCosts.ifEmpty { current.ascensionCosts },
                     )
                 }
@@ -137,13 +153,21 @@ data class WeaponDefinition(
     val baseAttack: Double? = null,
     val baseSecondaryStat: Double? = null,
     val description: String? = null,
+    val region: String? = null,
+    val obtainMethod: String? = null,
+    val releaseVersion: String? = null,
     val passiveName: String? = null,
     val passiveDescription: String? = null,
+    val story: String? = null,
     val imageUrl: String? = null,
     val remoteImageUrl: String? = null,
     val hoyolabEntryId: Long? = null,
+    val hoyolabIconUrl: String? = null,
+    val hoyolabPageVersion: String? = null,
+    val hoyolabDataVersion: Int = 0,
     val fullImageUrl: String? = null,
     val galleryImages: List<WeaponGalleryImage> = emptyList(),
+    val hoyolabAscension: List<WeaponHoyolabAscension> = emptyList(),
     val ascensionCosts: Map<Int, List<MaterialCost>> = emptyMap(),
 ) {
     val hasDetails: Boolean
@@ -154,4 +178,19 @@ data class WeaponGalleryImage(
     val label: String,
     val url: String,
     val description: String? = null,
+)
+
+data class WeaponHoyolabAscension(
+    val level: Int,
+    val attackBeforeAscension: Double? = null,
+    val attackAfterAscension: Double? = null,
+    val secondaryStat: Double? = null,
+    val materials: List<WeaponHoyolabMaterial> = emptyList(),
+)
+
+data class WeaponHoyolabMaterial(
+    val entryId: Long? = null,
+    val name: String? = null,
+    val amount: Long,
+    val imageUrl: String? = null,
 )

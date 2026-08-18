@@ -7,6 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
     <script th:src="@{/js/theme.js}" src="/js/theme.js"></script>
     <script defer th:src="@{/js/weapon-hero.js}" src="/js/weapon-hero.js"></script>
+    <script defer th:src="@{/js/weapon-copies.js}" src="/js/weapon-copies.js"></script>
 </head>
 <body>
 <header th:replace="~{fragments :: siteHeader('inventory')}"></header>
@@ -24,57 +25,77 @@
                     <img th:if="${weaponIcon != null}" th:src="${weaponIcon}"
                          th:alt="${weaponName}" onerror="this.remove()">
                 </div>
-                <h1 th:text="${weaponName}">Sacrificial Bow</h1>
+                <h1 th:text="${weaponName}">A Thousand Blazing Suns</h1>
             </div>
-            <p class="lead" th:text="#{weapon.detail.lead}">
-                Weapon information and copies found in your imported inventory.
+            <p class="lead"
+               th:text="${weaponDefinition != null && weaponDefinition.description != null
+                    ? weaponDefinition.description : #messages.msg('weapon.detail.lead')}">
+                A greatsword that dazzles like the rising sun.
             </p>
+
             <div class="facts" th:if="${weaponDefinition != null}">
                 <div class="fact">
                     <span class="fact-icon" aria-hidden="true">★</span>
                     <span class="fact-copy">
                         <small th:text="#{character.rarity}">Rarity</small>
-                        <b th:text="${weaponDefinition.rarity + ' ★'}">4 ★</b>
+                        <b th:text="${weaponDefinition.rarity + ' ★'}">5 ★</b>
+                    </span>
+                </div>
+                <div class="fact" th:if="${weaponDefinition.weaponType != null}">
+                    <span class="fact-icon" aria-hidden="true">⚔</span>
+                    <span class="fact-copy">
+                        <small th:text="#{weapon.detail.type}">Type</small>
+                        <b th:text="${weaponDefinition.weaponType}">Claymore</b>
+                    </span>
+                </div>
+                <div class="fact" th:if="${weaponMaxStats != null
+                        && (weaponMaxStats.attackAfterAscension != null
+                            || weaponMaxStats.attackBeforeAscension != null)}">
+                    <span class="fact-icon" aria-hidden="true">◆</span>
+                    <span class="fact-copy">
+                        <small th:text="#{weapon.detail.maxAttack}">Max ATK</small>
+                        <b th:text="${#numbers.formatDecimal(
+                            weaponMaxStats.attackAfterAscension != null
+                                ? weaponMaxStats.attackAfterAscension
+                                : weaponMaxStats.attackBeforeAscension, 1, 0)}">741</b>
                     </span>
                 </div>
                 <div class="fact" th:if="${secondaryStatName != null}">
                     <span class="fact-icon" aria-hidden="true">✦</span>
                     <span class="fact-copy">
-                        <small th:text="#{weapon.detail.secondaryStat}">Secondary stat</small>
-                        <b th:text="${secondaryStatName}">Energy Recharge</b>
-                    </span>
-                </div>
-                <div class="fact" th:if="${weaponDefinition.baseSecondaryStat != null}">
-                    <span class="fact-icon" aria-hidden="true">◇</span>
-                    <span class="fact-copy">
-                        <small th:text="#{weapon.detail.baseSecondaryStat}">Base secondary stat</small>
-                        <b th:text="${#numbers.formatDecimal(weaponDefinition.baseSecondaryStat, 1, 1)
-                            + (secondaryStatKey != null && secondaryStatKey.endsWith('_') ? '%' : '')}">
-                            6.7%
+                        <small th:text="${secondaryStatName}">CRIT Rate</small>
+                        <b th:if="${weaponMaxStats != null && weaponMaxStats.secondaryStat != null}"
+                           th:text="${#numbers.formatDecimal(weaponMaxStats.secondaryStat, 1, 1)
+                                + (secondaryStatKey != null && secondaryStatKey.endsWith('_') ? '%' : '')}">
+                            11.0%
                         </b>
+                        <b th:if="${weaponMaxStats == null || weaponMaxStats.secondaryStat == null}"
+                           th:text="#{weapon.detail.secondaryStat}">Secondary stat</b>
                     </span>
                 </div>
             </div>
-            <div class="good-character-state"
-                 th:classappend="${inventoryAvailable ? (owned ? ' owned' : ' unowned') : ' unowned'}">
-                <span class="good-label"
-                      th:text="${!inventoryAvailable
-                        ? #messages.msg('weapon.detail.inventoryUnknown')
-                        : (owned ? #messages.msg('character.owned')
-                                 : #messages.msg('character.unowned'))}">Owned</span>
-                <strong th:if="${owned}"
-                        th:text="#{weapon.detail.copies(${ownedCopies.size()})}">1 copy</strong>
-                <span class="good-source" th:if="${owned}"
-                      th:text="#{character.fromGood}">Imported from GOOD</span>
-                <span th:if="${inventoryAvailable && !owned}"
-                      th:text="#{weapon.detail.notOwnedNote}">No copy was found in your inventory.</span>
+
+            <div class="weapon-wiki-meta" th:if="${weaponDefinition != null}">
+                <span th:if="${weaponDefinition.region != null}">
+                    <small th:text="#{weapon.detail.region}">Region</small>
+                    <b th:text="${weaponDefinition.region}">Natlan</b>
+                </span>
+                <span th:if="${weaponDefinition.obtainMethod != null}">
+                    <small th:text="#{weapon.detail.source}">Source</small>
+                    <b th:text="${weaponDefinition.obtainMethod}">Event Wish Exclusive</b>
+                </span>
+                <span th:if="${weaponDefinition.releaseVersion != null}">
+                    <small th:text="#{weapon.detail.released}">Released</small>
+                    <b th:text="#{weapon.detail.version(${weaponDefinition.releaseVersion})}">Version 5.3</b>
+                </span>
             </div>
-            <a class="optimizer-character-link" th:href="@{/inventory/weapons(query=${weaponName})}">
-                <span aria-hidden="true">⚔</span>
-                <span th:text="#{weapon.detail.openInventory}">Open weapon inventory</span>
-                <b aria-hidden="true">→</b>
+
+            <a class="optimizer-character-link" th:href="@{/inventory/weapons}">
+                <span aria-hidden="true">←</span>
+                <span th:text="#{weapon.detail.backToCatalog}">Back to weapon catalog</span>
             </a>
         </div>
+
         <div class="hero-art weapon-hero-art">
             <div class="weapon-vfx" aria-hidden="true"></div>
             <div class="hero-orbit orbit-one" aria-hidden="true"></div>
@@ -84,8 +105,7 @@
             <span class="hero-spark spark-three" aria-hidden="true">✦</span>
             <span class="hero-art-fallback" aria-hidden="true">⚔</span>
             <img class="weapon-display-image" th:if="${weaponFullImage != null}"
-                 th:src="${weaponFullImage}"
-                 th:alt="${weaponName}">
+                 th:src="${weaponFullImage}" th:alt="${weaponName}">
             <img class="weapon-display-image"
                  th:if="${weaponFullImage == null && weaponIcon != null}" th:src="${weaponIcon}"
                  th:alt="${weaponName}">
@@ -100,65 +120,197 @@
                 <span class="weapon-image-toggle-icon" aria-hidden="true">◇</span>
                 <span>
                     <small th:text="#{weapon.detail.weaponForm}">Weapon form</small>
-                    <b data-weapon-form-label
-                       th:text="#{weapon.detail.ascendedImage}">Ascended</b>
+                    <b data-weapon-form-label th:text="#{weapon.detail.ascendedImage}">Ascended</b>
                 </span>
                 <span class="weapon-image-toggle-swap" aria-hidden="true">⇄</span>
             </button>
         </div>
     </section>
 
-    <div class="weapon-detail-layout">
-        <section class="panel weapon-copy-panel">
-            <p class="eyebrow" th:text="#{weapon.detail.inventoryEyebrow}">Your inventory</p>
-            <h2 th:text="#{weapon.detail.copiesHeading}">Owned copies</h2>
-            <p class="muted" th:if="${ownedCopies.isEmpty()}"
+    <div class="weapon-detail-content">
+        <section class="panel weapon-passive-panel"
+                 th:if="${weaponDefinition != null && weaponDefinition.passiveName != null}">
+            <p class="eyebrow" th:text="#{weapon.detail.passiveEyebrow}">Weapon skill</p>
+            <h2 th:text="${weaponDefinition.passiveName}">Sunset Reignites the Dawn</h2>
+            <p class="weapon-rich-text" th:text="${weaponDefinition.passiveDescription}">
+                Gain Scorching Brilliance when using an Elemental Skill or Burst.
+            </p>
+        </section>
+
+        <section class="panel weapon-progression-panel"
+                 th:if="${weaponDefinition != null && !weaponDefinition.hoyolabAscension.isEmpty()}">
+            <p class="eyebrow" th:text="#{weapon.detail.progressionEyebrow}">Level progression</p>
+            <h2 th:text="#{weapon.detail.progressionHeading}">Weapon stats</h2>
+            <div class="weapon-progression-table">
+                <div class="weapon-progression-header" aria-hidden="true">
+                    <span th:text="#{weapon.detail.level}">Level</span>
+                    <span th:text="#{weapon.detail.attack}">ATK</span>
+                    <span th:text="${secondaryStatName ?: #messages.msg('weapon.detail.secondaryStat')}">
+                        Secondary stat
+                    </span>
+                </div>
+                <div class="weapon-progression-row"
+                     th:each="row : ${weaponDefinition.hoyolabAscension}">
+                    <strong th:text="${row.level}">20</strong>
+                    <span>
+                        <span th:if="${row.attackBeforeAscension != null}"
+                              th:text="${#numbers.formatDecimal(row.attackBeforeAscension, 1, 0)}">145</span>
+                        <i th:if="${row.attackBeforeAscension != null
+                                && row.attackAfterAscension != null}" aria-hidden="true">→</i>
+                        <b th:if="${row.attackAfterAscension != null}"
+                           th:text="${#numbers.formatDecimal(row.attackAfterAscension, 1, 0)}">176</b>
+                    </span>
+                    <span th:if="${row.secondaryStat != null}"
+                          th:text="${#numbers.formatDecimal(row.secondaryStat, 1, 1)
+                            + (secondaryStatKey != null && secondaryStatKey.endsWith('_') ? '%' : '')}">
+                        4.2%
+                    </span>
+                    <span th:if="${row.secondaryStat == null}">—</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel weapon-owned-copies-panel" data-weapon-owned-copies
+                 th:attr="data-level-label=#{weapon.detail.levelShort},
+                          data-ore-name=#{weapon.detail.mysticOre},
+                          data-exp-label=#{weapon.detail.weaponExperience},
+                          data-ready-label=#{weapon.detail.targetReached},
+                          data-unknown-material=#{weapon.detail.unknownMaterial},
+                          data-saving-label=#{weapon.detail.levelSaving},
+                          data-saved-label=#{weapon.detail.levelSaved},
+                          data-save-error-label=#{weapon.detail.levelSaveError},
+                          data-csrf-header=${_csrf.headerName},
+                          data-csrf-token=${_csrf.token}">
+            <div class="weapon-owned-copies-heading">
+                <div>
+                    <p class="eyebrow" th:text="#{weapon.detail.inventoryEyebrow}">Your inventory</p>
+                    <h2 th:text="#{weapon.detail.copiesHeading}">Owned copies</h2>
+                </div>
+                <span th:if="${!ownedWeaponCopies.isEmpty()}"
+                      th:text="#{weapon.detail.copies(${ownedWeaponCopies.size()})}">2 copies</span>
+            </div>
+
+            <p class="muted" th:if="${ownedWeaponCopies.isEmpty()}"
                th:text="${inventoryAvailable
                     ? #messages.msg('weapon.detail.noCopies')
                     : #messages.msg('weapon.detail.importFirst')}">
                 No copies found.
             </p>
-            <div class="weapon-copy-list" th:if="${!ownedCopies.isEmpty()}">
-                <article th:each="copy : ${ownedCopies}">
-                    <div>
-                        <strong th:text="#{character.levelAscension(${copy.level},${copy.ascension})}">
-                            Level 90 · Ascension 6
-                        </strong>
-                        <span th:text="#{weapon.detail.refinement(${copy.refinement})}">Refinement 1</span>
+
+            <div class="weapon-owned-copy-list" th:if="${!ownedWeaponCopies.isEmpty()}">
+                <article class="weapon-owned-copy" th:each="copy : ${ownedWeaponCopies}"
+                         th:attr="data-copy-id=${copy.id},
+                                  data-current-level=${copy.level},
+                                  data-current-ascension=${copy.ascension},
+                                  data-save-url=${copy.saveUrl}">
+                    <div class="weapon-copy-owner-block">
+                        <span class="weapon-copy-owner-icon" aria-hidden="true">
+                            <span>✦</span>
+                            <img th:if="${copy.ownerIconUrl != null}" th:src="${copy.ownerIconUrl}"
+                                 alt="" loading="lazy" onerror="this.remove()">
+                        </span>
+                        <div>
+                            <small th:text="#{weapons.owner}">Owner</small>
+                            <b th:text="${!copy.ownerName.isEmpty()
+                                ? copy.ownerName : #messages.msg('weapon.detail.unassigned')}">
+                                Mavuika
+                            </b>
+                            <span>
+                                <span data-current-level-output
+                                      th:text="#{weapons.copy.level(${copy.level})}">Lv. 80</span>
+                                <i th:if="${copy.locked}" aria-hidden="true"
+                                   th:attr="title=#{weapon.detail.locked}">◆</i>
+                            </span>
+                        </div>
                     </div>
-                    <a th:if="${copy.ownerKey != null}"
-                       th:href="@{/characters/{key}(key=${copy.ownerKey})}"
-                       th:text="${copy.ownerName}">Furina</a>
-                    <span th:if="${copy.ownerKey == null}"
-                          th:text="${copy.ownerName ?: #messages.msg('weapon.detail.unassigned')}">
-                        Unassigned
-                    </span>
-                    <small th:if="${copy.locked}" th:text="#{weapon.detail.locked}">Locked</small>
+
+                    <div class="weapon-copy-picker-block">
+                        <small th:text="#{weapon.detail.ascensionTarget}">Ascension target</small>
+                        <div class="weapon-copy-level-picker" role="radiogroup"
+                             th:attr="data-selected-ascension=${copy.ascension},
+                                      aria-label=#{weapon.detail.ascensionTarget}">
+                            <button type="button" role="radio" th:each="target : ${copy.targets}"
+                                    th:classappend="${(target.reached ? ' is-reached' : '')
+                                        + (target.ascension == copy.ascension ? ' is-selected' : '')}"
+                                    th:disabled="${!copy.editable}"
+                                    th:attr="data-target-ascension=${target.ascension},
+                                             data-target-level=${target.level},
+                                             aria-checked=${target.ascension == copy.ascension},
+                                             aria-label=${#messages.msg('weapon.detail.targetLevel', target.level)},
+                                             tabindex=${target.ascension == copy.ascension ? '0' : '-1'}">
+                                <span class="weapon-copy-level-dot" aria-hidden="true"></span>
+                                <span class="weapon-copy-level-number" th:text="${target.level}">20</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <label class="weapon-copy-level-editor">
+                        <small th:text="#{weapon.detail.actualLevel}">Actual level</small>
+                        <span>
+                            <input type="number" inputmode="numeric" data-weapon-level-input
+                                   th:value="${copy.level}" min="1"
+                                   th:max="${copy.targets[copy.targets.size() - 1].level}"
+                                   th:disabled="${!copy.editable}"
+                                   th:attr="aria-label=#{weapon.detail.actualLevel}">
+                            <i aria-hidden="true">/</i>
+                            <b th:text="${copy.targets[copy.targets.size() - 1].level}">90</b>
+                        </span>
+                        <em data-weapon-save-state aria-live="polite"></em>
+                    </label>
+
+                    <div class="weapon-copy-refinement">
+                        <small th:text="#{weapons.refinement}">Refinement</small>
+                        <strong th:text="${'R' + copy.refinement}"
+                                th:attr="data-refinement=${copy.refinement}">R1</strong>
+                    </div>
+
+                    <div data-weapon-copy-targets hidden>
+                        <div th:each="target : ${copy.targets}"
+                             th:attr="data-copy-target=${target.ascension},
+                                      data-target-level=${target.level},
+                                      data-target-experience=${target.experience},
+                                      data-target-ore=${target.mysticEnhancementOre}">
+                            <span th:each="material : ${target.materials}"
+                                  th:attr="data-material-name=${material.name},
+                                           data-material-count=${material.amount},
+                                           data-material-image=${material.imageUrl},
+                                           data-material-href=${material.href}"></span>
+                        </div>
+                    </div>
                 </article>
+            </div>
+
+            <div class="weapon-copy-material-tooltip" role="dialog"
+                 th:attr="aria-label=#{weapon.detail.upgradeRequirements}"
+                 data-weapon-copy-tooltip hidden>
+                <small th:text="#{weapon.detail.upgradeRequirements}">Upgrade requirements</small>
+                <strong data-weapon-copy-range>Lv. 20 → 40</strong>
+                <a class="weapon-copy-exp-cost" data-weapon-copy-exp-cost
+                   th:href="@{/materials(materialId=104013)}">
+                    <img th:if="${mysticEnhancementOreImage != null}"
+                         th:src="${mysticEnhancementOreImage}" alt="">
+                    <span class="weapon-material-placeholder"
+                          th:if="${mysticEnhancementOreImage == null}" aria-hidden="true">◇</span>
+                    <div>
+                        <span th:text="#{weapon.detail.mysticOre}">Mystic Enhancement Ore</span>
+                        <small data-weapon-copy-exp>121,550 EXP</small>
+                    </div>
+                    <b data-weapon-copy-ore>×13</b>
+                </a>
+                <ul data-weapon-copy-material-list></ul>
+                <p data-weapon-copy-ready hidden th:text="#{weapon.detail.targetReached}">
+                    This target is already reached.
+                </p>
             </div>
         </section>
 
-        <section class="panel weapon-material-panel">
-            <p class="eyebrow" th:text="#{weapon.detail.materialEyebrow}">Ascension</p>
-            <h2 th:text="#{weapon.detail.materialHeading}">Ascension materials</h2>
-            <p class="muted" th:if="${weaponDefinition == null
-                    || weaponDefinition.ascensionCosts.isEmpty()}"
-               th:text="#{weapon.detail.dataUnavailable}">
-                Detailed ascension data is not available for this weapon yet.
+        <section class="panel weapon-story-panel"
+                 th:if="${weaponDefinition != null && weaponDefinition.story != null}">
+            <p class="eyebrow" th:text="#{weapon.detail.storyEyebrow}">Archive</p>
+            <h2 th:text="#{weapon.detail.storyHeading}">Weapon story</h2>
+            <p class="weapon-rich-text" th:text="${weaponDefinition.story}">
+                The weapon's story appears here.
             </p>
-            <div class="weapon-ascension-grid"
-                 th:if="${weaponDefinition != null
-                    && !weaponDefinition.ascensionCosts.isEmpty()}">
-                <article th:each="phase : ${weaponDefinition.ascensionCosts}">
-                    <h3 th:text="#{weapon.detail.ascensionPhase(${phase.key})}">Ascension 1</h3>
-                    <div th:each="material : ${phase.value}">
-                        <img th:src="@{/media/materials/{id}(id=${material.id})}"
-                             th:alt="${material.name}" loading="lazy" onerror="this.remove()">
-                        <span th:text="${material.name}">Mora</span>
-                        <b th:text="${#numbers.formatInteger(material.count, 1, 'POINT')}">5,000</b>
-                    </div>
-                </article>
-            </div>
         </section>
     </div>
 </main>

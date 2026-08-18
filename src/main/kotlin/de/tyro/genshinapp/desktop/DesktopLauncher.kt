@@ -78,6 +78,13 @@ class GenshinDesktopApplication : Application() {
         stage.title = "Genshin Archive"
         stage.isResizable = false
         stage.scene = createStartupScene(startupStatus)
+        stage.icons.add(
+            javafx.scene.image.Image(
+                requireNotNull(
+                    GenshinDesktopApplication::class.java.getResourceAsStream("/desktop/app-icon.png"),
+                ),
+            ),
+        )
         stage.sizeToScene()
         stage.centerOnScreen()
         stage.show()
@@ -107,21 +114,17 @@ class GenshinDesktopApplication : Application() {
         Thread(
             {
                 try {
-                    val startedContext = SpringApplicationBuilder(GenshinAppApplication::class.java)
-                        .profiles("desktop")
-                        .run(*applicationArguments)
+                    val startedContext = SpringApplicationBuilder(GenshinAppApplication::class.java).profiles("desktop").run(*applicationArguments)
                     context = startedContext
                     if (shutdownRequested) {
                         startedContext.close()
                         return@Thread
                     }
 
-                    val webContext = startedContext as? ServletWebServerApplicationContext
-                        ?: error("Desktop mode requires a servlet web server")
+                    val webContext = startedContext as? ServletWebServerApplicationContext ?: error("Desktop mode requires a servlet web server")
                     applicationUri = URI("http://127.0.0.1:${webContext.webServer.port}/")
                     runtimeProperties = startedContext.getBean(GenshinRuntimeProperties::class.java)
-                    irminsulIntegrationService =
-                        startedContext.getBean(IrminsulIntegrationService::class.java)
+                    irminsulIntegrationService = startedContext.getBean(IrminsulIntegrationService::class.java)
 
                     Platform.runLater {
                         if (!shutdownRequested) {
@@ -218,10 +221,7 @@ class GenshinDesktopApplication : Application() {
     }
 
     private fun showStartupFailure(stage: Stage, exception: Exception) {
-        val message = exception.message
-            ?.takeIf(String::isNotBlank)
-            ?.take(300)
-            ?: "The local services could not be started."
+        val message = exception.message?.takeIf(String::isNotBlank)?.take(300) ?: "The local services could not be started."
         val exit = Button("Close").apply {
             styleClass.add("startup-close")
             setOnAction { Platform.exit() }
@@ -397,9 +397,7 @@ class GenshinDesktopApplication : Application() {
                     irminsulIntegrationService.startCapture()
                 }
             }
-            reuseSession.isDisable = status.state.active ||
-                status.state == IrminsulCaptureState.UNAVAILABLE ||
-                !irminsulIntegrationService.hasCachedSessionKey()
+            reuseSession.isDisable = status.state.active || status.state == IrminsulCaptureState.UNAVAILABLE || !irminsulIntegrationService.hasCachedSessionKey()
             reuseSession.setOnAction {
                 irminsulIntegrationService.startCapture(reuseSessionKey = true)
             }
@@ -424,25 +422,24 @@ class GenshinDesktopApplication : Application() {
             prefRowCount = 6
             styleClass.add("capture-log-area")
         }
+
         fun openLogFile(target: Path) {
             runCatching {
                 Files.createDirectories(target.parent)
                 if (!Files.exists(target)) Files.createFile(target)
-                if (Desktop.isDesktopSupported() &&
-                    Desktop.getDesktop().isSupported(Desktop.Action.OPEN)
-                ) {
+                if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.OPEN)) {
                     Desktop.getDesktop().open(target.toFile())
                 }
             }.onFailure {
                 log.text = "The log file could not be opened: ${it.message}"
             }
         }
+
         fun refresh() {
             log.text = if (!Files.isRegularFile(path)) {
                 "No capture log yet. Start capture to create it."
             } else {
-                runCatching { captureLogTail(path, 12) }
-                    .getOrElse { "The capture log is temporarily unavailable: ${it.message}" }
+                runCatching { captureLogTail(path, 12) }.getOrElse { "The capture log is temporarily unavailable: ${it.message}" }
             }
             log.positionCaret(log.text.length)
         }
@@ -499,19 +496,13 @@ class GenshinDesktopApplication : Application() {
         IrminsulCaptureState.ERROR -> "Capture error"
     }
 
-    private fun captureLogTail(path: Path, maxLines: Int): String =
-        RandomAccessFile(path.toFile(), "r").use { file ->
-            val start = (file.length() - MAX_LOG_TAIL_BYTES).coerceAtLeast(0)
-            file.seek(start)
-            val bytes = ByteArray((file.length() - start).toInt())
-            file.readFully(bytes)
-            String(bytes, StandardCharsets.UTF_8)
-                .lineSequence()
-                .filter(String::isNotBlank)
-                .toList()
-                .takeLast(maxLines)
-                .joinToString(System.lineSeparator())
-        }
+    private fun captureLogTail(path: Path, maxLines: Int): String = RandomAccessFile(path.toFile(), "r").use { file ->
+        val start = (file.length() - MAX_LOG_TAIL_BYTES).coerceAtLeast(0)
+        file.seek(start)
+        val bytes = ByteArray((file.length() - start).toInt())
+        file.readFully(bytes)
+        String(bytes, StandardCharsets.UTF_8).lineSequence().filter(String::isNotBlank).toList().takeLast(maxLines).joinToString(System.lineSeparator())
+    }
 
     private fun statusCard(
         title: String,
@@ -578,9 +569,7 @@ class GenshinDesktopApplication : Application() {
     }
 
     private fun openInSystemBrowser() {
-        if (Desktop.isDesktopSupported() &&
-            Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)
-        ) {
+        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
             Desktop.getDesktop().browse(applicationUri)
         }
     }
@@ -590,16 +579,11 @@ class GenshinDesktopApplication : Application() {
     }
 }
 
-private fun desktopDirectory(): Path =
-    System.getenv("GENSHIN_DESKTOP_HOME")
-        ?.trim()
-        ?.takeIf(String::isNotEmpty)
-        ?.let(Path::of)
-        ?: Path.of(
-            System.getProperty("user.home"),
-            ".genshinapp",
-            "desktop",
-        )
+private fun desktopDirectory(): Path = System.getenv("GENSHIN_DESKTOP_HOME")?.trim()?.takeIf(String::isNotEmpty)?.let(Path::of) ?: Path.of(
+    System.getProperty("user.home"),
+    ".genshinapp",
+    "desktop",
+)
 
 private fun createDesktopDirectories(desktopDirectory: Path) {
     Files.createDirectories(desktopDirectory.resolve("database"))

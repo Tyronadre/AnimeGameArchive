@@ -21,7 +21,7 @@ class HoyolabWeaponGalleryServiceTest {
     }
 
     @Test
-    fun `finds the weapon entry and persists its awakened gallery image`() {
+    fun `imports and persists the structured weapon wiki page`() {
         val mapper = jacksonObjectMapper()
         val searchRequests = AtomicInteger()
         val detailRequests = AtomicInteger()
@@ -55,6 +55,66 @@ class HoyolabWeaponGalleryServiceTest {
         testServer.createContext("/entry_page") { exchange ->
             detailRequests.incrementAndGet()
             assertEquals("entry_page_id=1954", exchange.requestURI.rawQuery)
+            val baseInfo = mapper.writeValueAsString(
+                mapOf(
+                    "list" to listOf(
+                        mapOf("key" to "Name", "value" to listOf("Skyward Blade")),
+                        mapOf("key" to "Region", "value" to listOf("<p>Mondstadt</p>")),
+                        mapOf("key" to "Source", "value" to listOf("<p>Wishes</p>")),
+                        mapOf("key" to "Type", "value" to listOf("Sword")),
+                        mapOf("key" to "Secondary Attributes", "value" to listOf("CRIT Rate")),
+                        mapOf(
+                            "key" to "Sky-Piercing Fang",
+                            "value" to listOf("<p>Increases CRIT Rate.<br>Triggers a vacuum blade.</p>"),
+                        ),
+                        mapOf("key" to "Version Released", "value" to listOf("<p>1.0</p>")),
+                    ),
+                ),
+            )
+            val material = "\$" + mapper.writeValueAsString(
+                listOf(
+                    mapOf(
+                        "ep_id" to 757,
+                        "img" to MATERIAL_IMAGE_URL,
+                        "amount" to 10_000,
+                        "nickname" to "Mora",
+                    ),
+                ),
+            ) + "\$"
+            val ascension = mapper.writeValueAsString(
+                mapOf(
+                    "list" to listOf(
+                        mapOf(
+                            "key" to "Lv.1",
+                            "combatList" to listOf(
+                                mapOf(
+                                    "values" to listOf(
+                                        "ATK before Ascension",
+                                        "ATK after Ascension",
+                                        "CRIT Rate",
+                                    ),
+                                ),
+                                mapOf("values" to listOf("-", "49", "2.4％")),
+                            ),
+                            "materials" to emptyList<String>(),
+                        ),
+                        mapOf(
+                            "key" to "Lv.20",
+                            "combatList" to listOf(
+                                mapOf(
+                                    "values" to listOf(
+                                        "ATK before Ascension",
+                                        "ATK after Ascension",
+                                        "CRIT Rate",
+                                    ),
+                                ),
+                                mapOf("values" to listOf("145", "176", "4.2%")),
+                            ),
+                            "materials" to listOf(material),
+                        ),
+                    ),
+                ),
+            )
             val gallery = mapper.writeValueAsString(
                 mapOf(
                     "list" to listOf(
@@ -71,19 +131,36 @@ class HoyolabWeaponGalleryServiceTest {
                     ),
                 ),
             )
+            val story = mapper.writeValueAsString(
+                mapOf("list" to listOf(mapOf("desc" to "<p>First line.<br>Second line.</p>"))),
+            )
             exchange.respondJson(
                 mapper.writeValueAsBytes(
                     mapOf(
                         "retcode" to 0,
                         "data" to mapOf(
                             "page" to mapOf(
+                                "id" to "1954",
+                                "name" to "Skyward Blade",
+                                "desc" to "The fang that pierces the sky.",
+                                "icon_url" to WIKI_ICON_URL,
+                                "version" to "12345",
+                                "filter_values" to mapOf(
+                                    "weapon_rarity" to mapOf(
+                                        "values" to listOf("5-Star"),
+                                        "value_types" to listOf(mapOf("enum_string" to "5")),
+                                    ),
+                                ),
                                 "modules" to listOf(
                                     mapOf(
                                         "components" to listOf(
+                                            mapOf("component_id" to "baseInfo", "data" to baseInfo),
+                                            mapOf("component_id" to "ascension", "data" to ascension),
                                             mapOf(
                                                 "component_id" to "gallery_character",
                                                 "data" to gallery,
                                             ),
+                                            mapOf("component_id" to "story", "data" to story),
                                         ),
                                     ),
                                 ),
@@ -108,9 +185,27 @@ class HoyolabWeaponGalleryServiceTest {
         val second = assertNotNull(service.enrich("skywardblade"))
 
         assertEquals(1954, first.hoyolabEntryId)
+        assertEquals(1, first.hoyolabDataVersion)
+        assertEquals("12345", first.hoyolabPageVersion)
+        assertEquals(WIKI_ICON_URL, first.hoyolabIconUrl)
+        assertEquals("The fang that pierces the sky.", first.description)
+        assertEquals("Mondstadt", first.region)
+        assertEquals("Wishes", first.obtainMethod)
+        assertEquals("1.0", first.releaseVersion)
+        assertEquals("Sword", first.weaponType)
+        assertEquals("FIGHT_PROP_CRITICAL", first.secondaryStatType)
+        assertEquals(49.0, first.baseAttack)
+        assertEquals(2.4, first.baseSecondaryStat)
+        assertEquals("Sky-Piercing Fang", first.passiveName)
+        assertEquals("Increases CRIT Rate.\nTriggers a vacuum blade.", first.passiveDescription)
+        assertEquals("First line.\nSecond line.", first.story)
         assertEquals(AWAKENED_IMAGE_URL, first.fullImageUrl)
         assertEquals(2, first.galleryImages.size)
         assertEquals("After Lv.40 Ascension", first.galleryImages.last().description)
+        assertEquals(2, first.hoyolabAscension.size)
+        assertEquals(176.0, first.hoyolabAscension.last().attackAfterAscension)
+        assertEquals("Mora", first.hoyolabAscension.last().materials.single().name)
+        assertEquals(10_000, first.hoyolabAscension.last().materials.single().amount)
         assertEquals(first, second)
         assertEquals(first, store.findWeapon("skywardblade"))
         assertEquals(1, searchRequests.get())
@@ -142,5 +237,9 @@ class HoyolabWeaponGalleryServiceTest {
             "https://upload-static.hoyoverse.com/hoyolab-wiki/original.png"
         private const val AWAKENED_IMAGE_URL =
             "https://upload-static.hoyoverse.com/hoyolab-wiki/awakened.png"
+        private const val WIKI_ICON_URL =
+            "https://act-webstatic.hoyoverse.com/hoyolab-wiki/icon.png"
+        private const val MATERIAL_IMAGE_URL =
+            "https://bbs.hoyolab.com/hoyowiki/picture/object/Mora_icon.png"
     }
 }

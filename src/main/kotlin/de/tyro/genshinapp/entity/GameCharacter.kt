@@ -1,12 +1,16 @@
 package de.tyro.genshinapp.entity
 
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Lob
+import jakarta.persistence.OneToMany
+import jakarta.persistence.OrderBy
 import jakarta.persistence.Table
+import org.hibernate.annotations.BatchSize
 
 @Entity
 @Table(name = "game_character")
@@ -46,22 +50,24 @@ class GameCharacter {
 
     var ascensionStatType: String? = null
 
-    @Lob
-    @Column(nullable = false)
-    var imageUrlsJson: String = "{}"
+    @Column(name = "image_resource_key", length = 96)
+    var imageResourceKey: String? = null
 
-    @Lob
-    @Column(nullable = false)
-    var remoteImageUrlsJson: String = "{}"
+    @Column(name = "talent_resource_key", length = 96)
+    var talentResourceKey: String? = null
 
-    @Lob
-    @Column(nullable = false)
-    var ascensionCostsJson: String = "{}"
+    @OneToMany(mappedBy = "character", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OrderBy("imageType ASC")
+    @BatchSize(size = 100)
+    var images: MutableList<GameCharacterImage> = mutableListOf()
 
-    @Lob
-    @Column(nullable = false)
-    var talentCostsJson: String = "{}"
+    @OneToMany(mappedBy = "character", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OrderBy("costType ASC, level ASC, materialOrder ASC")
+    @BatchSize(size = 100)
+    var materialCosts: MutableList<GameCharacterMaterialCost> = mutableListOf()
 
-    @Lob
-    var talentsJson: String? = null
+    @OneToMany(mappedBy = "character", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OrderBy("displayOrder ASC")
+    @BatchSize(size = 100)
+    var talents: MutableList<GameCharacterTalent> = mutableListOf()
 }

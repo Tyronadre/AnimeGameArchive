@@ -18,17 +18,48 @@ class PlayerWeaponService(
 ) {
     @Transactional(readOnly = true)
     fun findAll(userId: Long): List<PlayerWeapon> =
+        findAllStored(userId).map(StoredPlayerWeapon::weapon)
+
+    @Transactional(readOnly = true)
+    fun findAllStored(userId: Long): List<StoredPlayerWeapon> =
         playerWeaponRepository.findAllByUser_IdOrderByImportPositionAscIdAsc(userId)
             .map { instance ->
-                PlayerWeapon(
-                    key = instance.weapon.key,
-                    level = instance.level,
-                    ascension = instance.ascension,
-                    refinement = instance.refinement,
-                    location = instance.location,
-                    locked = instance.locked,
+                StoredPlayerWeapon(
+                    id = requireNotNull(instance.id),
+                    weapon = toPlayerWeapon(instance),
                 )
             }
+
+    @Transactional
+    fun updateLevel(
+        userId: Long,
+        instanceId: Long,
+        expectedWeaponKey: String,
+        requestedLevel: Int,
+        requestedAscension: Int? = null,
+    ): StoredPlayerWeapon {
+        require(userId > 0) { "Invalid user id" }
+        val instance = playerWeaponRepository.findByIdAndUser_Id(instanceId, userId)
+            ?: throw NoSuchElementException("Weapon copy not found")
+        val normalizedKey = GoodKeyNormalizer.normalize(expectedWeaponKey)
+        require(instance.weapon.key == normalizedKey) { "Weapon copy does not match this page" }
+        val rarity = weaponCatalogService.find(normalizedKey)?.rarity ?: instance.weapon.rarity
+        val maxLevel = WeaponPlanningService.maxLevel(rarity)
+        require(requestedLevel in 1..maxLevel) {
+            "Weapon level must be between 1 and $maxLevel"
+        }
+
+        val minimumAscension = WeaponPlanningService.minimumAscensionFor(requestedLevel)
+        val maximumAscension = WeaponPlanningService.maximumAscension(rarity)
+        val ascension = requestedAscension ?: maxOf(instance.ascension, minimumAscension)
+        require(ascension in minimumAscension..maximumAscension) {
+            "Weapon ascension must be between $minimumAscension and $maximumAscension at level $requestedLevel"
+        }
+
+        instance.level = requestedLevel
+        instance.ascension = ascension
+        return StoredPlayerWeapon(requireNotNull(instance.id), toPlayerWeapon(instance))
+    }
 
     @Transactional
     fun replaceAll(userId: Long, weapons: Collection<PlayerWeapon>) {
@@ -60,4 +91,18 @@ class PlayerWeaponService(
             },
         )
     }
+
+    private fun toPlayerWeapon(instance: PlayerWeaponInstance): PlayerWeapon = PlayerWeapon(
+        key = instance.weapon.key,
+        level = instance.level,
+        ascension = instance.ascension,
+        refinement = instance.refinement,
+        location = instance.location,
+        locked = instance.locked,
+    )
 }
+
+data class StoredPlayerWeapon(
+    val id: Long,
+    val weapon: PlayerWeapon,
+)

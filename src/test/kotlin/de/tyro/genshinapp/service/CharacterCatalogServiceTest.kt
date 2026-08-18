@@ -169,6 +169,31 @@ class CharacterCatalogServiceTest {
     }
 
     @Test
+    fun `refreshes generated image defaults for persisted characters on startup`() {
+        val staleFurina = assertNotNull(catalog.findCharacter("furina")).copy(
+            imageUrls = emptyMap(),
+            remoteImageUrls = CharacterImageType.entries.associateWith {
+                "https://stale.example/${it.key}.png"
+            },
+        )
+        val store = InMemoryCatalogStore(
+            catalog.getCharacters().filterNot { it.key == "furina" } + staleFurina,
+        )
+
+        val restartedCatalog = catalogWithStore(store)
+        val refreshedFurina = assertNotNull(restartedCatalog.findCharacter("furina"))
+
+        CharacterImageType.entries.forEach { imageType ->
+            assertEquals(
+                fandomImageUrlResolver.characterImageUrl("Furina", imageType),
+                refreshedFurina.remoteImageUrl(imageType),
+            )
+            assertNotNull(refreshedFurina.imageUrls[imageType])
+        }
+        assertTrue("furina" !in store.savedCharacterKeys)
+    }
+
+    @Test
     fun `formats talent scaling values for every available level`() {
         val ayaka = assertNotNull(catalog.findCharacter("kamisatoayaka"))
         val normalAttack = ayaka.combatTalents.first { it.kind == CharacterTalentKind.NORMAL_ATTACK }

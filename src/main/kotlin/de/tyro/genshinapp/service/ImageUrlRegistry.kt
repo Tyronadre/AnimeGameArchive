@@ -1,5 +1,7 @@
 package de.tyro.genshinapp.service
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.tyro.genshinapp.configuration.GenshinContentProperties
 import de.tyro.genshinapp.model.CharacterDefinition
@@ -354,6 +356,7 @@ data class WeaponFullImageDefault(
     val defaultUrl: String,
 )
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class EditableImageLink(
     var name: String = "",
     /** Generated or internal code default. Refreshed automatically and overridden by [url]. */
@@ -361,9 +364,11 @@ data class EditableImageLink(
     /** User/admin override. Preserved across default refreshes and used before [defaultUrl]. */
     var url: String = "",
 ) {
+    @get:JsonIgnore
     val effectiveUrl: String?
         get() = url.ifBlank { defaultUrl }.ifBlank { null }
 
+    @get:JsonIgnore
     val hasOverride: Boolean
         get() = url.isNotBlank()
 

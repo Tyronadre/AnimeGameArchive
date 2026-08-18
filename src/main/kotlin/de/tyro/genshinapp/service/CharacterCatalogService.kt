@@ -41,7 +41,7 @@ class CharacterCatalogService(
             store.getCharacters().forEach { storedCharacter ->
                 val refreshedCharacter = rememberCharacter(storedCharacter)
                 if (refreshedCharacter.hasDifferentImageUrlsThan(storedCharacter)) {
-                    store.saveCharacter(refreshedCharacter)
+                    persistInternalImageDefaults(store, storedCharacter, refreshedCharacter)
                 }
             }
         }
@@ -86,7 +86,7 @@ class CharacterCatalogService(
         store?.findCharacter(normalizedKey)?.let { storedCharacter ->
             val character = rememberCharacter(storedCharacter)
             if (character.hasDifferentImageUrlsThan(storedCharacter)) {
-                store.saveCharacter(character)
+                persistInternalImageDefaults(store, storedCharacter, character)
             }
             contentLoader.registerDefaultImageLinks(
                 listOf(character),
@@ -347,13 +347,6 @@ class CharacterCatalogService(
                 .toUriString()
         }
 
-    private fun refreshPersistedCharacterImageUrls(character: CharacterDefinition): CharacterDefinition {
-        if (character.imageResourceKey !in INTERNAL_CHARACTER_IMAGE_DEFAULT_RESOURCE_KEYS) {
-            return character
-        }
-        return refreshCharacterImageUrls(character)
-    }
-
     private fun refreshCharacterImageUrls(character: CharacterDefinition): CharacterDefinition {
         val remoteImageUrls = defaultCharacterImageUrls(
             character.imageResourceKey,
@@ -376,6 +369,16 @@ class CharacterCatalogService(
         other: CharacterDefinition,
     ): Boolean =
         imageUrls != other.imageUrls || remoteImageUrls != other.remoteImageUrls
+
+    private fun persistInternalImageDefaults(
+        store: CharacterCatalogStore,
+        storedCharacter: CharacterDefinition,
+        refreshedCharacter: CharacterDefinition,
+    ) {
+        if (storedCharacter.imageResourceKey in INTERNAL_CHARACTER_IMAGE_DEFAULT_RESOURCE_KEYS) {
+            store.saveCharacter(refreshedCharacter)
+        }
+    }
 
     private fun readTalentAttributes(attributesNode: JsonNode): List<CharacterTalentAttribute> {
         val labels = attributesNode.path("labels")
@@ -455,7 +458,10 @@ class CharacterCatalogService(
     }
 
     private fun rememberCharacter(character: CharacterDefinition): CharacterDefinition {
-        val refreshedCharacter = refreshPersistedCharacterImageUrls(character)
+        // Generated URLs are runtime defaults, not user choices. Recalculate them whenever a
+        // stored character enters the catalog so resolver changes take effect after a restart.
+        // Administrator overrides remain separate in ImageUrlRegistry.
+        val refreshedCharacter = refreshCharacterImageUrls(character)
         charactersByKey[refreshedCharacter.key] = refreshedCharacter
         return refreshedCharacter
     }

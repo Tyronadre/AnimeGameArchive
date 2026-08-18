@@ -970,29 +970,54 @@ class PlayerInventoryController(
 
     @GetMapping("/weapons")
     fun weapons(
-        @RequestParam(defaultValue = "") query: String,
-        @RequestParam(defaultValue = "0") page: Int,
         @AuthenticationPrincipal principal: AppUserPrincipal,
         model: Model,
     ): String {
         val snapshot = snapshotStore.current(principal.id)
-        val normalizedQuery = query.trim()
-        val filtered = snapshot?.weapons.orEmpty()
-            .filter {
-                normalizedQuery.isBlank() ||
-                    it.name.contains(normalizedQuery, ignoreCase = true) ||
-                    it.location?.contains(normalizedQuery, ignoreCase = true) == true
+        val ownedByWeapon = snapshot?.weapons.orEmpty()
+            .groupBy { weapon -> GoodKeyNormalizer.normalize(weapon.key) }
+        val weapons = weaponCatalogService.getWeapons()
+            .map { definition ->
+                val typeKey = weaponTypeKey(definition.weaponType)
+                val copies = ownedByWeapon[definition.key].orEmpty()
+                    .sortedWith(
+                        compareByDescending<PlayerWeapon> { it.level }
+                            .thenByDescending { it.refinement },
+                    )
+                    .map { weapon ->
+                        val owner = weapon.location?.let(catalogService::findCharacter)
+                        WeaponCatalogCopy(
+                            level = weapon.level,
+                            refinement = weapon.refinement,
+                            locked = weapon.locked,
+                            ownerName = owner?.name
+                                ?: weapon.location?.let(GoodKeyNormalizer::humanize),
+                            ownerIconUrl = owner?.iconImageUrl,
+                        )
+                    }
+                WeaponCatalogCard(
+                    key = definition.key,
+                    name = definition.name,
+                    rarity = definition.rarity,
+                    type = typeKey.takeUnless { it == "unknown" }
+                        ?.let { messages.get("weapons.type.$it") }
+                        ?: definition.weaponType,
+                    typeKey = typeKey,
+                    imageUrl = weaponCatalogService.imageUrl(definition.key),
+                    copies = copies,
+                )
             }
-            .sortedWith(compareByDescending<PlayerWeapon> { it.level }.thenBy { it.name })
-        val weaponPage = paginate(filtered, page)
+            .sortedWith(
+                compareByDescending<WeaponCatalogCard> { it.rarity }
+                    .thenBy { it.name },
+            )
 
         model.addAttribute("snapshot", snapshot)
-        model.addAttribute("weapons", weaponPage.items)
-        model.addAttribute("weaponIcons", weaponCatalogService.imageUrls(weaponPage.items))
-        model.addAttribute("page", weaponPage.page)
-        model.addAttribute("totalPages", weaponPage.totalPages)
-        model.addAttribute("totalItems", weaponPage.totalItems)
-        model.addAttribute("query", normalizedQuery)
+        model.addAttribute("weapons", weapons)
+        model.addAttribute("weaponTypes", weaponTypeFilters())
+        model.addAttribute("totalWeapons", weapons.size)
+        model.addAttribute("ownedWeapons", weapons.count(WeaponCatalogCard::owned))
+        model.addAttribute("ownedCopies", weapons.sumOf(WeaponCatalogCard::copyCount))
         return "inventory-weapons"
     }
 
@@ -1050,6 +1075,45 @@ class PlayerInventoryController(
             totalPages = totalPages,
             totalItems = items.size,
         )
+    }
+
+    private fun weaponTypeFilters(): List<WeaponTypeFilter> = listOf(
+        WeaponTypeFilter(
+            key = "sword",
+            label = messages.get("weapons.type.sword"),
+            imageUrl = weaponCatalogService.imageUrl("silversword"),
+        ),
+        WeaponTypeFilter(
+            key = "claymore",
+            label = messages.get("weapons.type.claymore"),
+            imageUrl = weaponCatalogService.imageUrl("oldmercspal"),
+        ),
+        WeaponTypeFilter(
+            key = "polearm",
+            label = messages.get("weapons.type.polearm"),
+            imageUrl = weaponCatalogService.imageUrl("ironpoint"),
+        ),
+        WeaponTypeFilter(
+            key = "catalyst",
+            label = messages.get("weapons.type.catalyst"),
+            imageUrl = weaponCatalogService.imageUrl("pocketgrimoire"),
+        ),
+        WeaponTypeFilter(
+            key = "bow",
+            label = messages.get("weapons.type.bow"),
+            imageUrl = weaponCatalogService.imageUrl("seasonedhuntersbow"),
+        ),
+    )
+
+    private fun weaponTypeKey(type: String?): String = when (
+        GoodKeyNormalizer.normalize(type.orEmpty())
+    ) {
+        "sword" -> "sword"
+        "claymore" -> "claymore"
+        "polearm" -> "polearm"
+        "catalyst" -> "catalyst"
+        "bow" -> "bow"
+        else -> "unknown"
     }
 
     private fun artifactMutationRequest(
@@ -1268,4 +1332,43 @@ data class ArtifactEditorStat(
 data class ArtifactAssignmentCharacter(
     val key: String,
     val name: String,
+)
+
+data class WeaponTypeFilter(
+    val key: String,
+    val label: String,
+    val imageUrl: String?,
+)
+
+data class WeaponCatalogCard(
+    val key: String,
+    val name: String,
+    val rarity: Int,
+    val type: String?,
+    val typeKey: String,
+    val imageUrl: String?,
+    val copies: List<WeaponCatalogCopy>,
+) {
+    val owned: Boolean
+        get() = copies.isNotEmpty()
+
+    val copyCount: Int
+        get() = copies.size
+
+    val rarityStars: String
+        get() = "★".repeat(rarity.coerceIn(0, 5))
+
+    val searchText: String
+        get() = buildList {
+            add(name)
+            copies.mapNotNullTo(this, WeaponCatalogCopy::ownerName)
+        }.joinToString(" ").lowercase()
+}
+
+data class WeaponCatalogCopy(
+    val level: Int,
+    val refinement: Int,
+    val locked: Boolean,
+    val ownerName: String?,
+    val ownerIconUrl: String?,
 )

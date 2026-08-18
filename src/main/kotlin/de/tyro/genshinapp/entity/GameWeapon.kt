@@ -40,12 +40,24 @@ class GameWeapon {
     @Lob
     var description: String? = null
 
+    @Column(length = 96)
+    var region: String? = null
+
+    @Column(name = "obtain_method", length = 256)
+    var obtainMethod: String? = null
+
+    @Column(name = "release_version", length = 48)
+    var releaseVersion: String? = null
+
     @Column(name = "passive_name", length = 200)
     var passiveName: String? = null
 
     @Lob
     @Column(name = "passive_description")
     var passiveDescription: String? = null
+
+    @Lob
+    var story: String? = null
 
     @Column(name = "image_url", length = 512)
     var imageUrl: String? = null
@@ -56,12 +68,25 @@ class GameWeapon {
     @Column(name = "hoyolab_entry_id")
     var hoyolabEntryId: Long? = null
 
+    @Column(name = "hoyolab_icon_url", length = 4096)
+    var hoyolabIconUrl: String? = null
+
+    @Column(name = "hoyolab_page_version", length = 64)
+    var hoyolabPageVersion: String? = null
+
+    @Column(name = "hoyolab_data_version")
+    var hoyolabDataVersion: Int? = 0
+
     @Column(name = "full_image_url", length = 4096)
     var fullImageUrl: String? = null
 
     @Lob
     @Column(name = "gallery_images_json")
     var galleryImagesJson: String? = "[]"
+
+    @Lob
+    @Column(name = "hoyolab_ascension_json")
+    var hoyolabAscensionJson: String? = "[]"
 
     @Lob
     @Column(name = "ascension_costs_json", nullable = false)

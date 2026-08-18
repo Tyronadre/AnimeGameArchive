@@ -117,16 +117,33 @@ class WeaponCatalogService(
         catalogStore?.saveWeapon(definition) ?: definition
 
     private fun remember(definition: WeaponDefinition): WeaponDefinition {
-        definitionsByKey[definition.key] = definition
-        return definition
+        // Stored remoteImageUrl values are snapshots of generated defaults. Recalculate them when
+        // loading the runtime catalog so resolver changes are reflected on the next app start.
+        // User overrides live independently in ImageUrlRegistry and are therefore preserved.
+        val refreshedDefinition = refreshDefaultImageUrl(definition)
+        definitionsByKey[refreshedDefinition.key] = refreshedDefinition
+        return refreshedDefinition
     }
 
     private fun imageDefault(definition: WeaponDefinition): WeaponImageDefault =
         WeaponImageDefault(
             key = definition.key,
             name = definition.name,
-            defaultUrl = definition.remoteImageUrl.orEmpty(),
+            defaultUrl = currentDefaultImageUrl(definition),
         )
+
+    private fun refreshDefaultImageUrl(definition: WeaponDefinition): WeaponDefinition {
+        val defaultUrl = currentDefaultImageUrl(definition)
+        return if (definition.remoteImageUrl.orEmpty() == defaultUrl) {
+            definition
+        } else {
+            definition.copy(remoteImageUrl = defaultUrl)
+        }
+    }
+
+    private fun currentDefaultImageUrl(definition: WeaponDefinition): String =
+        fandomImageUrlResolver?.weaponImageUrl(definition.name)
+            ?: definition.remoteImageUrl.orEmpty()
 
     private fun fullImageDefault(definition: WeaponDefinition): WeaponFullImageDefault =
         WeaponFullImageDefault(

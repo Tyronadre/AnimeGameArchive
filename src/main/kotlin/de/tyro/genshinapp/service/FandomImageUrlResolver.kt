@@ -23,7 +23,7 @@ class FandomImageUrlResolver(
     }
 
     fun weaponImageUrl(weaponName: String): String {
-        val normalizedName = weaponName.trim().replace(WHITESPACE, "_")
+        val normalizedName = weaponName.trim().replace(WHITESPACE, "_").replace("\"","")
         return hashedImageUrl("Weapon_${normalizedName}.png")
     }
 

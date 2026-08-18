@@ -6,17 +6,24 @@
     <title th:text="#{weapons.title}">Weapons · Genshin Archive</title>
     <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
     <script th:src="@{/js/theme.js}" src="/js/theme.js"></script>
+    <script defer th:src="@{/js/weapon-catalog.js}" src="/js/weapon-catalog.js"></script>
 </head>
 <body>
 <header th:replace="~{fragments :: siteHeader('inventory')}"></header>
-<main class="inventory-page">
-    <section class="inventory-intro compact-intro">
-        <p class="eyebrow" th:text="#{inventory.good}">GOOD Inventory</p>
+<main class="inventory-page weapon-catalog-page">
+    <section class="inventory-intro compact-intro weapon-catalog-intro">
+        <p class="eyebrow" th:text="#{weapon.detail.eyebrow}">Weapon archive</p>
         <h1 th:text="#{inventory.weapons}">Weapons</h1>
-        <p class="lead" th:text="${snapshot == null
-            ? #messages.msg('inventory.import.first')
-            : #messages.msg('weapons.summary', totalItems)}">Weapons</p>
+        <p class="lead"
+           th:text="#{weapons.catalog.summary(${totalWeapons},${ownedWeapons},${ownedCopies})}">
+            You own 42 of 200 weapons across 48 copies.
+        </p>
+        <p class="weapon-catalog-import-note" th:if="${snapshot == null}"
+           th:text="#{weapon.detail.importFirst}">
+            Import a GOOD export to see your weapon copies and their owners.
+        </p>
     </section>
+
     <nav class="inventory-tabs">
         <a th:href="@{/inventory/items}" th:text="#{inventory.items}">Items</a>
         <a th:href="@{/inventory/artifacts}" th:text="#{inventory.artifacts}">Artifacts</a>
@@ -24,50 +31,126 @@
            th:text="#{inventory.optimizer}">Optimizer</a>
         <a class="active" th:href="@{/inventory/weapons}" th:text="#{inventory.weapons}">Weapons</a>
     </nav>
-    <section class="inventory-section" th:if="${snapshot != null}">
-        <form class="inventory-search" th:action="@{/inventory/weapons}" method="get">
-            <input type="search" name="query" th:value="${query}"
-                   th:placeholder="#{weapons.search}" placeholder="Weapon or character…">
-            <button type="submit" th:text="#{action.search}">Search</button>
-        </form>
-        <div class="weapon-table">
-            <div class="weapon-row weapon-header">
-                <span th:text="#{inventory.weapon}">Weapon</span>
-                <span th:text="#{character.level}">Level</span>
-                <span th:text="#{character.ascension}">Ascension</span>
-                <span th:text="#{weapons.refinement}">Refinement</span>
-                <span th:text="#{weapons.owner}">Owner</span>
-            </div>
-            <div class="weapon-row" th:each="weapon : ${weapons}">
-                <div class="weapon-name-cell">
-                    <div class="weapon-icon">
-                        <img th:if="${weaponIcons[weapon.imageKey] != null}"
-                             th:src="${weaponIcons[weapon.imageKey]}"
-                             th:alt="${weapon.name}"
-                             loading="lazy">
-                    </div>
-                    <strong>
-                        <a th:href="@{/weapons/{key}(key=${weapon.imageKey})}">
-                            <span th:if="${weapon.locked}">🔒 </span>
-                            <span th:text="${weapon.name}">Weapon</span>
-                        </a>
-                    </strong>
+
+    <section class="weapon-catalog-shell" data-weapon-catalog
+             th:attr="data-result-singular=#{weapons.result.singular},
+                      data-result-plural=#{weapons.result.plural}">
+        <div class="weapon-catalog-controls">
+            <label class="weapon-catalog-search">
+                <span class="sr-only" th:text="#{weapons.search}">Search weapons</span>
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="m21 21-4.35-4.35m2.35-5.4a7.75 7.75 0 1 1-15.5 0 7.75 7.75 0 0 1 15.5 0Z"/>
+                </svg>
+                <input type="search" autocomplete="off" data-weapon-search
+                       th:placeholder="#{weapons.search}" placeholder="Search weapons or characters…">
+                <button type="button" data-weapon-search-clear hidden
+                        th:attr="aria-label=#{weapons.search.clear},title=#{weapons.search.clear}">×</button>
+            </label>
+
+            <div class="weapon-filter-group weapon-type-filter">
+                <span class="weapon-filter-label" th:text="#{weapons.filter.type}">Weapon type</span>
+                <div class="weapon-filter-chips" role="group"
+                     th:attr="aria-label=#{weapons.filter.type}">
+                    <button class="weapon-filter-chip is-active" type="button" data-type-filter="all"
+                            aria-pressed="true">
+                        <span class="weapon-type-all" aria-hidden="true">✦</span>
+                        <span th:text="#{weapons.filter.allTypes}">All</span>
+                    </button>
+                    <button class="weapon-filter-chip" type="button" data-type-filter
+                            aria-pressed="false" th:each="type : ${weaponTypes}"
+                            th:attr="data-type-filter=${type.key},title=${type.label}">
+                        <span class="weapon-filter-chip-art" aria-hidden="true">
+                            <img th:if="${type.imageUrl != null}" th:src="${type.imageUrl}"
+                                 th:alt="${type.label}">
+                        </span>
+                        <span th:text="${type.label}">Sword</span>
+                    </button>
                 </div>
-                <span th:text="${weapon.level}">90</span>
-                <span th:text="${weapon.ascension}">6</span>
-                <span th:text="${'R' + weapon.refinement}">R1</span>
-                <span th:text="${weapon.location ?: '–'}">–</span>
             </div>
+
+            <div class="weapon-filter-group weapon-ownership-filter">
+                <span class="weapon-filter-label" th:text="#{weapons.filter.ownership}">Ownership</span>
+                <div class="weapon-filter-segmented" role="group"
+                     th:attr="aria-label=#{weapons.filter.ownership}">
+                    <button class="is-active" type="button" data-ownership-filter="all"
+                            aria-pressed="true" th:text="#{weapons.filter.all}">All</button>
+                    <button type="button" data-ownership-filter="owned" aria-pressed="false"
+                            th:text="#{weapons.filter.owned}">Owned</button>
+                    <button type="button" data-ownership-filter="unowned" aria-pressed="false"
+                            th:text="#{weapons.filter.unowned}">Unowned</button>
+                </div>
+            </div>
+
+            <p class="weapon-result-count" aria-live="polite" data-weapon-result-count
+               th:text="#{weapons.results(${totalWeapons})}">200 weapons</p>
         </div>
-        <nav class="pagination" th:if="${totalPages > 1}">
-            <a th:if="${page > 0}"
-               th:href="@{/inventory/weapons(page=${page - 1},query=${query})}"
-               th:text="#{pagination.previous}">← Previous</a>
-            <span th:text="#{pagination.page(${page + 1},${totalPages})}">Page 1</span>
-            <a th:if="${page + 1 < totalPages}"
-               th:href="@{/inventory/weapons(page=${page + 1},query=${query})}"
-               th:text="#{pagination.next}">Next →</a>
-        </nav>
+
+        <div class="weapon-catalog-grid" data-weapon-grid>
+            <article class="weapon-catalog-card" data-weapon-card="true"
+                     th:each="weapon : ${weapons}"
+                     th:classappend="${' weapon-rarity-' + weapon.rarity + (weapon.owned ? ' is-owned' : ' is-unowned')}"
+                     th:attr="data-type=${weapon.typeKey},data-owned=${weapon.owned},
+                              data-search=${weapon.searchText}">
+                <a class="weapon-catalog-card-link" th:href="@{/weapons/{key}(key=${weapon.key})}"
+                   th:attr="aria-describedby=${weapon.owned ? 'weapon-copy-popover-' + weapon.key : null}">
+                    <div class="weapon-catalog-art">
+                        <span class="weapon-catalog-art-fallback" aria-hidden="true">✦</span>
+                        <img th:if="${weapon.imageUrl != null}" th:src="${weapon.imageUrl}"
+                             th:alt="${weapon.name}" loading="lazy">
+                        <span class="weapon-copy-badge" th:classappend="${weapon.owned} ? ' has-copies' : ''"
+                              th:text="${'×' + weapon.copyCount}">×2</span>
+                    </div>
+                    <div class="weapon-catalog-copy">
+                        <p class="weapon-card-rarity" th:if="${weapon.rarity > 0}"
+                           th:attr="aria-label=#{weapons.rarity(${weapon.rarity})}"
+                           th:text="${weapon.rarityStars}">★★★★★</p>
+                        <h2 th:text="${weapon.name}">Aquila Favonia</h2>
+                        <div class="weapon-card-meta">
+                            <span th:text="${weapon.type ?: #messages.msg('inventory.weapon')}">Sword</span>
+                            <b th:text="${weapon.copyCount == 1
+                                ? #messages.msg('weapons.copy.single')
+                                : #messages.msg('weapons.copy.multiple', weapon.copyCount)}">2 copies</b>
+                        </div>
+                    </div>
+                </a>
+
+                <div class="weapon-copy-popover" role="tooltip" th:if="${weapon.owned}"
+                     th:id="${'weapon-copy-popover-' + weapon.key}">
+                    <div class="weapon-copy-popover-heading">
+                        <span th:text="#{weapons.copies.heading}">Owned copies</span>
+                        <b th:text="${'×' + weapon.copyCount}">×2</b>
+                    </div>
+                    <ul>
+                        <li th:each="copy, status : ${weapon.copies}">
+                            <span class="weapon-copy-character" aria-hidden="true">
+                                <span class="weapon-copy-character-fallback">✦</span>
+                                <img th:if="${copy.ownerIconUrl != null}"
+                                     th:src="${copy.ownerIconUrl}" alt="">
+                                <small th:text="${status.count}">1</small>
+                            </span>
+                            <span class="weapon-copy-stats">
+                                <b th:text="#{weapons.copy.level(${copy.level})}">Lv. 90</b>
+                                <small th:text="#{weapons.copy.refinement(${copy.refinement})}">R5</small>
+                            </span>
+                            <span class="weapon-copy-owner">
+                                <small th:text="#{weapons.owner}">Owner</small>
+                                <b th:text="${copy.ownerName ?: #messages.msg('weapon.detail.unassigned')}">
+                                    Kaedehara Kazuha
+                                </b>
+                            </span>
+                            <span class="weapon-copy-lock" th:if="${copy.locked}"
+                                  th:attr="title=#{weapon.detail.locked},aria-label=#{weapon.detail.locked}">◆</span>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+        </div>
+
+        <div class="weapon-catalog-empty" data-weapon-empty hidden>
+            <span aria-hidden="true">✦</span>
+            <h2 th:text="#{weapons.empty.heading}">No weapons found</h2>
+            <p th:text="#{weapons.empty.copy}">Try another search or filter.</p>
+        </div>
     </section>
 </main>
 </body>

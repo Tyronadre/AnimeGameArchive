@@ -47,13 +47,21 @@ class JpaWeaponCatalogStore(
         entity.baseAttack = weapon.baseAttack
         entity.baseSecondaryStat = weapon.baseSecondaryStat
         entity.description = weapon.description
+        entity.region = weapon.region
+        entity.obtainMethod = weapon.obtainMethod
+        entity.releaseVersion = weapon.releaseVersion
         entity.passiveName = weapon.passiveName
         entity.passiveDescription = weapon.passiveDescription
+        entity.story = weapon.story
         entity.imageUrl = weapon.imageUrl
         entity.remoteImageUrl = weapon.remoteImageUrl
         entity.hoyolabEntryId = weapon.hoyolabEntryId
+        entity.hoyolabIconUrl = weapon.hoyolabIconUrl
+        entity.hoyolabPageVersion = weapon.hoyolabPageVersion
+        entity.hoyolabDataVersion = weapon.hoyolabDataVersion
         entity.fullImageUrl = weapon.fullImageUrl
         entity.galleryImagesJson = objectMapper.writeValueAsString(weapon.galleryImages)
+        entity.hoyolabAscensionJson = objectMapper.writeValueAsString(weapon.hoyolabAscension)
         entity.ascensionCostsJson = objectMapper.writeValueAsString(weapon.ascensionCosts)
 
         return toDefinition(repository.save(entity)) ?: weapon.copy(key = normalizedKey)
@@ -69,15 +77,26 @@ class JpaWeaponCatalogStore(
             baseAttack = entity.baseAttack,
             baseSecondaryStat = entity.baseSecondaryStat,
             description = entity.description,
+            region = entity.region,
+            obtainMethod = entity.obtainMethod,
+            releaseVersion = entity.releaseVersion,
             passiveName = entity.passiveName,
             passiveDescription = entity.passiveDescription,
+            story = entity.story,
             imageUrl = entity.imageUrl,
             remoteImageUrl = entity.remoteImageUrl,
             hoyolabEntryId = entity.hoyolabEntryId,
+            hoyolabIconUrl = entity.hoyolabIconUrl,
+            hoyolabPageVersion = entity.hoyolabPageVersion,
+            hoyolabDataVersion = entity.hoyolabDataVersion ?: 0,
             fullImageUrl = entity.fullImageUrl,
             galleryImages = objectMapper.readValue(
                 entity.galleryImagesJson?.takeIf(String::isNotBlank) ?: "[]",
                 GALLERY_TYPE,
+            ),
+            hoyolabAscension = objectMapper.readValue(
+                entity.hoyolabAscensionJson?.takeIf(String::isNotBlank) ?: "[]",
+                HOYOLAB_ASCENSION_TYPE,
             ),
             ascensionCosts = objectMapper.readValue(entity.ascensionCostsJson, COSTS_TYPE),
         )
@@ -88,5 +107,7 @@ class JpaWeaponCatalogStore(
     companion object {
         private val COSTS_TYPE = object : TypeReference<Map<Int, List<MaterialCost>>>() {}
         private val GALLERY_TYPE = object : TypeReference<List<WeaponGalleryImage>>() {}
+        private val HOYOLAB_ASCENSION_TYPE =
+            object : TypeReference<List<WeaponHoyolabAscension>>() {}
     }
 }
