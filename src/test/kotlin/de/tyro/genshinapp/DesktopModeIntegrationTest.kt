@@ -39,6 +39,7 @@ import kotlin.test.assertTrue
         "spring.jpa.show-sql=false",
         "genshin.content.cache-directory=build/test-desktop-cache",
         "genshin.content.hoyolab-wiki-enabled=false",
+        "genshin.content.static-import-enabled=false",
     ],
 )
 @ActiveProfiles("desktop")

@@ -43,6 +43,7 @@ import kotlin.test.assertTrue
         "spring.datasource.password=",
         "spring.jpa.hibernate.ddl-auto=create-drop",
         "spring.jpa.show-sql=false",
+        "genshin.content.static-import-enabled=false",
     ],
 )
 @AutoConfigureMockMvc

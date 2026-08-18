@@ -8,6 +8,7 @@ import de.tyro.genshinapp.model.CharacterImageType
 import de.tyro.genshinapp.model.CharacterTalent
 import de.tyro.genshinapp.model.CharacterTalentAttribute
 import de.tyro.genshinapp.model.CharacterTalentKind
+import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.model.MaterialCost
 import de.tyro.genshinapp.model.TravelerAppearance
 import de.tyro.genshinapp.model.TravelerElement
@@ -173,6 +174,57 @@ class CharacterCatalogService(
                 name = element.queryName,
             )
         }
+
+    @Synchronized
+    fun importFromStaticData(
+        characters: Collection<JsonNode>,
+        talents: Collection<JsonNode>,
+    ): Int {
+        val talentsByKey = talents.asSequence()
+            .filter(JsonNode::isObject)
+            .mapNotNull { root ->
+                GoodKeyNormalizer.normalize(root.path("name").asText())
+                    .takeIf(String::isNotBlank)
+                    ?.let { it to root }
+            }
+            .toMap()
+        var changedCount = 0
+
+        characters.asSequence()
+            .filter(JsonNode::isObject)
+            .forEach { root ->
+                val key = GoodKeyNormalizer.normalize(root.path("name").asText())
+                if (key.isBlank() || key == TravelerIdentity.KEY) return@forEach
+                runCatching {
+                    val importedTalents = talentsByKey[key]
+                        ?: root.path("talents").takeIf(JsonNode::isObject)
+                    var candidate = mapCharacter(
+                        key = key,
+                        root = root,
+                        talentsRoot = importedTalents,
+                    )
+                    val current = charactersByKey[key]
+                    if (importedTalents == null && current != null) {
+                        candidate = candidate.copy(
+                            talentCosts = current.talentCosts,
+                            talents = current.talents,
+                        )
+                    }
+                    if (candidate.ascensionCosts.isEmpty() && current != null) {
+                        candidate = candidate.copy(ascensionCosts = current.ascensionCosts)
+                    }
+                    if (current != candidate) {
+                        rememberCharacter(saveCharacter(candidate))
+                        changedCount++
+                    }
+                }.onFailure { error ->
+                    logger.warn("Could not import character '{}' from genshin-db", key, error)
+                }
+            }
+
+        contentLoader.registerDefaultImageLinks(getCharacters(), emptyList())
+        return changedCount
+    }
 
     private fun loadCharacterKeys(): List<String> {
         val listResource = ClassPathResource("data/characters/char_list.json")

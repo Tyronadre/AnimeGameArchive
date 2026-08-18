@@ -82,6 +82,37 @@ class CharacterCatalogServiceTest {
     }
 
     @Test
+    fun `imports character and talent records from static genshin-db data idempotently`() {
+        val character = objectMapper.readTree(
+            """
+                {
+                  "id":999999,
+                  "name":"Remote Hero",
+                  "rarity":5,
+                  "weaponText":"Sword",
+                  "elementText":"Hydro",
+                  "costs":{}
+                }
+            """.trimIndent(),
+        )
+        val talents = objectMapper.readTree(
+            """
+                {
+                  "name":"Remote Hero",
+                  "costs":{},
+                  "combat1":{"name":"Remote Slash","description":"A remote normal attack."}
+                }
+            """.trimIndent(),
+        )
+
+        assertEquals(1, catalog.importFromStaticData(listOf(character), listOf(talents)))
+        assertEquals(0, catalog.importFromStaticData(listOf(character), listOf(talents)))
+        val imported = assertNotNull(catalog.findCharacter("remotehero"))
+        assertEquals("Hydro", imported.element)
+        assertEquals("Remote Slash", imported.talents.single().name)
+    }
+
+    @Test
     fun `exposes one canonical traveler character`() {
         val traveler = assertNotNull(catalog.findCharacter("traveler"))
 

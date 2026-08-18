@@ -52,6 +52,43 @@ class WeaponDataService(
             .find { it.id == id }
             ?.let { MaterialDefinition(it.id, it.name) }
 
+    @Synchronized
+    fun importFromStaticData(weapons: Collection<JsonNode>): Int {
+        var changedCount = 0
+        weapons.asSequence()
+            .filter(JsonNode::isObject)
+            .forEach { root ->
+                val key = GoodKeyNormalizer.normalize(root.path("name").asText())
+                if (key.isBlank()) return@forEach
+                val current = catalogStore?.findWeapon(key) ?: definitions[key]
+                var candidate = mapDefinition(key, root)
+                if (current != null) {
+                    candidate = candidate.copy(
+                        weaponType = candidate.weaponType ?: current.weaponType,
+                        secondaryStatType = candidate.secondaryStatType ?: current.secondaryStatType,
+                        baseAttack = candidate.baseAttack ?: current.baseAttack,
+                        baseSecondaryStat = candidate.baseSecondaryStat ?: current.baseSecondaryStat,
+                        description = candidate.description ?: current.description,
+                        passiveName = candidate.passiveName ?: current.passiveName,
+                        passiveDescription = candidate.passiveDescription ?: current.passiveDescription,
+                        imageUrl = current.imageUrl,
+                        remoteImageUrl = current.remoteImageUrl,
+                        hoyolabEntryId = current.hoyolabEntryId,
+                        fullImageUrl = current.fullImageUrl,
+                        galleryImages = current.galleryImages,
+                        ascensionCosts = candidate.ascensionCosts.ifEmpty { current.ascensionCosts },
+                    )
+                }
+                if (current != candidate) {
+                    val stored = catalogStore?.saveWeapon(candidate) ?: candidate
+                    definitions[key] = stored
+                    weaponCatalogService?.rememberPersisted(stored)
+                    changedCount++
+                }
+            }
+        return changedCount
+    }
+
     private fun mapDefinition(key: String, root: JsonNode): WeaponDefinition =
         WeaponDefinition(
             key = key,

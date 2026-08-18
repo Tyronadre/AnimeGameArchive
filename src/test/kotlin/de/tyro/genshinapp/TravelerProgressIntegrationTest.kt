@@ -28,6 +28,7 @@ import kotlin.test.assertNotNull
         "spring.jpa.hibernate.ddl-auto=create-drop",
         "spring.jpa.show-sql=false",
         "genshin.content.cache-directory=build/test-traveler-progress-cache",
+        "genshin.content.static-import-enabled=false",
     ],
 )
 @ActiveProfiles("desktop")

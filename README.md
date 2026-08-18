@@ -3,6 +3,23 @@
 Genshin Archive can run in two modes that share the same Spring backend and
 Thymeleaf interface.
 
+## Static game data
+
+At each application startup, the backend requests the configured core folders
+from the [genshin-db API](https://github.com/theBowja/genshin-db-api). The
+canonical JSON and a SHA-256 content hash are stored in `genshin_static_data`.
+Only new or changed records are written, and records missing from a successful
+folder response are removed. If the API is unavailable, the last database copy
+is kept and the bundled catalogs remain available as an offline fallback.
+
+The import is controlled with these properties:
+
+```properties
+genshin.content.static-import-enabled=true
+genshin.content.static-import-folders=artifacts,characters,constellations,domains,elements,materials,talents,weapons
+genshin.content.static-import-fail-on-error=false
+```
+
 ## Web mode
 
 The normal web application keeps account authentication and the configured

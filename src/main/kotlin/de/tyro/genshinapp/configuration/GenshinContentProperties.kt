@@ -13,6 +13,23 @@ class GenshinContentProperties {
 
     var characterApiUrl: String = "https://genshin-db-api.vercel.app/api/v5"
 
+    var staticImportEnabled: Boolean = true
+
+    var staticImportFolders: List<String> = listOf(
+        "artifacts",
+        "characters",
+        "constellations",
+        "domains",
+        "elements",
+        "materials",
+        "talents",
+        "weapons",
+    )
+
+    var staticImportFailOnError: Boolean = false
+
+    var staticImportUserAgentVersion: String = "0.1.4"
+
     var fandomImageBaseUrl: String =
         "https://static.wikia.nocookie.net/gensin-impact/images"
 
