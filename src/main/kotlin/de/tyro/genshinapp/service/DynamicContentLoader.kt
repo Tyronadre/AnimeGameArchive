@@ -10,6 +10,7 @@ import de.tyro.genshinapp.model.CharacterTalent
 import de.tyro.genshinapp.model.CharacterTalentKind
 import de.tyro.genshinapp.model.MaterialDefinition
 import de.tyro.genshinapp.model.TravelerElement
+import de.tyro.genshinapp.model.WeaponImageType
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Service
@@ -105,52 +106,33 @@ class DynamicContentLoader(
         )
     }
 
-    fun loadWeaponImage(key: String, weaponName: String): LoadedImage? {
-        val normalizedKey = key.trim().lowercase()
-            .takeIf { it.matches(ARTIFACT_KEY_PATTERN) }
-            ?: return null
-        if (weaponName.isBlank() || weaponName.length > MAX_MATERIAL_NAME_LENGTH) return null
-
-        val remoteUrl = imageUrlRegistry.weaponLink(normalizedKey)?.effectiveUrl
-            ?: fandomImageUrlResolver.weaponImageUrl(weaponName)
-
-        return loadRemoteImage(
-            weaponImagePath(normalizedKey),
-            remoteUrl,
-        )
-    }
-
-    fun loadWeaponFullImage(
+    fun loadWeaponImage(
         key: String,
         weaponName: String,
+        imageType: WeaponImageType,
         defaultUrl: String?,
     ): LoadedImage? {
         val normalizedKey = key.trim().lowercase()
             .takeIf { it.matches(ARTIFACT_KEY_PATTERN) }
             ?: return null
         if (weaponName.isBlank() || weaponName.length > MAX_MATERIAL_NAME_LENGTH) return null
-        val remoteUrl = imageUrlRegistry.weaponFullLink(normalizedKey)?.effectiveUrl
+
+        val remoteUrl = imageUrlRegistry.weaponLink(normalizedKey, imageType)?.effectiveUrl
             ?: defaultUrl?.takeIf(String::isNotBlank)
+            ?: fandomImageUrlResolver.weaponImageUrl(weaponName)
+                .takeIf { imageType == WeaponImageType.ICON }
             ?: return null
-        return loadRemoteImage(weaponFullImagePath(normalizedKey), remoteUrl)
+
+        return loadRemoteImage(
+            weaponImagePath(normalizedKey, imageType),
+            remoteUrl,
+        )
     }
 
-    fun loadWeaponGalleryImage(
-        key: String,
-        weaponName: String,
-        index: Int,
-        sourceUrl: String,
-    ): LoadedImage? {
-        val normalizedKey = key.trim().lowercase()
-            .takeIf { it.matches(ARTIFACT_KEY_PATTERN) }
-            ?: return null
-        if (
-            weaponName.isBlank() ||
-            weaponName.length > MAX_MATERIAL_NAME_LENGTH ||
-            index !in 0..MAX_WEAPON_GALLERY_INDEX
-        ) return null
-        return loadRemoteImage(weaponGalleryImagePath(normalizedKey, index), sourceUrl)
-    }
+    fun loadAttributeImage(attributeIcon: AttributeIcon): LoadedImage? = loadRemoteImage(
+        attributeImagePath(attributeIcon.key),
+        fandomImageUrlResolver.attributeImageUrl(attributeIcon),
+    )
 
     fun loadTalentImage(
         characterKey: String,
@@ -268,7 +250,12 @@ class DynamicContentLoader(
         }
     }
 
-    fun updateWeaponImageUrl(key: String, name: String, url: String): ImageUpdateResult {
+    fun updateWeaponImageUrl(
+        key: String,
+        name: String,
+        imageType: WeaponImageType,
+        url: String,
+    ): ImageUpdateResult {
         val normalizedKey = key.trim().lowercase()
             .takeIf { it.matches(ARTIFACT_KEY_PATTERN) }
             ?: return ImageUpdateResult(false, "images.update.invalidUrl")
@@ -282,42 +269,15 @@ class DynamicContentLoader(
         )
 
         return runCatching {
-            writeCachedImage(weaponImagePath(normalizedKey), image, validatedUrl)
-            imageUrlRegistry.setWeaponOverride(normalizedKey, name, validatedUrl)
+            writeCachedImage(weaponImagePath(normalizedKey, imageType), image, validatedUrl)
+            imageUrlRegistry.setWeaponOverride(normalizedKey, imageType, name, validatedUrl)
             ImageUpdateResult(
                 true,
-                "images.update.weaponSaved",
-                arrayOf(name),
+                "images.update.weaponImageSaved",
+                arrayOf(name, imageType.label),
             )
         }.getOrElse {
-            logger.error("Could not save weapon image URL for {}", normalizedKey, it)
-            ImageUpdateResult(false, "images.update.saveFailed")
-        }
-    }
-
-    fun updateWeaponFullImageUrl(key: String, name: String, url: String): ImageUpdateResult {
-        val normalizedKey = key.trim().lowercase()
-            .takeIf { it.matches(ARTIFACT_KEY_PATTERN) }
-            ?: return ImageUpdateResult(false, "images.update.invalidUrl")
-        val validatedUrl = validateImageUrl(url) ?: return ImageUpdateResult(
-            successful = false,
-            messageKey = "images.update.invalidUrl",
-        )
-        val image = downloadImage(URI.create(validatedUrl)) ?: return ImageUpdateResult(
-            successful = false,
-            messageKey = "images.update.downloadFailed",
-        )
-
-        return runCatching {
-            writeCachedImage(weaponFullImagePath(normalizedKey), image, validatedUrl)
-            imageUrlRegistry.setWeaponFullOverride(normalizedKey, "$name full view", validatedUrl)
-            ImageUpdateResult(
-                true,
-                "images.update.weaponFullSaved",
-                arrayOf(name),
-            )
-        }.getOrElse {
-            logger.error("Could not save full weapon image URL for {}", normalizedKey, it)
+            logger.error("Could not save {} image URL for {}", imageType, normalizedKey, it)
             ImageUpdateResult(false, "images.update.saveFailed")
         }
     }
@@ -379,12 +339,8 @@ class DynamicContentLoader(
         imageUrlRegistry.resetTalentOverride(character.talentResourceKey, talent.key)
     }
 
-    fun resetWeaponImageUrl(key: String) {
-        imageUrlRegistry.resetWeaponOverride(key)
-    }
-
-    fun resetWeaponFullImageUrl(key: String) {
-        imageUrlRegistry.resetWeaponFullOverride(key)
+    fun resetWeaponImageUrl(key: String, imageType: WeaponImageType = WeaponImageType.ICON) {
+        imageUrlRegistry.resetWeaponOverride(key, imageType)
     }
 
     fun characterImageState(
@@ -436,24 +392,21 @@ class DynamicContentLoader(
         }
     }
 
-    fun weaponImageState(key: String, name: String): ImageState {
+    fun weaponImageState(
+        key: String,
+        name: String,
+        imageType: WeaponImageType = WeaponImageType.ICON,
+        defaultUrl: String? = null,
+    ): ImageState {
         val normalizedKey = key.trim().lowercase()
-        val effectiveUrl = imageUrlRegistry.weaponLink(normalizedKey)?.effectiveUrl
-            ?: fandomImageUrlResolver.weaponImageUrl(name)
-        return when {
-            cachedImageMatches(weaponImagePath(normalizedKey), effectiveUrl) -> ImageState.CACHED
-            effectiveUrl.isNotBlank() -> ImageState.REMOTE
-            else -> ImageState.MISSING
-        }
-    }
-
-    fun weaponFullImageState(key: String, defaultUrl: String?): ImageState {
-        val normalizedKey = key.trim().lowercase()
-        val effectiveUrl = imageUrlRegistry.weaponFullLink(normalizedKey)?.effectiveUrl
+        val effectiveUrl = imageUrlRegistry.weaponLink(normalizedKey, imageType)?.effectiveUrl
             ?: defaultUrl?.takeIf(String::isNotBlank)
+            ?: fandomImageUrlResolver.weaponImageUrl(name)
+                .takeIf { imageType == WeaponImageType.ICON }
         return when {
-            cachedImageMatches(weaponFullImagePath(normalizedKey), effectiveUrl) -> ImageState.CACHED
-            effectiveUrl != null -> ImageState.REMOTE
+            cachedImageMatches(weaponImagePath(normalizedKey, imageType), effectiveUrl) ->
+                ImageState.CACHED
+            !effectiveUrl.isNullOrBlank() -> ImageState.REMOTE
             else -> ImageState.MISSING
         }
     }
@@ -713,14 +666,11 @@ class DynamicContentLoader(
     private fun artifactImagePath(setKey: String, slotKey: String): Path =
         cacheDirectory.resolve("artifacts").resolve("$setKey-$slotKey.image").normalize()
 
-    private fun weaponImagePath(key: String): Path =
-        cacheDirectory.resolve("weapons").resolve("$key.image").normalize()
+    private fun weaponImagePath(key: String, imageType: WeaponImageType): Path =
+        cacheDirectory.resolve("weapons").resolve("$key-${imageType.key}.image").normalize()
 
-    private fun weaponFullImagePath(key: String): Path =
-        cacheDirectory.resolve("weapons").resolve("$key-full.image").normalize()
-
-    private fun weaponGalleryImagePath(key: String, index: Int): Path =
-        cacheDirectory.resolve("weapons").resolve("$key-gallery-$index.image").normalize()
+    private fun attributeImagePath(key: String): Path =
+        cacheDirectory.resolve("attributes").resolve("$key.image").normalize()
 
     private fun weaponDataPath(key: String): Path =
         cacheDirectory.resolve("weapons").resolve("data").resolve("$key.json").normalize()
@@ -809,6 +759,5 @@ class DynamicContentLoader(
         private const val MAX_IMAGE_SIZE = 20 * 1024 * 1024
         private const val MAX_MATERIAL_NAME_LENGTH = 160
         private const val MAX_URL_LENGTH = 4_096
-        private const val MAX_WEAPON_GALLERY_INDEX = 20
     }
 }

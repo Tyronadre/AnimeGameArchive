@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.tyro.genshinapp.configuration.GenshinContentProperties
 import de.tyro.genshinapp.model.GoodKeyNormalizer
+import de.tyro.genshinapp.model.WeaponImageType
 import org.jsoup.Jsoup
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -77,11 +78,9 @@ class HoyolabWeaponGalleryService(
                     passiveDescription = page.passiveDescription ?: current.passiveDescription,
                     story = page.story ?: current.story,
                     hoyolabEntryId = page.entryId,
-                    hoyolabIconUrl = page.iconUrl ?: current.hoyolabIconUrl,
                     hoyolabPageVersion = page.pageVersion ?: current.hoyolabPageVersion,
                     hoyolabDataVersion = CURRENT_DATA_VERSION,
-                    fullImageUrl = page.preferredImageUrl ?: current.fullImageUrl,
-                    galleryImages = page.galleryImages.ifEmpty { current.galleryImages },
+                    remoteImageUrls = current.remoteImageUrls + page.remoteImageUrls,
                     hoyolabAscension = page.ascension.ifEmpty { current.hoyolabAscension },
                 ),
             )
@@ -116,11 +115,20 @@ class HoyolabWeaponGalleryService(
             ?.takeIf(JsonNode::isArray)
             ?.mapNotNull(::toGalleryImage)
             .orEmpty()
-        val preferredImage = galleryImages.firstOrNull {
+        val ascendedImage = galleryImages.firstOrNull {
             it.label.equals("Awakened", ignoreCase = true)
         } ?: galleryImages.firstOrNull {
             it.description?.contains("after", ignoreCase = true) == true
         } ?: galleryImages.lastOrNull()
+        val unascendedImage = galleryImages.firstOrNull {
+            it.label.equals("Original", ignoreCase = true)
+        } ?: galleryImages.firstOrNull {
+            it.description?.contains("before", ignoreCase = true) == true
+        } ?: galleryImages.firstOrNull { it !== ascendedImage }
+        val remoteImageUrls = buildMap {
+            ascendedImage?.url?.let { put(WeaponImageType.FULL_ASCENDED, it) }
+            unascendedImage?.url?.let { put(WeaponImageType.FULL_UNASCENDED, it) }
+        }
 
         val ascension = componentData(page, ASCENSION_COMPONENT_ID)
             ?.path("list")
@@ -144,7 +152,6 @@ class HoyolabWeaponGalleryService(
             entryId = entryId,
             name = page.optionalPlainText("name") ?: baseValues["Name"],
             description = page.optionalPlainText("desc"),
-            iconUrl = page.path("icon_url").asText().takeIf(::isAllowedImageUrl),
             pageVersion = page.path("version").asText().takeIf(String::isNotBlank),
             rarity = rarity,
             region = baseValues["Region"].nonBlank(),
@@ -157,8 +164,7 @@ class HoyolabWeaponGalleryService(
             passiveName = passive?.path("key")?.asText()?.nonBlank(),
             passiveDescription = passive?.path("value")?.plainValues()?.joinToString("\n")?.nonBlank(),
             story = story,
-            galleryImages = galleryImages,
-            preferredImageUrl = preferredImage?.url,
+            remoteImageUrls = remoteImageUrls,
             ascension = ascension,
         )
     }
@@ -187,11 +193,6 @@ class HoyolabWeaponGalleryService(
         val stats = headings.mapIndexedNotNull { index, heading ->
             values.getOrNull(index)?.let { heading to it.toNumber() }
         }.toMap()
-        val materials = node.path("materials")
-            .takeIf(JsonNode::isArray)
-            ?.flatMap(::toMaterials)
-            .orEmpty()
-
         return WeaponHoyolabAscension(
             level = level,
             attackBeforeAscension = stats[ATTACK_BEFORE_ASCENSION],
@@ -199,25 +200,7 @@ class HoyolabWeaponGalleryService(
             secondaryStat = stats.entries.firstOrNull { (heading, _) ->
                 heading != ATTACK_BEFORE_ASCENSION && heading != ATTACK_AFTER_ASCENSION
             }?.value,
-            materials = materials,
         )
-    }
-
-    private fun toMaterials(node: JsonNode): List<WeaponHoyolabMaterial> {
-        val encoded = node.asText().removePrefix("\$").removeSuffix("\$")
-        val parsed = runCatching { objectMapper.readTree(encoded) }.getOrNull() ?: return emptyList()
-        return parsed.descendants()
-            .filter(JsonNode::isObject)
-            .mapNotNull { material ->
-                val amount = material.path("amount").asLong(0).takeIf { it > 0 } ?: return@mapNotNull null
-                WeaponHoyolabMaterial(
-                    entryId = material.path("ep_id").asText().toLongOrNull(),
-                    name = material.optionalPlainText("nickname"),
-                    amount = amount,
-                    imageUrl = material.path("img").asText().takeIf(::isAllowedImageUrl),
-                )
-            }
-            .toList()
     }
 
     private fun findWeaponEntryIds(name: String): List<Long> {
@@ -256,11 +239,11 @@ class HoyolabWeaponGalleryService(
             ?: filter.path("values").plainValues().firstOrNull()
     }
 
-    private fun toGalleryImage(node: JsonNode): WeaponGalleryImage? {
+    private fun toGalleryImage(node: JsonNode): ImportedWeaponImage? {
         val url = node.path("img").asText().takeIf(::isAllowedImageUrl) ?: return null
         val label = node.path("key").asText().ifBlank { "Gallery" }
         val description = node.path("imgDesc").asText().toPlainText()
-        return WeaponGalleryImage(label, url, description)
+        return ImportedWeaponImage(label, url, description)
     }
 
     private fun getJson(pathAndQuery: String): JsonNode? {
@@ -348,7 +331,6 @@ class HoyolabWeaponGalleryService(
         val entryId: Long,
         val name: String?,
         val description: String?,
-        val iconUrl: String?,
         val pageVersion: String?,
         val rarity: Int?,
         val region: String?,
@@ -359,9 +341,14 @@ class HoyolabWeaponGalleryService(
         val passiveName: String?,
         val passiveDescription: String?,
         val story: String?,
-        val galleryImages: List<WeaponGalleryImage>,
-        val preferredImageUrl: String?,
+        val remoteImageUrls: Map<WeaponImageType, String>,
         val ascension: List<WeaponHoyolabAscension>,
+    )
+
+    private data class ImportedWeaponImage(
+        val label: String,
+        val url: String,
+        val description: String? = null,
     )
 
     companion object {

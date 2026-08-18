@@ -4,6 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
 import de.tyro.genshinapp.configuration.GenshinContentProperties
+import de.tyro.genshinapp.model.WeaponImageType
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import java.net.InetSocketAddress
@@ -187,7 +188,6 @@ class HoyolabWeaponGalleryServiceTest {
         assertEquals(1954, first.hoyolabEntryId)
         assertEquals(1, first.hoyolabDataVersion)
         assertEquals("12345", first.hoyolabPageVersion)
-        assertEquals(WIKI_ICON_URL, first.hoyolabIconUrl)
         assertEquals("The fang that pierces the sky.", first.description)
         assertEquals("Mondstadt", first.region)
         assertEquals("Wishes", first.obtainMethod)
@@ -199,13 +199,16 @@ class HoyolabWeaponGalleryServiceTest {
         assertEquals("Sky-Piercing Fang", first.passiveName)
         assertEquals("Increases CRIT Rate.\nTriggers a vacuum blade.", first.passiveDescription)
         assertEquals("First line.\nSecond line.", first.story)
-        assertEquals(AWAKENED_IMAGE_URL, first.fullImageUrl)
-        assertEquals(2, first.galleryImages.size)
-        assertEquals("After Lv.40 Ascension", first.galleryImages.last().description)
+        assertEquals(
+            AWAKENED_IMAGE_URL,
+            first.remoteImageUrl(WeaponImageType.FULL_ASCENDED),
+        )
+        assertEquals(
+            ORIGINAL_IMAGE_URL,
+            first.remoteImageUrl(WeaponImageType.FULL_UNASCENDED),
+        )
         assertEquals(2, first.hoyolabAscension.size)
         assertEquals(176.0, first.hoyolabAscension.last().attackAfterAscension)
-        assertEquals("Mora", first.hoyolabAscension.last().materials.single().name)
-        assertEquals(10_000, first.hoyolabAscension.last().materials.single().amount)
         assertEquals(first, second)
         assertEquals(first, store.findWeapon("skywardblade"))
         assertEquals(1, searchRequests.get())

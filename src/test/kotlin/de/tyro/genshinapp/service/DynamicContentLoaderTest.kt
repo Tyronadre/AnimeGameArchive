@@ -8,6 +8,7 @@ import de.tyro.genshinapp.model.CharacterDefinition
 import de.tyro.genshinapp.model.CharacterTalent
 import de.tyro.genshinapp.model.CharacterTalentKind
 import de.tyro.genshinapp.model.MaterialDefinition
+import de.tyro.genshinapp.model.WeaponImageType
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -167,17 +168,27 @@ class DynamicContentLoaderTest {
 
         val loader = loaderFor(testServer)
         val firstLoad = assertNotNull(
-            loader.loadWeaponImage("wolfsgravestone", "Wolf's Gravestone"),
+            loader.loadWeaponImage(
+                "wolfsgravestone",
+                "Wolf's Gravestone",
+                WeaponImageType.ICON,
+                null,
+            ),
         )
         val secondLoad = assertNotNull(
-            loader.loadWeaponImage("wolfsgravestone", "Wolf's Gravestone"),
+            loader.loadWeaponImage(
+                "wolfsgravestone",
+                "Wolf's Gravestone",
+                WeaponImageType.ICON,
+                null,
+            ),
         )
 
         assertContentEquals(pngBytes, firstLoad.bytes)
         assertContentEquals(pngBytes, secondLoad.bytes)
         assertEquals(1, imageRequests.get())
         assertTrue(requestedPaths.single().endsWith("/4/4f/Weapon_Wolf%27s_Gravestone.png"))
-        assertTrue(Files.isRegularFile(cacheDirectory.resolve("weapons/wolfsgravestone.image")))
+        assertTrue(Files.isRegularFile(cacheDirectory.resolve("weapons/wolfsgravestone-icon.image")))
     }
 
     @Test
@@ -205,6 +216,7 @@ class DynamicContentLoaderTest {
             listOf(
                 WeaponImageDefault(
                     key = "wolfsgravestone",
+                    imageType = WeaponImageType.ICON,
                     name = "Wolf's Gravestone",
                     defaultUrl = "http://127.0.0.1:${testServer.address.port}/default.png",
                 ),
@@ -214,16 +226,27 @@ class DynamicContentLoaderTest {
         val result = fixture.loader.updateWeaponImageUrl(
             "wolfsgravestone",
             "Wolf's Gravestone",
+            WeaponImageType.ICON,
             correctedUrl,
         )
         val cachedImage = assertNotNull(
-            fixture.loader.loadWeaponImage("wolfsgravestone", "Wolf's Gravestone"),
+            fixture.loader.loadWeaponImage(
+                "wolfsgravestone",
+                "Wolf's Gravestone",
+                WeaponImageType.ICON,
+                null,
+            ),
         )
 
         assertTrue(result.successful)
-        assertEquals(correctedUrl, fixture.registry.weaponLink("wolfsgravestone")?.url)
+        assertEquals(
+            correctedUrl,
+            fixture.registry.weaponLink("wolfsgravestone", WeaponImageType.ICON)?.url,
+        )
         assertContentEquals(pngBytes, cachedImage.bytes)
-        assertTrue(Files.readString(cacheDirectory.resolve("image-links.json")).contains("weapons"))
+        assertTrue(
+            Files.readString(cacheDirectory.resolve("image-links.json")).contains("weaponImages"),
+        )
     }
 
     @Test
@@ -248,15 +271,32 @@ class DynamicContentLoaderTest {
 
         val fixture = fixtureFor(testServer)
         val imageUrl = "http://127.0.0.1:${testServer.address.port}/skyward-awakened.png"
-        fixture.registry.registerWeaponFullDefaults(
-            listOf(WeaponFullImageDefault("skywardblade", "Skyward Blade full view", imageUrl)),
+        fixture.registry.registerWeaponDefaults(
+            listOf(
+                WeaponImageDefault(
+                    "skywardblade",
+                    WeaponImageType.FULL_ASCENDED,
+                    "Skyward Blade full image · Ascended",
+                    imageUrl,
+                ),
+            ),
         )
 
         val first = assertNotNull(
-            fixture.loader.loadWeaponFullImage("skywardblade", "Skyward Blade", imageUrl),
+            fixture.loader.loadWeaponImage(
+                "skywardblade",
+                "Skyward Blade",
+                WeaponImageType.FULL_ASCENDED,
+                imageUrl,
+            ),
         )
         val second = assertNotNull(
-            fixture.loader.loadWeaponFullImage("skywardblade", "Skyward Blade", imageUrl),
+            fixture.loader.loadWeaponImage(
+                "skywardblade",
+                "Skyward Blade",
+                WeaponImageType.FULL_ASCENDED,
+                imageUrl,
+            ),
         )
 
         assertContentEquals(pngBytes, first.bytes)
@@ -264,9 +304,18 @@ class DynamicContentLoaderTest {
         assertEquals(1, imageRequests.get())
         assertEquals(
             DynamicContentLoader.ImageState.CACHED,
-            fixture.loader.weaponFullImageState("skywardblade", imageUrl),
+            fixture.loader.weaponImageState(
+                "skywardblade",
+                "Skyward Blade",
+                WeaponImageType.FULL_ASCENDED,
+                imageUrl,
+            ),
         )
-        assertTrue(Files.isRegularFile(cacheDirectory.resolve("weapons/skywardblade-full.image")))
+        assertTrue(
+            Files.isRegularFile(
+                cacheDirectory.resolve("weapons/skywardblade-full-ascended.image"),
+            ),
+        )
     }
 
     @Test

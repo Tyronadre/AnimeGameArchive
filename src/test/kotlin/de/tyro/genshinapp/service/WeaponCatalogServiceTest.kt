@@ -2,6 +2,7 @@ package de.tyro.genshinapp.service
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import de.tyro.genshinapp.configuration.GenshinContentProperties
+import de.tyro.genshinapp.model.WeaponImageType
 import java.nio.file.Files
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.test.Test
@@ -10,7 +11,11 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class WeaponCatalogServiceTest {
-    private val catalog = WeaponCatalogService(jacksonObjectMapper())
+    private val contentProperties = GenshinContentProperties()
+    private val catalog = WeaponCatalogService(
+        jacksonObjectMapper(),
+        fandomImageUrlResolver = FandomImageUrlResolver(contentProperties),
+    )
 
     @Test
     fun `resolves GOOD keys to official weapon names and icon routes`() {
@@ -20,7 +25,7 @@ class WeaponCatalogServiceTest {
             catalog.officialName("ateaspoonoftranscendence"),
         )
         assertEquals(
-            "/media/weapons/WolfsGravestone",
+            "/media/weapons/wolfsgravestone/icon",
             catalog.imageUrl("WolfsGravestone"),
         )
     }
@@ -51,7 +56,10 @@ class WeaponCatalogServiceTest {
             WeaponDefinition(
                 key = "rust",
                 name = "Rust",
-                remoteImageUrl = FandomImageUrlResolver(oldProperties).weaponImageUrl("Rust"),
+                remoteImageUrls = mapOf(
+                    WeaponImageType.ICON to
+                        FandomImageUrlResolver(oldProperties).weaponImageUrl("Rust"),
+                ),
             ),
         )
         val oldRegistry = ImageUrlRegistry(mapper, oldProperties)
@@ -62,7 +70,7 @@ class WeaponCatalogServiceTest {
             oldRegistry,
         )
         val overrideUrl = "https://custom.example/rust.png"
-        oldRegistry.setWeaponOverride("rust", "Rust", overrideUrl)
+        oldRegistry.setWeaponOverride("rust", WeaponImageType.ICON, "Rust", overrideUrl)
 
         val newProperties = GenshinContentProperties().also {
             it.cacheDirectory = cacheDirectory.toString()
@@ -78,8 +86,11 @@ class WeaponCatalogServiceTest {
         )
 
         val expectedDefault = newResolver.weaponImageUrl("Rust")
-        assertEquals(expectedDefault, assertNotNull(restartedCatalog.find("rust")).remoteImageUrl)
-        val refreshedLink = assertNotNull(newRegistry.weaponLink("rust"))
+        assertEquals(
+            expectedDefault,
+            assertNotNull(restartedCatalog.find("rust")).remoteImageUrl(WeaponImageType.ICON),
+        )
+        val refreshedLink = assertNotNull(newRegistry.weaponLink("rust", WeaponImageType.ICON))
         assertEquals(expectedDefault, refreshedLink.defaultUrl)
         assertEquals(overrideUrl, refreshedLink.effectiveUrl)
         assertTrue(refreshedLink.hasOverride)

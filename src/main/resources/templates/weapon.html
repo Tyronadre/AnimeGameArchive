@@ -42,7 +42,12 @@
                     </span>
                 </div>
                 <div class="fact" th:if="${weaponDefinition.weaponType != null}">
-                    <span class="fact-icon" aria-hidden="true">⚔</span>
+                    <span class="fact-icon fact-image-icon" aria-hidden="true">
+                        <img class="weapon-type-fact-image"
+                             th:if="${weaponTypeIcon != null}" th:src="${weaponTypeIcon}"
+                             alt="" onerror="this.remove()">
+                        <span>⚔</span>
+                    </span>
                     <span class="fact-copy">
                         <small th:text="#{weapon.detail.type}">Type</small>
                         <b th:text="${weaponDefinition.weaponType}">Claymore</b>
@@ -51,7 +56,10 @@
                 <div class="fact" th:if="${weaponMaxStats != null
                         && (weaponMaxStats.attackAfterAscension != null
                             || weaponMaxStats.attackBeforeAscension != null)}">
-                    <span class="fact-icon" aria-hidden="true">◆</span>
+                    <span class="fact-icon fact-image-icon" aria-hidden="true">
+                        <img th:src="${attackStatIcon}" alt="" onerror="this.remove()">
+                        <span>◆</span>
+                    </span>
                     <span class="fact-copy">
                         <small th:text="#{weapon.detail.maxAttack}">Max ATK</small>
                         <b th:text="${#numbers.formatDecimal(
@@ -61,7 +69,11 @@
                     </span>
                 </div>
                 <div class="fact" th:if="${secondaryStatName != null}">
-                    <span class="fact-icon" aria-hidden="true">✦</span>
+                    <span class="fact-icon fact-image-icon" aria-hidden="true">
+                        <img th:if="${secondaryStatIcon != null}" th:src="${secondaryStatIcon}"
+                             alt="" onerror="this.remove()">
+                        <span>✦</span>
+                    </span>
                     <span class="fact-copy">
                         <small th:text="${secondaryStatName}">CRIT Rate</small>
                         <b th:if="${weaponMaxStats != null && weaponMaxStats.secondaryStat != null}"
@@ -104,11 +116,13 @@
             <span class="hero-spark spark-two" aria-hidden="true">✧</span>
             <span class="hero-spark spark-three" aria-hidden="true">✦</span>
             <span class="hero-art-fallback" aria-hidden="true">⚔</span>
-            <img class="weapon-display-image" th:if="${weaponFullImage != null}"
-                 th:src="${weaponFullImage}" th:alt="${weaponName}">
-            <img class="weapon-display-image"
-                 th:if="${weaponFullImage == null && weaponIcon != null}" th:src="${weaponIcon}"
-                 th:alt="${weaponName}">
+            <div class="weapon-display-stage">
+                <img class="weapon-display-image" th:if="${weaponFullImage != null}"
+                     th:src="${weaponFullImage}" th:alt="${weaponName}">
+                <img class="weapon-display-image"
+                     th:if="${weaponFullImage == null && weaponIcon != null}" th:src="${weaponIcon}"
+                     th:alt="${weaponName}">
+            </div>
             <button class="weapon-image-toggle" type="button"
                     th:if="${weaponOriginalImage != null && weaponFullImage != null}"
                     aria-pressed="true"

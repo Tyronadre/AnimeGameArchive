@@ -2,7 +2,9 @@ package de.tyro.genshinapp.controller
 
 import de.tyro.genshinapp.model.CharacterImageType
 import de.tyro.genshinapp.model.CharacterTalentKind
+import de.tyro.genshinapp.model.WeaponImageType
 import de.tyro.genshinapp.service.ArtifactCatalogService
+import de.tyro.genshinapp.service.AttributeIcon
 import de.tyro.genshinapp.service.CharacterCatalogService
 import de.tyro.genshinapp.service.DynamicContentLoader
 import de.tyro.genshinapp.service.MaterialCatalogService
@@ -83,41 +85,29 @@ class ContentMediaController(
         return imageResponse(image)
     }
 
-    @GetMapping("/weapons/{key}")
-    fun weaponImage(@PathVariable key: String): ResponseEntity<ByteArray> {
-        val weaponName = weaponCatalogService.weaponName(key)
+    @GetMapping("/attributes/{key}")
+    fun attributeImage(@PathVariable key: String): ResponseEntity<ByteArray> {
+        val attributeIcon = AttributeIcon.fromKey(key)
             ?: return ResponseEntity.notFound().build()
-        val image = contentLoader.loadWeaponImage(key, weaponName)
+        val image = contentLoader.loadAttributeImage(attributeIcon)
             ?: return ResponseEntity.notFound().build()
         return imageResponse(image)
     }
 
-    @GetMapping("/weapons/{key}/full")
-    fun weaponFullImage(@PathVariable key: String): ResponseEntity<ByteArray> {
-        val weapon = weaponCatalogService.find(key)
-            ?: return ResponseEntity.notFound().build()
-        val image = contentLoader.loadWeaponFullImage(
-            weapon.key,
-            weapon.name,
-            weapon.fullImageUrl,
-        ) ?: return ResponseEntity.notFound().build()
-        return imageResponse(image)
-    }
-
-    @GetMapping("/weapons/{key}/gallery/{index}")
-    fun weaponGalleryImage(
+    @GetMapping("/weapons/{key}/{type}")
+    fun weaponImage(
         @PathVariable key: String,
-        @PathVariable index: Int,
+        @PathVariable type: String,
     ): ResponseEntity<ByteArray> {
         val weapon = weaponCatalogService.find(key)
             ?: return ResponseEntity.notFound().build()
-        val galleryImage = weapon.galleryImages.getOrNull(index)
+        val imageType = WeaponImageType.fromKey(type)
             ?: return ResponseEntity.notFound().build()
-        val image = contentLoader.loadWeaponGalleryImage(
+        val image = contentLoader.loadWeaponImage(
             weapon.key,
             weapon.name,
-            index,
-            galleryImage.url,
+            imageType,
+            weapon.remoteImageUrl(imageType),
         ) ?: return ResponseEntity.notFound().build()
         return imageResponse(image)
     }

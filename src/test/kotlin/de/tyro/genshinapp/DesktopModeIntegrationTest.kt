@@ -5,6 +5,7 @@ import de.tyro.genshinapp.desktop.irminsul.IrminsulCaptureState
 import de.tyro.genshinapp.desktop.irminsul.IrminsulIntegrationService
 import de.tyro.genshinapp.desktop.irminsul.IrminsulStatusEvent
 import de.tyro.genshinapp.model.GoodKeyNormalizer
+import de.tyro.genshinapp.model.WeaponImageType
 import de.tyro.genshinapp.repository.UserRepository
 import de.tyro.genshinapp.repository.GameWeaponRepository
 import de.tyro.genshinapp.repository.PlayerWeaponInstanceRepository
@@ -100,7 +101,9 @@ class DesktopModeIntegrationTest @Autowired constructor(
             GoodKeyNormalizer.normalize(snapshot.weapons.first().key),
             storedCopies.first().weapon.key,
         )
-        assertNotNull(imageUrlRegistry.weaponLink("wolfsgravestone")?.effectiveUrl)
+        assertNotNull(
+            imageUrlRegistry.weaponLink("wolfsgravestone", WeaponImageType.ICON)?.effectiveUrl,
+        )
     }
 
     @Test

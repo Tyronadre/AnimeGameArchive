@@ -92,7 +92,7 @@
         outgoingImage.className = "weapon-display-image weapon-image-outgoing";
         outgoingImage.removeAttribute("alt");
         outgoingImage.setAttribute("aria-hidden", "true");
-        sourceImage.parentNode.insertBefore(outgoingImage, toggle);
+        sourceImage.after(outgoingImage);
         sourceImage.classList.add("is-switching", "weapon-image-incoming");
 
         const cleanupListeners = () => {

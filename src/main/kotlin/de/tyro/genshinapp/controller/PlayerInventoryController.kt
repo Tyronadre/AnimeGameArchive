@@ -1081,27 +1081,27 @@ class PlayerInventoryController(
         WeaponTypeFilter(
             key = "sword",
             label = messages.get("weapons.type.sword"),
-            imageUrl = weaponCatalogService.imageUrl("silversword"),
+            imageUrl = weaponCatalogService.weaponTypeImageUrl("sword"),
         ),
         WeaponTypeFilter(
             key = "claymore",
             label = messages.get("weapons.type.claymore"),
-            imageUrl = weaponCatalogService.imageUrl("oldmercspal"),
+            imageUrl = weaponCatalogService.weaponTypeImageUrl("claymore"),
         ),
         WeaponTypeFilter(
             key = "polearm",
             label = messages.get("weapons.type.polearm"),
-            imageUrl = weaponCatalogService.imageUrl("ironpoint"),
+            imageUrl = weaponCatalogService.weaponTypeImageUrl("polearm"),
         ),
         WeaponTypeFilter(
             key = "catalyst",
             label = messages.get("weapons.type.catalyst"),
-            imageUrl = weaponCatalogService.imageUrl("pocketgrimoire"),
+            imageUrl = weaponCatalogService.weaponTypeImageUrl("catalyst"),
         ),
         WeaponTypeFilter(
             key = "bow",
             label = messages.get("weapons.type.bow"),
-            imageUrl = weaponCatalogService.imageUrl("seasonedhuntersbow"),
+            imageUrl = weaponCatalogService.weaponTypeImageUrl("bow"),
         ),
     )
 

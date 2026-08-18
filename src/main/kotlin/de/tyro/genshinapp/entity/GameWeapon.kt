@@ -1,12 +1,16 @@
 package de.tyro.genshinapp.entity
 
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Lob
+import jakarta.persistence.OneToMany
+import jakarta.persistence.OrderBy
 import jakarta.persistence.Table
+import org.hibernate.annotations.BatchSize
 
 @Entity
 @Table(name = "game_weapon")
@@ -59,17 +63,8 @@ class GameWeapon {
     @Lob
     var story: String? = null
 
-    @Column(name = "image_url", length = 512)
-    var imageUrl: String? = null
-
-    @Column(name = "remote_image_url", length = 4096)
-    var remoteImageUrl: String? = null
-
     @Column(name = "hoyolab_entry_id")
     var hoyolabEntryId: Long? = null
-
-    @Column(name = "hoyolab_icon_url", length = 4096)
-    var hoyolabIconUrl: String? = null
 
     @Column(name = "hoyolab_page_version", length = 64)
     var hoyolabPageVersion: String? = null
@@ -77,18 +72,18 @@ class GameWeapon {
     @Column(name = "hoyolab_data_version")
     var hoyolabDataVersion: Int? = 0
 
-    @Column(name = "full_image_url", length = 4096)
-    var fullImageUrl: String? = null
+    @OneToMany(mappedBy = "weapon", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OrderBy("imageType ASC")
+    @BatchSize(size = 100)
+    var images: MutableList<GameWeaponImage> = mutableListOf()
 
-    @Lob
-    @Column(name = "gallery_images_json")
-    var galleryImagesJson: String? = "[]"
+    @OneToMany(mappedBy = "weapon", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OrderBy("phase ASC, materialOrder ASC")
+    @BatchSize(size = 100)
+    var materialCosts: MutableList<GameWeaponMaterialCost> = mutableListOf()
 
-    @Lob
-    @Column(name = "hoyolab_ascension_json")
-    var hoyolabAscensionJson: String? = "[]"
-
-    @Lob
-    @Column(name = "ascension_costs_json", nullable = false)
-    var ascensionCostsJson: String = "{}"
+    @OneToMany(mappedBy = "weapon", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OrderBy("level ASC")
+    @BatchSize(size = 100)
+    var progressions: MutableList<GameWeaponProgression> = mutableListOf()
 }

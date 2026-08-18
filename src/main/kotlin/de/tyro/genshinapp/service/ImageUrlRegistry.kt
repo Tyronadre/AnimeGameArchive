@@ -7,6 +7,7 @@ import de.tyro.genshinapp.configuration.GenshinContentProperties
 import de.tyro.genshinapp.model.CharacterDefinition
 import de.tyro.genshinapp.model.CharacterImageType
 import de.tyro.genshinapp.model.MaterialDefinition
+import de.tyro.genshinapp.model.WeaponImageType
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.nio.file.AtomicMoveNotSupportedException
@@ -98,7 +99,9 @@ class ImageUrlRegistry(
         refreshIfChanged()
         var changed = false
         weapons.forEach { weapon ->
-            val entry = document.weapons.getOrPut(weapon.key.lowercase()) {
+            val entry = document.weaponImages.getOrPut(
+                weaponEntryKey(weapon.key, weapon.imageType),
+            ) {
                 changed = true
                 EditableImageLink()
             }
@@ -106,20 +109,6 @@ class ImageUrlRegistry(
         }
         if (changed) writeDocument()
     }
-
-    fun registerWeaponFullDefaults(weapons: Collection<WeaponFullImageDefault>) =
-        synchronized(lock) {
-            refreshIfChanged()
-            var changed = false
-            weapons.forEach { weapon ->
-                val entry = document.weaponFullViews.getOrPut(weapon.key.lowercase()) {
-                    changed = true
-                    EditableImageLink()
-                }
-                changed = entry.updateDefaults(weapon.name, weapon.defaultUrl) || changed
-            }
-            if (changed) writeDocument()
-        }
 
     fun characterLink(
         key: String,
@@ -140,14 +129,9 @@ class ImageUrlRegistry(
             document.talents[talentEntryKey(characterKey, talentKey)]?.copy()
         }
 
-    fun weaponLink(key: String): EditableImageLink? = synchronized(lock) {
+    fun weaponLink(key: String, imageType: WeaponImageType): EditableImageLink? = synchronized(lock) {
         refreshIfChanged()
-        document.weapons[key.lowercase()]?.copy()
-    }
-
-    fun weaponFullLink(key: String): EditableImageLink? = synchronized(lock) {
-        refreshIfChanged()
-        document.weaponFullViews[key.lowercase()]?.copy()
+        document.weaponImages[weaponEntryKey(key, imageType)]?.copy()
     }
 
     fun setCharacterOverride(
@@ -190,22 +174,17 @@ class ImageUrlRegistry(
         writeDocument()
     }
 
-    fun setWeaponOverride(key: String, name: String, url: String) = synchronized(lock) {
+    fun setWeaponOverride(
+        key: String,
+        imageType: WeaponImageType,
+        name: String,
+        url: String,
+    ) = synchronized(lock) {
         refreshIfChanged()
-        val entry = document.weapons.getOrPut(key.lowercase()) {
-            EditableImageLink(name = name)
+        val entry = document.weaponImages.getOrPut(weaponEntryKey(key, imageType)) {
+            EditableImageLink(name = "$name ${imageType.label}")
         }
-        entry.name = name
-        entry.url = url
-        writeDocument()
-    }
-
-    fun setWeaponFullOverride(key: String, name: String, url: String) = synchronized(lock) {
-        refreshIfChanged()
-        val entry = document.weaponFullViews.getOrPut(key.lowercase()) {
-            EditableImageLink(name = name)
-        }
-        entry.name = name
+        entry.name = "$name ${imageType.label}"
         entry.url = url
         writeDocument()
     }
@@ -237,17 +216,9 @@ class ImageUrlRegistry(
         }
     }
 
-    fun resetWeaponOverride(key: String) = synchronized(lock) {
+    fun resetWeaponOverride(key: String, imageType: WeaponImageType) = synchronized(lock) {
         refreshIfChanged()
-        document.weapons[key.lowercase()]?.let {
-            it.url = ""
-            writeDocument()
-        }
-    }
-
-    fun resetWeaponFullOverride(key: String) = synchronized(lock) {
-        refreshIfChanged()
-        document.weaponFullViews[key.lowercase()]?.let {
+        document.weaponImages[weaponEntryKey(key, imageType)]?.let {
             it.url = ""
             writeDocument()
         }
@@ -260,6 +231,9 @@ class ImageUrlRegistry(
 
     private fun talentEntryKey(characterKey: String, talentKey: String): String =
         "${characterKey.lowercase()}:${talentKey.lowercase()}"
+
+    private fun weaponEntryKey(key: String, imageType: WeaponImageType): String =
+        "${key.lowercase()}:${imageType.key}"
 
     private fun refreshIfChanged() {
         val currentStamp = currentFileStamp()
@@ -319,12 +293,12 @@ class ImageUrlRegistry(
     )
 }
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class ImageLinksDocument(
     var characters: MutableMap<String, EditableImageLink> = linkedMapOf(),
     var materials: MutableMap<String, EditableImageLink> = linkedMapOf(),
     var talents: MutableMap<String, EditableImageLink> = linkedMapOf(),
-    var weapons: MutableMap<String, EditableImageLink> = linkedMapOf(),
-    var weaponFullViews: MutableMap<String, EditableImageLink> = linkedMapOf(),
+    var weaponImages: MutableMap<String, EditableImageLink> = linkedMapOf(),
 ) {
     fun sorted(): ImageLinksDocument = ImageLinksDocument(
         characters = characters.toSortedMap(),
@@ -332,8 +306,7 @@ data class ImageLinksDocument(
             compareBy<String> { it.toIntOrNull() ?: Int.MAX_VALUE }.thenBy { it },
         ),
         talents = talents.toSortedMap(),
-        weapons = weapons.toSortedMap(),
-        weaponFullViews = weaponFullViews.toSortedMap(),
+        weaponImages = weaponImages.toSortedMap(),
     )
 }
 
@@ -346,12 +319,7 @@ data class TalentImageDefault(
 
 data class WeaponImageDefault(
     val key: String,
-    val name: String,
-    val defaultUrl: String,
-)
-
-data class WeaponFullImageDefault(
-    val key: String,
+    val imageType: WeaponImageType,
     val name: String,
     val defaultUrl: String,
 )

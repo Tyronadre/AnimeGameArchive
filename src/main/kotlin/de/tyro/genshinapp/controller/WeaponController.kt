@@ -4,6 +4,7 @@ import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.model.PlayerWeapon
 import de.tyro.genshinapp.security.AppUserPrincipal
 import de.tyro.genshinapp.service.CharacterCatalogService
+import de.tyro.genshinapp.service.AttributeIcon
 import de.tyro.genshinapp.service.HoyolabWeaponGalleryService
 import de.tyro.genshinapp.service.MaterialCatalogService
 import de.tyro.genshinapp.service.OptimizerCombatStatService
@@ -63,20 +64,22 @@ class WeaponController(
             definition?.secondaryStatType,
         )
         val maxStats = definition?.hoyolabAscension?.maxByOrNull { it.level }
-        val originalImageIndex = definition?.galleryImages
-            ?.indexOfFirst { image ->
-                image.label.equals("Original", ignoreCase = true) ||
-                    image.description?.contains("before", ignoreCase = true) == true
-            }
-            ?.takeIf { it >= 0 }
-
         model.addAttribute("weaponKey", weaponKey)
         model.addAttribute("weaponName", weaponName)
         model.addAttribute("weaponIcon", weaponCatalogService.imageUrl(weaponKey))
+        model.addAttribute(
+            "weaponTypeIcon",
+            weaponCatalogService.weaponTypeImageUrl(definition?.weaponType),
+        )
+        model.addAttribute("attackStatIcon", AttributeIcon.ATTACK.mediaUrl)
+        model.addAttribute(
+            "secondaryStatIcon",
+            AttributeIcon.fromCombatStatKey(secondaryStatKey)?.mediaUrl,
+        )
         model.addAttribute("weaponFullImage", weaponCatalogService.fullImageUrl(weaponKey))
         model.addAttribute(
             "weaponOriginalImage",
-            originalImageIndex?.let { weaponCatalogService.galleryImageUrl(weaponKey, it) },
+            weaponCatalogService.unascendedImageUrl(weaponKey),
         )
         model.addAttribute("weaponDefinition", definition)
         model.addAttribute("weaponMaxStats", maxStats)
@@ -190,36 +193,17 @@ class WeaponController(
     private fun phaseMaterials(
         definition: WeaponDefinition,
         phase: Int,
-    ): List<OwnedWeaponMaterialView> {
-        val staticCosts = definition.ascensionCosts[phase].orEmpty()
-        if (staticCosts.isNotEmpty()) {
-            return staticCosts.map { material ->
-                OwnedWeaponMaterialView(
-                    identity = "material:${material.id}",
-                    name = material.name,
-                    amount = material.count,
-                    imageUrl = materialCatalogService.materialImageUrl(material.id),
-                    href = "/materials?materialId=${material.id}",
-                )
-            }
+    ): List<OwnedWeaponMaterialView> = definition.ascensionCosts[phase]
+        .orEmpty()
+        .map { material ->
+            OwnedWeaponMaterialView(
+                identity = "material:${material.id}",
+                name = material.name,
+                amount = material.count,
+                imageUrl = materialCatalogService.materialImageUrl(material.id),
+                href = "/materials?materialId=${material.id}",
+            )
         }
-
-        val requiredAtLevel = ASCENSION_CAPS.getOrNull(phase - 1) ?: return emptyList()
-        return definition.hoyolabAscension
-            .firstOrNull { it.level == requiredAtLevel }
-            ?.materials
-            .orEmpty()
-            .map { material ->
-                OwnedWeaponMaterialView(
-                    identity = material.entryId?.let { "hoyolab:$it" }
-                        ?: "hoyolab:${material.name}:${material.imageUrl}",
-                    name = material.name.orEmpty(),
-                    amount = material.amount,
-                    imageUrl = material.imageUrl,
-                    href = material.entryId?.let { "https://wiki.hoyolab.com/pc/genshin/entry/$it" },
-                )
-            }
-    }
 
     private companion object {
         private const val MYSTIC_ENHANCEMENT_ORE_ID = 104013

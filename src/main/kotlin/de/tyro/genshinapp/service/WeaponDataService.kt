@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.model.MaterialCost
 import de.tyro.genshinapp.model.MaterialDefinition
+import de.tyro.genshinapp.model.WeaponImageType
 import org.springframework.stereotype.Service
 import java.util.concurrent.ConcurrentHashMap
 
@@ -21,7 +22,11 @@ class WeaponDataService(
             ?.takeIf { !it.weaponType.isNullOrBlank() }
             ?.let { return it }
         val stored = catalogStore?.findWeapon(normalizedKey)
-        if (stored?.hasDetails == true && !stored.weaponType.isNullOrBlank()) {
+        if (
+            stored?.hasDetails == true &&
+            !stored.weaponType.isNullOrBlank() &&
+            stored.ascensionCosts.isNotEmpty()
+        ) {
             definitions[normalizedKey] = stored
             return stored
         }
@@ -29,14 +34,11 @@ class WeaponDataService(
             ?.let { mapDefinition(normalizedKey, it) }
             ?.let { loaded ->
                 loaded.copy(
-                    imageUrl = stored?.imageUrl,
-                    remoteImageUrl = stored?.remoteImageUrl,
+                    imageUrls = stored?.imageUrls.orEmpty(),
+                    remoteImageUrls = stored?.remoteImageUrls.orEmpty(),
                     hoyolabEntryId = stored?.hoyolabEntryId,
-                    hoyolabIconUrl = stored?.hoyolabIconUrl,
                     hoyolabPageVersion = stored?.hoyolabPageVersion,
                     hoyolabDataVersion = stored?.hoyolabDataVersion ?: 0,
-                    fullImageUrl = stored?.fullImageUrl,
-                    galleryImages = stored?.galleryImages.orEmpty(),
                     region = stored?.region,
                     obtainMethod = stored?.obtainMethod,
                     releaseVersion = stored?.releaseVersion,
@@ -83,14 +85,11 @@ class WeaponDataService(
                         passiveName = candidate.passiveName ?: current.passiveName,
                         passiveDescription = candidate.passiveDescription ?: current.passiveDescription,
                         story = current.story,
-                        imageUrl = current.imageUrl,
-                        remoteImageUrl = current.remoteImageUrl,
+                        imageUrls = current.imageUrls,
+                        remoteImageUrls = current.remoteImageUrls,
                         hoyolabEntryId = current.hoyolabEntryId,
-                        hoyolabIconUrl = current.hoyolabIconUrl,
                         hoyolabPageVersion = current.hoyolabPageVersion,
                         hoyolabDataVersion = current.hoyolabDataVersion,
-                        fullImageUrl = current.fullImageUrl,
-                        galleryImages = current.galleryImages,
                         hoyolabAscension = current.hoyolabAscension,
                         ascensionCosts = candidate.ascensionCosts.ifEmpty { current.ascensionCosts },
                     )
@@ -159,38 +158,25 @@ data class WeaponDefinition(
     val passiveName: String? = null,
     val passiveDescription: String? = null,
     val story: String? = null,
-    val imageUrl: String? = null,
-    val remoteImageUrl: String? = null,
+    val imageUrls: Map<WeaponImageType, String> = emptyMap(),
+    val remoteImageUrls: Map<WeaponImageType, String> = emptyMap(),
     val hoyolabEntryId: Long? = null,
-    val hoyolabIconUrl: String? = null,
     val hoyolabPageVersion: String? = null,
     val hoyolabDataVersion: Int = 0,
-    val fullImageUrl: String? = null,
-    val galleryImages: List<WeaponGalleryImage> = emptyList(),
     val hoyolabAscension: List<WeaponHoyolabAscension> = emptyList(),
     val ascensionCosts: Map<Int, List<MaterialCost>> = emptyMap(),
 ) {
     val hasDetails: Boolean
         get() = rarity in 1..5
-}
 
-data class WeaponGalleryImage(
-    val label: String,
-    val url: String,
-    val description: String? = null,
-)
+    fun imageUrl(type: WeaponImageType): String? = imageUrls[type]
+
+    fun remoteImageUrl(type: WeaponImageType): String? = remoteImageUrls[type]
+}
 
 data class WeaponHoyolabAscension(
     val level: Int,
     val attackBeforeAscension: Double? = null,
     val attackAfterAscension: Double? = null,
     val secondaryStat: Double? = null,
-    val materials: List<WeaponHoyolabMaterial> = emptyList(),
-)
-
-data class WeaponHoyolabMaterial(
-    val entryId: Long? = null,
-    val name: String? = null,
-    val amount: Long,
-    val imageUrl: String? = null,
 )

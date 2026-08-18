@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.model.PlayerWeapon
+import de.tyro.genshinapp.model.WeaponImageType
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Service
 import org.springframework.web.util.UriComponentsBuilder
@@ -23,15 +24,16 @@ class WeaponCatalogService(
         }
 
     init {
-        catalogStore?.getWeapons().orEmpty().forEach(::remember)
+        catalogStore?.getWeapons().orEmpty().forEach { stored ->
+            remember(save(refreshDefaultImageUrl(stored)))
+        }
         configuredNames.forEach { name ->
             val key = GoodKeyNormalizer.normalize(name)
             if (!definitionsByKey.containsKey(key)) {
                 remember(save(baseDefinition(key, name)))
             }
         }
-        imageUrlRegistry?.registerWeaponDefaults(getWeapons().map(::imageDefault))
-        imageUrlRegistry?.registerWeaponFullDefaults(getWeapons().map(::fullImageDefault))
+        imageUrlRegistry?.registerWeaponDefaults(getWeapons().flatMap(::imageDefaults))
     }
 
     fun getWeapons(): List<WeaponDefinition> = definitionsByKey.values.sortedBy { it.name }
@@ -60,27 +62,29 @@ class WeaponCatalogService(
         val definition = remember(
             save(baseDefinition(normalizedKey, GoodKeyNormalizer.humanize(key))),
         )
-        imageUrlRegistry?.registerWeaponDefaults(listOf(imageDefault(definition)))
-        imageUrlRegistry?.registerWeaponFullDefaults(listOf(fullImageDefault(definition)))
+        imageUrlRegistry?.registerWeaponDefaults(imageDefaults(definition))
         return definition
     }
 
     fun saveEnrichment(definition: WeaponDefinition): WeaponDefinition {
         val saved = remember(save(definition))
-        imageUrlRegistry?.registerWeaponFullDefaults(listOf(fullImageDefault(saved)))
+        imageUrlRegistry?.registerWeaponDefaults(imageDefaults(saved))
         return saved
     }
 
     fun rememberPersisted(definition: WeaponDefinition) {
         remember(definition)
-        imageUrlRegistry?.registerWeaponDefaults(listOf(imageDefault(definition)))
-        imageUrlRegistry?.registerWeaponFullDefaults(listOf(fullImageDefault(definition)))
+        imageUrlRegistry?.registerWeaponDefaults(imageDefaults(definition))
     }
 
-    fun imageUrl(key: String): String? {
+    fun imageUrl(key: String): String? = imageUrl(key, WeaponImageType.ICON)
+
+    fun imageUrl(key: String, imageType: WeaponImageType): String? {
         val normalizedKey = validKey(key) ?: return null
-        find(normalizedKey) ?: return null
-        return localImageUrl(key)
+        val definition = find(normalizedKey) ?: return null
+        val effectiveUrl = imageUrlRegistry?.weaponLink(normalizedKey, imageType)?.effectiveUrl
+            ?: definition.remoteImageUrl(imageType)
+        return localImageUrl(normalizedKey, imageType).takeIf { !effectiveUrl.isNullOrBlank() }
     }
 
     fun imageUrls(weapons: Collection<PlayerWeapon>): Map<String, String> =
@@ -88,29 +92,23 @@ class WeaponCatalogService(
             imageUrl(weapon.key)?.let { weapon.imageKey to it }
         }.toMap()
 
-    fun fullImageUrl(key: String): String? {
-        val normalizedKey = validKey(key) ?: return null
-        val definition = find(normalizedKey) ?: return null
-        val effectiveUrl = imageUrlRegistry?.weaponFullLink(normalizedKey)?.effectiveUrl
-            ?: definition.fullImageUrl
-        return localFullImageUrl(normalizedKey).takeIf { !effectiveUrl.isNullOrBlank() }
-    }
+    fun weaponTypeImageUrl(type: String?): String? = type
+        ?.let(GoodKeyNormalizer::normalize)
+        ?.let(TYPE_ICON_WEAPON_KEYS::get)
+        ?.let(::imageUrl)
 
-    fun galleryImageUrl(key: String, index: Int): String? {
-        val normalizedKey = validKey(key) ?: return null
-        val galleryImage = find(normalizedKey)?.galleryImages?.getOrNull(index) ?: return null
-        if (galleryImage.url.isBlank()) return null
-        return UriComponentsBuilder.fromPath("/media/weapons/{key}/gallery/{index}")
-            .buildAndExpand(normalizedKey, index)
-            .encode()
-            .toUriString()
-    }
+    fun fullImageUrl(key: String): String? = imageUrl(key, WeaponImageType.FULL_ASCENDED)
+
+    fun unascendedImageUrl(key: String): String? =
+        imageUrl(key, WeaponImageType.FULL_UNASCENDED)
 
     private fun baseDefinition(key: String, name: String): WeaponDefinition = WeaponDefinition(
         key = key,
         name = name,
-        imageUrl = localImageUrl(key),
-        remoteImageUrl = fandomImageUrlResolver?.weaponImageUrl(name),
+        imageUrls = WeaponImageType.entries.associateWith { localImageUrl(key, it) },
+        remoteImageUrls = fandomImageUrlResolver?.weaponImageUrl(name)?.let {
+            mapOf(WeaponImageType.ICON to it)
+        }.orEmpty(),
     )
 
     private fun save(definition: WeaponDefinition): WeaponDefinition =
@@ -125,42 +123,41 @@ class WeaponCatalogService(
         return refreshedDefinition
     }
 
-    private fun imageDefault(definition: WeaponDefinition): WeaponImageDefault =
-        WeaponImageDefault(
-            key = definition.key,
-            name = definition.name,
-            defaultUrl = currentDefaultImageUrl(definition),
-        )
+    private fun imageDefaults(definition: WeaponDefinition): List<WeaponImageDefault> =
+        WeaponImageType.entries.map { imageType ->
+            WeaponImageDefault(
+                key = definition.key,
+                imageType = imageType,
+                name = "${definition.name} ${imageType.label}",
+                defaultUrl = currentDefaultImageUrl(definition, imageType),
+            )
+        }
 
     private fun refreshDefaultImageUrl(definition: WeaponDefinition): WeaponDefinition {
-        val defaultUrl = currentDefaultImageUrl(definition)
-        return if (definition.remoteImageUrl.orEmpty() == defaultUrl) {
+        val defaultUrl = currentDefaultImageUrl(definition, WeaponImageType.ICON)
+        return if (definition.remoteImageUrl(WeaponImageType.ICON).orEmpty() == defaultUrl) {
             definition
         } else {
-            definition.copy(remoteImageUrl = defaultUrl)
+            definition.copy(
+                remoteImageUrls = definition.remoteImageUrls +
+                    (WeaponImageType.ICON to defaultUrl),
+            )
         }
     }
 
-    private fun currentDefaultImageUrl(definition: WeaponDefinition): String =
+    private fun currentDefaultImageUrl(
+        definition: WeaponDefinition,
+        imageType: WeaponImageType,
+    ): String = if (imageType == WeaponImageType.ICON) {
         fandomImageUrlResolver?.weaponImageUrl(definition.name)
-            ?: definition.remoteImageUrl.orEmpty()
+            ?: definition.remoteImageUrl(imageType).orEmpty()
+    } else {
+        definition.remoteImageUrl(imageType).orEmpty()
+    }
 
-    private fun fullImageDefault(definition: WeaponDefinition): WeaponFullImageDefault =
-        WeaponFullImageDefault(
-            key = definition.key,
-            name = "${definition.name} full view",
-            defaultUrl = definition.fullImageUrl.orEmpty(),
-        )
-
-    private fun localImageUrl(key: String): String =
-        UriComponentsBuilder.fromPath("/media/weapons/{key}")
-            .buildAndExpand(key)
-            .encode()
-            .toUriString()
-
-    private fun localFullImageUrl(key: String): String =
-        UriComponentsBuilder.fromPath("/media/weapons/{key}/full")
-            .buildAndExpand(key)
+    private fun localImageUrl(key: String, imageType: WeaponImageType): String =
+        UriComponentsBuilder.fromPath("/media/weapons/{key}/{type}")
+            .buildAndExpand(key, imageType.key)
             .encode()
             .toUriString()
 
@@ -170,5 +167,12 @@ class WeaponCatalogService(
     companion object {
         private const val CATALOG_RESOURCE = "data/weapon-names.json"
         private val WEAPON_KEY_PATTERN = Regex("[a-z0-9]+")
+        private val TYPE_ICON_WEAPON_KEYS = mapOf(
+            "sword" to "silversword",
+            "claymore" to "oldmercspal",
+            "polearm" to "ironpoint",
+            "catalyst" to "pocketgrimoire",
+            "bow" to "seasonedhuntersbow",
+        )
     }
 }
