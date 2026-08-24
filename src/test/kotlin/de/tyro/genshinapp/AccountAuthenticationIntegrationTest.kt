@@ -1,15 +1,16 @@
 package de.tyro.genshinapp
 
+import de.tyro.genshinapp.service.planning.SavedWeaponTarget
 import de.tyro.genshinapp.repository.UserRepository
-import de.tyro.genshinapp.service.ArtifactOptimizerCustomProfileService
-import de.tyro.genshinapp.service.ArtifactOptimizerProfileService
-import de.tyro.genshinapp.service.ArtifactOptimizerSharingService
-import de.tyro.genshinapp.service.CharacterWeaponTargetService
-import de.tyro.genshinapp.service.CharacterTargetService
-import de.tyro.genshinapp.service.DashboardGoalService
-import de.tyro.genshinapp.service.DashboardGoalType
-import de.tyro.genshinapp.service.GoodImportServiceTest
-import de.tyro.genshinapp.service.UserService
+import de.tyro.genshinapp.service.artifact.ArtifactOptimizerCustomProfileService
+import de.tyro.genshinapp.service.artifact.ArtifactOptimizerProfileService
+import de.tyro.genshinapp.service.artifact.ArtifactOptimizerSharingService
+import de.tyro.genshinapp.service.planning.CharacterWeaponTargetService
+import de.tyro.genshinapp.service.planning.CharacterTargetService
+import de.tyro.genshinapp.service.planning.DashboardGoalService
+import de.tyro.genshinapp.service.planning.DashboardGoalType
+import de.tyro.genshinapp.service.player.GoodImportServiceTest
+import de.tyro.genshinapp.service.account.UserService
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.matchesPattern
 import org.junit.jupiter.api.Test

@@ -1,7 +1,7 @@
 package de.tyro.genshinapp
 
 import de.tyro.genshinapp.configuration.LegacyGameCharacterSchemaCleanup
-import de.tyro.genshinapp.service.CharacterCatalogStore
+import de.tyro.genshinapp.service.catalog.CharacterCatalogStore
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.DefaultApplicationArguments

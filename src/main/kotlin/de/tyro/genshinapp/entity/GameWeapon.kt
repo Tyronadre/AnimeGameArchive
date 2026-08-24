@@ -1,8 +1,11 @@
 package de.tyro.genshinapp.entity
 
+import de.tyro.genshinapp.model.FightProperty
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -32,8 +35,9 @@ class GameWeapon {
     @Column(name = "weapon_type", length = 64)
     var weaponType: String? = null
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "secondary_stat_type", length = 96)
-    var secondaryStatType: String? = null
+    var secondaryStatType: FightProperty? = null
 
     @Column(name = "base_attack")
     var baseAttack: Double? = null

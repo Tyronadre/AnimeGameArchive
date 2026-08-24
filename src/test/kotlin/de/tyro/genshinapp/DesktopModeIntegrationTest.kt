@@ -9,9 +9,9 @@ import de.tyro.genshinapp.model.WeaponImageType
 import de.tyro.genshinapp.repository.UserRepository
 import de.tyro.genshinapp.repository.GameWeaponRepository
 import de.tyro.genshinapp.repository.PlayerWeaponInstanceRepository
-import de.tyro.genshinapp.service.GoodImportServiceTest
-import de.tyro.genshinapp.service.ImageUrlRegistry
-import de.tyro.genshinapp.service.PlayerSnapshotStore
+import de.tyro.genshinapp.service.player.GoodImportServiceTest
+import de.tyro.genshinapp.service.content.ImageUrlRegistry
+import de.tyro.genshinapp.service.player.PlayerSnapshotStore
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.not
 import org.junit.jupiter.api.Test

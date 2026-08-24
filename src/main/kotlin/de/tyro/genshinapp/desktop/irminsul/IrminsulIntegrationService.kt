@@ -1,7 +1,7 @@
 package de.tyro.genshinapp.desktop.irminsul
 
 import de.tyro.genshinapp.configuration.DesktopUserProvider
-import de.tyro.genshinapp.service.PlayerSnapshotStore
+import de.tyro.genshinapp.service.player.PlayerSnapshotStore
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext
 import org.springframework.context.ApplicationContext

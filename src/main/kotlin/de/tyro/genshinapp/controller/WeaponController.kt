@@ -3,18 +3,18 @@ package de.tyro.genshinapp.controller
 import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.model.PlayerWeapon
 import de.tyro.genshinapp.security.AppUserPrincipal
-import de.tyro.genshinapp.service.CharacterCatalogService
-import de.tyro.genshinapp.service.AttributeIcon
-import de.tyro.genshinapp.service.HoyolabWeaponGalleryService
-import de.tyro.genshinapp.service.MaterialCatalogService
-import de.tyro.genshinapp.service.OptimizerCombatStatService
-import de.tyro.genshinapp.service.PlayerSnapshotStore
-import de.tyro.genshinapp.service.WeaponCatalogService
-import de.tyro.genshinapp.service.WeaponDataService
-import de.tyro.genshinapp.service.WeaponDefinition
-import de.tyro.genshinapp.service.WeaponPlanningService
-import de.tyro.genshinapp.service.PlayerWeaponService
-import de.tyro.genshinapp.service.StoredPlayerWeapon
+import de.tyro.genshinapp.service.catalog.CharacterCatalogService
+import de.tyro.genshinapp.service.content.AttributeIcon
+import de.tyro.genshinapp.service.importer.HoyolabWeaponGalleryService
+import de.tyro.genshinapp.service.catalog.MaterialCatalogService
+import de.tyro.genshinapp.service.artifact.OptimizerCombatStatService
+import de.tyro.genshinapp.service.player.PlayerSnapshotStore
+import de.tyro.genshinapp.service.catalog.WeaponCatalogService
+import de.tyro.genshinapp.service.catalog.WeaponDataService
+import de.tyro.genshinapp.service.catalog.WeaponDefinition
+import de.tyro.genshinapp.service.planning.WeaponPlanningService
+import de.tyro.genshinapp.service.player.PlayerWeaponService
+import de.tyro.genshinapp.service.player.StoredPlayerWeapon
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
@@ -145,6 +145,7 @@ class WeaponController(
                 ?: weapon.location?.let(GoodKeyNormalizer::humanize)
                 ?: "",
             ownerIconUrl = owner?.iconImageUrl,
+            ownerHref = owner?.key?.let { "/characters/$it" },
             level = weapon.level,
             ascension = currentAscension,
             refinement = weapon.refinement,
@@ -217,6 +218,7 @@ data class OwnedWeaponCopyView(
     val saveUrl: String?,
     val ownerName: String,
     val ownerIconUrl: String?,
+    val ownerHref: String?,
     val level: Int,
     val ascension: Int,
     val refinement: Int,

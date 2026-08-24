@@ -16,12 +16,7 @@ class GenshinContentProperties {
     var staticImportEnabled: Boolean = true
 
     var staticImportFolders: List<String> = listOf(
-        "artifacts",
         "characters",
-        "constellations",
-        "domains",
-        "elements",
-        "materials",
         "talents",
         "weapons",
     )
@@ -37,6 +32,8 @@ class GenshinContentProperties {
         "https://sg-wiki-api.hoyolab.com/hoyowiki/wapi"
 
     var hoyolabWikiEnabled: Boolean = true
+
+    var hoyolabCatalogSyncEnabled: Boolean = true
 
     var connectTimeout: Duration = Duration.ofSeconds(8)
 

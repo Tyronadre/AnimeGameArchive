@@ -69,6 +69,11 @@ tasks.withType<Test> {
 
 val desktopMainClass = "de.tyro.genshinapp.desktop.DesktopLauncherKt"
 val scraperMainClass = "de.tyro.genshinapp.tools.Game8BuildProfileScraperKt"
+val bundledCatalogSnapshotMainClass =
+    "de.tyro.genshinapp.service.importer.BundledCatalogSnapshotKt"
+val bundledCatalogSnapshotFile = layout.buildDirectory.file(
+    "generated/bundled-catalog/data/bundled-catalog-snapshot.json",
+)
 val irminsulManifest = layout.projectDirectory.file("native/irminsul-helper/Cargo.toml")
 val irminsulExecutable = layout.projectDirectory.file("native/irminsul-helper/target/release/genshin-irminsul-helper.exe")
 val appName = "Another Anime Game Archive"
@@ -111,6 +116,43 @@ val csharpReferences = listOf(
     "System.Windows.Forms.dll",
 )
 
+val generateBundledCatalogSnapshot by tasks.registering(JavaExec::class) {
+    group = "content"
+    description = "Fetches current catalog data and creates the image-free bundled snapshot."
+    dependsOn(tasks.named("compileKotlin"))
+    classpath(sourceSets.main.get().output.classesDirs)
+    classpath(configurations.runtimeClasspath)
+    mainClass.set(bundledCatalogSnapshotMainClass)
+    args(
+        "--output",
+        bundledCatalogSnapshotFile.get().asFile.absolutePath,
+    )
+    outputs.file(bundledCatalogSnapshotFile)
+    outputs.upToDateWhen { false }
+}
+
+val scrapeGame8ArtifactBuilds by tasks.registering(JavaExec::class) {
+    group = "content"
+    description = "Scrapes Game8 artifact build profiles into the bundled optimizer data file."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("de.tyro.genshinapp.tools.Game8BuildProfileScraperKt")
+    args(
+        "--output",
+        layout.projectDirectory.file(
+            "src/main/resources/data/artifact-optimizer-builds.json",
+        ).asFile.absolutePath,
+    )
+}
+
+tasks.named<BootJar>("bootJar") {
+    dependsOn(generateBundledCatalogSnapshot)
+    from(bundledCatalogSnapshotFile) {
+        into("BOOT-INF/classes/data")
+    }
+
+    dependsOn(scrapeGame8ArtifactBuilds)
+}
+
 val buildIrminsulHelper by tasks.registering(Exec::class) {
     group = "desktop"
     description = "Builds the privileged Irminsul capture helper."
@@ -137,6 +179,10 @@ val desktopBootJar by tasks.registering(BootJar::class) {
     mainClass.set(desktopMainClass)
     targetJavaVersion.set(JavaVersion.VERSION_21)
     classpath(sourceSets.main.get().runtimeClasspath)
+    dependsOn(generateBundledCatalogSnapshot)
+    from(bundledCatalogSnapshotFile) {
+        into("BOOT-INF/classes/data")
+    }
 }
 
 val compileOnlineLauncher by tasks.registering(Exec::class) {
@@ -257,18 +303,7 @@ tasks.register<JavaExec>("desktopRun") {
     jvmArgs("-Djava.awt.headless=false")
 }
 
-tasks.register<JavaExec>("scrapeGame8ArtifactBuilds") {
-    group = "content"
-    description = "Scrapes Game8 artifact build profiles into the bundled optimizer data file."
-    classpath = sourceSets.main.get().runtimeClasspath
-    mainClass.set("de.tyro.genshinapp.tools.Game8BuildProfileScraperKt")
-    args(
-        "--output",
-        layout.projectDirectory.file(
-            "src/main/resources/data/artifact-optimizer-builds.json",
-        ).asFile.absolutePath,
-    )
-}
+
 
 val prepareDesktopPackage by tasks.registering(Sync::class) {
     group = "desktop"

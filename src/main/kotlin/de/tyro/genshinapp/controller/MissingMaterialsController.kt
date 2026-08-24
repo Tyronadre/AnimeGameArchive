@@ -1,10 +1,10 @@
 package de.tyro.genshinapp.controller
 
 import de.tyro.genshinapp.security.AppUserPrincipal
-import de.tyro.genshinapp.service.CharacterTargetService
-import de.tyro.genshinapp.service.MissingMaterialsPageService
-import de.tyro.genshinapp.service.PlayerPlanningService
-import de.tyro.genshinapp.service.PlayerSnapshotStore
+import de.tyro.genshinapp.service.planning.CharacterTargetService
+import de.tyro.genshinapp.service.planning.MissingMaterialsPageService
+import de.tyro.genshinapp.service.planning.PlayerPlanningService
+import de.tyro.genshinapp.service.player.PlayerSnapshotStore
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model

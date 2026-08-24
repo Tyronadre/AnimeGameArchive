@@ -3,13 +3,13 @@ package de.tyro.genshinapp.controller
 import de.tyro.genshinapp.model.CharacterImageType
 import de.tyro.genshinapp.model.CharacterTalentKind
 import de.tyro.genshinapp.model.WeaponImageType
-import de.tyro.genshinapp.service.ArtifactCatalogService
-import de.tyro.genshinapp.service.AttributeIcon
-import de.tyro.genshinapp.service.CharacterCatalogService
-import de.tyro.genshinapp.service.DynamicContentLoader
-import de.tyro.genshinapp.service.MaterialCatalogService
-import de.tyro.genshinapp.service.WeaponCatalogService
-import de.tyro.genshinapp.service.WeaponDataService
+import de.tyro.genshinapp.service.catalog.ArtifactCatalogService
+import de.tyro.genshinapp.service.content.AttributeIcon
+import de.tyro.genshinapp.service.catalog.CharacterCatalogService
+import de.tyro.genshinapp.service.content.DynamicContentLoader
+import de.tyro.genshinapp.service.catalog.MaterialCatalogService
+import de.tyro.genshinapp.service.catalog.WeaponCatalogService
+import de.tyro.genshinapp.service.catalog.WeaponDataService
 import org.springframework.http.CacheControl
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -78,9 +78,14 @@ class ContentMediaController(
         @PathVariable setKey: String,
         @PathVariable slotKey: String,
     ): ResponseEntity<ByteArray> {
-        val pieceName = artifactCatalogService.pieceName(setKey, slotKey)
+        val artifactImage = artifactCatalogService.artifactImage(setKey, slotKey)
             ?: return ResponseEntity.notFound().build()
-        val image = contentLoader.loadArtifactImage(setKey, slotKey, pieceName)
+        val image = contentLoader.loadArtifactImage(
+            setKey,
+            slotKey,
+            artifactImage.name,
+            artifactImage.remoteUrl,
+        )
             ?: return ResponseEntity.notFound().build()
         return imageResponse(image)
     }

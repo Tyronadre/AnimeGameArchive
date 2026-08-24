@@ -1,6 +1,6 @@
 package de.tyro.genshinapp
 
-import de.tyro.genshinapp.service.GoodImportServiceTest
+import de.tyro.genshinapp.service.player.GoodImportServiceTest
 import de.tyro.genshinapp.repository.MaterialRepository
 import de.tyro.genshinapp.repository.MaterialSourceRepository
 import org.hamcrest.Matchers.containsString

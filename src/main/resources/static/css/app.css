@@ -5223,6 +5223,30 @@ code {
     grid-template-columns: 52px minmax(0, 1fr);
     align-items: center;
     gap: 0.7rem;
+    color: inherit;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+.weapon-copy-owner-block[href] .weapon-copy-owner-icon,
+.weapon-copy-owner-block[href] b {
+    transition: border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.weapon-copy-owner-block[href]:hover .weapon-copy-owner-icon,
+.weapon-copy-owner-block[href]:focus-visible .weapon-copy-owner-icon {
+    border-color: color-mix(in srgb, var(--hero-accent) 68%, var(--line));
+    transform: translateY(-1px);
+}
+
+.weapon-copy-owner-block[href]:hover b,
+.weapon-copy-owner-block[href]:focus-visible b {
+    color: var(--hero-accent-deep);
+}
+
+.weapon-copy-owner-block[href]:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--hero-accent) 55%, transparent);
+    outline-offset: 4px;
 }
 
 .weapon-copy-owner-icon {
@@ -5235,9 +5259,6 @@ code {
     color: color-mix(in srgb, var(--hero-accent) 74%, white);
     border: 1px solid color-mix(in srgb, var(--hero-accent) 28%, var(--line));
     border-radius: 50%;
-    background:
-        radial-gradient(circle at 36% 28%, rgba(255, 255, 255, 0.42), transparent 28%),
-        color-mix(in srgb, var(--hero-accent) 13%, var(--surface));
     font-size: 1.15rem;
 }
 

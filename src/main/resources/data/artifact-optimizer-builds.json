@@ -1,8 +1,8 @@
 {
   "sourceName" : "Game8",
   "sourceUrl" : "https://game8.co/games/Genshin-Impact/archives/530535",
-  "sourceLastUpdated" : "July 15, 2026 03:34 AM",
-  "scrapedAt" : "2026-07-22T21:16:25.620827Z",
+  "sourceLastUpdated" : "July 29, 2026 04:20 AM",
+  "scrapedAt" : "2026-08-23T22:35:12.683762200Z",
   "profiles" : [ {
     "id" : "aino-support-1",
     "characterKey" : "aino",
@@ -170,22 +170,19 @@
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Zibai",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/570263",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/570263"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Linnea",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/551088",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/551088"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/555902",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/555902"
           } ]
         } ]
       }, {
@@ -207,8 +204,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Linnea",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/551088",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/551088"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -264,8 +260,7 @@
           "role" : "Main DPS/ Driver",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -497,8 +492,7 @@
           "role" : "Sub-DPS Support",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         }, {
           "role" : "Sub-DPS Support",
@@ -671,29 +665,25 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Sub-DPS",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Main DPS",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Support",
           "members" : [ {
             "name" : "Sub-DPS",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Support",
           "members" : [ {
             "name" : "Support",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         } ]
       }, {
@@ -1546,29 +1536,25 @@
           "role" : "Support",
           "members" : [ {
             "name" : "Support",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Main DPS",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Sub-DPS",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Support",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         } ]
       }, {
@@ -1852,8 +1838,7 @@
             "characterKey" : "bennett"
           }, {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           } ]
         }, {
           "role" : "Slot 3",
@@ -3736,8 +3721,7 @@
           "role" : "Support/ Main DPS",
           "members" : [ {
             "name" : "Sandrone",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382107",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382107"
           } ]
         } ]
       } ],
@@ -3969,8 +3953,7 @@
             "characterKey" : "mavuika"
           }, {
             "name" : "Varka",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314346",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/314346"
           }, {
             "name" : "Varesa",
             "url" : "https://game8.co/games/Genshin-Impact/archives/500244",
@@ -4015,8 +3998,7 @@
             "characterKey" : "citlali"
           }, {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           }, {
             "name" : "Chevreuse",
             "url" : "https://game8.co/games/Genshin-Impact/archives/426201",
@@ -4228,8 +4210,7 @@
             "characterKey" : "mavuika"
           }, {
             "name" : "Varka",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314346",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/314346"
           }, {
             "name" : "Varesa",
             "url" : "https://game8.co/games/Genshin-Impact/archives/500244",
@@ -4274,8 +4255,7 @@
             "characterKey" : "citlali"
           }, {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           }, {
             "name" : "Chevreuse",
             "url" : "https://game8.co/games/Genshin-Impact/archives/426201",
@@ -5046,8 +5026,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -5083,8 +5062,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Support",
@@ -5312,8 +5290,7 @@
           "role" : "Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         } ]
       }, {
@@ -6507,29 +6484,25 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Sub-DPS",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Main DPS",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Support",
           "members" : [ {
             "name" : "Sub-DPS",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Support",
           "members" : [ {
             "name" : "Support",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         } ]
       }, {
@@ -7169,22 +7142,19 @@
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Lohen",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/580697",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/580697"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           } ]
         } ]
       }, {
@@ -7609,8 +7579,7 @@
           "role" : "Support",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           } ]
         } ]
       }, {
@@ -7760,8 +7729,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -8254,8 +8222,7 @@
           "role" : "Support/ Sub-DPS",
           "members" : [ {
             "name" : "Columbina",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
@@ -8284,8 +8251,7 @@
           "role" : "Support/ Sub-DPS",
           "members" : [ {
             "name" : "Columbina",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
@@ -8314,8 +8280,7 @@
           "role" : "Support/ Sub-DPS",
           "members" : [ {
             "name" : "Columbina",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
@@ -8344,8 +8309,7 @@
           "role" : "Support/ Sub-DPS",
           "members" : [ {
             "name" : "Columbina",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
@@ -8358,8 +8322,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Jahoda",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/538446",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/538446"
           } ]
         }, {
           "role" : "Support",
@@ -8378,8 +8341,7 @@
           "role" : "Support/ Sub-DPS",
           "members" : [ {
             "name" : "Columbina",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
@@ -8408,8 +8370,7 @@
           "role" : "Support/ Sub-DPS",
           "members" : [ {
             "name" : "Columbina",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
@@ -8438,8 +8399,7 @@
           "role" : "Support/ Sub-DPS",
           "members" : [ {
             "name" : "Columbina",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
@@ -8468,8 +8428,7 @@
           "role" : "Support/ Sub-DPS",
           "members" : [ {
             "name" : "Columbina",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
@@ -8502,29 +8461,25 @@
           "role" : "Support/ Sub-DPS",
           "members" : [ {
             "name" : "Columbina",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
           "members" : [ {
             "name" : "Zibai",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/570263",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/570263"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/555902",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/555902"
           } ]
         }, {
           "role" : "Support",
           "members" : [ {
             "name" : "Linnea",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/551088",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/551088"
           } ]
         } ]
       }, {
@@ -8532,22 +8487,19 @@
           "role" : "Support/ Sub-DPS",
           "members" : [ {
             "name" : "Columbina",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
           "members" : [ {
             "name" : "Zibai",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/570263",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/570263"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/555902",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/555902"
           } ]
         }, {
           "role" : "Support",
@@ -8562,8 +8514,7 @@
           "role" : "Support/ Sub-DPS",
           "members" : [ {
             "name" : "Columbina",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
@@ -8583,8 +8534,7 @@
           "role" : "Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/555902",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/555902"
           } ]
         } ]
       }, {
@@ -8592,8 +8542,7 @@
           "role" : "Support/ Sub-DPS",
           "members" : [ {
             "name" : "Columbina",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
@@ -8626,8 +8575,7 @@
           "role" : "Support/ Sub-DPS",
           "members" : [ {
             "name" : "Columbina",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
@@ -8656,8 +8604,7 @@
           "role" : "Support/ Sub-DPS",
           "members" : [ {
             "name" : "Columbina",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
@@ -8677,8 +8624,7 @@
           "role" : "Support",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         } ]
       }, {
@@ -8686,8 +8632,7 @@
           "role" : "Support/ Sub-DPS",
           "members" : [ {
             "name" : "Columbina",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
@@ -8881,9 +8826,11 @@
         }, {
           "role" : "Slot 2",
           "members" : [ {
+            "name" : "Odette",
+            "url" : "https://game8.co/games/Genshin-Impact/archives/606893"
+          }, {
             "name" : "Sandrone",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382107",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382107"
           } ]
         }, {
           "role" : "Slot 3",
@@ -8970,8 +8917,7 @@
           "role" : "Slot 2",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Slot 3",
@@ -11334,8 +11280,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -11364,8 +11309,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -11394,8 +11338,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -11428,8 +11371,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -11462,8 +11404,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -11496,15 +11437,13 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
           "members" : [ {
             "name" : "Varka",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314346",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/314346"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -11517,8 +11456,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           } ]
         } ]
       }, {
@@ -11526,8 +11464,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -11556,8 +11493,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -11590,15 +11526,13 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
           "members" : [ {
             "name" : "Varka",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314346",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/314346"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -11620,8 +11554,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -11650,8 +11583,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -11684,8 +11616,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS/ Driver",
@@ -11714,8 +11645,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS/ Driver",
@@ -11748,8 +11678,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -11778,8 +11707,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -11812,8 +11740,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS Driver",
@@ -11842,8 +11769,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS Driver",
@@ -11876,8 +11802,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS Driver",
@@ -11906,8 +11831,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS Driver",
@@ -11940,8 +11864,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS Driver",
@@ -11970,8 +11893,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS Driver",
@@ -12004,8 +11926,7 @@
           "role" : "Main-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS",
@@ -12034,8 +11955,7 @@
           "role" : "Main-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS",
@@ -12068,8 +11988,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS",
@@ -12098,8 +12017,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS",
@@ -12132,15 +12050,13 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS Driver",
           "members" : [ {
             "name" : "Lohen",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/580697",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/580697"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -12153,8 +12069,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           } ]
         } ]
       }, {
@@ -12162,8 +12077,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS Driver",
@@ -12317,8 +12231,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -12347,8 +12260,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -12377,8 +12289,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -12411,8 +12322,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -12445,8 +12355,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -12479,15 +12388,13 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
           "members" : [ {
             "name" : "Varka",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314346",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/314346"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -12500,8 +12407,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           } ]
         } ]
       }, {
@@ -12509,8 +12415,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -12539,8 +12444,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -12573,15 +12477,13 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
           "members" : [ {
             "name" : "Varka",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314346",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/314346"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -12603,8 +12505,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -12633,8 +12534,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -12667,8 +12567,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS/ Driver",
@@ -12697,8 +12596,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS/ Driver",
@@ -12731,8 +12629,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -12761,8 +12658,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -12795,8 +12691,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS Driver",
@@ -12825,8 +12720,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS Driver",
@@ -12859,8 +12753,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS Driver",
@@ -12889,8 +12782,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS Driver",
@@ -12923,8 +12815,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS Driver",
@@ -12953,8 +12844,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS Driver",
@@ -12987,8 +12877,7 @@
           "role" : "Main-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS",
@@ -13017,8 +12906,7 @@
           "role" : "Main-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS",
@@ -13051,8 +12939,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS",
@@ -13081,8 +12968,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS",
@@ -13115,15 +13001,13 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS Driver",
           "members" : [ {
             "name" : "Lohen",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/580697",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/580697"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -13136,8 +13020,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           } ]
         } ]
       }, {
@@ -13145,8 +13028,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS Driver",
@@ -13938,8 +13820,7 @@
           "role" : "Main-DPS",
           "members" : [ {
             "name" : "Varka",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314346",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/314346"
           } ]
         }, {
           "role" : "Sub-DPS",
@@ -13968,8 +13849,7 @@
           "role" : "Main-DPS",
           "members" : [ {
             "name" : "Varka",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314346",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/314346"
           } ]
         }, {
           "role" : "Sub-DPS",
@@ -14357,15 +14237,14 @@
             "characterKey" : "raidenshogun"
           }, {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Slot 3",
           "members" : [ {
-            "name" : "Baizhu",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314348",
-            "characterKey" : "baizhu"
+            "name" : "Lauma",
+            "url" : "https://game8.co/games/Genshin-Impact/archives/538066",
+            "characterKey" : "lauma"
           }, {
             "name" : "Ineffa",
             "url" : "https://game8.co/games/Genshin-Impact/archives/531360",
@@ -15460,8 +15339,7 @@
           "role" : "Slot 2",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           }, {
             "name" : "Aino",
             "url" : "https://game8.co/games/Genshin-Impact/archives/537903",
@@ -16285,870 +16163,150 @@
         "condition" : null
       } ]
     } ],
-    "goalNotes" : [ "Furina's HP needs to be prioritized to get as close to 40,000 as possible to maximize the damage buffs granted to the team by her fanfare stacks. As a good baseline for her Energy Recharge, 180% is enough to get her Elemental Burst back off-cooldown in most teams.", "Lastly, Furina's CRIT Rate should be raised to at least 60% and as close to 80% as comfortably possible, with her CRIT DMG being given the same treatment, having around 200% as a goal in order to significantly improve her personal damage." ],
+    "goalNotes" : [ "As mentioned from above, you would want to have as much HP as you can with Furina. The 40,000 HP buff cap is based on her A4 passive. It is important to have Furina around 35,000 ~ 40,000 at all times to fully capitalize on her potential.", "Energy Recharge needs are dependent on how many other Hydro units are in the team with Furina, but a good baseline is around ~180% to ensure that she can use her Elemental Burst every rotation.", "Other than that, your CRIT value should have a 2:1 ratio for perfect balance." ],
     "recommendedWeapons" : [ {
       "rank" : 1,
       "name" : "Splendor of Tranquil Waters",
       "url" : "https://game8.co/games/Genshin-Impact/archives/431866",
-      "category" : "Sub-DPS Furina",
+      "category" : "Other Swords for Furina",
       "obtainMethod" : "Gacha"
     }, {
       "rank" : 2,
       "name" : "Key of Khaj-Nisut",
       "url" : "https://game8.co/games/Genshin-Impact/archives/348292",
-      "category" : "Sub-DPS Furina",
+      "category" : "Other Swords for Furina",
       "obtainMethod" : "Gacha"
     }, {
       "rank" : 3,
-      "name" : "Festering Desire",
-      "url" : "https://game8.co/games/Genshin-Impact/archives/314340",
-      "category" : "Best Free-to-Play Weapons for Furina",
-      "obtainMethod" : "Event"
+      "name" : "Primordial Jade Cutter",
+      "url" : "https://game8.co/games/Genshin-Impact/archives/317146",
+      "category" : "Other Swords for Furina",
+      "obtainMethod" : "Gacha"
     }, {
       "rank" : 4,
-      "name" : "Favonius Sword",
-      "url" : "https://game8.co/games/Genshin-Impact/archives/301925",
-      "category" : "Support Furina",
+      "name" : "Skyward Blade",
+      "url" : "https://game8.co/games/Genshin-Impact/archives/304643",
+      "category" : "Other Swords for Furina",
       "obtainMethod" : "Gacha"
     }, {
       "rank" : 5,
-      "name" : "Fleuve Cendre Ferryman",
-      "url" : "https://game8.co/games/Genshin-Impact/archives/420287",
-      "category" : "Best Free-to-Play Weapons for Furina",
-      "obtainMethod" : "Fishing"
+      "name" : "Festering Desire",
+      "url" : "https://game8.co/games/Genshin-Impact/archives/314340",
+      "category" : "Other Swords for Furina",
+      "obtainMethod" : "Event"
     }, {
       "rank" : 6,
-      "name" : "Primordial Jade Cutter",
-      "url" : "https://game8.co/games/Genshin-Impact/archives/317146",
-      "category" : "All Recommended Weapons for Furina",
-      "obtainMethod" : "Gacha"
-    }, {
-      "rank" : 7,
-      "name" : "Skyward Blade",
-      "url" : "https://game8.co/games/Genshin-Impact/archives/304643",
-      "category" : "All Recommended Weapons for Furina",
-      "obtainMethod" : "Gacha"
-    }, {
-      "rank" : 8,
       "name" : "Wolf-Fang",
       "url" : "https://game8.co/games/Genshin-Impact/archives/305864",
-      "category" : "All Recommended Weapons for Furina",
+      "category" : "Other Swords for Furina",
       "obtainMethod" : "Battle Pass"
+    }, {
+      "rank" : 7,
+      "name" : "Fleuve Cendre Ferryman",
+      "url" : "https://game8.co/games/Genshin-Impact/archives/420287",
+      "category" : "Other Swords for Furina",
+      "obtainMethod" : "Fishing"
+    }, {
+      "rank" : 8,
+      "name" : "Favonius Sword",
+      "url" : "https://game8.co/games/Genshin-Impact/archives/301925",
+      "category" : "Other Swords for Furina",
+      "obtainMethod" : "Gacha"
     }, {
       "rank" : 9,
       "name" : "The Dockhand's Assistant",
       "url" : "https://game8.co/games/Genshin-Impact/archives/301856",
-      "category" : "All Recommended Weapons for Furina",
+      "category" : "Other Swords for Furina",
       "obtainMethod" : "Gacha"
     } ],
     "recommendedTeams" : [ {
-      "name" : "Furina-Neuvillette Teams",
+      "name" : "Freeze Team Comp",
       "lineups" : [ {
         "slots" : [ {
-          "role" : "Sub-DPS/ Support",
+          "role" : "Slot 1",
           "members" : [ {
             "name" : "Furina",
             "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
             "characterKey" : "furina"
           } ]
         }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Neuvillette",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Neuvillette-Best-Builds",
-            "characterKey" : "neuvillette"
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Kazuha",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/332826",
-            "characterKey" : "kaedeharakazuha"
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Xilonen",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/461997",
-            "characterKey" : "xilonen"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Neuvillette",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Neuvillette-Best-Builds",
-            "characterKey" : "neuvillette"
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Citlali",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/461989",
-            "characterKey" : "citlali"
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Xilonen",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/461997",
-            "characterKey" : "xilonen"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Neuvillette",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Neuvillette-Best-Builds",
-            "characterKey" : "neuvillette"
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Kazuha",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/332826",
-            "characterKey" : "kaedeharakazuha"
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Baizhu",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314348",
-            "characterKey" : "baizhu"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Neuvillette",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Neuvillette-Best-Builds",
-            "characterKey" : "neuvillette"
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Ororon",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/461993",
-            "characterKey" : "ororon"
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Xilonen",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/461997",
-            "characterKey" : "xilonen"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Neuvillette",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Neuvillette-Best-Builds",
-            "characterKey" : "neuvillette"
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Ineffa",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/531360",
-            "characterKey" : "ineffa"
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Ororon",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/461993",
-            "characterKey" : "ororon"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Neuvillette",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Neuvillette-Best-Builds",
-            "characterKey" : "neuvillette"
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Ineffa",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/531360",
-            "characterKey" : "ineffa"
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Lauma",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/538066",
-            "characterKey" : "lauma"
-          } ]
-        } ]
-      } ],
-      "notes" : [ "Furina synergizes well with characters who possess HP-fluctuations within their kit as they can reliably activate her DMG buffs simply by using their kits, with the best one being Neuvillette.", "They can either run Hypercarry-focused supports like Xilonen and Kazuha, or reaction comps with Ororon or Citlali." ]
-    }, {
-      "name" : "General Buffer Teams",
-      "lineups" : [ {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Mavuika",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/461999",
-            "characterKey" : "mavuika"
-          } ]
-        }, {
-          "role" : "Sub-DPS",
-          "members" : [ {
-            "name" : "Xilonen",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/461997",
-            "characterKey" : "xilonen"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Bennett",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Bennett-Best-Builds",
-            "characterKey" : "bennett"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Raiden",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/337161",
-            "characterKey" : "raidenshogun"
-          } ]
-        }, {
-          "role" : "Sub-DPS",
-          "members" : [ {
-            "name" : "Yelan",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/372781",
-            "characterKey" : "yelan"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Jean",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/297536",
-            "characterKey" : "jean"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Navia",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/417194",
-            "characterKey" : "navia"
-          } ]
-        }, {
-          "role" : "Sub-DPS",
-          "members" : [ {
-            "name" : "Chiori",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382793",
-            "characterKey" : "chiori"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Sigewinne",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/352956",
-            "characterKey" : "sigewinne"
-          } ]
-        } ]
-      } ],
-      "notes" : [ "As Furina can act as both a buffer and Hydro applicator, she is great in any general team comps with a hypercarry who can react with Hydro like Mavuika or Arlecchino for Vaporize." ]
-    }, {
-      "name" : "Furina-Xianyun Teams",
-      "lineups" : [ {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Hu Tao",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314347",
-            "characterKey" : "hutao"
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Yelan",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/372781",
-            "characterKey" : "yelan"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Xianyun",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Xianyun-Best-Builds",
-            "characterKey" : "xianyun"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Gaming",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/437446",
-            "characterKey" : "gaming"
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Bennett",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Bennett-Best-Builds",
-            "characterKey" : "bennett"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Xianyun",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Xianyun-Best-Builds",
-            "characterKey" : "xianyun"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Xiao",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/297527",
-            "characterKey" : "xiao"
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Faruzan",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/391897",
-            "characterKey" : "faruzan"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Xianyun",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Xianyun-Best-Builds",
-            "characterKey" : "xianyun"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Diluc",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/297518",
-            "characterKey" : "diluc"
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Bennett",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Bennett-Best-Builds",
-            "characterKey" : "bennett"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Xianyun",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Xianyun-Best-Builds",
-            "characterKey" : "xianyun"
-          } ]
-        } ]
-      } ],
-      "notes" : [ "Xianyun is one of Furina's better healer supports due to her massive teamwide healing, and the both of them providing buffs to Plunge Attack team comps.", "This duo also runs the advantage of being two premier core supports, effectively taking the roles of Sub-DPS, Buffer Supports, and Healer Supports, giving players more choices for their DPS, especially for plunge teams." ]
-    }, {
-      "name" : "Furina Freeze Teams",
-      "lineups" : [ {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
+          "role" : "Slot 2",
           "members" : [ {
             "name" : "Skirk",
             "url" : "https://game8.co/games/Genshin-Impact/archives/333140",
             "characterKey" : "skirk"
           } ]
         }, {
-          "role" : "Sub-DPS",
-          "members" : [ {
-            "name" : "Shenhe",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/346620",
-            "characterKey" : "shenhe"
-          } ]
-        }, {
-          "role" : "Support",
+          "role" : "Slot 3",
           "members" : [ {
             "name" : "Escoffier",
             "url" : "https://game8.co/games/Genshin-Impact/archives/385307",
             "characterKey" : "escoffier"
           } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
         }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Wriothesley",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Wriothesley-Best-Builds",
-            "characterKey" : "wriothesley"
-          } ]
-        }, {
-          "role" : "Sub-DPS",
+          "role" : "Slot 4",
           "members" : [ {
             "name" : "Shenhe",
             "url" : "https://game8.co/games/Genshin-Impact/archives/346620",
             "characterKey" : "shenhe"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Escoffier",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/385307",
-            "characterKey" : "escoffier"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Wriothesley",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Wriothesley-Best-Builds",
-            "characterKey" : "wriothesley"
-          } ]
-        }, {
-          "role" : "Sub-DPS",
-          "members" : [ {
-            "name" : "Shenhe",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/346620",
-            "characterKey" : "shenhe"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Xilonen",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/461997",
-            "characterKey" : "xilonen"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Ayaka",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/315215",
-            "characterKey" : "kamisatoayaka"
-          } ]
-        }, {
-          "role" : "Sub-DPS",
-          "members" : [ {
-            "name" : "Shenhe",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/346620",
-            "characterKey" : "shenhe"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Xilonen",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/461997",
-            "characterKey" : "xilonen"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Ayaka",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/315215",
-            "characterKey" : "kamisatoayaka"
-          } ]
-        }, {
-          "role" : "Sub-DPS",
-          "members" : [ {
-            "name" : "Rosaria",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314177",
-            "characterKey" : "rosaria"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Jean",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/297536",
-            "characterKey" : "jean"
+          }, {
+            "name" : "Yelan",
+            "url" : "https://game8.co/games/Genshin-Impact/archives/372781",
+            "characterKey" : "yelan"
+          }, {
+            "name" : "Xingqiu",
+            "url" : "https://game8.co/games/Genshin-Impact/archives/297531",
+            "characterKey" : "xingqiu"
           } ]
         } ]
       } ],
-      "notes" : [ "Acting as a solo Hydro applicator for Freeze and a buffer, Furina in this team works as a quick-swap support for Cryo characters like Wriothesley and Ayaka." ]
+      "notes" : [ "Furina provides massive DMG% in the team while Skirk and Escoffier have synergistic mechanics with Freeze comps." ]
     }, {
-      "name" : "Furina Swirl Teams",
+      "name" : "Hypercarry Team Comp",
       "lineups" : [ {
         "slots" : [ {
-          "role" : "Sub-DPS/ Support",
+          "role" : "Slot 1",
           "members" : [ {
             "name" : "Furina",
             "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
             "characterKey" : "furina"
           } ]
         }, {
-          "role" : "Main-DPS",
+          "role" : "Slot 2",
           "members" : [ {
-            "name" : "Chasca",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462001",
-            "characterKey" : "chasca"
+            "name" : "Xilonen",
+            "url" : "https://game8.co/games/Genshin-Impact/archives/461997",
+            "characterKey" : "xilonen"
+          }, {
+            "name" : "Shinobu",
+            "url" : "https://game8.co/games/Genshin-Impact/archives/346199",
+            "characterKey" : "kukishinobu"
           } ]
         }, {
-          "role" : "Sub-DPS",
+          "role" : "Slot 3",
           "members" : [ {
-            "name" : "Ororon",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/461993",
-            "characterKey" : "ororon"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Bennett",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Bennett-Best-Builds",
-            "characterKey" : "bennett"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Mizuki",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/492414",
-            "characterKey" : null
-          } ]
-        }, {
-          "role" : "Sub-DPS",
-          "members" : [ {
-            "name" : "Ororon",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/461993",
-            "characterKey" : "ororon"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Mavuika",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/461999",
-            "characterKey" : "mavuika"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
+            "name" : "Kazuha",
+            "url" : "https://game8.co/games/Genshin-Impact/archives/332826",
+            "characterKey" : "kaedeharakazuha"
+          }, {
             "name" : "Sucrose",
             "url" : "https://game8.co/games/Genshin-Impact/archives/297525",
             "characterKey" : "sucrose"
           } ]
         }, {
-          "role" : "Sub-DPS",
+          "role" : "Slot 4",
           "members" : [ {
-            "name" : "Xiangling",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/297530",
-            "characterKey" : "xiangling"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Bennett",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Bennett-Best-Builds",
-            "characterKey" : "bennett"
+            "name" : "Wriothesley",
+            "url" : "https://game8.co/games/Genshin-Impact/archives/Wriothesley-Best-Builds",
+            "characterKey" : "wriothesley"
+          }, {
+            "name" : "Neuvillette",
+            "url" : "https://game8.co/games/Genshin-Impact/archives/Neuvillette-Best-Builds",
+            "characterKey" : "neuvillette"
           } ]
         } ]
       } ],
-      "notes" : [ "In a team-comp focused on Swirls, you will need to have a Viridescent Venerer Anemo character who can spread and buff the reaction with Furina." ]
-    }, {
-      "name" : "Furina Bloom Teams",
-      "lineups" : [ {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Alhaitham",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/383712",
-            "characterKey" : "alhaitham"
-          } ]
-        }, {
-          "role" : "Sub-DPS",
-          "members" : [ {
-            "name" : "Nahida",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Nahida-Best-Builds",
-            "characterKey" : "nahida"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Shinobu",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/346199",
-            "characterKey" : "kukishinobu"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Clorinde",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/417218",
-            "characterKey" : "clorinde"
-          } ]
-        }, {
-          "role" : "Sub-DPS",
-          "members" : [ {
-            "name" : "Nahida",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Nahida-Best-Builds",
-            "characterKey" : "nahida"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Baizhu",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314348",
-            "characterKey" : "baizhu"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Nahida",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Nahida-Best-Builds",
-            "characterKey" : "nahida"
-          } ]
-        }, {
-          "role" : "Sub-DPS",
-          "members" : [ {
-            "name" : "Lauma",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/538066",
-            "characterKey" : "lauma"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Kokomi",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/337140",
-            "characterKey" : "sangonomiyakokomi"
-          } ]
-        } ]
-      } ],
-      "notes" : [ "If you can't use Yelan or Xingqiu in your team, Furina is an alternative for Bloom-related teams. However, do note that Furina cannot buff the Bloom reaction's damage. As such, Furina is there to buff the Main DPS's damage instead." ]
-    }, {
-      "name" : "Furina in Geo and Physical Teams",
-      "lineups" : [ {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Noelle",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/297523",
-            "characterKey" : "noelle"
-          } ]
-        }, {
-          "role" : "Sub-DPS",
-          "members" : [ {
-            "name" : "Albedo",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/312182",
-            "characterKey" : "albedo"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Gorou",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/336726",
-            "characterKey" : "gorou"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Furina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/Furina-Best-Builds",
-            "characterKey" : "furina"
-          } ]
-        }, {
-          "role" : "Main-DPS",
-          "members" : [ {
-            "name" : "Eula",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/328764",
-            "characterKey" : "eula"
-          } ]
-        }, {
-          "role" : "Sub-DPS",
-          "members" : [ {
-            "name" : "Fischl",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/297524",
-            "characterKey" : "fischl"
-          } ]
-        }, {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Mika",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/390096",
-            "characterKey" : "mika"
-          } ]
-        } ]
-      } ],
-      "notes" : [ "For players who run Geo or Physical team comps, Furina works as a buffer to increase her Main DPS's damage. Noelle and Mika are recommended for these respective parties as they have party-wide healing within their kit.", "You can now also equip Noelle or Eula with the Marechaussee Hunter artifact set with Furina's help to get the CRIT Rate you need. It further enables you to get more CRIT DMG stats especially if you have weapons like the Redhorn Stonethresher.", "Get a lot of Energy Recharge for the whole party as the characters needed for these teams to work have high burst costs." ]
+      "notes" : [ "This is a Hypercarry team composition for Furina. She is a staple buffer for these type of composition, but do remember that she requires a Healer to properly function. Do note this is just an example team/s, as there are plenty of variation for this composition." ]
     } ]
   }, {
     "id" : "gaming-dps-1",
@@ -18696,22 +17854,19 @@
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Zibai",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/570263",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/570263"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/555902",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/555902"
           } ]
         } ]
       }, {
@@ -18740,8 +17895,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Linnea",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/551088",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/551088"
           } ]
         } ]
       } ],
@@ -20697,29 +19851,25 @@
           "role" : "Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
           "members" : [ {
             "name" : "Zibai",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/570263",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/570263"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Support",
           "members" : [ {
             "name" : "Linnea",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/551088",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/551088"
           } ]
         } ]
       }, {
@@ -20727,15 +19877,13 @@
           "role" : "Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
           "members" : [ {
             "name" : "Zibai",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/570263",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/570263"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -20757,15 +19905,13 @@
           "role" : "Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
           "members" : [ {
             "name" : "Zibai",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/570263",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/570263"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -20791,8 +19937,7 @@
           "role" : "Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
@@ -20805,15 +19950,13 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Support/ Support",
           "members" : [ {
             "name" : "Linnea",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/551088",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/551088"
           } ]
         } ]
       }, {
@@ -20821,8 +19964,7 @@
           "role" : "Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
@@ -20835,8 +19977,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Support/ Support",
@@ -20851,8 +19992,7 @@
           "role" : "Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Driver",
@@ -20872,8 +20012,7 @@
           "role" : "Support/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         } ]
       } ],
@@ -21097,8 +20236,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -21274,8 +20412,7 @@
           "role" : "Main-DPS",
           "members" : [ {
             "name" : "Mizuki",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/492414",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/492414"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -21793,8 +20930,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Jahoda",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS Driver",
@@ -21823,8 +20959,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Jahoda",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS Driver",
@@ -21857,8 +20992,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Jahoda",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS Driver",
@@ -21887,8 +21021,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Jahoda",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS Driver",
@@ -21921,8 +21054,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Jahoda",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS Driver",
@@ -21951,8 +21083,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Jahoda",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS Driver",
@@ -22301,29 +21432,25 @@
           "role" : "Support",
           "members" : [ {
             "name" : "Support",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Main DPS",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Support",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Support",
           "members" : [ {
             "name" : "Support",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         } ]
       }, {
@@ -24584,8 +23711,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -24598,8 +23724,7 @@
           "role" : "Support",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           } ]
         } ]
       }, {
@@ -25431,8 +24556,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         }, {
           "role" : "Sub-DPS Support",
@@ -25445,8 +24569,7 @@
           "role" : "Support",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           } ]
         } ]
       }, {
@@ -27421,8 +26544,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Support",
@@ -27451,15 +26573,13 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Support",
           "members" : [ {
             "name" : "Jahoda",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/538446",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/538446"
           } ]
         } ]
       }, {
@@ -28199,29 +27319,25 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Linnea",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
           "members" : [ {
             "name" : "Zibai",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/570263",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/570263"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/555902",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/555902"
           } ]
         } ]
       }, {
@@ -28229,8 +27345,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Linnea",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -28243,8 +27358,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -28259,8 +27373,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Linnea",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main-DPS",
@@ -28273,8 +27386,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -28654,13 +27766,7 @@
       } ]
     } ],
     "goalNotes" : [ "Lohen wants to stack ATK to around 2,000 or more to make full use of his damage multipliers, and to reap higher benefits from ATK-scaling buffers. Afterwards, CRIT should be focused on, with CRIT DMG having the priority of needing 175% and above due to Lohen's abundant sources of CRIT Rate.", "Lastly, Elemental Mastery and Energy Recharge can be pooled together from artifact substats, with around 200 Elemental Mastery at most to vastly improve his Melt damage, and 130% Energy Recharge at most to help him utilize his Elemental Burst more often." ],
-    "recommendedWeapons" : [ {
-      "rank" : 1,
-      "name" : "Weapons",
-      "url" : "https://game8.co/games/Genshin-Impact/archives/580697#hl_3",
-      "category" : null,
-      "obtainMethod" : null
-    } ],
+    "recommendedWeapons" : [ ],
     "recommendedTeams" : [ {
       "name" : "Lohen DPS Teams",
       "lineups" : [ {
@@ -28668,8 +27774,7 @@
           "role" : "Slot 1",
           "members" : [ {
             "name" : "Lohen",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Slot 2",
@@ -28694,8 +27799,7 @@
           "role" : "Slot 3",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           }, {
             "name" : "Bennett",
             "url" : "https://game8.co/games/Genshin-Impact/archives/Bennett-Best-Builds",
@@ -28709,8 +27813,7 @@
           "role" : "Slot 4",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           }, {
             "name" : "Xiangling",
             "url" : "https://game8.co/games/Genshin-Impact/archives/297530",
@@ -29552,15 +28655,13 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           } ]
         }, {
           "role" : "Support",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         } ]
       }, {
@@ -30302,15 +29403,13 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           } ]
         }, {
           "role" : "Support",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         } ]
       }, {
@@ -31139,8 +30238,7 @@
           "role" : "Main DPS (Driver)",
           "members" : [ {
             "name" : "Mizuki",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS",
@@ -31173,8 +30271,7 @@
           "role" : "Main DPS (Driver)",
           "members" : [ {
             "name" : "Mizuki",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS",
@@ -31203,8 +30300,7 @@
           "role" : "Main DPS (Driver)",
           "members" : [ {
             "name" : "Mizuki",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS",
@@ -31237,8 +30333,7 @@
           "role" : "Main DPS (Driver)",
           "members" : [ {
             "name" : "Mizuki",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Sub-DPS",
@@ -31267,8 +30362,7 @@
           "role" : "Main DPS (Driver)",
           "members" : [ {
             "name" : "Mizuki",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Sub-DPS",
@@ -31297,8 +30391,7 @@
           "role" : "Main DPS (Driver)",
           "members" : [ {
             "name" : "Mizuki",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Sub-DPS",
@@ -31331,8 +30424,7 @@
           "role" : "Main DPS (Driver)",
           "members" : [ {
             "name" : "Mizuki",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Sub-DPS",
@@ -31361,8 +30453,7 @@
           "role" : "Main DPS (Driver)",
           "members" : [ {
             "name" : "Mizuki",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Sub-DPS",
@@ -31395,8 +30486,7 @@
           "role" : "Main DPS (Driver)",
           "members" : [ {
             "name" : "Mizuki",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Sub-DPS",
@@ -31425,8 +30515,7 @@
           "role" : "Main DPS (Driver)",
           "members" : [ {
             "name" : "Mizuki",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS/ Sub-DPS",
@@ -31648,8 +30737,7 @@
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         }, {
           "role" : "Sub-DPS",
@@ -31769,29 +30857,25 @@
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Support",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Main DPS",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Support",
           "members" : [ {
             "name" : "Sub-DPS",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Support",
           "members" : [ {
             "name" : "Support",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         } ]
       }, {
@@ -33230,22 +32314,19 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/555902",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/555902"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Linnea",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/551088",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/551088"
           } ]
         } ]
       }, {
@@ -33260,8 +32341,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -33720,22 +32800,19 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/555902",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/555902"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Linnea",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/551088",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/551088"
           } ]
         } ]
       }, {
@@ -33750,8 +32827,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -34066,8 +33142,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         } ]
       }, {
@@ -34089,15 +33164,13 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Jahoda",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/538446",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/538446"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         } ]
       } ],
@@ -34123,8 +33196,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Jahoda",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/538446",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/538446"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -34792,194 +33864,123 @@
       "name" : "Nicole Hexerei Teams",
       "lineups" : [ {
         "slots" : [ {
-          "role" : "Support",
+          "role" : "Slot 1",
           "members" : [ {
             "name" : "Nicole",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
-          "role" : "Sub-DPS",
+          "role" : "Slot 2",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         }, {
-          "role" : "Main DPS",
+          "role" : "Slot 3",
           "members" : [ {
             "name" : "Varka",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314346",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/314346"
+          }, {
+            "name" : "Lohen",
+            "url" : "https://game8.co/games/Genshin-Impact/archives/580697"
           } ]
         }, {
-          "role" : "Sub-DPS/ Support",
+          "role" : "Slot 4",
           "members" : [ {
             "name" : "Prune",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/590328",
-            "characterKey" : null
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Nicole",
-            "url" : null,
-            "characterKey" : null
-          } ]
-        }, {
-          "role" : "Sub-DPS",
-          "members" : [ {
-            "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
-          } ]
-        }, {
-          "role" : "Main DPS",
-          "members" : [ {
-            "name" : "Varka",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314346",
-            "characterKey" : null
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
+            "url" : "https://game8.co/games/Genshin-Impact/archives/590328"
+          }, {
             "name" : "Venti",
             "url" : "https://game8.co/games/Genshin-Impact/archives/Venti-Best-Builds",
             "characterKey" : "venti"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Support",
-          "members" : [ {
-            "name" : "Nicole",
-            "url" : null,
-            "characterKey" : null
-          } ]
-        }, {
-          "role" : "Sub-DPS",
-          "members" : [ {
-            "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
-          } ]
-        }, {
-          "role" : "Main DPS",
-          "members" : [ {
-            "name" : "Lohen",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/580697",
-            "characterKey" : null
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
+          }, {
             "name" : "Citlali",
             "url" : "https://game8.co/games/Genshin-Impact/archives/461989",
             "characterKey" : "citlali"
           } ]
         } ]
       } ],
-      "notes" : [ "Hexerei teams are Nicole's best use case, but not limited to. Varka, Venti, Klee, and Lohen can make use of her Elemental Burst because of their status as a Hexerei Main DPS, while Prune can take Venti's place for a more streamlined Hexerei comp focused on a singular DPS being amplified.", "In addition, she can also serve alongside Durin in Hexerei-proxy teams with other characters like Mavuika, providing a similar level of effectiveness." ]
+      "notes" : [ "Hexerei teams are Nicole's best use case, but not limited to. Varka, Venti, Klee, and Lohen can make use of her Elemental Burst because of their status as a Hexerei Main DPS, while Prune can take Venti's place for a more streamlined Hexerei comp focused on a singular DPS being amplified." ]
     }, {
       "name" : "Nicole Overload Teams",
       "lineups" : [ {
         "slots" : [ {
-          "role" : "Sub-DPS",
+          "role" : "Slot 1",
           "members" : [ {
             "name" : "Nicole",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
-          "role" : "Main DPS",
+          "role" : "Slot 2",
           "members" : [ {
             "name" : "Arlecchino",
             "url" : "https://game8.co/games/Genshin-Impact/archives/382103",
             "characterKey" : "arlecchino"
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Chevreuse",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/426201",
-            "characterKey" : "chevreuse"
-          } ]
-        }, {
-          "role" : "Sub-DPS/ Support",
-          "members" : [ {
-            "name" : "Fischl",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/297524",
-            "characterKey" : "fischl"
-          } ]
-        } ]
-      }, {
-        "slots" : [ {
-          "role" : "Sub-DPS",
-          "members" : [ {
-            "name" : "Nicole",
-            "url" : null,
-            "characterKey" : null
-          } ]
-        }, {
-          "role" : "Main DPS",
-          "members" : [ {
+          }, {
             "name" : "Varesa",
             "url" : "https://game8.co/games/Genshin-Impact/archives/500244",
             "characterKey" : "varesa"
           } ]
         }, {
-          "role" : "Sub-DPS/ Support",
+          "role" : "Slot 3",
           "members" : [ {
+            "name" : "Chevreuse",
+            "url" : "https://game8.co/games/Genshin-Impact/archives/426201",
+            "characterKey" : "chevreuse"
+          }, {
             "name" : "Iansan",
             "url" : "https://game8.co/games/Genshin-Impact/archives/345881",
             "characterKey" : "iansan"
           } ]
         }, {
-          "role" : "Sub-DPS/ Support",
+          "role" : "Slot 4",
           "members" : [ {
+            "name" : "Fischl",
+            "url" : "https://game8.co/games/Genshin-Impact/archives/297524",
+            "characterKey" : "fischl"
+          }, {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         } ]
       } ],
-      "notes" : [ "Overload teams can greatly benefit from her buffs, as most of them are attack scalers, especially Pyro DPS like Arlecchino.", "However, Electro DPS Overload teams can be a bit tricky because of how valuable Fischl and Iansan are, and the lack of off-field Pyro application can make it difficult to trigger Overload, so it's best to keep this in mind.", "It's also important to note that Chevreuse is still a lot more valuable than her in Overload teams." ]
+      "notes" : [ "Overload teams can greatly benefit from her buffs, as most of them are attack scalers, especially Pyro DPS like Arlecchino. However, Electro DPS Overload teams can be a bit tricky because of how valuable Fischl and Iansan are, and the lack of off-field Pyro application can make it difficult to trigger Overload, so it's best to keep this in mind." ]
     }, {
       "name" : "Kinich-Nicole Team",
       "lineups" : [ {
         "slots" : [ {
-          "role" : "Sub-DPS",
+          "role" : "Slot 1",
           "members" : [ {
             "name" : "Nicole",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
-          "role" : "Main DPS",
+          "role" : "Slot 2",
           "members" : [ {
             "name" : "Kinich",
             "url" : "https://game8.co/games/Genshin-Impact/archives/461991",
             "characterKey" : "kinich"
           } ]
         }, {
-          "role" : "Sub-DPS/ Support",
+          "role" : "Slot 3",
           "members" : [ {
             "name" : "Iansan",
             "url" : "https://game8.co/games/Genshin-Impact/archives/345881",
             "characterKey" : "iansan"
+          }, {
+            "name" : "Emilie",
+            "url" : "https://game8.co/games/Genshin-Impact/archives/422493",
+            "characterKey" : "emilie"
           } ]
         }, {
-          "role" : "Sub-DPS/ Support",
+          "role" : "Slot 4",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         } ]
       } ],
-      "notes" : [ "Kinich now has a new best team with Nicole's release. Since Kinich is the premier Burning DPS, Nicole sees a lot of value in providing shields to prevent continuous damage from burning, and of course, her buffs provide a lot of damage for his team.", "This is regarded as Kinich's new best team." ]
+      "notes" : [ "Kinich now has a new best team with Nicole's release. Since Kinich is the premier Burning DPS, Nicole sees a lot of value in providing shields to prevent continuous damage from burning, and of course, her buffs provide a lot of damage for his team." ]
     }, {
       "name" : "Nicole Hexerei Teams",
       "lineups" : [ {
@@ -34987,29 +33988,25 @@
           "role" : "Support",
           "members" : [ {
             "name" : "Nicole",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         }, {
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Varka",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314346",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/314346"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Prune",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/590328",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/590328"
           } ]
         } ]
       }, {
@@ -35017,22 +34014,19 @@
           "role" : "Support",
           "members" : [ {
             "name" : "Nicole",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         }, {
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Varka",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314346",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/314346"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -35047,22 +34041,19 @@
           "role" : "Support",
           "members" : [ {
             "name" : "Nicole",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         }, {
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Lohen",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/580697",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/580697"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -35081,8 +34072,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Nicole",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS",
@@ -35111,8 +34101,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Nicole",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS",
@@ -35132,8 +34121,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         } ]
       } ],
@@ -35145,8 +34133,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Nicole",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Main DPS",
@@ -35166,8 +34153,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         } ]
       } ],
@@ -35891,22 +34877,19 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/555902",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/555902"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Linnea",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/551088",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/551088"
           } ]
         } ]
       }, {
@@ -35921,8 +34904,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/555902",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/555902"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -35935,8 +34917,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Linnea",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/551088",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/551088"
           } ]
         } ]
       } ],
@@ -36221,22 +35202,19 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/555902",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/555902"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Linnea",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/551088",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/551088"
           } ]
         } ]
       }, {
@@ -36251,8 +35229,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/555902",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/555902"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -36265,8 +35242,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Linnea",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/551088",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/551088"
           } ]
         } ]
       } ],
@@ -37454,13 +36430,7 @@
     } ],
     "goalStats" : [ ],
     "goalNotes" : [ ],
-    "recommendedWeapons" : [ {
-      "rank" : 1,
-      "name" : "Weapons",
-      "url" : "https://game8.co/games/Genshin-Impact/archives/590328#hl_3",
-      "category" : null,
-      "obtainMethod" : null
-    } ],
+    "recommendedWeapons" : [ ],
     "recommendedTeams" : [ {
       "name" : "Hexerei Teams",
       "lineups" : [ {
@@ -37468,15 +36438,13 @@
           "role" : "Slot 1",
           "members" : [ {
             "name" : "Prune",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Slot 2",
           "members" : [ {
             "name" : "Varka",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314346",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/314346"
           }, {
             "name" : "Venti",
             "url" : "https://game8.co/games/Genshin-Impact/archives/Venti-Best-Builds",
@@ -37490,8 +36458,7 @@
           "role" : "Slot 3",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           }, {
             "name" : "Fischl",
             "url" : "https://game8.co/games/Genshin-Impact/archives/297524",
@@ -37501,8 +36468,7 @@
           "role" : "Slot 4",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         } ]
       } ],
@@ -37514,8 +36480,7 @@
           "role" : "Slot 1",
           "members" : [ {
             "name" : "Prune",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Slot 2",
@@ -37547,8 +36512,7 @@
             "characterKey" : "kirara"
           }, {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         } ]
       } ],
@@ -37689,8 +36653,7 @@
           "role" : "Slot 2",
           "members" : [ {
             "name" : "Sandrone",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382107",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382107"
           } ]
         }, {
           "role" : "Slot 3",
@@ -37707,8 +36670,7 @@
           "role" : "Slot 4",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           }, {
             "name" : "Xilonen",
             "url" : "https://game8.co/games/Genshin-Impact/archives/461997",
@@ -38754,8 +37716,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         }, {
           "role" : "Support",
@@ -38825,8 +37786,7 @@
           "role" : "Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         } ]
       }, {
@@ -38848,15 +37808,13 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Jahoda",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/538446",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/538446"
           } ]
         }, {
           "role" : "Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         } ]
       } ],
@@ -39758,66 +38716,72 @@
     "goalNotes" : [ "Sandrone wants as much ATK as possible, with 2,000 ATK being a good stopping point to cap out her A4 passive. 125 ~ 145% Energy Recharge to consistently use her Burst every rotation before prioritizing the rest of the remaining stats.", "Sandrone has an abundance of CRIT Rate from her Ascension stat and other sources, which allows her to prioritize CRIT DMG instead. Elemental Mastery is less of a priority because of her A4 passive. Nonetheless, it is still great to have EM if you see it in your substats." ],
     "recommendedWeapons" : [ {
       "rank" : 1,
+      "name" : "Forged by the Golden Melody",
+      "url" : "https://game8.co/games/Genshin-Impact/archives/613902",
+      "category" : "Other Claymores for Sandrone",
+      "obtainMethod" : "Battle Pass"
+    }, {
+      "rank" : 2,
       "name" : "A Teaspoon of Transcendence",
       "url" : "https://game8.co/games/Genshin-Impact/archives/605434",
       "category" : "Other Claymores for Sandrone",
       "obtainMethod" : "Gacha"
     }, {
-      "rank" : 2,
+      "rank" : 3,
       "name" : "A Thousand Blazing Suns",
       "url" : "https://game8.co/games/Genshin-Impact/archives/491933",
       "category" : "Other Claymores for Sandrone",
       "obtainMethod" : "Gacha"
     }, {
-      "rank" : 3,
+      "rank" : 4,
       "name" : "Redhorn Stonethresher",
       "url" : "https://game8.co/games/Genshin-Impact/archives/349600",
       "category" : "Other Claymores for Sandrone",
       "obtainMethod" : "Gacha"
     }, {
-      "rank" : 4,
+      "rank" : 5,
       "name" : "Beacon of the Reed Sea",
       "url" : "https://game8.co/games/Genshin-Impact/archives/405238",
       "category" : "Other Claymores for Sandrone",
       "obtainMethod" : "Gacha"
     }, {
-      "rank" : 5,
+      "rank" : 6,
       "name" : "Gest of the Mighty Wolf",
       "url" : "https://game8.co/games/Genshin-Impact/archives/580687",
       "category" : "Other Claymores for Sandrone",
       "obtainMethod" : "Gacha"
     }, {
-      "rank" : 6,
+      "rank" : 7,
       "name" : "Verdict",
       "url" : "https://game8.co/games/Genshin-Impact/archives/436072",
       "category" : "Other Claymores for Sandrone",
       "obtainMethod" : "Gacha"
     }, {
-      "rank" : 7,
+      "rank" : 8,
       "name" : "Mailed Flower",
       "url" : "https://game8.co/games/Genshin-Impact/archives/405248",
       "category" : "Other Claymores for Sandrone",
       "obtainMethod" : "Event"
     }, {
-      "rank" : 8,
+      "rank" : 9,
       "name" : "Tidal Shadow",
       "url" : "https://game8.co/games/Genshin-Impact/archives/420288",
       "category" : "Other Claymores for Sandrone",
       "obtainMethod" : "Crafted"
     }, {
-      "rank" : 9,
+      "rank" : 10,
       "name" : "Lithic Blade",
       "url" : "https://game8.co/games/Genshin-Impact/archives/317260",
       "category" : "Other Claymores for Sandrone",
       "obtainMethod" : "Gacha"
     }, {
-      "rank" : 10,
+      "rank" : 11,
       "name" : "Wolf's Gravestone",
       "url" : "https://game8.co/games/Genshin-Impact/archives/304631",
       "category" : "Other Claymores for Sandrone",
       "obtainMethod" : "Gacha"
     }, {
-      "rank" : 11,
+      "rank" : 12,
       "name" : "Ultimate Overlord's Mega Magic Sword",
       "url" : "https://game8.co/games/Genshin-Impact/archives/436076",
       "category" : "Other Claymores for Sandrone",
@@ -39830,8 +38794,7 @@
           "role" : "Slot 1",
           "members" : [ {
             "name" : "Sandrone",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Slot 2",
@@ -39847,9 +38810,8 @@
         }, {
           "role" : "Slot 3",
           "members" : [ {
-            "name" : "Qiqi",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/297533",
-            "characterKey" : "qiqi"
+            "name" : "Odette",
+            "url" : "https://game8.co/games/Genshin-Impact/archives/606893"
           }, {
             "name" : "Escoffier",
             "url" : "https://game8.co/games/Genshin-Impact/archives/385307",
@@ -39859,12 +38821,11 @@
           "role" : "Slot 4",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           } ]
         } ]
       } ],
-      "notes" : [ "C1 Yae Miko is her best teammate so far with the massive Stellar-Conduct DMG buff that she provides. Qiqi can provide particles and buff Stellar-Conduct DMG. Nicole cannot make use of Celestial Gift, as there are no other Hexerei members in it. Nonetheless, her shield and teamwide ATK buff can more than justify her placement in the team." ]
+      "notes" : [ "C1 Yae Miko is her best teammate so far with the massive Stellar-Conduct DMG buff that she provides. Odette can significantly buff Stellar-Glimmer DMG. Nicole cannot make use of Celestial Gift, as there are no other Hexerei members in it. Nonetheless, her shield and teamwide ATK buff can more than justify her placement in the team." ]
     } ]
   }, {
     "id" : "kujousara-subdps-1",
@@ -43664,8 +42625,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         }, {
           "role" : "Support",
@@ -46900,8 +45860,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Support",
@@ -47025,13 +45984,7 @@
       } ]
     } ],
     "goalNotes" : [ "Varka wants as close to 3,000 ATK as possible, then as much CRIT Rate and CRIT DMG afterwards, with CRIT Rate being at its max at 80% and CRIT DMG above 200%.", "If his Elemental Burst is within your damage rotation, then get his Energy Recharge to 130% since this, combined with another Anemo unit, should be enough to let Varka use his almost every other rotation." ],
-    "recommendedWeapons" : [ {
-      "rank" : 1,
-      "name" : "Weapons",
-      "url" : "https://game8.co/games/Genshin-Impact/archives/314346#hl_3",
-      "category" : null,
-      "obtainMethod" : null
-    } ],
+    "recommendedWeapons" : [ ],
     "recommendedTeams" : [ {
       "name" : "Hexerei Mono-Pyro Teams",
       "lineups" : [ {
@@ -47039,15 +45992,13 @@
           "role" : "Slot 1",
           "members" : [ {
             "name" : "Varka",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Slot 2",
           "members" : [ {
             "name" : "Prune",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/590328",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/590328"
           }, {
             "name" : "Venti",
             "url" : "https://game8.co/games/Genshin-Impact/archives/Venti-Best-Builds",
@@ -47061,8 +46012,7 @@
           "role" : "Slot 3",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           }, {
             "name" : "Bennett",
             "url" : "https://game8.co/games/Genshin-Impact/archives/Bennett-Best-Builds",
@@ -47072,8 +46022,7 @@
           "role" : "Slot 4",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           }, {
             "name" : "Xiangling",
             "url" : "https://game8.co/games/Genshin-Impact/archives/297530",
@@ -47089,8 +46038,7 @@
           "role" : "Slot 1",
           "members" : [ {
             "name" : "Varka",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Slot 2",
@@ -47139,8 +46087,7 @@
           "role" : "Slot 1",
           "members" : [ {
             "name" : "Varka",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Slot 2",
@@ -47181,8 +46128,7 @@
           "role" : "Slot 1",
           "members" : [ {
             "name" : "Varka",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Slot 2",
@@ -47358,8 +46304,7 @@
           "role" : "Main-DPS",
           "members" : [ {
             "name" : "Varka",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314346",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/314346"
           } ]
         }, {
           "role" : "Sub DPS",
@@ -47372,15 +46317,13 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           } ]
         } ]
       }, {
@@ -47402,8 +46345,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -47651,8 +46593,7 @@
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Mizuki",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/492414",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/492414"
           } ]
         }, {
           "role" : "Sub-DPS",
@@ -47903,8 +46844,7 @@
           "role" : "Main-DPS",
           "members" : [ {
             "name" : "Varka",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/314346",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/314346"
           } ]
         }, {
           "role" : "Sub DPS",
@@ -47917,15 +46857,13 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           } ]
         } ]
       }, {
@@ -47947,8 +46885,7 @@
           "role" : "Sub-DPS",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -48196,8 +47133,7 @@
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Mizuki",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/492414",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/492414"
           } ]
         }, {
           "role" : "Sub-DPS",
@@ -48489,15 +47425,13 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           } ]
         }, {
           "role" : "Support",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           } ]
         } ]
       }, {
@@ -48902,66 +47836,72 @@
     "goalNotes" : [ "Wriothesley wants to focus on getting his ATK to around 2,000 with 2,100 being the sweet spot, and CRIT Rate to around 50% under Marechaussee to give him enough room to hit CRIT attacks.", "The rest of his stats should go into CRIT DMG to boost his personal damage further, with ER being taken to 130% at most if you want to use his Elemental Burst almost every rotation." ],
     "recommendedWeapons" : [ {
       "rank" : 1,
+      "name" : "Clash of Kings",
+      "url" : "https://game8.co/games/Genshin-Impact/archives/613904",
+      "category" : "All Recommended Weapons for Wriothesley",
+      "obtainMethod" : "Battle Pass"
+    }, {
+      "rank" : 2,
       "name" : "Cashflow Supervision",
       "url" : "https://game8.co/games/Genshin-Impact/archives/408469",
       "category" : "All Recommended Weapons for Wriothesley",
       "obtainMethod" : "Gacha"
     }, {
-      "rank" : 2,
+      "rank" : 3,
       "name" : "Tulaytullah's Remembrance",
       "url" : "https://game8.co/games/Genshin-Impact/archives/397860",
       "category" : "All Recommended Weapons for Wriothesley",
       "obtainMethod" : "Gacha"
     }, {
-      "rank" : 3,
+      "rank" : 4,
       "name" : "Lost Prayer to the Sacred Winds",
       "url" : "https://game8.co/games/Genshin-Impact/archives/304619",
       "category" : "All Recommended Weapons for Wriothesley",
       "obtainMethod" : "Gacha"
     }, {
-      "rank" : 4,
+      "rank" : 5,
       "name" : "The Widsith",
       "url" : "https://game8.co/games/Genshin-Impact/archives/301944",
       "category" : "All Recommended Weapons for Wriothesley",
       "obtainMethod" : "Gacha"
     }, {
-      "rank" : 5,
+      "rank" : 6,
       "name" : "Flowing Purity",
       "url" : "https://game8.co/games/Genshin-Impact/archives/420290",
       "category" : "All Recommended Weapons for Wriothesley",
       "obtainMethod" : "Crafted"
     }, {
-      "rank" : 6,
+      "rank" : 7,
       "name" : "Skyward Atlas",
       "url" : "https://game8.co/games/Genshin-Impact/archives/304620",
       "category" : "All Recommended Weapons for Wriothesley",
       "obtainMethod" : "Gacha"
     }, {
-      "rank" : 7,
+      "rank" : 8,
       "name" : "Solar Pearl",
       "url" : "https://game8.co/games/Genshin-Impact/archives/304618",
       "category" : "All Recommended Weapons for Wriothesley",
       "obtainMethod" : "Battle Pass"
     }, {
-      "rank" : 8,
+      "rank" : 9,
       "name" : "Dodoco Tales",
       "url" : "https://game8.co/games/Genshin-Impact/archives/332845",
       "category" : "All Recommended Weapons for Wriothesley",
       "obtainMethod" : "Event"
     }, {
-      "rank" : 9,
+      "rank" : 10,
       "name" : "Blackcliff Agate",
       "url" : "https://game8.co/games/Genshin-Impact/archives/304616",
       "category" : "All Recommended Weapons for Wriothesley",
       "obtainMethod" : "Starglitter Exchange"
     }, {
-      "rank" : 10,
+      "rank" : 11,
       "name" : "Frostbearer",
       "url" : "https://game8.co/games/Genshin-Impact/archives/314341",
       "category" : "All Recommended Weapons for Wriothesley",
       "obtainMethod" : "Crafted"
     }, {
-      "rank" : 11,
+      "rank" : 12,
       "name" : "Royal Grimoire",
       "url" : "https://game8.co/games/Genshin-Impact/archives/304621",
       "category" : "All Recommended Weapons for Wriothesley",
@@ -48981,8 +47921,10 @@
           "role" : "Slot 2",
           "members" : [ {
             "name" : "Sandrone",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382107",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382107"
+          }, {
+            "name" : "Odette",
+            "url" : "https://game8.co/games/Genshin-Impact/archives/606893"
           } ]
         }, {
           "role" : "Slot 3",
@@ -49008,7 +47950,7 @@
           } ]
         } ]
       } ],
-      "notes" : [ "Wriothesley can serve as a Stellar-Conduct driver thanks to Sandrone, and paired with other Stellar-Conduct notable members like Yae Miko, Beidou, Qiqi, and Diona." ]
+      "notes" : [ "Wriothesley can serve as a Stellar-Conduct driver thanks to Odette and Sandrone, and paired with other Stellar-Conduct notable members like Yae Miko, Beidou, Qiqi, and Diona." ]
     }, {
       "name" : "Freeze Teams",
       "lineups" : [ {
@@ -49085,8 +48027,7 @@
             "characterKey" : "xiangling"
           }, {
             "name" : "Durin",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/462478",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/462478"
           }, {
             "name" : "Emilie",
             "url" : "https://game8.co/games/Genshin-Impact/archives/422493",
@@ -49100,8 +48041,7 @@
             "characterKey" : "bennett"
           }, {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           }, {
             "name" : "Xilonen",
             "url" : "https://game8.co/games/Genshin-Impact/archives/461997",
@@ -49471,8 +48411,7 @@
             "characterKey" : "alhaitham"
           }, {
             "name" : "Lohen",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/580697",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/580697"
           } ]
         }, {
           "role" : "Slot 4",
@@ -49662,8 +48601,7 @@
           "role" : "Support/ Sub-DPS",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           } ]
         } ]
       }, {
@@ -51786,8 +50724,7 @@
           "role" : "Slot 2",
           "members" : [ {
             "name" : "Sandrone",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382107",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382107"
           } ]
         }, {
           "role" : "Slot 3",
@@ -51804,8 +50741,7 @@
           "role" : "Slot 4",
           "members" : [ {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           }, {
             "name" : "Xilonen",
             "url" : "https://game8.co/games/Genshin-Impact/archives/461997",
@@ -51889,8 +50825,7 @@
             "characterKey" : "kujousara"
           }, {
             "name" : "Nicole",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/406932",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/406932"
           } ]
         }, {
           "role" : "Slot 4",
@@ -55093,29 +54028,25 @@
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Zibai",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/555902",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/555902"
           } ]
         }, {
           "role" : "Support",
           "members" : [ {
             "name" : "Linnea",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/551088",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/551088"
           } ]
         } ]
       }, {
@@ -55123,22 +54054,19 @@
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Zibai",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/555902",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/555902"
           } ]
         }, {
           "role" : "Support",
@@ -55153,8 +54081,7 @@
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Zibai",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -55167,15 +54094,13 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Illuga",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/555902",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/555902"
           } ]
         }, {
           "role" : "Support",
           "members" : [ {
             "name" : "Linnea",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/551088",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/551088"
           } ]
         } ]
       }, {
@@ -55183,8 +54108,7 @@
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Zibai",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -55197,8 +54121,7 @@
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Columbina",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/382106",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/382106"
           } ]
         }, {
           "role" : "Support",
@@ -55217,8 +54140,7 @@
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Zibai",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -55247,8 +54169,7 @@
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Zibai",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
@@ -55277,15 +54198,13 @@
           "role" : "Main DPS",
           "members" : [ {
             "name" : "Zibai",
-            "url" : null,
-            "characterKey" : null
+            "url" : null
           } ]
         }, {
           "role" : "Sub-DPS/ Support",
           "members" : [ {
             "name" : "Jahoda",
-            "url" : "https://game8.co/games/Genshin-Impact/archives/538446",
-            "characterKey" : null
+            "url" : "https://game8.co/games/Genshin-Impact/archives/538446"
           } ]
         }, {
           "role" : "Sub-DPS/ Support",

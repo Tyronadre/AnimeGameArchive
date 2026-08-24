@@ -3,8 +3,8 @@ package de.tyro.genshinapp
 import de.tyro.genshinapp.configuration.DesktopUserProvider
 import de.tyro.genshinapp.model.TravelerElement
 import de.tyro.genshinapp.repository.UserRepository
-import de.tyro.genshinapp.service.CharacterTargetService
-import de.tyro.genshinapp.service.TravelerService
+import de.tyro.genshinapp.service.planning.CharacterTargetService
+import de.tyro.genshinapp.service.player.TravelerService
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc

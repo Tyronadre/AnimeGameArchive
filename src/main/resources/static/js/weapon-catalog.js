@@ -13,8 +13,52 @@ const initializeWeaponCatalog = () => {
     );
     if (!search || !clearSearch || !resultCount || !emptyState || !cards.length) return;
 
-    const state = {type: "all", ownership: "all", query: ""};
+    const storageKey = "genshinapp.weaponCatalog.filters";
+    const typeValues = new Set(typeButtons.map((button) => button.dataset.typeFilter));
+    const ownershipValues = new Set(
+        ownershipButtons.map((button) => button.dataset.ownershipFilter),
+    );
     const normalize = (value) => (value || "").trim().toLocaleLowerCase();
+    const validatedState = (candidate = {}) => ({
+        type: typeValues.has(candidate.type) ? candidate.type : "all",
+        ownership: ownershipValues.has(candidate.ownership) ? candidate.ownership : "all",
+        query: typeof candidate.query === "string" ? candidate.query : "",
+    });
+    const storedState = (() => {
+        try {
+            return JSON.parse(sessionStorage.getItem(storageKey) || "{}");
+        } catch (_) {
+            return {};
+        }
+    })();
+    const urlParameters = new URLSearchParams(window.location.search);
+    const hasUrlState = ["type", "ownership", "query"].some((key) =>
+        urlParameters.has(key),
+    );
+    const state = validatedState(hasUrlState ? {
+        type: urlParameters.get("type") || "all",
+        ownership: urlParameters.get("ownership") || "all",
+        query: urlParameters.get("query") || "",
+    } : storedState);
+
+    const persistState = () => {
+        try {
+            sessionStorage.setItem(storageKey, JSON.stringify(state));
+        } catch (_) {
+            // URL state still preserves the filters if session storage is unavailable.
+        }
+
+        const url = new URL(window.location.href);
+        [["type", state.type, "all"], ["ownership", state.ownership, "all"]]
+            .forEach(([key, value, defaultValue]) => {
+                if (value === defaultValue) url.searchParams.delete(key);
+                else url.searchParams.set(key, value);
+            });
+        const query = state.query.trim();
+        if (query) url.searchParams.set("query", query);
+        else url.searchParams.delete("query");
+        window.history.replaceState(window.history.state, "", url);
+    };
 
     const setActive = (buttons, activeButton) => {
         buttons.forEach((button) => {
@@ -31,8 +75,9 @@ const initializeWeaponCatalog = () => {
             const ownershipMatches = state.ownership === "all" ||
                 (state.ownership === "owned" && card.dataset.owned === "true") ||
                 (state.ownership === "unowned" && card.dataset.owned === "false");
-            const searchMatches = !state.query ||
-                normalize(card.dataset.search).includes(state.query);
+            const normalizedQuery = normalize(state.query);
+            const searchMatches = !normalizedQuery ||
+                normalize(card.dataset.search).includes(normalizedQuery);
             const matches = typeMatches && ownershipMatches && searchMatches;
             card.hidden = !matches;
             if (matches) visible += 1;
@@ -44,6 +89,7 @@ const initializeWeaponCatalog = () => {
         resultCount.textContent = `${visible} ${noun}`;
         emptyState.hidden = visible !== 0;
         clearSearch.hidden = !search.value;
+        persistState();
     };
 
     typeButtons.forEach((button) => {
@@ -63,7 +109,7 @@ const initializeWeaponCatalog = () => {
     });
 
     const updateSearch = () => {
-        state.query = normalize(search.value);
+        state.query = search.value;
         applyFilters();
     };
 
@@ -84,6 +130,16 @@ const initializeWeaponCatalog = () => {
         search.focus();
         applyFilters();
     });
+
+    search.value = state.query;
+    setActive(
+        typeButtons,
+        typeButtons.find((button) => button.dataset.typeFilter === state.type),
+    );
+    setActive(
+        ownershipButtons,
+        ownershipButtons.find((button) => button.dataset.ownershipFilter === state.ownership),
+    );
 
     cards.forEach((card) => {
         const alignPopover = () => {

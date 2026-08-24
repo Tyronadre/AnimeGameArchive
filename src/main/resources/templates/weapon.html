@@ -217,7 +217,7 @@
                                   data-current-level=${copy.level},
                                   data-current-ascension=${copy.ascension},
                                   data-save-url=${copy.saveUrl}">
-                    <div class="weapon-copy-owner-block">
+                    <a class="weapon-copy-owner-block" th:href="${copy.ownerHref}">
                         <span class="weapon-copy-owner-icon" aria-hidden="true">
                             <span>✦</span>
                             <img th:if="${copy.ownerIconUrl != null}" th:src="${copy.ownerIconUrl}"
@@ -236,7 +236,7 @@
                                    th:attr="title=#{weapon.detail.locked}">◆</i>
                             </span>
                         </div>
-                    </div>
+                    </a>
 
                     <div class="weapon-copy-picker-block">
                         <small th:text="#{weapon.detail.ascensionTarget}">Ascension target</small>

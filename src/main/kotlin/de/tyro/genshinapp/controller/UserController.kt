@@ -3,8 +3,8 @@ package de.tyro.genshinapp.controller
 import de.tyro.genshinapp.configuration.GenshinRuntimeProperties
 import de.tyro.genshinapp.configuration.LocalizedMessages
 import de.tyro.genshinapp.security.AppUserPrincipal
-import de.tyro.genshinapp.service.RegistrationException
-import de.tyro.genshinapp.service.UserService
+import de.tyro.genshinapp.service.account.RegistrationException
+import de.tyro.genshinapp.service.account.UserService
 import org.springframework.security.authentication.AnonymousAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.annotation.AuthenticationPrincipal

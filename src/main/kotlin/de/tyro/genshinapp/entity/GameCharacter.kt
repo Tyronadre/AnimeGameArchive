@@ -1,8 +1,11 @@
 package de.tyro.genshinapp.entity
 
+import de.tyro.genshinapp.model.FightProperty
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -48,13 +51,18 @@ class GameCharacter {
 
     var constellation: String? = null
 
-    var ascensionStatType: String? = null
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ascension_stat_type", length = 96)
+    var ascensionStatType: FightProperty? = null
 
     @Column(name = "image_resource_key", length = 96)
     var imageResourceKey: String? = null
 
     @Column(name = "talent_resource_key", length = 96)
     var talentResourceKey: String? = null
+
+    @Column(name = "hoyolab_entry_id")
+    var hoyolabEntryId: Long? = null
 
     @OneToMany(mappedBy = "character", cascade = [CascadeType.ALL], orphanRemoval = true)
     @OrderBy("imageType ASC")

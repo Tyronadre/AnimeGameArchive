@@ -13,7 +13,7 @@ data class CharacterDefinition(
     val affiliation: String?,
     val region: String?,
     val constellation: String?,
-    val ascensionStatType: String?,
+    val ascensionStatType: FightProperty?,
     val imageUrls: Map<CharacterImageType, String>,
     val remoteImageUrls: Map<CharacterImageType, String>,
     val ascensionCosts: Map<Int, List<MaterialCost>>,
@@ -21,6 +21,7 @@ data class CharacterDefinition(
     val talents: List<CharacterTalent> = emptyList(),
     val imageResourceKey: String = key,
     val talentResourceKey: String = key,
+    val hoyolabEntryId: Long? = null,
 ) {
     val iconImageUrl: String?
         get() = imageUrls[CharacterImageType.ICON]
