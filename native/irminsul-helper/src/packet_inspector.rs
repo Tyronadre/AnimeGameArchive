@@ -105,7 +105,7 @@ impl PacketInspectionLogger {
             fields,
         };
         self.write_event(&event);
-        if self.sequence % 20 == 0 {
+        if self.sequence.is_multiple_of(20) {
             let _ = self.writer.flush();
         }
     }

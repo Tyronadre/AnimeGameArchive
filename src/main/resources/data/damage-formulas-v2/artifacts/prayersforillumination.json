@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 2,
+  "key": "prayersforillumination",
+  "name": "Prayers for Illumination",
+  "inputs": [],
+  "effects": [
+    {
+      "pieces": 1,
+      "recipient": "wearer",
+      "effect": {
+        "id": "1pc",
+        "name": "1-piece · Pyro status duration",
+        "source": "Artifact set",
+        "description": "Reduces the time the wearer is affected by Pyro by 40%. Does not reduce enemy auras or increase damage.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [],
+        "metrics": [
+          {
+            "label": "Status duration multiplier",
+            "expression": {
+              "type": "constant",
+              "value": 0.6
+            },
+            "unit": "ratio",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: prayersforillumination",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

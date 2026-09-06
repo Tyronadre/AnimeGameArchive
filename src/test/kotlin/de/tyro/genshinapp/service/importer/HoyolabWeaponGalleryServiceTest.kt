@@ -3,6 +3,7 @@ package de.tyro.genshinapp.service.importer
 import de.tyro.genshinapp.service.catalog.WeaponCatalogService
 import de.tyro.genshinapp.service.catalog.WeaponCatalogStore
 import de.tyro.genshinapp.service.catalog.WeaponDefinition
+import de.tyro.genshinapp.service.catalog.MaterialCatalogService
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
@@ -180,11 +181,16 @@ class HoyolabWeaponGalleryServiceTest {
         val store = InMemoryWeaponCatalogStore(
             WeaponDefinition(key = "skywardblade", name = "Skyward Blade", rarity = 5),
         )
-        val catalog = WeaponCatalogService(mapper, store)
+        val catalog = WeaponCatalogService(store)
         val properties = GenshinContentProperties().also {
             it.hoyolabWikiApiUrl = "http://127.0.0.1:${testServer.address.port}"
         }
-        val service = HoyolabWeaponGalleryService(mapper, properties, catalog)
+        val service = HoyolabWeaponGalleryService(
+            mapper,
+            properties,
+            catalog,
+            MaterialCatalogService(),
+        )
 
         val first = assertNotNull(service.enrich("SkywardBlade"))
         val second = assertNotNull(service.enrich("skywardblade"))

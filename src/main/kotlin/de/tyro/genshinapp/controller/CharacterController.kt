@@ -3,6 +3,7 @@ package de.tyro.genshinapp.controller
 import de.tyro.genshinapp.service.catalog.WeaponDefinition
 import de.tyro.genshinapp.service.planning.SavedWeaponTarget
 import de.tyro.genshinapp.configuration.LocalizedMessages
+import de.tyro.genshinapp.model.CharacterDefinition
 import de.tyro.genshinapp.model.CharacterProgressForm
 import de.tyro.genshinapp.model.CharacterTalentKind
 import de.tyro.genshinapp.model.GoodKeyNormalizer
@@ -13,6 +14,7 @@ import de.tyro.genshinapp.security.AppUserPrincipal
 import de.tyro.genshinapp.service.catalog.ArtifactCatalogService
 import de.tyro.genshinapp.service.artifact.ArtifactOptimizationService
 import de.tyro.genshinapp.service.catalog.CharacterCatalogService
+import de.tyro.genshinapp.service.content.FandomImageUrlResolver
 import de.tyro.genshinapp.service.planning.CharacterTargetService
 import de.tyro.genshinapp.service.planning.CharacterWeaponTargetService
 import de.tyro.genshinapp.service.player.PlayerEquipmentService
@@ -22,7 +24,10 @@ import de.tyro.genshinapp.service.player.TravelerService
 import de.tyro.genshinapp.service.artifact.OptimizerCombatStatService
 import de.tyro.genshinapp.service.catalog.WeaponCatalogService
 import de.tyro.genshinapp.service.catalog.WeaponDataService
+import de.tyro.genshinapp.service.importer.HoyolabCharacterPageService
 import de.tyro.genshinapp.service.planning.WeaponPlanningService
+import de.tyro.genshinapp.service.damage.DamageCalculatorService
+import de.tyro.genshinapp.service.damage.v2.DamageFormulaServiceV2
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
@@ -52,7 +57,18 @@ class CharacterController(
     private val weaponPlanningService: WeaponPlanningService,
     private val travelerService: TravelerService,
     private val messages: LocalizedMessages,
+    private val damageCalculatorService: DamageCalculatorService,
+    private val damageFormulaServiceV2: DamageFormulaServiceV2,
+    private val hoyolabCharacterPageService: HoyolabCharacterPageService,
+    private val fandomImageUrlResolver: FandomImageUrlResolver,
 ) {
+    @GetMapping("/api/characters/{key}", "/characters/{key}/json")
+    @ResponseBody
+    fun characterJson(@PathVariable key: String): CharacterDefinition =
+        hoyolabCharacterPageService.enrichExact(key)
+            ?: catalogService.findCharacter(key)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Character not found")
+
     @GetMapping("/characters")
     fun characters(
         @RequestParam(required = false, defaultValue = "") query: String,
@@ -71,22 +87,6 @@ class CharacterController(
                     character
                 }
             }
-            .filter {
-                normalizedQuery.isBlank() ||
-                    it.name.contains(normalizedQuery, ignoreCase = true) ||
-                    it.element?.contains(normalizedQuery, ignoreCase = true) == true ||
-                    it.region?.contains(normalizedQuery, ignoreCase = true) == true ||
-                    (
-                        it.key == TravelerIdentity.KEY &&
-                            (
-                                TravelerElement.entries.any { element ->
-                                    element.displayName.contains(normalizedQuery, ignoreCase = true)
-                                } || TravelerAppearance.entries.any { appearance ->
-                                    appearance.key.contains(normalizedQuery, ignoreCase = true)
-                                }
-                            )
-                        )
-            }
         val snapshot = snapshotStore.current(principal.id)
         val ownershipOverrides = targetService.ownershipOverrides(principal.id)
         val ownershipByCharacter = characters.associate { character ->
@@ -96,11 +96,37 @@ class CharacterController(
             } ?: false
             character.key to (ownershipOverrides[normalizedKey] ?: importedOwnership)
         }
+        val characterCards = characters.map { character ->
+            CharacterCatalogCard(
+                character = character,
+                owned = ownershipByCharacter[character.key] == true,
+                elementKey = GoodKeyNormalizer.normalize(character.element.orEmpty()),
+                elementIconUrl = character.element
+                    ?.let { element -> ELEMENT_NAMES.firstOrNull { it.equals(element, true) } }
+                    ?.let(fandomImageUrlResolver::elementIconUrl),
+                weaponTypeKey = weaponTypeKey(character.weapon),
+                searchText = buildList {
+                    add(character.name)
+                    character.title?.let(::add)
+                    character.element?.let(::add)
+                    character.region?.let(::add)
+                    character.weapon?.let(::add)
+                    character.affiliation?.let(::add)
+                    if (character.key == TravelerIdentity.KEY) {
+                        addAll(TravelerElement.entries.map(TravelerElement::displayName))
+                        addAll(TravelerAppearance.entries.map(TravelerAppearance::key))
+                    }
+                }.joinToString(" "),
+            )
+        }
 
         model.addAttribute("characters", characters)
+        model.addAttribute("characterCards", characterCards)
         model.addAttribute("ownershipByCharacter", ownershipByCharacter)
+        model.addAttribute("elementFilters", elementFilterOptions())
+        model.addAttribute("characterWeaponFilters", weaponFilterOptions())
         model.addAttribute("query", normalizedQuery)
-        model.addAttribute("totalCharacters", catalogService.getCharacters().size)
+        model.addAttribute("totalCharacters", characters.size)
         return "home"
     }
 
@@ -120,10 +146,14 @@ class CharacterController(
                 return "redirect:/characters/${TravelerIdentity.KEY}"
             }
 
+        hoyolabCharacterPageService.enrichExact(normalizedRouteKey)
         val baseCharacter = catalogService.findCharacter(key)
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Character not found")
         val travelerSelection = travelerService.selection(principal.id)
         val isTraveler = baseCharacter.key == TravelerIdentity.KEY
+        if (isTraveler) {
+            hoyolabCharacterPageService.enrichExact(travelerSelection.element.variantKey)
+        }
         val character = if (isTraveler) {
             catalogService.findTraveler(
                 travelerSelection.element,
@@ -236,6 +266,14 @@ class CharacterController(
             artifactCatalogService.imageUrls(equipment?.artifacts.orEmpty()),
         )
         model.addAttribute("inventoryAvailable", snapshot != null)
+        model.addAttribute(
+            "damageCalculatorAvailable",
+            damageCalculatorService.supports(character.key),
+        )
+        model.addAttribute(
+            "damageFormulaV2Available",
+            damageFormulaServiceV2.supports(character.key),
+        )
         model.addAttribute(
             "materials",
             planningService.calculateBalances(character, progress, snapshot),
@@ -399,7 +437,67 @@ class CharacterController(
             }
         }
 
+    private fun elementFilterOptions(): List<CharacterCatalogFilterOption> =
+        ELEMENT_NAMES.map { element ->
+            CharacterCatalogFilterOption(
+                key = GoodKeyNormalizer.normalize(element),
+                label = element,
+                imageUrl = fandomImageUrlResolver.elementIconUrl(element),
+            )
+        }
+
+    private fun weaponFilterOptions(): List<CharacterCatalogFilterOption> =
+        WEAPON_TYPES.map { (key, name) ->
+            CharacterCatalogFilterOption(
+                key = key,
+                label = messages.get("weapons.type.$key"),
+                imageUrl = fandomImageUrlResolver.weaponTypeIconUrl(name),
+            )
+        }
+
+    private fun weaponTypeKey(type: String?): String = when (
+        GoodKeyNormalizer.normalize(type.orEmpty())
+    ) {
+        "sword", "onehandedsword" -> "sword"
+        "claymore", "twohandedsword" -> "claymore"
+        "polearm" -> "polearm"
+        "catalyst" -> "catalyst"
+        "bow" -> "bow"
+        else -> "unknown"
+    }
+
     companion object {
         private const val MAX_ADDITIONAL_STAT = 100_000.0
+        private val ELEMENT_NAMES = listOf(
+            "Anemo",
+            "Geo",
+            "Electro",
+            "Dendro",
+            "Hydro",
+            "Pyro",
+            "Cryo",
+        )
+        private val WEAPON_TYPES = listOf(
+            "sword" to "Sword",
+            "claymore" to "Claymore",
+            "polearm" to "Polearm",
+            "catalyst" to "Catalyst",
+            "bow" to "Bow",
+        )
     }
 }
+
+data class CharacterCatalogFilterOption(
+    val key: String,
+    val label: String,
+    val imageUrl: String,
+)
+
+data class CharacterCatalogCard(
+    val character: CharacterDefinition,
+    val owned: Boolean,
+    val elementKey: String,
+    val elementIconUrl: String?,
+    val weaponTypeKey: String,
+    val searchText: String,
+)

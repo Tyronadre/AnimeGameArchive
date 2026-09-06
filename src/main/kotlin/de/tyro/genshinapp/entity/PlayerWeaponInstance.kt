@@ -35,6 +35,9 @@ class PlayerWeaponInstance {
     @JoinColumn(name = "weapon_id", nullable = false)
     lateinit var weapon: GameWeapon
 
+    @Column(name = "export_key", length = 96)
+    var exportKey: String? = null
+
     @Column(name = "import_position", nullable = false)
     var importPosition: Int = 0
 

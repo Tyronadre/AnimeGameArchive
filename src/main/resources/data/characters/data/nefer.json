@@ -9,6 +9,7 @@
   "gender" : "Female",
   "qualityType" : "QUALITY_ORANGE",
   "rarity" : 5,
+  "attackBase" : 26.8128,
   "birthdaymmdd" : "5/9",
   "birthday" : "May 9",
   "elementType" : "ELEMENT_DENDRO",

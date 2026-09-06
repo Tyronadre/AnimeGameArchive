@@ -1,0 +1,64 @@
+{
+  "inputs": [
+    {
+      "id": "dendroResonanceBloomActive",
+      "label": "Dendro resonance: recent Bloom-related reaction",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1,
+      "section": "combat",
+      "description": "Adds the 30 EM reaction-triggered portion for 6 seconds; toggle off before the reaction."
+    }
+  ],
+  "effects": [
+    {
+      "id": "dendroResonance",
+      "name": "Sprawling Greenery",
+      "source": "Team · Dendro resonance",
+      "description": "With four party members and at least two Dendro characters, grants 50 EM to the team. A recent Bloom-related reaction grants another 30 EM. The separate Quicken/Hyperbloom-related 20 EM is not assumed for this team.",
+      "category": "team",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "teamComposition",
+        "conditions": [
+          {
+            "type": "contextAtLeast",
+            "input": "teamSize",
+            "value": 4
+          },
+          {
+            "type": "contextAtLeast",
+            "input": "dendroCount",
+            "value": 2
+          }
+        ]
+      },
+      "statChanges": [
+        {
+          "stat": "team:elementalMastery",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 50
+          }
+        },
+        {
+          "stat": "team:elementalMastery",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 30
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "dendroResonanceBloomActive",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

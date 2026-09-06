@@ -88,6 +88,19 @@ class TravelerService(
         saveImportedProgress(userId, element, state)
     }
 
+    @Transactional
+    fun replaceImportedProgress(userId: Long, snapshot: PlayerSnapshot) {
+        val storedProgress = progressRepository.findAllByUser_Id(userId)
+        storedProgress.forEach { progress ->
+            progress.currentConstellation = null
+            progress.currentNormalTalent = null
+            progress.currentSkillTalent = null
+            progress.currentBurstTalent = null
+        }
+        progressRepository.saveAll(storedProgress)
+        importSnapshot(userId, snapshot)
+    }
+
     private fun saveImportedProgress(
         userId: Long,
         element: TravelerElement,

@@ -1,0 +1,871 @@
+.damage-calculator-v2-page {
+    min-width: 1120px;
+}
+
+/* Desktop-only, read-only source builds. These never use the live input state. */
+.damage-stored-team {
+    position: relative;
+    margin-bottom: 1.2rem;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: var(--surface);
+    overflow: visible;
+}
+
+.damage-stored-team[hidden] { display: none; }
+.damage-stored-team-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 1.2rem;
+}
+.damage-stored-team.is-open .damage-stored-team-bar { border-radius: 20px 20px 0 0; }
+.damage-stored-team-toggle:focus-visible,
+.damage-stored-stat:focus-visible { outline: 2px solid var(--damage-accent); outline-offset: -2px; }
+.damage-stored-team-members { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); flex: 1; gap: 0.75rem; min-width: 0; }
+.damage-stored-team-toggle { display: grid; flex: 0 0 34px; width: 34px; height: 34px; padding: 0; place-items: center; border: 0; border-radius: 9px; background: transparent; color: inherit; cursor: pointer; }
+.damage-stored-team-toggle:hover { background: var(--surface-soft); }
+.damage-stored-team-chevron { font-size: 1.2rem; transition: transform 150ms ease; }
+.damage-stored-team.is-open .damage-stored-team-chevron { transform: rotate(180deg); }
+.damage-team-picker { position: relative; display: block; min-width: 0; }
+.damage-team-picker-button { display: flex; width: 100%; min-width: 0; align-items: center; gap: 0.55rem; padding: 0.35rem 0.45rem; border: 1px solid transparent; border-radius: 11px; background: transparent; color: inherit; text-align: left; cursor: pointer; }
+.damage-team-picker-button:hover,
+.damage-team-picker-button[aria-expanded="true"] { border-color: var(--line); background: var(--surface-soft); }
+.damage-team-picker-button:focus-visible { outline: 2px solid var(--damage-accent); outline-offset: 1px; }
+.damage-team-picker-button .damage-stored-icon { width: 36px; height: 36px; flex-basis: 36px; }
+.damage-team-picker-copy { display: grid; min-width: 0; flex: 1; gap: 0.08rem; }
+.damage-team-picker-copy b { overflow: hidden; font-size: 0.7rem; text-overflow: ellipsis; white-space: nowrap; }
+.damage-team-picker-copy small { color: var(--muted); font-size: 0.53rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.damage-team-picker-caret { color: var(--muted); font-size: 0.65rem; }
+.damage-team-picker-menu { position: absolute; z-index: 120; top: calc(100% + 0.4rem); left: 0; width: max(270px, 100%); padding: 0.55rem; border: 1px solid var(--line); border-radius: 13px; background: var(--surface); box-shadow: 0 16px 40px rgba(22, 18, 30, 0.2); }
+.damage-team-picker-menu[hidden] { display: none; }
+.damage-team-picker-search { width: 100%; margin: 0 0 0.45rem; padding: 0.5rem 0.6rem; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-soft); color: inherit; font-size: 0.65rem; }
+.damage-team-picker-options { display: grid; max-height: 330px; gap: 0.16rem; overflow-y: auto; overscroll-behavior: contain; }
+.damage-team-picker-option { display: flex; width: 100%; align-items: center; gap: 0.55rem; padding: 0.35rem; border: 0; border-radius: 8px; background: transparent; color: inherit; text-align: left; cursor: pointer; }
+.damage-team-picker-option:hover,
+.damage-team-picker-option:focus-visible { background: var(--surface-soft); outline: none; }
+.damage-team-picker-option.is-selected { background: var(--damage-accent-soft); }
+.damage-team-picker-option:disabled { opacity: 0.38; cursor: not-allowed; }
+.damage-team-picker-option:disabled:hover { background: transparent; }
+.damage-team-picker-option .damage-stored-icon { width: 31px; height: 31px; flex-basis: 31px; }
+.damage-team-picker-empty-icon { display: grid; flex: 0 0 31px; width: 31px; height: 31px; place-items: center; border: 1px dashed var(--line); border-radius: 8px; color: var(--muted); }
+.damage-team-picker-no-results { margin: 0; padding: 0.7rem; color: var(--muted); font-size: 0.62rem; text-align: center; }
+.damage-stored-icon {
+    display: inline-grid;
+    flex: 0 0 38px;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 10px;
+    background: var(--surface-soft);
+    color: var(--muted);
+    font-size: 1rem;
+}
+.damage-stored-icon > * { grid-area: 1 / 1; }
+.damage-stored-icon img { width: 100%; height: 100%; object-fit: contain; z-index: 1; }
+.damage-stored-team-body { padding: 1rem; border-top: 1px solid var(--line); }
+.damage-stored-team-intro { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-bottom: 1rem; }
+.damage-stored-team-intro h2 { margin: 0.2rem 0 0; font-size: 1.05rem; }
+.damage-stored-team-intro .eyebrow { margin: 0; font-size: 0.52rem; }
+.damage-stored-team-intro > p { max-width: 650px; margin: 0; color: var(--muted); font-size: 0.65rem; line-height: 1.55; }
+.damage-stored-team-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.8rem; }
+.damage-stored-build { min-width: 0; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; align-self: start; }
+.damage-stored-build-header { display: flex; align-items: center; gap: 0.65rem; padding: 0.8rem; background: var(--surface-soft); }
+.damage-stored-build-header h3 { margin: 0; font-size: 0.86rem; }
+.damage-stored-build-header p { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.6rem; }
+.damage-stored-build-empty { display: grid; min-height: 150px; place-items: center; border-style: dashed; color: var(--muted); font-size: 0.75rem; }
+.damage-stored-section { padding: 0.65rem 0.8rem; border-top: 1px solid var(--line); }
+.damage-stored-section h4 { margin: 0 0 0.45rem; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.damage-stored-stats { margin: 0; display: grid; gap: 0.12rem; }
+.damage-stored-stat { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; padding: 0.13rem 0.2rem; border-radius: 4px; font-size: 0.65rem; }
+.damage-stored-stat:hover { background: var(--surface-soft); }
+.damage-stored-stat dt { color: var(--muted); }
+.damage-stored-stat dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.damage-stored-stat-eleMas dd,
+.damage-stored-stat-dendrodmg dd { color: var(--damage-accent-deep); }
+.damage-stored-stat-critRate dd { border-bottom: 2px dotted #b385ba; }
+.damage-stored-stat-critDMG dd { border-bottom: 2px solid #b385ba; }
+.damage-stored-equipment-heading { display: flex; gap: 0.45rem; align-items: center; margin-bottom: 0.4rem; }
+.damage-stored-equipment-heading b { display: block; font-size: 0.67rem; overflow-wrap: anywhere; }
+.damage-stored-equipment-heading small { display: block; font-size: 0.56rem; color: var(--muted); margin-top: 0.2rem; }
+.damage-stored-artifact + .damage-stored-artifact { border-top: 1px solid var(--line); }
+.damage-stored-artifact > summary { display: flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0; cursor: pointer; list-style: none; }
+.damage-stored-artifact > summary::after { content: '+'; margin-left: auto; color: var(--muted); }
+.damage-stored-artifact[open] > summary::after { content: '−'; }
+.damage-stored-artifact .damage-stored-icon { width: 30px; height: 30px; flex-basis: 30px; }
+.damage-stored-artifact-copy { display: grid; gap: 0.1rem; min-width: 0; }
+.damage-stored-artifact-copy b { font-size: 0.58rem; overflow-wrap: anywhere; }
+.damage-stored-artifact-copy small { font-size: 0.51rem; color: var(--muted); }
+.damage-stored-artifact-main { font-size: 0.58rem; font-variant-numeric: tabular-nums; }
+.damage-stored-artifact .damage-stored-stats { padding: 0 0.2rem 0.45rem; }
+.damage-stored-artifact-total { margin-top: 0.5rem; }
+.damage-stored-more > summary,
+.damage-stored-artifact-total > summary { color: var(--muted); font-size: 0.57rem; padding: 0.2rem 0; cursor: pointer; }
+.damage-stored-totals { background: var(--damage-accent-soft); }
+.damage-stored-totals h4 { color: var(--damage-accent-deep); }
+.damage-stored-totals .damage-stored-stat { font-size: 0.7rem; }
+.damage-stored-totals .damage-stored-stat dt { color: inherit; }
+.damage-stored-muted { padding: 0.2rem 0; margin: 0; color: var(--muted); font-size: 0.62rem; }
+.damage-stored-issues { margin: 0.6rem 0.8rem; padding: 0.5rem; border: 1px dashed var(--line); border-radius: 8px; font-size: 0.6rem; }
+.damage-stored-issues summary { cursor: pointer; }
+.damage-stored-issues p { margin: 0.4rem 0 0; color: var(--muted); line-height: 1.5; }
+.damage-stored-team-footnote { color: var(--muted); font-size: 0.58rem; line-height: 1.55; }
+.damage-stored-team-footnote { margin: 0.8rem 0 0; }
+
+.damage-calculator-v2-page .damage-calculator-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(330px, 0.72fr);
+}
+
+.damage-v2-status {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin: 0 0 1.2rem;
+    padding: 0.9rem 1rem;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface);
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.damage-v2-status[hidden] {
+    display: none;
+}
+
+.damage-v2-status-dot {
+    width: 9px;
+    height: 9px;
+    border: 2px solid color-mix(in srgb, var(--damage-accent) 34%, var(--line));
+    border-top-color: var(--damage-accent);
+    border-radius: 50%;
+    animation: damage-v2-spin 700ms linear infinite;
+}
+
+@keyframes damage-v2-spin {
+    to { transform: rotate(360deg); }
+}
+
+.damage-v2-workspace {
+    display: block;
+}
+
+.damage-v2-workspace.is-updating .damage-v2-tab-panel {
+    opacity: 0.72;
+}
+
+.damage-v2-workspace .damage-v2-tab-panel {
+    transition: opacity 120ms ease;
+}
+
+.damage-v2-tab-shell {
+    --damage-v2-tab-rail-width: 210px;
+    --damage-v2-tab-rail-gap: 1rem;
+    display: grid;
+    grid-template-columns: var(--damage-v2-tab-rail-width) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--damage-v2-tab-rail-gap);
+    width: calc(100% + var(--damage-v2-tab-rail-width) + var(--damage-v2-tab-rail-gap));
+    min-width: 0;
+    margin-left: calc(0px - var(--damage-v2-tab-rail-width) - var(--damage-v2-tab-rail-gap));
+    overflow: visible;
+}
+
+.damage-v2-tab-bar {
+    position: sticky;
+    z-index: 40;
+    top: 84px;
+    display: grid;
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+    gap: 0.75rem;
+    padding: 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 17px;
+    background: var(--surface-soft);
+    box-shadow: 0 12px 30px rgba(31, 40, 53, 0.08);
+}
+
+.damage-v2-tabs {
+    display: grid;
+    gap: 0.35rem;
+}
+
+.damage-v2-tabs [role="tab"] {
+    min-height: 38px;
+    padding: 0.58rem 0.85rem;
+    color: var(--muted);
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: transparent;
+    font: inherit;
+    font-size: 0.68rem;
+    font-weight: 780;
+    line-height: 1.35;
+    text-align: left;
+    cursor: pointer;
+}
+
+.damage-v2-tabs [role="tab"]:hover {
+    color: var(--ink);
+    background: var(--surface);
+}
+
+.damage-v2-tabs [role="tab"][aria-selected="true"] {
+    color: var(--damage-accent-deep);
+    border-color: color-mix(in srgb, var(--damage-accent) 30%, var(--line));
+    background: var(--surface);
+    box-shadow: 0 5px 14px rgba(30, 39, 28, 0.07);
+}
+
+.damage-v2-tabs [role="tab"]:focus-visible {
+    outline: 2px solid var(--damage-accent);
+    outline-offset: 2px;
+}
+
+.damage-v2-tab-bar > .damage-reset-button { width: 100%; }
+
+.damage-v2-tab-panel {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+    padding: 1rem;
+    border: 1px solid var(--line);
+    border-radius: 21px;
+    background: var(--surface);
+}
+
+.damage-v2-tab-panel[hidden] { display: none; }
+
+.damage-v2-effects-layout {
+    display: grid;
+    grid-template-columns: 330px minmax(0, 1fr);
+    align-items: start;
+    gap: 1rem;
+}
+
+.damage-v2-effect-controls {
+    top: 82px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+}
+
+.damage-v2-effects-layout .damage-effects-panel {
+    margin: 0;
+}
+
+.damage-v2-panel-intro {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 1rem;
+}
+
+.damage-v2-panel-intro .eyebrow,
+.damage-v2-panel-intro h2 { margin: 0; }
+.damage-v2-panel-intro h2 { margin-top: 0.22rem; font-size: 1.1rem; }
+.damage-v2-panel-intro > p { max-width: 640px; margin: 0; color: var(--muted); font-size: 0.66rem; line-height: 1.55; }
+
+.damage-v2-character-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.damage-v2-character-stat-card {
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: 15px;
+    background: var(--surface);
+    overflow: visible;
+}
+
+.damage-v2-character-stat-card.is-empty {
+    min-height: 220px;
+    border-style: dashed;
+}
+
+.damage-v2-character-stat-empty {
+    display: grid;
+    min-height: 220px;
+    place-items: center;
+    color: var(--muted);
+    font-size: 0.68rem;
+}
+
+.damage-v2-character-stat-header {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.7rem;
+    border-bottom: 1px solid var(--line);
+    border-radius: 14px 14px 0 0;
+    background: var(--surface-soft);
+}
+
+.damage-v2-character-stat-header h3 { margin: 0; font-size: 0.8rem; }
+.damage-v2-character-stat-header small { display: block; margin-top: 0.1rem; color: var(--muted); font-size: 0.53rem; }
+.damage-v2-character-stat-header .damage-stored-icon { width: 34px; height: 34px; flex-basis: 34px; }
+.damage-v2-character-stat-header > div { min-width: 0; flex: 1; }
+.damage-v2-character-reset {
+    flex: 0 0 auto;
+    padding: 0.3rem 0.42rem;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: var(--surface);
+    font: inherit;
+    font-size: 0.49rem;
+    font-weight: 760;
+    cursor: pointer;
+}
+.damage-v2-character-reset:hover { color: var(--damage-accent-deep); border-color: var(--damage-accent); }
+.damage-v2-character-reset:focus-visible { outline: 2px solid var(--damage-accent); outline-offset: 1px; }
+.damage-v2-character-stat-fields { display: grid; }
+.damage-v2-character-input-group + .damage-v2-character-input-group { border-top: 1px solid var(--line); }
+.damage-v2-character-input-group > h4 {
+    margin: 0;
+    padding: 0.5rem 0.65rem;
+    color: var(--muted);
+    background: color-mix(in srgb, var(--surface-soft) 68%, transparent);
+    font-size: 0.48rem;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+.damage-v2-character-progress > h4 { color: var(--damage-accent-deep); background: var(--damage-accent-soft); }
+
+.damage-v2-stat-field {
+    min-width: 0;
+    margin: 0;
+    padding: 0.57rem 0.65rem;
+    border-top: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+}
+
+.damage-v2-stat-field:first-child { border-top: 0; }
+.damage-v2-stat-heading { display: flex; align-items: center; justify-content: space-between; gap: 0.45rem; }
+.damage-v2-stat-identity { display: flex; min-width: 0; align-items: center; gap: 0.34rem; color: var(--muted); font-size: 0.57rem; font-weight: 730; }
+.damage-v2-stat-identity > span:not(.damage-v2-stat-icon) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.damage-v2-stat-identity > small { flex: 0 0 auto; padding: 0.09rem 0.22rem; color: var(--damage-accent-deep); border-radius: 4px; background: var(--damage-accent-soft); font-size: 0.42rem; text-transform: uppercase; }
+.damage-v2-stat-icon { display: inline-grid; flex: 0 0 20px; width: 20px; height: 20px; place-items: center; border-radius: 6px; background: var(--surface-soft); color: #7b8290; }
+.damage-v2-stat-icon svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.damage-v2-stat-icon-maxHp { color: #b45b68; background: rgba(180, 91, 104, 0.1); }
+.damage-v2-stat-icon-attack { color: #b26b37; background: rgba(178, 107, 55, 0.1); }
+.damage-v2-stat-icon-defense { color: #5e78a6; background: rgba(94, 120, 166, 0.1); }
+.damage-v2-stat-icon-elementalMastery { color: #4d8c75; background: rgba(77, 140, 117, 0.1); }
+.damage-v2-stat-icon-critRate,
+.damage-v2-stat-icon-critDamage { color: #8b61a3; background: rgba(139, 97, 163, 0.1); }
+.damage-v2-stat-icon-energyRecharge { color: #5f82ba; background: rgba(95, 130, 186, 0.1); }
+.damage-v2-stat-icon-elementalDamageBonus { color: var(--damage-accent-deep); background: var(--damage-accent-soft); }
+.damage-v2-stat-icon-physicalDamageBonus { color: #8a8178; background: rgba(138, 129, 120, 0.12); }
+.damage-v2-stat-icon-characterLevel { color: #a07a35; background: rgba(160, 122, 53, 0.1); }
+.damage-v2-stat-icon-normalTalentLevel,
+.damage-v2-stat-icon-skillTalentLevel,
+.damage-v2-stat-icon-burstTalentLevel { color: var(--damage-accent-deep); background: var(--damage-accent-soft); }
+
+.damage-v2-effective-value { display: grid; justify-items: end; line-height: 1.05; }
+.damage-v2-effective-value small { color: var(--muted); font-size: 0.42rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.damage-v2-effective-value b { color: var(--ink); font-size: 0.68rem; font-variant-numeric: tabular-nums; }
+.damage-v2-effective-value.is-buffed b { color: var(--damage-accent-deep); }
+
+.damage-v2-stat-editors {
+    display: grid;
+    grid-template-columns: 66px minmax(0, 1fr);
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 0.38rem;
+}
+
+.damage-v2-stat-editors input[type="number"] {
+    width: 100%;
+    min-width: 0;
+    padding: 0.28rem 0.34rem;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--surface-soft);
+    font: inherit;
+    font-size: 0.56rem;
+    font-weight: 720;
+    font-variant-numeric: tabular-nums;
+}
+
+.damage-v2-stat-editors input[type="range"] { min-width: 0; margin: 0; }
+.damage-v2-stat-editors input:focus-visible { outline: 2px solid var(--damage-accent); outline-offset: 1px; }
+
+.damage-v2-stat-calculation {
+    display: grid;
+    gap: 0.3rem;
+    margin-top: 0.48rem;
+    padding-top: 0.45rem;
+    border-top: 1px dashed color-mix(in srgb, var(--line) 82%, transparent);
+}
+.damage-v2-stat-calculation > small {
+    color: var(--muted);
+    font-size: 0.43rem;
+    font-weight: 820;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+.damage-v2-stat-calculation > code {
+    display: flex;
+    min-width: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.14rem 0.05rem;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 0.5rem;
+    line-height: 1.45;
+    white-space: normal;
+}
+.damage-v2-stat-calculation .damage-formula-token {
+    max-width: 100%;
+    font-size: 0.48rem;
+    overflow-wrap: anywhere;
+    white-space: normal;
+}
+
+.damage-v2-calculation-inputs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.2rem;
+}
+
+.damage-v2-calculation-inputs .damage-input-section {
+    margin: 0;
+    padding: 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: 13px;
+}
+
+.damage-v2-calculation-inputs .damage-input-section + .damage-input-section { margin-top: 0; }
+
+.damage-v2-reaction-toggle {
+    margin: 0 0 1.2rem;
+    border-color: color-mix(in srgb, var(--damage-accent) 24%, var(--line));
+    background: color-mix(in srgb, var(--damage-accent) 6%, var(--surface));
+}
+
+.damage-v2-reaction-results {
+    display: none;
+    gap: 0.55rem;
+    margin: 0.75rem 0 0;
+    padding-top: 0.75rem;
+    border-top: 1px dashed color-mix(in srgb, var(--damage-accent) 32%, var(--line));
+}
+
+.damage-calculator-v2-page.is-showing-reactions .damage-v2-reaction-results { display: grid; }
+
+.damage-v2-reaction-result {
+    display: grid;
+    gap: 0.55rem;
+    padding: 0.72rem;
+    border: 1px solid color-mix(in srgb, var(--damage-accent) 26%, var(--line));
+    border-radius: 11px;
+    background: color-mix(in srgb, var(--damage-accent) 5%, var(--surface));
+}
+
+.damage-v2-reaction-result > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.damage-v2-reaction-result > header > div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-items: start;
+    gap: 0.25rem;
+}
+
+.damage-v2-reaction-result > header small {
+    flex-basis: 100%;
+    color: var(--muted);
+    font-size: 0.5rem;
+}
+
+.damage-v2-reaction-kind {
+    padding: 0.13rem 0.34rem;
+    color: var(--damage-accent-deep);
+    border: 1px solid color-mix(in srgb, var(--damage-accent) 25%, var(--line));
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--damage-accent) 8%, var(--surface));
+    font-size: 0.43rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.damage-v2-reaction-result > header > strong {
+    color: var(--damage-accent-deep);
+    font-size: 1rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.damage-v2-reaction-result > header > strong small {
+    margin-right: 0.2rem;
+    font-size: 0.48rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.damage-v2-reaction-result > header > strong.is-utility {
+    max-width: 8rem;
+    font-size: 0.67rem;
+    text-align: right;
+}
+
+.damage-v2-reaction-description {
+    margin: -0.12rem 0 0;
+    color: var(--muted);
+    font-size: 0.52rem;
+    line-height: 1.45;
+}
+
+.damage-v2-reaction-result dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem;
+    margin: 0;
+}
+
+.damage-v2-reaction-result dl > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.38rem 0.45rem;
+    border-radius: 7px;
+    background: var(--surface);
+}
+
+.damage-v2-reaction-result dt { color: var(--muted); font-size: 0.48rem; }
+.damage-v2-reaction-result dd { margin: 0; font-size: 0.62rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+.damage-v2-reaction-formula {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.12rem;
+    color: var(--muted);
+    font-size: 0.56rem;
+}
+
+.damage-v2-reaction-formula .damage-formula-token { font-size: 0.53rem; }
+
+.damage-calculator-v2-page .damage-current-build-note {
+    margin: 0 0 1rem;
+    padding: 0.72rem 0.8rem;
+    color: var(--damage-accent-deep);
+    border: 1px solid color-mix(in srgb, var(--damage-accent) 24%, var(--line));
+    border-radius: 12px;
+    background: var(--damage-accent-soft);
+    font-size: 0.61rem;
+    line-height: 1.5;
+}
+
+.damage-v2-toggle-field {
+    padding: 0.55rem 0;
+}
+
+.damage-v2-toggle-field .damage-buff-toggle {
+    margin: 0;
+}
+
+.damage-v2-effects > header {
+    display: grid;
+}
+
+.damage-v2-schema-chip {
+    padding: 0.24rem 0.42rem;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface-soft);
+    font-size: 0.49rem;
+    font-weight: 740;
+}
+
+.damage-v2-effects .damage-effect-section-constellation {
+    --effect-accent-rgb: 126, 87, 176;
+}
+
+.damage-v2-pipeline-copy {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.9rem 1rem;
+}
+
+.damage-v2-pipeline-copy p {
+    flex: 1 1 auto;
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.64rem;
+    line-height: 1.55;
+}
+
+.damage-v2-schema-chip {
+    flex: 0 0 auto;
+    color: var(--damage-accent-deep);
+    border-color: color-mix(in srgb, var(--damage-accent) 26%, var(--line));
+    background: var(--damage-accent-soft);
+}
+
+.damage-calculator-v2-page .damage-live-summary {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.damage-v2-formula-source {
+    color: var(--muted);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 0.52rem;
+}
+
+.damage-v2-null-part {
+    color: var(--muted);
+    font-style: italic;
+}
+
+.damage-calculator-v2-page .damage-talent-heading {
+    border-radius: 21px 21px 0 0;
+}
+
+.damage-calculator-v2-page .damage-talent-marker {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+}
+
+.damage-calculator-v2-page .damage-talent-marker-fallback,
+.damage-calculator-v2-page .damage-talent-marker img {
+    grid-area: 1 / 1;
+}
+
+.damage-calculator-v2-page .damage-talent-marker-fallback {
+    z-index: 0;
+}
+
+.damage-calculator-v2-page .damage-talent-marker img {
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    padding: 0.3rem;
+    object-fit: contain;
+    background: var(--damage-accent-soft);
+}
+
+.damage-v2-talent-description {
+    margin: 0.75rem 0.75rem 0;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--damage-accent) 22%, var(--line));
+    border-radius: 12px;
+    background: var(--surface);
+}
+
+.damage-v2-talent-description > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.72rem 0.85rem;
+    color: var(--damage-accent-deep);
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.025em;
+    list-style: none;
+    cursor: pointer;
+}
+
+.damage-v2-talent-description > summary::-webkit-details-marker { display: none; }
+
+.damage-v2-talent-description > summary:hover {
+    background: var(--damage-accent-soft);
+}
+
+.damage-v2-talent-description > summary:focus-visible {
+    outline: 2px solid var(--damage-accent);
+    outline-offset: -2px;
+}
+
+.damage-v2-talent-description > summary i {
+    display: grid;
+    flex: 0 0 22px;
+    width: 22px;
+    height: 22px;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--damage-accent-soft);
+    font-size: 0.85rem;
+    font-style: normal;
+    transition: transform 150ms ease;
+}
+
+.damage-v2-talent-description[open] > summary i { transform: rotate(45deg); }
+
+.damage-v2-talent-description-body {
+    padding: 0.85rem;
+    color: var(--muted);
+    border-top: 1px solid var(--line);
+    font-size: 0.64rem;
+    line-height: 1.65;
+    white-space: pre-line;
+}
+
+.damage-calculator-v2-page .damage-instance-title-row {
+    overflow: hidden;
+    border-radius: 9px 9px 0 0;
+}
+
+.damage-v2-main-scaling {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: 1.15rem;
+    gap: 0.06rem;
+    margin-top: 0.16rem;
+}
+
+.damage-v2-main-scaling .damage-formula-token {
+    font-size: 0.57rem;
+    line-height: 1.25;
+}
+
+.damage-instance-heading > .damage-v2-type-badge {
+    --formula-token-rgb: 60, 138, 79;
+    gap: 0.3rem;
+    min-height: 0;
+    padding: 0.27rem 0.46rem;
+    color: rgb(var(--formula-token-rgb));
+    border: 1px solid rgba(var(--formula-token-rgb), 0.3);
+    border-radius: 999px;
+    background: rgba(var(--formula-token-rgb), 0.1);
+    font-size: 0.52rem;
+    font-weight: 850;
+    line-height: 1.2;
+}
+
+.damage-v2-type-dot {
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 0 3px rgba(var(--formula-token-rgb), 0.11);
+}
+
+.damage-instance-heading > .damage-v2-type-badge.is-lunar {
+    --formula-token-rgb: 111, 85, 170;
+}
+
+.damage-v2-error {
+    display: grid;
+    justify-items: start;
+    gap: 0.6rem;
+    padding: 1.2rem;
+    color: #94413d;
+    border: 1px solid rgba(181, 74, 67, 0.28);
+    border-radius: 18px;
+    background: rgba(181, 74, 67, 0.07);
+}
+
+.damage-v2-error[hidden] {
+    display: none;
+}
+
+.damage-v2-error p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.7rem;
+}
+
+.damage-v2-error button {
+    color: #94413d;
+    border-color: rgba(181, 74, 67, 0.3);
+    background: rgba(181, 74, 67, 0.08);
+}
+
+.damage-v2-update-error {
+    color: #a54e47;
+    border-color: rgba(181, 74, 67, 0.28);
+    background: rgba(181, 74, 67, 0.07);
+}
+
+html[data-theme="dark"] .damage-v2-status,
+html[data-theme="dark"] .damage-v2-error {
+    background: var(--surface-solid);
+}
+
+html[data-theme="dark"] .damage-v2-schema-chip {
+    color: var(--damage-accent-deep);
+}
+
+/* This application is desktop-only. Keep the two-column calculator when narrow browser sizes trigger legacy rules. */
+@media (max-width: 1180px) {
+    .damage-calculator-v2-page {
+        width: 1080px;
+        min-width: 1080px;
+    }
+
+    .damage-calculator-v2-page .damage-calculator-hero {
+        grid-template-columns: minmax(0, 1fr) 330px;
+    }
+
+    .damage-calculator-v2-page .damage-workspace {
+        grid-template-columns: 330px minmax(0, 1fr);
+    }
+
+    .damage-calculator-v2-page .damage-instance-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .damage-calculator-v2-page .damage-calculator-art {
+        display: grid;
+    }
+
+    .damage-calculator-v2-page .damage-controls {
+        position: sticky;
+        max-height: calc(100vh - 100px);
+    }
+
+    .damage-calculator-v2-page .damage-input-section {
+        display: block;
+    }
+}
+.damage-v2-team-notes {
+    color: var(--muted);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin: 0.75rem 0;
+}
+
+.damage-v2-team-notes summary { cursor: pointer; }
+.damage-v2-team-notes > b { display: block; margin-top: 0.75rem; }
+.damage-v2-team-notes > p { margin: 0.35rem 0; }
+.damage-v2-team-notes > a { display: inline-block; margin-right: 0.75rem; }
+.damage-v2-input-help { display: block; color: var(--muted); margin-top: 0.35rem; }
+.damage-v2-effects .damage-effect-section-team { --effect-accent-rgb: 49, 133, 150; }
+
+.damage-v2-effects .damage-effect-section-artifact { --effect-accent-rgb: 173, 126, 58; }
+.damage-v2-artifact-loadout { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0.8rem 0.8rem 0; }
+.damage-v2-artifact-loadout p { margin: 0; color: var(--muted); font-size: 0.65rem; line-height: 1.5; }
+.damage-v2-artifact-set-chip, .damage-v2-artifact-piece-count {
+    color: var(--muted);
+    font-size: 0.58rem;
+    line-height: 1.5;
+}
+.damage-v2-artifact-set-chip { padding: 0.22rem 0.45rem; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-soft); }
+.damage-v2-artifact-inputs { padding: 0.4rem 0.8rem; }
+.damage-v2-artifact-piece-count { display: block; margin-top: 0.45rem; }
+.damage-v2-effects .damage-toggle-control:has(input:disabled) { opacity: 0.45; cursor: not-allowed; }
+.damage-instance-heading > .damage-v2-type-badge.is-physical { --formula-token-rgb: 123, 129, 146; }
+.damage-calculator-v2-page .formula-token-element-physical { --formula-token-rgb: 123, 129, 146; }

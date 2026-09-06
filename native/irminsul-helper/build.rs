@@ -19,6 +19,11 @@ async fn main() -> io::Result<()> {
         database.save_to_writer(writer).unwrap();
     }
 
+    #[cfg(all(unix, feature = "static-libpcap"))]
+    {
+        println!("cargo:rustc-link-lib=static=pcap");
+    }
+
     println!("cargo:rerun-if-changed=build.rs");
     Ok(())
 }

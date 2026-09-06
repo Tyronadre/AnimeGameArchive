@@ -1,0 +1,26 @@
+{
+  "schemaVersion":2,"key":"bennett","name":"Bennett","element":"Pyro","weaponType":"Sword","characterDataResource":"data/characters/data/bennett.json",
+  "statBindings":{"attack":"bennettAttack","energyRecharge":"bennettEnergyRecharge"},
+  "inputs":[
+    {"id":"bennettConstellation","label":"Bennett constellation","defaultValue":0,"min":0,"max":6,"step":1,"initialValueSource":{"valueKey":"constellation"},"section":"constellations"},
+    {"id":"bennettAttack","label":"Bennett ATK","defaultValue":1500,"min":0,"max":20000,"step":1,"initialValueSource":{"valueKey":"totalAttack"}},
+    {"id":"bennettBaseAttack","label":"Bennett Base ATK","defaultValue":800,"min":0,"max":2000,"step":1,"initialValueSource":{"valueKey":"baseAttack"},"section":"internal"},
+    {"id":"bennettEnergyRecharge","label":"Bennett Energy Recharge","defaultValue":100,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:enerRech_"}},
+    {"id":"bennettSkillTalentLevel","label":"Bennett Skill level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"skillTalent"}},
+    {"id":"bennettBurstTalentLevel","label":"Bennett Burst level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"burstTalent"}}
+  ],
+  "effects":[
+    {"id":"bennettFantasticVoyage","name":"Fantastic Voyage · Inspiration Field","source":"Bennett · Elemental Burst","category":"team","description":"Adds Bennett's Burst-level ATK Bonus Ratio multiplied by his Base ATK to the active character.","defaultEnabled":true,"activation":{"event":"burstFieldActive"},"statChanges":[{"stat":"attack","operation":"flatAdd","phase":1,"value":{"type":"multiply","operands":[{"type":"input","input":"bennettBaseAttack"},{"type":"talentParameter","characterKey":"bennett","talent":"combat3","parameter":"param4","levelInput":"bennettBurstTalentLevel"}]}}]},
+    {"id":"bennettRekindle","name":"Rekindle","source":"Bennett · Passive","category":"passive","description":"Reduces Bennett's Skill cooldown; no effect on the active teammate's hit.","impact":"Personal rotation only.","defaultEnabled":true,"activation":{"event":"always"}},
+    {"id":"bennettFearnaught","name":"Fearnaught","source":"Bennett · Passive","category":"passive","description":"Further reduces Bennett's Skill cooldown in his field.","impact":"Personal rotation only.","defaultEnabled":true,"activation":{"event":"burstFieldActive"}},
+    {"id":"bennettExpedition","name":"It Should Be Safe...","source":"Bennett · Passive","category":"passive","description":"Expedition passive with no combat effect.","defaultEnabled":true,"activation":{"event":"always"}},
+    {"id":"bennettC1","name":"C1 · Grand Expectation","source":"Bennett · Constellation","category":"constellation","description":"Removes the HP restriction and adds 20% of Bennett's Base ATK to Fantastic Voyage.","ownershipRequirements":{"bennettConstellation":1},"activation":{"event":"burstFieldActive"},"statChanges":[{"stat":"attack","operation":"flatAdd","value":{"type":"multiply","operands":[{"type":"input","input":"bennettBaseAttack"},{"type":"constant","value":0.2}]}}]},
+    {"id":"bennettC2","name":"C2 · Impasse Conqueror","source":"Bennett · Constellation","category":"constellation","description":"Raises Bennett's ER below 70% HP.","impact":"Personal rotation only.","ownershipRequirements":{"bennettConstellation":2},"activation":{"event":"always"}},
+    {"id":"bennettC3","name":"C3 · Unstoppable Fervor","source":"Bennett · Constellation","category":"constellation","description":"Adds three Skill talent levels.","impact":"Personal damage only.","ownershipRequirements":{"bennettConstellation":3},"activation":{"event":"always"},"statChanges":[{"stat":"bennettSkillTalentLevel","operation":"flatAdd","value":{"type":"constant","value":3},"maximum":15}]},
+    {"id":"bennettC4","name":"C4 · Unexpected Odyssey","source":"Bennett · Constellation","category":"constellation","description":"Adds a follow-up to Bennett's Charge Level 1 Skill.","impact":"Personal damage only.","ownershipRequirements":{"bennettConstellation":4},"activation":{"event":"always"}},
+    {"id":"bennettC5","name":"C5 · True Explorer","source":"Bennett · Constellation","category":"constellation","description":"Adds three Burst talent levels, strengthening the field's ATK buff.","ownershipRequirements":{"bennettConstellation":5},"activation":{"event":"always"},"statChanges":[{"stat":"bennettBurstTalentLevel","operation":"flatAdd","value":{"type":"constant","value":3},"maximum":15}]},
+    {"id":"bennettC6","name":"C6 · Fire Ventures With Me","source":"Bennett · Constellation","category":"constellation","description":"Inside Fantastic Voyage, grants 15% Pyro DMG Bonus. Infusion is described but does not rewrite another profile's damage type.","ownershipRequirements":{"bennettConstellation":6},"activation":{"event":"burstFieldActive"},"formulaModifiers":[{"targets":{"elements":["Pyro"]},"damageBonus":{"expression":{"type":"constant","value":15}}}]}
+  ],
+  "notes":["The field ATK buff is sourced from Bennett's stored Base ATK and current Burst talent level."],
+  "sources":["data/characters/data/bennett.json","https://keqingmains.com/q/bennett-quickguide/"]
+}

@@ -213,9 +213,15 @@ class HttpHoyolabWikiDataSource(
 class HoyolabWikiException(message: String, cause: Throwable? = null) : RuntimeException(message, cause)
 
 internal fun isAllowedHoyolabImageUrl(value: String): Boolean {
-    if (value.length !in 1..4096) return false
-    val uri = runCatching { URI.create(value) }.getOrNull() ?: return false
-    return uri.scheme.equals("https", ignoreCase = true) && uri.host?.lowercase() in setOf(
+    return normalizeHoyolabImageUrl(value) != null
+}
+
+/** HoYoWiki's legacy object URLs contain literal spaces; normalize them before persistence/use. */
+internal fun normalizeHoyolabImageUrl(value: String): String? {
+    if (value.length !in 1..4096) return null
+    val uri = runCatching { URI.create(value.trim().replace(" ", "%20")) }.getOrNull()
+        ?: return null
+    val allowed = uri.scheme.equals("https", ignoreCase = true) && uri.host?.lowercase() in setOf(
         "upload-static.hoyoverse.com",
         "act-upload.hoyoverse.com",
         "act-webstatic.hoyoverse.com",
@@ -223,4 +229,5 @@ internal fun isAllowedHoyolabImageUrl(value: String): Boolean {
         "img-os-static.hoyolab.com",
         "upload-os-bbs.hoyolab.com",
     )
+    return uri.toASCIIString().takeIf { allowed }
 }

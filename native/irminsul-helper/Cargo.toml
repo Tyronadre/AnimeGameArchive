@@ -1,19 +1,21 @@
 [package]
 name = "genshin-irminsul-helper"
-version = "0.1.0"
+version = "0.2.1"
 edition = "2024"
 license = "MIT"
 build = "build.rs"
 
 [dependencies]
-anime-game-data = { git = "https://github.com/konkers/anime-game-data", rev = "df004591478efaedb995a425256b8ee535e36eee" }
+anime-game-data = { git = "https://github.com/konkers/anime-game-data", rev = "dfc03cdb5e27807a876b8d4dff17b3f67a320f5c" }
 anyhow = "1.0.99"
+async-trait = "0.1.92"
 auto-artifactarium = { path = "../vendor/auto-artifactarium" }
 base64 = "0.22.1"
 clap = { version = "4.5.47", features = ["derive"] }
 flate2 = "1.1.9"
 futures = "0.3.31"
 indexmap = "2.11.1"
+pcap = { version = "2.3.0", features = ["capture-stream"], optional = true }
 protobuf = "3.7.2"
 reqwest = { version = "0.12.23", features = ["json"] }
 serde = { version = "1.0.219", features = ["derive"] }
@@ -31,10 +33,21 @@ windows = { version = "0.61.3", features = [
     "Win32_UI_WindowsAndMessaging",
 ] }
 
+[target.'cfg(unix)'.dependencies]
+nix = { version = "0.31.3", features = ["user"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+caps = "0.5.6"
+
 [build-dependencies]
-anime-game-data = { git = "https://github.com/konkers/anime-game-data", rev = "df004591478efaedb995a425256b8ee535e36eee" }
+anime-game-data = { git = "https://github.com/konkers/anime-game-data", rev = "dfc03cdb5e27807a876b8d4dff17b3f67a320f5c" }
 flate2 = "1.1.9"
 tokio = { version = "1.47.1", features = ["macros", "rt-multi-thread"] }
+
+[features]
+default = []
+pcap = ["dep:pcap"]
+static-libpcap = ["pcap"]
 
 [profile.release]
 opt-level = 2

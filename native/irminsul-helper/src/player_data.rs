@@ -9,6 +9,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::good::{self, fake_uninitialized_4th_line};
 
+type CachedPlayerState = (Vec<Vec<u8>>, Vec<Vec<u8>>);
+
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ExportSettings {
     pub include_characters: bool,
@@ -101,7 +103,7 @@ impl PlayerData {
         previous_len - self.items.len()
     }
 
-    pub fn cached_state(&self) -> Result<(Vec<Vec<u8>>, Vec<Vec<u8>>)> {
+    pub fn cached_state(&self) -> Result<CachedPlayerState> {
         Ok((
             self.characters
                 .iter()
@@ -173,10 +175,18 @@ impl PlayerData {
         &self,
         settings: &ExportSettings,
     ) -> Vec<good::Character> {
+        let tps_avatar_ids: Vec<u32> = [
+            self.game_data.get_tps_avatar_id_female(),
+            self.game_data.get_tps_avatar_id_male(),
+        ]
+        .into_iter()
+        .filter_map(Result::ok)
+        .collect();
+
         self.characters
             .iter()
             .filter_map(|character| {
-                if character.avatar_type != 1 {
+                if character.avatar_type != 1 || tps_avatar_ids.contains(&character.avatar_id) {
                     return None;
                 }
 
@@ -188,6 +198,7 @@ impl PlayerData {
                 let mut auto = 1;
                 let mut skill = 1;
                 let mut burst = 1;
+                let mut element = None;
 
                 for (id, level) in &character.skill_level_map {
                     let Some(ty) = self.game_data.get_skill_type(*id).ok() else {
@@ -196,7 +207,10 @@ impl PlayerData {
                     match ty {
                         SkillType::Auto => auto = *level,
                         SkillType::Skill => skill = *level,
-                        SkillType::Burst => burst = *level,
+                        SkillType::Burst => {
+                            burst = *level;
+                            element = self.game_data.get_skill_element(*id).ok().copied();
+                        }
                     }
                 }
 
@@ -207,8 +221,15 @@ impl PlayerData {
                     return None;
                 }
 
+                let mut key = good::to_good_key(name);
+                if key == good::TRAVELER_KEY
+                    && let Some(element) = element
+                {
+                    key.push_str(element.as_ref());
+                }
+
                 Some(good::Character {
-                    key: good::to_good_key(name),
+                    key,
                     level,
                     constellation,
                     ascension,

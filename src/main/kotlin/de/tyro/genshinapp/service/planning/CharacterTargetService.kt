@@ -34,6 +34,21 @@ class CharacterTargetService(
         canonicalTargets(userId).mapValues { (_, target) -> target.toValues() }
 
     @Transactional
+    fun clearCurrentState(userId: Long) {
+        val targets = targetRepository.findAllByUser_Id(userId)
+        targets.forEach { target ->
+            target.owned = null
+            target.currentLevel = null
+            target.currentAscension = null
+            target.currentConstellation = null
+            target.currentNormalTalent = null
+            target.currentSkillTalent = null
+            target.currentBurstTalent = null
+        }
+        targetRepository.saveAll(targets)
+    }
+
+    @Transactional
     fun save(
         userId: Long,
         characterKey: String,

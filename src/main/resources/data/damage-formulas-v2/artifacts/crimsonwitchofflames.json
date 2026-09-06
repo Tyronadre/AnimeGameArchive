@@ -1,0 +1,200 @@
+{
+  "schemaVersion": 2,
+  "key": "crimsonwitchofflames",
+  "name": "Crimson Witch of Flames",
+  "inputs": [
+    {
+      "id": "stacks",
+      "label": "Active stacks",
+      "defaultValue": 3,
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "description": "Snapshot stack count; duration and stack generation are not simulated."
+    }
+  ],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · Pyro DMG",
+        "source": "Artifact set",
+        "description": "Elemental damage bonus applies to matching ordinary damage, not Lunar reactions.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [],
+              "elements": [
+                "Pyro"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 15
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 15
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Pyro reactions and Skill stacks",
+        "source": "Artifact set",
+        "description": "Overloaded/Burning/Burgeon +40%; Vaporize/Melt reaction bonus +15%. Each Skill stack adds 7.5 percentage points Pyro DMG, up to three stacks for 10s.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "anyTags": [
+                "overloaded",
+                "burning",
+                "burgeon"
+              ],
+              "damageKinds": [
+                "reaction",
+                "lunar"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 40
+              }
+            }
+          },
+          {
+            "targets": {
+              "anyTags": [
+                "vaporize",
+                "melt"
+              ],
+              "damageKinds": [
+                "reaction",
+                "lunar"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 15
+              }
+            }
+          },
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [],
+              "elements": [
+                "Pyro"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 7.5
+                  },
+                  {
+                    "type": "input",
+                    "input": "local:stacks"
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 40
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          },
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 15
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          },
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 7.5
+                },
+                {
+                  "type": "input",
+                  "input": "local:stacks"
+                }
+              ]
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: crimsonwitchofflames",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

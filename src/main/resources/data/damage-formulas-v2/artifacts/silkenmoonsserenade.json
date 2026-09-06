@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 2,
+  "key": "silkenmoonsserenade",
+  "name": "Silken Moon's Serenade",
+  "inputs": [],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · ER +20%",
+        "source": "Artifact set",
+        "description": "Always active with at least two equipped pieces.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "energyRecharge",
+            "operation": "flatAdd",
+            "value": {
+              "type": "constant",
+              "value": 20
+            }
+          }
+        ],
+        "formulaModifiers": [],
+        "metrics": [],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "party",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Gleaming Moon: Chant",
+        "source": "Artifact set",
+        "description": "Elemental damage grants the party 60 EM at Nascent Gleam or 120 EM at Ascendant Gleam for 8s. Chant also supplies one unique 10% party Lunar DMG bonus, stacking with Intent but not another Chant.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "contextAtLeast",
+              "input": "context:moonsignLevel",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [
+          {
+            "stat": "elementalMastery",
+            "operation": "flatAdd",
+            "value": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 60
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 60
+                    },
+                    {
+                      "type": "min",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 1
+                        },
+                        {
+                          "type": "max",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 0
+                            },
+                            {
+                              "type": "add",
+                              "operands": [
+                                {
+                                  "type": "context",
+                                  "input": "moonsignLevel"
+                                },
+                                {
+                                  "type": "constant",
+                                  "value": -1
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "lunar"
+              ],
+              "anyTags": []
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 10
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 10
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "stackingGroup": "gleamingMoonChant",
+        "impact": "Party effect. Identical non-stacking bonuses use one eligible source."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: silkenmoonsserenade",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

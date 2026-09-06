@@ -7,8 +7,8 @@ import de.tyro.genshinapp.model.MaterialDefinition
 
 /** Builds the metadata that is persisted with a material. Crafting code never has to infer it. */
 object MaterialCatalogMetadata {
-    fun isNonCraftableSpecial(materialId: Int): Boolean =
-        materialId in BRILLIANT_DIAMOND_RANGE
+    fun isNonCraftableSpecial(name: String): Boolean =
+        name.startsWith("Brilliant Diamond ", ignoreCase = true)
 
     fun enrich(
         materials: Collection<MaterialDefinition>,
@@ -42,20 +42,14 @@ object MaterialCatalogMetadata {
                 .filterNot(enemyFamilies::containsKey),
             enemyFamilies,
         )
-        val weeklyFamilies = usage.keys
-            .filter { categories[it] == MaterialCategory.WEEKLY_BOSS }
-            .sorted().chunked(3).filter { it.size == 3 }
-            .flatMap { family -> family.map { it to "weekly:${family.first()}" } }.toMap()
-
         val preliminary = materials.map { material ->
             val materialCategory = categories[material.id] ?: material.category
             val family = when (materialCategory) {
                 MaterialCategory.GEM -> "gem:${familyWithoutSuffix(material.name, GEM_SUFFIXES)}"
                 MaterialCategory.TALENT_BOOK -> "talent:${familyWithoutPrefix(material.name)}"
                 MaterialCategory.ENEMY_DROP -> enemyFamilies[material.id]
-                MaterialCategory.WEEKLY_BOSS -> weeklyFamilies[material.id]
-                MaterialCategory.WEAPON_ASCENSION ->
-                    "weapon:${(material.id - WEAPON_RANGE.first) / 4}"
+                MaterialCategory.WEEKLY_BOSS -> null
+                MaterialCategory.WEAPON_ASCENSION -> null
                 else -> null
             }
             material.copy(
@@ -79,41 +73,47 @@ object MaterialCatalogMetadata {
         material: MaterialDefinition,
         usage: Usage?,
     ): MaterialCategory {
-        if (isNonCraftableSpecial(material.id)) return MaterialCategory.OTHER
+        if (isNonCraftableSpecial(material.name)) return MaterialCategory.OTHER
 
-        val usageCategory = usage?.let { category(material.id, it) }
+        val usageCategory = usage?.let(::category)
             ?.takeUnless { it == MaterialCategory.OTHER }
         if (usageCategory != null) return usageCategory
 
-        val identityCategory = categoryFromIdentity(material.id, material.name)
+        val identityCategory = categoryFromIdentity(material.name)
             .takeUnless { it == MaterialCategory.OTHER }
         if (identityCategory != null) return identityCategory
 
+        // These categories were previously inferred too broadly. Clear persisted false positives.
+        if (material.category == MaterialCategory.GEM) return MaterialCategory.OTHER
+        if (material.category == MaterialCategory.TALENT_BOOK) return MaterialCategory.OTHER
         return material.category
     }
 
-    private fun category(id: Int, usage: Usage): MaterialCategory = when {
-        id in GEM_RANGE && GEM_SUFFIXES.any { usage.name.endsWith(it, true) } -> MaterialCategory.GEM
+    private fun category(usage: Usage): MaterialCategory = when {
+        isElementalGem(usage.name) -> MaterialCategory.GEM
         TALENT_PREFIXES.any { usage.name.startsWith(it, true) } -> MaterialCategory.TALENT_BOOK
-        id in 112000..112999 && usage.ascension && usage.talent -> MaterialCategory.ENEMY_DROP
-        id in 113000..113999 && usage.talent && !usage.ascension -> MaterialCategory.WEEKLY_BOSS
-        id in 113000..113999 && usage.ascension -> MaterialCategory.WORLD_BOSS
-        id in COLLECTABLE_RANGE && usage.ascension -> MaterialCategory.COLLECTABLE
-        id in WEAPON_RANGE -> MaterialCategory.WEAPON_ASCENSION
+        usage.ascension && usage.talent && !usage.name.equals("Mora", ignoreCase = true) ->
+            MaterialCategory.ENEMY_DROP
+        usage.talent && !usage.name.equals("Crown of Insight", ignoreCase = true) ->
+            MaterialCategory.WEEKLY_BOSS
+        usage.ascension && !usage.name.equals("Mora", ignoreCase = true) ->
+            MaterialCategory.COLLECTABLE
         else -> MaterialCategory.OTHER
     }
 
-    private fun categoryFromIdentity(id: Int, name: String): MaterialCategory = when {
-        id in GEM_RANGE && GEM_SUFFIXES.any { name.endsWith(it, true) } -> MaterialCategory.GEM
+    private fun categoryFromIdentity(name: String): MaterialCategory = when {
+        isElementalGem(name) -> MaterialCategory.GEM
         TALENT_PREFIXES.any { name.startsWith(it, true) } -> MaterialCategory.TALENT_BOOK
-        id in ENEMY_DROP_RANGE -> MaterialCategory.ENEMY_DROP
-        id in WEAPON_RANGE -> MaterialCategory.WEAPON_ASCENSION
         else -> MaterialCategory.OTHER
     }
 
     private fun familyWithoutSuffix(name: String, suffixes: List<String>): String {
         val suffix = suffixes.first { name.endsWith(it, true) }
         return GoodKeyNormalizer.normalize(name.dropLast(suffix.length))
+    }
+
+    private fun isElementalGem(name: String): Boolean = ELEMENTAL_GEM_FAMILIES.any { family ->
+        GEM_SUFFIXES.any { suffix -> name.equals(family + suffix, ignoreCase = true) }
     }
 
     private fun familyWithoutPrefix(name: String): String {
@@ -145,12 +145,16 @@ object MaterialCatalogMetadata {
 
     private data class Usage(val name: String, var ascension: Boolean = false, var talent: Boolean = false)
 
-    private val WEAPON_RANGE = 114001..114999
-    private val ENEMY_DROP_RANGE = 112000..112999
-    private val COLLECTABLE_RANGE = 100000..101999
-    private val BRILLIANT_DIAMOND_RANGE = 104101..104104
-    private val GEM_RANGE = 104110..104199
     private val GEM_SUFFIXES = listOf(" Sliver", " Fragment", " Chunk", " Gemstone")
+    private val ELEMENTAL_GEM_FAMILIES = listOf(
+        "Agnidus Agate",
+        "Varunada Lazurite",
+        "Vajrada Amethyst",
+        "Vayuda Turquoise",
+        "Shivada Jade",
+        "Prithiva Topaz",
+        "Nagadus Emerald",
+    )
     private val TALENT_PREFIXES = listOf("Teachings of ", "Guide to ", "Philosophies of ")
     private val TIERED = setOf(
         MaterialCategory.GEM, MaterialCategory.TALENT_BOOK,

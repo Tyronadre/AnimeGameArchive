@@ -1,0 +1,337 @@
+{
+  "schemaVersion": 2,
+  "weaponType": "Catalyst",
+  "key": "nahida",
+  "name": "Nahida",
+  "element": "Dendro",
+  "characterDataResource": "data/characters/data/nahida.json",
+  "statBindings": {
+    "elementalMastery": "nahidaElementalMastery"
+  },
+  "inputs": [
+    {
+      "id": "nahidaConstellation",
+      "label": "Nahida constellation",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 6,
+      "step": 1,
+      "initialValueSource": {
+        "valueKey": "constellation"
+      },
+      "section": "constellations"
+    },
+    {
+      "id": "nahidaElementalMastery",
+      "label": "Nahida EM",
+      "defaultValue": 1000,
+      "min": 0,
+      "max": 3000,
+      "step": 1,
+      "initialValueSource": {
+        "valueKey": "stat:eleMas"
+      },
+      "hintTag": "elementalMastery"
+    },
+    {
+      "id": "nahidaMarkedOpponents",
+      "label": "Nahida marked opponents",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 8,
+      "step": 1
+    },
+    {
+      "id": "nahidaQuickenActive",
+      "label": "Quicken / Aggravate / Spread recently triggered",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1,
+      "section": "combat",
+      "description": "Only enable if the marked enemy has received a Quicken-related reaction in the last 8 seconds. The default team cannot trigger one by itself."
+    }
+  ],
+  "effects": [
+    {
+      "id": "nahidaCompassionIlluminated",
+      "name": "Compassion Illuminated",
+      "source": "Nahida · Passive / Burst",
+      "description": "Inside Shrine of Maya, the on-field character gains 25% of the highest teammate EM, capped at 250. The source is evaluated before converted-stat buffs to prevent recursive EM sharing.",
+      "category": "team",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "statChanges": [
+        {
+          "stat": "elementalMastery",
+          "operation": "flatAdd",
+          "value": {
+            "type": "min",
+            "operands": [
+              {
+                "type": "constant",
+                "value": 250
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "teamMax",
+                    "input": "elementalMastery"
+                  },
+                  {
+                    "type": "constant",
+                    "value": 0.25
+                  }
+                ]
+              }
+            ]
+          },
+          "phase": 10
+        }
+      ]
+    },
+    {
+      "id": "nahidaNewMoonsEmbrace",
+      "name": "New Moon's Embrace",
+      "source": "Nahida · Moonsign team bonus",
+      "description": "At Ascendant Gleam, assumes Nahida was the last non-Moonsign member to use a Skill or Burst. Adds 2.25% Lunar Reaction DMG Bonus per 100 Nahida EM, capped at 36%. This is a shared team rule, not a Nahida talent.",
+      "category": "team",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "skillOrBurstActivation",
+        "conditions": [
+          {
+            "type": "contextAtLeast",
+            "input": "moonsignLevel",
+            "value": 2
+          }
+        ]
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "min",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 36
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "input",
+                      "input": "nahidaElementalMastery"
+                    },
+                    {
+                      "type": "constant",
+                      "value": 0.0225
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "nahidaC1",
+      "name": "C1 · The Seed of Stored Knowledge",
+      "source": "Nahida constellation",
+      "description": "Improves Shrine of Maya's elemental counts. It does not change the active character's damage per hit.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "nahidaConstellation": 1
+      },
+      "impact": "Nahida's Burst effects / duration only."
+    },
+    {
+      "id": "nahidaC2",
+      "name": "C2 · The Root of All Fullness",
+      "source": "Nahida constellation",
+      "description": "Marked enemies receive Lunar-Bloom hits with +10% CRIT Rate and +20% CRIT DMG. The separate 30% DEF reduction requires a recent Quicken-related reaction.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "markedOpponent",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "nahidaMarkedOpponents",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "nahidaConstellation": 2
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "crit": {
+            "additionalRate": {
+              "expression": {
+                "type": "constant",
+                "value": 10
+              }
+            },
+            "additionalDamage": {
+              "expression": {
+                "type": "constant",
+                "value": 20
+              }
+            }
+          }
+        },
+        {
+          "targets": {},
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "nahidaQuickenActive",
+              "value": 1
+            }
+          ],
+          "defenseMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 30
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "nahidaC3",
+      "name": "C3 · The Shoot of Conscious Attainment",
+      "source": "Nahida constellation",
+      "description": "Adds Skill talent levels to Nahida's personal attacks; no teammate damage modifier.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "nahidaConstellation": 3
+      },
+      "impact": "Personal damage only."
+    },
+    {
+      "id": "nahidaC4",
+      "name": "C4 · The Stem of Manifest Inference",
+      "source": "Nahida constellation",
+      "description": "Nahida gains 100 / 120 / 140 / 160 EM with 1 / 2 / 3 / 4 or more marked enemies. Applied before her EM share and Moonsign bonus.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "markedOpponent",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "nahidaMarkedOpponents",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "nahidaConstellation": 4
+      },
+      "statChanges": [
+        {
+          "stat": "nahidaElementalMastery",
+          "operation": "flatAdd",
+          "value": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "constant",
+                "value": 80
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 20
+                  },
+                  {
+                    "type": "min",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 4
+                      },
+                      {
+                        "type": "input",
+                        "input": "nahidaMarkedOpponents"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "nahidaC5",
+      "name": "C5 · The Leaves of Enlightening Speech",
+      "source": "Nahida constellation",
+      "description": "Adds Burst talent levels; affects Nahida's own buffs and duration, not Compassion Illuminated's EM share.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "nahidaConstellation": 5
+      },
+      "impact": "Nahida's Burst effects / duration only."
+    },
+    {
+      "id": "nahidaC6",
+      "name": "C6 · The Fruit of Reason's Culmination",
+      "source": "Nahida constellation",
+      "description": "Adds Nahida's Karmic Oblivion attacks; does not add damage instances to the active character.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "nahidaConstellation": 6
+      },
+      "impact": "Personal damage only."
+    }
+  ],
+  "notes": [
+    "Support profile only. Awakening Elucidated affects Nahida's own Tri-Karma Purification; her utility passive has no damage modifier.",
+    "Deepwood Memories and weapon effects are equipment effects, not inherent Nahida buffs; they are not assumed here."
+  ],
+  "sources": [
+    "data/characters/data/nahida.json",
+    "https://genshin-impact.fandom.com/wiki/Nahida",
+    "https://keqingmains.com/misc/lunar-reactions/"
+  ]
+}

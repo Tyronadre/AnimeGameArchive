@@ -1,19 +1,7 @@
 package de.tyro.genshinapp.service.catalog
 
-import de.tyro.genshinapp.configuration.LegacyGameCharacterSchemaCleanup
-import de.tyro.genshinapp.entity.GameCharacter
-import de.tyro.genshinapp.entity.GameCharacterImage
-import de.tyro.genshinapp.entity.GameCharacterCostType
-import de.tyro.genshinapp.entity.GameCharacterMaterialCost
-import de.tyro.genshinapp.entity.GameCharacterTalent
-import de.tyro.genshinapp.entity.GameCharacterTalentAttribute
-import de.tyro.genshinapp.entity.GameCharacterTalentAttributeValue
-import de.tyro.genshinapp.entity.Material
-import de.tyro.genshinapp.model.CharacterDefinition
-import de.tyro.genshinapp.model.CharacterImageType
-import de.tyro.genshinapp.model.CharacterTalent
-import de.tyro.genshinapp.model.CharacterTalentAttribute
-import de.tyro.genshinapp.model.MaterialCost
+import de.tyro.genshinapp.entity.*
+import de.tyro.genshinapp.model.*
 import de.tyro.genshinapp.repository.GameCharacterRepository
 import de.tyro.genshinapp.repository.MaterialRepository
 import org.slf4j.LoggerFactory
@@ -32,13 +20,9 @@ interface CharacterCatalogStore {
 class JpaCharacterCatalogStore(
     private val characterRepository: GameCharacterRepository,
     private val materialRepository: MaterialRepository,
-    legacySchemaCleanup: LegacyGameCharacterSchemaCleanup,
 ) : CharacterCatalogStore {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    init {
-        legacySchemaCleanup.prepareForCatalogAccess()
-    }
 
     @Transactional(readOnly = true)
     override fun getCharacters(): List<CharacterDefinition> =
@@ -69,10 +53,13 @@ class JpaCharacterCatalogStore(
         entity.imageResourceKey = character.imageResourceKey
         entity.talentResourceKey = character.talentResourceKey
         entity.hoyolabEntryId = character.hoyolabEntryId
+        entity.hoyolabPageVersion = character.hoyolabPageVersion
+        entity.hoyolabDataVersion = character.hoyolabDataVersion
 
         synchronizeImages(entity, character)
         synchronizeMaterialCosts(entity, character)
         synchronizeTalents(entity, character.talents)
+        synchronizeProgressions(entity, character.hoyolabAscension)
 
         return toDefinition(characterRepository.save(entity)) ?: character
     }
@@ -169,6 +156,30 @@ class JpaCharacterCatalogStore(
         }
     }
 
+    private fun synchronizeProgressions(
+        entity: GameCharacter,
+        progressions: List<CharacterHoyolabAscension>,
+    ) {
+        val desiredLevels = progressions.mapTo(linkedSetOf(), CharacterHoyolabAscension::level)
+        entity.progressions.removeIf { it.level !in desiredLevels }
+        val existingByLevel = entity.progressions.associateBy(GameCharacterProgression::level)
+        progressions.forEach { desired ->
+            val stored = existingByLevel[desired.level] ?: GameCharacterProgression().also {
+                it.character = entity
+                it.level = desired.level
+                entity.progressions += it
+            }
+            stored.hpBeforeAscension = desired.hpBeforeAscension
+            stored.hpAfterAscension = desired.hpAfterAscension
+            stored.attackBeforeAscension = desired.attackBeforeAscension
+            stored.attackAfterAscension = desired.attackAfterAscension
+            stored.defenseBeforeAscension = desired.defenseBeforeAscension
+            stored.defenseAfterAscension = desired.defenseAfterAscension
+            stored.secondaryStatBeforeAscension = desired.secondaryStatBeforeAscension
+            stored.secondaryStatAfterAscension = desired.secondaryStatAfterAscension
+        }
+    }
+
     private fun synchronizeTalentAttributes(
         talent: GameCharacterTalent,
         attributes: List<CharacterTalentAttribute>,
@@ -220,6 +231,17 @@ class JpaCharacterCatalogStore(
                 region = entity.region,
                 constellation = entity.constellation,
                 ascensionStatType = entity.ascensionStatType,
+                baseStats = entity.progressions.firstOrNull { it.level == 1 }?.let {
+                    CharacterBaseValues(
+                        hp = it.hpAfterAscension,
+                        attack = it.attackAfterAscension,
+                        defense = it.defenseAfterAscension,
+                        critRate = 5.0,
+                        critDamage = 50.0,
+                        energyRecharge = 100.0,
+                        elementalMastery = 0.0,
+                    )
+                },
                 imageUrls = entity.images.mapNotNull { image ->
                     val url = image.localUrl
                     if (url == null) null else image.imageType to url
@@ -252,6 +274,21 @@ class JpaCharacterCatalogStore(
                 imageResourceKey = entity.imageResourceKey ?: entity.key,
                 talentResourceKey = entity.talentResourceKey ?: entity.key,
                 hoyolabEntryId = entity.hoyolabEntryId,
+                hoyolabPageVersion = entity.hoyolabPageVersion,
+                hoyolabDataVersion = entity.hoyolabDataVersion,
+                hoyolabAscension = entity.progressions.map { progression ->
+                    CharacterHoyolabAscension(
+                        level = progression.level,
+                        hpBeforeAscension = progression.hpBeforeAscension,
+                        hpAfterAscension = progression.hpAfterAscension,
+                        attackBeforeAscension = progression.attackBeforeAscension,
+                        attackAfterAscension = progression.attackAfterAscension,
+                        defenseBeforeAscension = progression.defenseBeforeAscension,
+                        defenseAfterAscension = progression.defenseAfterAscension,
+                        secondaryStatBeforeAscension = progression.secondaryStatBeforeAscension,
+                        secondaryStatAfterAscension = progression.secondaryStatAfterAscension,
+                    )
+                },
             )
         }.onFailure {
             logger.warn("Stored character data for '{}' is invalid", entity.key, it)

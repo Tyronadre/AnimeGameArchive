@@ -3,6 +3,8 @@ package de.tyro.genshinapp.service.catalog
 import de.tyro.genshinapp.service.planning.TalentDomain
 import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.model.MaterialSchedule
+import de.tyro.genshinapp.model.MaterialCategory
+import de.tyro.genshinapp.model.MaterialDefinition
 import de.tyro.genshinapp.model.MaterialSourceRole
 import de.tyro.genshinapp.model.MaterialSourceType
 
@@ -128,6 +130,53 @@ object MaterialCatalogSeed {
         )
     }
 
+    private val metadataByMaterialId: Map<Int, SeededMaterialMetadata> by lazy {
+        buildMap {
+            sources.forEach { source ->
+                source.materials.forEach { membership ->
+                    val category = when {
+                        membership.role == MaterialSourceRole.GEM -> MaterialCategory.GEM
+                        source.type == MaterialSourceType.TALENT_DOMAIN -> MaterialCategory.TALENT_BOOK
+                        source.type == MaterialSourceType.WORLD_BOSS -> MaterialCategory.WORLD_BOSS
+                        source.type == MaterialSourceType.WEEKLY_BOSS -> MaterialCategory.WEEKLY_BOSS
+                        else -> MaterialCategory.ENEMY_DROP
+                    }
+                    val tieredFamily = when (category) {
+                        MaterialCategory.ENEMY_DROP -> source.key
+                        MaterialCategory.WEEKLY_BOSS -> source.key
+                        else -> null
+                    }
+                    put(
+                        membership.materialId,
+                        SeededMaterialMetadata(
+                            category = category,
+                            craftingFamily = tieredFamily,
+                            craftingTier = when (category) {
+                                MaterialCategory.ENEMY_DROP -> membership.materialOrder
+                                else -> null
+                            },
+                            conversionGroup = when (category) {
+                                MaterialCategory.WEEKLY_BOSS -> source.key
+                                else -> null
+                            },
+                        ),
+                    )
+                }
+            }
+        }
+    }
+
+    /** Source membership is authoritative when usage/name inference is ambiguous. */
+    fun applySourceMetadata(material: MaterialDefinition): MaterialDefinition {
+        val metadata = metadataByMaterialId[material.id] ?: return material
+        return material.copy(
+            category = metadata.category,
+            craftingFamily = metadata.craftingFamily ?: material.craftingFamily,
+            craftingTier = metadata.craftingTier ?: material.craftingTier,
+            conversionGroup = metadata.conversionGroup ?: material.conversionGroup,
+        )
+    }
+
     private fun talentDomain(index: Int, seed: TalentSeed): MaterialSourceSeed =
         MaterialSourceSeed(
             key = key(MaterialSourceType.TALENT_DOMAIN, seed.name),
@@ -206,4 +255,11 @@ object MaterialCatalogSeed {
     )
 
     private data class EnemySeed(val name: String, val materialIds: IntRange)
+
+    private data class SeededMaterialMetadata(
+        val category: MaterialCategory,
+        val craftingFamily: String?,
+        val craftingTier: Int?,
+        val conversionGroup: String?,
+    )
 }

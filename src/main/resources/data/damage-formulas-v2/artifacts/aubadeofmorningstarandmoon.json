@@ -1,0 +1,199 @@
+{
+  "schemaVersion": 2,
+  "key": "aubadeofmorningstarandmoon",
+  "name": "Aubade of Morningstar and Moon",
+  "inputs": [
+    {
+      "id": "offField",
+      "label": "Off-field bonus active (includes 3s grace)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1,
+      "description": "Off-field state belongs to the artifact wearer.",
+      "defaultContext": "offField"
+    }
+  ],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · EM +80",
+        "source": "Artifact set",
+        "description": "Always active with at least two equipped pieces.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "elementalMastery",
+            "operation": "flatAdd",
+            "value": {
+              "type": "constant",
+              "value": 80
+            }
+          }
+        ],
+        "formulaModifiers": [],
+        "metrics": [],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Off-field Lunar damage",
+        "source": "Artifact set",
+        "description": "Wearer's Lunar DMG +20%, plus 40% at Ascendant Gleam. Expires 3s after returning on-field. Does not buff a teammate's Lunar damage.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:offField",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "lunar"
+              ],
+              "anyTags": []
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 20
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 40
+                      },
+                      {
+                        "type": "min",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 1
+                          },
+                          {
+                            "type": "max",
+                            "operands": [
+                              {
+                                "type": "constant",
+                                "value": 0
+                              },
+                              {
+                                "type": "add",
+                                "operands": [
+                                  {
+                                    "type": "context",
+                                    "input": "moonsignLevel"
+                                  },
+                                  {
+                                    "type": "constant",
+                                    "value": -1
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 20
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 40
+                    },
+                    {
+                      "type": "min",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 1
+                        },
+                        {
+                          "type": "max",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 0
+                            },
+                            {
+                              "type": "add",
+                              "operands": [
+                                {
+                                  "type": "context",
+                                  "input": "moonsignLevel"
+                                },
+                                {
+                                  "type": "constant",
+                                  "value": -1
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: aubadeofmorningstarandmoon",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

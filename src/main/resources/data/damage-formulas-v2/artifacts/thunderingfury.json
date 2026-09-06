@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 2,
+  "key": "thunderingfury",
+  "name": "Thundering Fury",
+  "inputs": [],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · Electro DMG",
+        "source": "Artifact set",
+        "description": "Elemental damage bonus applies to matching ordinary damage, not Lunar reactions.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [],
+              "elements": [
+                "Electro"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 15
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 15
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Electro reactions",
+        "source": "Artifact set",
+        "description": "Overloaded/Electro-Charged/Superconduct/Hyperbloom +40%; Aggravate reaction bonus +20%; Lunar-Charged/Stellar Conduct +20%. Eligible reaction triggers reduce Skill cooldown by 1s, subject to its 0.8s trigger interval.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "anyTags": [
+                "overloaded",
+                "electroCharged",
+                "superconduct",
+                "hyperbloom"
+              ],
+              "damageKinds": [
+                "reaction",
+                "lunar"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 40
+              }
+            }
+          },
+          {
+            "targets": {
+              "anyTags": [
+                "aggravate",
+                "lunarCharged",
+                "stellarConduct"
+              ],
+              "damageKinds": [
+                "reaction",
+                "lunar"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 20
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "Skill cooldown reduction per trigger (seconds)",
+            "expression": {
+              "type": "constant",
+              "value": 1
+            },
+            "unit": "number",
+            "conditions": []
+          },
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 40
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          },
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 20
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: thunderingfury",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

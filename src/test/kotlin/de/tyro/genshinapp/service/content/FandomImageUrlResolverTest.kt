@@ -67,4 +67,16 @@ class FandomImageUrlResolverTest {
             resolver.normalAttackImageUrl("Sword", "Cryo"),
         )
     }
+
+    @Test
+    fun `calculates Wikia paths for character catalog filter icons`() {
+        assertEquals(
+            "https://static.wikia.nocookie.net/gensin-impact/images/a/a4/Element_Anemo.png",
+            resolver.elementIconUrl("Anemo"),
+        )
+        assertEquals(
+            "https://static.wikia.nocookie.net/gensin-impact/images/8/81/Icon_Sword.png",
+            resolver.weaponTypeIconUrl("Sword"),
+        )
+    }
 }

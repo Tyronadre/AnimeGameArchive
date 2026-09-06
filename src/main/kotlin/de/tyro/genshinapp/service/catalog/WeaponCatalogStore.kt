@@ -1,6 +1,5 @@
 package de.tyro.genshinapp.service.catalog
 
-import de.tyro.genshinapp.configuration.LegacyGameWeaponSchemaCleanup
 import de.tyro.genshinapp.entity.GameWeapon
 import de.tyro.genshinapp.entity.GameWeaponImage
 import de.tyro.genshinapp.entity.GameWeaponMaterialCost
@@ -27,13 +26,8 @@ interface WeaponCatalogStore {
 class JpaWeaponCatalogStore(
     private val repository: GameWeaponRepository,
     private val materialRepository: MaterialRepository,
-    legacySchemaCleanup: LegacyGameWeaponSchemaCleanup,
 ) : WeaponCatalogStore {
     private val logger = LoggerFactory.getLogger(javaClass)
-
-    init {
-        legacySchemaCleanup.prepareForCatalogAccess()
-    }
 
     @Transactional(readOnly = true)
     override fun getWeapons(): List<WeaponDefinition> =

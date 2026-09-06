@@ -1,0 +1,241 @@
+{
+  "schemaVersion": 2,
+  "key": "flowerofparadiselost",
+  "name": "Flower of Paradise Lost",
+  "inputs": [
+    {
+      "id": "stacks",
+      "label": "Active stacks",
+      "defaultValue": 4,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "description": "Snapshot stack count; duration and stack generation are not simulated."
+    }
+  ],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · EM +80",
+        "source": "Artifact set",
+        "description": "Always active with at least two equipped pieces.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "elementalMastery",
+            "operation": "flatAdd",
+            "value": {
+              "type": "constant",
+              "value": 80
+            }
+          }
+        ],
+        "formulaModifiers": [],
+        "metrics": [],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Bloom reaction stacks",
+        "source": "Artifact set",
+        "description": "Bloom/Hyperbloom/Burgeon start at +40% reaction DMG and Lunar-Bloom at +10%. Each of four stacks adds 25% of those bonuses; stacks last 10s and may be gained off-field.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "anyTags": [
+                "bloom",
+                "hyperbloom",
+                "burgeon"
+              ],
+              "damageKinds": [
+                "reaction",
+                "lunar"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 40
+                  },
+                  {
+                    "type": "add",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 1
+                      },
+                      {
+                        "type": "multiply",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 0.25
+                          },
+                          {
+                            "type": "input",
+                            "input": "local:stacks"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "targets": {
+              "damageKinds": [
+                "lunar"
+              ],
+              "anyTags": [
+                "lunarBloom"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 10
+                  },
+                  {
+                    "type": "add",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 1
+                      },
+                      {
+                        "type": "multiply",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 0.25
+                          },
+                          {
+                            "type": "input",
+                            "input": "local:stacks"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 40
+                },
+                {
+                  "type": "add",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 1
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 0.25
+                        },
+                        {
+                          "type": "input",
+                          "input": "local:stacks"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          },
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 10
+                },
+                {
+                  "type": "add",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 1
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 0.25
+                        },
+                        {
+                          "type": "input",
+                          "input": "local:stacks"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: flowerofparadiselost",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

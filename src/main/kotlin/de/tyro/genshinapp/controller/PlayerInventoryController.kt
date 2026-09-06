@@ -23,6 +23,7 @@ import de.tyro.genshinapp.service.catalog.CharacterCatalogService
 import de.tyro.genshinapp.service.planning.CharacterTargetService
 import de.tyro.genshinapp.service.player.GoodImportException
 import de.tyro.genshinapp.service.player.GoodImportService
+import de.tyro.genshinapp.service.player.GoodDatabaseService
 import de.tyro.genshinapp.service.planning.MaterialCraftingService
 import de.tyro.genshinapp.service.catalog.MaterialCatalogService
 import de.tyro.genshinapp.service.artifact.OptimizerCombatStatService
@@ -61,6 +62,7 @@ class PlayerInventoryController(
     private val weaponDataService: WeaponDataService,
     private val optimizerCombatStatService: OptimizerCombatStatService,
     private val travelerService: TravelerService,
+    private val goodDatabaseService: GoodDatabaseService,
     private val messages: LocalizedMessages,
 ) {
     @GetMapping
@@ -1039,7 +1041,7 @@ class PlayerInventoryController(
         }
 
         return try {
-            val snapshot = snapshotStore.save(principal.id, file.bytes)
+            val snapshot = goodDatabaseService.import(principal.id, file.bytes)
             redirectAttributes.addFlashAttribute(
                 "successMessage",
                 messages.get(

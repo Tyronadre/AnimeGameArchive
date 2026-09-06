@@ -5,4 +5,6 @@ import org.springframework.data.repository.CrudRepository
 
 interface TravelerElementProgressRepository : CrudRepository<TravelerElementProgress, Long> {
     fun findByUser_IdAndElement(userId: Long, element: String): TravelerElementProgress?
+
+    fun findAllByUser_Id(userId: Long): List<TravelerElementProgress>
 }

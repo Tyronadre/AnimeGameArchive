@@ -32,6 +32,16 @@ class FandomImageUrlResolver(
         return hashedImageUrl("Icon_Attribute_${normalizedName}.png")
     }
 
+    fun elementIconUrl(elementName: String): String {
+        val normalizedName = elementName.trim().replace(WHITESPACE, "_")
+        return hashedImageUrl("Element_${normalizedName}.png")
+    }
+
+    fun weaponTypeIconUrl(weaponType: String): String {
+        val normalizedName = weaponType.trim().replace(WHITESPACE, "_")
+        return hashedImageUrl("Icon_${normalizedName}.png")
+    }
+
     fun talentImageUrl(talentName: String): String {
         val normalizedName = talentName
             .replace(TALENT_SPECIAL_CHARACTERS, "")

@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 2,
+  "key": "obsidiancodex",
+  "name": "Obsidian Codex",
+  "inputs": [
+    {
+      "id": "nightsoul",
+      "label": "On-field Nightsoul's Blessing",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1,
+      "description": ""
+    },
+    {
+      "id": "consumed",
+      "label": "Consumed Nightsoul points on-field within 6s",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1,
+      "description": ""
+    }
+  ],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · Nightsoul damage",
+        "source": "Artifact set",
+        "description": "While on-field in Nightsoul's Blessing, damage +15%. This is not assumed for characters without Nightsoul.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:nightsoul",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [],
+              "elements": []
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 15
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 15
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Nightsoul point consumption",
+        "source": "Artifact set",
+        "description": "After consuming a Nightsoul point on-field, CRIT Rate +40% for 6s.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:consumed",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [
+          {
+            "stat": "critRate",
+            "operation": "flatAdd",
+            "value": {
+              "type": "constant",
+              "value": 40
+            }
+          }
+        ],
+        "formulaModifiers": [],
+        "metrics": [],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: obsidiancodex",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

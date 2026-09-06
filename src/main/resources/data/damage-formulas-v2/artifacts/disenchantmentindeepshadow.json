@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 2,
+  "key": "disenchantmentindeepshadow",
+  "name": "Disenchantment in Deep Shadow",
+  "inputs": [
+    {
+      "id": "affected",
+      "label": "Target affected by Superconduct / Stellar Conduct",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1,
+      "description": ""
+    }
+  ],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · ATK +18%",
+        "source": "Artifact set",
+        "description": "Always active with at least two equipped pieces.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "attack",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "input",
+                  "input": "recipient:baseAttack"
+                },
+                {
+                  "type": "constant",
+                  "value": 0.18
+                }
+              ]
+            }
+          }
+        ],
+        "formulaModifiers": [],
+        "metrics": [],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Superconduct and Stellar Conduct",
+        "source": "Artifact set",
+        "description": "Superconduct DMG +80% and Stellar Conduct DMG +40%. Attacks against enemies affected by either reaction gain 16% CRIT Rate.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "anyTags": [
+                "superconduct"
+              ],
+              "damageKinds": [
+                "reaction",
+                "lunar"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 80
+              }
+            }
+          },
+          {
+            "targets": {
+              "anyTags": [
+                "stellarConduct"
+              ],
+              "damageKinds": [
+                "reaction",
+                "lunar"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 40
+              }
+            }
+          },
+          {
+            "targets": {
+              "anyTags": [],
+              "damageKinds": [
+                "talent",
+                "lunar"
+              ]
+            },
+            "crit": {
+              "additionalRate": {
+                "unit": "percentPoints",
+                "expression": {
+                  "type": "constant",
+                  "value": 16
+                }
+              }
+            },
+            "conditions": [
+              {
+                "type": "inputAtLeast",
+                "input": "local:affected",
+                "value": 1
+              }
+            ]
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 80
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          },
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 40
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          },
+          {
+            "label": "Additional CRIT Rate",
+            "expression": {
+              "type": "constant",
+              "value": 16
+            },
+            "unit": "percentPoints",
+            "conditions": [
+              {
+                "type": "inputAtLeast",
+                "input": "local:affected",
+                "value": 1
+              }
+            ]
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: disenchantmentindeepshadow",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

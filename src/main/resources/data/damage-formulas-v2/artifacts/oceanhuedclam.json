@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 2,
+  "key": "oceanhuedclam",
+  "name": "Ocean-Hued Clam",
+  "inputs": [
+    {
+      "id": "recordedHealing",
+      "label": "Foam recorded healing (including overheal)",
+      "defaultValue": 30000,
+      "min": 0,
+      "max": 30000,
+      "step": 100,
+      "description": "Recorded total after healing modifiers; do not add Healing Bonus a second time."
+    }
+  ],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · Healing Bonus +15%",
+        "source": "Artifact set",
+        "description": "Always active with at least two equipped pieces.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "healingBonus",
+            "operation": "flatAdd",
+            "value": {
+              "type": "constant",
+              "value": 15
+            }
+          }
+        ],
+        "formulaModifiers": [],
+        "metrics": [],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Sea-Dyed Foam",
+        "source": "Artifact set",
+        "description": "One bubble deals Physical damage equal to 90% of healing recorded over 3s, including overheal, capped at 30,000 recorded healing. It ignores DEF, cannot CRIT and cannot receive ordinary DMG or reaction bonuses. Physical RES still applies.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [],
+        "metrics": [],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": [
+        {
+          "id": "foam",
+          "label": "Sea-Dyed Foam · bubble explosion",
+          "damageType": "artifactPhysicalProc",
+          "tags": [
+            "artifactProc"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "constant",
+                "value": 0.9
+              },
+              {
+                "type": "min",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 30000
+                  },
+                  {
+                    "type": "input",
+                    "input": "local:recordedHealing"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "damageTypes": [
+    {
+      "id": "artifactPhysicalProc",
+      "element": "Physical",
+      "defenseBehavior": "bypass",
+      "appliesElementalDamageBonus": false,
+      "appliesOtherDamageBonus": false,
+      "allowsCriticalHits": false,
+      "resistanceInput": "enemyPhysicalResistance",
+      "independentProc": true,
+      "kind": "artifactProc"
+    }
+  ],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: oceanhuedclam",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

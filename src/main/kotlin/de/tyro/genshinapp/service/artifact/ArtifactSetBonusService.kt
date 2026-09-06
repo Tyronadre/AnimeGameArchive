@@ -6,6 +6,7 @@ import de.tyro.genshinapp.entity.ArtifactSetBonus
 import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.model.PlayerArtifact
 import de.tyro.genshinapp.repository.ArtifactSetBonusRepository
+import de.tyro.genshinapp.startup.ApplicationStartupStatus
 import jakarta.annotation.PostConstruct
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.ClassPathResource
@@ -28,6 +29,10 @@ class ArtifactSetBonusService(
 
     @PostConstruct
     fun initialize() {
+        ApplicationStartupStatus.report(
+            "Loading artifact set bonuses…",
+            "Synchronizing bundled combat effects with the database",
+        )
         val seedCatalog = readSeedCatalog()
         val stored = repository.findAll().associateBy(ArtifactSetBonus::setKey)
         val changed = seedCatalog.sets.mapNotNull { seed ->

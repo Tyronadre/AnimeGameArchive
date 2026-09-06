@@ -1,0 +1,440 @@
+{
+  "schemaVersion": 2,
+  "weaponType": "Catalyst",
+  "key": "columbina",
+  "name": "Columbina",
+  "element": "Hydro",
+  "moonsignContribution": 1,
+  "talentParameters": {
+    "combat3.lunarBonus": [
+      0.13,
+      0.16,
+      0.19,
+      0.22,
+      0.25,
+      0.28,
+      0.31,
+      0.34,
+      0.37,
+      0.4,
+      0.43,
+      0.46,
+      0.49,
+      0.52,
+      0.55
+    ]
+  },
+  "statBindings": {
+    "elementalMastery": "columbinaElementalMastery",
+    "maxHp": "columbinaMaxHp",
+    "baseHp": "columbinaBaseHp"
+  },
+  "inputs": [
+    {
+      "id": "columbinaConstellation",
+      "label": "Columbina constellation",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 6,
+      "step": 1,
+      "initialValueSource": {
+        "valueKey": "constellation"
+      },
+      "section": "constellations"
+    },
+    {
+      "id": "columbinaElementalMastery",
+      "label": "Columbina EM",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 3000,
+      "step": 1,
+      "initialValueSource": {
+        "valueKey": "stat:eleMas"
+      },
+      "hintTag": "elementalMastery"
+    },
+    {
+      "id": "columbinaMaxHp",
+      "label": "Columbina Max HP (before conditional buffs)",
+      "defaultValue": 35000,
+      "min": 1,
+      "max": 100000,
+      "step": 1,
+      "description": "Loaded from Columbina's current character, weapon, and artifact data. Conditional combat buffs are applied separately."
+    },
+    {
+      "id": "columbinaBaseHp",
+      "label": "Columbina base HP",
+      "defaultValue": 14695,
+      "min": 1,
+      "max": 30000,
+      "step": 1,
+      "initialValueSource": {
+        "valueKey": "baseHp"
+      },
+      "section": "internal",
+      "description": "Resolved automatically from Columbina's character data and used for C2's +40% HP. It is not a player-entered combat stat."
+    },
+    {
+      "id": "columbinaBurstTalentLevel",
+      "label": "Columbina Burst level",
+      "defaultValue": 10,
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "initialValueSource": {
+        "valueKey": "burstTalent"
+      },
+      "hintTag": "talentLevel"
+    }
+  ],
+  "effects": [
+    {
+      "id": "columbinaLunarDomain",
+      "name": "Lunar Domain",
+      "source": "Columbina · Elemental Burst",
+      "description": "Assumes the active character is inside Lunar Domain. Its Lunar Reaction DMG Bonus uses Columbina's effective Burst level.",
+      "category": "team",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "talentParameter",
+              "characterKey": "columbina",
+              "talent": "combat3",
+              "parameter": "lunarBonus",
+              "levelInput": "columbinaBurstTalentLevel"
+            },
+            "unit": "ratio"
+          }
+        }
+      ]
+    },
+    {
+      "id": "columbinaMoonlightLent",
+      "name": "Moonsign Benediction: Moonlight, Lent Unto You",
+      "source": "Columbina · Passive",
+      "description": "Adds 0.2% Lunar Reaction base damage per 1,000 Max HP, capped at 7%. Columbina contributes one Moonsign level while in the party.",
+      "category": "team",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "baseDamageBonus": {
+            "expression": {
+              "type": "min",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 7
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "input",
+                      "input": "columbinaMaxHp"
+                    },
+                    {
+                      "type": "constant",
+                      "value": 0.0002
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "columbinaMoonridgeDew",
+      "name": "Law of the New Moon · Moonridge Dew",
+      "source": "Columbina · Passive",
+      "description": "Lunar-Bloom reactions inside Lunar Domain can supply up to three extra Moonridge Dew per 18 seconds. This changes resource availability, not the damage of an existing hit.",
+      "category": "team",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "requiresEffects": [
+        "columbinaLunarDomain"
+      ],
+      "impact": "Resource / rotation only."
+    },
+    {
+      "id": "columbinaC1",
+      "name": "C1 · Radiance Over Blossoms and Peaks",
+      "source": "Columbina constellation",
+      "description": "Grants 1.5% Lunar Reaction Elevation. Immediate Gravity Interference and interruption resistance are not additional damage on the active character.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "columbinaConstellation": 1
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "elevation": {
+            "expression": {
+              "type": "constant",
+              "value": 1.5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "columbinaC2",
+      "name": "C2 · Not in Lone Splendor",
+      "source": "Columbina constellation",
+      "description": "Assumes Lunar Brilliance is active: +40% base HP. At Ascendant Gleam with Lunar-Bloom dominant, the active character gains 0.35% of her resulting Max HP as EM. Also grants 7% Lunar Reaction Elevation.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "columbinaConstellation": 2
+      },
+      "statChanges": [
+        {
+          "stat": "columbinaMaxHp",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "columbinaBaseHp"
+              },
+              {
+                "type": "constant",
+                "value": 0.4
+              }
+            ]
+          }
+        },
+        {
+          "stat": "elementalMastery",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "columbinaMaxHp"
+              },
+              {
+                "type": "constant",
+                "value": 0.0035
+              }
+            ]
+          },
+          "phase": 10,
+          "conditions": [
+            {
+              "type": "contextAtLeast",
+              "input": "moonsignLevel",
+              "value": 2
+            }
+          ]
+        }
+      ],
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "elevation": {
+            "expression": {
+              "type": "constant",
+              "value": 7
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "columbinaC3",
+      "name": "C3 · Dreamlike Glow Across Tranquil Waters",
+      "source": "Columbina constellation",
+      "description": "Grants 1.5% Lunar Reaction Elevation. Extra Skill levels affect Columbina's personal damage only.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "columbinaConstellation": 3
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "elevation": {
+            "expression": {
+              "type": "constant",
+              "value": 1.5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "columbinaC4",
+      "name": "C4 · Cloudveiled Ridges in Floral Mists",
+      "source": "Columbina constellation",
+      "description": "Grants 1.5% Lunar Reaction Elevation. Energy recovery and Gravity Interference's additional damage remain personal effects.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "columbinaConstellation": 4
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "elevation": {
+            "expression": {
+              "type": "constant",
+              "value": 1.5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "columbinaC5",
+      "name": "C5 · Silence Tending One Lone Song",
+      "source": "Columbina constellation",
+      "description": "Adds three Burst talent levels, capped at 15, and grants 1.5% Lunar Reaction Elevation.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "columbinaConstellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "columbinaBurstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15
+        }
+      ],
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "elevation": {
+            "expression": {
+              "type": "constant",
+              "value": 1.5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "columbinaC6",
+      "name": "C6 · Through Darkness Led by Moonlight",
+      "source": "Columbina constellation",
+      "description": "Assumes a recent Lunar-Bloom inside Lunar Domain: +80% Dendro and Hydro CRIT DMG for 8 seconds. Separately grants 7% Lunar Reaction Elevation.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "columbinaConstellation": 6
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "elements": [
+              "Dendro",
+              "Hydro"
+            ]
+          },
+          "requiresEffects": [
+            "columbinaLunarDomain"
+          ],
+          "crit": {
+            "additionalDamage": {
+              "expression": {
+                "type": "constant",
+                "value": 80
+              }
+            }
+          }
+        },
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "elevation": {
+            "expression": {
+              "type": "constant",
+              "value": 7
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Support profile only; Lunacy's Lure and personal damage instances do not modify the active character.",
+    "The bundled catalog has no Columbina talent file, so the Burst bonus table is explicitly authored here. Max HP and base HP are loaded from the stored build and character-stat database."
+  ],
+  "sources": [
+    "https://keqingmains.com/q/columbina-quickguide/",
+    "https://genshin-impact.fandom.com/wiki/Moonlit_Melancholy",
+    "https://keqingmains.com/misc/lunar-reactions/"
+  ]
+}

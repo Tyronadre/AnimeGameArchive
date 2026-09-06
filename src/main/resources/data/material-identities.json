@@ -1,0 +1,1130 @@
+{
+  "formatVersion": 1,
+  "catalogVersion": 1,
+  "materials": [
+    {
+      "gameId": 0,
+      "name": "Character EXP"
+    },
+    {
+      "gameId": 202,
+      "name": "Mora"
+    },
+    {
+      "gameId": 1327,
+      "name": "Mystic Enhancement Ore"
+    },
+    {
+      "gameId": 100021,
+      "name": "Wolfhook"
+    },
+    {
+      "gameId": 100022,
+      "name": "Valberry"
+    },
+    {
+      "gameId": 100023,
+      "name": "Cecilia"
+    },
+    {
+      "gameId": 100024,
+      "name": "Windwheel Aster"
+    },
+    {
+      "gameId": 100025,
+      "name": "Philanemo Mushroom"
+    },
+    {
+      "gameId": 100027,
+      "name": "Jueyun Chili"
+    },
+    {
+      "gameId": 100028,
+      "name": "Noctilucous Jade"
+    },
+    {
+      "gameId": 100029,
+      "name": "Silk Flower"
+    },
+    {
+      "gameId": 100030,
+      "name": "Glaze Lily"
+    },
+    {
+      "gameId": 100031,
+      "name": "Qingxin"
+    },
+    {
+      "gameId": 100033,
+      "name": "Starconch"
+    },
+    {
+      "gameId": 100034,
+      "name": "Violetgrass"
+    },
+    {
+      "gameId": 100055,
+      "name": "Small Lamp Grass"
+    },
+    {
+      "gameId": 100056,
+      "name": "Calla Lily"
+    },
+    {
+      "gameId": 100057,
+      "name": "Dandelion Seed"
+    },
+    {
+      "gameId": 100058,
+      "name": "Cor Lapis"
+    },
+    {
+      "gameId": 101201,
+      "name": "Onikabuto"
+    },
+    {
+      "gameId": 101202,
+      "name": "Sakura Bloom"
+    },
+    {
+      "gameId": 101203,
+      "name": "Crystal Marrow"
+    },
+    {
+      "gameId": 101204,
+      "name": "Dendrobium"
+    },
+    {
+      "gameId": 101205,
+      "name": "Naku Weed"
+    },
+    {
+      "gameId": 101206,
+      "name": "Sea Ganoderma"
+    },
+    {
+      "gameId": 101207,
+      "name": "Sango Pearl"
+    },
+    {
+      "gameId": 101208,
+      "name": "Amakumo Fruit"
+    },
+    {
+      "gameId": 101209,
+      "name": "Fluorescent Fungus"
+    },
+    {
+      "gameId": 101213,
+      "name": "Rukkhashava Mushrooms"
+    },
+    {
+      "gameId": 101214,
+      "name": "Padisarah"
+    },
+    {
+      "gameId": 101215,
+      "name": "Nilotpala Lotus"
+    },
+    {
+      "gameId": 101217,
+      "name": "Kalpalata Lotus"
+    },
+    {
+      "gameId": 101220,
+      "name": "Henna Berry"
+    },
+    {
+      "gameId": 101222,
+      "name": "Sand Grease Pupa"
+    },
+    {
+      "gameId": 101223,
+      "name": "Mourning Flower"
+    },
+    {
+      "gameId": 101224,
+      "name": "Trishiraite"
+    },
+    {
+      "gameId": 101225,
+      "name": "Scarab"
+    },
+    {
+      "gameId": 101232,
+      "name": "Beryl Conch"
+    },
+    {
+      "gameId": 101233,
+      "name": "Romaritime Flower"
+    },
+    {
+      "gameId": 101235,
+      "name": "Lumidouce Bell"
+    },
+    {
+      "gameId": 101236,
+      "name": "Rainbow Rose"
+    },
+    {
+      "gameId": 101237,
+      "name": "Lumitoile"
+    },
+    {
+      "gameId": 101238,
+      "name": "Lakelight Lily"
+    },
+    {
+      "gameId": 101239,
+      "name": "Subdetection Unit"
+    },
+    {
+      "gameId": 101240,
+      "name": "Spring of the First Dewdrop"
+    },
+    {
+      "gameId": 101241,
+      "name": "Clearwater Jade"
+    },
+    {
+      "gameId": 101247,
+      "name": "Sprayfeather Gill"
+    },
+    {
+      "gameId": 101248,
+      "name": "Brilliant Chrysanthemum"
+    },
+    {
+      "gameId": 101249,
+      "name": "Quenepa Berry"
+    },
+    {
+      "gameId": 101250,
+      "name": "Saurian Claw Succulent"
+    },
+    {
+      "gameId": 101252,
+      "name": "Glowing Hornshroom"
+    },
+    {
+      "gameId": 101253,
+      "name": "Withering Purpurbloom"
+    },
+    {
+      "gameId": 101254,
+      "name": "Skysplit Gembloom"
+    },
+    {
+      "gameId": 101255,
+      "name": "Dracolite"
+    },
+    {
+      "gameId": 101257,
+      "name": "Portable Bearing"
+    },
+    {
+      "gameId": 101261,
+      "name": "Frostlamp Flower"
+    },
+    {
+      "gameId": 101263,
+      "name": "Moonfall Silver"
+    },
+    {
+      "gameId": 104101,
+      "name": "Brilliant Diamond Sliver"
+    },
+    {
+      "gameId": 104102,
+      "name": "Brilliant Diamond Fragment"
+    },
+    {
+      "gameId": 104103,
+      "name": "Brilliant Diamond Chunk"
+    },
+    {
+      "gameId": 104104,
+      "name": "Brilliant Diamond Gemstone"
+    },
+    {
+      "gameId": 104111,
+      "name": "Agnidus Agate Sliver"
+    },
+    {
+      "gameId": 104112,
+      "name": "Agnidus Agate Fragment"
+    },
+    {
+      "gameId": 104113,
+      "name": "Agnidus Agate Chunk"
+    },
+    {
+      "gameId": 104114,
+      "name": "Agnidus Agate Gemstone"
+    },
+    {
+      "gameId": 104121,
+      "name": "Varunada Lazurite Sliver"
+    },
+    {
+      "gameId": 104122,
+      "name": "Varunada Lazurite Fragment"
+    },
+    {
+      "gameId": 104123,
+      "name": "Varunada Lazurite Chunk"
+    },
+    {
+      "gameId": 104124,
+      "name": "Varunada Lazurite Gemstone"
+    },
+    {
+      "gameId": 104131,
+      "name": "Nagadus Emerald Sliver"
+    },
+    {
+      "gameId": 104132,
+      "name": "Nagadus Emerald Fragment"
+    },
+    {
+      "gameId": 104133,
+      "name": "Nagadus Emerald Chunk"
+    },
+    {
+      "gameId": 104134,
+      "name": "Nagadus Emerald Gemstone"
+    },
+    {
+      "gameId": 104141,
+      "name": "Vajrada Amethyst Sliver"
+    },
+    {
+      "gameId": 104142,
+      "name": "Vajrada Amethyst Fragment"
+    },
+    {
+      "gameId": 104143,
+      "name": "Vajrada Amethyst Chunk"
+    },
+    {
+      "gameId": 104144,
+      "name": "Vajrada Amethyst Gemstone"
+    },
+    {
+      "gameId": 104151,
+      "name": "Vayuda Turquoise Sliver"
+    },
+    {
+      "gameId": 104152,
+      "name": "Vayuda Turquoise Fragment"
+    },
+    {
+      "gameId": 104153,
+      "name": "Vayuda Turquoise Chunk"
+    },
+    {
+      "gameId": 104154,
+      "name": "Vayuda Turquoise Gemstone"
+    },
+    {
+      "gameId": 104161,
+      "name": "Shivada Jade Sliver"
+    },
+    {
+      "gameId": 104162,
+      "name": "Shivada Jade Fragment"
+    },
+    {
+      "gameId": 104163,
+      "name": "Shivada Jade Chunk"
+    },
+    {
+      "gameId": 104164,
+      "name": "Shivada Jade Gemstone"
+    },
+    {
+      "gameId": 104171,
+      "name": "Prithiva Topaz Sliver"
+    },
+    {
+      "gameId": 104172,
+      "name": "Prithiva Topaz Fragment"
+    },
+    {
+      "gameId": 104173,
+      "name": "Prithiva Topaz Chunk"
+    },
+    {
+      "gameId": 104174,
+      "name": "Prithiva Topaz Gemstone"
+    },
+    {
+      "gameId": 104301,
+      "name": "Teachings of Freedom"
+    },
+    {
+      "gameId": 104302,
+      "name": "Guide to Freedom"
+    },
+    {
+      "gameId": 104303,
+      "name": "Philosophies of Freedom"
+    },
+    {
+      "gameId": 104304,
+      "name": "Teachings of Resistance"
+    },
+    {
+      "gameId": 104305,
+      "name": "Guide to Resistance"
+    },
+    {
+      "gameId": 104306,
+      "name": "Philosophies of Resistance"
+    },
+    {
+      "gameId": 104307,
+      "name": "Teachings of Ballad"
+    },
+    {
+      "gameId": 104308,
+      "name": "Guide to Ballad"
+    },
+    {
+      "gameId": 104309,
+      "name": "Philosophies of Ballad"
+    },
+    {
+      "gameId": 104310,
+      "name": "Teachings of Prosperity"
+    },
+    {
+      "gameId": 104311,
+      "name": "Guide to Prosperity"
+    },
+    {
+      "gameId": 104312,
+      "name": "Philosophies of Prosperity"
+    },
+    {
+      "gameId": 104313,
+      "name": "Teachings of Diligence"
+    },
+    {
+      "gameId": 104314,
+      "name": "Guide to Diligence"
+    },
+    {
+      "gameId": 104315,
+      "name": "Philosophies of Diligence"
+    },
+    {
+      "gameId": 104316,
+      "name": "Teachings of Gold"
+    },
+    {
+      "gameId": 104317,
+      "name": "Guide to Gold"
+    },
+    {
+      "gameId": 104318,
+      "name": "Philosophies of Gold"
+    },
+    {
+      "gameId": 104319,
+      "name": "Crown of Insight"
+    },
+    {
+      "gameId": 104320,
+      "name": "Teachings of Transience"
+    },
+    {
+      "gameId": 104321,
+      "name": "Guide to Transience"
+    },
+    {
+      "gameId": 104322,
+      "name": "Philosophies of Transience"
+    },
+    {
+      "gameId": 104323,
+      "name": "Teachings of Elegance"
+    },
+    {
+      "gameId": 104324,
+      "name": "Guide to Elegance"
+    },
+    {
+      "gameId": 104325,
+      "name": "Philosophies of Elegance"
+    },
+    {
+      "gameId": 104326,
+      "name": "Teachings of Light"
+    },
+    {
+      "gameId": 104327,
+      "name": "Guide to Light"
+    },
+    {
+      "gameId": 104328,
+      "name": "Philosophies of Light"
+    },
+    {
+      "gameId": 104329,
+      "name": "Teachings of Admonition"
+    },
+    {
+      "gameId": 104330,
+      "name": "Guide to Admonition"
+    },
+    {
+      "gameId": 104331,
+      "name": "Philosophies of Admonition"
+    },
+    {
+      "gameId": 104332,
+      "name": "Teachings of Ingenuity"
+    },
+    {
+      "gameId": 104333,
+      "name": "Guide to Ingenuity"
+    },
+    {
+      "gameId": 104334,
+      "name": "Philosophies of Ingenuity"
+    },
+    {
+      "gameId": 104335,
+      "name": "Teachings of Praxis"
+    },
+    {
+      "gameId": 104336,
+      "name": "Guide to Praxis"
+    },
+    {
+      "gameId": 104337,
+      "name": "Philosophies of Praxis"
+    },
+    {
+      "gameId": 104338,
+      "name": "Teachings of Equity"
+    },
+    {
+      "gameId": 104339,
+      "name": "Guide to Equity"
+    },
+    {
+      "gameId": 104340,
+      "name": "Philosophies of Equity"
+    },
+    {
+      "gameId": 104341,
+      "name": "Teachings of Justice"
+    },
+    {
+      "gameId": 104342,
+      "name": "Guide to Justice"
+    },
+    {
+      "gameId": 104343,
+      "name": "Philosophies of Justice"
+    },
+    {
+      "gameId": 104344,
+      "name": "Teachings of Order"
+    },
+    {
+      "gameId": 104345,
+      "name": "Guide to Order"
+    },
+    {
+      "gameId": 104346,
+      "name": "Philosophies of Order"
+    },
+    {
+      "gameId": 104347,
+      "name": "Teachings of Contention"
+    },
+    {
+      "gameId": 104348,
+      "name": "Guide to Contention"
+    },
+    {
+      "gameId": 104349,
+      "name": "Philosophies of Contention"
+    },
+    {
+      "gameId": 104350,
+      "name": "Teachings of Kindling"
+    },
+    {
+      "gameId": 104351,
+      "name": "Guide to Kindling"
+    },
+    {
+      "gameId": 104352,
+      "name": "Philosophies of Kindling"
+    },
+    {
+      "gameId": 104353,
+      "name": "Teachings of Conflict"
+    },
+    {
+      "gameId": 104354,
+      "name": "Guide to Conflict"
+    },
+    {
+      "gameId": 104355,
+      "name": "Philosophies of Conflict"
+    },
+    {
+      "gameId": 104356,
+      "name": "Teachings of Moonlight"
+    },
+    {
+      "gameId": 104357,
+      "name": "Guide to Moonlight"
+    },
+    {
+      "gameId": 104358,
+      "name": "Philosophies of Moonlight"
+    },
+    {
+      "gameId": 104359,
+      "name": "Teachings of Elysium"
+    },
+    {
+      "gameId": 104360,
+      "name": "Guide to Elysium"
+    },
+    {
+      "gameId": 104361,
+      "name": "Philosophies of Elysium"
+    },
+    {
+      "gameId": 104362,
+      "name": "Teachings of Vagrancy"
+    },
+    {
+      "gameId": 104363,
+      "name": "Guide to Vagrancy"
+    },
+    {
+      "gameId": 104364,
+      "name": "Philosophies of Vagrancy"
+    },
+    {
+      "gameId": 112002,
+      "name": "Slime Condensate"
+    },
+    {
+      "gameId": 112003,
+      "name": "Slime Secretions"
+    },
+    {
+      "gameId": 112004,
+      "name": "Slime Concentrate"
+    },
+    {
+      "gameId": 112005,
+      "name": "Damaged Mask"
+    },
+    {
+      "gameId": 112006,
+      "name": "Stained Mask"
+    },
+    {
+      "gameId": 112007,
+      "name": "Ominous Mask"
+    },
+    {
+      "gameId": 112008,
+      "name": "Divining Scroll"
+    },
+    {
+      "gameId": 112009,
+      "name": "Sealed Scroll"
+    },
+    {
+      "gameId": 112010,
+      "name": "Forbidden Curse Scroll"
+    },
+    {
+      "gameId": 112011,
+      "name": "Firm Arrowhead"
+    },
+    {
+      "gameId": 112012,
+      "name": "Sharp Arrowhead"
+    },
+    {
+      "gameId": 112013,
+      "name": "Weathered Arrowhead"
+    },
+    {
+      "gameId": 112032,
+      "name": "Recruit's Insignia"
+    },
+    {
+      "gameId": 112033,
+      "name": "Sergeant's Insignia"
+    },
+    {
+      "gameId": 112034,
+      "name": "Lieutenant's Insignia"
+    },
+    {
+      "gameId": 112035,
+      "name": "Treasure Hoarder Insignia"
+    },
+    {
+      "gameId": 112036,
+      "name": "Silver Raven Insignia"
+    },
+    {
+      "gameId": 112037,
+      "name": "Golden Raven Insignia"
+    },
+    {
+      "gameId": 112038,
+      "name": "Whopperflower Nectar"
+    },
+    {
+      "gameId": 112039,
+      "name": "Shimmering Nectar"
+    },
+    {
+      "gameId": 112040,
+      "name": "Energy Nectar"
+    },
+    {
+      "gameId": 112044,
+      "name": "Old Handguard"
+    },
+    {
+      "gameId": 112045,
+      "name": "Kageuchi Handguard"
+    },
+    {
+      "gameId": 112046,
+      "name": "Famed Handguard"
+    },
+    {
+      "gameId": 112053,
+      "name": "Spectral Husk"
+    },
+    {
+      "gameId": 112054,
+      "name": "Spectral Heart"
+    },
+    {
+      "gameId": 112055,
+      "name": "Spectral Nucleus"
+    },
+    {
+      "gameId": 112059,
+      "name": "Fungal Spores"
+    },
+    {
+      "gameId": 112060,
+      "name": "Luminescent Pollen"
+    },
+    {
+      "gameId": 112061,
+      "name": "Crystalline Cyst Dust"
+    },
+    {
+      "gameId": 112065,
+      "name": "Faded Red Satin"
+    },
+    {
+      "gameId": 112066,
+      "name": "Trimmed Red Silk"
+    },
+    {
+      "gameId": 112067,
+      "name": "Rich Red Brocade"
+    },
+    {
+      "gameId": 112080,
+      "name": "Transoceanic Pearl"
+    },
+    {
+      "gameId": 112081,
+      "name": "Transoceanic Chunk"
+    },
+    {
+      "gameId": 112082,
+      "name": "Xenochromatic Crystal"
+    },
+    {
+      "gameId": 112083,
+      "name": "Meshing Gear"
+    },
+    {
+      "gameId": 112084,
+      "name": "Mechanical Spur Gear"
+    },
+    {
+      "gameId": 112085,
+      "name": "Artificed Dynamic Gear"
+    },
+    {
+      "gameId": 112101,
+      "name": "Juvenile Fang"
+    },
+    {
+      "gameId": 112102,
+      "name": "Seasoned Fang"
+    },
+    {
+      "gameId": 112103,
+      "name": "Tyrant's Fang"
+    },
+    {
+      "gameId": 112104,
+      "name": "Sentry's Wooden Whistle"
+    },
+    {
+      "gameId": 112105,
+      "name": "Warrior's Metal Whistle"
+    },
+    {
+      "gameId": 112106,
+      "name": "Saurian-Crowned Warrior's Golden Whistle"
+    },
+    {
+      "gameId": 112122,
+      "name": "Broken Drive Shaft"
+    },
+    {
+      "gameId": 112123,
+      "name": "Reinforced Drive Shaft"
+    },
+    {
+      "gameId": 112124,
+      "name": "Precision Drive Shaft"
+    },
+    {
+      "gameId": 112125,
+      "name": "Tattered Warrant"
+    },
+    {
+      "gameId": 112126,
+      "name": "Immaculate Warrant"
+    },
+    {
+      "gameId": 112127,
+      "name": "Frost-Etched Warrant"
+    },
+    {
+      "gameId": 113001,
+      "name": "Hurricane Seed"
+    },
+    {
+      "gameId": 113002,
+      "name": "Lightning Prism"
+    },
+    {
+      "gameId": 113003,
+      "name": "Dvalin's Plume"
+    },
+    {
+      "gameId": 113004,
+      "name": "Dvalin's Claw"
+    },
+    {
+      "gameId": 113005,
+      "name": "Dvalin's Sigh"
+    },
+    {
+      "gameId": 113006,
+      "name": "Tail of Boreas"
+    },
+    {
+      "gameId": 113007,
+      "name": "Ring of Boreas"
+    },
+    {
+      "gameId": 113008,
+      "name": "Spirit Locket of Boreas"
+    },
+    {
+      "gameId": 113009,
+      "name": "Basalt Pillar"
+    },
+    {
+      "gameId": 113010,
+      "name": "Hoarfrost Core"
+    },
+    {
+      "gameId": 113011,
+      "name": "Everflame Seed"
+    },
+    {
+      "gameId": 113012,
+      "name": "Cleansing Heart"
+    },
+    {
+      "gameId": 113013,
+      "name": "Tusk of Monoceros Caeli"
+    },
+    {
+      "gameId": 113014,
+      "name": "Shard of a Foul Legacy"
+    },
+    {
+      "gameId": 113015,
+      "name": "Shadow of the Warrior"
+    },
+    {
+      "gameId": 113016,
+      "name": "Juvenile Jade"
+    },
+    {
+      "gameId": 113017,
+      "name": "Dragon Lord's Crown"
+    },
+    {
+      "gameId": 113018,
+      "name": "Bloodjade Branch"
+    },
+    {
+      "gameId": 113019,
+      "name": "Gilded Scale"
+    },
+    {
+      "gameId": 113020,
+      "name": "Crystalline Bloom"
+    },
+    {
+      "gameId": 113022,
+      "name": "Marionette Core"
+    },
+    {
+      "gameId": 113023,
+      "name": "Perpetual Heart"
+    },
+    {
+      "gameId": 113024,
+      "name": "Smoldering Pearl"
+    },
+    {
+      "gameId": 113025,
+      "name": "Molten Moment"
+    },
+    {
+      "gameId": 113026,
+      "name": "Hellfire Butterfly"
+    },
+    {
+      "gameId": 113027,
+      "name": "Ashen Heart"
+    },
+    {
+      "gameId": 113028,
+      "name": "Dew of Repudiation"
+    },
+    {
+      "gameId": 113029,
+      "name": "Storm Beads"
+    },
+    {
+      "gameId": 113030,
+      "name": "Riftborn Regalia"
+    },
+    {
+      "gameId": 113031,
+      "name": "Dragonheir's False Fin"
+    },
+    {
+      "gameId": 113032,
+      "name": "Mudra of the Malefic General"
+    },
+    {
+      "gameId": 113033,
+      "name": "Tears of the Calamitous God"
+    },
+    {
+      "gameId": 113034,
+      "name": "The Meaning of Aeons"
+    },
+    {
+      "gameId": 113035,
+      "name": "Runic Fang"
+    },
+    {
+      "gameId": 113036,
+      "name": "Majestic Hooked Beak"
+    },
+    {
+      "gameId": 113037,
+      "name": "Thunderclap Fruitcore"
+    },
+    {
+      "gameId": 113038,
+      "name": "Perpetual Caliber"
+    },
+    {
+      "gameId": 113039,
+      "name": "Light Guiding Tetrahedron"
+    },
+    {
+      "gameId": 113040,
+      "name": "Quelled Creeper"
+    },
+    {
+      "gameId": 113041,
+      "name": "Puppet Strings"
+    },
+    {
+      "gameId": 113042,
+      "name": "Mirror of Mushin"
+    },
+    {
+      "gameId": 113043,
+      "name": "Daka's Bell"
+    },
+    {
+      "gameId": 113044,
+      "name": "Pseudo-Stamens"
+    },
+    {
+      "gameId": 113045,
+      "name": "Evergloom Ring"
+    },
+    {
+      "gameId": 113046,
+      "name": "Worldspan Fern"
+    },
+    {
+      "gameId": 113047,
+      "name": "Primordial Greenbloom"
+    },
+    {
+      "gameId": 113048,
+      "name": "Everamber"
+    },
+    {
+      "gameId": 113049,
+      "name": "Artificed Spare Clockwork Component — Coppelia"
+    },
+    {
+      "gameId": 113050,
+      "name": "Artificed Spare Clockwork Component — Coppelius"
+    },
+    {
+      "gameId": 113051,
+      "name": "Emperor's Resolution"
+    },
+    {
+      "gameId": 113052,
+      "name": "\"Tourbillon Device\""
+    },
+    {
+      "gameId": 113053,
+      "name": "Fontemer Unihorn"
+    },
+    {
+      "gameId": 113054,
+      "name": "Lightless Silk String"
+    },
+    {
+      "gameId": 113055,
+      "name": "Lightless Eye of the Maelstrom"
+    },
+    {
+      "gameId": 113056,
+      "name": "Lightless Mass"
+    },
+    {
+      "gameId": 113057,
+      "name": "Water That Failed To Transcend"
+    },
+    {
+      "gameId": 113058,
+      "name": "Cloudseam Scale"
+    },
+    {
+      "gameId": 113059,
+      "name": "Fragment of a Golden Melody"
+    },
+    {
+      "gameId": 113060,
+      "name": "Fading Candle"
+    },
+    {
+      "gameId": 113061,
+      "name": "Silken Feather"
+    },
+    {
+      "gameId": 113062,
+      "name": "Denial and Judgment"
+    },
+    {
+      "gameId": 113064,
+      "name": "Mark of the Binding Blessing"
+    },
+    {
+      "gameId": 113065,
+      "name": "Overripe Flamegranate"
+    },
+    {
+      "gameId": 113066,
+      "name": "Gold-Inscribed Secret Source Core"
+    },
+    {
+      "gameId": 113067,
+      "name": "Ensnaring Gaze"
+    },
+    {
+      "gameId": 113068,
+      "name": "Eroded Horn"
+    },
+    {
+      "gameId": 113069,
+      "name": "Eroded Sunfire"
+    },
+    {
+      "gameId": 113070,
+      "name": "Eroded Scale-Feather"
+    },
+    {
+      "gameId": 113071,
+      "name": "Talisman of the Enigmatic Land"
+    },
+    {
+      "gameId": 113072,
+      "name": "Sparkless Statue Core"
+    },
+    {
+      "gameId": 113073,
+      "name": "Ascended Sample: Knight"
+    },
+    {
+      "gameId": 113074,
+      "name": "Ascended Sample: Rook"
+    },
+    {
+      "gameId": 113075,
+      "name": "Ascended Sample: Queen"
+    },
+    {
+      "gameId": 113076,
+      "name": "Secret Source Airflow Accumulator"
+    },
+    {
+      "gameId": 113077,
+      "name": "Precision Kuuvahki Stamping Die"
+    },
+    {
+      "gameId": 113078,
+      "name": "Lightbearing Scale-Feather"
+    },
+    {
+      "gameId": 113079,
+      "name": "Radiant Antler"
+    }
+  ]
+}

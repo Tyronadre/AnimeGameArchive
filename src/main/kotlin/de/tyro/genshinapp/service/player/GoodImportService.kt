@@ -123,24 +123,40 @@ class GoodImportService(
                 mainStatKey = artifact.requiredText("mainStatKey", label),
                 location = artifact.optionalText("location"),
                 locked = artifact.path("lock").asBoolean(false),
-                substats = substats.map { stat ->
-                    PlayerArtifactStat(
-                        key = stat.requiredText("key", label),
-                        value = stat.path("value").takeIf(JsonNode::isNumber)?.asDouble()
-                            ?: throw GoodImportException(
-                                "good.error.invalidSubstat",
-                                label.localizedArgument,
-                            ),
-                    )
-                },
+                substats = substats.map { stat -> parseArtifactStat(stat, label) },
                 totalRolls = artifact.path("totalRolls")
                     .takeIf(JsonNode::isIntegralNumber)
                     ?.asInt(),
                 astralMark = artifact.path("astralMark").asBoolean(false),
                 elixirCrafted = artifact.path("elixerCrafted").asBoolean(false),
+                unactivatedSubstats = artifact.path("unactivatedSubstats")
+                    .takeUnless { it.isMissingNode || it.isNull }
+                    ?.also {
+                        if (!it.isArray) {
+                            throw GoodImportException(
+                                "good.error.invalidSubstats",
+                                label.localizedArgument,
+                            )
+                        }
+                    }
+                    ?.map { stat -> parseArtifactStat(stat, label) }
+                    .orEmpty(),
             )
         }
     }
+
+    private fun parseArtifactStat(
+        stat: JsonNode,
+        label: ImportEntryLabel,
+    ): PlayerArtifactStat = PlayerArtifactStat(
+        key = stat.requiredText("key", label),
+        value = stat.path("value").takeIf(JsonNode::isNumber)?.asDouble()
+            ?: throw GoodImportException(
+                "good.error.invalidSubstat",
+                label.localizedArgument,
+            ),
+        initialValue = stat.path("initialValue").takeIf(JsonNode::isNumber)?.asDouble(),
+    )
 
     private fun parseWeapons(node: JsonNode): List<PlayerWeapon> {
         if (node.isMissingNode || node.isNull) return emptyList()

@@ -36,7 +36,7 @@ class WeaponPlanningServiceTest {
 
         assertEquals(
             597L,
-            requirements.single { it.id == 104013 }.amount,
+            requirements.single { it.id == 1327 }.amount,
         )
         assertEquals(
             597_000L,

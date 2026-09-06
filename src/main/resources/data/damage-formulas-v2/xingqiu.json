@@ -1,0 +1,64 @@
+{
+  "schemaVersion":2,"key":"xingqiu","characterKey":"xingqiu","name":"Xingqiu","element":"Hydro","weaponType":"Sword",
+  "characterDataResource":"data/characters/data/xingqiu.json","defaultTeam":["xingqiu","arlecchino","bennett","xiangling"],
+  "statBindings":{"attack":"attack","elementalMastery":"elementalMastery","energyRecharge":"energyRecharge","physicalDamageBonus":"physicalDamageBonus"},
+  "inputs":[
+    {"id":"characterLevel","label":"Character level","defaultValue":90,"min":1,"max":90,"step":1,"initialValueSource":{"valueKey":"level"}},
+    {"id":"enemyLevel","label":"Enemy level","defaultValue":90,"min":1,"max":120,"step":1,"section":"enemy"},
+    {"id":"maxHp","label":"Max HP","defaultValue":15000,"min":0,"max":200000,"step":1,"initialValueSource":{"valueKey":"totalHp"}},
+    {"id":"attack","label":"Total ATK","defaultValue":1500,"min":0,"max":20000,"step":1,"initialValueSource":{"valueKey":"totalAttack"}},
+    {"id":"defense","label":"Total DEF","defaultValue":800,"min":0,"max":20000,"step":1,"initialValueSource":{"valueKey":"totalDefense"}},
+    {"id":"elementalMastery","label":"Elemental Mastery","defaultValue":0,"min":0,"max":5000,"step":1,"initialValueSource":{"valueKey":"stat:eleMas"}},
+    {"id":"elementalDamageBonus","label":"Hydro DMG Bonus","defaultValue":0,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:hydro_dmg_"}},
+    {"id":"physicalDamageBonus","label":"Physical DMG Bonus","defaultValue":0,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:physical_dmg_"}},
+    {"id":"energyRecharge","label":"Energy Recharge","defaultValue":100,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:enerRech_"}},
+    {"id":"critRate","label":"CRIT Rate","defaultValue":5,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:critRate_"}},
+    {"id":"critDamage","label":"CRIT DMG","defaultValue":50,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:critDMG_"}},
+    {"id":"xingqiuConstellation","label":"Xingqiu constellation","defaultValue":0,"min":0,"max":6,"step":1,"initialValueSource":{"valueKey":"constellation"},"section":"constellations"},
+    {"id":"normalTalentLevel","label":"Normal Attack level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"normalTalent"}},
+    {"id":"skillTalentLevel","label":"Elemental Skill level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"skillTalent"}},
+    {"id":"burstTalentLevel","label":"Elemental Burst level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"burstTalent"}},
+    {"id":"enemyResistance","label":"Enemy Hydro RES","defaultValue":10,"min":-100,"max":150,"step":0.1,"unit":"percentPoints","section":"enemy"},
+    {"id":"enemyPhysicalResistance","label":"Enemy Physical RES","defaultValue":10,"min":-100,"max":150,"step":0.1,"unit":"percentPoints","section":"enemy"},
+    {"id":"defenseReduction","label":"DEF reduction","defaultValue":0,"min":0,"max":100,"step":0.1,"unit":"percentPoints","section":"enemy"},
+    {"id":"defenseIgnore","label":"DEF ignored","defaultValue":0,"min":0,"max":100,"step":0.1,"unit":"percentPoints","section":"enemy"}
+  ],
+  "damageTypes":[
+    {"id":"directHydro","element":"Hydro"},
+    {"id":"directPhysical","element":"Physical","appliesElementalDamageBonus":false,"resistanceInput":"enemyPhysicalResistance","innateDamageBonus":{"unit":"percentPoints","expression":{"type":"input","input":"physicalDamageBonus"}}}
+  ],
+  "talents":[
+    {"key":"normal","name":"Guhua Style","formulas":[
+      {"id":"normal-1","label":"1-Hit DMG","damageType":"directPhysical","tags":["normalAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param1","levelInput":"normalTalentLevel"}]}},
+      {"id":"normal-2","label":"2-Hit DMG","damageType":"directPhysical","tags":["normalAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param2","levelInput":"normalTalentLevel"}]}},
+      {"id":"normal-3","label":"3-Hit DMG (2 strikes)","damageType":"directPhysical","tags":["normalAttack","multiHit"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"add","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param3","levelInput":"normalTalentLevel"},{"type":"talentParameter","talent":"combat1","parameter":"param4","levelInput":"normalTalentLevel"}]}]}},
+      {"id":"normal-4","label":"4-Hit DMG","damageType":"directPhysical","tags":["normalAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param5","levelInput":"normalTalentLevel"}]}},
+      {"id":"normal-5","label":"5-Hit DMG (2 strikes)","damageType":"directPhysical","tags":["normalAttack","multiHit"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"add","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param6","levelInput":"normalTalentLevel"},{"type":"talentParameter","talent":"combat1","parameter":"param7","levelInput":"normalTalentLevel"}]}]}},
+      {"id":"charged","label":"Charged Attack DMG (2 hits)","damageType":"directPhysical","tags":["chargedAttack","multiHit"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"add","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param8","levelInput":"normalTalentLevel"},{"type":"talentParameter","talent":"combat1","parameter":"param9","levelInput":"normalTalentLevel"}]}]}},
+      {"id":"plunge","label":"Plunge DMG","damageType":"directPhysical","tags":["plungingAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param11","levelInput":"normalTalentLevel"}]}},
+      {"id":"low-plunge","label":"Low Plunge DMG","damageType":"directPhysical","tags":["plungingAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param12","levelInput":"normalTalentLevel"}]}},
+      {"id":"high-plunge","label":"High Plunge DMG","damageType":"directPhysical","tags":["plungingAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param13","levelInput":"normalTalentLevel"}]}}
+    ]},
+    {"key":"skill","name":"Guhua Sword: Fatal Rainscreen","formulas":[
+      {"id":"skill-hit-1","label":"Skill 1st Hit DMG","damageType":"directHydro","tags":["elementalSkill"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param1","levelInput":"skillTalentLevel"}]}},
+      {"id":"skill-hit-2","label":"Skill 2nd Hit DMG","damageType":"directHydro","tags":["elementalSkill"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param2","levelInput":"skillTalentLevel"}]}}
+    ]},
+    {"key":"burst","name":"Guhua Sword: Raincutter","formulas":[
+      {"id":"rain-sword","label":"Sword Rain DMG (per sword)","damageType":"directHydro","tags":["elementalBurst","swordRain"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat3","parameter":"param1","levelInput":"burstTalentLevel"}]}},
+      {"id":"rain-wave-2","label":"2-Sword Wave DMG","damageType":"directHydro","tags":["elementalBurst","swordRain","multiHit"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat3","parameter":"param1","levelInput":"burstTalentLevel"},{"type":"constant","value":2}]}},
+      {"id":"rain-wave-3","label":"3-Sword Wave DMG","damageType":"directHydro","tags":["elementalBurst","swordRain","multiHit"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat3","parameter":"param1","levelInput":"burstTalentLevel"},{"type":"constant","value":3}]}},
+      {"id":"rain-wave-5","label":"C6 Enhanced 5-Sword Wave DMG","damageType":"directHydro","tags":["elementalBurst","swordRain","multiHit","constellationDamage"],"requiredEffects":["xingqiuC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat3","parameter":"param1","levelInput":"burstTalentLevel"},{"type":"constant","value":5}]}}
+    ]}
+  ],
+  "effects":[
+    {"id":"hydropathic","name":"Hydropathic","source":"Xingqiu · Passive","category":"passive","description":"When a Rain Sword is shattered or expires, it heals based on Xingqiu's Max HP.","impact":"Healing only; no outgoing damage modifier.","defaultEnabled":true,"activation":{"event":"rainSwordExpires"}},
+    {"id":"bladesAmidstRaindrops","name":"Blades Amidst Raindrops","source":"Xingqiu · Passive","category":"passive","description":"Increases Xingqiu's Hydro DMG Bonus by 20%.","defaultEnabled":true,"activation":{"event":"always"},"formulaModifiers":[{"targets":{"elements":["Hydro"]},"damageBonus":{"expression":{"type":"constant","value":20}}}]},
+    {"id":"flashOfGenius","name":"Flash of Genius","source":"Xingqiu · Passive","category":"passive","description":"Crafting passive with no combat effect.","impact":"No calculator modifier.","defaultEnabled":true,"activation":{"event":"always"}},
+    {"id":"xingqiuC1","name":"C1 · The Scent Remained","source":"Xingqiu · Constellation","category":"constellation","description":"Increases the maximum number of Rain Swords by 1.","impact":"Defensive/healing utility; listed damage instances are unchanged.","ownershipRequirements":{"xingqiuConstellation":1},"activation":{"event":"always"}},
+    {"id":"xingqiuC2","name":"C2 · Rainbow Upon the Azure Sky","source":"Xingqiu · Constellation","category":"constellation","description":"Extends Raincutter by 3 seconds and reduces Hydro RES of enemies hit by Sword Rain by 15% for 4 seconds.","ownershipRequirements":{"xingqiuConstellation":2},"activation":{"event":"swordRainHit"},"formulaModifiers":[{"targets":{"elements":["Hydro"]},"resistanceMitigation":{"reduction":{"expression":{"type":"constant","value":15}}}}]},
+    {"id":"xingqiuC3","name":"C3 · Weaver of Verses","source":"Xingqiu · Constellation","category":"constellation","description":"Increases Raincutter's talent level by 3.","ownershipRequirements":{"xingqiuConstellation":3},"activation":{"event":"always"},"statChanges":[{"stat":"burstTalentLevel","operation":"flatAdd","value":{"type":"constant","value":3},"maximum":15}]},
+    {"id":"xingqiuC4","name":"C4 · Evilsoother","source":"Xingqiu · Constellation","category":"constellation","description":"During Raincutter, Fatal Rainscreen deals 50% more damage. This is a multiplicative Base DMG Bonus layer.","ownershipRequirements":{"xingqiuConstellation":4},"activation":{"event":"raincutterActive"},"formulaModifiers":[{"targets":{"requiredTags":["elementalSkill"]},"baseDamageBonus":{"expression":{"type":"constant","value":50}}}]},
+    {"id":"xingqiuC5","name":"C5 · Embrace of Rain","source":"Xingqiu · Constellation","category":"constellation","description":"Increases Fatal Rainscreen's talent level by 3.","ownershipRequirements":{"xingqiuConstellation":5},"activation":{"event":"always"},"statChanges":[{"stat":"skillTalentLevel","operation":"flatAdd","value":{"type":"constant","value":3},"maximum":15}]},
+    {"id":"xingqiuC6","name":"C6 · Hence, Call Them My Own Verses","source":"Xingqiu · Constellation","category":"constellation","description":"Changes the Sword Rain pattern to 2-3-5 and restores 3 Energy on the enhanced wave. The 5-sword wave is listed separately.","ownershipRequirements":{"xingqiuConstellation":6},"activation":{"event":"thirdSwordRainWave"}}
+  ]
+}

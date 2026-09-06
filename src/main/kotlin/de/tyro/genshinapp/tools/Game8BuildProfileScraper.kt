@@ -3,6 +3,10 @@ package de.tyro.genshinapp.tools
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import de.tyro.genshinapp.model.GoodKeyNormalizer
+import de.tyro.genshinapp.configuration.GenshinContentProperties
+import de.tyro.genshinapp.service.importer.HttpHoyolabWikiDataSource
+import de.tyro.genshinapp.service.importer.HoyolabWikiEntry
+import de.tyro.genshinapp.service.importer.HoyolabWikiMenu
 import de.tyro.genshinapp.service.artifact.ArtifactOptimizationProfile
 import de.tyro.genshinapp.service.artifact.ArtifactOptimizerBuildCatalog
 import de.tyro.genshinapp.service.artifact.ArtifactOptimizerBuildGoalRange
@@ -26,14 +30,15 @@ private const val DEFAULT_SOURCE_URL =
     "https://game8.co/games/Genshin-Impact/archives/530535"
 private const val DEFAULT_OUTPUT =
     "src/main/resources/data/artifact-optimizer-builds.json"
-private const val DEFAULT_CHARACTER_DATA =
-    "src/main/resources/data/characters"
-
 fun main(args: Array<String>) {
     val options = ScraperOptions.parse(args.toList())
     val html = options.input?.let(Files::readString)
         ?: fetchHtml(options.sourceUrl)
-    val characterIndex = CharacterIndex.load(options.characterDataDirectory)
+    val mapper = jacksonObjectMapper()
+    val hoyolab = HttpHoyolabWikiDataSource(mapper, GenshinContentProperties())
+    val characterIndex = CharacterIndex.fromHoyolab(
+        hoyolab.listEntries(HoyolabWikiMenu.CHARACTERS),
+    )
     val baseCatalog = Game8BuildProfileParser.parse(
         html = html,
         sourceUrl = options.sourceUrl,
@@ -812,6 +817,20 @@ class CharacterIndex private constructor(
     companion object {
         fun empty(): CharacterIndex = CharacterIndex(emptyMap(), emptyMap())
 
+        fun fromHoyolab(entries: Collection<HoyolabWikiEntry>): CharacterIndex {
+            val metadata = entries.map { entry ->
+                CharacterMetadata(
+                    key = GoodKeyNormalizer.normalize(entry.name),
+                    name = entry.name,
+                    element = entry.firstFilter("character_vision"),
+                )
+            }
+            return CharacterIndex(
+                byKey = metadata.associateBy(CharacterMetadata::key),
+                byName = metadata.associateBy { GoodKeyNormalizer.normalize(it.name) },
+            )
+        }
+
         fun load(directory: Path): CharacterIndex {
             val mapper = jacksonObjectMapper()
             val listFile = directory.resolve("char_list.json")
@@ -849,7 +868,6 @@ private data class ScraperOptions(
     val sourceUrl: String,
     val input: Path?,
     val output: Path,
-    val characterDataDirectory: Path,
     val fetchCharacterPages: Boolean,
 ) {
     companion object {
@@ -857,7 +875,6 @@ private data class ScraperOptions(
             var sourceUrl = DEFAULT_SOURCE_URL
             var input: Path? = null
             var output = Path.of(DEFAULT_OUTPUT)
-            var characterData = Path.of(DEFAULT_CHARACTER_DATA)
             var fetchCharacterPages = true
             var index = 0
             while (index < args.size) {
@@ -865,8 +882,6 @@ private data class ScraperOptions(
                     "--url" -> sourceUrl = args.valueAfter(index, option).also { index++ }
                     "--input" -> input = Path.of(args.valueAfter(index, option)).also { index++ }
                     "--output" -> output = Path.of(args.valueAfter(index, option)).also { index++ }
-                    "--character-data" ->
-                        characterData = Path.of(args.valueAfter(index, option)).also { index++ }
                     "--skip-character-pages" -> fetchCharacterPages = false
                     else -> throw IllegalArgumentException("Unknown option: $option")
                 }
@@ -876,7 +891,6 @@ private data class ScraperOptions(
                 sourceUrl = sourceUrl,
                 input = input,
                 output = output,
-                characterDataDirectory = characterData,
                 fetchCharacterPages = fetchCharacterPages,
             )
         }

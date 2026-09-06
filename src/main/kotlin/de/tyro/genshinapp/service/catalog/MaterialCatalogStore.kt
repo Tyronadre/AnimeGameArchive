@@ -59,7 +59,17 @@ class JpaMaterialCatalogStore(
 
     @Transactional
     override fun saveMaterials(materials: Collection<MaterialDefinition>) {
-        materials.forEach(::upsertMaterial)
+        val desired = materials.distinctBy(MaterialDefinition::id)
+        if (desired.isEmpty()) return
+        val existingByGameId = materialRepository
+            .findAllByGameIdInOrderByNameAsc(desired.map(MaterialDefinition::id))
+            .associateBy(Material::gameId)
+        materialRepository.saveAll(
+            desired.map { material ->
+                (existingByGameId[material.id] ?: Material().also { it.gameId = material.id })
+                    .apply(material)
+            },
+        )
     }
 
     @Transactional
@@ -105,15 +115,13 @@ class JpaMaterialCatalogStore(
         ).map(::toDefinition)
     }
 
-    private fun upsertMaterial(material: MaterialDefinition): Material {
-        val entity = materialRepository.findByGameId(material.id)
-            ?: Material().also { it.gameId = material.id }
-        entity.name = material.name
-        entity.type = material.category.name
-        entity.craftingFamily = material.craftingFamily
-        entity.craftingTier = material.craftingTier
-        entity.conversionGroup = material.conversionGroup
-        return materialRepository.save(entity)
+    private fun Material.apply(material: MaterialDefinition): Material {
+        name = material.name
+        type = material.category.name
+        craftingFamily = material.craftingFamily
+        craftingTier = material.craftingTier
+        conversionGroup = material.conversionGroup
+        return this
     }
 
     private fun toDefinition(entity: Material): MaterialDefinition =

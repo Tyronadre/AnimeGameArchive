@@ -2,8 +2,8 @@
 
 This is the privileged, headless capture component used by Genshin Archive's
 desktop mode. It is adapted from
-[konkers/irminsul](https://github.com/konkers/irminsul) version 0.1.19,
-commit `f8b027c2523e300209f39e3968f386cea11eb61d`.
+[konkers/irminsul](https://github.com/konkers/irminsul) version 0.2.1,
+commit `d128e2f5319e7c9e56031274ce1b62c810514754`.
 
 The following files are retained from upstream with only integration-specific
 changes around them:
@@ -15,7 +15,7 @@ changes around them:
 - `keys/gi.json`
 
 Irminsul's MIT license is preserved in `LICENSE`. The helper has no independent
-UI. It captures the complete login character and inventory snapshot, exports
+UI or self-updater. It captures the complete login character and inventory snapshot, exports
 GOOD v3, and sends it to the token-protected loopback endpoint supplied by the
 desktop application. It then remains attached and recognizes complete inventory
 item changes and deletions by their nested protobuf shape rather than
@@ -27,7 +27,8 @@ When `--packet-log-file` is supplied, it additionally records each decoded game
 command as a JSON Lines inspection entry with command ID, payload size,
 best-known category, and a bounded generic protobuf field tree. The packet log is
 intended for local reverse-engineering decisions and may contain private
-account/game data.
+account/game data. Pktmon remains the default capture backend on Windows; builds
+with the optional `pcap` feature can select pcap with `--capture-backend pcap`.
 
 Live updates currently cover artifacts, weapons, and materials. Character
 progression and equipped item locations are refreshed by starting a new capture.

@@ -1,33 +1,40 @@
 package de.tyro.genshinapp.service.catalog
 
-import de.tyro.genshinapp.service.content.DynamicContentLoader
-import com.fasterxml.jackson.databind.ObjectMapper
+import de.tyro.genshinapp.service.content.ImageUrlRegistry
+import de.tyro.genshinapp.service.content.MaterialImageDefault
+import de.tyro.genshinapp.service.importer.HoyolabMaterialReference
+import de.tyro.genshinapp.service.importer.HoyolabMaterialSummary
+import de.tyro.genshinapp.startup.ApplicationStartupStatus
 import de.tyro.genshinapp.model.CharacterDefinition
 import de.tyro.genshinapp.model.MaterialCategory
 import de.tyro.genshinapp.model.MaterialDefinition
 import de.tyro.genshinapp.model.MaterialSourceDefinition
 import de.tyro.genshinapp.model.MaterialSourceType
-import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Service
 import org.springframework.web.util.UriComponentsBuilder
 import java.util.concurrent.ConcurrentHashMap
 
 @Service
 class MaterialCatalogService(
-    private val objectMapper: ObjectMapper,
     private val catalogStore: MaterialCatalogStore? = null,
     private val characterCatalogService: CharacterCatalogService? = null,
-    private val contentLoader: DynamicContentLoader? = null,
+    private val imageUrlRegistry: ImageUrlRegistry? = null,
+    private val identityCatalog: MaterialIdentityCatalog? = null,
 ) {
     private val materialsById = ConcurrentHashMap<Int, MaterialDefinition>()
+    private val materialIdByHoyolabPageId = ConcurrentHashMap<Int, Int>()
 
     @Volatile
     private var synchronizedCharacterSignature: Int? = null
 
     init {
+        ApplicationStartupStatus.report(
+            "Loading saved materials…",
+            "Preparing inventory and progression material records",
+        )
         catalogStore?.getMaterials().orEmpty().forEach(::remember)
+        identityCatalog?.materials().orEmpty().forEach(::rememberIdentity)
         BASE_MATERIALS.forEach(::rememberDiscovered)
-        loadBundledWeaponMaterials().forEach(::rememberDiscovered)
         synchronizeAvailableCharacters()
     }
 
@@ -61,6 +68,69 @@ class MaterialCatalogService(
         return materialsById[id] ?: catalogStore?.findMaterial(id)?.also(::remember)
     }
 
+    @Synchronized
+    fun synchronizeHoyolabMaterialList(entries: Collection<HoyolabMaterialSummary>): Int {
+        var changed = 0
+        val imageDefaults = mutableListOf<MaterialImageDefault>()
+        entries.forEach { entry ->
+            val pageId = entry.entryPageId.toInt().takeIf { it > 0 } ?: return@forEach
+            val id = canonicalMaterialId(pageId, entry.name)
+            materialIdByHoyolabPageId[pageId] = id
+            val current = materialsById[id]
+            val candidate = (current ?: MaterialDefinition(id, entry.name)).copy(
+                name = entry.name,
+                category = current?.category?.takeUnless { it == MaterialCategory.OTHER }
+                    ?: entry.category.takeUnless { it == MaterialCategory.OTHER }
+                    ?: MaterialCategory.OTHER,
+            )
+            if (current != candidate) {
+                remember(candidate)
+                changed++
+            }
+            entry.iconUrl?.let { imageDefaults += MaterialImageDefault(id, entry.name, it) }
+        }
+        normalizeAndPersist(characterCatalogService?.getCharacters().orEmpty())
+        imageUrlRegistry?.registerMaterialDefaults(imageDefaults)
+        return changed
+    }
+
+    @Synchronized
+    fun synchronizeHoyolabReferences(references: Collection<HoyolabMaterialReference>) {
+        val imageDefaults = mutableListOf<MaterialImageDefault>()
+        val discovered = mutableListOf<MaterialDefinition>()
+        references.map(::canonicalReference).distinctBy(HoyolabMaterialReference::id).forEach { reference ->
+            val current = materialsById[reference.id] ?: catalogStore?.findMaterial(reference.id)
+            val name = reference.name ?: current?.name ?: "HoYoWiki material ${reference.hoyolabPageId}"
+            if (current == null) {
+                MaterialDefinition(reference.id, name).also {
+                    remember(it)
+                    discovered += it
+                }
+            }
+            reference.imageUrl?.let {
+                imageDefaults += MaterialImageDefault(
+                    reference.id,
+                    current?.name ?: name,
+                    it,
+                )
+            }
+        }
+        if (discovered.isNotEmpty()) catalogStore?.saveMaterials(discovered)
+        imageUrlRegistry?.registerMaterialDefaults(imageDefaults)
+    }
+
+    fun canonicalCost(reference: HoyolabMaterialReference) = canonicalReference(reference).toCost()
+
+    /** Refreshes the source-controlled game-id bridge before a live HoYoWiki import. */
+    @Synchronized
+    fun refreshIdentityCatalog(): Boolean {
+        val catalog = identityCatalog ?: return false
+        if (!catalog.refreshRemote()) return false
+        catalog.materials().forEach(::rememberIdentity)
+        normalizeAndPersist(characterCatalogService?.getCharacters().orEmpty())
+        return true
+    }
+
     fun getSources(types: Collection<MaterialSourceType>): List<MaterialSourceDefinition> {
         synchronizeAvailableCharacters()
         return catalogStore?.getSources(types).orEmpty()
@@ -70,25 +140,24 @@ class MaterialCatalogService(
     fun synchronizeCharacters(characters: Collection<CharacterDefinition>) {
         materialsOf(characters).forEach(::rememberDiscovered)
         val enriched = MaterialCatalogMetadata.enrich(materialsById.values, characters)
+            .map(MaterialCatalogSeed::applySourceMetadata)
         enriched.forEach { candidate ->
             val existing = materialsById[candidate.id]
             remember(
-                if (existing == null || MaterialCatalogMetadata.isNonCraftableSpecial(candidate.id)) {
+                if (existing == null || MaterialCatalogMetadata.isNonCraftableSpecial(candidate.name)) {
                     candidate
                 } else existing.copy(
                     name = existing.name.ifBlank { candidate.name },
-                    category = existing.category.takeUnless { it == MaterialCategory.OTHER }
-                        ?: candidate.category,
-                    craftingFamily = existing.craftingFamily ?: candidate.craftingFamily,
-                    craftingTier = existing.craftingTier ?: candidate.craftingTier,
-                    conversionGroup = existing.conversionGroup ?: candidate.conversionGroup,
+                    category = candidate.category,
+                    craftingFamily = candidate.craftingFamily,
+                    craftingTier = candidate.craftingTier,
+                    conversionGroup = candidate.conversionGroup,
                 )
             )
         }
         catalogStore?.saveMaterials(materialsById.values)
         catalogStore?.ensureSources(MaterialCatalogSeed.sources)
         synchronizedCharacterSignature = characterSignature(characters)
-        contentLoader?.registerDefaultImageLinks(emptyList(), materialsById.values.toList())
     }
 
     fun materialsOf(characters: Collection<CharacterDefinition>): List<MaterialDefinition> =
@@ -115,9 +184,43 @@ class MaterialCatalogService(
         materialsById.compute(material.id) { _, existing -> existing ?: material }
     }
 
+    private fun rememberIdentity(material: MaterialDefinition) {
+        materialsById.compute(material.id) { _, existing ->
+            if (existing == null) material else existing.copy(
+                name = material.name,
+                category = material.category.takeUnless { it == MaterialCategory.OTHER }
+                    ?: existing.category,
+                craftingFamily = material.craftingFamily ?: existing.craftingFamily,
+                craftingTier = material.craftingTier ?: existing.craftingTier,
+                conversionGroup = material.conversionGroup ?: existing.conversionGroup,
+            )
+        }
+    }
+
     private fun remember(material: MaterialDefinition) {
         materialsById[material.id] = material
     }
+
+    private fun normalizeAndPersist(characters: Collection<CharacterDefinition>) {
+        MaterialCatalogMetadata.enrich(materialsById.values, characters)
+            .map(MaterialCatalogSeed::applySourceMetadata)
+            .forEach(::remember)
+        catalogStore?.saveMaterials(materialsById.values)
+        catalogStore?.ensureSources(MaterialCatalogSeed.sources)
+    }
+
+    private fun canonicalReference(reference: HoyolabMaterialReference): HoyolabMaterialReference {
+        val id = materialIdByHoyolabPageId[reference.hoyolabPageId]
+            ?: canonicalMaterialId(reference.hoyolabPageId, reference.name)
+                .also { materialIdByHoyolabPageId[reference.hoyolabPageId] = it }
+        val name = materialsById[id]?.name ?: reference.name
+        return reference.copy(id = id, name = name)
+    }
+
+    private fun canonicalMaterialId(hoyolabPageId: Int, name: String?): Int =
+        identityCatalog?.let { catalog -> name?.let(catalog::gameIdForName) }
+            ?: materialIdByHoyolabPageId[hoyolabPageId]
+            ?: Math.addExact(HOYOLAB_SYNTHETIC_ID_BASE, hoyolabPageId)
 
     private fun synchronizeAvailableCharacters() {
         val characters = characterCatalogService?.getCharacters() ?: return
@@ -134,24 +237,11 @@ class MaterialCatalogService(
             )
         }.hashCode()
 
-    private fun loadBundledWeaponMaterials(): List<MaterialDefinition> =
-        BUNDLED_WEAPON_KEYS.asSequence().flatMap { key ->
-            val resource = ClassPathResource("data/weapons/data/$key.json")
-            if (!resource.exists()) return@flatMap emptySequence()
-            resource.inputStream.use(objectMapper::readTree).path("costs")
-                .flatMap { phase ->
-                    phase.map { cost ->
-                        MaterialDefinition(cost.path("id").asInt(), cost.path("name").asText())
-                    }
-                }
-                .asSequence()
-        }.filter { it.id > 0 && it.name.isNotBlank() }.distinctBy { it.id }.toList()
-
     private companion object {
+        private const val HOYOLAB_SYNTHETIC_ID_BASE = 1_500_000_000
         private val BASE_MATERIALS = listOf(
             MaterialDefinition(0, "Character EXP"),
-            MaterialDefinition(104013, "Mystic Enhancement Ore"),
+            MaterialDefinition(1327, "Mystic Enhancement Ore"),
         )
-        private val BUNDLED_WEAPON_KEYS = listOf("rust", "sacrificialbow")
     }
 }

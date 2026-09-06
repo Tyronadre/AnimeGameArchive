@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 2,
+  "key": "deepwoodmemories",
+  "name": "Deepwood Memories",
+  "inputs": [],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · Dendro DMG",
+        "source": "Artifact set",
+        "description": "Elemental damage bonus applies to matching ordinary damage, not Lunar reactions.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [],
+              "elements": [
+                "Dendro"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 15
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 15
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "party",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Dendro resistance reduction",
+        "source": "Artifact set",
+        "description": "A Skill or Burst hit reduces target Dendro RES by 30% for 8s, including when the wearer is off-field. Applies to Dendro Lunar damage too; duplicate sets do not stack.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "elements": [
+                "Dendro"
+              ]
+            },
+            "resistanceMitigation": {
+              "reduction": {
+                "unit": "percentPoints",
+                "expression": {
+                  "type": "constant",
+                  "value": 30
+                }
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "Enemy RES reduction",
+            "expression": {
+              "type": "constant",
+              "value": 30
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "stackingGroup": "deepwoodMemories",
+        "impact": "Party effect. Identical non-stacking bonuses use one eligible source."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: deepwoodmemories",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

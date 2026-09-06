@@ -24,6 +24,8 @@ class PlayerSnapshotStore(
     private val snapshotActivityService: SnapshotActivityService? = null,
     private val travelerService: TravelerService? = null,
     private val playerWeaponService: PlayerWeaponService? = null,
+    private val playerArtifactStorageService: PlayerArtifactStorageService? = null,
+    private val goodDataStorageService: PlayerGoodDataStorageService? = null,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val playerDataDirectory = Path.of(properties.cacheDirectory)
@@ -35,18 +37,31 @@ class PlayerSnapshotStore(
     fun save(userId: Long, bytes: ByteArray): PlayerSnapshot {
         val snapshot = goodImportService.parse(bytes)
         val state = stateFor(userId)
-        val previous: PlayerSnapshot?
+        val previous = current(userId)
         synchronized(state.writeLock) {
-            previous = state.baseSnapshot.get()
-            writeAtomically(state.snapshotFile, bytes)
-            writeAtomically(state.inventoryOverridesFile, "{}".toByteArray())
-            Files.deleteIfExists(state.artifactOverridesFile)
+            if (goodDataStorageService != null) {
+                goodDataStorageService.replaceAll(userId, snapshot)
+                runCatching {
+                    writeAtomically(state.snapshotFile, bytes)
+                    writeAtomically(state.inventoryOverridesFile, "{}".toByteArray())
+                    Files.deleteIfExists(state.artifactOverridesFile)
+                }.onFailure {
+                    logger.warn("The legacy GOOD backup could not be updated", it)
+                }
+            } else {
+                playerArtifactStorageService?.replaceAll(userId, snapshot.artifacts)
+                writeAtomically(state.snapshotFile, bytes)
+                writeAtomically(state.inventoryOverridesFile, "{}".toByteArray())
+                Files.deleteIfExists(state.artifactOverridesFile)
+            }
             state.inventoryOverrides.set(emptyMap())
             state.artifactOverrides.set(null)
             state.baseSnapshot.set(snapshot)
             state.revision.incrementAndGet()
         }
-        playerWeaponService?.replaceAll(userId, snapshot.weapons)
+        if (goodDataStorageService == null) {
+            playerWeaponService?.replaceAll(userId, snapshot.weapons)
+        }
         val saved = current(userId) ?: snapshot
         travelerService?.importSnapshot(userId, saved)
         snapshotActivityService?.record(userId, previous, saved)
@@ -55,11 +70,16 @@ class PlayerSnapshotStore(
 
     fun current(userId: Long): PlayerSnapshot? {
         val state = stateFor(userId)
-        val snapshot = state.baseSnapshot.get() ?: return null
+        val storedSnapshot = goodDataStorageService?.find(userId)
+        val snapshot = storedSnapshot ?: state.baseSnapshot.get() ?: return null
         return snapshot.copy(
             revision = state.revision.get(),
-            inventory = snapshot.inventory + state.inventoryOverrides.get(),
-            artifacts = state.artifactOverrides.get() ?: snapshot.artifacts,
+            inventory = if (storedSnapshot != null) {
+                snapshot.inventory
+            } else {
+                snapshot.inventory + state.inventoryOverrides.get()
+            },
+            artifacts = playerArtifactStorageService?.findAll(userId) ?: state.artifactOverrides.get() ?: snapshot.artifacts,
             weapons = playerWeaponService?.findAll(userId) ?: snapshot.weapons,
         )
     }
@@ -68,22 +88,35 @@ class PlayerSnapshotStore(
         require(key.matches(INVENTORY_KEY_PATTERN)) { "Invalid inventory key" }
         require(amount >= 0) { "Inventory amount must not be negative" }
         val state = stateFor(userId)
-        val snapshot = state.baseSnapshot.get() ?: throw IllegalStateException("No GOOD file imported")
         val previous = current(userId) ?: throw IllegalStateException("No GOOD file imported")
 
         synchronized(state.writeLock) {
-            val updatedOverrides = state.inventoryOverrides.get().toMutableMap()
-            if (snapshot.inventory[key] == amount) {
-                updatedOverrides.remove(key)
+            if (goodDataStorageService != null) {
+                goodDataStorageService.updateMaterial(
+                    userId = userId,
+                    key = key,
+                    amount = amount,
+                    exportKey = previous.inventoryNames[key] ?: key,
+                )
+                state.baseSnapshot.set(
+                    previous.copy(inventory = previous.inventory + (key to amount)),
+                )
             } else {
-                updatedOverrides[key] = amount
+                val snapshot = state.baseSnapshot.get()
+                    ?: throw IllegalStateException("No GOOD file imported")
+                val updatedOverrides = state.inventoryOverrides.get().toMutableMap()
+                if (snapshot.inventory[key] == amount) {
+                    updatedOverrides.remove(key)
+                } else {
+                    updatedOverrides[key] = amount
+                }
+                writeAtomically(
+                    state.inventoryOverridesFile,
+                    objectMapper.writerWithDefaultPrettyPrinter()
+                        .writeValueAsBytes(updatedOverrides.toSortedMap()),
+                )
+                state.inventoryOverrides.set(updatedOverrides)
             }
-            writeAtomically(
-                state.inventoryOverridesFile,
-                objectMapper.writerWithDefaultPrettyPrinter()
-                    .writeValueAsBytes(updatedOverrides.toSortedMap()),
-            )
-            state.inventoryOverrides.set(updatedOverrides)
             state.revision.incrementAndGet()
         }
         val updated = current(userId) ?: throw IllegalStateException("No GOOD file imported")
@@ -99,17 +132,21 @@ class PlayerSnapshotStore(
         val snapshot = state.baseSnapshot.get() ?: throw IllegalStateException("No GOOD file imported")
         val previous = current(userId) ?: throw IllegalStateException("No GOOD file imported")
         synchronized(state.writeLock) {
-            val currentArtifacts = state.artifactOverrides.get() ?: snapshot.artifacts
+            val currentArtifacts = playerArtifactStorageService?.findAll(userId) ?: state.artifactOverrides.get() ?: snapshot.artifacts
             val updatedArtifacts = update(currentArtifacts)
             require(updatedArtifacts.size <= GoodImportService.MAX_ARTIFACTS) {
                 "Too many artifacts"
             }
-            writeAtomically(
-                state.artifactOverridesFile,
-                objectMapper.writerWithDefaultPrettyPrinter()
-                    .writeValueAsBytes(updatedArtifacts.map(StoredArtifact::from)),
-            )
-            state.artifactOverrides.set(updatedArtifacts)
+            if (playerArtifactStorageService != null) {
+                playerArtifactStorageService.replaceAll(userId, updatedArtifacts)
+            } else {
+                writeAtomically(
+                    state.artifactOverridesFile,
+                    objectMapper.writerWithDefaultPrettyPrinter()
+                        .writeValueAsBytes(updatedArtifacts.map(StoredArtifact::from)),
+                )
+                state.artifactOverrides.set(updatedArtifacts)
+            }
             state.revision.incrementAndGet()
         }
         val updated = current(userId) ?: throw IllegalStateException("No GOOD file imported")
@@ -132,20 +169,36 @@ class PlayerSnapshotStore(
             inventoryOverridesFile = userDirectory.resolve("inventory-overrides.json"),
             artifactOverridesFile = userDirectory.resolve("artifact-overrides.json"),
         )
-        loadStoredSnapshot(userId, state)
+        goodDataStorageService?.find(userId)?.let {
+            state.baseSnapshot.set(it)
+            return state
+        }
+        loadStoredSnapshot(state)
         loadInventoryOverrides(state)
         loadArtifactOverrides(state)
+        state.baseSnapshot.get()?.let { snapshot ->
+            val migrated = snapshot.copy(
+                inventory = snapshot.inventory + state.inventoryOverrides.get(),
+                artifacts = state.artifactOverrides.get() ?: snapshot.artifacts,
+            )
+            if (goodDataStorageService != null) {
+                goodDataStorageService.replaceAll(userId, migrated)
+                state.baseSnapshot.set(migrated)
+                state.inventoryOverrides.set(emptyMap())
+                state.artifactOverrides.set(null)
+            } else {
+                playerArtifactStorageService?.initializeIfMissing(userId, migrated.artifacts)
+            }
+        }
         return state
     }
 
-    private fun loadStoredSnapshot(userId: Long, state: PlayerSnapshotState) {
+    private fun loadStoredSnapshot(state: PlayerSnapshotState) {
         if (!Files.isRegularFile(state.snapshotFile)) return
 
         runCatching {
             val importedAt = Files.getLastModifiedTime(state.snapshotFile).toInstant()
-            goodImportService.parse(Files.readAllBytes(state.snapshotFile), importedAt).also {
-                playerWeaponService?.replaceAll(userId, it.weapons)
-            }
+            goodImportService.parse(Files.readAllBytes(state.snapshotFile), importedAt)
         }.onSuccess(state.baseSnapshot::set)
             .onFailure {
                 logger.error("Stored GOOD file {} could not be loaded", state.snapshotFile, it)
@@ -236,6 +289,7 @@ class PlayerSnapshotStore(
         val totalRolls: Int?,
         val astralMark: Boolean,
         val elixirCrafted: Boolean,
+        val unactivatedSubstats: List<StoredArtifactStat> = emptyList(),
     ) {
         fun toPlayerArtifact(): PlayerArtifact = PlayerArtifact(
             setKey = setKey,
@@ -245,10 +299,13 @@ class PlayerSnapshotStore(
             mainStatKey = mainStatKey,
             location = location,
             locked = locked,
-            substats = substats.map { PlayerArtifactStat(it.key, it.value) },
+            substats = substats.map { PlayerArtifactStat(it.key, it.value, it.initialValue) },
             totalRolls = totalRolls,
             astralMark = astralMark,
             elixirCrafted = elixirCrafted,
+            unactivatedSubstats = unactivatedSubstats.map {
+                PlayerArtifactStat(it.key, it.value, it.initialValue)
+            },
         )
 
         companion object {
@@ -261,11 +318,14 @@ class PlayerSnapshotStore(
                 location = artifact.location,
                 locked = artifact.locked,
                 substats = artifact.substats.map {
-                    StoredArtifactStat(it.key, it.value)
+                    StoredArtifactStat(it.key, it.value, it.initialValue)
                 },
                 totalRolls = artifact.totalRolls,
                 astralMark = artifact.astralMark,
                 elixirCrafted = artifact.elixirCrafted,
+                unactivatedSubstats = artifact.unactivatedSubstats.map {
+                    StoredArtifactStat(it.key, it.value, it.initialValue)
+                },
             )
         }
     }
@@ -273,6 +333,7 @@ class PlayerSnapshotStore(
     private data class StoredArtifactStat(
         val key: String,
         val value: Double,
+        val initialValue: Double? = null,
     )
 
     companion object {

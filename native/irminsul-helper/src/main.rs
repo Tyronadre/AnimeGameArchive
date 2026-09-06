@@ -15,7 +15,7 @@ use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use tokio::time::{MissedTickBehavior, interval};
 
-use crate::capture::PacketCapture;
+use crate::capture::create_capture;
 use crate::live_updates::{parse_item_changes, parse_item_deletions};
 use crate::packet_inspector::{CommandInspection, PacketInspectionLogger};
 use crate::player_data::{ExportSettings, PlayerData};
@@ -51,6 +51,13 @@ struct Args {
     session: String,
     #[arg(long, default_value_t = false)]
     no_admin: bool,
+
+    #[arg(
+        long = "capture-backend",
+        value_enum,
+        default_value_t = capture::DEFAULT_CAPTURE_BACKEND_TYPE
+    )]
+    capture_backend: capture::BackendType,
 
     #[arg(long)]
     log_file: Option<PathBuf>,
@@ -88,7 +95,7 @@ async fn main() {
     configure_logging(args.log_file.as_deref());
     tracing::info!("Capture helper process starting");
     if !args.no_admin {
-        #[cfg(windows)]
+        #[cfg(any(windows, unix))]
         admin::ensure_admin();
     }
 
@@ -153,8 +160,12 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
         sniffer = sniffer.set_session_key(key);
         restored_session = true;
     }
-    let mut capture =
-        PacketCapture::new().map_err(|error| anyhow!("packet capture could not start: {error}"))?;
+    let mut capture = create_capture(args.capture_backend).map_err(|error| {
+        anyhow!(
+            "{:?} packet capture could not start: {error}",
+            args.capture_backend
+        )
+    })?;
     tracing::info!("Packet capture started; waiting for Genshin Impact traffic");
 
     send_status(

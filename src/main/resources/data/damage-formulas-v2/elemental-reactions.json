@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 2,
+  "characterLevelMultipliers": [
+    17.165605, 18.535048, 19.904854, 21.274903, 22.6454, 24.649613, 26.640643, 28.868587, 31.367679, 34.143343,
+    37.201, 40.66, 44.446668, 48.563519, 53.74848, 59.081897, 64.420047, 69.724455, 75.123137, 80.584775,
+    86.112028, 91.703742, 97.244628, 102.812644, 108.409563, 113.201694, 118.102906, 122.979318, 129.72733, 136.29291,
+    142.67085, 149.029029, 155.416987, 161.825495, 169.106313, 176.518077, 184.072741, 191.709518, 199.556908, 207.382042,
+    215.3989, 224.165667, 233.50216, 243.350573, 256.063067, 268.543493, 281.526075, 295.013648, 309.067188, 323.601597,
+    336.757542, 350.530312, 364.482705, 378.619181, 398.600417, 416.398254, 434.386996, 452.951051, 472.606217, 492.88489,
+    513.568543, 539.103198, 565.510563, 592.538753, 624.443427, 651.470148, 679.49683, 707.79406, 736.671422, 765.640231,
+    794.773403, 824.677397, 851.157781, 877.74209, 914.229123, 946.746752, 979.411386, 1011.223022, 1044.791746, 1077.443668,
+    1109.99754, 1142.976615, 1176.369483, 1210.184393, 1253.835659, 1288.952801, 1325.484092, 1363.456928, 1405.097377, 1446.853458
+  ],
+  "crystallizeLevelMultipliers": [
+    91.1791, 98.707667, 106.23622, 113.764771, 121.293322, 128.821878, 136.350422, 143.878978, 151.407522, 158.936078,
+    169.991484, 181.076253, 192.190362, 204.048207, 215.938996, 227.86275, 247.685944, 267.542105, 287.431209, 303.826417,
+    320.225217, 336.627633, 352.319267, 368.010913, 383.702548, 394.432358, 405.18147, 415.949907, 426.737645, 437.544709,
+    450.600004, 463.700301, 476.845577, 491.127512, 502.554564, 514.012104, 531.409589, 549.979601, 568.58488, 584.99652,
+    605.670375, 626.386206, 646.052333, 665.755638, 685.496096, 700.839402, 723.333147, 745.865265, 768.435731, 786.791945,
+    809.538812, 832.329057, 855.162654, 878.039628, 899.484802, 919.362018, 946.039586, 974.764223, 1003.578617, 1030.077002,
+    1056.634974, 1085.246306, 1113.924427, 1149.25872, 1178.064819, 1200.223743, 1227.660294, 1257.242987, 1284.917392, 1314.75288,
+    1342.665216, 1372.752485, 1396.320986, 1427.312436, 1458.374528, 1482.335772, 1511.910837, 1541.549377, 1569.153701, 1596.814298,
+    1622.419626, 1648.074031, 1666.376146, 1684.678276, 1702.980391, 1726.104684, 1754.671567, 1785.86656, 1817.137404, 1851.060358
+  ],
+  "reactions": [
+    {
+      "key": "vaporize-pyro-trigger", "id": "vaporize", "name": "Vaporize", "kind": "amplifying",
+      "triggerElements": ["Pyro"], "requiredTeamElements": ["Hydro"], "auraLabel": "Hydro",
+      "damageElement": "Pyro", "baseMultiplier": 1.5,
+      "elementalMasteryCoefficient": 2.78, "elementalMasteryDenominator": 1400.0
+    },
+    {
+      "key": "vaporize-hydro-trigger", "id": "vaporize", "name": "Vaporize", "kind": "amplifying",
+      "triggerElements": ["Hydro"], "requiredTeamElements": ["Pyro"], "auraLabel": "Pyro",
+      "damageElement": "Hydro", "baseMultiplier": 2.0,
+      "elementalMasteryCoefficient": 2.78, "elementalMasteryDenominator": 1400.0
+    },
+    {
+      "key": "melt-pyro-trigger", "id": "melt", "name": "Melt", "kind": "amplifying",
+      "triggerElements": ["Pyro"], "requiredTeamElements": ["Cryo"], "auraLabel": "Cryo",
+      "damageElement": "Pyro", "baseMultiplier": 2.0,
+      "elementalMasteryCoefficient": 2.78, "elementalMasteryDenominator": 1400.0
+    },
+    {
+      "key": "melt-cryo-trigger", "id": "melt", "name": "Melt", "kind": "amplifying",
+      "triggerElements": ["Cryo"], "requiredTeamElements": ["Pyro"], "auraLabel": "Pyro",
+      "damageElement": "Cryo", "baseMultiplier": 1.5,
+      "elementalMasteryCoefficient": 2.78, "elementalMasteryDenominator": 1400.0
+    },
+    {
+      "key": "aggravate-electro-trigger", "id": "aggravate", "name": "Aggravate", "kind": "additive",
+      "triggerElements": ["Electro"], "requiredTeamElements": ["Dendro"], "auraLabel": "Quicken",
+      "damageElement": "Electro", "description": "Requires a Quicken aura established by Dendro and Electro.",
+      "baseMultiplier": 1.15, "elementalMasteryCoefficient": 5.0, "elementalMasteryDenominator": 1200.0
+    },
+    {
+      "key": "spread-dendro-trigger", "id": "spread", "name": "Spread", "kind": "additive",
+      "triggerElements": ["Dendro"], "requiredTeamElements": ["Electro"], "auraLabel": "Quicken",
+      "damageElement": "Dendro", "description": "Requires a Quicken aura established by Dendro and Electro.",
+      "baseMultiplier": 1.25, "elementalMasteryCoefficient": 5.0, "elementalMasteryDenominator": 1200.0
+    },
+    {
+      "key": "overloaded-pyro-trigger", "id": "overloaded", "name": "Overloaded", "kind": "transformative",
+      "triggerElements": ["Pyro"], "requiredTeamElements": ["Electro"], "auraLabel": "Electro",
+      "damageElement": "Pyro", "baseMultiplier": 2.75,
+      "elementalMasteryCoefficient": 16.0, "elementalMasteryDenominator": 2000.0
+    },
+    {
+      "key": "overloaded-electro-trigger", "id": "overloaded", "name": "Overloaded", "kind": "transformative",
+      "triggerElements": ["Electro"], "requiredTeamElements": ["Pyro"], "auraLabel": "Pyro",
+      "damageElement": "Pyro", "baseMultiplier": 2.75,
+      "elementalMasteryCoefficient": 16.0, "elementalMasteryDenominator": 2000.0
+    },
+    {
+      "key": "electro-charged-hydro-trigger", "id": "electroCharged", "name": "Electro-Charged", "kind": "transformative",
+      "triggerElements": ["Hydro"], "requiredTeamElements": ["Electro"], "auraLabel": "Electro",
+      "damageElement": "Electro", "baseMultiplier": 2.0,
+      "elementalMasteryCoefficient": 16.0, "elementalMasteryDenominator": 2000.0
+    },
+    {
+      "key": "electro-charged-electro-trigger", "id": "electroCharged", "name": "Electro-Charged", "kind": "transformative",
+      "triggerElements": ["Electro"], "requiredTeamElements": ["Hydro"], "auraLabel": "Hydro",
+      "damageElement": "Electro", "baseMultiplier": 2.0,
+      "elementalMasteryCoefficient": 16.0, "elementalMasteryDenominator": 2000.0
+    },
+    {
+      "key": "superconduct-cryo-trigger", "id": "superconduct", "name": "Superconduct", "kind": "transformative",
+      "triggerElements": ["Cryo"], "requiredTeamElements": ["Electro"], "auraLabel": "Electro",
+      "damageElement": "Cryo", "baseMultiplier": 1.5,
+      "elementalMasteryCoefficient": 16.0, "elementalMasteryDenominator": 2000.0
+    },
+    {
+      "key": "superconduct-electro-trigger", "id": "superconduct", "name": "Superconduct", "kind": "transformative",
+      "triggerElements": ["Electro"], "requiredTeamElements": ["Cryo"], "auraLabel": "Cryo",
+      "damageElement": "Cryo", "baseMultiplier": 1.5,
+      "elementalMasteryCoefficient": 16.0, "elementalMasteryDenominator": 2000.0
+    },
+    {
+      "key": "swirl-pyro", "id": "swirl", "name": "Swirl", "kind": "transformative",
+      "triggerElements": ["Anemo"], "requiredTeamElements": ["Pyro"], "auraLabel": "Pyro",
+      "damageElement": "Pyro", "baseMultiplier": 0.6,
+      "elementalMasteryCoefficient": 16.0, "elementalMasteryDenominator": 2000.0
+    },
+    {
+      "key": "swirl-hydro", "id": "swirl", "name": "Swirl", "kind": "transformative",
+      "triggerElements": ["Anemo"], "requiredTeamElements": ["Hydro"], "auraLabel": "Hydro",
+      "damageElement": "Hydro", "baseMultiplier": 0.6,
+      "elementalMasteryCoefficient": 16.0, "elementalMasteryDenominator": 2000.0
+    },
+    {
+      "key": "swirl-electro", "id": "swirl", "name": "Swirl", "kind": "transformative",
+      "triggerElements": ["Anemo"], "requiredTeamElements": ["Electro"], "auraLabel": "Electro",
+      "damageElement": "Electro", "baseMultiplier": 0.6,
+      "elementalMasteryCoefficient": 16.0, "elementalMasteryDenominator": 2000.0
+    },
+    {
+      "key": "swirl-cryo", "id": "swirl", "name": "Swirl", "kind": "transformative",
+      "triggerElements": ["Anemo"], "requiredTeamElements": ["Cryo"], "auraLabel": "Cryo",
+      "damageElement": "Cryo", "baseMultiplier": 0.6,
+      "elementalMasteryCoefficient": 16.0, "elementalMasteryDenominator": 2000.0
+    },
+    {
+      "key": "burning-pyro-trigger", "id": "burning", "name": "Burning", "kind": "transformative",
+      "triggerElements": ["Pyro"], "requiredTeamElements": ["Dendro"], "auraLabel": "Dendro",
+      "damageElement": "Pyro", "description": "Damage shown is one Burning tick.",
+      "baseMultiplier": 0.25, "elementalMasteryCoefficient": 16.0, "elementalMasteryDenominator": 2000.0
+    },
+    {
+      "key": "burning-dendro-trigger", "id": "burning", "name": "Burning", "kind": "transformative",
+      "triggerElements": ["Dendro"], "requiredTeamElements": ["Pyro"], "auraLabel": "Pyro",
+      "damageElement": "Pyro", "description": "Damage shown is one Burning tick.",
+      "baseMultiplier": 0.25, "elementalMasteryCoefficient": 16.0, "elementalMasteryDenominator": 2000.0
+    },
+    {
+      "key": "bloom-hydro-trigger", "id": "bloom", "name": "Bloom", "kind": "transformative",
+      "triggerElements": ["Hydro"], "requiredTeamElements": ["Dendro"], "auraLabel": "Dendro",
+      "damageElement": "Dendro", "description": "Damage shown is the Dendro Core rupture.",
+      "baseMultiplier": 2.0, "elementalMasteryCoefficient": 16.0, "elementalMasteryDenominator": 2000.0
+    },
+    {
+      "key": "bloom-dendro-trigger", "id": "bloom", "name": "Bloom", "kind": "transformative",
+      "triggerElements": ["Dendro"], "requiredTeamElements": ["Hydro"], "auraLabel": "Hydro",
+      "damageElement": "Dendro", "description": "Damage shown is the Dendro Core rupture.",
+      "baseMultiplier": 2.0, "elementalMasteryCoefficient": 16.0, "elementalMasteryDenominator": 2000.0
+    },
+    {
+      "key": "hyperbloom-electro-trigger", "id": "hyperbloom", "name": "Hyperbloom", "kind": "transformative",
+      "triggerElements": ["Electro"], "requiredTeamElements": ["Hydro", "Dendro"], "auraLabel": "Dendro Core",
+      "damageElement": "Dendro", "description": "Requires a Dendro Core created by Hydro and Dendro.",
+      "baseMultiplier": 3.0, "elementalMasteryCoefficient": 16.0, "elementalMasteryDenominator": 2000.0
+    },
+    {
+      "key": "burgeon-pyro-trigger", "id": "burgeon", "name": "Burgeon", "kind": "transformative",
+      "triggerElements": ["Pyro"], "requiredTeamElements": ["Hydro", "Dendro"], "auraLabel": "Dendro Core",
+      "damageElement": "Dendro", "description": "Requires a Dendro Core created by Hydro and Dendro.",
+      "baseMultiplier": 3.0, "elementalMasteryCoefficient": 16.0, "elementalMasteryDenominator": 2000.0
+    },
+    {
+      "key": "shatter-blunt-trigger", "id": "shatter", "name": "Shatter", "kind": "transformative",
+      "triggerElements": ["Physical", "Geo", "Anemo", "Cryo", "Electro", "Hydro", "Pyro", "Dendro"],
+      "requiredTeamElements": ["Hydro", "Cryo"], "auraLabel": "Frozen",
+      "damageElement": "Physical", "description": "Only blunt or Plunging Attack hits can Shatter a Frozen target.",
+      "requiredFormulaTagsAny": ["blunt", "plungingAttack"],
+      "baseMultiplier": 3.0, "elementalMasteryCoefficient": 16.0, "elementalMasteryDenominator": 2000.0
+    },
+    {
+      "key": "freeze-hydro-trigger", "id": "freeze", "name": "Freeze", "kind": "utility",
+      "triggerElements": ["Hydro"], "requiredTeamElements": ["Cryo"], "auraLabel": "Cryo",
+      "description": "Freezes the target. Freeze itself deals no damage.",
+      "baseMultiplier": 0.0, "elementalMasteryCoefficient": 0.0, "elementalMasteryDenominator": 1.0
+    },
+    {
+      "key": "freeze-cryo-trigger", "id": "freeze", "name": "Freeze", "kind": "utility",
+      "triggerElements": ["Cryo"], "requiredTeamElements": ["Hydro"], "auraLabel": "Hydro",
+      "description": "Freezes the target. Freeze itself deals no damage.",
+      "baseMultiplier": 0.0, "elementalMasteryCoefficient": 0.0, "elementalMasteryDenominator": 1.0
+    },
+    {
+      "key": "quicken-electro-trigger", "id": "quicken", "name": "Quicken", "kind": "utility",
+      "triggerElements": ["Electro"], "requiredTeamElements": ["Dendro"], "auraLabel": "Dendro",
+      "description": "Creates a Quicken aura. Quicken itself deals no damage; later Electro or Dendro hits can Aggravate or Spread.",
+      "baseMultiplier": 0.0, "elementalMasteryCoefficient": 0.0, "elementalMasteryDenominator": 1.0
+    },
+    {
+      "key": "quicken-dendro-trigger", "id": "quicken", "name": "Quicken", "kind": "utility",
+      "triggerElements": ["Dendro"], "requiredTeamElements": ["Electro"], "auraLabel": "Electro",
+      "description": "Creates a Quicken aura. Quicken itself deals no damage; later Electro or Dendro hits can Aggravate or Spread.",
+      "baseMultiplier": 0.0, "elementalMasteryCoefficient": 0.0, "elementalMasteryDenominator": 1.0
+    },
+    {
+      "key": "crystallize-pyro", "id": "crystallize", "name": "Crystallize", "kind": "shield",
+      "triggerElements": ["Geo"], "requiredTeamElements": ["Pyro"], "auraLabel": "Pyro",
+      "damageElement": "Geo", "description": "Creates an elemental shard. The value is the shard shield's base absorption.",
+      "baseMultiplier": 1.0, "elementalMasteryCoefficient": 4.44, "elementalMasteryDenominator": 1400.0
+    },
+    {
+      "key": "crystallize-hydro", "id": "crystallize", "name": "Crystallize", "kind": "shield",
+      "triggerElements": ["Geo"], "requiredTeamElements": ["Hydro"], "auraLabel": "Hydro",
+      "damageElement": "Geo", "description": "Creates an elemental shard. The value is the shard shield's base absorption.",
+      "baseMultiplier": 1.0, "elementalMasteryCoefficient": 4.44, "elementalMasteryDenominator": 1400.0
+    },
+    {
+      "key": "crystallize-electro", "id": "crystallize", "name": "Crystallize", "kind": "shield",
+      "triggerElements": ["Geo"], "requiredTeamElements": ["Electro"], "auraLabel": "Electro",
+      "damageElement": "Geo", "description": "Creates an elemental shard. The value is the shard shield's base absorption.",
+      "baseMultiplier": 1.0, "elementalMasteryCoefficient": 4.44, "elementalMasteryDenominator": 1400.0
+    },
+    {
+      "key": "crystallize-cryo", "id": "crystallize", "name": "Crystallize", "kind": "shield",
+      "triggerElements": ["Geo"], "requiredTeamElements": ["Cryo"], "auraLabel": "Cryo",
+      "damageElement": "Geo", "description": "Creates an elemental shard. The value is the shard shield's base absorption.",
+      "baseMultiplier": 1.0, "elementalMasteryCoefficient": 4.44, "elementalMasteryDenominator": 1400.0
+    }
+  ],
+  "sources": [
+    "https://genshin-impact.fandom.com/wiki/Elemental_Mastery",
+    "https://genshin-impact.fandom.com/wiki/Elemental_Reaction/Level_Scaling",
+    "https://library.keqingmains.com/combat-mechanics/elemental-effects/transformative-reactions",
+    "https://keqingmains.com/misc/dendro/"
+  ]
+}

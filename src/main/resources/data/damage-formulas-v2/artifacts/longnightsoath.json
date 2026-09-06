@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 2,
+  "key": "longnightsoath",
+  "name": "Long Night's Oath",
+  "inputs": [
+    {
+      "id": "stacks",
+      "label": "Active stacks",
+      "defaultValue": 5,
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "description": "Snapshot stack count; duration and stack generation are not simulated."
+    }
+  ],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · Plunging DMG +25%",
+        "source": "Artifact set",
+        "description": "Plunging Attack damage only.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [
+                "plungingAttack"
+              ],
+              "elements": []
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 25
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 25
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Radiance Everlasting",
+        "source": "Artifact set",
+        "description": "Plunging DMG +15% per stack, up to five stacks. Plunging/Charged/Skill hits grant 1/2/2 stacks with separate trigger intervals.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [
+                "plungingAttack"
+              ],
+              "elements": []
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 15
+                  },
+                  {
+                    "type": "input",
+                    "input": "local:stacks"
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 15
+                },
+                {
+                  "type": "input",
+                  "input": "local:stacks"
+                }
+              ]
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: longnightsoath",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

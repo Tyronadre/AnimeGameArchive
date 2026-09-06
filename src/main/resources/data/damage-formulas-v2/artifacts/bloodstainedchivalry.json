@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 2,
+  "key": "bloodstainedchivalry",
+  "name": "Bloodstained Chivalry",
+  "inputs": [],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · Physical DMG +25%",
+        "source": "Artifact set",
+        "description": "Ordinary Physical damage only.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [],
+              "elements": [
+                "Physical"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 25
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 25
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · After defeating an opponent",
+        "source": "Artifact set",
+        "description": "For 10s: Charged Attack DMG +50% and Charged Attacks consume no stamina.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [
+                "chargedAttack"
+              ],
+              "elements": []
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 50
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "Charged Attack stamina cost multiplier",
+            "expression": {
+              "type": "constant",
+              "value": 0
+            },
+            "unit": "ratio",
+            "conditions": []
+          },
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 50
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: bloodstainedchivalry",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

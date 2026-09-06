@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 2,
+  "key": "gambler",
+  "name": "Gambler",
+  "inputs": [],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · Skill DMG +20%",
+        "source": "Artifact set",
+        "description": "Elemental Skill damage only.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [
+                "elementalSkill"
+              ],
+              "elements": []
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 20
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 20
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Skill cooldown reset",
+        "source": "Artifact set",
+        "description": "Defeating an enemy resets the Skill cooldown, once per 15s. This affects availability, not per-hit damage.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [],
+        "metrics": [
+          {
+            "label": "Reset cooldown (seconds)",
+            "expression": {
+              "type": "constant",
+              "value": 15
+            },
+            "unit": "number",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: gambler",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

@@ -5,19 +5,26 @@ Thymeleaf interface.
 
 ## Static game data
 
-At each application startup, the backend requests the configured core folders
-from the [genshin-db API](https://github.com/theBowja/genshin-db-api). The
-canonical JSON and a SHA-256 content hash are stored in `genshin_static_data`.
-Only new or changed records are written, and records missing from a successful
-folder response are removed. If the API is unavailable, the last database copy
-is kept and the bundled catalogs remain available as an offline fallback.
+The official HoYoWiki is the catalogue and detail source for characters,
+weapons, artifacts, and materials. Packaging creates a JSON snapshot containing
+the current HoYoWiki records (but not image bytes). The snapshot is projected
+into typed database tables on startup, followed by one live catalogue refresh.
+Persisted data remains available if the live request fails.
+
+HoYoWiki exposes page ids for materials, while GOOD inventories and source groups use
+in-game item ids. [`material-identities.json`](src/main/resources/data/material-identities.json)
+is the versioned bridge between both namespaces. It is bundled for offline/fresh installs and
+the live catalogue refresh checks the configured raw GitHub URL for a newer copy, validates it,
+and caches it before importing HoYoWiki data. New material mappings can therefore be shipped as
+a data-file update without changing the application binary. Increment `catalogVersion` whenever
+the file changes; the app only activates cached or remote catalogs newer than its current one.
 
 The import is controlled with these properties:
 
 ```properties
-genshin.content.static-import-enabled=true
-genshin.content.static-import-folders=artifacts,characters,constellations,domains,elements,materials,talents,weapons
-genshin.content.static-import-fail-on-error=false
+genshin.content.hoyolab-wiki-enabled=true
+genshin.content.hoyolab-catalog-sync-enabled=true
+genshin.content.material-identity-catalog-url=https://raw.githubusercontent.com/Tyronadre/AnimeGameArchive/master/src/main/resources/data/material-identities.json
 ```
 
 ## Web mode
@@ -83,11 +90,12 @@ To create the smaller per-user Windows installer:
 .\gradlew.bat packageDesktopInstaller
 ```
 
-The online installer contains the application and downloads the latest Eclipse
-Temurin Java 21 JRE during installation. It verifies the runtime's SHA-256
-checksum and installs Java privately beside the application, without modifying
-the system `PATH` or requiring administrator access. The installer is written to
-`build\desktop-installer`.
+The online installer contains the application and reuses the private Java 21
+runtime from an existing installation when available, so upgrades do not
+download Java again. On a fresh installation, it downloads the latest Eclipse
+Temurin Java 21 JRE, verifies its SHA-256 checksum, and installs it privately
+beside the application without modifying the system `PATH` or requiring
+administrator access. The installer is written to `build\desktop-installer`.
 
 For an installer that also contains Java and works without internet access, use:
 

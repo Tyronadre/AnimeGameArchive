@@ -1,0 +1,23 @@
+{
+  "schemaVersion":2,"key":"xingqiu","name":"Xingqiu","element":"Hydro","weaponType":"Sword","characterDataResource":"data/characters/data/xingqiu.json",
+  "statBindings":{"attack":"xingqiuAttack","energyRecharge":"xingqiuEnergyRecharge"},
+  "inputs":[
+    {"id":"xingqiuConstellation","label":"Xingqiu constellation","defaultValue":0,"min":0,"max":6,"step":1,"initialValueSource":{"valueKey":"constellation"},"section":"constellations"},
+    {"id":"xingqiuAttack","label":"Xingqiu ATK","defaultValue":1500,"min":0,"max":20000,"step":1,"initialValueSource":{"valueKey":"totalAttack"}},
+    {"id":"xingqiuEnergyRecharge","label":"Xingqiu Energy Recharge","defaultValue":100,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:enerRech_"}},
+    {"id":"xingqiuSkillTalentLevel","label":"Xingqiu Skill level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"skillTalent"}},
+    {"id":"xingqiuBurstTalentLevel","label":"Xingqiu Burst level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"burstTalent"}}
+  ],
+  "effects":[
+    {"id":"xingqiuHydropathic","name":"Hydropathic","source":"Xingqiu · Passive","category":"passive","description":"Rain Swords heal when shattered or expired.","impact":"Healing only.","defaultEnabled":true,"activation":{"event":"rainSwordExpires"}},
+    {"id":"xingqiuHydroBonus","name":"Blades Amidst Raindrops","source":"Xingqiu · Passive","category":"passive","description":"Grants Xingqiu 20% Hydro DMG Bonus.","impact":"Personal damage only.","defaultEnabled":true,"activation":{"event":"always"}},
+    {"id":"xingqiuCrafting","name":"Flash of Genius","source":"Xingqiu · Passive","category":"passive","description":"Crafting passive with no combat effect.","defaultEnabled":true,"activation":{"event":"always"}},
+    {"id":"xingqiuC1","name":"C1 · The Scent Remained","source":"Xingqiu · Constellation","category":"constellation","description":"Adds one maximum Rain Sword.","impact":"Defensive/healing utility.","ownershipRequirements":{"xingqiuConstellation":1},"activation":{"event":"always"}},
+    {"id":"xingqiuC2","name":"C2 · Rainbow Upon the Azure Sky","source":"Xingqiu · Constellation","category":"constellation","description":"Sword Rain hits reduce enemy Hydro RES by 15% for 4 seconds.","ownershipRequirements":{"xingqiuConstellation":2},"activation":{"event":"swordRainHit"},"formulaModifiers":[{"targets":{"elements":["Hydro"]},"resistanceMitigation":{"reduction":{"expression":{"type":"constant","value":15}}}}]},
+    {"id":"xingqiuC3","name":"C3 · Weaver of Verses","source":"Xingqiu · Constellation","category":"constellation","description":"Adds three Burst talent levels.","impact":"Personal damage only.","ownershipRequirements":{"xingqiuConstellation":3},"activation":{"event":"always"},"statChanges":[{"stat":"xingqiuBurstTalentLevel","operation":"flatAdd","value":{"type":"constant","value":3},"maximum":15}]},
+    {"id":"xingqiuC4","name":"C4 · Evilsoother","source":"Xingqiu · Constellation","category":"constellation","description":"Raises Xingqiu's Skill damage during his Burst.","impact":"Personal damage only.","ownershipRequirements":{"xingqiuConstellation":4},"activation":{"event":"always"}},
+    {"id":"xingqiuC5","name":"C5 · Embrace of Rain","source":"Xingqiu · Constellation","category":"constellation","description":"Adds three Skill talent levels.","impact":"Personal damage only.","ownershipRequirements":{"xingqiuConstellation":5},"activation":{"event":"always"},"statChanges":[{"stat":"xingqiuSkillTalentLevel","operation":"flatAdd","value":{"type":"constant","value":3},"maximum":15}]},
+    {"id":"xingqiuC6","name":"C6 · Hence, Call Them My Own Verses","source":"Xingqiu · Constellation","category":"constellation","description":"Changes Xingqiu's Sword Rain pattern to 2-3-5 and restores Energy.","impact":"Personal damage/rotation only.","ownershipRequirements":{"xingqiuConstellation":6},"activation":{"event":"always"}}
+  ],
+  "sources":["data/characters/data/xingqiu.json","https://keqingmains.com/q/xingqiu-quickguide/"]
+}

@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{damage.title(${profile.name})}">Nefer Damage Calculator · Genshin Archive</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+    <link rel="stylesheet" th:href="@{/css/damage-calculator.css}" href="/css/damage-calculator.css">
+    <script th:src="@{/js/theme.js}" src="/js/theme.js"></script>
+    <script defer th:src="@{/js/damage-calculator.js}" src="/js/damage-calculator.js"></script>
+</head>
+<body>
+<header th:replace="~{fragments :: siteHeader('damage-calculator')}"></header>
+
+<main class="damage-calculator-page" data-damage-calculator
+      th:classappend="${profile.element != null
+          ? 'damage-element-' + #strings.toLowerCase(profile.element)
+          : 'damage-element-neutral'}"
+      th:attr="data-influenced-label=#{damage.breakdown.influencedByPrefix},
+          data-damage-element=${#strings.toLowerCase(profile.element)},
+          data-effect-active-label=#{damage.effects.state.active},
+          data-effect-inactive-label=#{damage.effects.state.inactive},
+          data-effect-blocked-label=#{damage.effects.state.blocked},
+          data-effect-unavailable-label=#{damage.effects.state.unavailable},
+          data-effect-locked-label=#{damage.effects.state.locked},
+          data-effect-preview-label=#{damage.effects.state.preview},
+          data-effect-count-label=#{damage.effects.state.count},
+          data-effect-origin-label=#{damage.effects.tooltip.activeSources},
+          data-lunar-label=#{damage.formula.lunarEmBonus},
+          data-defense-ignored-label=#{damage.formula.defenseIgnored}">
+    <section class="damage-calculator-hero">
+        <div class="damage-calculator-hero-copy">
+            <a class="damage-back-link" th:href="@{/characters/{key}(key=${character.key})}">
+                <span aria-hidden="true">←</span>
+                <span th:text="#{damage.backToCharacter(${character.name})}">Back to Nefer</span>
+            </a>
+            <a class="damage-version-link" th:href="@{/damage-calculator-v2/{key}(key=${character.key})}">
+                <span th:text="#{damage.v2.openNew}">Open hand-authored V2</span>
+                <b aria-hidden="true">→</b>
+            </a>
+            <p class="eyebrow" th:text="#{damage.eyebrow}">Direct damage lab · v1</p>
+            <div class="damage-character-heading">
+                <div class="damage-character-icon">
+                    <span th:text="${#strings.substring(character.name, 0, 1)}">N</span>
+                    <img th:if="${character.iconImageUrl != null}"
+                         th:src="${character.iconImageUrl}"
+                         th:alt="${character.name + ' Icon'}"
+                         onerror="this.remove()">
+                </div>
+                <div>
+                    <span class="damage-element-pill" th:text="${profile.element}">Dendro</span>
+                    <h1 th:text="#{damage.heading(${profile.name})}">Nefer damage calculator</h1>
+                </div>
+            </div>
+            <p class="lead" th:text="#{damage.lead}">
+                Tune the build, buffs, talents, and target. Every direct talent hit updates instantly.
+            </p>
+            <div class="damage-scope-note">
+                <span aria-hidden="true">◇</span>
+                <p th:text="${#messages.msg(profile.scopeMessageKey)}">
+                    This first pass covers C0 direct Dendro talent damage.
+                </p>
+            </div>
+        </div>
+        <div class="damage-calculator-art" aria-hidden="true">
+            <div class="damage-art-ring damage-art-ring-one"></div>
+            <div class="damage-art-ring damage-art-ring-two"></div>
+            <span class="damage-art-glyph">✦</span>
+            <img th:if="${character.wishImageUrl != null}"
+                 th:src="${character.wishImageUrl}"
+                 alt=""
+                 onerror="this.remove()">
+        </div>
+    </section>
+
+    <section class="damage-workspace">
+        <aside class="damage-controls" aria-labelledby="damage-input-heading">
+            <div class="damage-panel-heading">
+                <div>
+                    <p class="eyebrow" th:text="#{damage.inputs.eyebrow}">Live inputs</p>
+                    <h2 id="damage-input-heading" th:text="#{damage.inputs.heading}">Build and target</h2>
+                </div>
+                <button class="damage-reset-button" type="button" data-damage-reset
+                        th:text="#{action.reset}">Reset</button>
+            </div>
+
+            <section class="damage-team-panel" aria-labelledby="damage-team-heading">
+                <header>
+                    <p class="eyebrow" th:text="#{damage.team.eyebrow}">Team setup</p>
+                    <h3 id="damage-team-heading" th:text="#{damage.team.heading}">Party</h3>
+                    <p th:text="#{damage.team.help}">Choose the other three party members.</p>
+                </header>
+                <div class="damage-team-slots">
+                    <label th:each="slot : ${#numbers.sequence(0, 3)}">
+                        <span th:text="#{damage.team.slot(${slot + 1})}">Slot 1</span>
+                        <select th:attr="data-team-slot=${slot}"
+                                th:disabled="${slot == 0}">
+                            <option value="" th:if="${slot > 0}" th:text="#{damage.team.empty}">Empty</option>
+                            <option th:each="member : ${profile.teamMembers}"
+                                    th:value="${member.key}"
+                                    th:text="${member.name + ' · ' + member.element}"
+                                    th:selected="${profile.defaultTeam[slot] == member.key}">Nefer · Dendro</option>
+                        </select>
+                    </label>
+                </div>
+                <p class="damage-current-build-note" th:if="${currentStatsLoaded}"
+                   th:text="#{damage.team.currentBuild}">
+                    Current imported values are used where available.
+                </p>
+            </section>
+
+            <div class="damage-input-section" th:each="section : ${profile.inputSections}">
+                <h3 th:text="${#messages.msg(section.messageKey)}">Character build</h3>
+                <div class="damage-slider-field" th:each="input : ${section.inputs}"
+                     th:classappend="${input.type == 'checkbox'} ? ' damage-toggle-field' : ''"
+                     th:attr="data-input-team-member=${input.requiredTeamMember}">
+                    <th:block th:if="${input.type != 'checkbox'}">
+                        <div class="damage-input-label">
+                            <label th:for="${'damage-input-' + input.id}">
+                                <span th:text="${#messages.msg(input.messageKey)}">Attack</span>
+                                <small th:if="${input.currentValueLoaded}"
+                                       th:text="#{damage.input.current}">Current</small>
+                            </label>
+                            <output th:for="${'damage-input-' + input.id}"
+                                    th:attr="data-input-output=${input.id}"
+                                    th:text="${input.defaultValue + input.suffix}">1800</output>
+                        </div>
+                        <input type="range"
+                               th:id="${'damage-input-' + input.id}"
+                               th:attr="data-damage-input=${input.id},data-suffix=${input.suffix},
+                                    data-current-loaded=${input.currentValueLoaded},
+                                    min=${input.min},max=${input.max},step=${input.step}"
+                               th:value="${input.defaultValue}">
+                    </th:block>
+                    <label class="damage-buff-toggle" th:if="${input.type == 'checkbox'}"
+                           th:for="${'damage-input-' + input.id}">
+                        <span>
+                            <b th:text="${#messages.msg(input.messageKey)}">A Wager of Moonlight</b>
+                            <small th:if="${input.helpMessageKey != null}"
+                                   th:text="${#messages.msg(input.helpMessageKey)}">Adds 100 EM.</small>
+                        </span>
+                        <span class="damage-toggle-control">
+                            <input type="checkbox"
+                                   th:id="${'damage-input-' + input.id}"
+                                   th:attr="data-damage-input=${input.id}"
+                                   th:checked="${input.defaultValue > 0}">
+                            <i aria-hidden="true"></i>
+                        </span>
+                    </label>
+                    <small class="damage-input-help"
+                           th:if="${input.type != 'checkbox' && input.helpMessageKey != null}"
+                           th:text="${#messages.msg(input.helpMessageKey)}">Help text.</small>
+                </div>
+            </div>
+
+            <section class="damage-effects-panel" aria-labelledby="damage-effects-heading">
+                <header>
+                    <p class="eyebrow" th:text="#{damage.effects.eyebrow}">Effect layers</p>
+                    <h3 id="damage-effects-heading" th:text="#{damage.effects.heading}">Passives and buffs</h3>
+                    <p th:text="#{damage.effects.help}">
+                        Enabled effects are calculated in source-aware layers.
+                    </p>
+                </header>
+
+                <details class="damage-effect-section"
+                         th:each="effectSection : ${profile.effectSections}"
+                         th:classappend="${' damage-effect-section-' + effectSection.key}"
+                         th:attr="data-effect-section=${effectSection.key}"
+                         th:open="${effectSection.defaultExpanded}">
+                    <summary>
+                        <span>
+                            <b th:text="${#messages.msg(effectSection.messageKey)}">Character passives</b>
+                            <small th:if="${effectSection.helpMessageKey != null}"
+                                   th:text="${#messages.msg(effectSection.helpMessageKey)}">Source help</small>
+                        </span>
+                        <span class="damage-effect-summary-tools">
+                            <span class="damage-effect-count"
+                                  th:attr="data-effect-count=${effectSection.key}">0 active</span>
+                            <span class="damage-effect-bulk-actions">
+                                <button type="button"
+                                        th:attr="data-effect-enable-all=${effectSection.key}"
+                                        th:text="#{damage.effects.action.enableAll}">Enable all</button>
+                                <button type="button"
+                                        th:attr="data-effect-disable-all=${effectSection.key}"
+                                        th:text="#{damage.effects.action.disableAll}">Disable all</button>
+                                <button type="button"
+                                        th:if="${effectSection.key == 'constellation'}"
+                                        data-effect-reset-ownership
+                                        th:text="#{damage.effects.action.ownedDefaults}">Owned defaults</button>
+                            </span>
+                        </span>
+                    </summary>
+                    <div class="damage-effect-list">
+                        <article class="damage-effect-card"
+                                 th:each="effect : ${effectSection.effects}"
+                                 th:attr="data-effect-card=${effect.id},data-effect-source=${effectSection.key}">
+                            <div class="damage-effect-card-heading">
+                                <span>
+                                    <small class="damage-effect-source"
+                                           th:if="${effect.sourceMessageKey != null}"
+                                           th:text="${#messages.msg(effect.sourceMessageKey)}">Nefer</small>
+                                    <b th:text="${#messages.msg(effect.nameMessageKey)}">Passive name</b>
+                                </span>
+                                <label class="damage-toggle-control"
+                                       th:for="${'damage-effect-' + effect.id}"
+                                       th:attr="data-effect-toggle-label=${effect.id},aria-label=${#messages.msg(effect.nameMessageKey)}">
+                                    <input type="checkbox"
+                                           th:id="${'damage-effect-' + effect.id}"
+                                           th:attr="data-damage-effect=${effect.id}"
+                                           th:checked="${initialEffectValues[effect.id]}">
+                                    <i aria-hidden="true"></i>
+                                </label>
+                            </div>
+                            <label th:for="${'damage-effect-' + effect.id}"
+                                   th:text="${#messages.msg(effect.descriptionMessageKey)}">
+                                Effect description.
+                            </label>
+                            <div class="damage-effect-card-footer">
+                                <span class="damage-effect-status"
+                                      th:attr="data-effect-status=${effect.id}"
+                                      th:text="#{damage.effects.state.active}">Active</span>
+                                <small th:if="${effect.impactMessageKey != null}"
+                                       th:text="${#messages.msg(effect.impactMessageKey)}">Calculation impact.</small>
+                            </div>
+                            <small class="damage-effect-metric"
+                                   th:each="modifier, modifierStat : ${effect.modifiers}"
+                                   th:if="${modifier.displayMessageKey != null}">
+                                <span th:text="${#messages.msg(modifier.displayMessageKey)}">Current value</span>
+                                <b th:attr="data-effect-metric=${effect.id + ':' + modifierStat.index}">0%</b>
+                            </small>
+                        </article>
+                    </div>
+                </details>
+            </section>
+        </aside>
+
+        <div class="damage-output-column">
+            <section class="damage-live-summary" aria-live="polite" aria-atomic="true">
+                <div>
+                    <small th:text="#{damage.summary.attack}">Effective ATK</small>
+                    <b data-effective-stat="attack"
+                       th:text="${#numbers.formatInteger(initialCalculation.effectiveStats['attack'], 1)}">1,800</b>
+                </div>
+                <div>
+                    <small th:text="#{damage.summary.em}">Effective EM</small>
+                    <b data-effective-stat="elementalMastery"
+                       th:text="${#numbers.formatInteger(initialCalculation.effectiveStats['elementalMastery'], 1)}">700</b>
+                </div>
+                <div>
+                    <small th:text="#{damage.summary.critRate}">Effective CRIT Rate</small>
+                    <b data-effective-stat="critRate" data-effective-format="percent"
+                       th:text="${#numbers.formatDecimal(initialCalculation.effectiveStats['critRate'], 1, 1) + '%'}">78.0%</b>
+                </div>
+                <div>
+                    <small th:text="#{damage.summary.critDamage}">Effective CRIT DMG</small>
+                    <b data-effective-stat="critDamage" data-effective-format="percent"
+                       th:text="${#numbers.formatDecimal(initialCalculation.effectiveStats['critDamage'], 1, 1) + '%'}">216.0%</b>
+                </div>
+                <div>
+                    <small th:text="#{damage.summary.defense}">DEF multiplier</small>
+                    <b data-defense-multiplier
+                       th:text="${#numbers.formatPercent(initialCalculation.defenseMultiplier, 1, 1)}">50.0%</b>
+                </div>
+                <div>
+                    <small th:text="#{damage.summary.resistance}">RES multiplier</small>
+                    <b data-resistance-multiplier
+                       th:text="${#numbers.formatPercent(initialCalculation.resistanceMultiplier, 1, 1)}">90.0%</b>
+                </div>
+            </section>
+
+            <section class="damage-formula-pipeline" aria-labelledby="damage-formula-pipeline-heading">
+                <header>
+                    <div>
+                        <p class="eyebrow" th:text="#{damage.pipeline.eyebrow}">Live formula</p>
+                        <h2 id="damage-formula-pipeline-heading" th:text="#{damage.pipeline.heading}">
+                            How the selected stats become damage
+                        </h2>
+                    </div>
+                    <code th:text="#{damage.pipeline.formula}">Base damage × DMG Bonus × DEF × RES</code>
+                </header>
+                <div class="damage-pipeline-grid">
+                    <article>
+                        <span>1</span>
+                        <div>
+                            <b th:text="#{damage.pipeline.stats}">Effective stats</b>
+                            <code data-pipeline-stats>ATK 1,800 · EM 700</code>
+                            <small th:text="#{damage.pipeline.stats.help}">Build values plus active stat buffs.</small>
+                        </div>
+                    </article>
+                    <article>
+                        <span>2</span>
+                        <div>
+                            <b th:text="#{damage.pipeline.bonus}">DMG Bonus multiplier</b>
+                            <code data-pipeline-bonus>1 + 46.6% = ×1.466</code>
+                            <small th:text="#{damage.pipeline.bonus.help}">Applicable damage bonuses add together.</small>
+                        </div>
+                    </article>
+                    <article>
+                        <span>3</span>
+                        <div>
+                            <b th:text="#{damage.pipeline.defense}">Enemy DEF multiplier</b>
+                            <code data-pipeline-defense>Character and enemy levels = ×0.500</code>
+                            <small th:text="#{damage.pipeline.defense.help}">Levels and defense effects influence this step.</small>
+                        </div>
+                    </article>
+                    <article>
+                        <span>4</span>
+                        <div>
+                            <b th:text="#{damage.pipeline.resistance}">Enemy RES multiplier</b>
+                            <code data-pipeline-resistance>1 − 10% Dendro RES = ×0.900</code>
+                            <small th:text="#{damage.pipeline.resistance.help}">Resistance uses a piecewise formula.</small>
+                        </div>
+                    </article>
+                    <article>
+                        <span>5</span>
+                        <div>
+                            <b th:text="#{damage.pipeline.crit}">Average CRIT multiplier</b>
+                            <code data-pipeline-crit>1 + 70% × 180% = ×2.260</code>
+                            <small th:text="#{damage.pipeline.crit.help}">CRIT Rate weights the CRIT DMG multiplier.</small>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <div class="damage-results-heading" id="damage-results">
+                <div>
+                    <p class="eyebrow" th:text="#{damage.outputs.eyebrow}">Damage instances</p>
+                    <h2 th:text="#{damage.outputs.heading}">All talent hits</h2>
+                </div>
+                <div class="damage-result-tools">
+                    <div class="damage-result-legend" aria-label="Damage result legend">
+                        <span><i class="legend-dot legend-average"></i><b th:text="#{damage.result.average}">Average</b></span>
+                        <span><i class="legend-dot legend-normal"></i><b th:text="#{damage.result.nonCrit}">Non-CRIT</b></span>
+                        <span><i class="legend-dot legend-crit"></i><b th:text="#{damage.result.crit}">CRIT</b></span>
+                    </div>
+                    <button class="damage-expand-calculations" type="button"
+                            data-expand-calculations aria-expanded="false"
+                            th:attr="data-expand-label=#{damage.breakdown.expandAll},
+                                data-collapse-label=#{damage.breakdown.collapseAll}"
+                            th:text="#{damage.breakdown.expandAll}">Expand all calculations</button>
+                </div>
+            </div>
+
+            <section class="damage-talent" th:each="talent : ${profile.talents}">
+                <header class="damage-talent-heading">
+                    <span class="damage-talent-marker" th:text="${talent.marker}">NA</span>
+                    <div>
+                        <small th:text="${#messages.msg(talent.kindMessageKey)}">Normal Attack</small>
+                        <h3 th:text="${talent.name}">Striking Serpent</h3>
+                    </div>
+                    <span class="damage-talent-level">
+                        <span th:text="#{character.talent.level}">Level</span>
+                        <b th:attr="data-talent-level=${talent.levelInput}">10</b>
+                    </span>
+                </header>
+
+                <div class="damage-instance-grid">
+                    <article class="damage-instance" th:each="instance : ${talent.instances}"
+                             th:hidden="${!initialResults[instance.id].active}"
+                             th:attr="data-damage-instance=${instance.id},data-damage-model=${instance.damageModel}">
+                        <div class="damage-instance-heading">
+                            <div>
+                                <span class="damage-instance-title-row">
+                                    <h4 th:text="${instance.label}">1-Hit DMG</h4>
+                                    <small class="damage-model-pill"
+                                           th:if="${instance.damageModel == 'lunarReaction'}"
+                                           th:text="#{damage.model.lunarBloom}">Lunar-Bloom</small>
+                                </span>
+                                <small data-scaling>68.5% ATK</small>
+                            </div>
+                            <span th:if="${instance.note != null}" th:text="${instance.note}">2 strikes</span>
+                        </div>
+                        <div class="damage-average-result">
+                            <small th:text="#{damage.result.average}">Average</small>
+                            <strong data-result="average"
+                                    th:text="${initialResults[instance.id].roundedAverage}">12,460</strong>
+                        </div>
+                        <dl class="damage-secondary-results">
+                            <div>
+                                <dt th:text="#{damage.result.nonCrit}">Non-CRIT</dt>
+                                <dd data-result="nonCritical"
+                                    th:text="${initialResults[instance.id].roundedNonCritical}">8,900</dd>
+                            </div>
+                            <div>
+                                <dt th:text="#{damage.result.crit}">CRIT</dt>
+                                <dd data-result="critical"
+                                    th:text="${initialResults[instance.id].roundedCritical}">24,920</dd>
+                            </div>
+                        </dl>
+                        <p class="damage-instance-bonus" data-instance-bonus hidden></p>
+                        <details class="damage-calculation-breakdown" data-calculation-breakdown>
+                            <summary>
+                                <span th:text="#{damage.breakdown.heading}">View full calculation</span>
+                                <i aria-hidden="true">+</i>
+                            </summary>
+                            <div class="damage-formula-rows">
+                                <div>
+                                    <span>
+                                        <b th:text="#{damage.breakdown.base}">Talent base damage</b>
+                                        <small data-formula-influences>Influenced by ATK</small>
+                                    </span>
+                                    <code data-formula="base">1,800 ATK × 68.5% = 1,233</code>
+                                </div>
+                                <div>
+                                    <span>
+                                        <b th:text="#{damage.breakdown.bonus}">Damage bonuses</b>
+                                        <small th:text="#{damage.breakdown.bonus.help}">All applicable bonuses are additive.</small>
+                                    </span>
+                                    <code data-formula="bonus">1 + 46.6% = ×1.466</code>
+                                </div>
+                                <div>
+                                    <span>
+                                        <b th:text="#{damage.breakdown.defense}">Defense mitigation</b>
+                                        <small th:text="#{damage.breakdown.defense.help}">Levels and defense effects.</small>
+                                    </span>
+                                    <code data-formula="defense">(90 + 100) ÷ (...) = ×0.500</code>
+                                </div>
+                                <div>
+                                    <span>
+                                        <b th:text="#{damage.breakdown.resistance}">Resistance mitigation</b>
+                                        <small th:text="#{damage.breakdown.resistance.help}">Enemy Dendro resistance.</small>
+                                    </span>
+                                    <code data-formula="resistance">1 − 10% = ×0.900</code>
+                                </div>
+                                <div class="damage-formula-result-row">
+                                    <span>
+                                        <b th:text="#{damage.result.nonCrit}">Non-CRIT</b>
+                                        <small th:text="#{damage.breakdown.nonCrit.help}">The direct hit before CRIT DMG.</small>
+                                    </span>
+                                    <code data-formula="nonCritical">1,233 × 1.466 × 0.500 × 0.900 = 813</code>
+                                </div>
+                                <div class="damage-formula-result-row">
+                                    <span>
+                                        <b th:text="#{damage.result.crit}">CRIT</b>
+                                        <small th:text="#{damage.breakdown.crit.help}">Applies the full CRIT DMG multiplier.</small>
+                                    </span>
+                                    <code data-formula="critical">813 × (1 + 180%) = 2,276</code>
+                                </div>
+                                <div class="damage-formula-result-row damage-formula-average-row">
+                                    <span>
+                                        <b th:text="#{damage.result.average}">Average</b>
+                                        <small th:text="#{damage.breakdown.average.help}">CRIT Rate-weighted expected damage.</small>
+                                    </span>
+                                    <code data-formula="average">813 × (1 + 70% × 180%) = 1,837</code>
+                                </div>
+                            </div>
+                        </details>
+                    </article>
+                </div>
+            </section>
+
+        </div>
+    </section>
+
+    <div class="damage-formula-metadata" hidden aria-hidden="true">
+        <th:block th:each="section : ${profile.inputSections}">
+            <span th:each="input : ${section.inputs}"
+                  th:attr="data-formula-meta=${input.id},
+                      data-formula-name=${#messages.msg(input.messageKey)},
+                      data-formula-tooltip=${#messages.msg('damage.tooltip.' + input.id)}"></span>
+        </th:block>
+        <th:block th:each="effectSection : ${profile.effectSections}">
+            <span th:each="effect : ${effectSection.effects}"
+                  th:attr="data-formula-effect-meta=${effect.id},
+                      data-formula-name=${#messages.msg(effect.nameMessageKey)},
+                      data-formula-tooltip=${#messages.msg(effect.descriptionMessageKey)},
+                      data-formula-source=${effectSection.key}"></span>
+        </th:block>
+        <span data-formula-meta="talentScaling"
+              th:attr="data-formula-name=#{damage.meta.talentScaling},
+                  data-formula-tooltip=#{damage.tooltip.talentScaling}"></span>
+        <span data-formula-meta="hitCount"
+              th:attr="data-formula-name=#{damage.meta.hitCount},
+                  data-formula-tooltip=#{damage.tooltip.hitCount}"></span>
+        <span data-formula-meta="damageBonusMultiplier"
+              th:attr="data-formula-name=#{damage.meta.damageBonusMultiplier},
+                  data-formula-tooltip=#{damage.tooltip.damageBonusMultiplier}"></span>
+        <span data-formula-meta="defenseMultiplier"
+              th:attr="data-formula-name=#{damage.meta.defenseMultiplier},
+                  data-formula-tooltip=#{damage.tooltip.defenseMultiplier}"></span>
+        <span data-formula-meta="resistanceMultiplier"
+              th:attr="data-formula-name=#{damage.meta.resistanceMultiplier},
+                  data-formula-tooltip=#{damage.tooltip.resistanceMultiplier}"></span>
+        <span data-formula-meta="critMultiplier"
+              th:attr="data-formula-name=#{damage.meta.critMultiplier},
+                  data-formula-tooltip=#{damage.tooltip.critMultiplier}"></span>
+        <span data-formula-meta="damageResult"
+              th:attr="data-formula-name=#{damage.meta.damageResult},
+                  data-formula-tooltip=#{damage.tooltip.damageResult}"></span>
+        <span data-formula-meta="lunarEmBonus"
+              th:attr="data-formula-name=#{damage.meta.lunarEmBonus},
+                  data-formula-tooltip=#{damage.tooltip.lunarEmBonus}"></span>
+        <span data-formula-meta="elevationMultiplier"
+              th:attr="data-formula-name=#{damage.meta.elevationMultiplier},
+                  data-formula-tooltip=#{damage.tooltip.elevationMultiplier}"></span>
+    </div>
+    <script id="damage-profile" type="application/json" th:utext="${profileJson}"></script>
+</main>
+
+<footer>
+    <span th:text="#{damage.footer(${profile.dataVersion})}">
+        Talent multipliers from the bundled Nefer 6.1 data profile.
+    </span>
+</footer>
+</body>
+</html>

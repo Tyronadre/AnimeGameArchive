@@ -1,17 +1,11 @@
 package de.tyro.genshinapp.service.content
 
-import de.tyro.genshinapp.service.importer.GenshinDbApiClient
-import de.tyro.genshinapp.service.importer.GenshinDetailDataSource
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.node.ObjectNode
 import de.tyro.genshinapp.configuration.GenshinContentProperties
 import de.tyro.genshinapp.model.CharacterDefinition
 import de.tyro.genshinapp.model.CharacterImageType
 import de.tyro.genshinapp.model.CharacterTalent
 import de.tyro.genshinapp.model.CharacterTalentKind
 import de.tyro.genshinapp.model.MaterialDefinition
-import de.tyro.genshinapp.model.TravelerElement
 import de.tyro.genshinapp.model.WeaponImageType
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.ClassPathResource
@@ -26,14 +20,9 @@ import java.util.concurrent.ConcurrentHashMap
 
 @Service
 class DynamicContentLoader(
-    private val objectMapper: ObjectMapper,
     private val properties: GenshinContentProperties,
     private val imageUrlRegistry: ImageUrlRegistry,
     private val fandomImageUrlResolver: FandomImageUrlResolver,
-    private val detailDataSource: GenshinDetailDataSource = GenshinDbApiClient(
-        objectMapper,
-        properties,
-    ),
     private val remoteImageDataSource: RemoteImageDataSource = HttpRemoteImageDataSource(
         properties,
     ),
@@ -41,30 +30,6 @@ class DynamicContentLoader(
     private val logger = LoggerFactory.getLogger(javaClass)
     private val cacheDirectory = Path.of(properties.cacheDirectory).toAbsolutePath().normalize()
     private val downloadLocks = ConcurrentHashMap<String, Any>()
-
-    fun loadCharacterJson(key: String): JsonNode? {
-        val normalizedKey = normalizeCharacterKey(key) ?: return null
-        readClasspathJson("data/characters/data/$normalizedKey.json")?.let { return it }
-        readCachedJson(characterDataPath(normalizedKey))?.let { return it }
-
-        return synchronized(lockFor("character-data:$normalizedKey")) {
-            readCachedJson(characterDataPath(normalizedKey))
-                ?: downloadCharacterJson(normalizedKey)
-        }
-    }
-
-    fun loadWeaponJson(key: String): JsonNode? {
-        val normalizedKey = key.trim().lowercase()
-            .takeIf { it.matches(ARTIFACT_KEY_PATTERN) }
-            ?: return null
-        readClasspathJson("data/weapons/data/$normalizedKey.json")?.let { return it }
-        readCachedJson(weaponDataPath(normalizedKey))?.let { return it }
-
-        return synchronized(lockFor("weapon-data:$normalizedKey")) {
-            readCachedJson(weaponDataPath(normalizedKey))
-                ?: downloadWeaponJson(normalizedKey)
-        }
-    }
 
     fun loadCharacterImage(
         character: CharacterDefinition,
@@ -414,53 +379,6 @@ class DynamicContentLoader(
         }
     }
 
-    private fun downloadCharacterJson(key: String): JsonNode? {
-        val travelerElement = TravelerElement.fromKey(key)
-            ?.takeIf { it.variantKey == key }
-        if (travelerElement != null) {
-            val talents = fetchDetail("talents for ${travelerElement.queryName}") {
-                detailDataSource.fetchTalents(travelerElement.queryName)
-            }
-                ?.takeIf(JsonNode::isObject)
-                ?: return null
-            val character = (readClasspathJson("data/characters/data/aether.json") as? ObjectNode)
-                ?.deepCopy()
-                ?: return null
-            character.put("name", travelerElement.queryName)
-            character.put("elementText", travelerElement.displayName)
-            character.set<JsonNode>("talents", talents)
-            writeCachedJson(characterDataPath(key), character)
-            return character
-        }
-
-        val character = fetchDetail("character $key") {
-            detailDataSource.fetchCharacter(key)
-        }
-            ?.takeIf(::validCharacterJson)
-            ?: return null
-        val talents = fetchDetail("talents for $key") { detailDataSource.fetchTalents(key) }
-
-        if (character is ObjectNode && talents?.isObject == true) {
-            character.set<JsonNode>("talents", talents)
-        }
-
-        writeCachedJson(characterDataPath(key), character)
-        return character
-    }
-
-    private fun downloadWeaponJson(key: String): JsonNode? {
-        val weapon = fetchDetail("weapon $key") { detailDataSource.fetchWeapon(key) }
-            ?.takeIf(::validWeaponJson)
-            ?: return null
-        writeCachedJson(weaponDataPath(key), weapon)
-        return weapon
-    }
-
-    private fun fetchDetail(description: String, fetch: () -> JsonNode?): JsonNode? =
-        runCatching(fetch)
-            .onFailure { logger.warn("Could not fetch normalized {} data", description, it) }
-            .getOrNull()
-
     private fun downloadImage(uri: URI): LoadedImage? {
         val image = remoteImageDataSource.fetchImage(uri) ?: return null
         return LoadedImage(image.bytes, image.contentType)
@@ -490,27 +408,6 @@ class DynamicContentLoader(
         character.weapon.takeIf { talent.kind == CharacterTalentKind.NORMAL_ATTACK },
         character.element.takeIf { talent.kind == CharacterTalentKind.NORMAL_ATTACK },
     )
-
-    private fun readClasspathJson(path: String): JsonNode? {
-        val resource = ClassPathResource(path)
-        if (!resource.exists()) return null
-
-        return runCatching {
-            resource.inputStream.use(objectMapper::readTree)
-        }.onFailure {
-            logger.warn("Bundled character data {} is invalid; using download fallback", path, it)
-        }.getOrNull()?.takeIf(::validCharacterJson)
-    }
-
-    private fun readCachedJson(path: Path): JsonNode? {
-        if (!Files.isRegularFile(path)) return null
-
-        return runCatching {
-            Files.newInputStream(path).use(objectMapper::readTree)
-        }.onFailure {
-            logger.warn("Cached character data {} is invalid; using download fallback", path, it)
-        }.getOrNull()?.takeIf(::validCharacterJson)
-    }
 
     private fun readClasspathImage(path: String, contentType: String): LoadedImage? {
         val resource = ClassPathResource(path)
@@ -556,14 +453,6 @@ class DynamicContentLoader(
         }.getOrNull()
     }
 
-    private fun writeCachedJson(path: Path, json: JsonNode) {
-        runCatching {
-            writeAtomically(path, objectMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(json))
-        }.onFailure {
-            logger.warn("Could not cache character data at {}", path, it)
-        }
-    }
-
     private fun writeCachedImage(path: Path, image: LoadedImage, sourceUrl: String) {
         runCatching {
             writeAtomically(path, image.bytes)
@@ -597,18 +486,6 @@ class DynamicContentLoader(
         }
     }
 
-    private fun validCharacterJson(node: JsonNode): Boolean =
-        node.isObject && node.path("name").isTextual && node.path("name").asText().isNotBlank()
-
-    private fun validWeaponJson(node: JsonNode): Boolean =
-        node.isObject &&
-            node.path("name").isTextual &&
-            node.path("rarity").canConvertToInt() &&
-            node.path("costs").isObject
-
-    private fun characterDataPath(key: String): Path =
-        cacheDirectory.resolve("characters").resolve("data").resolve("$key.json").normalize()
-
     private fun characterImagePath(
         key: String,
         imageType: CharacterImageType,
@@ -636,9 +513,6 @@ class DynamicContentLoader(
 
     private fun attributeImagePath(key: String): Path =
         cacheDirectory.resolve("attributes").resolve("$key.image").normalize()
-
-    private fun weaponDataPath(key: String): Path =
-        cacheDirectory.resolve("weapons").resolve("data").resolve("$key.json").normalize()
 
     private fun contentTypePath(imagePath: Path): Path =
         imagePath.resolveSibling("${imagePath.fileName}.content-type")

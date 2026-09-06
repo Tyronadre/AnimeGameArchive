@@ -22,7 +22,15 @@ data class CharacterDefinition(
     val imageResourceKey: String = key,
     val talentResourceKey: String = key,
     val hoyolabEntryId: Long? = null,
+    val hoyolabPageVersion: String? = null,
+    val hoyolabDataVersion: Int = 0,
+    val hoyolabAscension: List<CharacterHoyolabAscension> = emptyList(),
+    val baseStats: CharacterBaseValues? = null,
 ) {
+    /** Compatibility accessor; no separately persisted attack value. */
+    val baseAttack: Double?
+        get() = baseStats?.attack
+
     val iconImageUrl: String?
         get() = imageUrls[CharacterImageType.ICON]
 
@@ -40,6 +48,18 @@ data class CharacterDefinition(
     val passiveTalents: List<CharacterTalent>
         get() = talents.filterNot { it.kind.combat }
 }
+
+data class CharacterHoyolabAscension(
+    val level: Int,
+    val hpBeforeAscension: Double? = null,
+    val hpAfterAscension: Double? = null,
+    val attackBeforeAscension: Double? = null,
+    val attackAfterAscension: Double? = null,
+    val defenseBeforeAscension: Double? = null,
+    val defenseAfterAscension: Double? = null,
+    val secondaryStatBeforeAscension: Double? = null,
+    val secondaryStatAfterAscension: Double? = null,
+)
 
 data class CharacterTalent(
     val key: String,

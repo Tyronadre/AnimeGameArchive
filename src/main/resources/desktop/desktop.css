@@ -57,7 +57,14 @@
 
 .startup-status {
     -fx-text-fill: #eee8f7;
-    -fx-font-size: 12px;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-alignment: center;
+}
+
+.startup-detail {
+    -fx-text-fill: #b9aecb;
+    -fx-font-size: 10px;
     -fx-text-alignment: center;
 }
 

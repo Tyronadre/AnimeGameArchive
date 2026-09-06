@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 2,
+  "key": "scrolloftheheroofcindercity",
+  "name": "Scroll of the Hero of Cinder City",
+  "inputs": [
+    {
+      "id": "elementParticipated",
+      "label": "Calculated character's element participated in the reaction",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1,
+      "description": ""
+    },
+    {
+      "id": "nightsoul",
+      "label": "Additional Nightsoul-triggered bonus active",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1,
+      "description": ""
+    }
+  ],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · Nightsoul Burst energy",
+        "source": "Artifact set",
+        "description": "A nearby Nightsoul Burst restores 6 Energy to the wearer. Energy generation is not per-hit damage.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [],
+        "metrics": [
+          {
+            "label": "Energy per Nightsoul Burst",
+            "expression": {
+              "type": "constant",
+              "value": 6
+            },
+            "unit": "number",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "party",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Reaction elemental bonus",
+        "source": "Artifact set",
+        "description": "A reaction involving the wearer grants party members 12% DMG of the involved elements for 15s. Triggering in Nightsoul's Blessing adds 28% for 20s. Confirm that the calculated character's element participated. Duplicate sets do not stack.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:elementParticipated",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [],
+              "elements": [
+                "recipient"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 12
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 28
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:nightsoul"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 12
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 28
+                    },
+                    {
+                      "type": "input",
+                      "input": "local:nightsoul"
+                    }
+                  ]
+                }
+              ]
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "stackingGroup": "scrollOfTheHeroOfCinderCity",
+        "stackingPriority": {
+          "type": "add",
+          "operands": [
+            {
+              "type": "constant",
+              "value": 12
+            },
+            {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 28
+                },
+                {
+                  "type": "input",
+                  "input": "local:nightsoul"
+                }
+              ]
+            }
+          ]
+        },
+        "impact": "Party effect. Identical non-stacking bonuses use one eligible source."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: scrolloftheheroofcindercity",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

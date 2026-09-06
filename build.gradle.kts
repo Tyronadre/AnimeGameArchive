@@ -1,6 +1,8 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 import org.gradle.api.tasks.bundling.Zip
 import org.gradle.api.tasks.bundling.ZipEntryCompression
+import java.util.Properties
+import java.util.concurrent.TimeUnit
 
 
 plugins {
@@ -76,6 +78,7 @@ val bundledCatalogSnapshotFile = layout.buildDirectory.file(
 )
 val irminsulManifest = layout.projectDirectory.file("native/irminsul-helper/Cargo.toml")
 val irminsulExecutable = layout.projectDirectory.file("native/irminsul-helper/target/release/genshin-irminsul-helper.exe")
+val nativeUpstreamVersions = layout.projectDirectory.file("native/upstream-versions.properties")
 val appName = "Another Anime Game Archive"
 val appIcon = layout.projectDirectory.file("src/main/resources/desktop/app-icon.ico")
 val appImageDirectory = layout.buildDirectory.dir("desktop/$appName")
@@ -156,6 +159,7 @@ tasks.named<BootJar>("bootJar") {
 val buildIrminsulHelper by tasks.registering(Exec::class) {
     group = "desktop"
     description = "Builds the privileged Irminsul capture helper."
+    dependsOn(checkNativeUpstreamUpdates)
     workingDir(layout.projectDirectory.dir("native/irminsul-helper"))
     commandLine(
         "cargo",
@@ -170,6 +174,128 @@ val buildIrminsulHelper by tasks.registering(Exec::class) {
         },
     )
     outputs.file(irminsulExecutable)
+}
+
+val checkNativeUpstreamUpdates by tasks.registering {
+    group = "verification"
+    description = "Checks whether newer Irminsul native sources are available upstream."
+    inputs.file(nativeUpstreamVersions)
+
+    doLast {
+        val instructionsFile = layout.projectDirectory.file("docs/native-upstream-updates.md").asFile
+        val properties = Properties().apply {
+            nativeUpstreamVersions.asFile.inputStream().use(::load)
+        }
+
+        fun property(name: String): String =
+            properties.getProperty(name)?.trim()?.takeIf(String::isNotEmpty)
+                ?: error("Missing '$name' in ${nativeUpstreamVersions.asFile}")
+
+        fun gitLsRemote(vararg arguments: String): List<String> {
+            val process = ProcessBuilder(listOf("git", "ls-remote") + arguments)
+                .redirectErrorStream(true)
+                .apply {
+                    environment()["GIT_TERMINAL_PROMPT"] = "0"
+                }
+                .start()
+
+            if (!process.waitFor(15, TimeUnit.SECONDS)) {
+                process.destroyForcibly()
+                error("git ls-remote timed out")
+            }
+
+            val output = process.inputStream.bufferedReader().use { it.readText() }.trim()
+            if (process.exitValue() != 0) {
+                error(output.ifEmpty { "git ls-remote exited with code ${process.exitValue()}" })
+            }
+            return output.lineSequence().filter(String::isNotBlank).toList()
+        }
+
+        fun revisionAndRef(line: String): Pair<String, String> {
+            val fields = line.trim().split(Regex("\\s+"), limit = 2)
+            check(fields.size == 2) { "Unexpected git ls-remote output: $line" }
+            return fields[0] to fields[1]
+        }
+
+        val warnings = mutableListOf<String>()
+        val failures = mutableListOf<String>()
+
+        runCatching {
+            val repository = property("irminsul.repository")
+            val currentVersion = property("irminsul.currentVersion")
+            val currentRevision = property("irminsul.currentRevision")
+            val latest = gitLsRemote(
+                "--tags",
+                "--refs",
+                "--sort=-version:refname",
+                repository,
+                "refs/tags/v*",
+            ).firstOrNull() ?: error("No version tags were returned by $repository")
+            val (latestRevision, latestRef) = revisionAndRef(latest)
+            val latestVersion = latestRef.removePrefix("refs/tags/")
+
+            if (latestVersion != currentVersion) {
+                warnings += buildString {
+                    appendLine("Irminsul: local $currentVersion (${currentRevision.take(12)}) -> upstream $latestVersion (${latestRevision.take(12)})")
+                    append("  Review: ${repository.removeSuffix(".git")}/compare/$currentRevision...$latestRevision")
+                }
+            }
+        }.onFailure {
+            failures += "Irminsul: ${it.message ?: it.javaClass.simpleName}"
+        }
+
+        runCatching {
+            val repository = property("autoArtifactarium.repository")
+            val branchRef = property("autoArtifactarium.ref")
+            val currentRevision = property("autoArtifactarium.currentRevision")
+            val latest = gitLsRemote(repository, branchRef).singleOrNull()
+                ?: error("Expected exactly one ref for $branchRef from $repository")
+            val (latestRevision, _) = revisionAndRef(latest)
+
+            if (!latestRevision.equals(currentRevision, ignoreCase = true)) {
+                warnings += buildString {
+                    appendLine("auto-artifactarium: local base ${currentRevision.take(12)} -> upstream ${latestRevision.take(12)}")
+                    append("  Review: ${repository.removeSuffix(".git")}/compare/$currentRevision...$latestRevision")
+                }
+            }
+        }.onFailure {
+            failures += "auto-artifactarium: ${it.message ?: it.javaClass.simpleName}"
+        }
+
+        if (warnings.isEmpty() && failures.isEmpty()) {
+            logger.lifecycle("Native upstream check: tracked sources are current.")
+        }
+
+        if (warnings.isNotEmpty()) {
+            logger.warn(
+                buildString {
+                    appendLine()
+                    appendLine("============================================================")
+                    appendLine("WARNING: Native Rust source updates are available")
+                    appendLine("------------------------------------------------------------")
+                    appendLine(warnings.joinToString("\n"))
+                    appendLine()
+                    appendLine("Do not overwrite the locally adapted sources. Review and")
+                    appendLine("port the upstream changes manually, then update:")
+                    appendLine("  ${nativeUpstreamVersions.asFile}")
+                    appendLine()
+                    appendLine("Instructions:")
+                    appendLine("  $instructionsFile")
+                    appendLine()
+                    appendLine("The installer build will continue.")
+                    append("============================================================")
+                },
+            )
+        }
+
+        if (failures.isNotEmpty()) {
+            logger.warn(
+                "Native upstream update check could not be completed; the installer build will continue.\n" +
+                    failures.joinToString("\n") { "  - $it" } +
+                    "\nRun './gradlew checkNativeUpstreamUpdates' later or see $instructionsFile",
+            )
+        }
+    }
 }
 
 val desktopBootJar by tasks.registering(BootJar::class) {
@@ -350,7 +476,7 @@ tasks.register<Exec>("packageDesktop") {
 tasks.register<Exec>("packageDesktopOfflineInstaller") {
     group = "desktop"
     description = "Creates an offline Windows installer with a bundled Java runtime."
-    dependsOn("packageDesktop")
+    dependsOn("packageDesktop", checkNativeUpstreamUpdates)
 
     doFirst {
         val jpackage = javaHome.resolve("bin/jpackage.exe")
@@ -398,7 +524,7 @@ tasks.register<Exec>("packageDesktopOfflineInstaller") {
 tasks.register<Exec>("packageDesktopInstaller") {
     group = "desktop"
     description = "Creates a small online installer that downloads a private Java 21 runtime."
-    dependsOn(onlineInstallerPayload)
+    dependsOn(onlineInstallerPayload, checkNativeUpstreamUpdates)
     inputs.file(onlineInstallerSources.file("OnlineInstaller.cs"))
     inputs.file(onlineInstallerPayloadArchive)
     inputs.file(appIcon)

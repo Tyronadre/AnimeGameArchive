@@ -3,6 +3,7 @@ package de.tyro.genshinapp.service.importer
 import de.tyro.genshinapp.service.catalog.WeaponCatalogService
 import de.tyro.genshinapp.service.catalog.WeaponDefinition
 import de.tyro.genshinapp.service.catalog.WeaponHoyolabAscension
+import de.tyro.genshinapp.service.catalog.MaterialCatalogService
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.tyro.genshinapp.configuration.GenshinContentProperties
@@ -19,6 +20,7 @@ class HoyolabWeaponGalleryService(
     private val objectMapper: ObjectMapper,
     private val properties: GenshinContentProperties,
     private val weaponCatalogService: WeaponCatalogService,
+    private val materialCatalogService: MaterialCatalogService,
     private val source: HoyolabWikiDataSource = HttpHoyolabWikiDataSource(objectMapper, properties),
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -53,31 +55,47 @@ class HoyolabWeaponGalleryService(
             }
 
             failedAt.remove(normalizedKey)
-            weaponCatalogService.saveEnrichment(
-                current.copy(
-                    name = page.name ?: current.name,
-                    rarity = page.rarity ?: current.rarity,
-                    weaponType = page.weaponType ?: current.weaponType,
-                    secondaryStatType = page.secondaryStatType ?: current.secondaryStatType,
-                    baseAttack = page.ascension.firstOrNull()?.attackAfterAscension
-                        ?: current.baseAttack,
-                    baseSecondaryStat = page.ascension.firstOrNull()?.secondaryStat
-                        ?: current.baseSecondaryStat,
-                    description = page.description ?: current.description,
-                    region = page.region ?: current.region,
-                    obtainMethod = page.obtainMethod ?: current.obtainMethod,
-                    releaseVersion = page.releaseVersion ?: current.releaseVersion,
-                    passiveName = page.passiveName ?: current.passiveName,
-                    passiveDescription = page.passiveDescription ?: current.passiveDescription,
-                    story = page.story ?: current.story,
-                    hoyolabEntryId = page.entryId,
-                    hoyolabPageVersion = page.pageVersion ?: current.hoyolabPageVersion,
-                    hoyolabDataVersion = CURRENT_DATA_VERSION,
-                    remoteImageUrls = current.remoteImageUrls + page.remoteImageUrls,
-                    hoyolabAscension = page.ascension.ifEmpty { current.hoyolabAscension },
-                ),
-            )
+            savePage(current, page)
         }
+    }
+
+    /** Imports a page captured in the build-time HoYoWiki snapshot. */
+    fun importPage(page: JsonNode): WeaponDefinition? {
+        val name = page.path("name").asText().trim().takeIf(String::isNotBlank) ?: return null
+        val current = weaponCatalogService.find(GoodKeyNormalizer.normalize(name)) ?: return null
+        val entryId = page.path("id").asText().toLongOrNull()
+            ?: current.hoyolabEntryId
+            ?: return null
+        return parsePage(entryId, page)?.let { savePage(current, it) }
+    }
+
+    private fun savePage(current: WeaponDefinition, page: WeaponPageResult): WeaponDefinition {
+        materialCatalogService.synchronizeHoyolabReferences(page.materialReferences)
+        return weaponCatalogService.saveEnrichment(
+            current.copy(
+                name = page.name ?: current.name,
+                rarity = page.rarity ?: current.rarity,
+                weaponType = page.weaponType ?: current.weaponType,
+                secondaryStatType = page.secondaryStatType ?: current.secondaryStatType,
+                baseAttack = page.ascension.firstOrNull()?.attackAfterAscension
+                    ?: current.baseAttack,
+                baseSecondaryStat = page.ascension.firstOrNull()?.secondaryStat
+                    ?: current.baseSecondaryStat,
+                description = page.description ?: current.description,
+                region = page.region ?: current.region,
+                obtainMethod = page.obtainMethod ?: current.obtainMethod,
+                releaseVersion = page.releaseVersion ?: current.releaseVersion,
+                passiveName = page.passiveName ?: current.passiveName,
+                passiveDescription = page.passiveDescription ?: current.passiveDescription,
+                story = page.story ?: current.story,
+                hoyolabEntryId = page.entryId,
+                hoyolabPageVersion = page.pageVersion ?: current.hoyolabPageVersion,
+                hoyolabDataVersion = CURRENT_DATA_VERSION,
+                remoteImageUrls = current.remoteImageUrls + page.remoteImageUrls,
+                hoyolabAscension = page.ascension.ifEmpty { current.hoyolabAscension },
+                ascensionCosts = page.ascensionCosts.ifEmpty { current.ascensionCosts },
+            ),
+        )
     }
 
     private fun lookupPage(weapon: WeaponDefinition): WeaponPageResult? {
@@ -90,6 +108,11 @@ class HoyolabWeaponGalleryService(
 
     private fun loadPage(requestedEntryId: Long): WeaponPageResult? {
         val page = source.fetchPage(requestedEntryId) ?: return null
+        return parsePage(requestedEntryId, page)
+    }
+
+    private fun parsePage(requestedEntryId: Long, page: JsonNode): WeaponPageResult? {
+        val parser = HoyolabPageParser(objectMapper)
         val baseInfo = componentData(page, BASE_INFO_COMPONENT_ID)
         val baseInfoItems = baseInfo?.path("list")
             ?.takeIf(JsonNode::isArray)
@@ -122,12 +145,23 @@ class HoyolabWeaponGalleryService(
             unascendedImage?.url?.let { put(WeaponImageType.FULL_UNASCENDED, it) }
         }
 
-        val ascension = componentData(page, ASCENSION_COMPONENT_ID)
+        val ascensionRows = componentData(page, ASCENSION_COMPONENT_ID)
             ?.path("list")
             ?.takeIf(JsonNode::isArray)
-            ?.mapNotNull(::toAscensionRow)
-            ?.sortedBy(WeaponHoyolabAscension::level)
+            ?.toList()
             .orEmpty()
+        val ascension = ascensionRows
+            .mapNotNull(::toAscensionRow)
+            .sortedBy(WeaponHoyolabAscension::level)
+        val materialReferences = ascensionRows.flatMap { row ->
+            parser.materialReferences(row.path("materials"))
+        }
+        val ascensionCosts = ascensionRows.mapIndexedNotNull { index, row ->
+            if (index == 0) return@mapIndexedNotNull null
+            val costs = parser.materialReferences(row.path("materials"))
+                .map(materialCatalogService::canonicalCost)
+            costs.takeIf { it.isNotEmpty() }?.let { index to it }
+        }.toMap()
         val story = componentData(page, STORY_COMPONENT_ID)
             ?.path("list")
             ?.takeIf(JsonNode::isArray)
@@ -160,6 +194,8 @@ class HoyolabWeaponGalleryService(
             story = story,
             remoteImageUrls = remoteImageUrls,
             ascension = ascension,
+            ascensionCosts = ascensionCosts,
+            materialReferences = materialReferences,
         )
     }
 
@@ -217,7 +253,7 @@ class HoyolabWeaponGalleryService(
     }
 
     private fun toGalleryImage(node: JsonNode): ImportedWeaponImage? {
-        val url = node.path("img").asText().takeIf(::isAllowedHoyolabImageUrl) ?: return null
+        val url = normalizeHoyolabImageUrl(node.path("img").asText()) ?: return null
         val label = node.path("key").asText().ifBlank { "Gallery" }
         val description = node.path("imgDesc").asText().toPlainText()
         return ImportedWeaponImage(label, url, description)
@@ -277,6 +313,8 @@ class HoyolabWeaponGalleryService(
         val story: String?,
         val remoteImageUrls: Map<WeaponImageType, String>,
         val ascension: List<WeaponHoyolabAscension>,
+        val ascensionCosts: Map<Int, List<de.tyro.genshinapp.model.MaterialCost>>,
+        val materialReferences: List<HoyolabMaterialReference>,
     )
 
     private data class ImportedWeaponImage(

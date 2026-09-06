@@ -6,7 +6,7 @@ enum class CharacterImageType(
 ) {
     ICON("icon", "Icon"),
     CARD("card", "Card"),
-    WISH("wish", "Wish"),
+    WISH("wish", "Banner"),
     ;
 
     fun fileName(characterName: String): String {

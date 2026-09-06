@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 2,
+  "key": "desertpavilionchronicle",
+  "name": "Desert Pavilion Chronicle",
+  "inputs": [],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · Anemo DMG",
+        "source": "Artifact set",
+        "description": "Elemental damage bonus applies to matching ordinary damage, not Lunar reactions.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [],
+              "elements": [
+                "Anemo"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 15
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 15
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Charged Attack trigger",
+        "source": "Artifact set",
+        "description": "After a Charged Attack hit, gain 10% Normal Attack speed and 40% Normal/Charged/Plunging Attack DMG for 15s.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [
+                "normalAttack",
+                "chargedAttack",
+                "plungingAttack"
+              ],
+              "elements": []
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 40
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "Normal Attack speed bonus",
+            "expression": {
+              "type": "constant",
+              "value": 10
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          },
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 40
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: desertpavilionchronicle",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

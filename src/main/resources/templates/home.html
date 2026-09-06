@@ -6,11 +6,13 @@
     <title th:text="#{home.title}">Genshin Characters</title>
     <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
     <script th:src="@{/js/theme.js}" src="/js/theme.js"></script>
+    <script defer th:src="@{/js/character-catalog.js}" src="/js/character-catalog.js"></script>
 </head>
 <body>
 <header th:replace="~{fragments :: siteHeader('characters')}"></header>
 
-<main>
+<main class="character-catalog-page" data-character-catalog
+      th:attr="data-result-template=#{home.results('RESULT_COUNT')}">
     <section class="welcome">
         <p class="eyebrow" th:text="#{home.eyebrow}">Character database</p>
         <h1 th:text="#{home.heading}">Who do you want to build?</h1>
@@ -18,13 +20,100 @@
             Search the bundled data and calculate ascension and talent materials.
         </p>
 
-        <form class="search" th:action="@{/characters}" method="get">
-            <label class="sr-only" for="query" th:text="#{home.search.label}">Search characters</label>
-            <input id="query" name="query" type="search" th:value="${query}"
-                   th:placeholder="#{home.search.placeholder}" placeholder="Name, element, or region…"
-                   autocomplete="off">
-            <button type="submit" th:text="#{action.search}">Search</button>
-            <a th:if="${!query.isBlank()}" th:href="@{/characters}" th:text="#{action.reset}">Reset</a>
+        <form class="character-catalog-controls" th:action="@{/characters}" method="get"
+              data-character-filter-form>
+            <div class="character-catalog-search-row">
+                <label class="character-catalog-search" for="query">
+                    <span class="sr-only" th:text="#{home.search.label}">Search characters</span>
+                    <svg aria-hidden="true" viewBox="0 0 24 24">
+                        <path d="m21 21-4.35-4.35m2.35-5.4a7.75 7.75 0 1 1-15.5 0 7.75 7.75 0 0 1 15.5 0Z"/>
+                    </svg>
+                    <input id="query" name="query" type="search" th:value="${query}"
+                           th:placeholder="#{home.search.placeholder}"
+                           placeholder="Name, element, region, or weapon…"
+                           autocomplete="off" data-character-search>
+                    <button type="button" data-character-search-clear hidden
+                            th:attr="aria-label=#{home.search.clear},title=#{home.search.clear}">×</button>
+                </label>
+                <button class="character-search-submit" type="submit"
+                        th:text="#{action.search}">Search</button>
+                <button class="character-filter-reset" type="button" data-character-filter-reset hidden
+                        th:text="#{action.reset}">Reset</button>
+            </div>
+
+            <div class="character-filter-groups">
+                <div class="character-filter-group character-element-filter">
+                    <span class="character-filter-label"
+                          th:text="#{home.filter.element}">Element</span>
+                    <div class="character-filter-chips" role="group"
+                         th:attr="aria-label=#{home.filter.element}">
+                        <button class="character-filter-chip is-active" type="button"
+                                data-element-filter="all" aria-pressed="true">
+                            <span class="character-filter-icon character-filter-all"
+                                  aria-hidden="true">✦</span>
+                            <span th:text="#{common.all}">All</span>
+                        </button>
+                        <button class="character-filter-chip" type="button" aria-pressed="false"
+                                data-element-filter th:each="filter : ${elementFilters}"
+                                th:attr="data-element-filter=${filter.key},title=${filter.label}">
+                            <span class="character-filter-icon" aria-hidden="true">
+                                <img th:src="${filter.imageUrl}" th:alt="${filter.label}"
+                                     onerror="this.remove()">
+                            </span>
+                            <span th:text="${filter.label}">Anemo</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="character-filter-group character-weapon-filter">
+                    <span class="character-filter-label"
+                          th:text="#{home.filter.weapon}">Weapon type</span>
+                    <div class="character-filter-chips" role="group"
+                         th:attr="aria-label=#{home.filter.weapon}">
+                        <button class="character-filter-chip is-active" type="button"
+                                data-weapon-filter="all" aria-pressed="true">
+                            <span class="character-filter-icon character-filter-all"
+                                  aria-hidden="true">✦</span>
+                            <span th:text="#{common.all}">All</span>
+                        </button>
+                        <button class="character-filter-chip" type="button" aria-pressed="false"
+                                data-weapon-filter th:each="filter : ${characterWeaponFilters}"
+                                th:attr="data-weapon-filter=${filter.key},title=${filter.label}">
+                            <span class="character-filter-icon" aria-hidden="true">
+                                <img th:src="${filter.imageUrl}" th:alt="${filter.label}"
+                                     onerror="this.remove()">
+                            </span>
+                            <span th:text="${filter.label}">Sword</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="character-filter-group character-ownership-filter">
+                    <span class="character-filter-label"
+                          th:text="#{home.filter.ownership}">Ownership</span>
+                    <div class="character-filter-segmented" role="group"
+                         th:attr="aria-label=#{home.filter.ownership}">
+                        <button class="is-active" type="button" data-ownership-filter="all"
+                                aria-pressed="true" th:text="#{common.all}">All</button>
+                        <button type="button" data-ownership-filter="owned" aria-pressed="false"
+                                th:text="#{character.owned}">Owned</button>
+                        <button type="button" data-ownership-filter="unowned" aria-pressed="false"
+                                th:text="#{character.unowned}">Unowned</button>
+                    </div>
+                </div>
+
+                <div class="character-filter-group character-rarity-filter">
+                    <span class="character-filter-label"
+                          th:text="#{home.filter.rarity}">Rarity</span>
+                    <div class="character-filter-segmented" role="group"
+                         th:attr="aria-label=#{home.filter.rarity}">
+                        <button class="is-active" type="button" data-rarity-filter="all"
+                                aria-pressed="true" th:text="#{common.all}">All</button>
+                        <button type="button" data-rarity-filter="4" aria-pressed="false">4 ★</button>
+                        <button type="button" data-rarity-filter="5" aria-pressed="false">5 ★</button>
+                    </div>
+                </div>
+            </div>
         </form>
     </section>
 
@@ -34,11 +123,17 @@
                 <p class="eyebrow" th:text="#{home.collection}">Collection</p>
                 <h2 id="catalog-heading" th:text="#{nav.characters}">Characters</h2>
             </div>
-            <span th:text="#{home.results(${characters.size()})}">0 results</span>
+            <span aria-live="polite" data-character-result-count
+                  th:text="#{home.results(${totalCharacters})}">0 results</span>
         </div>
 
-        <div class="character-grid" th:if="${!characters.isEmpty()}">
-            <a class="character-card" th:each="character : ${characters}"
+        <div class="character-grid" data-character-grid>
+            <a class="character-card" th:each="card : ${characterCards}"
+               th:with="character=${card.character}"
+               data-character-card="true"
+               th:attr="data-element=${card.elementKey},data-weapon=${card.weaponTypeKey},
+                        data-owned=${card.owned},data-rarity=${character.rarity},
+                        data-search=${card.searchText}"
                th:href="@{/characters/{key}(key=${character.key})}">
                 <div class="portrait">
                     <span class="portrait-fallback"
@@ -47,11 +142,14 @@
                          th:src="${character.cardImageUrl}"
                          th:alt="${character.name + ' Card'}"
                          loading="lazy" onerror="this.remove()">
-                    <span class="element-pill" th:if="${character.element != null}"
-                          th:text="${character.element}">Hydro</span>
+                    <span class="element-pill" th:if="${card.elementIconUrl != null}"
+                          th:attr="aria-label=${character.element},title=${character.element}">
+                        <img th:src="${card.elementIconUrl}" alt="" aria-hidden="true"
+                             onerror="this.parentElement.remove()">
+                    </span>
                     <span class="collection-status-pill"
-                          th:classappend="${ownershipByCharacter[character.key] ? ' owned' : ' unowned'}"
-                          th:text="${ownershipByCharacter[character.key]
+                          th:classappend="${card.owned ? ' owned' : ' unowned'}"
+                          th:text="${card.owned
                             ? #messages.msg('character.owned')
                             : #messages.msg('character.unowned')}">
                         Not owned
@@ -70,7 +168,8 @@
             </a>
         </div>
 
-        <div class="empty-state" th:if="${characters.isEmpty()}">
+        <div class="empty-state character-catalog-empty" data-character-empty
+             th:hidden="${!characterCards.isEmpty()}">
             <span>✧</span>
             <h3 th:text="#{home.empty.heading}">No characters found</h3>
             <p th:text="#{home.empty.text}">Try another name, element, or region.</p>

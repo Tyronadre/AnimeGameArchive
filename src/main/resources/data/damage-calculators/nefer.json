@@ -1,0 +1,572 @@
+{
+  "key": "nefer",
+  "characterKey": "nefer",
+  "name": "Nefer",
+  "element": "Dendro",
+  "characterDataResource": "data/characters/data/nefer.json",
+  "scopeMessageKey": "damage.scope.nefer",
+  "teamMembers": [
+    { "key": "nefer", "name": "Nefer", "element": "Dendro", "moonsignContribution": 1, "locked": true },
+    { "key": "lauma", "name": "Lauma", "element": "Dendro", "moonsignContribution": 1 },
+    { "key": "nahida", "name": "Nahida", "element": "Dendro" },
+    { "key": "columbina", "name": "Columbina", "element": "Hydro", "moonsignContribution": 1 }
+  ],
+  "defaultTeam": ["nefer", "lauma", "nahida", "columbina"],
+  "inputSections": [
+    {
+      "key": "build",
+      "messageKey": "damage.section.build",
+      "inputs": [
+        { "id": "characterLevel", "messageKey": "damage.input.characterLevel", "formulaLabel": "Character Lv.", "min": 1, "max": 90, "step": 1, "defaultValue": 90, "initialValueSource": { "valueKey": "level" } },
+        { "id": "attack", "messageKey": "damage.input.attack", "formulaLabel": "ATK", "min": 100, "max": 5000, "step": 10, "defaultValue": 1800, "initialValueSource": { "valueKey": "totalAttack" } },
+        { "id": "elementalMastery", "messageKey": "damage.input.elementalMastery", "formulaLabel": "EM", "min": 0, "max": 1500, "step": 10, "defaultValue": 700, "initialValueSource": { "valueKey": "stat:eleMas" } },
+        { "id": "elementalDamageBonus", "messageKey": "damage.input.dendroBonus", "formulaLabel": "Dendro DMG", "min": 0, "max": 200, "step": 0.1, "defaultValue": 0, "suffix": "%", "initialValueSource": { "valueKey": "stat:dendro_dmg_" } },
+        { "id": "otherDamageBonus", "messageKey": "damage.input.otherBonus", "formulaLabel": "Other DMG", "min": 0, "max": 200, "step": 0.1, "defaultValue": 0, "suffix": "%", "helpMessageKey": "damage.input.otherBonus.help" },
+        { "id": "critRate", "messageKey": "damage.input.critRate", "formulaLabel": "CRIT Rate", "min": 0, "max": 100, "step": 0.1, "defaultValue": 70, "suffix": "%", "initialValueSource": { "valueKey": "stat:critRate_" } },
+        { "id": "critDamage", "messageKey": "damage.input.critDamage", "formulaLabel": "CRIT DMG", "min": 0, "max": 500, "step": 0.1, "defaultValue": 180, "suffix": "%", "initialValueSource": { "valueKey": "stat:critDMG_" } }
+      ]
+    },
+    {
+      "key": "talents",
+      "messageKey": "damage.section.talents",
+      "inputs": [
+        { "id": "normalTalentLevel", "messageKey": "damage.input.normalTalent", "min": 1, "max": 15, "step": 1, "defaultValue": 10, "initialValueSource": { "valueKey": "normalTalent" } },
+        { "id": "skillTalentLevel", "messageKey": "damage.input.skillTalent", "min": 1, "max": 15, "step": 1, "defaultValue": 10, "initialValueSource": { "valueKey": "skillTalent" } },
+        { "id": "burstTalentLevel", "messageKey": "damage.input.burstTalent", "min": 1, "max": 15, "step": 1, "defaultValue": 10, "initialValueSource": { "valueKey": "burstTalent" } }
+      ]
+    },
+    {
+      "key": "constellations",
+      "messageKey": "damage.section.constellations",
+      "inputs": [
+        { "id": "neferConstellation", "messageKey": "damage.input.neferConstellation", "formulaLabel": "Nefer C", "min": 0, "max": 6, "step": 1, "defaultValue": 0, "initialValueSource": { "valueKey": "constellation" } },
+        { "id": "laumaConstellation", "messageKey": "damage.input.laumaConstellation", "formulaLabel": "Lauma C", "min": 0, "max": 6, "step": 1, "defaultValue": 0, "requiredTeamMember": "lauma", "initialValueSource": { "characterKey": "lauma", "valueKey": "constellation" } },
+        { "id": "nahidaConstellation", "messageKey": "damage.input.nahidaConstellation", "formulaLabel": "Nahida C", "min": 0, "max": 6, "step": 1, "defaultValue": 0, "requiredTeamMember": "nahida", "initialValueSource": { "characterKey": "nahida", "valueKey": "constellation" } },
+        { "id": "columbinaConstellation", "messageKey": "damage.input.columbinaConstellation", "formulaLabel": "Columbina C", "min": 0, "max": 6, "step": 1, "defaultValue": 0, "requiredTeamMember": "columbina", "initialValueSource": { "characterKey": "columbina", "valueKey": "constellation" } }
+      ]
+    },
+    {
+      "key": "teamStats",
+      "messageKey": "damage.section.teamStats",
+      "inputs": [
+        { "id": "laumaElementalMastery", "messageKey": "damage.input.laumaElementalMastery", "formulaLabel": "Lauma EM", "min": 0, "max": 2000, "step": 10, "defaultValue": 1000, "requiredTeamMember": "lauma", "initialValueSource": { "characterKey": "lauma", "valueKey": "stat:eleMas" } },
+        { "id": "laumaSkillTalentLevel", "messageKey": "damage.input.laumaSkillTalent", "formulaLabel": "Lauma Skill Lv.", "min": 1, "max": 15, "step": 1, "defaultValue": 10, "requiredTeamMember": "lauma", "initialValueSource": { "characterKey": "lauma", "valueKey": "skillTalent" } },
+        { "id": "laumaBurstTalentLevel", "messageKey": "damage.input.laumaBurstTalent", "formulaLabel": "Lauma Burst Lv.", "min": 1, "max": 15, "step": 1, "defaultValue": 10, "requiredTeamMember": "lauma", "initialValueSource": { "characterKey": "lauma", "valueKey": "burstTalent" } },
+        { "id": "nahidaElementalMastery", "messageKey": "damage.input.nahidaElementalMastery", "formulaLabel": "Nahida EM", "min": 0, "max": 2000, "step": 10, "defaultValue": 1000, "requiredTeamMember": "nahida", "initialValueSource": { "characterKey": "nahida", "valueKey": "stat:eleMas" } },
+        { "id": "nahidaMarkedOpponents", "messageKey": "damage.input.nahidaMarkedOpponents", "formulaLabel": "Marked opponents", "min": 1, "max": 4, "step": 1, "defaultValue": 1, "requiredTeamMember": "nahida" },
+        { "id": "columbinaMaxHp", "messageKey": "damage.input.columbinaMaxHp", "formulaLabel": "Columbina Max HP", "min": 10000, "max": 70000, "step": 100, "defaultValue": 35000, "requiredTeamMember": "columbina" },
+        { "id": "columbinaBurstTalentLevel", "messageKey": "damage.input.columbinaBurstTalent", "formulaLabel": "Columbina Burst Lv.", "min": 1, "max": 15, "step": 1, "defaultValue": 10, "requiredTeamMember": "columbina", "initialValueSource": { "characterKey": "columbina", "valueKey": "burstTalent" } }
+      ]
+    },
+    {
+      "key": "buffs",
+      "messageKey": "damage.section.buffs",
+      "inputs": [
+        { "id": "veilStacks", "messageKey": "damage.input.veilStacks", "formulaLabel": "Veils", "min": 0, "max": 5, "step": 1, "defaultValue": 3, "helpMessageKey": "damage.input.veilStacks.help" }
+      ]
+    },
+    {
+      "key": "enemy",
+      "messageKey": "damage.section.enemy",
+      "inputs": [
+        { "id": "enemyLevel", "messageKey": "damage.input.enemyLevel", "formulaLabel": "Enemy Lv.", "min": 1, "max": 110, "step": 1, "defaultValue": 90 },
+        { "id": "enemyResistance", "messageKey": "damage.input.dendroResistance", "formulaLabel": "Dendro RES", "min": -100, "max": 100, "step": 1, "defaultValue": 10, "suffix": "%" },
+        { "id": "defenseReduction", "messageKey": "damage.input.defenseReduction", "formulaLabel": "DEF reduction", "min": 0, "max": 90, "step": 1, "defaultValue": 0, "suffix": "%" },
+        { "id": "defenseIgnore", "messageKey": "damage.input.defenseIgnore", "formulaLabel": "DEF ignore", "min": 0, "max": 90, "step": 1, "defaultValue": 0, "suffix": "%" }
+      ]
+    }
+  ],
+  "statModifiers": [],
+  "effectSections": [
+    {
+      "key": "character",
+      "messageKey": "damage.effects.section.character",
+      "helpMessageKey": "damage.effects.section.character.help",
+      "defaultExpanded": true,
+      "effects": [
+        {
+          "id": "dusklitEaves",
+          "nameMessageKey": "damage.effect.dusklitEaves.name",
+          "descriptionMessageKey": "damage.effect.dusklitEaves.description",
+          "sourceMessageKey": "damage.effect.source.nefer",
+          "impactMessageKey": "damage.effect.dusklitEaves.impact",
+          "defaultEnabled": true,
+          "modifiers": [
+            { "layer": "baseDamageBonus", "operation": "inputScaled", "input": "elementalMastery", "amount": 0.0175, "max": 14, "requiredTags": ["lunarBloom"], "displayMessageKey": "damage.effect.metric.lunarBloomBase" }
+          ]
+        },
+        {
+          "id": "aWagerOfMoonlight",
+          "nameMessageKey": "damage.effect.aWager.name",
+          "descriptionMessageKey": "damage.effect.aWager.description",
+          "sourceMessageKey": "damage.effect.source.nefer",
+          "impactMessageKey": "damage.effect.aWager.impact",
+          "defaultEnabled": true,
+          "requiresEffects": ["ascendantGleam"],
+          "modifiers": [
+            { "layer": "stat", "operation": "thresholdFlatAdd", "stat": "elementalMastery", "input": "veilStacks", "threshold": 3, "amount": 100 },
+            { "layer": "damageBonus", "operation": "inputScaled", "input": "veilStacks", "amount": 8, "requiredTags": ["phantasmPerformance"], "displayMessageKey": "damage.effect.metric.phantasmBonus" }
+          ]
+        },
+        {
+          "id": "daughterOfDustAndSand",
+          "nameMessageKey": "damage.effect.daughter.name",
+          "descriptionMessageKey": "damage.effect.daughter.description",
+          "sourceMessageKey": "damage.effect.source.nefer",
+          "impactMessageKey": "damage.effect.daughter.impact",
+          "defaultEnabled": true,
+          "modifiers": [
+            { "layer": "metric", "operation": "thresholdScaled", "input": "elementalMastery", "amount": 0.1, "threshold": 500, "max": 50, "displayMessageKey": "damage.effect.metric.verdantDew" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "constellation",
+      "messageKey": "damage.effects.section.constellation",
+      "helpMessageKey": "damage.effects.section.constellation.help",
+      "defaultExpanded": false,
+      "effects": [
+        {
+          "id": "neferC1",
+          "nameMessageKey": "damage.effect.neferC1.name",
+          "descriptionMessageKey": "damage.effect.neferC1.description",
+          "sourceMessageKey": "damage.effect.source.neferConstellation",
+          "impactMessageKey": "damage.effect.neferC1.impact",
+          "ownershipRequirements": { "neferConstellation": 1 },
+          "modifiers": [
+            { "layer": "flatBaseDamage", "operation": "inputScaled", "input": "elementalMastery", "amount": 0.6, "requiredTags": ["phantasmPerformance", "lunarBloom"], "displayMessageKey": "damage.effect.metric.flatBaseDamage", "displayFormat": "number" }
+          ]
+        },
+        {
+          "id": "neferC2",
+          "nameMessageKey": "damage.effect.neferC2.name",
+          "descriptionMessageKey": "damage.effect.neferC2.description",
+          "sourceMessageKey": "damage.effect.source.neferConstellation",
+          "impactMessageKey": "damage.effect.neferC2.impact",
+          "ownershipRequirements": { "neferConstellation": 2 },
+          "modifiers": [
+            { "layer": "stat", "operation": "thresholdFlatAdd", "stat": "elementalMastery", "input": "veilStacks", "threshold": 5, "amount": 100, "displayMessageKey": "damage.effect.metric.elementalMastery", "displayFormat": "number" }
+          ]
+        },
+        {
+          "id": "neferC3",
+          "nameMessageKey": "damage.effect.neferC3.name",
+          "descriptionMessageKey": "damage.effect.neferC3.description",
+          "sourceMessageKey": "damage.effect.source.neferConstellation",
+          "impactMessageKey": "damage.effect.neferC3.impact",
+          "ownershipRequirements": { "neferConstellation": 3 },
+          "modifiers": [
+            { "layer": "stat", "operation": "flatAdd", "stat": "skillTalentLevel", "amount": 3, "displayMessageKey": "damage.effect.metric.talentLevels", "displayFormat": "number" }
+          ]
+        },
+        {
+          "id": "neferC4",
+          "nameMessageKey": "damage.effect.neferC4.name",
+          "descriptionMessageKey": "damage.effect.neferC4.description",
+          "sourceMessageKey": "damage.effect.source.neferConstellation",
+          "impactMessageKey": "damage.effect.neferC4.impact",
+          "ownershipRequirements": { "neferConstellation": 4 },
+          "modifiers": [
+            { "layer": "resistanceReduction", "operation": "flatAdd", "amount": 20, "displayMessageKey": "damage.effect.metric.dendroResReduction" }
+          ]
+        },
+        {
+          "id": "neferC5",
+          "nameMessageKey": "damage.effect.neferC5.name",
+          "descriptionMessageKey": "damage.effect.neferC5.description",
+          "sourceMessageKey": "damage.effect.source.neferConstellation",
+          "impactMessageKey": "damage.effect.neferC5.impact",
+          "ownershipRequirements": { "neferConstellation": 5 },
+          "modifiers": [
+            { "layer": "stat", "operation": "flatAdd", "stat": "burstTalentLevel", "amount": 3, "displayMessageKey": "damage.effect.metric.talentLevels", "displayFormat": "number" }
+          ]
+        },
+        {
+          "id": "neferC6",
+          "nameMessageKey": "damage.effect.neferC6.name",
+          "descriptionMessageKey": "damage.effect.neferC6.description",
+          "sourceMessageKey": "damage.effect.source.neferConstellation",
+          "impactMessageKey": "damage.effect.neferC6.impact",
+          "ownershipRequirements": { "neferConstellation": 6 },
+          "modifiers": [
+            { "layer": "elevation", "operation": "flatAdd", "amount": 15, "requiredTags": ["lunarBloom"], "requiresEffects": ["ascendantGleam"], "displayMessageKey": "damage.effect.metric.elevation" }
+          ]
+        },
+        {
+          "id": "laumaC2",
+          "nameMessageKey": "damage.effect.laumaC2.name",
+          "descriptionMessageKey": "damage.effect.laumaC2.description",
+          "sourceMessageKey": "damage.effect.source.laumaConstellation",
+          "impactMessageKey": "damage.effect.laumaC2.impact",
+          "requiredTeamMembers": ["lauma"],
+          "ownershipRequirements": { "laumaConstellation": 2 },
+          "modifiers": [
+            { "layer": "flatBaseDamage", "operation": "inputScaled", "input": "laumaElementalMastery", "amount": 4, "requiredTags": ["lunarBloom"], "displayMessageKey": "damage.effect.metric.flatBaseDamage", "displayFormat": "number" },
+            { "layer": "damageBonus", "operation": "flatAdd", "amount": 40, "requiredTags": ["lunarBloom"], "requiresEffects": ["ascendantGleam"], "displayMessageKey": "damage.effect.metric.lunarDamageBonus" }
+          ]
+        },
+        {
+          "id": "laumaC3",
+          "nameMessageKey": "damage.effect.laumaC3.name",
+          "descriptionMessageKey": "damage.effect.laumaC3.description",
+          "sourceMessageKey": "damage.effect.source.laumaConstellation",
+          "impactMessageKey": "damage.effect.laumaC3.impact",
+          "requiredTeamMembers": ["lauma"],
+          "ownershipRequirements": { "laumaConstellation": 3 },
+          "modifiers": [
+            { "layer": "stat", "operation": "flatAdd", "stat": "laumaBurstTalentLevel", "amount": 3, "displayMessageKey": "damage.effect.metric.talentLevels", "displayFormat": "number" }
+          ]
+        },
+        {
+          "id": "laumaC5",
+          "nameMessageKey": "damage.effect.laumaC5.name",
+          "descriptionMessageKey": "damage.effect.laumaC5.description",
+          "sourceMessageKey": "damage.effect.source.laumaConstellation",
+          "impactMessageKey": "damage.effect.laumaC5.impact",
+          "requiredTeamMembers": ["lauma"],
+          "ownershipRequirements": { "laumaConstellation": 5 },
+          "modifiers": [
+            { "layer": "stat", "operation": "flatAdd", "stat": "laumaSkillTalentLevel", "amount": 3, "displayMessageKey": "damage.effect.metric.talentLevels", "displayFormat": "number" }
+          ]
+        },
+        {
+          "id": "nahidaC2",
+          "nameMessageKey": "damage.effect.nahidaC2.name",
+          "descriptionMessageKey": "damage.effect.nahidaC2.description",
+          "sourceMessageKey": "damage.effect.source.nahidaConstellation",
+          "impactMessageKey": "damage.effect.nahidaC2.impact",
+          "requiredTeamMembers": ["nahida"],
+          "ownershipRequirements": { "nahidaConstellation": 2 },
+          "modifiers": [
+            { "layer": "critRate", "operation": "flatAdd", "amount": 10, "requiredTags": ["lunarBloom"], "displayMessageKey": "damage.effect.metric.lunarCritRate" },
+            { "layer": "critDamage", "operation": "flatAdd", "amount": 20, "requiredTags": ["lunarBloom"], "displayMessageKey": "damage.effect.metric.lunarCritDamage" }
+          ]
+        },
+        {
+          "id": "nahidaC4",
+          "nameMessageKey": "damage.effect.nahidaC4.name",
+          "descriptionMessageKey": "damage.effect.nahidaC4.description",
+          "sourceMessageKey": "damage.effect.source.nahidaConstellation",
+          "impactMessageKey": "damage.effect.nahidaC4.impact",
+          "requiredTeamMembers": ["nahida"],
+          "ownershipRequirements": { "nahidaConstellation": 4 },
+          "modifiers": [
+            { "layer": "stat", "operation": "levelValue", "stat": "nahidaElementalMastery", "amount": 0, "levelInput": "nahidaMarkedOpponents", "values": [100, 120, 140, 160], "displayMessageKey": "damage.effect.metric.elementalMastery", "displayFormat": "number" }
+          ]
+        },
+        {
+          "id": "columbinaC1",
+          "nameMessageKey": "damage.effect.columbinaC1.name",
+          "descriptionMessageKey": "damage.effect.columbinaC1.description",
+          "sourceMessageKey": "damage.effect.source.columbinaConstellation",
+          "impactMessageKey": "damage.effect.columbinaC1.impact",
+          "requiredTeamMembers": ["columbina"],
+          "ownershipRequirements": { "columbinaConstellation": 1 },
+          "modifiers": [
+            { "layer": "elevation", "operation": "flatAdd", "amount": 1.5, "requiredTags": ["lunarBloom"], "displayMessageKey": "damage.effect.metric.elevation" }
+          ]
+        },
+        {
+          "id": "columbinaC2",
+          "nameMessageKey": "damage.effect.columbinaC2.name",
+          "descriptionMessageKey": "damage.effect.columbinaC2.description",
+          "sourceMessageKey": "damage.effect.source.columbinaConstellation",
+          "impactMessageKey": "damage.effect.columbinaC2.impact",
+          "requiredTeamMembers": ["columbina"],
+          "ownershipRequirements": { "columbinaConstellation": 2 },
+          "modifiers": [
+            { "layer": "stat", "operation": "percentAdd", "stat": "columbinaMaxHp", "amount": 40, "displayMessageKey": "damage.effect.metric.maxHp" },
+            { "layer": "stat", "operation": "inputScaled", "stat": "elementalMastery", "input": "columbinaMaxHp", "amount": 0.0035, "requiresEffects": ["ascendantGleam"], "displayMessageKey": "damage.effect.metric.elementalMastery", "displayFormat": "number" },
+            { "layer": "elevation", "operation": "flatAdd", "amount": 7, "requiredTags": ["lunarBloom"], "displayMessageKey": "damage.effect.metric.elevation" }
+          ]
+        },
+        {
+          "id": "columbinaC3",
+          "nameMessageKey": "damage.effect.columbinaC3.name",
+          "descriptionMessageKey": "damage.effect.columbinaC3.description",
+          "sourceMessageKey": "damage.effect.source.columbinaConstellation",
+          "impactMessageKey": "damage.effect.columbinaC3.impact",
+          "requiredTeamMembers": ["columbina"],
+          "ownershipRequirements": { "columbinaConstellation": 3 },
+          "modifiers": [
+            { "layer": "elevation", "operation": "flatAdd", "amount": 1.5, "requiredTags": ["lunarBloom"], "displayMessageKey": "damage.effect.metric.elevation" }
+          ]
+        },
+        {
+          "id": "columbinaC4",
+          "nameMessageKey": "damage.effect.columbinaC4.name",
+          "descriptionMessageKey": "damage.effect.columbinaC4.description",
+          "sourceMessageKey": "damage.effect.source.columbinaConstellation",
+          "impactMessageKey": "damage.effect.columbinaC4.impact",
+          "requiredTeamMembers": ["columbina"],
+          "ownershipRequirements": { "columbinaConstellation": 4 },
+          "modifiers": [
+            { "layer": "elevation", "operation": "flatAdd", "amount": 1.5, "requiredTags": ["lunarBloom"], "displayMessageKey": "damage.effect.metric.elevation" }
+          ]
+        },
+        {
+          "id": "columbinaC5",
+          "nameMessageKey": "damage.effect.columbinaC5.name",
+          "descriptionMessageKey": "damage.effect.columbinaC5.description",
+          "sourceMessageKey": "damage.effect.source.columbinaConstellation",
+          "impactMessageKey": "damage.effect.columbinaC5.impact",
+          "requiredTeamMembers": ["columbina"],
+          "ownershipRequirements": { "columbinaConstellation": 5 },
+          "modifiers": [
+            { "layer": "stat", "operation": "flatAdd", "stat": "columbinaBurstTalentLevel", "amount": 3, "displayMessageKey": "damage.effect.metric.talentLevels", "displayFormat": "number" },
+            { "layer": "elevation", "operation": "flatAdd", "amount": 1.5, "requiredTags": ["lunarBloom"], "displayMessageKey": "damage.effect.metric.elevation" }
+          ]
+        },
+        {
+          "id": "columbinaC6",
+          "nameMessageKey": "damage.effect.columbinaC6.name",
+          "descriptionMessageKey": "damage.effect.columbinaC6.description",
+          "sourceMessageKey": "damage.effect.source.columbinaConstellation",
+          "impactMessageKey": "damage.effect.columbinaC6.impact",
+          "requiredTeamMembers": ["columbina"],
+          "ownershipRequirements": { "columbinaConstellation": 6 },
+          "modifiers": [
+            { "layer": "critDamage", "operation": "flatAdd", "amount": 80, "requiresEffects": ["columbinaLunarDomain"], "displayMessageKey": "damage.effect.metric.dendroCritDamage" },
+            { "layer": "elevation", "operation": "flatAdd", "amount": 7, "requiredTags": ["lunarBloom"], "displayMessageKey": "damage.effect.metric.elevation" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "team",
+      "messageKey": "damage.effects.section.team",
+      "helpMessageKey": "damage.effects.section.team.help",
+      "defaultExpanded": false,
+      "effects": [
+        {
+          "id": "ascendantGleam",
+          "nameMessageKey": "damage.effect.ascendant.name",
+          "descriptionMessageKey": "damage.effect.ascendant.description",
+          "sourceMessageKey": "damage.effect.source.team",
+          "impactMessageKey": "damage.effect.ascendant.impact",
+          "defaultEnabled": true,
+          "minimumMoonsignLevel": 2
+        },
+        {
+          "id": "laumaFrostgroveSanctuary",
+          "nameMessageKey": "damage.effect.laumaFrostgrove.name",
+          "descriptionMessageKey": "damage.effect.laumaFrostgrove.description",
+          "sourceMessageKey": "damage.effect.source.lauma",
+          "impactMessageKey": "damage.effect.laumaFrostgrove.impact",
+          "requiredTeamMembers": ["lauma"],
+          "modifiers": [
+            { "layer": "resistanceReduction", "operation": "levelValue", "amount": 0, "levelInput": "laumaSkillTalentLevel", "values": [2.5, 5, 7.5, 10, 12.5, 15, 17.5, 20, 22.5, 25, 28, 31, 34, 37, 40], "displayMessageKey": "damage.effect.metric.dendroResReduction" }
+          ]
+        },
+        {
+          "id": "laumaLightForTheFrostyNight",
+          "nameMessageKey": "damage.effect.laumaLight.name",
+          "descriptionMessageKey": "damage.effect.laumaLight.description",
+          "sourceMessageKey": "damage.effect.source.lauma",
+          "impactMessageKey": "damage.effect.laumaLight.impact",
+          "requiredTeamMembers": ["lauma"],
+          "requiresEffects": ["ascendantGleam"],
+          "modifiers": [
+            { "layer": "critRate", "operation": "flatAdd", "amount": 10, "requiredTags": ["lunarBloom"], "displayMessageKey": "damage.effect.metric.lunarCritRate" },
+            { "layer": "critDamage", "operation": "flatAdd", "amount": 20, "requiredTags": ["lunarBloom"], "displayMessageKey": "damage.effect.metric.lunarCritDamage" }
+          ]
+        },
+        {
+          "id": "laumaNaturesChorus",
+          "nameMessageKey": "damage.effect.laumaNature.name",
+          "descriptionMessageKey": "damage.effect.laumaNature.description",
+          "sourceMessageKey": "damage.effect.source.lauma",
+          "impactMessageKey": "damage.effect.laumaNature.impact",
+          "requiredTeamMembers": ["lauma"],
+          "modifiers": [
+            { "layer": "baseDamageBonus", "operation": "inputScaled", "input": "laumaElementalMastery", "amount": 0.0175, "max": 14, "requiredTags": ["lunarBloom"], "displayMessageKey": "damage.effect.metric.lunarBloomBase" }
+          ]
+        },
+        {
+          "id": "laumaPaleHymn",
+          "nameMessageKey": "damage.effect.laumaPaleHymn.name",
+          "descriptionMessageKey": "damage.effect.laumaPaleHymn.description",
+          "sourceMessageKey": "damage.effect.source.lauma",
+          "impactMessageKey": "damage.effect.laumaPaleHymn.impact",
+          "requiredTeamMembers": ["lauma"],
+          "modifiers": [
+            { "layer": "flatBaseDamage", "operation": "levelValueScaled", "input": "laumaElementalMastery", "amount": 0, "levelInput": "laumaBurstTalentLevel", "values": [2.2224, 2.38908, 2.55576, 2.778, 2.94468, 3.11136, 3.3336, 3.55584, 3.77808, 4.00032, 4.22256, 4.4448, 4.7226, 5.0004, 5.2782], "requiredTags": ["lunarBloom"], "displayMessageKey": "damage.effect.metric.flatBaseDamage", "displayFormat": "number" }
+          ]
+        },
+        {
+          "id": "nahidaCompassionIlluminated",
+          "nameMessageKey": "damage.effect.nahidaCompassion.name",
+          "descriptionMessageKey": "damage.effect.nahidaCompassion.description",
+          "sourceMessageKey": "damage.effect.source.nahida",
+          "impactMessageKey": "damage.effect.nahidaCompassion.impact",
+          "requiredTeamMembers": ["nahida"],
+          "modifiers": [
+            { "layer": "stat", "operation": "inputScaled", "stat": "elementalMastery", "input": "nahidaElementalMastery", "amount": 0.25, "max": 250, "displayMessageKey": "damage.effect.metric.elementalMastery", "displayFormat": "number" }
+          ]
+        },
+        {
+          "id": "nahidaNewMoonsEmbrace",
+          "nameMessageKey": "damage.effect.nahidaNewMoon.name",
+          "descriptionMessageKey": "damage.effect.nahidaNewMoon.description",
+          "sourceMessageKey": "damage.effect.source.nahida",
+          "impactMessageKey": "damage.effect.nahidaNewMoon.impact",
+          "requiredTeamMembers": ["nahida"],
+          "requiresEffects": ["ascendantGleam"],
+          "modifiers": [
+            { "layer": "damageBonus", "operation": "inputScaled", "input": "nahidaElementalMastery", "amount": 0.0225, "max": 36, "requiredTags": ["lunarBloom"], "displayMessageKey": "damage.effect.metric.lunarDamageBonus" }
+          ]
+        },
+        {
+          "id": "nahidaDeepwoodMemories",
+          "nameMessageKey": "damage.effect.nahidaDeepwood.name",
+          "descriptionMessageKey": "damage.effect.nahidaDeepwood.description",
+          "sourceMessageKey": "damage.effect.source.nahidaGear",
+          "impactMessageKey": "damage.effect.nahidaDeepwood.impact",
+          "requiredTeamMembers": ["nahida"],
+          "modifiers": [
+            { "layer": "resistanceReduction", "operation": "flatAdd", "amount": 30, "displayMessageKey": "damage.effect.metric.dendroResReduction" }
+          ]
+        },
+        {
+          "id": "columbinaLunarDomain",
+          "nameMessageKey": "damage.effect.columbinaDomain.name",
+          "descriptionMessageKey": "damage.effect.columbinaDomain.description",
+          "sourceMessageKey": "damage.effect.source.columbina",
+          "impactMessageKey": "damage.effect.columbinaDomain.impact",
+          "requiredTeamMembers": ["columbina"],
+          "modifiers": [
+            { "layer": "damageBonus", "operation": "levelValue", "amount": 0, "levelInput": "columbinaBurstTalentLevel", "values": [13, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46, 49, 52, 55], "requiredTags": ["lunarBloom"], "displayMessageKey": "damage.effect.metric.lunarDamageBonus" }
+          ]
+        },
+        {
+          "id": "columbinaMoonlightLent",
+          "nameMessageKey": "damage.effect.columbinaMoonlight.name",
+          "descriptionMessageKey": "damage.effect.columbinaMoonlight.description",
+          "sourceMessageKey": "damage.effect.source.columbina",
+          "impactMessageKey": "damage.effect.columbinaMoonlight.impact",
+          "requiredTeamMembers": ["columbina"],
+          "modifiers": [
+            { "layer": "baseDamageBonus", "operation": "inputScaled", "input": "columbinaMaxHp", "amount": 0.0002, "max": 7, "requiredTags": ["lunarBloom"], "displayMessageKey": "damage.effect.metric.lunarBloomBase" }
+          ]
+        },
+        {
+          "id": "columbinaMoonridgeDew",
+          "nameMessageKey": "damage.effect.columbinaDew.name",
+          "descriptionMessageKey": "damage.effect.columbinaDew.description",
+          "sourceMessageKey": "damage.effect.source.columbina",
+          "impactMessageKey": "damage.effect.columbinaDew.impact",
+          "requiredTeamMembers": ["columbina"]
+        }
+      ]
+    },
+    {
+      "key": "weapon",
+      "messageKey": "damage.effects.section.weapon",
+      "helpMessageKey": "damage.effects.section.weapon.help",
+      "defaultExpanded": true,
+      "effects": [
+        {
+          "id": "reliquaryOfTruth",
+          "nameMessageKey": "damage.effect.reliquary.name",
+          "descriptionMessageKey": "damage.effect.reliquary.description",
+          "sourceMessageKey": "damage.effect.source.reliquary",
+          "impactMessageKey": "damage.effect.reliquary.impact",
+          "defaultEnabled": true,
+          "modifiers": [
+            { "layer": "stat", "operation": "flatAdd", "stat": "critRate", "amount": 8 }
+          ]
+        },
+        {
+          "id": "secretOfLies",
+          "nameMessageKey": "damage.effect.secret.name",
+          "descriptionMessageKey": "damage.effect.secret.description",
+          "sourceMessageKey": "damage.effect.source.reliquary",
+          "impactMessageKey": "damage.effect.secret.impact",
+          "defaultEnabled": true,
+          "requiresEffects": ["reliquaryOfTruth"],
+          "modifiers": [
+            { "layer": "stat", "operation": "flatAdd", "stat": "elementalMastery", "amount": 80 },
+            { "layer": "stat", "operation": "flatAdd", "stat": "elementalMastery", "amount": 40, "requiresEffects": ["moonOfTruth"] }
+          ]
+        },
+        {
+          "id": "moonOfTruth",
+          "nameMessageKey": "damage.effect.moon.name",
+          "descriptionMessageKey": "damage.effect.moon.description",
+          "sourceMessageKey": "damage.effect.source.reliquary",
+          "impactMessageKey": "damage.effect.moon.impact",
+          "defaultEnabled": true,
+          "requiresEffects": ["reliquaryOfTruth"],
+          "modifiers": [
+            { "layer": "stat", "operation": "flatAdd", "stat": "critDamage", "amount": 24 },
+            { "layer": "stat", "operation": "flatAdd", "stat": "critDamage", "amount": 12, "requiresEffects": ["secretOfLies"] }
+          ]
+        }
+      ]
+    }
+  ],
+  "formula": {
+    "characterLevelInput": "characterLevel",
+    "enemyLevelInput": "enemyLevel",
+    "resistanceInput": "enemyResistance",
+    "defenseReductionInput": "defenseReduction",
+    "defenseIgnoreInput": "defenseIgnore",
+    "damageBonusInputs": [
+      { "input": "elementalDamageBonus", "excludedDamageModels": ["lunarReaction"] },
+      { "input": "otherDamageBonus" }
+    ],
+    "critRateInput": "critRate",
+    "critDamageInput": "critDamage"
+  },
+  "talents": [
+    {
+      "key": "normal",
+      "marker": "NA",
+      "kindMessageKey": "character.talent.normalAttack",
+      "name": "Striking Serpent",
+      "levelInput": "normalTalentLevel",
+      "sourceTalent": "combat1",
+      "instances": [
+        { "id": "normal-1", "label": "1-Hit DMG", "terms": [{ "stat": "attack", "statLabel": "ATK", "parameter": "param1" }] },
+        { "id": "normal-2", "label": "2-Hit DMG", "terms": [{ "stat": "attack", "statLabel": "ATK", "parameter": "param2" }] },
+        { "id": "normal-3", "label": "3-Hit DMG", "hitCount": 2, "note": "2 strikes", "terms": [{ "stat": "attack", "statLabel": "ATK", "parameter": "param3" }] },
+        { "id": "normal-4", "label": "4-Hit DMG", "terms": [{ "stat": "attack", "statLabel": "ATK", "parameter": "param4" }] },
+        { "id": "charged", "label": "Charged Attack DMG", "terms": [{ "stat": "attack", "statLabel": "ATK", "parameter": "param5" }] },
+        { "id": "plunge", "label": "Plunge DMG", "terms": [{ "stat": "attack", "statLabel": "ATK", "parameter": "param8" }] },
+        { "id": "low-plunge", "label": "Low Plunge DMG", "terms": [{ "stat": "attack", "statLabel": "ATK", "parameter": "param9" }] },
+        { "id": "high-plunge", "label": "High Plunge DMG", "terms": [{ "stat": "attack", "statLabel": "ATK", "parameter": "param10" }] }
+      ]
+    },
+    {
+      "key": "skill",
+      "marker": "E",
+      "kindMessageKey": "character.talent.elementalSkill",
+      "name": "Senet Strategy: Dance of a Thousand Nights",
+      "levelInput": "skillTalentLevel",
+      "sourceTalent": "combat2",
+      "instances": [
+        { "id": "skill", "label": "Skill DMG", "terms": [{ "stat": "attack", "statLabel": "ATK", "parameter": "param1" }, { "stat": "elementalMastery", "statLabel": "EM", "parameter": "param2" }] },
+        { "id": "phantasm-nefer-1", "label": "Phantasm Performance 1-Hit DMG (Nefer)", "tags": ["phantasmPerformance"], "terms": [{ "stat": "attack", "statLabel": "ATK", "parameter": "param5" }, { "stat": "elementalMastery", "statLabel": "EM", "parameter": "param6" }] },
+        { "id": "phantasm-nefer-2", "label": "Phantasm Performance 2-Hit DMG (Nefer)", "tags": ["phantasmPerformance"], "excludedEffects": ["neferC6"], "terms": [{ "stat": "attack", "statLabel": "ATK", "parameter": "param7" }, { "stat": "elementalMastery", "statLabel": "EM", "parameter": "param8" }] },
+        { "id": "phantasm-nefer-2-c6", "label": "Phantasm Performance 2-Hit DMG (Nefer, C6)", "damageModel": "lunarReaction", "tags": ["phantasmPerformance", "lunarBloom"], "requiredEffects": ["neferC6"], "terms": [{ "stat": "elementalMastery", "statLabel": "EM", "values": [0.85] }] },
+        { "id": "phantasm-shades-1", "label": "Phantasm Performance 1-Hit DMG (Shades)", "damageModel": "lunarReaction", "tags": ["phantasmPerformance", "lunarBloom"], "terms": [{ "stat": "elementalMastery", "statLabel": "EM", "parameter": "param9" }] },
+        { "id": "phantasm-shades-2", "label": "Phantasm Performance 2-Hit DMG (Shades)", "damageModel": "lunarReaction", "tags": ["phantasmPerformance", "lunarBloom"], "terms": [{ "stat": "elementalMastery", "statLabel": "EM", "parameter": "param10" }] },
+        { "id": "phantasm-shades-3", "label": "Phantasm Performance 3-Hit DMG (Shades)", "damageModel": "lunarReaction", "tags": ["phantasmPerformance", "lunarBloom"], "terms": [{ "stat": "elementalMastery", "statLabel": "EM", "parameter": "param11" }] },
+        { "id": "phantasm-c6-extra", "label": "Phantasm Performance Additional DMG (C6)", "damageModel": "lunarReaction", "tags": ["phantasmPerformance", "lunarBloom"], "requiredEffects": ["neferC6"], "terms": [{ "stat": "elementalMastery", "statLabel": "EM", "values": [1.2] }] }
+      ]
+    },
+    {
+      "key": "burst",
+      "marker": "Q",
+      "kindMessageKey": "character.talent.elementalBurst",
+      "name": "Sacred Vow: True Eye's Phantasm",
+      "levelInput": "burstTalentLevel",
+      "sourceTalent": "combat3",
+      "instances": [
+        { "id": "burst-1", "label": "1-Hit DMG", "terms": [{ "stat": "attack", "statLabel": "ATK", "parameter": "param1" }, { "stat": "elementalMastery", "statLabel": "EM", "parameter": "param2" }], "bonusTerms": [{ "input": "veilStacks", "label": "per Veil stack", "parameter": "param5" }] },
+        { "id": "burst-2", "label": "2-Hit DMG", "terms": [{ "stat": "attack", "statLabel": "ATK", "parameter": "param3" }, { "stat": "elementalMastery", "statLabel": "EM", "parameter": "param4" }], "bonusTerms": [{ "input": "veilStacks", "label": "per Veil stack", "parameter": "param5" }] }
+      ]
+    }
+  ]
+}

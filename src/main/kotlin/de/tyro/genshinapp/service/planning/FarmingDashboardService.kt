@@ -730,7 +730,7 @@ class FarmingDashboardService(
     companion object {
         private const val CHARACTER_EXPERIENCE_ID = 0
         private const val MORA_ID = 202
-        private const val MYSTIC_ENHANCEMENT_ORE_ID = 104013
+        private const val MYSTIC_ENHANCEMENT_ORE_ID = 1327
         private const val AUTOMATIC_ROSTER_CHARACTER_COUNT = 24
         private const val MAX_MATERIAL_BALANCE_CACHE_ENTRIES = 128
         private const val ACTIVE_MATERIAL_PRIORITY_BOOST = 1_000_000

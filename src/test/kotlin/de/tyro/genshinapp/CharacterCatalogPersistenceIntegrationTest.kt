@@ -1,10 +1,8 @@
 package de.tyro.genshinapp
 
-import de.tyro.genshinapp.configuration.LegacyGameCharacterSchemaCleanup
 import de.tyro.genshinapp.service.catalog.CharacterCatalogStore
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.DefaultApplicationArguments
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
 import kotlin.test.assertFalse
@@ -25,7 +23,6 @@ import kotlin.test.assertTrue
 class CharacterCatalogPersistenceIntegrationTest @Autowired constructor(
     private val characterCatalogStore: CharacterCatalogStore,
     private val jdbcTemplate: JdbcTemplate,
-    private val legacySchemaCleanup: LegacyGameCharacterSchemaCleanup,
 ) {
     @Test
     fun `character catalog is persisted and reconstructed without json`() {
@@ -57,8 +54,6 @@ class CharacterCatalogPersistenceIntegrationTest @Autowired constructor(
         assertTrue(storedAmber.talents.isNotEmpty())
         assertTrue(storedAmber.talents.any { it.attributes.isNotEmpty() })
 
-        jdbcTemplate.execute("ALTER TABLE game_character ADD COLUMN talents_json CLOB")
-        legacySchemaCleanup.run(DefaultApplicationArguments())
         assertFalse(gameCharacterColumns().contains("talents_json"))
     }
 

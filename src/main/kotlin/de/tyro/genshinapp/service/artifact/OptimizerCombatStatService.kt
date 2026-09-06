@@ -1,15 +1,17 @@
 package de.tyro.genshinapp.service.artifact
 
-import de.tyro.genshinapp.service.catalog.CharacterCatalogService
+import de.tyro.genshinapp.service.catalog.CharacterStatCatalog
 import de.tyro.genshinapp.service.catalog.WeaponDataService
+import de.tyro.genshinapp.service.catalog.WeaponDefinition
 import de.tyro.genshinapp.model.FightProperty
 import de.tyro.genshinapp.model.PlayerCharacterState
 import de.tyro.genshinapp.model.PlayerWeapon
 import org.springframework.stereotype.Service
+import kotlin.math.abs
 
 @Service
 class OptimizerCombatStatService(
-    private val characterCatalogService: CharacterCatalogService,
+    private val characterStatCatalog: CharacterStatCatalog,
     private val weaponDataService: WeaponDataService,
 ) {
     fun resolve(
@@ -31,27 +33,21 @@ class OptimizerCombatStatService(
         weapon: PlayerWeapon?,
         additionalStats: Map<String, Double>,
     ): OptimizerBaseStats {
-        val characterStats = linkedMapOf(
+        val resolved = characterStatCatalog.resolve(character.key, character.level, character.ascension)
+        // Base HP/ATK/DEF are not flat bonuses. In particular ATK must not be added twice.
+        val characterStats = resolved?.filterKeys { it !in setOf("hp", "atk", "def") } ?: linkedMapOf(
             "critRate_" to BASE_CRIT_RATE,
             "critDMG_" to BASE_CRIT_DAMAGE,
             "enerRech_" to BASE_ENERGY_RECHARGE,
             "eleMas" to 0.0,
         )
-        characterCatalogService.findCharacter(character.key)?.let { definition ->
-            val statKey = combatStatKey(definition.ascensionStatType)
-            val value = characterAscensionStat(
-                statKey = statKey,
-                rarity = definition.rarity,
-                ascension = character.ascension,
-            )
-            if (statKey != null && value > 0.0) {
-                characterStats[statKey] = characterStats.getOrDefault(statKey, 0.0) + value
-            }
-        }
+        val characterBaseAttack = resolved?.get("atk")
 
         val weaponStats = linkedMapOf<String, Double>()
+        var weaponBaseAttack: Double? = null
         weapon?.let { equipped ->
             weaponDataService.find(equipped.key)?.let { definition ->
+                weaponBaseAttack = resolveWeaponBaseAttack(definition, equipped)
                 val statKey = combatStatKey(definition.secondaryStatType)
                 val baseValue = definition.baseSecondaryStat
                 if (statKey != null && baseValue != null) {
@@ -64,26 +60,38 @@ class OptimizerCombatStatService(
             characterStats = characterStats,
             weaponStats = weaponStats,
             bonusStats = additionalStats.filterValues { it != 0.0 },
+            characterBaseAttack = characterBaseAttack,
+            weaponBaseAttack = weaponBaseAttack,
+            combinedBaseAttack = when {
+                characterBaseAttack == null -> null
+                weapon == null -> characterBaseAttack
+                weaponBaseAttack == null -> null
+                else -> characterBaseAttack + weaponBaseAttack!!
+            },
         )
     }
 
-    private fun characterAscensionStat(
-        statKey: String?,
-        rarity: Int,
-        ascension: Int,
-    ): Double {
-        if (statKey == null) return 0.0
-        val unlockedSteps = ASCENSION_STAT_PHASES.count { ascension >= it }
-        if (unlockedSteps == 0) return 0.0
-        val fiveStar = rarity >= 5
-        val increment = when (statKey) {
-            "critRate_" -> if (fiveStar) 4.8 else 4.0
-            "critDMG_" -> if (fiveStar) 9.6 else 8.0
-            "enerRech_" -> if (fiveStar) 8.0 else 6.67
-            "eleMas" -> if (fiveStar) 28.8 else 24.0
-            else -> if (fiveStar) 7.2 else 6.0
+    private fun resolveWeaponBaseAttack(
+        definition: WeaponDefinition,
+        weapon: PlayerWeapon,
+    ): Double? {
+        definition.hoyolabAscension.firstOrNull { it.level == weapon.level }?.let { progression ->
+            val ascensionAtBoundary = WEAPON_ASCENSION_BY_LEVEL[weapon.level]
+            return if (ascensionAtBoundary != null && weapon.ascension >= ascensionAtBoundary) {
+                progression.attackAfterAscension ?: progression.attackBeforeAscension
+            } else {
+                progression.attackBeforeAscension ?: progression.attackAfterAscension
+            }
         }
-        return increment * unlockedSteps
+
+        val levelOneAttack = definition.baseAttack ?: return null
+        if (weapon.level == 1) return levelOneAttack
+        if (weapon.level != 90) return null
+        return WEAPON_LEVEL_90_ARCHETYPES
+            .filter { archetype -> archetype.rarity == definition.rarity }
+            .minByOrNull { archetype -> abs(archetype.levelOneAttack - levelOneAttack) }
+            ?.takeIf { archetype -> abs(archetype.levelOneAttack - levelOneAttack) < 0.1 }
+            ?.levelNinetyAttack
     }
 
     private fun weaponSecondaryStat(baseValue: Double, level: Int): Double {
@@ -96,16 +104,37 @@ class OptimizerCombatStatService(
         private const val BASE_CRIT_DAMAGE = 50.0
         private const val BASE_ENERGY_RECHARGE = 100.0
         private const val WEAPON_LEVEL_90_MULTIPLIER = 4.594
-        private val ASCENSION_STAT_PHASES = listOf(2, 3, 5, 6)
+        private val WEAPON_ASCENSION_BY_LEVEL = mapOf(
+            20 to 1,
+            40 to 2,
+            50 to 3,
+            60 to 4,
+            70 to 5,
+            80 to 6,
+        )
+        private val WEAPON_LEVEL_90_ARCHETYPES = listOf(
+            WeaponAttackArchetype(5, 44.3358, 541.83),
+            WeaponAttackArchetype(5, 45.9364, 608.07),
+            WeaponAttackArchetype(5, 47.537, 674.33),
+        )
 
         fun combatStatKey(type: FightProperty?): String? = type?.optimizerKey
     }
+
+    private data class WeaponAttackArchetype(
+        val rarity: Int,
+        val levelOneAttack: Double,
+        val levelNinetyAttack: Double,
+    )
 }
 
 data class OptimizerBaseStats(
     val characterStats: Map<String, Double>,
     val weaponStats: Map<String, Double>,
     val bonusStats: Map<String, Double>,
+    val characterBaseAttack: Double? = null,
+    val weaponBaseAttack: Double? = null,
+    val combinedBaseAttack: Double? = null,
 ) {
     val totals: Map<String, Double>
         get() = buildMap {
@@ -118,6 +147,12 @@ data class OptimizerBaseStats(
                 )
             }
         }
+
+    fun totalAttack(totalValues: Map<String, Double>): Double? = combinedBaseAttack?.let { base ->
+        val attackPercent = totalValues.getOrDefault("atk_", 0.0)
+        val flatAttack = totalValues.getOrDefault("atk", 0.0)
+        base * (1.0 + attackPercent / 100.0) + flatAttack
+    }
 
     companion object {
         fun defaults(): OptimizerBaseStats = OptimizerBaseStats(

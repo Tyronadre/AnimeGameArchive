@@ -4,38 +4,28 @@ import de.tyro.genshinapp.service.content.FandomImageUrlResolver
 import de.tyro.genshinapp.service.content.ImageUrlRegistry
 import de.tyro.genshinapp.service.content.WeaponImageDefault
 import de.tyro.genshinapp.service.importer.HoyolabWeaponSummary
-import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.ObjectMapper
+import de.tyro.genshinapp.startup.ApplicationStartupStatus
 import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.model.PlayerWeapon
 import de.tyro.genshinapp.model.WeaponImageType
-import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Service
 import org.springframework.web.util.UriComponentsBuilder
 import java.util.concurrent.ConcurrentHashMap
 
 @Service
 class WeaponCatalogService(
-    objectMapper: ObjectMapper,
     private val catalogStore: WeaponCatalogStore? = null,
     private val fandomImageUrlResolver: FandomImageUrlResolver? = null,
     private val imageUrlRegistry: ImageUrlRegistry? = null,
 ) {
     private val definitionsByKey = ConcurrentHashMap<String, WeaponDefinition>()
-    private val configuredNames: List<String> =
-        ClassPathResource(CATALOG_RESOURCE).inputStream.use {
-            objectMapper.readValue(it, object : TypeReference<List<String>>() {})
-        }
-
     init {
+        ApplicationStartupStatus.report(
+            "Loading saved weapons…",
+            "Refreshing weapon records and image defaults",
+        )
         catalogStore?.getWeapons().orEmpty().forEach { stored ->
             remember(save(refreshDefaultImageUrl(stored)))
-        }
-        configuredNames.forEach { name ->
-            val key = GoodKeyNormalizer.normalize(name)
-            if (!definitionsByKey.containsKey(key)) {
-                remember(save(baseDefinition(key, name)))
-            }
         }
         imageUrlRegistry?.registerWeaponDefaults(getWeapons().flatMap(::imageDefaults))
     }
@@ -199,7 +189,6 @@ class WeaponCatalogService(
         .takeIf { it.isNotBlank() && it.matches(WEAPON_KEY_PATTERN) }
 
     companion object {
-        private const val CATALOG_RESOURCE = "data/weapon-names.json"
         private val WEAPON_KEY_PATTERN = Regex("[a-z0-9]+")
         private val TYPE_ICON_WEAPON_KEYS = mapOf(
             "sword" to "silversword",

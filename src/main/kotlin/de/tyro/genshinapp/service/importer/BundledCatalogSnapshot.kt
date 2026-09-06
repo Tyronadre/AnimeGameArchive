@@ -4,10 +4,10 @@ import de.tyro.genshinapp.service.catalog.ArtifactCatalogService
 import de.tyro.genshinapp.service.catalog.CharacterCatalogService
 import de.tyro.genshinapp.service.catalog.MaterialCatalogService
 import de.tyro.genshinapp.service.catalog.WeaponCatalogService
-import de.tyro.genshinapp.service.catalog.WeaponDataService
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import de.tyro.genshinapp.configuration.GenshinContentProperties
+import de.tyro.genshinapp.startup.ApplicationStartupStatus
 import org.slf4j.LoggerFactory
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
@@ -19,91 +19,131 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 import java.time.Instant
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
 
 data class BundledCatalogSnapshot(
     val formatVersion: Int = CURRENT_FORMAT_VERSION,
     val generatedAt: String = "",
-    val normalizedCharacters: List<JsonNode> = emptyList(),
-    val normalizedTalents: List<JsonNode> = emptyList(),
-    val normalizedWeapons: List<JsonNode> = emptyList(),
     val hoyolabCharacters: List<HoyolabWikiEntry> = emptyList(),
     val hoyolabWeapons: List<HoyolabWikiEntry> = emptyList(),
     val hoyolabArtifacts: List<HoyolabWikiEntry> = emptyList(),
+    val hoyolabMaterials: List<HoyolabWikiEntry> = emptyList(),
+    val hoyolabCharacterPages: List<JsonNode> = emptyList(),
+    val hoyolabWeaponPages: List<JsonNode> = emptyList(),
 ) {
     companion object {
-        const val CURRENT_FORMAT_VERSION = 1
+        const val CURRENT_FORMAT_VERSION = 2
     }
 }
 
-/** Imports the build-time snapshot once, before the live startup synchronizers run. */
+/** Idempotently applies the build-time snapshot before live startup synchronization. */
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE + 50)
 class BundledCatalogSnapshotImporter(
-    private val staticDataCatalog: GenshinStaticDataCatalog,
     private val characterCatalogService: CharacterCatalogService,
     private val materialCatalogService: MaterialCatalogService,
-    private val weaponDataService: WeaponDataService,
     private val weaponCatalogService: WeaponCatalogService,
     private val artifactCatalogService: ArtifactCatalogService,
     private val hoyolabEntryMapper: HoyolabCatalogEntryMapper,
+    private val characterPageService: HoyolabCharacterPageService,
+    private val weaponPageService: HoyolabWeaponGalleryService,
 ) : ApplicationRunner {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val objectMapper = jacksonObjectMapper()
 
     override fun run(args: ApplicationArguments) {
+        ApplicationStartupStatus.report(
+            "Reading bundled game catalogue…",
+            "Loading the packaged HoYoWiki snapshot",
+        )
         val resource = ClassPathResource(SNAPSHOT_RESOURCE)
         if (!resource.exists()) {
             logger.debug("No bundled catalog snapshot is present")
+            ApplicationStartupStatus.report(
+                "Preparing live catalogue refresh…",
+                "No bundled snapshot was found",
+            )
             return
         }
-        if (staticDataCatalog.readFolder(IMPORT_MARKER_FOLDER).isNotEmpty()) {
-            logger.debug("Bundled catalog snapshot was already imported")
-            return
-        }
-
         val snapshot = resource.inputStream.use { input ->
             objectMapper.readValue(input, BundledCatalogSnapshot::class.java)
         }
         validate(snapshot)
 
-        staticDataCatalog.synchronize(CHARACTERS_FOLDER, snapshot.normalizedCharacters)
-        staticDataCatalog.synchronize(TALENTS_FOLDER, snapshot.normalizedTalents)
-        staticDataCatalog.synchronize(WEAPONS_FOLDER, snapshot.normalizedWeapons)
-
-        val characterChanges = characterCatalogService.importFromStaticData(
-            snapshot.normalizedCharacters,
-            snapshot.normalizedTalents,
+        ApplicationStartupStatus.report(
+            "Importing bundled materials…",
+            "${snapshot.hoyolabMaterials.size} catalogue entries",
+        )
+        val materialChanges = materialCatalogService.synchronizeHoyolabMaterialList(
+            snapshot.hoyolabMaterials.mapNotNull(hoyolabEntryMapper::toMaterialSummary),
+        )
+        ApplicationStartupStatus.report(
+            "Importing bundled characters…",
+            "${snapshot.hoyolabCharacters.size} catalogue entries",
         )
         val officialCharacterChanges = characterCatalogService.synchronizeHoyolabCharacterList(
             snapshot.hoyolabCharacters.mapNotNull(hoyolabEntryMapper::toCharacterSummary),
         )
-        val weaponChanges = weaponDataService.importFromStaticData(snapshot.normalizedWeapons)
+        ApplicationStartupStatus.report(
+            "Importing bundled weapons…",
+            "${snapshot.hoyolabWeapons.size} catalogue entries",
+        )
         val officialWeaponChanges = weaponCatalogService.synchronizeHoyolabWeaponList(
             snapshot.hoyolabWeapons.mapNotNull(hoyolabEntryMapper::toWeaponSummary),
+        )
+        ApplicationStartupStatus.report(
+            "Importing bundled artifacts…",
+            "${snapshot.hoyolabArtifacts.size} catalogue entries",
         )
         val artifactChanges = artifactCatalogService.synchronizeHoyolabArtifactList(
             snapshot.hoyolabArtifacts,
         )
-        materialCatalogService.synchronizeCharacters(characterCatalogService.getCharacters())
-
-        staticDataCatalog.synchronize(
-            IMPORT_MARKER_FOLDER,
-            listOf(
-                objectMapper.createObjectNode().also { marker ->
-                    marker.put("name", "Bundled catalog snapshot")
-                    marker.put("version", snapshot.formatVersion.toString())
-                    marker.put("generatedAt", snapshot.generatedAt)
-                },
-            ),
+        val characterPageChanges = importPagesWithProgress(
+            "Importing character details…",
+            snapshot.hoyolabCharacterPages,
+            characterPageService::importPage,
         )
+        val weaponPageChanges = importPagesWithProgress(
+            "Importing weapon details…",
+            snapshot.hoyolabWeaponPages,
+            weaponPageService::importPage,
+        )
+        ApplicationStartupStatus.report(
+            "Indexing progression materials…",
+            "Connecting character requirements to the material catalogue",
+        )
+        materialCatalogService.synchronizeCharacters(characterCatalogService.getCharacters())
         logger.info(
             "Imported bundled catalog snapshot from {}: {} characters, {} weapons, " +
                 "{} artifacts changed",
             snapshot.generatedAt,
-            characterChanges + officialCharacterChanges,
-            weaponChanges + officialWeaponChanges,
-            artifactChanges,
+            officialCharacterChanges + characterPageChanges,
+            officialWeaponChanges + weaponPageChanges,
+            artifactChanges + materialChanges,
         )
+        ApplicationStartupStatus.report(
+            "Preparing live catalogue refresh…",
+            "Bundled game data is ready",
+        )
+    }
+
+    private fun importPagesWithProgress(
+        task: String,
+        pages: List<JsonNode>,
+        importer: (JsonNode) -> Any?,
+    ): Int {
+        if (pages.isEmpty()) return 0
+        ApplicationStartupStatus.report(task, "0 of ${pages.size}")
+        var changed = 0
+        pages.forEachIndexed { index, page ->
+            if (importer(page) != null) changed++
+            val completed = index + 1
+            if (completed == pages.size || completed % PROGRESS_REPORT_INTERVAL == 0) {
+                ApplicationStartupStatus.report(task, "$completed of ${pages.size}")
+            }
+        }
+        return changed
     }
 
     private fun validate(snapshot: BundledCatalogSnapshot) {
@@ -111,15 +151,6 @@ class BundledCatalogSnapshotImporter(
             "Unsupported bundled catalog snapshot format ${snapshot.formatVersion}"
         }
         require(snapshot.generatedAt.isNotBlank()) { "Bundled catalog snapshot has no timestamp" }
-        require(snapshot.normalizedCharacters.isNotEmpty()) {
-            "Bundled catalog snapshot has no normalized characters"
-        }
-        require(snapshot.normalizedTalents.isNotEmpty()) {
-            "Bundled catalog snapshot has no normalized talents"
-        }
-        require(snapshot.normalizedWeapons.isNotEmpty()) {
-            "Bundled catalog snapshot has no normalized weapons"
-        }
         require(snapshot.hoyolabCharacters.isNotEmpty()) {
             "Bundled catalog snapshot has no HoYoWiki characters"
         }
@@ -129,14 +160,20 @@ class BundledCatalogSnapshotImporter(
         require(snapshot.hoyolabArtifacts.isNotEmpty()) {
             "Bundled catalog snapshot has no HoYoWiki artifacts"
         }
+        require(snapshot.hoyolabMaterials.isNotEmpty()) {
+            "Bundled catalog snapshot has no HoYoWiki materials"
+        }
+        require(snapshot.hoyolabCharacterPages.isNotEmpty()) {
+            "Bundled catalog snapshot has no HoYoWiki character pages"
+        }
+        require(snapshot.hoyolabWeaponPages.isNotEmpty()) {
+            "Bundled catalog snapshot has no HoYoWiki weapon pages"
+        }
     }
 
     private companion object {
         private const val SNAPSHOT_RESOURCE = "data/bundled-catalog-snapshot.json"
-        private const val IMPORT_MARKER_FOLDER = "bundledsnapshot"
-        private const val CHARACTERS_FOLDER = "characters"
-        private const val TALENTS_FOLDER = "talents"
-        private const val WEAPONS_FOLDER = "weapons"
+        private const val PROGRESS_REPORT_INTERVAL = 10
     }
 }
 
@@ -146,15 +183,16 @@ fun main(args: Array<String>) {
     val objectMapper = jacksonObjectMapper()
     val properties = GenshinContentProperties()
     val hoyolab = HttpHoyolabWikiDataSource(objectMapper, properties)
-    val normalized = GenshinDbApiClient(objectMapper, properties)
+    val characters = hoyolab.listEntries(HoyolabWikiMenu.CHARACTERS)
+    val weapons = hoyolab.listEntries(HoyolabWikiMenu.WEAPONS)
     val snapshot = BundledCatalogSnapshot(
         generatedAt = Instant.now().toString(),
-        normalizedCharacters = normalized.fetchDataset(GenshinStaticDataset.CHARACTERS),
-        normalizedTalents = normalized.fetchDataset(GenshinStaticDataset.TALENTS),
-        normalizedWeapons = normalized.fetchDataset(GenshinStaticDataset.WEAPONS),
-        hoyolabCharacters = hoyolab.listEntries(HoyolabWikiMenu.CHARACTERS),
-        hoyolabWeapons = hoyolab.listEntries(HoyolabWikiMenu.WEAPONS),
+        hoyolabCharacters = characters,
+        hoyolabWeapons = weapons,
         hoyolabArtifacts = hoyolab.listEntries(HoyolabWikiMenu.ARTIFACTS),
+        hoyolabMaterials = hoyolab.listEntries(HoyolabWikiMenu.MATERIALS),
+        hoyolabCharacterPages = fetchPages(characters, hoyolab),
+        hoyolabWeaponPages = fetchPages(weapons, hoyolab),
     )
     Files.createDirectories(output.toAbsolutePath().normalize().parent)
     val temporary = Files.createTempFile(output.parent, "bundled-catalog-snapshot", ".tmp")
@@ -163,6 +201,24 @@ fun main(args: Array<String>) {
         Files.move(temporary, output, StandardCopyOption.REPLACE_EXISTING)
     } finally {
         Files.deleteIfExists(temporary)
+    }
+}
+
+private fun fetchPages(
+    entries: List<HoyolabWikiEntry>,
+    source: HoyolabWikiDataSource,
+): List<JsonNode> {
+    val executor = Executors.newFixedThreadPool(8)
+    return try {
+        executor.invokeAll(entries.map { entry ->
+            Callable {
+                requireNotNull(source.fetchPage(entry.entryPageId)) {
+                    "HoYoWiki page ${entry.entryPageId} (${entry.name}) is unavailable"
+                }
+            }
+        }).map { it.get() }
+    } finally {
+        executor.shutdown()
     }
 }
 

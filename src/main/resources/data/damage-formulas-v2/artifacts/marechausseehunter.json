@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 2,
+  "key": "marechausseehunter",
+  "name": "Marechaussee Hunter",
+  "inputs": [
+    {
+      "id": "stacks",
+      "label": "Active stacks",
+      "defaultValue": 3,
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "description": "Snapshot stack count; duration and stack generation are not simulated."
+    }
+  ],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · Normal / Charged DMG +15%",
+        "source": "Artifact set",
+        "description": "Normal and Charged Attack damage only.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [
+                "normalAttack",
+                "chargedAttack"
+              ],
+              "elements": []
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 15
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 15
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · HP change stacks",
+        "source": "Artifact set",
+        "description": "Each HP increase or decrease grants 12% CRIT Rate for 5s, up to three stacks.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "critRate",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 12
+                },
+                {
+                  "type": "input",
+                  "input": "local:stacks"
+                }
+              ]
+            }
+          }
+        ],
+        "formulaModifiers": [],
+        "metrics": [],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: marechausseehunter",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

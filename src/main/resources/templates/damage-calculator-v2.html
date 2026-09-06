@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{damage.v2.title(${character.name})}">Nefer Damage Calculator V2 · Genshin Archive</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+    <link rel="stylesheet" th:href="@{/css/damage-calculator.css}" href="/css/damage-calculator.css">
+    <link rel="stylesheet" th:href="@{/css/damage-calculator-v2.css}" href="/css/damage-calculator-v2.css">
+    <script th:src="@{/js/theme.js}" src="/js/theme.js"></script>
+    <script defer th:src="@{/js/damage-calculator-v2.js}" src="/js/damage-calculator-v2.js"></script>
+</head>
+<body>
+<header th:replace="~{fragments :: siteHeader('damage-calculator')}"></header>
+
+<main class="damage-calculator-page damage-calculator-v2-page"
+      th:classappend="${character.element != null
+          ? 'damage-element-' + #strings.toLowerCase(character.element)
+          : 'damage-element-neutral'}"
+      data-damage-calculator-v2
+      th:attr="data-profile-url=@{/api/damage-formulas/v2/{key}(key=${profileKey})},
+          data-calculate-url=@{/api/damage-formulas/v2/{key}/calculate(key=${profileKey})},
+          data-team-url=@{/api/damage-formulas/v2/{key}/team(key=${profileKey})},
+          data-label-team-effects=#{damage.effects.section.team},
+          data-label-team-effects-help=#{damage.effects.section.team.help},
+          data-label-section-team-stats=#{damage.v2.effects.conditions},
+          data-label-team-empty=#{damage.team.empty},
+          data-label-team-slot=#{damage.v2.teamSlot},
+          data-label-team-search=#{damage.v2.teamSearch},
+          data-label-team-no-results=#{damage.v2.teamNoResults},
+          data-label-team-select=#{damage.v2.teamSelect},
+          data-label-team-context=#{damage.v2.teamContext},
+          data-label-team-notes=#{damage.v2.teamNotes},
+          data-label-artifacts=#{damage.v2.artifacts},
+          data-label-artifact-help=#{damage.v2.artifacts.help},
+          data-label-artifact-empty=#{damage.v2.artifacts.empty},
+          data-label-artifact-pieces=#{damage.v2.artifacts.pieces},
+          data-label-artifact-unavailable=#{damage.v2.artifacts.unavailable},
+          data-label-artifact-duplicate=#{damage.v2.artifacts.duplicate},
+          data-label-artifact-unknown=#{damage.v2.artifacts.unknown},
+          data-label-condition-inactive=#{damage.v2.conditionInactive},
+          data-label-cannot-crit=#{damage.v2.cannotCrit},
+          data-label-post-bonus-base=#{damage.v2.postBonusBase},
+          data-talent-resource-key=${character.talentResourceKey},
+          data-talent-media-base=@{/media/characters/{characterKey}/talents(characterKey=${character.talentResourceKey})},
+          data-csrf-header=${_csrf.headerName},data-csrf-token=${_csrf.token},
+          data-label-current=#{damage.input.current},
+          data-label-active=#{damage.effects.state.active},
+          data-label-inactive=#{damage.effects.state.inactive},
+          data-label-blocked=#{damage.effects.state.blocked},
+          data-label-locked=#{damage.effects.state.locked},
+          data-label-preview=#{damage.effects.state.preview},
+          data-label-effect-count=#{damage.effects.state.count},
+          data-label-enable-all=#{damage.effects.action.enableAll},
+          data-label-disable-all=#{damage.effects.action.disableAll},
+          data-label-owned-defaults=#{damage.effects.action.ownedDefaults},
+          data-label-passive-effects=#{damage.effects.section.character},
+          data-label-passive-effects-help=#{damage.effects.section.character.help},
+          data-label-constellation-effects=#{damage.effects.section.constellation},
+          data-label-constellation-effects-help=#{damage.effects.section.constellation.help},
+          data-label-loading=#{damage.v2.loading},
+          data-label-error=#{damage.v2.error},
+          data-label-expand=#{damage.breakdown.expandAll},
+          data-label-collapse=#{damage.breakdown.collapseAll},
+          data-label-view-formula=#{damage.breakdown.heading},
+          data-label-base=#{damage.breakdown.base},
+          data-label-bonus=#{damage.breakdown.bonus},
+          data-label-defense=#{damage.breakdown.defense},
+          data-label-resistance=#{damage.breakdown.resistance},
+          data-label-elevation=#{damage.v2.elevation},
+          data-label-non-crit=#{damage.result.nonCrit},
+          data-label-crit=#{damage.result.crit},
+          data-label-average=#{damage.result.average},
+          data-label-bypassed=#{damage.v2.bypassed},
+          data-label-skill-description=#{damage.v2.skillDescription},
+          data-label-reaction-aura=#{damage.v2.reaction.aura},
+          data-label-reaction-multiplier=#{damage.v2.reaction.multiplier},
+          data-label-reaction-em-bonus=#{damage.v2.reaction.emBonus},
+          data-label-reaction-bonus=#{damage.v2.reaction.bonus},
+          data-label-reaction-trigger=#{damage.v2.reaction.trigger},
+          data-label-reaction-amplifying=#{damage.v2.reaction.kind.amplifying},
+          data-label-reaction-additive=#{damage.v2.reaction.kind.additive},
+          data-label-reaction-transformative=#{damage.v2.reaction.kind.transformative},
+          data-label-reaction-utility=#{damage.v2.reaction.kind.utility},
+          data-label-reaction-shield=#{damage.v2.reaction.kind.shield},
+          data-label-reaction-damage=#{damage.v2.reaction.damage},
+          data-label-reaction-combined=#{damage.v2.reaction.combined},
+          data-label-reaction-level-multiplier=#{damage.v2.reaction.levelMultiplier},
+          data-label-reaction-additive-base=#{damage.v2.reaction.additiveBase},
+          data-label-reaction-resistance=#{damage.v2.reaction.resistance},
+          data-label-reaction-ignores-defense-crit=#{damage.v2.reaction.ignoresDefenseCrit},
+          data-label-reaction-crystallize-base=#{damage.v2.reaction.crystallizeBase},
+          data-label-reaction-shield-absorption=#{damage.v2.reaction.shieldAbsorption},
+          data-label-reaction-no-damage=#{damage.v2.reaction.noDamage},
+          data-label-talent-level=#{character.talent.level},
+          data-label-no-effect=#{damage.v2.noAuthoredEffect},
+          data-label-summary-attack=#{damage.summary.attack},
+          data-label-summary-em=#{damage.summary.em},
+          data-label-summary-crit-rate=#{damage.summary.critRate},
+          data-label-summary-crit-damage=#{damage.summary.critDamage},
+          data-label-summary-effects=#{damage.v2.activeEffects},
+          data-label-summary-formulas=#{damage.v2.formulaCount},
+          data-label-section-build=#{damage.section.build},
+          data-label-section-constellations=#{damage.section.constellations},
+          data-label-section-talents=#{damage.section.talents},
+          data-label-section-combat=#{damage.section.buffs},
+          data-label-section-enemy=#{damage.section.enemy},
+          data-label-effective=#{damage.v2.stats.effective},
+          data-label-entered=#{damage.v2.stats.entered},
+          data-label-progress=#{damage.v2.stats.progress},
+          data-label-combat-stats=#{damage.v2.stats.combat},
+          data-label-stat-calculation=#{damage.v2.stats.calculation},
+          data-label-reset=#{action.reset}">
+    <div hidden data-v2-talent-descriptions>
+        <span th:each="talent : ${character.combatTalents}"
+              data-v2-talent-description-source
+              th:attr="data-talent-key=${talent.key}"
+              th:text="${talent.description}"></span>
+    </div>
+    <section class="damage-stored-team" data-v2-stored-team hidden>
+        <div class="damage-stored-team-bar">
+            <span class="damage-stored-team-members" data-v2-team></span>
+            <button type="button" class="damage-stored-team-toggle" data-v2-stored-team-toggle
+                    aria-expanded="false" aria-label="Show or hide stored team builds"
+                    th:aria-label="#{damage.v2.builds.toggle}">
+                <span class="damage-stored-team-chevron" aria-hidden="true">⌄</span>
+            </button>
+        </div>
+        <div class="damage-stored-team-body" data-v2-stored-team-body hidden>
+            <div class="damage-stored-team-intro">
+                <div>
+                    <p class="eyebrow" th:text="#{damage.v2.builds.eyebrow}">Stored builds · read only</p>
+                    <h2 th:text="#{damage.v2.builds.heading}">Team starting stats</h2>
+                </div>
+                <p th:text="#{damage.v2.builds.help}">Character + weapon + artifact stats only. Set effects, passives, constellations, team buffs and calculator overrides are excluded.</p>
+            </div>
+            <div class="damage-stored-team-grid" data-v2-stored-team-grid></div>
+            <p class="damage-stored-team-footnote" th:text="#{damage.v2.builds.footnote}">Equipment and progress come from your saved build. Exact level / ascension tables resolve base and main stats; missing data is shown as unavailable, never estimated. Expand an artifact to inspect its substats.</p>
+        </div>
+    </section>
+    <div hidden data-v2-build-labels th:attr="
+        data-character=#{damage.v2.builds.character},data-weapon=#{damage.v2.builds.weapon},
+        data-artifacts=#{damage.v2.builds.artifacts},data-totals=#{damage.v2.builds.totals},
+        data-unavailable=#{damage.v2.builds.unavailable},data-no-weapon=#{damage.v2.builds.noWeapon},
+        data-no-artifacts=#{damage.v2.builds.noArtifacts},data-not-owned=#{damage.v2.builds.notOwned},
+        data-empty=#{damage.team.empty},data-level=#{damage.v2.builds.level},
+        data-ascension=#{damage.v2.builds.ascension},data-refinement=#{damage.v2.builds.refinement},
+        data-more-stats=#{damage.v2.builds.moreStats},data-artifact-total=#{damage.v2.builds.artifactTotal},
+        data-main-stat=#{damage.v2.builds.mainStat},data-substats=#{damage.v2.builds.substats}"></div>
+
+    <section class="damage-calculator-hero">
+        <div class="damage-calculator-hero-copy">
+            <a class="damage-back-link" th:href="@{/characters/{key}(key=${character.key})}">
+                <span aria-hidden="true">←</span>
+                <span th:text="#{damage.backToCharacter(${character.name})}">Back to Nefer</span>
+            </a>
+            <a class="damage-version-link" th:href="@{/damage-calculator/{key}(key=${character.key})}">
+                <span th:text="#{damage.v2.openOld}">Open previous calculator</span>
+                <b aria-hidden="true">↗</b>
+            </a>
+            <p class="eyebrow" th:text="#{damage.v2.eyebrow}">Hand-authored formula lab · v2</p>
+            <div class="damage-character-heading">
+                <div class="damage-character-icon">
+                    <span th:text="${#strings.substring(character.name, 0, 1)}">N</span>
+                    <img th:if="${character.iconImageUrl != null}"
+                         th:src="${character.iconImageUrl}"
+                         th:alt="${character.name + ' Icon'}"
+                         onerror="this.remove()">
+                </div>
+                <div>
+                    <span class="damage-element-pill" th:text="${character.element}">Dendro</span>
+                    <h1 th:text="#{damage.v2.heading(${character.name})}">Nefer damage calculator V2</h1>
+                </div>
+            </div>
+            <p class="lead" th:text="#{damage.v2.lead}">
+                Every damage instance and effect is defined by hand and calculated by the V2 formula endpoint.
+            </p>
+            <div class="damage-scope-note">
+                <span aria-hidden="true">◇</span>
+                <p th:text="#{damage.v2.scope}">
+                    This comparison currently contains Nefer's basic talent formulas and A Wager of Moonlight.
+                </p>
+            </div>
+        </div>
+        <div class="damage-calculator-art" aria-hidden="true">
+            <div class="damage-art-ring damage-art-ring-one"></div>
+            <div class="damage-art-ring damage-art-ring-two"></div>
+            <span class="damage-art-glyph">✦</span>
+            <img th:if="${character.wishImageUrl != null}"
+                 th:src="${character.wishImageUrl}"
+                 alt=""
+                 onerror="this.remove()">
+        </div>
+    </section>
+
+    <div class="damage-v2-status" data-v2-status role="status" aria-live="polite">
+        <span class="damage-v2-status-dot" aria-hidden="true"></span>
+        <span th:text="#{damage.v2.loading}">Loading the hand-authored profile…</span>
+    </div>
+
+    <section class="damage-workspace damage-v2-workspace" data-v2-workspace hidden>
+        <div class="damage-v2-tab-shell">
+            <aside class="damage-v2-tab-bar">
+                <div class="damage-v2-tabs" role="tablist" aria-orientation="vertical"
+                     th:aria-label="#{damage.v2.tabs.label}">
+                    <button type="button" role="tab" id="damage-v2-tab-effects" aria-selected="true"
+                            aria-controls="damage-v2-panel-effects" data-v2-tab="effects"
+                            th:text="#{damage.v2.tabs.effects}">Effects, buffs &amp; constellations</button>
+                    <button type="button" role="tab" id="damage-v2-tab-stats" aria-selected="false" tabindex="-1"
+                            aria-controls="damage-v2-panel-stats" data-v2-tab="stats"
+                            th:text="#{damage.v2.tabs.stats}">Effective stats</button>
+                    <button type="button" role="tab" id="damage-v2-tab-damage" aria-selected="false" tabindex="-1"
+                            aria-controls="damage-v2-panel-damage" data-v2-tab="damage"
+                            th:text="#{damage.v2.tabs.damage}">Damage calculation</button>
+                </div>
+                <button class="damage-reset-button" type="button" data-v2-reset th:text="#{action.reset}">Reset</button>
+            </aside>
+
+            <section class="damage-v2-tab-panel" id="damage-v2-panel-effects" role="tabpanel"
+                     aria-labelledby="damage-v2-tab-effects" data-v2-tab-panel="effects">
+                <div class="damage-v2-effects-layout">
+                    <aside class="damage-controls damage-v2-effect-controls" aria-labelledby="damage-v2-effect-input-heading">
+                        <div class="damage-panel-heading">
+                            <div>
+                                <p class="eyebrow" th:text="#{damage.inputs.eyebrow}">Live inputs</p>
+                                <h2 id="damage-v2-effect-input-heading" th:text="#{damage.v2.effects.settings}">Effect settings</h2>
+                            </div>
+                        </div>
+                        <section class="damage-team-panel" aria-label="Team calculation context">
+                            <p class="damage-current-build-note" data-v2-team-context></p>
+                            <details class="damage-v2-team-notes" data-v2-team-notes></details>
+                        </section>
+                        <div data-v2-inputs></div>
+                    </aside>
+
+                    <section class="damage-effects-panel damage-v2-effects" aria-labelledby="damage-v2-effects-heading">
+                        <header>
+                            <p class="eyebrow" th:text="#{damage.effects.eyebrow}">Conditional layers</p>
+                            <h2 id="damage-v2-effects-heading" th:text="#{damage.effects.heading}">Passives and buffs</h2>
+                            <p th:text="#{damage.v2.effectsHelp}">Every effect modifies the same nullable formula layers used by talent hits.</p>
+                        </header>
+                        <div data-v2-effects></div>
+                    </section>
+                </div>
+            </section>
+
+            <section class="damage-v2-tab-panel" id="damage-v2-panel-stats" role="tabpanel"
+                     aria-labelledby="damage-v2-tab-stats" data-v2-tab-panel="stats" hidden>
+                <header class="damage-v2-panel-intro">
+                    <div>
+                        <p class="eyebrow" th:text="#{damage.v2.stats.eyebrow}">Live team values</p>
+                        <h2 th:text="#{damage.v2.stats.heading}">Effective stats for every character</h2>
+                    </div>
+                    <p th:text="#{damage.v2.stats.help}">Enter any base value. Active effects are shown immediately as the effective value used by formulas.</p>
+                </header>
+                <p class="damage-current-build-note" data-v2-current-note hidden th:text="#{damage.v2.currentBuild}">
+                    Current imported values were loaded for highlighted inputs.
+                </p>
+                <div class="damage-v2-character-stats" data-v2-character-stats aria-live="polite"></div>
+            </section>
+
+            <section class="damage-v2-tab-panel" id="damage-v2-panel-damage" role="tabpanel"
+                     aria-labelledby="damage-v2-tab-damage" data-v2-tab-panel="damage" hidden>
+                <header class="damage-v2-panel-intro">
+                    <div>
+                        <p class="eyebrow" th:text="#{damage.outputs.eyebrow}">Damage instances</p>
+                        <h2 th:text="#{damage.v2.damage.heading}">Calculation inputs and results</h2>
+                    </div>
+                    <p th:text="#{damage.v2.damage.help}">Set enemy values here, then inspect each damage instance below.</p>
+                </header>
+                <div class="damage-v2-calculation-inputs" data-v2-calculation-inputs></div>
+                <div class="damage-buff-toggle damage-v2-reaction-toggle">
+                    <span>
+                        <b th:text="#{damage.v2.reaction.toggle}">Show possible reactions</b>
+                        <small th:text="#{damage.v2.reaction.help}">Show all standard reactions made possible by the selected team.</small>
+                    </span>
+                    <label class="damage-toggle-control">
+                        <input type="checkbox" data-v2-reaction-toggle
+                               th:attr="aria-label=#{damage.v2.reaction.toggle}">
+                        <i aria-hidden="true"></i>
+                    </label>
+                </div>
+            <div class="damage-results-heading" id="damage-v2-results">
+                <div>
+                    <p class="eyebrow" th:text="#{damage.outputs.eyebrow}">Damage instances</p>
+                    <h2 th:text="#{damage.outputs.heading}">All talent hits</h2>
+                </div>
+                <div class="damage-result-tools">
+                    <div class="damage-result-legend" aria-hidden="true">
+                        <span><i class="legend-dot legend-average"></i><span th:text="#{damage.result.average}">Average</span></span>
+                        <span><i class="legend-dot legend-crit"></i><span th:text="#{damage.result.crit}">CRIT</span></span>
+                    </div>
+                    <button class="damage-expand-calculations" type="button" data-v2-expand
+                            th:text="#{damage.breakdown.expandAll}">Expand all calculations</button>
+                </div>
+            </div>
+
+            <div data-v2-results></div>
+            </section>
+        </div>
+    </section>
+
+    <section class="damage-v2-error" data-v2-error hidden>
+        <b th:text="#{damage.v2.errorHeading}">The V2 calculator could not be loaded.</b>
+        <p data-v2-error-message th:text="#{damage.v2.error}">Please retry.</p>
+        <button type="button" data-v2-retry th:text="#{damage.v2.retry}">Retry</button>
+    </section>
+
+    <div class="damage-formula-metadata" hidden aria-hidden="true">
+        <span data-formula-hint-tag="characterLevel"
+              th:attr="data-formula-name=#{damage.input.characterLevel},data-formula-tooltip=#{damage.tooltip.characterLevel}"></span>
+        <span data-formula-hint-tag="enemyLevel"
+              th:attr="data-formula-name=#{damage.input.enemyLevel},data-formula-tooltip=#{damage.tooltip.enemyLevel}"></span>
+        <span data-formula-hint-tag="attack"
+              th:attr="data-formula-name=#{damage.input.attack},data-formula-tooltip=#{damage.tooltip.attack}"></span>
+        <span data-formula-hint-tag="elementalMastery"
+              th:attr="data-formula-name=#{damage.input.elementalMastery},data-formula-tooltip=#{damage.v2.tooltip.elementalMastery}"></span>
+        <span data-formula-hint-tag="elementalDamageBonus"
+              th:attr="data-formula-name=#{damage.input.dendroBonus},data-formula-tooltip=#{damage.v2.tooltip.elementalDamageBonus}"></span>
+        <span data-formula-hint-tag="critRate"
+              th:attr="data-formula-name=#{damage.input.critRate},data-formula-tooltip=#{damage.tooltip.critRate}"></span>
+        <span data-formula-hint-tag="critDamage"
+              th:attr="data-formula-name=#{damage.input.critDamage},data-formula-tooltip=#{damage.tooltip.critDamage}"></span>
+        <span data-formula-hint-tag="enemyResistance"
+              th:attr="data-formula-name=#{damage.input.dendroResistance},data-formula-tooltip=#{damage.v2.tooltip.enemyResistance}"></span>
+        <span data-formula-hint-tag="defenseReduction"
+              th:attr="data-formula-name=#{damage.input.defenseReduction},data-formula-tooltip=#{damage.tooltip.defenseReduction}"></span>
+        <span data-formula-hint-tag="defenseIgnore"
+              th:attr="data-formula-name=#{damage.input.defenseIgnore},data-formula-tooltip=#{damage.tooltip.defenseIgnore}"></span>
+        <span data-formula-hint-tag="talentLevel"
+              th:attr="data-formula-name=#{damage.v2.meta.talentLevel},data-formula-tooltip=#{damage.v2.tooltip.talentLevel}"></span>
+        <span data-formula-hint-tag="talentScaling"
+              th:attr="data-formula-name=#{damage.meta.talentScaling},data-formula-tooltip=#{damage.v2.tooltip.talentScaling}"></span>
+        <span data-formula-hint-tag="hitCount"
+              th:attr="data-formula-name=#{damage.meta.hitCount},data-formula-tooltip=#{damage.tooltip.hitCount}"></span>
+        <span data-formula-hint-tag="damageBonusMultiplier"
+              th:attr="data-formula-name=#{damage.meta.damageBonusMultiplier},data-formula-tooltip=#{damage.v2.tooltip.damageBonusMultiplier}"></span>
+        <span data-formula-hint-tag="defenseMultiplier"
+              th:attr="data-formula-name=#{damage.meta.defenseMultiplier},data-formula-tooltip=#{damage.tooltip.defenseMultiplier}"></span>
+        <span data-formula-hint-tag="resistanceMultiplier"
+              th:attr="data-formula-name=#{damage.meta.resistanceMultiplier},data-formula-tooltip=#{damage.v2.tooltip.resistanceMultiplier}"></span>
+        <span data-formula-hint-tag="critMultiplier"
+              th:attr="data-formula-name=#{damage.meta.critMultiplier},data-formula-tooltip=#{damage.tooltip.critMultiplier}"></span>
+        <span data-formula-hint-tag="lunarEmBonus"
+              th:attr="data-formula-name=#{damage.meta.lunarEmBonus},data-formula-tooltip=#{damage.tooltip.lunarEmBonus}"></span>
+        <span data-formula-hint-tag="directDendro"
+              th:attr="data-formula-name=#{damage.v2.type.direct},data-formula-tooltip=#{damage.v2.tooltip.direct}"></span>
+        <span data-formula-hint-tag="lunarBloom"
+              th:attr="data-formula-name=#{damage.v2.type.lunar},data-formula-tooltip=#{damage.v2.tooltip.lunar}"></span>
+    </div>
+</main>
+
+<footer>
+    <span th:text="#{damage.v2.footer}">
+        Hand-authored formulas are loaded from the V2 damage endpoint. The previous calculator remains unchanged.
+    </span>
+</footer>
+</body>
+</html>

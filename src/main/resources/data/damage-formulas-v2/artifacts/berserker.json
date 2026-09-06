@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 2,
+  "key": "berserker",
+  "name": "Berserker",
+  "inputs": [
+    {
+      "id": "hpPercent",
+      "label": "Wearer current HP %",
+      "defaultValue": 50,
+      "min": 0,
+      "max": 100,
+      "step": 0.1,
+      "description": ""
+    }
+  ],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · CRIT Rate +12%",
+        "source": "Artifact set",
+        "description": "Always active with at least two equipped pieces.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "critRate",
+            "operation": "flatAdd",
+            "value": {
+              "type": "constant",
+              "value": 12
+            }
+          }
+        ],
+        "formulaModifiers": [],
+        "metrics": [],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Low HP",
+        "source": "Artifact set",
+        "description": "While the wearer has less than 70% HP, CRIT Rate +24%.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtMost",
+              "input": "local:hpPercent",
+              "value": 69.99
+            }
+          ]
+        },
+        "statChanges": [
+          {
+            "stat": "critRate",
+            "operation": "flatAdd",
+            "value": {
+              "type": "constant",
+              "value": 24
+            }
+          }
+        ],
+        "formulaModifiers": [],
+        "metrics": [],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: berserker",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

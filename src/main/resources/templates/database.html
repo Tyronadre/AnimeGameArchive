@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{database.title}">Database · Genshin Archive</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+    <script th:src="@{/js/theme.js}" src="/js/theme.js"></script>
+</head>
+<body>
+<header th:replace="~{fragments :: siteHeader('database')}"></header>
+
+<main class="database-page">
+    <section class="inventory-intro compact-intro">
+        <p class="eyebrow" th:text="#{database.eyebrow}">Data transfer</p>
+        <h1 th:text="#{database.heading}">Database</h1>
+        <p class="lead" th:text="#{database.lead}">
+            Replace your saved game data from a GOOD file or download the complete current state.
+        </p>
+    </section>
+
+    <div class="flash success" th:if="${successMessage != null}" th:text="${successMessage}">
+        Imported.
+    </div>
+    <div class="flash error" th:if="${errorMessage != null}" th:text="${errorMessage}">
+        Import failed.
+    </div>
+
+    <section class="database-grid">
+        <article class="database-card">
+            <div class="database-card-icon" aria-hidden="true">⇣</div>
+            <div>
+                <p class="eyebrow" th:text="#{database.import.eyebrow}">Replace data</p>
+                <h2 th:text="#{database.import.heading}">Import GOOD</h2>
+                <p th:text="#{database.import.text}">
+                    Import characters, materials, artifacts, and weapons from a GOOD JSON file.
+                </p>
+                <p class="database-warning" th:text="#{database.import.warning}">
+                    The imported current state replaces the data already saved in those categories.
+                </p>
+                <form class="good-upload database-upload" th:action="@{/database/import}"
+                      method="post" enctype="multipart/form-data">
+                    <label for="database-good-file">
+                        <span th:text="#{items.goodFile}">GOOD JSON file</span>
+                        <input id="database-good-file" type="file" name="file"
+                               accept="application/json,.json" required>
+                    </label>
+                    <button class="primary-button" type="submit" th:text="#{database.import.action}">
+                        Import and replace
+                    </button>
+                </form>
+            </div>
+        </article>
+
+        <article class="database-card">
+            <div class="database-card-icon" aria-hidden="true">⇡</div>
+            <div>
+                <p class="eyebrow" th:text="#{database.export.eyebrow}">Download data</p>
+                <h2 th:text="#{database.export.heading}">Export GOOD</h2>
+                <p th:text="#{database.export.text}">
+                    Export the complete current database state as a portable GOOD v3 JSON file.
+                </p>
+
+                <div class="database-summary" th:if="${snapshot != null}">
+                    <div>
+                        <strong th:text="${snapshot.characters.size()}">0</strong>
+                        <span th:text="#{database.characters}">Characters</span>
+                    </div>
+                    <div>
+                        <strong th:text="${snapshot.inventory.size()}">0</strong>
+                        <span th:text="#{database.materials}">Materials</span>
+                    </div>
+                    <div>
+                        <strong th:text="${snapshot.artifacts.size()}">0</strong>
+                        <span th:text="#{database.artifacts}">Artifacts</span>
+                    </div>
+                    <div>
+                        <strong th:text="${snapshot.weapons.size()}">0</strong>
+                        <span th:text="#{database.weapons}">Weapons</span>
+                    </div>
+                </div>
+
+                <a class="primary-button database-export-action" th:if="${snapshot != null}"
+                   th:href="@{/database/export}" th:text="#{database.export.action}">
+                    Download GOOD file
+                </a>
+                <p class="database-unavailable" th:if="${snapshot == null}"
+                   th:text="#{database.export.unavailable}">
+                    Import a GOOD file before exporting.
+                </p>
+            </div>
+        </article>
+    </section>
+</main>
+</body>
+</html>

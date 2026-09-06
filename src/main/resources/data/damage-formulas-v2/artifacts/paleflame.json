@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 2,
+  "key": "paleflame",
+  "name": "Pale Flame",
+  "inputs": [
+    {
+      "id": "stacks",
+      "label": "Active stacks",
+      "defaultValue": 2,
+      "min": 0,
+      "max": 2,
+      "step": 1,
+      "description": "Snapshot stack count; duration and stack generation are not simulated."
+    }
+  ],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · Physical DMG +25%",
+        "source": "Artifact set",
+        "description": "Ordinary Physical damage only.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [],
+              "elements": [
+                "Physical"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 25
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 25
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Skill-hit stacks",
+        "source": "Artifact set",
+        "description": "Each Skill hit grants 9% ATK for 7s, up to two stacks. At two stacks, gain another 25% Physical DMG.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "attack",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "input",
+                  "input": "recipient:baseAttack"
+                },
+                {
+                  "type": "divide",
+                  "operands": [
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 9
+                        },
+                        {
+                          "type": "input",
+                          "input": "local:stacks"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "constant",
+                      "value": 100
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [],
+              "elements": [
+                "Physical"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 25
+              }
+            },
+            "conditions": [
+              {
+                "type": "inputAtLeast",
+                "input": "local:stacks",
+                "value": 2
+              }
+            ]
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 25
+            },
+            "unit": "percentPoints",
+            "conditions": [
+              {
+                "type": "inputAtLeast",
+                "input": "local:stacks",
+                "value": 2
+              }
+            ]
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: paleflame",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 2,
+  "key": "adventurer",
+  "name": "Adventurer",
+  "inputs": [],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · Max HP +1,000",
+        "source": "Artifact set",
+        "description": "Always active with at least two equipped pieces.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "maxHp",
+            "operation": "flatAdd",
+            "value": {
+              "type": "constant",
+              "value": 1000
+            }
+          }
+        ],
+        "formulaModifiers": [],
+        "metrics": [],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Chest recovery",
+        "source": "Artifact set",
+        "description": "Opening a chest restores 30% Max HP over 5s. This is recovery, not attack damage.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "chestOpened",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [],
+        "metrics": [
+          {
+            "label": "Total base recovery",
+            "expression": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 0.3
+                },
+                {
+                  "type": "input",
+                  "input": "wearer:maxHp"
+                }
+              ]
+            },
+            "unit": "number",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: adventurer",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

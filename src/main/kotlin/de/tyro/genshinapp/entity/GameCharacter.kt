@@ -64,6 +64,12 @@ class GameCharacter {
     @Column(name = "hoyolab_entry_id")
     var hoyolabEntryId: Long? = null
 
+    @Column(name = "hoyolab_page_version", length = 64)
+    var hoyolabPageVersion: String? = null
+
+    @Column(name = "hoyolab_data_version")
+    var hoyolabDataVersion: Int = 0
+
     @OneToMany(mappedBy = "character", cascade = [CascadeType.ALL], orphanRemoval = true)
     @OrderBy("imageType ASC")
     @BatchSize(size = 100)
@@ -78,4 +84,9 @@ class GameCharacter {
     @OrderBy("displayOrder ASC")
     @BatchSize(size = 100)
     var talents: MutableList<GameCharacterTalent> = mutableListOf()
+
+    @OneToMany(mappedBy = "character", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OrderBy("level ASC")
+    @BatchSize(size = 100)
+    var progressions: MutableList<GameCharacterProgression> = mutableListOf()
 }

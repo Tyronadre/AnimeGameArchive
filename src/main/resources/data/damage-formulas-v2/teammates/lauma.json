@@ -1,0 +1,421 @@
+{
+  "schemaVersion": 2,
+  "weaponType": "Catalyst",
+  "key": "lauma",
+  "name": "Lauma",
+  "element": "Dendro",
+  "moonsignContribution": 1,
+  "characterDataResource": "data/characters/data/lauma.json",
+  "statBindings": {
+    "elementalMastery": "laumaElementalMastery"
+  },
+  "inputs": [
+    {
+      "id": "laumaConstellation",
+      "label": "Lauma constellation",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 6,
+      "step": 1,
+      "initialValueSource": {
+        "valueKey": "constellation"
+      },
+      "section": "constellations"
+    },
+    {
+      "id": "laumaElementalMastery",
+      "label": "Lauma EM",
+      "defaultValue": 1000,
+      "min": 0,
+      "max": 3000,
+      "step": 1,
+      "initialValueSource": {
+        "valueKey": "stat:eleMas"
+      },
+      "hintTag": "elementalMastery"
+    },
+    {
+      "id": "laumaSkillTalentLevel",
+      "label": "Lauma Skill level",
+      "defaultValue": 10,
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "initialValueSource": {
+        "valueKey": "skillTalent"
+      },
+      "hintTag": "talentLevel"
+    },
+    {
+      "id": "laumaBurstTalentLevel",
+      "label": "Lauma Burst level",
+      "defaultValue": 10,
+      "min": 1,
+      "max": 15,
+      "step": 1,
+      "initialValueSource": {
+        "valueKey": "burstTalent"
+      },
+      "hintTag": "talentLevel"
+    }
+  ],
+  "effects": [
+    {
+      "id": "laumaFrostgroveSanctuary",
+      "name": "Frostgrove Sanctuary",
+      "source": "Lauma · Elemental Skill",
+      "description": "Assumes a Skill hit within the last 10 seconds. Reduces Dendro and Hydro RES using Lauma's effective Skill level.",
+      "category": "team",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "elements": [
+              "Dendro",
+              "Hydro"
+            ]
+          },
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "talentParameter",
+                "characterKey": "lauma",
+                "talent": "combat2",
+                "parameter": "param8",
+                "levelInput": "laumaSkillTalentLevel"
+              },
+              "unit": "ratio"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "laumaLightForTheFrostyNight",
+      "name": "Light for the Frosty Night",
+      "source": "Lauma · Passive",
+      "description": "After Lauma's Skill, Ascendant Gleam grants Lunar-Bloom +10% CRIT Rate and +20% CRIT DMG for 20 seconds. The Nascent buff affects ordinary Bloom reactions, not these hits.",
+      "category": "team",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "skillActivation",
+        "conditions": [
+          {
+            "type": "contextAtLeast",
+            "input": "moonsignLevel",
+            "value": 2
+          }
+        ]
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "crit": {
+            "additionalRate": {
+              "expression": {
+                "type": "constant",
+                "value": 10
+              }
+            },
+            "additionalDamage": {
+              "expression": {
+                "type": "constant",
+                "value": 20
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "laumaNaturesChorus",
+      "name": "Moonsign Benediction: Nature's Chorus",
+      "source": "Lauma · Passive",
+      "description": "Adds 0.0175% Lunar-Bloom base damage per EM, capped at 14%. Lauma also contributes one Moonsign level while in the party.",
+      "category": "team",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "baseDamageBonus": {
+            "expression": {
+              "type": "min",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 14
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "input",
+                      "input": "laumaElementalMastery"
+                    },
+                    {
+                      "type": "constant",
+                      "value": 0.0175
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "laumaPaleHymn",
+      "name": "Pale Hymn",
+      "source": "Lauma · Elemental Burst",
+      "description": "Assumes a Pale Hymn stack is available for this hit. Adds Lauma's EM × the Burst scaling to base damage before damage bonuses, RES, CRIT, and Elevation. Stack depletion is not simulated.",
+      "category": "team",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "laumaElementalMastery"
+              },
+              {
+                "type": "talentParameter",
+                "characterKey": "lauma",
+                "talent": "combat3",
+                "parameter": "param4",
+                "levelInput": "laumaBurstTalentLevel"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "laumaC1",
+      "name": "C1 · O Lips, Weave Me Songs and Psalms",
+      "source": "Lauma constellation",
+      "description": "Adds healing and movement utility; no modifier to the active character's damage.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "laumaConstellation": 1
+      },
+      "impact": "Healing / utility only.",
+      "metrics": [
+        {
+          "label": "Healing per trigger",
+          "expression": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "laumaElementalMastery"
+              },
+              {
+                "type": "constant",
+                "value": 5
+              }
+            ]
+          },
+          "unit": "number"
+        }
+      ]
+    },
+    {
+      "id": "laumaC2",
+      "name": "C2 · Twine Warnings and Tales From the North",
+      "source": "Lauma constellation",
+      "description": "Pale Hymn adds another 400% of Lauma's EM to Lunar-Bloom. Separately, Ascendant Gleam grants 40% Lunar-Bloom DMG Bonus, including when no Pale Hymn stack is available.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "laumaConstellation": 2
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "requiresEffects": [
+            "laumaPaleHymn"
+          ],
+          "postBonusBase": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "laumaElementalMastery"
+              },
+              {
+                "type": "constant",
+                "value": 4
+              }
+            ]
+          }
+        },
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "contextAtLeast",
+              "input": "moonsignLevel",
+              "value": 2
+            }
+          ],
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 40
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "laumaC3",
+      "name": "C3 · Seek Not to Tread the Sly Fox's Path",
+      "source": "Lauma constellation",
+      "description": "Adds three Burst talent levels, up to level 15; increases Pale Hymn scaling.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "laumaConstellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "laumaBurstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "laumaC4",
+      "name": "C4 · Nor Yearn for the Great Bear's Might",
+      "source": "Lauma constellation",
+      "description": "Restores Lauma's Energy on Sanctuary hits. Changes Burst uptime, not damage per hit.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "laumaConstellation": 4
+      },
+      "impact": "Energy / rotation only."
+    },
+    {
+      "id": "laumaC5",
+      "name": "C5 · If Truth May Be Subject to Witness",
+      "source": "Lauma constellation",
+      "description": "Adds three Skill talent levels, up to level 15; increases the RES reduction.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "laumaConstellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "laumaSkillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "laumaC6",
+      "name": "C6 · I Offer Blood and Tears to the Moonlight",
+      "source": "Lauma constellation",
+      "description": "At Ascendant Gleam, grants 25% Lunar-Bloom Elevation. Lauma's extra attacks and Pale Hymn generation affect her own damage and the rotation, not the active character's hit count.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "laumaConstellation": 6
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "contextAtLeast",
+              "input": "moonsignLevel",
+              "value": 2
+            }
+          ],
+          "elevation": {
+            "expression": {
+              "type": "constant",
+              "value": 25
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Support profile: personal attacks, healing timelines and stack consumption are not simulated.",
+    "Cleansing for the Spring and Prayers for the Forest do not modify a teammate's damage."
+  ],
+  "sources": [
+    "data/characters/data/lauma.json",
+    "https://library.keqingmains.com/characters/dendro/lauma",
+    "https://keqingmains.com/misc/lunar-reactions/"
+  ]
+}

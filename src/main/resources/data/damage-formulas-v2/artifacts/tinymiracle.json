@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 2,
+  "key": "tinymiracle",
+  "name": "Tiny Miracle",
+  "inputs": [],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · Elemental RES +20%",
+        "source": "Artifact set",
+        "description": "Wearer gains 20% resistance to every element. Incoming damage only.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [],
+        "metrics": [
+          {
+            "label": "All elemental RES",
+            "expression": {
+              "type": "constant",
+              "value": 20
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Elemental hit resistance",
+        "source": "Artifact set",
+        "description": "Taking elemental damage grants 30% additional RES to that element for 10s, once per 10s. Incoming damage only.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [],
+        "metrics": [
+          {
+            "label": "Additional matching elemental RES",
+            "expression": {
+              "type": "constant",
+              "value": 30
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: tinymiracle",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

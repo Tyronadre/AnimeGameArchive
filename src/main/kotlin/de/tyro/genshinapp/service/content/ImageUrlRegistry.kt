@@ -110,6 +110,22 @@ class ImageUrlRegistry(
         if (changed) writeDocument()
     }
 
+    fun registerMaterialDefaults(materials: Collection<MaterialImageDefault>) = synchronized(lock) {
+        refreshIfChanged()
+        var changed = false
+        materials.forEach { material ->
+            val entry = document.materials.getOrPut(material.id.toString()) {
+                changed = true
+                EditableImageLink()
+            }
+            changed = entry.updateDefaults(material.name, material.defaultUrl) || changed
+        }
+        if (changed) writeDocument()
+    }
+
+    fun registerDefaultsForTalents(talents: Collection<TalentImageDefault>) =
+        registerDefaults(emptyList(), emptyList(), talents)
+
     fun characterLink(
         key: String,
         imageType: CharacterImageType,
@@ -320,6 +336,12 @@ data class TalentImageDefault(
 data class WeaponImageDefault(
     val key: String,
     val imageType: WeaponImageType,
+    val name: String,
+    val defaultUrl: String,
+)
+
+data class MaterialImageDefault(
+    val id: Int,
     val name: String,
     val defaultUrl: String,
 )

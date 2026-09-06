@@ -1,0 +1,342 @@
+{
+  "schemaVersion": 2,
+  "key": "viridescentvenerer",
+  "name": "Viridescent Venerer",
+  "inputs": [
+    {
+      "id": "element",
+      "label": "Affected element: 1 Hydro · 2 Pyro · 3 Cryo · 4 Electro",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "description": ""
+    }
+  ],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · Anemo DMG",
+        "source": "Artifact set",
+        "description": "Elemental damage bonus applies to matching ordinary damage, not Lunar reactions.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [],
+              "elements": [
+                "Anemo"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 15
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 15
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "party",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Swirl and elemental shred",
+        "source": "Artifact set",
+        "description": "Swirl damage +60%. A Swirl triggered by the wearer on-field reduces the swirled Hydro/Pyro/Cryo/Electro RES by 40% for 10s. Dendro cannot be swirled. Duplicate RES reductions do not stack.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "elements": [
+                "Hydro"
+              ]
+            },
+            "resistanceMitigation": {
+              "reduction": {
+                "unit": "percentPoints",
+                "expression": {
+                  "type": "constant",
+                  "value": 40
+                }
+              }
+            },
+            "conditions": [
+              {
+                "type": "inputAtLeast",
+                "input": "local:element",
+                "value": 1
+              },
+              {
+                "type": "inputAtMost",
+                "input": "local:element",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "targets": {
+              "elements": [
+                "Pyro"
+              ]
+            },
+            "resistanceMitigation": {
+              "reduction": {
+                "unit": "percentPoints",
+                "expression": {
+                  "type": "constant",
+                  "value": 40
+                }
+              }
+            },
+            "conditions": [
+              {
+                "type": "inputAtLeast",
+                "input": "local:element",
+                "value": 2
+              },
+              {
+                "type": "inputAtMost",
+                "input": "local:element",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "targets": {
+              "elements": [
+                "Cryo"
+              ]
+            },
+            "resistanceMitigation": {
+              "reduction": {
+                "unit": "percentPoints",
+                "expression": {
+                  "type": "constant",
+                  "value": 40
+                }
+              }
+            },
+            "conditions": [
+              {
+                "type": "inputAtLeast",
+                "input": "local:element",
+                "value": 3
+              },
+              {
+                "type": "inputAtMost",
+                "input": "local:element",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "targets": {
+              "elements": [
+                "Electro"
+              ]
+            },
+            "resistanceMitigation": {
+              "reduction": {
+                "unit": "percentPoints",
+                "expression": {
+                  "type": "constant",
+                  "value": 40
+                }
+              }
+            },
+            "conditions": [
+              {
+                "type": "inputAtLeast",
+                "input": "local:element",
+                "value": 4
+              },
+              {
+                "type": "inputAtMost",
+                "input": "local:element",
+                "value": 4
+              }
+            ]
+          }
+        ],
+        "metrics": [
+          {
+            "label": "Enemy RES reduction",
+            "expression": {
+              "type": "constant",
+              "value": 40
+            },
+            "unit": "percentPoints",
+            "conditions": [
+              {
+                "type": "inputAtLeast",
+                "input": "local:element",
+                "value": 1
+              },
+              {
+                "type": "inputAtMost",
+                "input": "local:element",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "label": "Enemy RES reduction",
+            "expression": {
+              "type": "constant",
+              "value": 40
+            },
+            "unit": "percentPoints",
+            "conditions": [
+              {
+                "type": "inputAtLeast",
+                "input": "local:element",
+                "value": 2
+              },
+              {
+                "type": "inputAtMost",
+                "input": "local:element",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "label": "Enemy RES reduction",
+            "expression": {
+              "type": "constant",
+              "value": 40
+            },
+            "unit": "percentPoints",
+            "conditions": [
+              {
+                "type": "inputAtLeast",
+                "input": "local:element",
+                "value": 3
+              },
+              {
+                "type": "inputAtMost",
+                "input": "local:element",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "label": "Enemy RES reduction",
+            "expression": {
+              "type": "constant",
+              "value": 40
+            },
+            "unit": "percentPoints",
+            "conditions": [
+              {
+                "type": "inputAtLeast",
+                "input": "local:element",
+                "value": 4
+              },
+              {
+                "type": "inputAtMost",
+                "input": "local:element",
+                "value": 4
+              }
+            ]
+          }
+        ],
+        "requiresEffects": [],
+        "stackingGroup": "viridescentVenerer",
+        "impact": "Party effect. Identical non-stacking bonuses use one eligible source."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pcSwirl",
+        "name": "4-piece · Wearer's Swirl DMG",
+        "source": "Artifact set",
+        "description": "Swirl damage +60% applies only to the wearer, not the whole party.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "anyTags": [
+                "swirl"
+              ],
+              "damageKinds": [
+                "reaction",
+                "lunar"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 60
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 60
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: viridescentvenerer",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

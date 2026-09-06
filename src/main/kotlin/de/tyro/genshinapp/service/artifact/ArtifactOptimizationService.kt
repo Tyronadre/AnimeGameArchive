@@ -269,6 +269,7 @@ class ArtifactOptimizationService(
     fun summarizeCurrentBuild(
         artifacts: List<PlayerArtifact>,
         baseStats: OptimizerBaseStats,
+        includeSetBonuses: Boolean = true,
     ): ArtifactBuildStats = buildStatsForArtifacts(
         artifacts = artifacts,
         baseStats = baseStats,
@@ -278,6 +279,7 @@ class ArtifactOptimizationService(
             substatPriorities = emptyList(),
         ),
         includeAllStats = true,
+        setBonusArtifacts = if (includeSetBonuses) artifacts else emptyList(),
     )
 
     private fun farmingOutlooks(

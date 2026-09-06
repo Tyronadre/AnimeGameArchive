@@ -1,0 +1,394 @@
+{
+  "schemaVersion": 2,
+  "key": "nymphsdream",
+  "name": "Nymph's Dream",
+  "inputs": [
+    {
+      "id": "stacks",
+      "label": "Active stacks",
+      "defaultValue": 3,
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "description": "Snapshot stack count; duration and stack generation are not simulated."
+    }
+  ],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · Hydro DMG",
+        "source": "Artifact set",
+        "description": "Elemental damage bonus applies to matching ordinary damage, not Lunar reactions.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [],
+              "elements": [
+                "Hydro"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 15
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 15
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Mirrored Nymph stacks",
+        "source": "Artifact set",
+        "description": "At 1/2/3 distinct attack-type stacks: ATK +7/16/25% and Hydro DMG +4/9/15%. Stacks last 8s.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "attack",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "input",
+                  "input": "recipient:baseAttack"
+                },
+                {
+                  "type": "divide",
+                  "operands": [
+                    {
+                      "type": "add",
+                      "operands": [
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 7
+                            },
+                            {
+                              "type": "min",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 1
+                                },
+                                {
+                                  "type": "input",
+                                  "input": "local:stacks"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 9
+                            },
+                            {
+                              "type": "max",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 0
+                                },
+                                {
+                                  "type": "add",
+                                  "operands": [
+                                    {
+                                      "type": "input",
+                                      "input": "local:stacks"
+                                    },
+                                    {
+                                      "type": "constant",
+                                      "value": -1
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "constant",
+                      "value": 100
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [],
+              "elements": [
+                "Hydro"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 4
+                      },
+                      {
+                        "type": "min",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 1
+                          },
+                          {
+                            "type": "input",
+                            "input": "local:stacks"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 5
+                      },
+                      {
+                        "type": "min",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 1
+                          },
+                          {
+                            "type": "max",
+                            "operands": [
+                              {
+                                "type": "constant",
+                                "value": 0
+                              },
+                              {
+                                "type": "add",
+                                "operands": [
+                                  {
+                                    "type": "input",
+                                    "input": "local:stacks"
+                                  },
+                                  {
+                                    "type": "constant",
+                                    "value": -1
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 6
+                      },
+                      {
+                        "type": "max",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 0
+                          },
+                          {
+                            "type": "add",
+                            "operands": [
+                              {
+                                "type": "input",
+                                "input": "local:stacks"
+                              },
+                              {
+                                "type": "constant",
+                                "value": -2
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 4
+                    },
+                    {
+                      "type": "min",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 1
+                        },
+                        {
+                          "type": "input",
+                          "input": "local:stacks"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 5
+                    },
+                    {
+                      "type": "min",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 1
+                        },
+                        {
+                          "type": "max",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 0
+                            },
+                            {
+                              "type": "add",
+                              "operands": [
+                                {
+                                  "type": "input",
+                                  "input": "local:stacks"
+                                },
+                                {
+                                  "type": "constant",
+                                  "value": -1
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 6
+                    },
+                    {
+                      "type": "max",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 0
+                        },
+                        {
+                          "type": "add",
+                          "operands": [
+                            {
+                              "type": "input",
+                              "input": "local:stacks"
+                            },
+                            {
+                              "type": "constant",
+                              "value": -2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: nymphsdream",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

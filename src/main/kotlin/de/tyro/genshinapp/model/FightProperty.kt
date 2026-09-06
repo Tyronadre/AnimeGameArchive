@@ -6,7 +6,7 @@ import java.util.Locale
  * Canonical combat-stat identifiers used by Genshin's data files.
  *
  * The enum names deliberately match the `FIGHT_PROP_*` values persisted in the database, so
- * JPA can store them as readable strings without a separate conversion layer.
+ * JPA can store them as readable strings.
  */
 enum class FightProperty(
     val optimizerKey: String,

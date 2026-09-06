@@ -5,6 +5,7 @@ import de.tyro.genshinapp.configuration.GenshinRuntimeProperties
 import de.tyro.genshinapp.desktop.irminsul.IrminsulCaptureState
 import de.tyro.genshinapp.desktop.irminsul.IrminsulCaptureStatus
 import de.tyro.genshinapp.desktop.irminsul.IrminsulIntegrationService
+import de.tyro.genshinapp.startup.ApplicationStartupStatus
 import javafx.animation.KeyFrame
 import javafx.animation.Timeline
 import javafx.application.Application
@@ -62,6 +63,7 @@ class GenshinDesktopApplication : Application() {
     private var trayIcon: TrayIcon? = null
     private var primaryStage: Stage? = null
     private var captureStatusSubscription: AutoCloseable? = null
+    private var startupStatusSubscription: AutoCloseable? = null
     private var captureLogRefresh: Timeline? = null
 
     @Volatile
@@ -70,14 +72,20 @@ class GenshinDesktopApplication : Application() {
     override fun start(stage: Stage) {
         primaryStage = stage
         dataDirectory = Path.of(requireNotNull(System.getProperty("genshin.desktop.home")))
-        val startupStatus = Label("Starting local database and services…").apply {
+        val startupTask = Label("Preparing application…").apply {
             styleClass.add("startup-status")
             isWrapText = true
+        }
+        val startupDetail = Label().apply {
+            styleClass.add("startup-detail")
+            isWrapText = true
+            isVisible = false
+            isManaged = false
         }
 
         stage.title = "Genshin Archive"
         stage.isResizable = false
-        stage.scene = createStartupScene(startupStatus)
+        stage.scene = createStartupScene(startupTask, startupDetail)
         stage.icons.add(
             javafx.scene.image.Image(
                 requireNotNull(
@@ -89,11 +97,21 @@ class GenshinDesktopApplication : Application() {
         stage.centerOnScreen()
         stage.show()
 
-        startBackend(stage, startupStatus)
+        startupStatusSubscription = ApplicationStartupStatus.subscribe { status ->
+            val render = {
+                startupTask.text = status.task
+                startupDetail.text = status.detail.orEmpty()
+                startupDetail.isVisible = status.detail != null
+                startupDetail.isManaged = status.detail != null
+            }
+            if (Platform.isFxApplicationThread()) render() else Platform.runLater { render() }
+        }
+        startBackend(stage)
     }
 
     override fun stop() {
         shutdownRequested = true
+        startupStatusSubscription?.close()
         captureStatusSubscription?.close()
         captureLogRefresh?.stop()
         if (::irminsulIntegrationService.isInitialized) {
@@ -109,11 +127,15 @@ class GenshinDesktopApplication : Application() {
         }
     }
 
-    private fun startBackend(stage: Stage, startupStatus: Label) {
+    private fun startBackend(stage: Stage) {
         val applicationArguments = parameters.raw.toTypedArray()
         Thread(
             {
                 try {
+                    ApplicationStartupStatus.report(
+                        "Opening local database…",
+                        "Applying the database schema and creating application services",
+                    )
                     val startedContext = SpringApplicationBuilder(GenshinAppApplication::class.java).profiles("desktop").run(*applicationArguments)
                     context = startedContext
                     if (shutdownRequested) {
@@ -128,7 +150,7 @@ class GenshinDesktopApplication : Application() {
 
                     Platform.runLater {
                         if (!shutdownRequested) {
-                            startupStatus.text = "Opening the local interface…"
+                            ApplicationStartupStatus.report("Opening the local interface…")
                             showMainWindow(stage)
                         }
                     }
@@ -147,6 +169,8 @@ class GenshinDesktopApplication : Application() {
     }
 
     private fun showMainWindow(stage: Stage) {
+        startupStatusSubscription?.close()
+        startupStatusSubscription = null
         if (!runtimeProperties.showWindow) {
             Platform.setImplicitExit(false)
             stage.hide()
@@ -177,7 +201,7 @@ class GenshinDesktopApplication : Application() {
         }
     }
 
-    private fun createStartupScene(status: Label): Scene {
+    private fun createStartupScene(status: Label, detail: Label): Scene {
         val emblem = StackPane(
             Label("✦").apply { styleClass.add("startup-mark") },
         ).apply {
@@ -205,6 +229,7 @@ class GenshinDesktopApplication : Application() {
             },
             progress,
             status,
+            detail,
             Label(dataDirectory.toString()).apply {
                 styleClass.add("startup-path")
                 isWrapText = true
@@ -221,6 +246,8 @@ class GenshinDesktopApplication : Application() {
     }
 
     private fun showStartupFailure(stage: Stage, exception: Exception) {
+        startupStatusSubscription?.close()
+        startupStatusSubscription = null
         val message = exception.message?.takeIf(String::isNotBlank)?.take(300) ?: "The local services could not be started."
         val exit = Button("Close").apply {
             styleClass.add("startup-close")

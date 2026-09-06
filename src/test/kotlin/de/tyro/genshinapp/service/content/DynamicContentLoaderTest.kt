@@ -33,39 +33,6 @@ class DynamicContentLoaderTest {
     }
 
     @Test
-    fun `downloads missing character data and reuses the file cache`() {
-        val characterRequests = AtomicInteger()
-        val talentRequests = AtomicInteger()
-        val testServer = startServer()
-        testServer.createContext("/characters") { exchange ->
-            characterRequests.incrementAndGet()
-            exchange.respond(
-                "application/json",
-                """{"id":999,"name":"Remote Hero","costs":{},"images":{}}""".toByteArray(),
-            )
-        }
-        testServer.createContext("/talents") { exchange ->
-            talentRequests.incrementAndGet()
-            exchange.respond(
-                "application/json",
-                """{"costs":{"lvl2":[{"id":202,"name":"Mora","count":1000}]}}""".toByteArray(),
-            )
-        }
-        testServer.start()
-
-        val loader = loaderFor(testServer)
-        val firstLoad = assertNotNull(loader.loadCharacterJson("remotehero"))
-        val secondLoad = assertNotNull(loader.loadCharacterJson("remotehero"))
-
-        assertEquals("Remote Hero", firstLoad.path("name").asText())
-        assertEquals(1000, firstLoad.path("talents").path("costs").path("lvl2")[0].path("count").asInt())
-        assertEquals(firstLoad, secondLoad)
-        assertEquals(1, characterRequests.get())
-        assertEquals(1, talentRequests.get())
-        assertTrue(Files.isRegularFile(cacheDirectory.resolve("characters/data/remotehero.json")))
-    }
-
-    @Test
     fun `downloads missing material image and reuses the file cache`() {
         val imageRequests = AtomicInteger()
         val requestedPaths = mutableListOf<String>()
@@ -499,13 +466,11 @@ class DynamicContentLoaderTest {
         val objectMapper = jacksonObjectMapper()
         val properties = GenshinContentProperties().also {
             it.cacheDirectory = cacheDirectory.toString()
-            it.characterApiUrl = baseUrl
             it.fandomImageBaseUrl = "$baseUrl/material"
         }
         val registry = ImageUrlRegistry(objectMapper, properties)
         return LoaderFixture(
             loader = DynamicContentLoader(
-                objectMapper,
                 properties,
                 registry,
                 FandomImageUrlResolver(properties),

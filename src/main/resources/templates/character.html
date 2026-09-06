@@ -151,6 +151,24 @@
                 </span>
                 <b aria-hidden="true">→</b>
             </a>
+            <a class="optimizer-character-link calculator-character-link"
+               th:if="${damageCalculatorAvailable}"
+               th:href="@{/damage-calculator/{key}(key=${character.key})}">
+                <span aria-hidden="true">◇</span>
+                <span th:text="#{character.openDamageCalculator}">
+                    Open this character's damage calculator
+                </span>
+                <b aria-hidden="true">→</b>
+            </a>
+            <a class="optimizer-character-link calculator-character-link"
+               th:if="${damageFormulaV2Available}"
+               th:href="@{/damage-calculator-v2/{key}(key=${character.key})}">
+                <span aria-hidden="true">◇</span>
+                <span th:text="#{character.openDamageCalculatorV2}">
+                    Open the hand-authored damage calculator
+                </span>
+                <b aria-hidden="true">→</b>
+            </a>
         </div>
         <div class="hero-art">
             <div class="hero-orbit orbit-one" aria-hidden="true"></div>

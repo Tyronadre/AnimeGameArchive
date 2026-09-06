@@ -69,20 +69,21 @@ class PlayerWeaponService(
         val user = userRepository.findById(userId)
             .orElseThrow { IllegalArgumentException("Unknown user id") }
         val normalizedWeapons = weapons.map { weapon ->
-            weapon.copy(key = GoodKeyNormalizer.normalize(weapon.key))
+            weapon.key to weapon.copy(key = GoodKeyNormalizer.normalize(weapon.key))
         }
-        weaponCatalogService.ensureWeapons(normalizedWeapons.map(PlayerWeapon::key))
+        weaponCatalogService.ensureWeapons(normalizedWeapons.map { it.second.key })
         val baseWeapons = weaponRepository.findAll()
             .associateBy { weapon -> weapon.key }
 
         playerWeaponRepository.deleteAllForUser(userId)
         playerWeaponRepository.saveAll(
-            normalizedWeapons.mapIndexed { index, weapon ->
+            normalizedWeapons.mapIndexed { index, (exportKey, weapon) ->
                 PlayerWeaponInstance().also { instance ->
                     instance.user = user
                     instance.weapon = requireNotNull(baseWeapons[weapon.key]) {
                         "Weapon catalog entry '${weapon.key}' is missing"
                     }
+                    instance.exportKey = exportKey
                     instance.importPosition = index
                     instance.level = weapon.level
                     instance.ascension = weapon.ascension
@@ -95,7 +96,7 @@ class PlayerWeaponService(
     }
 
     private fun toPlayerWeapon(instance: PlayerWeaponInstance): PlayerWeapon = PlayerWeapon(
-        key = instance.weapon.key,
+        key = instance.exportKey?.takeIf(String::isNotBlank) ?: instance.weapon.key,
         level = instance.level,
         ascension = instance.ascension,
         refinement = instance.refinement,

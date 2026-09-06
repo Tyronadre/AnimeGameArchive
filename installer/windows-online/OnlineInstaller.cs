@@ -31,6 +31,7 @@ internal static class OnlineInstaller
                     DesktopShortcut = !HasArgument(args, "--no-shortcuts"),
                     LaunchAfterInstall = !HasArgument(args, "--no-launch"),
                     RegisterInstallation = !HasArgument(args, "--test"),
+                    AllowRuntimeDownload = !HasArgument(args, "--no-java-download"),
                 };
                 new InstallerEngine(null, null).InstallAsync(options).GetAwaiter().GetResult();
                 return 0;
@@ -111,8 +112,8 @@ internal sealed class InstallerForm : Form
         };
         var description = new Label
         {
-            Text = "The application files are included. A private Eclipse Temurin Java 21 " +
-                "runtime will be downloaded and verified during installation.",
+            Text = "The application files are included. The app's existing private Java runtime " +
+                "will be reused; otherwise Java 21 will be downloaded and verified.",
             AutoSize = false,
             Size = new Size(540, 42),
             Location = new Point(26, 60),
@@ -144,7 +145,7 @@ internal sealed class InstallerForm : Form
         progress.Size = new Size(538, 22);
         progress.Minimum = 0;
         progress.Maximum = 100;
-        status.Text = "Ready to install. Internet access is required.";
+        status.Text = "Ready to install. Java will only be downloaded if needed.";
         status.AutoEllipsis = true;
         status.Location = new Point(26, 236);
         status.Size = new Size(538, 36);
@@ -198,6 +199,7 @@ internal sealed class InstallerForm : Form
                 DesktopShortcut = desktopShortcut.Checked,
                 LaunchAfterInstall = launchAfterInstall.Checked,
                 RegisterInstallation = true,
+                AllowRuntimeDownload = true,
             });
             progress.Value = 100;
             status.Text = "Installation complete.";
@@ -292,6 +294,7 @@ internal sealed class InstallOptions
     internal bool DesktopShortcut { get; set; }
     internal bool LaunchAfterInstall { get; set; }
     internal bool RegisterInstallation { get; set; }
+    internal bool AllowRuntimeDownload { get; set; }
 }
 
 internal sealed class RuntimePackage
@@ -341,33 +344,63 @@ internal sealed class InstallerEngine
 
         try
         {
-            ReportStatus("Finding the latest Eclipse Temurin Java 21 runtime…");
-            RuntimePackage package = await Task.Run(() => FetchRuntimePackage());
+            string installedRuntime = Path.Combine(installDirectory, "runtime");
+            ReportStatus("Checking for the app's existing private Java 21 runtime…");
+            bool reuseInstalledRuntime = await Task.Run(
+                () => IsCompatibleRuntimeDirectory(installedRuntime));
             ThrowIfCancelled();
 
-            ReportStatus(
-                "Downloading " + package.Name + " (" + FormatSize(package.Size) + ")…");
-            using (var client = CreateWebClient())
+            if (!reuseInstalledRuntime)
             {
-                activeDownload = client;
-                client.DownloadProgressChanged += (sender, eventArgs) =>
-                    ReportProgress((int)Math.Round(eventArgs.ProgressPercentage * 0.70));
-                await client.DownloadFileTaskAsync(new Uri(package.Link), runtimeArchive);
-                activeDownload = null;
-            }
-            ThrowIfCancelled();
+                if (!options.AllowRuntimeDownload)
+                {
+                    throw new InvalidOperationException(
+                        "No compatible 64-bit Java 21 or newer runtime was found.");
+                }
 
-            ReportStatus("Verifying the Java runtime checksum…");
-            await Task.Run(() => VerifyChecksum(runtimeArchive, package.Checksum));
-            ThrowIfCancelled();
+                ReportStatus("Finding the latest Eclipse Temurin Java 21 runtime…");
+                RuntimePackage package = await Task.Run(() => FetchRuntimePackage());
+                ThrowIfCancelled();
+
+                ReportStatus(
+                    "Downloading " + package.Name + " (" + FormatSize(package.Size) + ")…");
+                using (var client = CreateWebClient())
+                {
+                    activeDownload = client;
+                    client.DownloadProgressChanged += (sender, eventArgs) =>
+                        ReportProgress((int)Math.Round(eventArgs.ProgressPercentage * 0.70));
+                    await client.DownloadFileTaskAsync(new Uri(package.Link), runtimeArchive);
+                    activeDownload = null;
+                }
+                ThrowIfCancelled();
+
+                ReportStatus("Verifying the Java runtime checksum…");
+                await Task.Run(() => VerifyChecksum(runtimeArchive, package.Checksum));
+                ThrowIfCancelled();
+            }
+            else
+            {
+                ReportProgress(70);
+                ReportStatus("Reusing the app's existing Java 21 runtime — no download needed.");
+            }
 
             ReportProgress(73);
             ReportStatus("Preparing application files…");
             await Task.Run(() =>
             {
                 ExtractEmbeddedPayload(stagedInstallation);
-                ExtractRuntime(runtimeArchive, Path.Combine(stagedInstallation, "runtime"));
-                ValidateRuntime(Path.Combine(stagedInstallation, "runtime"));
+                if (!reuseInstalledRuntime)
+                {
+                    ExtractRuntime(runtimeArchive, Path.Combine(stagedInstallation, "runtime"));
+                    ValidateRuntimeDirectory(Path.Combine(stagedInstallation, "runtime"));
+                }
+                else
+                {
+                    CopyDirectory(
+                        installedRuntime,
+                        Path.Combine(stagedInstallation, "runtime"));
+                    ValidateRuntimeDirectory(Path.Combine(stagedInstallation, "runtime"));
+                }
             });
             ThrowIfCancelled();
 
@@ -395,6 +428,19 @@ internal sealed class InstallerEngine
         {
             activeDownload = null;
             TryDeleteDirectory(temporaryDirectory);
+        }
+    }
+
+    private static bool IsCompatibleRuntimeDirectory(string runtimeDirectory)
+    {
+        try
+        {
+            ValidateRuntimeDirectory(runtimeDirectory);
+            return true;
+        }
+        catch
+        {
+            return false;
         }
     }
 
@@ -519,13 +565,13 @@ internal sealed class InstallerEngine
         }
     }
 
-    private static void ValidateRuntime(string runtimeDirectory)
+    private static void ValidateRuntimeDirectory(string runtimeDirectory)
     {
         string java = Path.Combine(runtimeDirectory, "bin", "java.exe");
         string javaw = Path.Combine(runtimeDirectory, "bin", "javaw.exe");
         if (!File.Exists(java) || !File.Exists(javaw))
         {
-            throw new InvalidDataException("The downloaded archive did not contain a Windows JRE.");
+            throw new InvalidDataException("The runtime directory does not contain Java 21.");
         }
 
         var process = Process.Start(new ProcessStartInfo
@@ -541,11 +587,11 @@ internal sealed class InstallerEngine
         if (!process.WaitForExit(15000))
         {
             process.Kill();
-            throw new InvalidDataException("The downloaded Java runtime did not start.");
+            throw new InvalidDataException("The Java runtime did not start.");
         }
         if (process.ExitCode != 0 || version.IndexOf("21.", StringComparison.Ordinal) < 0)
         {
-            throw new InvalidDataException("The downloaded runtime is not Java 21.");
+            throw new InvalidDataException("The runtime directory does not contain Java 21.");
         }
     }
 

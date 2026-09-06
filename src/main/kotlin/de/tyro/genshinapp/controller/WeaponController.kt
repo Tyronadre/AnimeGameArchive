@@ -37,6 +37,16 @@ class WeaponController(
     private val weaponPlanningService: WeaponPlanningService,
     private val playerWeaponService: PlayerWeaponService,
 ) {
+    @GetMapping("/api/weapons/{key}", "/weapons/{key}/json")
+    @ResponseBody
+    fun weaponJson(@PathVariable key: String): WeaponDefinition {
+        val weaponKey = GoodKeyNormalizer.normalize(key)
+        weaponCatalogService.officialName(weaponKey)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Weapon not found")
+        return weaponDataService.find(weaponKey)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Weapon data not found")
+    }
+
     @GetMapping("/weapons/{key}")
     fun weapon(
         @PathVariable key: String,
@@ -207,7 +217,7 @@ class WeaponController(
         }
 
     private companion object {
-        private const val MYSTIC_ENHANCEMENT_ORE_ID = 104013
+        private const val MYSTIC_ENHANCEMENT_ORE_ID = 1327
         private val ASCENSION_CAPS = listOf(20, 40, 50, 60, 70, 80, 90)
     }
 }

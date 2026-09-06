@@ -75,3 +75,49 @@ pub fn ensure_admin() {
     // Exit the current process since we launched a new elevated one
     std::process::exit(0);
 }
+
+#[cfg(unix)]
+fn is_root() -> bool {
+    nix::unistd::geteuid().is_root()
+}
+
+#[cfg(target_os = "linux")]
+fn has_cap_net_raw() -> bool {
+    caps::has_cap(None, caps::CapSet::Effective, caps::Capability::CAP_NET_RAW)
+        .is_ok_and(|has_net_raw| has_net_raw)
+}
+
+#[cfg(all(unix, not(target_os = "linux")))]
+fn has_cap_net_raw() -> bool {
+    false
+}
+
+#[cfg(unix)]
+pub fn ensure_admin() {
+    if is_root() || has_cap_net_raw() {
+        tracing::info!("Packet capture privileges are available");
+        return;
+    }
+
+    #[cfg(target_os = "macos")]
+    if std::fs::File::open("/dev/bpf0").is_ok() {
+        tracing::info!("Packet capture device is readable");
+        return;
+    }
+
+    let executable = std::env::current_exe()
+        .map(|path| path.to_string_lossy().into_owned())
+        .unwrap_or_else(|_| "./genshin-irminsul-helper".to_owned());
+    #[cfg(target_os = "linux")]
+    let instructions = format!(
+        "grant capture permission with `sudo setcap cap_net_raw=ep '{executable}'`, or run as root"
+    );
+    #[cfg(target_os = "macos")]
+    let instructions = "grant read permission for /dev/bpf* or run as root".to_owned();
+    #[cfg(all(unix, not(any(target_os = "linux", target_os = "macos"))))]
+    let instructions = "run as root".to_owned();
+
+    tracing::error!(%instructions, "Packet capture permission is missing");
+    eprintln!("Irminsul helper cannot capture packets: {instructions}");
+    std::process::exit(1);
+}

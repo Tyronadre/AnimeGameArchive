@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 2,
+  "key": "goldentroupe",
+  "name": "Golden Troupe",
+  "inputs": [
+    {
+      "id": "offField",
+      "label": "Off-field Skill bonus active (includes 2s grace)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1,
+      "description": "Wearer's field state.",
+      "defaultContext": "offField"
+    }
+  ],
+  "effects": [
+    {
+      "pieces": 2,
+      "recipient": "wearer",
+      "effect": {
+        "id": "2pc",
+        "name": "2-piece · Skill DMG +20%",
+        "source": "Artifact set",
+        "description": "Elemental Skill damage only.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "equippedSet",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [
+                "elementalSkill"
+              ],
+              "elements": []
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "constant",
+                "value": 20
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "constant",
+              "value": 20
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    },
+    {
+      "pieces": 4,
+      "recipient": "wearer",
+      "effect": {
+        "id": "4pc",
+        "name": "4-piece · Skill damage and off-field bonus",
+        "source": "Artifact set",
+        "description": "Skill DMG +25%, with another 25% while off-field. The off-field portion expires 2s after taking the field.",
+        "category": "artifact",
+        "defaultEnabled": true,
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent"
+              ],
+              "anyTags": [
+                "elementalSkill"
+              ],
+              "elements": []
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 25
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 25
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:offField"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "DMG bonus",
+            "expression": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 25
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 25
+                    },
+                    {
+                      "type": "input",
+                      "input": "local:offField"
+                    }
+                  ]
+                }
+              ]
+            },
+            "unit": "percentPoints",
+            "conditions": []
+          }
+        ],
+        "requiresEffects": [],
+        "impact": "Wearer only. Conditional bonuses apply to the selected combat snapshot."
+      },
+      "formulas": []
+    }
+  ],
+  "damageTypes": [],
+  "sources": [
+    "Bundled artifact-set-bonuses.json: goldentroupe",
+    "https://library.keqingmains.com/equipment/artifacts"
+  ]
+}

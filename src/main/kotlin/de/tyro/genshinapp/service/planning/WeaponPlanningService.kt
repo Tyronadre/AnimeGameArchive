@@ -94,7 +94,7 @@ class WeaponPlanningService(
     }
 
     companion object {
-        private const val MYSTIC_ENHANCEMENT_ORE_ID = 104013
+        private const val MYSTIC_ENHANCEMENT_ORE_ID = 1327
         private const val MYSTIC_ENHANCEMENT_ORE_NAME = "Mystic Enhancement Ore"
         private const val MYSTIC_ORE_EXPERIENCE = 10_000
         private const val MORA_ID = 202

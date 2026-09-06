@@ -37,6 +37,7 @@ data class PlayerArtifact(
     val totalRolls: Int?,
     val astralMark: Boolean,
     val elixirCrafted: Boolean,
+    val unactivatedSubstats: List<PlayerArtifactStat> = emptyList(),
 ) {
     val setName: String
         get() = GoodKeyNormalizer.humanize(setKey)
@@ -61,6 +62,7 @@ data class PlayerArtifact(
 data class PlayerArtifactStat(
     val key: String,
     val value: Double,
+    val initialValue: Double? = null,
 ) {
     val name: String
         get() = GoodKeyNormalizer.statName(key)

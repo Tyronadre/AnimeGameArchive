@@ -11,20 +11,6 @@ class GenshinContentProperties {
     var cacheDirectory: String =
         Path.of(System.getProperty("user.home"), ".genshinapp", "cache").toString()
 
-    var characterApiUrl: String = "https://genshin-db-api.vercel.app/api/v5"
-
-    var staticImportEnabled: Boolean = true
-
-    var staticImportFolders: List<String> = listOf(
-        "characters",
-        "talents",
-        "weapons",
-    )
-
-    var staticImportFailOnError: Boolean = false
-
-    var staticImportUserAgentVersion: String = "0.1.4"
-
     var fandomImageBaseUrl: String =
         "https://static.wikia.nocookie.net/gensin-impact/images"
 
@@ -34,6 +20,10 @@ class GenshinContentProperties {
     var hoyolabWikiEnabled: Boolean = true
 
     var hoyolabCatalogSyncEnabled: Boolean = true
+
+    var materialIdentityCatalogUrl: String =
+        "https://raw.githubusercontent.com/Tyronadre/AnimeGameArchive/master/" +
+            "src/main/resources/data/material-identities.json"
 
     var connectTimeout: Duration = Duration.ofSeconds(8)
 
