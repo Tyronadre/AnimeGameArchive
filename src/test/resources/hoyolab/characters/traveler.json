@@ -1,0 +1,98 @@
+{
+  "id": "20",
+  "name": "Traveler",
+  "filter_values": {
+    "character_rarity": {
+      "values": [
+        "5-Star"
+      ],
+      "value_types": [
+        {
+          "id": "2",
+          "value": "5-Star",
+          "mi18n_key": "filter_2",
+          "icon": "",
+          "enum_string": "5"
+        }
+      ],
+      "key": {
+        "key": "character_rarity",
+        "text": "Quality",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_character_rarity",
+        "is_multi_select": false,
+        "id": "7",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    },
+    "character_property": {
+      "values": [
+        "ATK"
+      ],
+      "value_types": [
+        {
+          "id": "550",
+          "value": "ATK",
+          "mi18n_key": "filter_550",
+          "icon": "",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "character_property",
+        "text": "Bonus Attributes From Ascension",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_character_property",
+        "is_multi_select": false,
+        "id": "8",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    },
+    "character_weapon": {
+      "values": [
+        "Sword"
+      ],
+      "value_types": [
+        {
+          "id": "71",
+          "value": "Sword",
+          "mi18n_key": "filter_71",
+          "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/03/27/eb8602badf0ade7c03650a440d188ce1_4346782947893420142.png",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "character_weapon",
+        "text": "Weapons",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_character_weapon",
+        "is_multi_select": false,
+        "id": "9",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    },
+    "character_vision": {
+      "values": [],
+      "value_types": [],
+      "key": null
+    },
+    "character_region": {
+      "values": [],
+      "value_types": [],
+      "key": null
+    }
+  },
+  "modules": [
+    {
+      "components": [
+        {
+          "data": "{\"list\":[{\"key\":\"Lv.1\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"-\",\"912\"]},{\"key\":\"Base ATK\",\"values\":[\"-\",\"18\"]},{\"key\":\"Base DEF\",\"values\":[\"-\",\"57\"]},{\"key\":\"ATK\",\"values\":[\"-\",\"0.0%\"]}],\"materials\":[],\"id\":\"ascension43586\"},{\"key\":\"Lv.20\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"2342\",\"3024\"]},{\"key\":\"Base ATK\",\"values\":[\"46\",\"59\"]},{\"key\":\"Base DEF\",\"values\":[\"147\",\"190\"]},{\"key\":\"ATK\",\"values\":[\"0.0%\",\"0.0%\"]}],\"materials\":[],\"id\":\"ascension3472\"},{\"key\":\"Lv.40\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"4529\",\"5013\"]},{\"key\":\"Base ATK\",\"values\":[\"88\",\"98\"]},{\"key\":\"Base DEF\",\"values\":[\"284\",\"315\"]},{\"key\":\"ATK\",\"values\":[\"0.0%\",\"6.0%\"]}],\"materials\":[],\"id\":\"ascension99895\"},{\"key\":\"Lv.50\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"5766\",\"6411\"]},{\"key\":\"Base ATK\",\"values\":[\"113\",\"125\"]},{\"key\":\"Base DEF\",\"values\":[\"362\",\"402\"]},{\"key\":\"ATK\",\"values\":[\"6.0%\",\"12.0%\"]}],\"materials\":[],\"id\":\"ascension61485\"},{\"key\":\"Lv.60\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"7164\",\"7648\"]},{\"key\":\"Base ATK\",\"values\":[\"140\",\"149\"]},{\"key\":\"Base DEF\",\"values\":[\"450\",\"480\"]},{\"key\":\"ATK\",\"values\":[\"12.0%\",\"12.0%\"]}],\"materials\":[],\"id\":\"ascension60644\"},{\"key\":\"Lv.70\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"8401\",\"8885\"]},{\"key\":\"Base ATK\",\"values\":[\"164\",\"174\"]},{\"key\":\"Base DEF\",\"values\":[\"527\",\"558\"]},{\"key\":\"ATK\",\"values\":[\"12.0%\",\"18.0%\"]}],\"materials\":[],\"id\":\"ascension19086\"},{\"key\":\"Lv.80\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"9638\",\"10122\"]},{\"key\":\"Base ATK\",\"values\":[\"188\",\"198\"]},{\"key\":\"Base DEF\",\"values\":[\"605\",\"635\"]},{\"key\":\"ATK\",\"values\":[\"18.0%\",\"24.0%\"]}],\"materials\":[],\"id\":\"ascension9957\"},{\"key\":\"Lv.90\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"10875\",\"-\"]},{\"key\":\"Base ATK\",\"values\":[\"212\",\"-\"]},{\"key\":\"Base DEF\",\"values\":[\"683\",\"-\"]},{\"key\":\"ATK\",\"values\":[\"24.0%\",\"-\"]}],\"materials\":[],\"id\":\"ascension54266\"}]}",
+          "component_id": "ascension"
+        }
+      ]
+    }
+  ]
+}

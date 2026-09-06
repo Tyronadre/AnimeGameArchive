@@ -1,11 +1,29 @@
 # Character stat storage
 
-Character identity, talents, material costs, and progression now come from HoYoWiki. Character icon, card, and banner defaults are derived from their stable Wikia filenames; administrator overrides remain separate.
+Character identity, talents, material costs, and stat checkpoints come from HoYoWiki. `HoyolabCharacterPageService.importPage` parses the ascension component, normalizes whitespace in stat labels (including nonbreaking spaces), and uses the existing ascension-stat type.
 
-`BundledCatalogSnapshotImporter` first applies the build-time list and full-page snapshot. `HoyolabCatalogStartupSynchronizer` then refreshes the official list once per process, and `HoyolabCharacterPageService` refreshes a stale full page when its character detail is opened.
+The importer converts a complete level 1–90 table into three collections owned by `GameCharacter`:
 
-HoYoWiki ascension rows are stored as `GameCharacterProgression` children of `GameCharacter`. Each row keeps the before/after HP, ATK, DEF, and ascension-stat values at levels 1, 20, 40, 50, 60, 70, 80, and 90. Character and talent material costs reference the shared `Material` entity.
+- `GameCharacterBaseStat` stores each nonzero level-one **After Ascension** value and the applicable growth-curve key. A zero secondary base value creates no row. Universal CRIT Rate, CRIT DMG and Energy Recharge defaults are defined once in `CharacterStatCatalog`, rather than repeated in character records.
+- `GameCharacterLevelStat` stores cumulative level-only HP, ATK and DEF growth at each checkpoint. It excludes the level-one base and all ascension increases.
+- `GameCharacterAscensionStat` stores cumulative bonuses for phases 1–6. HP, ATK and DEF bonuses come from the before/after increase at the same level. The secondary bonus is the phase's after-ascension value minus its level-one value.
 
-`CharacterStatCatalog` resolves calculator values from those persisted HoYoWiki boundaries. It preserves the selected ascension side at a boundary and interpolates intermediate character levels within the selected phase. Universal starting values are CRIT Rate 5%, CRIT DMG 50%, Energy Recharge 100%, and Elemental Mastery 0; the HoYoWiki ascension value is added to the character's declared ascension stat.
+For example, Lauma's imported base EM is 200 and her phase-six EM bonus is 115, giving 315 EM. Characters with a zero level-one CRIT DMG bonus retain the universal 50% and receive their ascension bonus once.
 
-Replacing the bundled snapshot or changing the parser is reflected on the next startup. There is no one-time installation marker and no separate character growth-curve database.
+All requests for stats at a level and ascension go through `CharacterStatCatalog.resolve(key, level, ascension)`:
+
+```text
+stat = base value + level growth + cumulative ascension bonus
+```
+
+The catalog validates both level and phase, so 80/5 and 80/6 remain distinct and 81/5 is unavailable. It returns null for missing data or invalid combinations. Traveler aliases share the canonical Traveler record.
+
+The importer identifies the S4 or S5 growth family by fitting the observed level-only growth across HP, ATK and DEF. It does not assume a curve from rarity: the five-star Traveler uses S4. Between checkpoints, the catalog uses the selected game's curve coordinates to calculate the fraction of level growth. Secondary stats remain constant within a phase.
+
+HoYoWiki publishes rounded values. Multiplying a rounded level-one ATK by an uncalibrated curve would amplify its rounding error. The level-growth checkpoints preserve every supplied boundary value while calibrating the game curve between them. Intermediate results therefore follow the game curve at **HoYoWiki's source precision**; they cannot recover hidden unrounded game coefficients. No linear interpolation by level or independent calculation in a profile/model remains.
+
+The offline curve resource `src/main/resources/data/character-growth-curves.json` is copied from [Genshin Optimizer's character curve data](https://github.com/frzyc/genshin-optimizer/blob/e2686ab3a00e6ac7fc2a786a3585027a2d75ce63/libs/gi/stats/Data/Characters/expCurve.json), pinned to commit `e2686ab3a00e6ac7fc2a786a3585027a2d75ce63`. This is a shared numeric growth table, not a second character catalog.
+
+On upgrade, `CharacterStatStorageMigration` converts complete legacy `game_character_progression` records that have no normalized base stats. The old table is no longer mapped or written; an existing copy is left untouched. Incomplete legacy records require a page refresh. Fresh databases only create the three new stat tables.
+
+`BundledCatalogSnapshotImporter` then reapplies the packaged full-page snapshot at startup. The page import version is 2, so live enrichment also refreshes previously imported pages. Re-importing updates existing child rows and removes obsolete values without duplicates. Incomplete imports preserve the previous usable stat profile.

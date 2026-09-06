@@ -35,12 +35,8 @@ class OptimizerCombatStatService(
     ): OptimizerBaseStats {
         val resolved = characterStatCatalog.resolve(character.key, character.level, character.ascension)
         // Base HP/ATK/DEF are not flat bonuses. In particular ATK must not be added twice.
-        val characterStats = resolved?.filterKeys { it !in setOf("hp", "atk", "def") } ?: linkedMapOf(
-            "critRate_" to BASE_CRIT_RATE,
-            "critDMG_" to BASE_CRIT_DAMAGE,
-            "enerRech_" to BASE_ENERGY_RECHARGE,
-            "eleMas" to 0.0,
-        )
+        val characterStats = resolved?.filterKeys { it !in setOf("hp", "atk", "def") }
+            ?: CharacterStatCatalog.DEFAULT_STATS.mapKeys { it.key.optimizerKey }
         val characterBaseAttack = resolved?.get("atk")
 
         val weaponStats = linkedMapOf<String, Double>()
@@ -100,9 +96,6 @@ class OptimizerCombatStatService(
     }
 
     companion object {
-        private const val BASE_CRIT_RATE = 5.0
-        private const val BASE_CRIT_DAMAGE = 50.0
-        private const val BASE_ENERGY_RECHARGE = 100.0
         private const val WEAPON_LEVEL_90_MULTIPLIER = 4.594
         private val WEAPON_ASCENSION_BY_LEVEL = mapOf(
             20 to 1,
@@ -156,12 +149,7 @@ data class OptimizerBaseStats(
 
     companion object {
         fun defaults(): OptimizerBaseStats = OptimizerBaseStats(
-            characterStats = mapOf(
-                "critRate_" to 5.0,
-                "critDMG_" to 50.0,
-                "enerRech_" to 100.0,
-                "eleMas" to 0.0,
-            ),
+            characterStats = CharacterStatCatalog.DEFAULT_STATS.mapKeys { it.key.optimizerKey },
             weaponStats = emptyMap(),
             bonusStats = emptyMap(),
         )

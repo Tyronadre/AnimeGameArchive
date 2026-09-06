@@ -59,7 +59,7 @@ class JpaCharacterCatalogStore(
         synchronizeImages(entity, character)
         synchronizeMaterialCosts(entity, character)
         synchronizeTalents(entity, character.talents)
-        synchronizeProgressions(entity, character.hoyolabAscension)
+        synchronizeStats(entity, character.stats)
 
         return toDefinition(characterRepository.save(entity)) ?: character
     }
@@ -156,27 +156,48 @@ class JpaCharacterCatalogStore(
         }
     }
 
-    private fun synchronizeProgressions(
-        entity: GameCharacter,
-        progressions: List<CharacterHoyolabAscension>,
-    ) {
-        val desiredLevels = progressions.mapTo(linkedSetOf(), CharacterHoyolabAscension::level)
-        entity.progressions.removeIf { it.level !in desiredLevels }
-        val existingByLevel = entity.progressions.associateBy(GameCharacterProgression::level)
-        progressions.forEach { desired ->
-            val stored = existingByLevel[desired.level] ?: GameCharacterProgression().also {
+    private fun synchronizeStats(entity: GameCharacter, profile: CharacterStatProfile?) {
+        val bases = profile?.baseStats.orEmpty().filterValues { it != 0.0 }
+        entity.baseStats.removeIf { it.stat !in bases }
+        val existingBases = entity.baseStats.associateBy { it.stat }
+        bases.forEach { (stat, value) ->
+            val stored = existingBases[stat] ?: GameCharacterBaseStat().also {
                 it.character = entity
-                it.level = desired.level
-                entity.progressions += it
+                it.stat = stat
+                entity.baseStats += it
             }
-            stored.hpBeforeAscension = desired.hpBeforeAscension
-            stored.hpAfterAscension = desired.hpAfterAscension
-            stored.attackBeforeAscension = desired.attackBeforeAscension
-            stored.attackAfterAscension = desired.attackAfterAscension
-            stored.defenseBeforeAscension = desired.defenseBeforeAscension
-            stored.defenseAfterAscension = desired.defenseAfterAscension
-            stored.secondaryStatBeforeAscension = desired.secondaryStatBeforeAscension
-            stored.secondaryStatAfterAscension = desired.secondaryStatAfterAscension
+            stored.value = value
+            stored.growthCurve = profile?.growthCurves?.get(stat)
+        }
+
+        val levels = profile?.levelGrowth.orEmpty().flatMap { (level, values) ->
+            values.map { (stat, value) -> (level to stat) to value }
+        }.toMap()
+        entity.levelStats.removeIf { (it.level to it.stat) !in levels }
+        val existingLevels = entity.levelStats.associateBy { it.level to it.stat }
+        levels.forEach { (identity, value) ->
+            val stored = existingLevels[identity] ?: GameCharacterLevelStat().also {
+                it.character = entity
+                it.level = identity.first
+                it.stat = identity.second
+                entity.levelStats += it
+            }
+            stored.growth = value
+        }
+
+        val phases = profile?.ascensionBonuses.orEmpty().flatMap { (phase, values) ->
+            values.map { (stat, value) -> (phase to stat) to value }
+        }.toMap()
+        entity.ascensionStats.removeIf { (it.phase to it.stat) !in phases }
+        val existingPhases = entity.ascensionStats.associateBy { it.phase to it.stat }
+        phases.forEach { (identity, value) ->
+            val stored = existingPhases[identity] ?: GameCharacterAscensionStat().also {
+                it.character = entity
+                it.phase = identity.first
+                it.stat = identity.second
+                entity.ascensionStats += it
+            }
+            stored.bonus = value
         }
     }
 
@@ -231,15 +252,18 @@ class JpaCharacterCatalogStore(
                 region = entity.region,
                 constellation = entity.constellation,
                 ascensionStatType = entity.ascensionStatType,
-                baseStats = entity.progressions.firstOrNull { it.level == 1 }?.let {
-                    CharacterBaseValues(
-                        hp = it.hpAfterAscension,
-                        attack = it.attackAfterAscension,
-                        defense = it.defenseAfterAscension,
-                        critRate = 5.0,
-                        critDamage = 50.0,
-                        energyRecharge = 100.0,
-                        elementalMastery = 0.0,
+                stats = entity.baseStats.takeIf { it.isNotEmpty() }?.let { bases ->
+                    CharacterStatProfile(
+                        baseStats = bases.associate { it.stat to it.value },
+                        growthCurves = bases.mapNotNull { base ->
+                            base.growthCurve?.let { base.stat to it }
+                        }.toMap(),
+                        levelGrowth = entity.levelStats.groupBy { it.level }.mapValues { (_, values) ->
+                            values.associate { it.stat to it.growth }
+                        },
+                        ascensionBonuses = entity.ascensionStats.groupBy { it.phase }.mapValues { (_, values) ->
+                            values.associate { it.stat to it.bonus }
+                        },
                     )
                 },
                 imageUrls = entity.images.mapNotNull { image ->
@@ -276,19 +300,6 @@ class JpaCharacterCatalogStore(
                 hoyolabEntryId = entity.hoyolabEntryId,
                 hoyolabPageVersion = entity.hoyolabPageVersion,
                 hoyolabDataVersion = entity.hoyolabDataVersion,
-                hoyolabAscension = entity.progressions.map { progression ->
-                    CharacterHoyolabAscension(
-                        level = progression.level,
-                        hpBeforeAscension = progression.hpBeforeAscension,
-                        hpAfterAscension = progression.hpAfterAscension,
-                        attackBeforeAscension = progression.attackBeforeAscension,
-                        attackAfterAscension = progression.attackAfterAscension,
-                        defenseBeforeAscension = progression.defenseBeforeAscension,
-                        defenseAfterAscension = progression.defenseAfterAscension,
-                        secondaryStatBeforeAscension = progression.secondaryStatBeforeAscension,
-                        secondaryStatAfterAscension = progression.secondaryStatAfterAscension,
-                    )
-                },
             )
         }.onFailure {
             logger.warn("Stored character data for '{}' is invalid", entity.key, it)

@@ -12,6 +12,7 @@ import de.tyro.genshinapp.desktop.irminsul.IrminsulCaptureState
 import de.tyro.genshinapp.desktop.irminsul.IrminsulIntegrationService
 import de.tyro.genshinapp.desktop.irminsul.IrminsulStatusEvent
 import de.tyro.genshinapp.model.GoodKeyNormalizer
+import de.tyro.genshinapp.model.FightProperty
 import de.tyro.genshinapp.model.WeaponImageType
 import de.tyro.genshinapp.repository.UserRepository
 import de.tyro.genshinapp.repository.GameWeaponRepository
@@ -228,16 +229,15 @@ class DesktopModeIntegrationTest @Autowired constructor(
         assertEquals(1, nefer.path("constellation").asInt())
         assertEquals(5, nefer.path("artifacts").size())
         assertEquals("reliquaryoftruth", GoodKeyNormalizer.normalize(nefer.path("weapon").path("key").asText()))
-        assertEquals(344.4168692, nefer.path("characterStats").first { it.path("key").asText() == "atk" }.path("value").asDouble(), 1e-7)
+        assertEquals(344.0, nefer.path("characterStats").first { it.path("key").asText() == "atk" }.path("value").asDouble(), 1e-7)
         assertEquals(541.829758, nefer.path("weapon").path("stats").first { it.path("key").asText() == "atk" }.path("value").asDouble(), 1e-7)
         assertEquals(0.0, nefer.path("totalStats").first { it.path("key").asText() == "dendro_dmg_" }.path("value").asDouble())
         assertFalse(nefer.has("sources"))
         assertFalse(nefer.has("importedAt"))
         assertEquals(0L, buildStatRepository.count(), "Installation does not create legacy JSON cache rows")
         val metadata = assertNotNull(characterCatalogStore.findCharacter("nefer"))
-        assertEquals(26.8128, metadata.baseAttack)
-        assertEquals(metadata.baseStats?.attack, metadata.baseAttack)
-        assertEquals(988.9742, metadata.baseStats?.hp)
+        assertEquals(27.0, metadata.stats?.baseStats?.get(FightProperty.FIGHT_PROP_BASE_ATTACK))
+        assertEquals(989.0, metadata.stats?.baseStats?.get(FightProperty.FIGHT_PROP_BASE_HP))
 
         val changed = mapper.readTree(mockMvc.perform(post("/api/damage-formulas/v2/nefer/team").with(csrf())
             .contentType(MediaType.APPLICATION_JSON).content("""{

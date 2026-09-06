@@ -1,4 +1,4 @@
-package de.tyro.genshinapp.service.catalog
+ package de.tyro.genshinapp.service.catalog
 
 import de.tyro.genshinapp.model.FightProperty
 import de.tyro.genshinapp.model.GoodKeyNormalizer

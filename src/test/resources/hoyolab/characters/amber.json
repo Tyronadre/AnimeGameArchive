@@ -1,0 +1,136 @@
+{
+  "id": "14",
+  "name": "Amber",
+  "filter_values": {
+    "character_region": {
+      "values": [
+        "Mondstadt"
+      ],
+      "value_types": [
+        {
+          "id": "32",
+          "value": "Mondstadt",
+          "mi18n_key": "filter_32",
+          "icon": "",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "character_region",
+        "text": "Region",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_character_region",
+        "is_multi_select": false,
+        "id": "6",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    },
+    "character_rarity": {
+      "values": [
+        "4-Star"
+      ],
+      "value_types": [
+        {
+          "id": "14",
+          "value": "4-Star",
+          "mi18n_key": "filter_14",
+          "icon": "",
+          "enum_string": "4"
+        }
+      ],
+      "key": {
+        "key": "character_rarity",
+        "text": "Quality",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_character_rarity",
+        "is_multi_select": false,
+        "id": "7",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    },
+    "character_property": {
+      "values": [
+        "ATK"
+      ],
+      "value_types": [
+        {
+          "id": "550",
+          "value": "ATK",
+          "mi18n_key": "filter_550",
+          "icon": "",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "character_property",
+        "text": "Bonus Attributes From Ascension",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_character_property",
+        "is_multi_select": false,
+        "id": "8",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    },
+    "character_vision": {
+      "values": [
+        "Pyro"
+      ],
+      "value_types": [
+        {
+          "id": "729",
+          "value": "Pyro",
+          "mi18n_key": "filter_729",
+          "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/03/27/ac3123b42bf631685287e76c8c834a6c_564491877314389852.png",
+          "enum_string": "pyro"
+        }
+      ],
+      "key": {
+        "key": "character_vision",
+        "text": "Elemental Type",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_character_vision",
+        "is_multi_select": false,
+        "id": "5",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    },
+    "character_weapon": {
+      "values": [
+        "Bow"
+      ],
+      "value_types": [
+        {
+          "id": "95",
+          "value": "Bow",
+          "mi18n_key": "filter_95",
+          "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/03/27/e38debacfd0147020895322333ea9d2a_4867338674175003782.png",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "character_weapon",
+        "text": "Weapons",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_character_weapon",
+        "is_multi_select": false,
+        "id": "9",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    }
+  },
+  "modules": [
+    {
+      "components": [
+        {
+          "data": "{\"list\":[{\"key\":\"Lv.1\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"-\",\"793\"]},{\"key\":\"Base ATK\",\"values\":[\"-\",\"19\"]},{\"key\":\"Base DEF\",\"values\":[\"-\",\"50\"]},{\"key\":\"ATK\",\"values\":[\"-\",\"0.0%\"]}],\"materials\":[],\"id\":\"ascension47562\"},{\"key\":\"Lv.20\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"2038\",\"2630\"]},{\"key\":\"Base ATK\",\"values\":[\"48\",\"62\"]},{\"key\":\"Base DEF\",\"values\":[\"129\",\"167\"]},{\"key\":\"ATK\",\"values\":[\"0.0%\",\"0.0%\"]}],\"materials\":[],\"id\":\"ascension35667\"},{\"key\":\"Lv.40\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"3940\",\"4361\"]},{\"key\":\"Base ATK\",\"values\":[\"93\",\"103\"]},{\"key\":\"Base DEF\",\"values\":[\"250\",\"277\"]},{\"key\":\"ATK\",\"values\":[\"0.0%\",\"6.0%\"]}],\"materials\":[],\"id\":\"ascension32145\"},{\"key\":\"Lv.50\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"5016\",\"5578\"]},{\"key\":\"Base ATK\",\"values\":[\"118\",\"131\"]},{\"key\":\"Base DEF\",\"values\":[\"318\",\"354\"]},{\"key\":\"ATK\",\"values\":[\"6.0%\",\"12.0%\"]}],\"materials\":[],\"id\":\"ascension39422\"},{\"key\":\"Lv.60\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"6233\",\"6654\"]},{\"key\":\"Base ATK\",\"values\":[\"147\",\"157\"]},{\"key\":\"Base DEF\",\"values\":[\"396\",\"422\"]},{\"key\":\"ATK\",\"values\":[\"12.0%\",\"12.0%\"]}],\"materials\":[],\"id\":\"ascension68834\"},{\"key\":\"Lv.70\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"7309\",\"7730\"]},{\"key\":\"Base ATK\",\"values\":[\"172\",\"182\"]},{\"key\":\"Base DEF\",\"values\":[\"464\",\"491\"]},{\"key\":\"ATK\",\"values\":[\"12.0%\",\"18.0%\"]}],\"materials\":[],\"id\":\"ascension79453\"},{\"key\":\"Lv.80\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"8385\",\"8806\"]},{\"key\":\"Base ATK\",\"values\":[\"198\",\"208\"]},{\"key\":\"Base DEF\",\"values\":[\"532\",\"559\"]},{\"key\":\"ATK\",\"values\":[\"18.0%\",\"24.0%\"]}],\"materials\":[],\"id\":\"ascension20139\"},{\"key\":\"Lv.90\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"9461\",\"-\"]},{\"key\":\"Base ATK\",\"values\":[\"223\",\"-\"]},{\"key\":\"Base DEF\",\"values\":[\"601\",\"-\"]},{\"key\":\"ATK\",\"values\":[\"24.0%\",\"-\"]}],\"materials\":[],\"id\":\"ascension45200\"}]}",
+          "component_id": "ascension"
+        }
+      ]
+    }
+  ]
+}

@@ -12,6 +12,9 @@ enum class FightProperty(
     val optimizerKey: String,
     private vararg val aliases: String,
 ) {
+    FIGHT_PROP_BASE_HP("hp", "base hp"),
+    FIGHT_PROP_BASE_ATTACK("atk", "base atk"),
+    FIGHT_PROP_BASE_DEFENSE("def", "base def"),
     FIGHT_PROP_CRITICAL("critRate_", "crit rate"),
     FIGHT_PROP_CRITICAL_HURT("critDMG_", "crit dmg", "critical damage"),
     FIGHT_PROP_CHARGE_EFFICIENCY("enerRech_", "energy recharge"),

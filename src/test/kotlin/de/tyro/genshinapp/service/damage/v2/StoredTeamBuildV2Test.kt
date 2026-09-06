@@ -23,7 +23,7 @@ class StoredTeamBuildV2Test {
     private val snapshotStore = mock(PlayerSnapshotStore::class.java)
     private val targets = mock(CharacterTargetService::class.java)
     private val catalog = mock(EquipmentStatCatalog::class.java)
-    private val characterCatalog = CharacterStatTestData.mockCatalog()
+    private val characterCatalog = CharacterStatTestData.catalog()
     private val service = DamageTeamBuildServiceV2(snapshotStore, targets, mock(CharacterCatalogStore::class.java), mock(WeaponCatalogStore::class.java), catalog, characterCatalog)
     private val profile = DamageFormulaProfileV2(2, "nefer", "nefer", "Nefer", "dendro", "",
         emptyList(), emptyList(), emptyList(), teamMembers = listOf(DamageTeamMemberV2("nefer", "Nefer", "dendro", 1)), selectedTeam = setOf("nefer"))
@@ -53,7 +53,7 @@ class StoredTeamBuildV2Test {
         assertEquals(5, build.ascension)
         assertEquals(2, build.constellation)
         assertEquals(characterCatalog.resolve("nefer", 80, 5)!!["atk"], build.totalStats.first { it.key == "atk" }.value)
-        assertEquals(CharacterStatTestData.profiles.getValue("nefer").base.elementalMastery, build.totalStats.first { it.key == "eleMas" }.value)
+        assertEquals(0.0, build.totalStats.first { it.key == "eleMas" }.value)
     }
 
     @Test
@@ -83,7 +83,7 @@ class StoredTeamBuildV2Test {
     @Test
     fun `team character ascension stats are resolved from the respective source records`() {
         for (key in listOf("lauma", "nahida")) {
-            assertEquals(CharacterStatTestData.profiles.getValue(key).base.elementalMastery!! + 115.2,
+            assertEquals(115.2,
                 characterCatalog.resolve(key, 90, 6)!!["eleMas"]!!, 1e-7)
         }
         assertEquals(24.2, characterCatalog.resolve("Columbina", 90, 6)!!["critRate_"]!!, 1e-7)

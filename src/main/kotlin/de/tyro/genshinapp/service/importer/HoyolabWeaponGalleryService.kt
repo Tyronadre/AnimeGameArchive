@@ -55,6 +55,7 @@ class HoyolabWeaponGalleryService(
             }
 
             failedAt.remove(normalizedKey)
+            logger.info("Updating weapon: {}",  normalizedKey)
             savePage(current, page)
         }
     }
@@ -324,7 +325,7 @@ class HoyolabWeaponGalleryService(
     )
 
     companion object {
-        private const val CURRENT_DATA_VERSION = 1
+        private const val CURRENT_DATA_VERSION = 2
         private const val BASE_INFO_COMPONENT_ID = "baseInfo"
         private const val ASCENSION_COMPONENT_ID = "ascension"
         private const val GALLERY_COMPONENT_ID = "gallery_character"

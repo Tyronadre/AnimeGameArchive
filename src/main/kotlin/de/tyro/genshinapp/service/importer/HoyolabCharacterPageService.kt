@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.tyro.genshinapp.configuration.GenshinContentProperties
 import de.tyro.genshinapp.model.CharacterDefinition
-import de.tyro.genshinapp.model.CharacterHoyolabAscension
 import de.tyro.genshinapp.model.CharacterTalent
 import de.tyro.genshinapp.model.CharacterTalentAttribute
 import de.tyro.genshinapp.model.CharacterTalentKind
@@ -51,6 +50,7 @@ class HoyolabCharacterPageService(
                 current
             } else {
                 failedAt.remove(normalizedKey)
+                logger.info("Updating character: {}", normalizedKey)
                 importPage(page) ?: current
             }
         }
@@ -84,6 +84,12 @@ class HoyolabCharacterPageService(
         val entryId = page.path("id").asText().toLongOrNull()
             ?: current.hoyolabEntryId
             ?: return null
+        val ascensionStat = FightProperty.fromExternal(filterValue(filters, "character_property"))
+            ?: current.ascensionStatType
+        val stats = HoyolabCharacterStatsParser(parser).parse(ascensionRows, ascensionStat)
+        if (stats == null && ascensionRows.isNotEmpty()) {
+            logger.warn("Incomplete HoYoWiki stats for {}; keeping the previously imported stats", name)
+        }
         val candidate = current.copy(
             id = entryId,
             name = name,
@@ -101,19 +107,15 @@ class HoyolabCharacterPageService(
             affiliation = base["Affiliation"] ?: current.affiliation,
             region = filterValue(filters, "character_region") ?: current.region,
             constellation = base["Constellation"] ?: current.constellation,
-            ascensionStatType = FightProperty.fromExternal(
-                filterValue(filters, "character_property"),
-            ) ?: current.ascensionStatType,
+            ascensionStatType = ascensionStat,
             ascensionCosts = ascensionCosts.ifEmpty { current.ascensionCosts },
             talentCosts = talentData.costs.ifEmpty { current.talentCosts },
             talents = talentData.talents.ifEmpty { current.talents },
             hoyolabEntryId = entryId,
             hoyolabPageVersion = page.path("version").asText().trim()
                 .takeIf(String::isNotBlank) ?: current.hoyolabPageVersion,
-            hoyolabDataVersion = CURRENT_DATA_VERSION,
-            hoyolabAscension = ascensionRows.mapNotNull(::parseAscensionRow)
-                .sortedBy(CharacterHoyolabAscension::level)
-                .ifEmpty { current.hoyolabAscension },
+            hoyolabDataVersion = if (stats != null) CURRENT_DATA_VERSION else current.hoyolabDataVersion,
+            stats = stats ?: current.stats,
         )
         return characterCatalogService.saveHoyolabEnrichment(candidate)
     }
@@ -127,32 +129,6 @@ class HoyolabCharacterPageService(
                 .map(HoyolabWikiSearchHit::entryPageId))
         }.distinct()
         return ids.firstNotNullOfOrNull(source::fetchPage)
-    }
-
-    private fun parseAscensionRow(row: JsonNode): CharacterHoyolabAscension? {
-        val level = LEVEL_PATTERN.find(row.path("key").asText())
-            ?.groupValues?.getOrNull(1)?.toIntOrNull() ?: return null
-        val combatRows = row.path("combatList").takeIf(JsonNode::isArray)?.toList().orEmpty()
-        fun values(label: String): List<String> = combatRows.firstOrNull {
-            it.path("key").asText().equals(label, ignoreCase = true)
-        }?.path("values")?.takeIf(JsonNode::isArray)?.map(JsonNode::asText).orEmpty()
-        val hp = values("Base HP")
-        val attack = values("Base ATK")
-        val defense = values("Base DEF")
-        val secondary = combatRows.drop(1).firstOrNull {
-            it.path("key").asText() !in BASE_STAT_LABELS
-        }?.path("values")?.takeIf(JsonNode::isArray)?.map(JsonNode::asText).orEmpty()
-        return CharacterHoyolabAscension(
-            level = level,
-            hpBeforeAscension = parser.number(hp.getOrNull(0)),
-            hpAfterAscension = parser.number(hp.getOrNull(1)),
-            attackBeforeAscension = parser.number(attack.getOrNull(0)),
-            attackAfterAscension = parser.number(attack.getOrNull(1)),
-            defenseBeforeAscension = parser.number(defense.getOrNull(0)),
-            defenseAfterAscension = parser.number(defense.getOrNull(1)),
-            secondaryStatBeforeAscension = parser.number(secondary.getOrNull(0)),
-            secondaryStatAfterAscension = parser.number(secondary.getOrNull(1)),
-        )
     }
 
     private fun parseTalents(page: JsonNode): ParsedTalents {
@@ -230,12 +206,10 @@ class HoyolabCharacterPageService(
     )
 
     private companion object {
-        private const val CURRENT_DATA_VERSION = 1
+        private const val CURRENT_DATA_VERSION = 2
         private const val FAILURE_COOLDOWN_MS = 5 * 60 * 1000L
         private const val ASCENSION_COMPONENT_ID = "ascension"
         private const val TALENT_COMPONENT_ID = "talent"
-        private val LEVEL_PATTERN = Regex("(\\d+)")
         private val RARITY_PATTERN = Regex("([1-5])")
-        private val BASE_STAT_LABELS = setOf("Base HP", "Base ATK", "Base DEF")
     }
 }

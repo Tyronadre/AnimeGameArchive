@@ -1,0 +1,136 @@
+{
+  "id": "8396",
+  "name": "Lauma",
+  "filter_values": {
+    "character_property": {
+      "values": [
+        "Elemental Mastery"
+      ],
+      "value_types": [
+        {
+          "id": "473",
+          "value": "Elemental Mastery",
+          "mi18n_key": "filter_473",
+          "icon": "",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "character_property",
+        "text": "Bonus Attributes From Ascension",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_character_property",
+        "is_multi_select": false,
+        "id": "8",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    },
+    "character_rarity": {
+      "values": [
+        "5-Star"
+      ],
+      "value_types": [
+        {
+          "id": "2",
+          "value": "5-Star",
+          "mi18n_key": "filter_2",
+          "icon": "",
+          "enum_string": "5"
+        }
+      ],
+      "key": {
+        "key": "character_rarity",
+        "text": "Quality",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_character_rarity",
+        "is_multi_select": false,
+        "id": "7",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    },
+    "character_region": {
+      "values": [
+        "Nod-Krai"
+      ],
+      "value_types": [
+        {
+          "id": "4158",
+          "value": "Nod-Krai",
+          "mi18n_key": "filter_custom_41",
+          "icon": "",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "character_region",
+        "text": "Region",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_character_region",
+        "is_multi_select": false,
+        "id": "6",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    },
+    "character_vision": {
+      "values": [
+        "Dendro"
+      ],
+      "value_types": [
+        {
+          "id": "761",
+          "value": "Dendro",
+          "mi18n_key": "filter_761",
+          "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/03/27/bda7c6cf71ea059c6abc086405a7cdd5_1717146848708050949.png",
+          "enum_string": "dendro"
+        }
+      ],
+      "key": {
+        "key": "character_vision",
+        "text": "Elemental Type",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_character_vision",
+        "is_multi_select": false,
+        "id": "5",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    },
+    "character_weapon": {
+      "values": [
+        "Catalyst"
+      ],
+      "value_types": [
+        {
+          "id": "110",
+          "value": "Catalyst",
+          "mi18n_key": "filter_110",
+          "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/03/27/91c80bbf63e574fc6d6b1cb8563cf8e3_5665224225336557820.png",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "character_weapon",
+        "text": "Weapons",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_character_weapon",
+        "is_multi_select": false,
+        "id": "9",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    }
+  },
+  "modules": [
+    {
+      "components": [
+        {
+          "data": "{\"list\":[{\"key\":\"Lv.1\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"-\",\"829\"]},{\"key\":\"Base ATK\",\"values\":[\"-\",\"20\"]},{\"key\":\"Base DEF\",\"values\":[\"-\",\"52\"]},{\"key\":\"Elemental Mastery\",\"values\":[\"-\",\"200\"]}],\"materials\":[],\"id\":\"ascension15386\"},{\"key\":\"Lv.20\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"2151\",\"2863\"]},{\"key\":\"Base ATK\",\"values\":[\"51\",\"69\"]},{\"key\":\"Base DEF\",\"values\":[\"135\",\"180\"]},{\"key\":\"Elemental Mastery\",\"values\":[\"200\",\"200\"]}],\"materials\":[],\"id\":\"ascension82533\"},{\"key\":\"Lv.40\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"4283\",\"4789\"]},{\"key\":\"Base ATK\",\"values\":[\"103\",\"115\"]},{\"key\":\"Base DEF\",\"values\":[\"269\",\"301\"]},{\"key\":\"Elemental Mastery\",\"values\":[\"200\",\"229\"]}],\"materials\":[],\"id\":\"ascension40568\"},{\"key\":\"Lv.50\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"5509\",\"6183\"]},{\"key\":\"Base ATK\",\"values\":[\"132\",\"148\"]},{\"key\":\"Base DEF\",\"values\":[\"346\",\"388\"]},{\"key\":\"Elemental Mastery\",\"values\":[\"229\",\"258\"]}],\"materials\":[],\"id\":\"ascension50514\"},{\"key\":\"Lv.60\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"6911\",\"7416\"]},{\"key\":\"Base ATK\",\"values\":[\"165\",\"177\"]},{\"key\":\"Base DEF\",\"values\":[\"434\",\"465\"]},{\"key\":\"Elemental Mastery\",\"values\":[\"258\",\"258\"]}],\"materials\":[],\"id\":\"ascension85315\"},{\"key\":\"Lv.70\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"8151\",\"8657\"]},{\"key\":\"Base ATK\",\"values\":[\"195\",\"207\"]},{\"key\":\"Base DEF\",\"values\":[\"512\",\"543\"]},{\"key\":\"Elemental Mastery\",\"values\":[\"258\",\"286\"]}],\"materials\":[],\"id\":\"ascension8008\"},{\"key\":\"Lv.80\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"9400\",\"9905\"]},{\"key\":\"Base ATK\",\"values\":[\"225\",\"237\"]},{\"key\":\"Base DEF\",\"values\":[\"590\",\"622\"]},{\"key\":\"Elemental Mastery\",\"values\":[\"286\",\"315\"]}],\"materials\":[],\"id\":\"ascension65517\"},{\"key\":\"Lv.90\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"10654\",\"-\"]},{\"key\":\"Base ATK\",\"values\":[\"255\",\"-\"]},{\"key\":\"Base DEF\",\"values\":[\"669\",\"-\"]},{\"key\":\"Elemental Mastery\",\"values\":[\"315\",\"-\"]}],\"materials\":[],\"id\":\"ascension27412\"}]}",
+          "component_id": "ascension"
+        }
+      ]
+    }
+  ]
+}

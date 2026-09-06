@@ -86,7 +86,14 @@ class GameCharacter {
     var talents: MutableList<GameCharacterTalent> = mutableListOf()
 
     @OneToMany(mappedBy = "character", cascade = [CascadeType.ALL], orphanRemoval = true)
-    @OrderBy("level ASC")
     @BatchSize(size = 100)
-    var progressions: MutableList<GameCharacterProgression> = mutableListOf()
+    var baseStats: MutableList<GameCharacterBaseStat> = mutableListOf()
+
+    @OneToMany(mappedBy = "character", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @BatchSize(size = 100)
+    var levelStats: MutableList<GameCharacterLevelStat> = mutableListOf()
+
+    @OneToMany(mappedBy = "character", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @BatchSize(size = 100)
+    var ascensionStats: MutableList<GameCharacterAscensionStat> = mutableListOf()
 }

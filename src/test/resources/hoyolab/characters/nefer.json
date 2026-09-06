@@ -1,0 +1,136 @@
+{
+  "id": "8894",
+  "name": "Nefer",
+  "filter_values": {
+    "character_property": {
+      "values": [
+        "CRIT DMG"
+      ],
+      "value_types": [
+        {
+          "id": "463",
+          "value": "CRIT DMG",
+          "mi18n_key": "filter_463",
+          "icon": "",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "character_property",
+        "text": "Bonus Attributes From Ascension",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_character_property",
+        "is_multi_select": false,
+        "id": "8",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    },
+    "character_rarity": {
+      "values": [
+        "5-Star"
+      ],
+      "value_types": [
+        {
+          "id": "2",
+          "value": "5-Star",
+          "mi18n_key": "filter_2",
+          "icon": "",
+          "enum_string": "5"
+        }
+      ],
+      "key": {
+        "key": "character_rarity",
+        "text": "Quality",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_character_rarity",
+        "is_multi_select": false,
+        "id": "7",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    },
+    "character_region": {
+      "values": [
+        "Nod-Krai"
+      ],
+      "value_types": [
+        {
+          "id": "4158",
+          "value": "Nod-Krai",
+          "mi18n_key": "filter_custom_41",
+          "icon": "",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "character_region",
+        "text": "Region",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_character_region",
+        "is_multi_select": false,
+        "id": "6",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    },
+    "character_vision": {
+      "values": [
+        "Dendro"
+      ],
+      "value_types": [
+        {
+          "id": "761",
+          "value": "Dendro",
+          "mi18n_key": "filter_761",
+          "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/03/27/bda7c6cf71ea059c6abc086405a7cdd5_1717146848708050949.png",
+          "enum_string": "dendro"
+        }
+      ],
+      "key": {
+        "key": "character_vision",
+        "text": "Elemental Type",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_character_vision",
+        "is_multi_select": false,
+        "id": "5",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    },
+    "character_weapon": {
+      "values": [
+        "Catalyst"
+      ],
+      "value_types": [
+        {
+          "id": "110",
+          "value": "Catalyst",
+          "mi18n_key": "filter_110",
+          "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/03/27/91c80bbf63e574fc6d6b1cb8563cf8e3_5665224225336557820.png",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "character_weapon",
+        "text": "Weapons",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_character_weapon",
+        "is_multi_select": false,
+        "id": "9",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    }
+  },
+  "modules": [
+    {
+      "components": [
+        {
+          "data": "{\"list\":[{\"key\":\"Lv.1\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"-\",\"989\"]},{\"key\":\"Base ATK\",\"values\":[\"-\",\"27\"]},{\"key\":\"Base DEF\",\"values\":[\"-\",\"62\"]},{\"key\":\"CRIT DMG Bonus\",\"values\":[\"-\",\"0.0%\"]}],\"materials\":[],\"id\":\"ascension36503\"},{\"key\":\"Lv.20\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"2565\",\"3413\"]},{\"key\":\"Base ATK\",\"values\":[\"70\",\"93\"]},{\"key\":\"Base DEF\",\"values\":[\"161\",\"215\"]},{\"key\":\"CRIT DMG Bonus\",\"values\":[\"0.0%\",\"0.0%\"]}],\"materials\":[],\"id\":\"ascension13345\"},{\"key\":\"Lv.40\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"5107\",\"5710\"]},{\"key\":\"Base ATK\",\"values\":[\"138\",\"155\"]},{\"key\":\"Base DEF\",\"values\":[\"321\",\"359\"]},{\"key\":\"CRIT DMG Bonus\",\"values\":[\"0.0%\",\"9.6%\"]}],\"materials\":[],\"id\":\"ascension42736\"},{\"key\":\"Lv.50\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"6569\",\"7373\"]},{\"key\":\"Base ATK\",\"values\":[\"178\",\"200\"]},{\"key\":\"Base DEF\",\"values\":[\"413\",\"464\"]},{\"key\":\"CRIT DMG Bonus\",\"values\":[\"9.6%\",\"19.2%\"]}],\"materials\":[],\"id\":\"ascension19157\"},{\"key\":\"Lv.60\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"8241\",\"8844\"]},{\"key\":\"Base ATK\",\"values\":[\"223\",\"240\"]},{\"key\":\"Base DEF\",\"values\":[\"519\",\"556\"]},{\"key\":\"CRIT DMG Bonus\",\"values\":[\"19.2%\",\"19.2%\"]}],\"materials\":[],\"id\":\"ascension96330\"},{\"key\":\"Lv.70\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"9720\",\"10322\"]},{\"key\":\"Base ATK\",\"values\":[\"264\",\"280\"]},{\"key\":\"Base DEF\",\"values\":[\"612\",\"649\"]},{\"key\":\"CRIT DMG Bonus\",\"values\":[\"19.2%\",\"28.8%\"]}],\"materials\":[],\"id\":\"ascension62042\"},{\"key\":\"Lv.80\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"11208\",\"11811\"]},{\"key\":\"Base ATK\",\"values\":[\"304\",\"320\"]},{\"key\":\"Base DEF\",\"values\":[\"705\",\"743\"]},{\"key\":\"CRIT DMG Bonus\",\"values\":[\"28.8%\",\"38.4%\"]}],\"materials\":[],\"id\":\"ascension341\"},{\"key\":\"Lv.90\",\"combatList\":[{\"key\":\"\",\"values\":[\"Before Ascension\",\"After Ascension\"]},{\"key\":\"Base HP\",\"values\":[\"12704\",\"-\"]},{\"key\":\"Base ATK\",\"values\":[\"344\",\"-\"]},{\"key\":\"Base DEF\",\"values\":[\"799\",\"-\"]},{\"key\":\"CRIT DMG Bonus\",\"values\":[\"38.4%\",\"-\"]}],\"materials\":[],\"id\":\"ascension58136\"}]}",
+          "component_id": "ascension"
+        }
+      ]
+    }
+  ]
+}
