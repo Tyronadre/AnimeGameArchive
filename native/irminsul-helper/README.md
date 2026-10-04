@@ -2,8 +2,8 @@
 
 This is the privileged, headless capture component used by Genshin Archive's
 desktop mode. It is adapted from
-[konkers/irminsul](https://github.com/konkers/irminsul) version 0.2.1,
-commit `d128e2f5319e7c9e56031274ce1b62c810514754`.
+[konkers/irminsul](https://github.com/konkers/irminsul) version 0.2.2,
+commit `0765e6eb527b3cec5b1b8878d8f5d743f3afc156`.
 
 The following files are retained from upstream with only integration-specific
 changes around them:
