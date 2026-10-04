@@ -50,7 +50,7 @@ class ArtifactOptimizationServiceTest {
     }
 
     @Test
-    fun `plume value beats flower when crit rate is already near its cap`() {
+    fun `quality remains independent of equipped stats and buffs`() {
         val flower = artifact(
             slotKey = "flower",
             mainStatKey = "hp",
@@ -59,16 +59,6 @@ class ArtifactOptimizationServiceTest {
                 PlayerArtifactStat("critRate_", 8.9),
                 PlayerArtifactStat("critDMG_", 13.2),
                 PlayerArtifactStat("enerRech_", 10.4),
-            ),
-        )
-        val plume = artifact(
-            slotKey = "plume",
-            mainStatKey = "atk",
-            substats = listOf(
-                PlayerArtifactStat("eleMas", 21.0),
-                PlayerArtifactStat("def", 63.0),
-                PlayerArtifactStat("critDMG_", 14.8),
-                PlayerArtifactStat("critRate_", 7.0),
             ),
         )
         val targets = service.createTargets(
@@ -83,20 +73,19 @@ class ArtifactOptimizationServiceTest {
             targets,
             contextTotals = mapOf("critRate_" to 88.1),
         ).weightedRolls
-        val plumeValue = service.evaluate(
-            plume,
+        val sameFlowerValue = service.evaluate(
+            flower,
             ArtifactOptimizationProfile.ATTACK,
             targets,
-            contextTotals = mapOf("critRate_" to 90.0),
+            contextTotals = mapOf("critRate_" to 100.0, "critDMG_" to 250.0, "enerRech_" to 300.0),
         ).weightedRolls
 
         assertTrue(flowerValue > 0.0)
-        assertTrue(plumeValue > 0.0)
-        assertTrue(plumeValue > flowerValue * 1.4)
+        assertEquals(flowerValue, sameFlowerValue)
     }
 
     @Test
-    fun `high wanted roll tiers beat more low rolls with redundant crit rate`() {
+    fun `quality rewards total useful stat value while reporting roll tiers separately`() {
         val highTierArtifact = artifact(
             slotKey = "flower",
             mainStatKey = "hp",
@@ -140,7 +129,7 @@ class ArtifactOptimizationServiceTest {
         assertEquals(listOf(1, 1), lowTier.rollAnalysis.substats.getValue("critRate_").tiers)
         assertEquals(0.86, highTier.rollAnalysis.quality, 0.01)
         assertEquals(0.72, lowTier.rollAnalysis.quality, 0.01)
-        assertTrue(highTier.score > lowTier.score)
+        assertTrue(lowTier.score > highTier.score)
     }
 
     @Test
@@ -189,7 +178,7 @@ class ArtifactOptimizationServiceTest {
 
         assertTrue(targetedScore.score > profileScore.score)
         assertEquals(1.0, targetedScore.mainStatFit)
-        assertEquals(0.2, profileScore.mainStatFit)
+        assertEquals(0.0, profileScore.mainStatFit)
         assertEquals(setOf("hp", "def"), targets.substatKeys)
         assertEquals(setOf("sands", "goblet", "circlet"), targets.mainStats.keys)
         assertTrue("flower" !in targets.mainStats)
@@ -197,7 +186,7 @@ class ArtifactOptimizationServiceTest {
     }
 
     @Test
-    fun `preferred damage main stat contributes its full artifact value`() {
+    fun `main stat compatibility is separate from substat quality`() {
         val damageGoblet = artifact(
             mainStatKey = "pyro_dmg_",
             substats = listOf(
@@ -214,11 +203,19 @@ class ArtifactOptimizationServiceTest {
             ),
         )
 
-        val damageScore = service.evaluate(damageGoblet, ArtifactOptimizationProfile.ATTACK)
-        val mismatchScore = service.evaluate(mismatchedGoblet, ArtifactOptimizationProfile.ATTACK)
+        val targets = service.createTargets(
+            ArtifactOptimizationProfile.ATTACK,
+            custom = true,
+            requestedMainStats = mapOf("goblet" to "pyro_dmg_"),
+        )
+        val damageScore = service.evaluate(damageGoblet, ArtifactOptimizationProfile.ATTACK, targets)
+        val mismatchScore = service.evaluate(mismatchedGoblet, ArtifactOptimizationProfile.ATTACK, targets)
 
-        assertTrue(damageScore.weightedRolls >= 8.0)
-        assertTrue(damageScore.score > mismatchScore.score)
+        assertEquals(0.0, damageScore.weightedRolls)
+        assertEquals(0.0, damageScore.score)
+        assertEquals(1.0, damageScore.mainStatFit)
+        assertEquals(0.0, mismatchScore.mainStatFit)
+        assertTrue(mismatchScore.score > damageScore.score)
     }
 
     @Test
@@ -394,10 +391,11 @@ class ArtifactOptimizationServiceTest {
     }
 
     @Test
-    fun `crit circlet main stat beats mismatched hp circlet with better substats`() {
+    fun `allowed main stats establish suitability without a quality bonus`() {
         val targets = service.createTargets(
             profile = ArtifactOptimizationProfile.ATTACK,
             custom = true,
+            requestedMainStats = mapOf("circlet" to "critRate_|critDMG_"),
             requestedPriorityStats = listOf("critRate_", "critDMG_", "eleMas"),
             requestedMaximumTargets = mapOf("critRate_" to 100.0),
         )
@@ -433,12 +431,13 @@ class ArtifactOptimizationServiceTest {
             contextTotals = mapOf("critRate_" to 55.0, "critDMG_" to 140.0),
         )
 
-        assertTrue(critScore.score > hpScore.score)
+        assertEquals(0.0, critScore.score)
+        assertTrue(hpScore.score > critScore.score)
         assertTrue(critScore.mainStatFit > hpScore.mainStatFit)
     }
 
     @Test
-    fun `crit rate main stat has diminishing value close to the cap`() {
+    fun `main stats receive no constant quality bonus`() {
         val targets = service.createTargets(
             profile = ArtifactOptimizationProfile.ATTACK,
             custom = true,
@@ -469,7 +468,8 @@ class ArtifactOptimizationServiceTest {
             contextTotals = mapOf("critRate_" to 82.0, "critDMG_" to 130.0),
         )
 
-        assertTrue(critDamageScore.score > critRateScore.score)
+        assertEquals(0.0, critRateScore.score)
+        assertEquals(0.0, critDamageScore.score)
     }
 
     @Test
@@ -588,8 +588,163 @@ class ArtifactOptimizationServiceTest {
             result.setPlan.requirements.forEach { requirement ->
                 assertTrue((counts[requirement.setKey] ?: 0) >= requirement.count)
             }
-            assertTrue(suggestion.optimizedAverageScore > suggestion.currentAverageScore)
+            assertTrue(suggestion.pieces.all { it.suitable })
         }
+    }
+
+    @Test
+    fun `perfect useful rolls reach one hundred and the worked example scores eighty three`() {
+        val perfect = artifact(
+            slotKey = "flower", mainStatKey = "hp",
+            substats = listOf(
+                PlayerArtifactStat("critRate_", 6 * 3.89),
+                PlayerArtifactStat("critDMG_", 7.77),
+                PlayerArtifactStat("atk_", 5.83),
+                PlayerArtifactStat("enerRech_", 6.48),
+            ),
+        )
+        val example = perfect.copy(substats = listOf(
+            PlayerArtifactStat("critRate_", 10.1),
+            PlayerArtifactStat("critDMG_", 20.2),
+            PlayerArtifactStat("atk_", 9.3),
+            PlayerArtifactStat("enerRech_", 5.2),
+        ))
+        assertEquals(100.0, service.evaluate(perfect, ArtifactOptimizationProfile.ATTACK).score, 0.001)
+        assertEquals(8.3, service.evaluate(perfect, ArtifactOptimizationProfile.ATTACK).bestPossibleRolls, 0.001)
+        assertEquals(82.8, service.evaluate(example, ArtifactOptimizationProfile.ATTACK).score, 0.1)
+    }
+
+    @Test
+    fun `single wanted stat uses six attainable rolls and empty budgets remain finite`() {
+        val targets = service.createTargets(ArtifactOptimizationProfile.REACTION, true,
+            requestedPriorityStats = listOf("eleMas"))
+        val piece = artifact(slotKey = "flower", mainStatKey = "hp",
+            substats = listOf(PlayerArtifactStat("eleMas", 6 * 23.31)))
+        val evaluation = service.evaluate(piece, ArtifactOptimizationProfile.REACTION, targets)
+        assertEquals(6.0, evaluation.bestPossibleRolls)
+        assertEquals(100.0, evaluation.score, 0.001)
+        val emMain = piece.copy(slotKey = "sands", mainStatKey = "eleMas", substats = emptyList())
+        val noBudget = service.evaluate(emMain, ArtifactOptimizationProfile.REACTION, targets)
+        assertEquals(0.0, noBudget.bestPossibleRolls)
+        assertEquals(0.0, noBudget.score)
+    }
+
+    @Test
+    fun `three line starters and unfinished pieces share a fixed final quality budget`() {
+        val targets = service.createTargets(ArtifactOptimizationProfile.REACTION, true,
+            requestedPriorityStats = listOf("eleMas"))
+        val threeLine = artifact(slotKey = "flower", mainStatKey = "hp",
+            substats = listOf(
+                PlayerArtifactStat("eleMas", 5 * 23.31),
+                PlayerArtifactStat("def", 23.15),
+                PlayerArtifactStat("atk", 19.45),
+                PlayerArtifactStat("critDMG_", 7.77),
+            )).copy(totalRolls = 8)
+        assertEquals(100.0 * 5 / 6, service.evaluate(threeLine, ArtifactOptimizationProfile.REACTION, targets).score, 0.001)
+        val starter = threeLine.copy(level = 0, totalRolls = 3,
+            substats = threeLine.substats.take(3).map {
+                if (it.key == "eleMas") it.copy(value = 23.31) else it
+            })
+        assertEquals(100.0 / 6, service.evaluate(starter, ArtifactOptimizationProfile.REACTION, targets).score, 0.001)
+    }
+
+    @Test
+    fun `total stat requirements and set membership do not change individual quality`() {
+        val piece = artifact(substats = listOf(PlayerArtifactStat("enerRech_", 12.96)))
+        val base = service.createTargets(ArtifactOptimizationProfile.ENERGY_SUPPORT, true,
+            requestedPriorityStats = listOf("enerRech_", "hp_"))
+        val constrained = base.copy(minimumTargets = mapOf("enerRech_" to 180.0),
+            maximumTargets = mapOf("enerRech_" to 200.0))
+        val original = service.evaluate(piece, ArtifactOptimizationProfile.ENERGY_SUPPORT, base)
+        val changed = service.evaluate(piece.copy(setKey = "HeartOfDepth"),
+            ArtifactOptimizationProfile.ENERGY_SUPPORT, constrained,
+            contextTotals = mapOf("enerRech_" to 250.0))
+        assertEquals(original.score, changed.score)
+        assertEquals(original.weightedRolls, changed.weightedRolls)
+    }
+
+    @Test
+    fun `main stat alternatives are sanitized and each accepted alternative is suitable`() {
+        val targets = service.createTargets(ArtifactOptimizationProfile.REACTION, true,
+            requestedMainStats = mapOf("circlet" to "critRate_|critDMG_|eleMas|invalid|critRate_"))
+        assertEquals("critRate_|critDMG_|eleMas", targets.mainStats["circlet"])
+        for (key in listOf("critRate_", "critDMG_", "eleMas")) {
+            assertEquals(1.0, service.evaluate(artifact(slotKey = "circlet", mainStatKey = key,
+                substats = emptyList()), ArtifactOptimizationProfile.REACTION, targets).mainStatFit)
+        }
+        assertEquals(0.0, service.evaluate(artifact(slotKey = "circlet", mainStatKey = "hp_",
+            substats = emptyList()), ArtifactOptimizationProfile.REACTION, targets).mainStatFit)
+    }
+
+    @Test
+    fun `unfinished equipped artifacts show reproducible projected quality and set fit`() {
+        val character = PlayerCharacterState("TestCharacter", 90, 0, 6, 1, 1, 1)
+        val starter = equippedArtifact("flower", "hp", listOf(
+            PlayerArtifactStat("critRate_", 3.89),
+            PlayerArtifactStat("critDMG_", 7.77),
+            PlayerArtifactStat("atk_", 5.83),
+        )).copy(level = 0, totalRolls = 3)
+        val offPiece = equippedArtifact("plume", "atk", emptyList()).copy(setKey = "HeartOfDepth")
+        val snapshot = PlayerSnapshot(3, "test", Instant.EPOCH, characters = listOf(character),
+            inventory = emptyMap(), inventoryNames = emptyMap(), exportedInventoryKeys = 0,
+            artifacts = listOf(starter, offPiece), weapons = emptyList())
+        val selection = ArtifactSetSelection(ArtifactSetSelectionMode.CUSTOM,
+            listOf(ArtifactSetTarget("gladiatorsfinale", 4)))
+        val first = service.optimize(snapshot, character, ArtifactOptimizationProfile.ATTACK, setSelection = selection)
+        val second = service.optimize(snapshot, character, ArtifactOptimizationProfile.ATTACK,
+            targets = ArtifactOptimizationTargets.defaults(ArtifactOptimizationProfile.ATTACK)
+                .copy(additionalStats = mapOf("critRate_" to 100.0)), setSelection = selection)
+        val flower = first.currentPieces.first()
+        val projection = requireNotNull(flower.qualityProjection)
+        assertTrue(projection.averageFinalScore > flower.score)
+        assertTrue(projection.likelyLowScore <= projection.likelyHighScore)
+        assertTrue(projection.likelyHighScore <= 100.0)
+        assertEquals(projection, second.currentPieces.first().qualityProjection)
+        assertEquals(flower.score, second.currentPieces.first().score)
+        assertEquals("optimizer.setFit.target", flower.setFitKey)
+        assertEquals("optimizer.setFit.offPiece", first.currentPieces.last().setFitKey)
+        assertEquals(null, first.currentPieces.last().qualityProjection)
+    }
+
+    @Test
+    fun `loadout accepts a tiny loss in the highest priority for a substantial useful gain`() {
+        val character = PlayerCharacterState("TestCharacter", 90, 0, 6, 1, 1, 1)
+        val flower = equippedArtifact("flower", "hp", listOf(
+            PlayerArtifactStat("enerRech_", 6.49), PlayerArtifactStat("critDMG_", 7.77)))
+        val replacement = flower.copy(location = null, substats = listOf(
+            PlayerArtifactStat("enerRech_", 6.48), PlayerArtifactStat("critDMG_", 31.08)))
+        val equipped = listOf(flower,
+            equippedArtifact("plume", "atk", emptyList()),
+            equippedArtifact("sands", "atk_", emptyList()),
+            equippedArtifact("goblet", "pyro_dmg_", emptyList()),
+            equippedArtifact("circlet", "critRate_", emptyList()))
+        val snapshot = PlayerSnapshot(3, "test", Instant.EPOCH, characters = listOf(character),
+            inventory = emptyMap(), inventoryNames = emptyMap(), exportedInventoryKeys = 0,
+            artifacts = equipped + replacement, weapons = emptyList())
+        val targets = service.createTargets(ArtifactOptimizationProfile.ATTACK, true,
+            requestedPriorityStats = listOf("enerRech_", "critDMG_"))
+        val result = service.optimize(snapshot, character, ArtifactOptimizationProfile.ATTACK, targets)
+        val loadout = requireNotNull(result.loadout)
+        assertEquals(replacement, loadout.pieces.first { it.artifact.slotKey == "flower" }.artifact)
+    }
+
+    @Test
+    fun `slots with no useful substat budget do not reduce an EM only builds quality`() {
+        val character = PlayerCharacterState("TestCharacter", 90, 0, 6, 1, 1, 1)
+        val pieces = listOf(
+            equippedArtifact("flower", "hp", listOf(PlayerArtifactStat("eleMas", 6 * 23.31))),
+            equippedArtifact("plume", "atk", listOf(PlayerArtifactStat("eleMas", 6 * 23.31))),
+        ) + listOf("sands", "goblet", "circlet").map {
+            equippedArtifact(it, "eleMas", emptyList())
+        }
+        val snapshot = PlayerSnapshot(3, "test", Instant.EPOCH, characters = listOf(character),
+            inventory = emptyMap(), inventoryNames = emptyMap(), exportedInventoryKeys = 0,
+            artifacts = pieces, weapons = emptyList())
+        val targets = service.createTargets(ArtifactOptimizationProfile.REACTION, true,
+            requestedPriorityStats = listOf("eleMas"))
+        val result = service.optimize(snapshot, character, ArtifactOptimizationProfile.REACTION, targets)
+        assertEquals(100.0, result.currentAverageScore, 0.001)
+        assertEquals(3, result.currentPieces.count { it.bestPossibleRolls == 0.0 })
     }
 
     private fun artifact(

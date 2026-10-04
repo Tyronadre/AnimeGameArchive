@@ -630,6 +630,14 @@ class PlayerInventoryController(
         model.addAttribute("selectedProfile", selectedProfile)
         model.addAttribute("optimizerTargets", targets)
         model.addAttribute(
+            "mainStatTargetLabels",
+            targets.mainStats.mapValues { (_, value) ->
+                value?.split('|')?.joinToString(" / ") {
+                    messages.get(ArtifactOptimizationService.statMessageKey(it))
+                }
+            },
+        )
+        model.addAttribute(
             "mainStatOptions",
             listOf("sands", "goblet", "circlet")
                 .associateWith(artifactOptimizationService::mainStatOptions),

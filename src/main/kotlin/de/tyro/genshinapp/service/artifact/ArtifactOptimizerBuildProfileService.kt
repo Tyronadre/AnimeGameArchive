@@ -46,9 +46,8 @@ class ArtifactOptimizerBuildProfileService(
             profile = profileFor(build),
             custom = true,
             requestedMainStats = build.fixedMainStats,
-            requestedPriorityStats = build.goalStatKeys + build.substatKeys,
+            requestedPriorityStats = build.substatKeys + build.goalStatKeys,
             requestedMinimumTargets = build.goalMinimumTargets,
-            requestedMaximumTargets = build.goalMaximumTargets,
         )
 
     fun setSelectionFor(
@@ -197,15 +196,8 @@ data class ArtifactOptimizerBuildStatRecommendation(
     val keys: List<String> = emptyList(),
 ) {
     fun fixedTargetFor(slot: String): String? =
-        when {
-            keys.isEmpty() -> null
-            slot == "circlet" && keys.toSet() == FLEXIBLE_CRIT_CIRCLET_KEYS -> null
-            else -> keys.first()
-        }
-
-    companion object {
-        private val FLEXIBLE_CRIT_CIRCLET_KEYS = setOf("critRate_", "critDMG_")
-    }
+        keys.distinct().takeIf { it.isNotEmpty() && slot in setOf("sands", "goblet", "circlet") }
+            ?.joinToString("|")
 }
 
 data class ArtifactOptimizerBuildGoalStatRecommendation(

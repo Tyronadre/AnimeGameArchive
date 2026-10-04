@@ -61,6 +61,64 @@ class AccountAuthenticationIntegrationTest @Autowired constructor(
     private val passwordEncoder: PasswordEncoder,
 ) {
     @Test
+    fun `artifact quality alternatives projections and shared plans render and survive saving`() {
+        val account = userService.register("Quality Tester", "artifact-quality@example.com", "quality-password")
+        val login = mockMvc.perform(post("/login").with(csrf())
+            .param("email", account.email).param("password", "quality-password"))
+            .andExpect(authenticated()).andReturn()
+        val session = login.request.getSession(false) as MockHttpSession
+        val inventory = """
+            {"format":"GOOD","version":3,"source":"quality-test",
+             "characters":[{"key":"Tartaglia","level":90,"ascension":6,"constellation":0,
+                            "talent":{"auto":1,"skill":1,"burst":1}}],"materials":{},"weapons":[],
+             "artifacts":[
+               {"setKey":"GladiatorsFinale","slotKey":"flower","rarity":5,"level":0,"mainStatKey":"hp","location":"Tartaglia",
+                "substats":[{"key":"critRate_","value":3.89},{"key":"critDMG_","value":7.77},{"key":"atk_","value":5.83}]},
+               {"setKey":"HeartOfDepth","slotKey":"plume","rarity":5,"level":20,"mainStatKey":"atk","location":"Tartaglia",
+                "substats":[{"key":"critRate_","value":3.89},{"key":"critDMG_","value":7.77},{"key":"atk_","value":5.83},{"key":"enerRech_","value":6.48}]},
+               {"setKey":"GladiatorsFinale","slotKey":"sands","rarity":5,"level":20,"mainStatKey":"atk_","location":"Tartaglia",
+                "substats":[{"key":"critRate_","value":3.89},{"key":"critDMG_","value":7.77},{"key":"eleMas","value":23.31},{"key":"enerRech_","value":6.48}]},
+               {"setKey":"GladiatorsFinale","slotKey":"goblet","rarity":5,"level":20,"mainStatKey":"hydro_dmg_","location":"Tartaglia",
+                "substats":[{"key":"critRate_","value":3.89},{"key":"critDMG_","value":7.77},{"key":"atk_","value":5.83},{"key":"enerRech_","value":6.48}]},
+               {"setKey":"GladiatorsFinale","slotKey":"circlet","rarity":5,"level":20,"mainStatKey":"critRate_","location":"Tartaglia",
+                "substats":[{"key":"atk","value":19.45},{"key":"critDMG_","value":7.77},{"key":"atk_","value":5.83},{"key":"enerRech_","value":6.48}]}
+             ]}
+        """.trimIndent()
+        mockMvc.perform(multipart("/inventory/upload")
+            .file(MockMultipartFile("file", "quality.json", "application/json", inventory.toByteArray()))
+            .session(session).with(csrf()))
+            .andExpect(status().is3xxRedirection)
+        mockMvc.perform(post("/inventory/artifact-optimizer/profile").session(session).with(csrf())
+            .param("character", "Tartaglia").param("optimizerCharacter", "Tartaglia").param("profile", "custom-new")
+            .param("customProfileName", "Quality Plan").param("customTargets", "true")
+            .param("sandsMain", "atk_").param("gobletMain", "hydro_dmg_")
+            .param("circletMain", "critRate_|critDMG_|eleMas")
+            .param("priorityStats", "critRate_", "critDMG_", "atk_", "enerRech_")
+            .param("setMode", "custom").param("firstSet", "GladiatorsFinale").param("firstSetCount", "4"))
+            .andExpect(status().is3xxRedirection)
+        val saved = requireNotNull(optimizerProfileService.find(account.id!!, "Tartaglia"))
+        val named = optimizerCustomProfileService.findAll(account.id!!, "Tartaglia").single()
+        assertEquals("critRate_|critDMG_|eleMas", saved.targets.mainStats["circlet"])
+        assertEquals(saved.targets.mainStats, named.targets.mainStats)
+        mockMvc.perform(get("/inventory/artifact-optimizer").session(session)
+            .param("character", "Tartaglia").param("lang", "en"))
+            .andExpect(status().isOk)
+            .andExpect(content().string(containsString("average substat quality")))
+            .andExpect(content().string(containsString("CRIT Rate / CRIT DMG / Elemental Mastery")))
+            .andExpect(content().string(containsString("Expected quality at +20")))
+            .andExpect(content().string(containsString("Target set")))
+            .andExpect(content().string(containsString("Off-piece")))
+        val shared = optimizerSharingService.create(account.id!!, named.profile, named.targets, named.setSelection)
+        val loadedShare = requireNotNull(optimizerSharingService.find(shared.token))
+        assertEquals(named.targets.mainStats, loadedShare.targets.mainStats)
+        mockMvc.perform(get("/inventory/artifact-optimizer").session(session)
+            .param("character", "Tartaglia").param("shared", shared.token).param("lang", "en"))
+            .andExpect(status().isOk)
+            .andExpect(content().string(containsString("Shared configuration preview")))
+            .andExpect(content().string(containsString("CRIT Rate / CRIT DMG / Elemental Mastery")))
+    }
+
+    @Test
     fun `english is the default and german can be selected persistently`() {
         mockMvc.perform(get("/login"))
             .andExpect(status().isOk)

@@ -4,6 +4,8 @@ import de.tyro.genshinapp.service.catalog.EquipmentStatCatalog
 import de.tyro.genshinapp.service.catalog.CharacterStatTestData
 import de.tyro.genshinapp.service.catalog.CharacterCatalogStore
 import de.tyro.genshinapp.service.catalog.WeaponCatalogStore
+import de.tyro.genshinapp.service.importer.HoyolabCharacterPageService
+import de.tyro.genshinapp.service.importer.HoyolabWeaponGalleryService
 import de.tyro.genshinapp.service.player.PlayerSnapshotStore
 import de.tyro.genshinapp.service.planning.CharacterTargetService
 import de.tyro.genshinapp.service.planning.CharacterTargetValues
@@ -24,7 +26,8 @@ class StoredTeamBuildV2Test {
     private val targets = mock(CharacterTargetService::class.java)
     private val catalog = mock(EquipmentStatCatalog::class.java)
     private val characterCatalog = CharacterStatTestData.catalog()
-    private val service = DamageTeamBuildServiceV2(snapshotStore, targets, mock(CharacterCatalogStore::class.java), mock(WeaponCatalogStore::class.java), catalog, characterCatalog)
+    private val service = DamageTeamBuildServiceV2(snapshotStore, targets, mock(CharacterCatalogStore::class.java), mock(WeaponCatalogStore::class.java), catalog, characterCatalog,
+        mock(HoyolabCharacterPageService::class.java), mock(HoyolabWeaponGalleryService::class.java))
     private val profile = DamageFormulaProfileV2(2, "nefer", "nefer", "Nefer", "dendro", "",
         emptyList(), emptyList(), emptyList(), teamMembers = listOf(DamageTeamMemberV2("nefer", "Nefer", "dendro", 1)), selectedTeam = setOf("nefer"))
     private fun snapshot() = PlayerSnapshot(1, "test", Instant.EPOCH,

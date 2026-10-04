@@ -41,13 +41,13 @@ open class ArtifactOptimizerProfile {
     @Column(name = "custom_targets", nullable = false)
     open var customTargets: Boolean = false
 
-    @Column(name = "sands_main", length = 32)
+    @Column(name = "sands_main", length = 500)
     open var sandsMain: String? = null
 
-    @Column(name = "goblet_main", length = 32)
+    @Column(name = "goblet_main", length = 500)
     open var gobletMain: String? = null
 
-    @Column(name = "circlet_main", length = 32)
+    @Column(name = "circlet_main", length = 500)
     open var circletMain: String? = null
 
     @Column(name = "substat_keys", nullable = false, length = 500)

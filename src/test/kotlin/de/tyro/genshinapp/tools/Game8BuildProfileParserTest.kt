@@ -72,7 +72,7 @@ class Game8BuildProfileParserTest {
         assertEquals(4, dps.artifactSets.single().count)
         assertEquals("atk_", dps.fixedMainStats["sands"])
         assertEquals("cryo_dmg_", dps.fixedMainStats["goblet"])
-        assertNull(dps.fixedMainStats["circlet"])
+        assertEquals("critRate_|critDMG_", dps.fixedMainStats["circlet"])
         assertEquals(listOf("critDMG_", "critRate_", "enerRech_"), dps.substatKeys)
 
         val support = catalog.profiles[1]

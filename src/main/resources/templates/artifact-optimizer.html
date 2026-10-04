@@ -148,6 +148,13 @@
                                         th:text="#{optimizer.targets.profileDefault}">
                                     Profile recommendation
                                 </option>
+                                <option th:if="${optimizerTargets.mainStats[entry.key] != null
+                                            && #strings.contains(optimizerTargets.mainStats[entry.key], '|')}"
+                                        th:value="${optimizerTargets.mainStats[entry.key]}"
+                                        selected
+                                        th:text="${mainStatTargetLabels[entry.key]}">
+                                    Allowed main stats
+                                </option>
                                 <option th:each="option : ${entry.value}"
                                         th:value="${option.key}"
                                         th:selected="${optimizerTargets.mainStats[entry.key]
@@ -665,7 +672,7 @@
                         <h2 th:text="#{optimizer.currentPieces.heading}">Current artifacts</h2>
                     </div>
                     <span th:text="#{optimizer.currentPieces.help}">
-                        Score combines useful roll value and main-stat fit.
+                        Quality measures useful substat rolls against a perfect piece for this main stat.
                     </span>
                 </div>
 
@@ -688,8 +695,9 @@
                                 <small th:text="${'+' + piece.artifact.level}">+20</small>
                             </div>
                             <div class="piece-grade">
-                                <b th:text="${piece.grade}">A</b>
-                                <span th:text="${#numbers.formatDecimal(piece.score, 1, 1)}">62.4</span>
+                                <b th:text="${piece.bestPossibleRolls > 0 ? piece.grade : '—'}">A</b>
+                                <span th:text="${piece.bestPossibleRolls > 0
+                                    ? #numbers.formatDecimal(piece.score, 1, 1) : '—'}">62.4</span>
                             </div>
                         </div>
                         <div class="optimizer-score-track" th:style="${'--piece-score:' + piece.score + '%'}">
@@ -704,6 +712,22 @@
                             </span>
                             <small th:text="${#messages.msg(piece.mainStatFitKey)}">Preferred main stat</small>
                         </div>
+                        <p th:if="${!piece.suitable}" th:text="#{optimizer.fit.unsuitable}">
+                            Unsuitable for this build plan
+                        </p>
+                        <p th:if="${piece.setFitKey != null}" th:text="${#messages.msg(piece.setFitKey)}">
+                            Target set
+                        </p>
+                        <p th:if="${piece.bestPossibleRolls == 0}" th:text="#{optimizer.quality.noSubstats}">
+                            This plan has no useful substats for this main stat.
+                        </p>
+                        <dl th:if="${piece.qualityProjection != null}">
+                            <dt th:text="#{optimizer.leveling.average}">Expected quality at +20</dt>
+                            <dd th:text="${#numbers.formatDecimal(piece.qualityProjection.averageFinalScore, 1, 1)}">65.0</dd>
+                            <dt th:text="#{optimizer.leveling.likelyRange}">Likely final range (10–90%)</dt>
+                            <dd th:text="${#numbers.formatDecimal(piece.qualityProjection.likelyLowScore, 1, 1)
+                                + '–' + #numbers.formatDecimal(piece.qualityProjection.likelyHighScore, 1, 1)}">50.0–80.0</dd>
+                        </dl>
                         <div class="artifact-roll-summary">
                             <span>
                                 <small th:text="#{optimizer.rolls.quality}">Roll quality</small>
@@ -747,7 +771,8 @@
                         </ul>
                         <footer>
                             <span th:text="#{optimizer.weightedRolls}">Weighted rolls</span>
-                            <b th:text="${#numbers.formatDecimal(piece.weightedRolls, 1, 2)}">5.21</b>
+                            <b th:text="${#numbers.formatDecimal(piece.weightedRolls, 1, 2)
+                                + ' / ' + #numbers.formatDecimal(piece.bestPossibleRolls, 1, 2)}">5.21 / 8.3</b>
                         </footer>
                     </article>
                 </div>
@@ -967,6 +992,10 @@
                                 </div>
                                 <dl>
                                     <div>
+                                        <dt th:text="#{optimizer.quality.current}">Current quality</dt>
+                                        <dd th:text="${#numbers.formatDecimal(candidate.piece.score, 1, 1)}">25.0</dd>
+                                    </div>
+                                    <div>
                                         <dt th:text="#{optimizer.leveling.average}">
                                             Average at +20
                                         </dt>
@@ -1139,6 +1168,8 @@
                                 <small th:if="${piece.artifact.location != null}"
                                        th:text="#{optimizer.loadout.from(
                                         ${piece.artifact.location})}">From Furina</small>
+                                <small th:if="${piece.setFitKey != null}"
+                                       th:text="${#messages.msg(piece.setFitKey)}">Target set</small>
                             </div>
                             <strong th:text="${#numbers.formatDecimal(piece.score, 1, 1)}">72.1</strong>
                         </article>

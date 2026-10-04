@@ -12,6 +12,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.security.MessageDigest
 import kotlin.math.abs
+import kotlin.math.ln
 import kotlin.math.pow
 import kotlin.math.roundToLong
 import kotlin.random.Random
@@ -73,9 +74,9 @@ class ArtifactOptimizationService(
             )
         }
         val mainStats = VARIABLE_MAIN_STAT_SLOTS.associateWith { slot ->
-            requestedMainStats[slot]?.takeIf { requested ->
-                MAIN_STATS_BY_SLOT.getValue(slot).any { (key) -> key == requested }
-            }
+            requestedMainStats[slot]?.split('|')
+                ?.filter { requested -> MAIN_STATS_BY_SLOT.getValue(slot).any { (key) -> key == requested } }
+                ?.distinct()?.takeIf { it.isNotEmpty() }?.joinToString("|")
         }
         val priorities = (requestedPriorityStats.ifEmpty { requestedSubstats })
             .filter { it in SUBSTAT_WEIGHTS }
@@ -167,22 +168,19 @@ class ArtifactOptimizationService(
                     characterKey
             }
             .sortedBy { SLOT_ORDER[it.artifact.slotKey.lowercase()] ?: Int.MAX_VALUE }
-        val currentContexts = currentArtifacts.associate { target ->
-            target.artifact.slotKey.lowercase() to buildStatsForArtifacts(
-                artifacts = currentArtifacts
-                    .filter { it.index != target.index }
-                    .map(IndexedArtifact::artifact),
-                baseStats = baseStats,
-                targets = targets,
-                setBonusArtifacts = currentArtifacts.map(IndexedArtifact::artifact),
-            ).totalValues
-        }
+        val loadoutSetPlan = createSetPlan(
+            currentArtifacts.map(IndexedArtifact::artifact),
+            snapshot.artifacts,
+            setSelection,
+        )
         val currentPieces = currentArtifacts.map {
             score(
                 it,
                 strategy,
                 currentArtifact = true,
-                contextTotals = currentContexts[it.artifact.slotKey.lowercase()].orEmpty(),
+            ).copy(
+                setFitKey = setFitKey(it.artifact, loadoutSetPlan),
+                qualityProjection = projectArtifactQuality(it.artifact, strategy),
             )
         }
         val currentBySlot = currentPieces.associateBy { it.artifact.slotKey.lowercase() }
@@ -191,29 +189,21 @@ class ArtifactOptimizationService(
             snapshot.artifacts,
             ArtifactSetSelection.current(),
         )
-        val loadoutSetPlan = createSetPlan(
-            currentArtifacts.map(IndexedArtifact::artifact),
-            snapshot.artifacts,
-            setSelection,
-        )
 
         val farmingOutlooks = farmingOutlooks(
             currentPieces = currentPieces,
             setPlan = currentSetPlan,
             strategy = strategy,
-            contextBySlot = currentContexts,
         )
         val artifactOutlooks = artifactUpgradeOutlooks(
             currentPieces = currentPieces,
             strategy = strategy,
-            contextBySlot = currentContexts,
         )
         val levelingCandidates = levelingCandidates(
             allArtifacts = indexedArtifacts,
             currentBySlot = currentBySlot,
             setPlan = currentSetPlan,
             strategy = strategy,
-            contextBySlot = currentContexts,
         )
         val loadout = optimizeLoadout(
             allArtifacts = indexedArtifacts,
@@ -255,15 +245,15 @@ class ArtifactOptimizationService(
         )
     }
 
+    /** Build-plan quality; contextTotals is retained for caller compatibility and has no effect. */
     fun evaluate(
         artifact: PlayerArtifact,
         profile: ArtifactOptimizationProfile,
         targets: ArtifactOptimizationTargets = ArtifactOptimizationTargets.defaults(profile),
-        contextTotals: Map<String, Double> = emptyMap(),
+        @Suppress("UNUSED_PARAMETER") contextTotals: Map<String, Double> = emptyMap(),
     ): ArtifactEvaluation = cachedEvaluateArtifact(
         artifact,
         ArtifactScoringStrategy(profile, targets),
-        contextTotals,
     )
 
     fun summarizeCurrentBuild(
@@ -286,7 +276,6 @@ class ArtifactOptimizationService(
         currentPieces: List<ScoredArtifact>,
         setPlan: ArtifactSetPlan,
         strategy: ArtifactScoringStrategy,
-        contextBySlot: Map<String, Map<String, Double>>,
     ): List<ArtifactFarmingOutlook> {
         val setCounts = currentPieces.groupingBy {
             GoodKeyNormalizer.normalize(it.artifact.setKey)
@@ -316,13 +305,7 @@ class ArtifactOptimizationService(
             repeat(FARMING_SIMULATIONS) {
                 val generated = generateDomainArtifact(setKey, random)
                 val target = targets[generated.slotKey.lowercase()]
-                if (target != null &&
-                    evaluateArtifact(
-                        generated,
-                        strategy,
-                        contextBySlot[generated.slotKey.lowercase()].orEmpty(),
-                    ).score > target.score + SCORE_EPSILON
-                ) {
+                if (target != null && beatsPiece(generated, target, strategy)) {
                     improvements++
                 }
             }
@@ -354,18 +337,17 @@ class ArtifactOptimizationService(
         currentBySlot: Map<String, ScoredArtifact>,
         setPlan: ArtifactSetPlan,
         strategy: ArtifactScoringStrategy,
-        contextBySlot: Map<String, Map<String, Double>>,
     ): List<ArtifactLevelingCandidate> {
         val currentIndices = currentBySlot.values.mapTo(mutableSetOf()) { it.inventoryIndex }
         return allArtifacts.asSequence()
             .filter { it.index !in currentIndices }
             .filter { it.artifact.rarity == 5 && it.artifact.level < 20 }
+            .filter { strategy.acceptsExplicitMainStat(it.artifact.slotKey.lowercase(), it.artifact.mainStatKey) }
             .filter { candidateCanPreserveSetPlan(it.artifact, currentBySlot, setPlan) }
             .mapNotNull { indexed ->
                 val target = currentBySlot[indexed.artifact.slotKey.lowercase()]
-                val context = contextBySlot[indexed.artifact.slotKey.lowercase()].orEmpty()
-                val optimisticScore = optimisticScore(indexed.artifact, strategy, context)
-                if (target != null && optimisticScore <= target.score + SCORE_EPSILON) {
+                val optimisticScore = optimisticScore(indexed.artifact, strategy)
+                if (target?.suitable == true && optimisticScore <= target.score + SCORE_EPSILON) {
                     null
                 } else {
                     PreLevelingCandidate(indexed, target, optimisticScore)
@@ -377,7 +359,6 @@ class ArtifactOptimizationService(
                 simulateLevelingCandidate(
                     candidate,
                     strategy,
-                    contextBySlot[candidate.indexedArtifact.artifact.slotKey.lowercase()].orEmpty(),
                 )
             }
             .filter {
@@ -402,7 +383,6 @@ class ArtifactOptimizationService(
     private fun artifactUpgradeOutlooks(
         currentPieces: List<ScoredArtifact>,
         strategy: ArtifactScoringStrategy,
-        contextBySlot: Map<String, Map<String, Double>>,
     ): List<ArtifactUpgradeOutlook> = currentPieces.map { piece ->
         val slotKey = piece.artifact.slotKey.lowercase()
         val random = Random(
@@ -417,13 +397,7 @@ class ArtifactOptimizationService(
         var improvements = 0
         repeat(ARTIFACT_FARMING_SIMULATIONS) {
             val generated = generateDomainArtifact(piece.artifact.setKey, random)
-            if (generated.slotKey.equals(slotKey, ignoreCase = true) &&
-                evaluateArtifact(
-                    generated,
-                    strategy,
-                    contextBySlot[slotKey].orEmpty(),
-                ).score > piece.score + SCORE_EPSILON
-            ) {
+            if (generated.slotKey.equals(slotKey, ignoreCase = true) && beatsPiece(generated, piece, strategy)) {
                 improvements++
             }
         }
@@ -444,10 +418,9 @@ class ArtifactOptimizationService(
     private fun simulateLevelingCandidate(
         candidate: PreLevelingCandidate,
         strategy: ArtifactScoringStrategy,
-        contextTotals: Map<String, Double>,
     ): ArtifactLevelingCandidate {
         val artifact = candidate.indexedArtifact.artifact
-        val targetScore = candidate.target?.score ?: 0.0
+        val targetScore = candidate.target?.takeIf { it.suitable }?.score ?: 0.0
         val random = Random(
             stableSeed(
                 artifact.setKey,
@@ -465,7 +438,7 @@ class ArtifactOptimizationService(
         val remainingUpgrades = remainingUpgradeMilestones(artifact)
         repeat(LEVELING_SIMULATIONS) {
             val outcome = simulateRemainingLevels(artifact, random, strategy)
-            val score = evaluateArtifact(outcome.artifact, strategy, contextTotals).score
+            val score = strategy.qualityScore(outcome.artifact)
             scores[it] = score
             totalScore += score
             totalUsefulUpgrades += outcome.usefulUpgrades
@@ -474,7 +447,7 @@ class ArtifactOptimizationService(
         }
         scores.sort()
 
-        val evaluation = cachedEvaluateArtifact(artifact, strategy, contextTotals)
+        val evaluation = cachedEvaluateArtifact(artifact, strategy)
         return ArtifactLevelingCandidate(
             piece = scoredArtifact(candidate.indexedArtifact, evaluation, false),
             targetScore = targetScore,
@@ -519,7 +492,7 @@ class ArtifactOptimizationService(
 
         val assignments = setAssignments(setPlan)
         val comparator = Comparator<LoadoutCandidate> { first, second ->
-            compareLoadoutCandidates(first, second, strategy.targets)
+            compareLoadoutCandidates(first, second, strategy)
         }
         val bestCandidate = assignments.asSequence()
             .mapNotNull { assignment ->
@@ -555,15 +528,17 @@ class ArtifactOptimizationService(
             .maxWithOrNull(comparator)
             ?: return null
         val bestPieces = bestCandidate.pieces
-        val contextualBestPieces = contextualizePieces(bestPieces, strategy, baseStats)
+        val labeledBestPieces = bestPieces.map {
+            it.copy(setFitKey = setFitKey(it.artifact, setPlan))
+        }
 
         val currentAverage = averageLoadoutScore(currentPieces)
-        val optimizedAverage = averageLoadoutScore(contextualBestPieces)
+        val optimizedAverage = averageLoadoutScore(labeledBestPieces)
         val changed = bestPieces.map(ScoredArtifact::inventoryIndex).toSet() != currentIndices
         val currentMeetsSetPlan = satisfiesSetPlan(currentPieces, setPlan)
         val currentCandidate = loadoutCandidate(currentPieces, baseStats, strategy.targets)
         if (!changed || (
-                currentMeetsSetPlan &&
+                currentMeetsSetPlan && currentPieces.all { it.suitable } &&
                     comparator.compare(bestCandidate, currentCandidate) <= 0
                 )
         ) {
@@ -571,38 +546,17 @@ class ArtifactOptimizationService(
         }
 
         return ArtifactLoadoutSuggestion(
-            pieces = contextualBestPieces,
+            pieces = labeledBestPieces,
             currentAverageScore = currentAverage,
             optimizedAverageScore = optimizedAverage,
             scoreGain = optimizedAverage - currentAverage,
             buildStats = bestCandidate.buildStats,
-            transferredPieces = contextualBestPieces.count {
+            transferredPieces = labeledBestPieces.count {
                 val owner = TravelerIdentity.canonicalCharacterKey(
                     it.artifact.location.orEmpty(),
                 )
                 owner.isNotBlank() && owner != selectedCharacterKey
             },
-        )
-    }
-
-    private fun contextualizePieces(
-        pieces: List<ScoredArtifact>,
-        strategy: ArtifactScoringStrategy,
-        baseStats: OptimizerBaseStats,
-    ): List<ScoredArtifact> = pieces.map { target ->
-        val contextTotals = buildStatsForArtifacts(
-            artifacts = pieces
-                .filter { it.inventoryIndex != target.inventoryIndex }
-                .map(ScoredArtifact::artifact),
-            baseStats = baseStats,
-            targets = strategy.targets,
-            setBonusArtifacts = pieces.map(ScoredArtifact::artifact),
-        ).totalValues
-        score(
-            indexedArtifact = IndexedArtifact(target.inventoryIndex, target.artifact),
-            strategy = strategy,
-            currentArtifact = target.currentArtifact,
-            contextTotals = contextTotals,
         )
     }
 
@@ -619,12 +573,9 @@ class ArtifactOptimizationService(
     private fun compareLoadoutCandidates(
         first: LoadoutCandidate,
         second: LoadoutCandidate,
-        targets: ArtifactOptimizationTargets,
+        strategy: ArtifactScoringStrategy,
     ): Int {
-        comparePreferLower(
-            first.buildStats.critRateOverflow,
-            second.buildStats.critRateOverflow,
-        ).takeIf { it != 0 }?.let { return it }
+        val targets = strategy.targets
         comparePreferLower(
             first.buildStats.maximumViolation,
             second.buildStats.maximumViolation,
@@ -645,33 +596,32 @@ class ArtifactOptimizationService(
             ).takeIf { it != 0 }?.let { return it }
         }
 
-        targets.substatPriorities.forEach { key ->
-            compareDoubles(
-                priorityValue(key, first.buildStats.totalValues, targets),
-                priorityValue(key, second.buildStats.totalValues, targets),
-            ).takeIf { it != 0 }?.let { return it }
-        }
-
         compareDoubles(
-            first.buildStats.critBalance,
-            second.buildStats.critBalance,
+            buildUtility(first.buildStats.totalValues, strategy),
+            buildUtility(second.buildStats.totalValues, strategy),
         ).takeIf { it != 0 }?.let { return it }
         return compareDoubles(first.pieceScore, second.pieceScore)
     }
 
-    private fun priorityValue(
-        key: String,
+    private fun buildUtility(
         totals: Map<String, Double>,
-        targets: ArtifactOptimizationTargets,
+        strategy: ArtifactScoringStrategy,
     ): Double {
-        val critRate = totals.getOrDefault("critRate_", 0.0).coerceAtMost(CRIT_RATE_CAP)
-        val critDamage = totals.getOrDefault("critDMG_", 0.0)
-        val value = when (key) {
-            "critRate_" -> minOf(critRate, critDamage / CRIT_DAMAGE_RATIO)
-            "critDMG_" -> minOf(critDamage, critRate * CRIT_DAMAGE_RATIO)
-            else -> totals.getOrDefault(key, 0.0)
+        fun capped(key: String): Double = minOf(
+            totals.getOrDefault(key, 0.0).coerceAtLeast(0.0),
+            strategy.targets.maximumTargets[key] ?: Double.MAX_VALUE,
+        )
+        val statValue = strategy.statWeights.entries.sumOf { (key, weight) ->
+            if (key in CRIT_STAT_KEYS) 0.0 else {
+                capped(key) / (MAX_SUBSTAT_ROLLS[key] ?: 1.0) * weight
+            }
         }
-        return minOf(value, targets.maximumTargets[key] ?: Double.MAX_VALUE)
+        val critWeight = CRIT_STAT_KEYS.maxOf { strategy.statWeights[it] ?: 0.0 }
+        val averageCrit = 1.0 + (capped("critRate_") / 100.0).coerceIn(0.0, 1.0) * capped("critDMG_") / 100.0
+        // Express the exact expected-CRIT multiplier in approximate useful-roll
+        // units, calibrated to one max CD roll at a 50/100 reference build.
+        val referenceCritGain = ln((1.5 + 0.5 * MAX_SUBSTAT_ROLLS.getValue("critDMG_") / 100.0) / 1.5)
+        return statValue + critWeight * ln(averageCrit) / referenceCritGain
     }
 
     private fun comparePreferLower(first: Double, second: Double): Int =
@@ -741,7 +691,6 @@ class ArtifactOptimizationService(
         val critRate = totalValues.getOrDefault("critRate_", 0.0)
         val critDamage = totalValues.getOrDefault("critDMG_", 0.0)
         val effectiveCritRate = critRate.coerceAtMost(CRIT_RATE_CAP)
-        val ratioDifference = abs(critDamage - effectiveCritRate * CRIT_DAMAGE_RATIO)
         val rows = trackedKeys
             .filter { key ->
                 includeAllStats ||
@@ -779,7 +728,7 @@ class ArtifactOptimizationService(
             rows = rows,
             totalValues = totalValues,
             critRateOverflow = (critRate - CRIT_RATE_CAP).coerceAtLeast(0.0),
-            critBalance = 1.0 / (1.0 + ratioDifference),
+            critBalance = 1.0 + effectiveCritRate.coerceAtLeast(0.0) / 100.0 * critDamage.coerceAtLeast(0.0) / 100.0,
             allMinimumTargetsMet = completions.all { it >= 1.0 },
             minimumCompletion = completions.minOrNull() ?: 1.0,
             minimumCompletionSum = completions.sum(),
@@ -917,11 +866,10 @@ class ArtifactOptimizationService(
         indexedArtifact: IndexedArtifact,
         strategy: ArtifactScoringStrategy,
         currentArtifact: Boolean,
-        contextTotals: Map<String, Double> = emptyMap(),
     ): ScoredArtifact =
         scoredArtifact(
             indexedArtifact,
-            cachedEvaluateArtifact(indexedArtifact.artifact, strategy, contextTotals),
+            cachedEvaluateArtifact(indexedArtifact.artifact, strategy),
             currentArtifact,
         )
 
@@ -967,6 +915,7 @@ class ArtifactOptimizationService(
             upgradeRolls = evaluation.rollAnalysis.upgradeRolls,
             targetEfficiency = evaluation.substatEfficiency,
             currentArtifact = currentArtifact,
+            bestPossibleRolls = evaluation.bestPossibleRolls,
         )
     }
 
@@ -981,86 +930,80 @@ class ArtifactOptimizationService(
     private fun cachedEvaluateArtifact(
         artifact: PlayerArtifact,
         strategy: ArtifactScoringStrategy,
-        contextTotals: Map<String, Double> = emptyMap(),
     ): ArtifactEvaluation {
         val cacheService = artifactEvaluationCacheService
-            ?: return evaluateArtifact(artifact, strategy, contextTotals)
-        val cacheKey = evaluationCacheKey(artifact, strategy, contextTotals)
+            ?: return evaluateArtifact(artifact, strategy)
+        val cacheKey = evaluationCacheKey(artifact, strategy)
         return cacheService.getOrCompute(cacheKey) {
-            evaluateArtifact(artifact, strategy, contextTotals)
+            evaluateArtifact(artifact, strategy)
         }
     }
 
     private fun evaluateArtifact(
         artifact: PlayerArtifact,
         strategy: ArtifactScoringStrategy,
-        contextTotals: Map<String, Double> = emptyMap(),
     ): ArtifactEvaluation {
         val rollAnalysis = analyzeArtifactRolls(artifact, strategy)
-        val substatRolls = artifact.substats.sumOf { stat ->
-            val maximum = MAX_SUBSTAT_ROLLS[stat.key] ?: return@sumOf 0.0
-            val effectiveValue = strategy.effectiveValue(stat.key, stat.value, contextTotals)
-            (effectiveValue / maximum) * (strategy.statWeights[stat.key] ?: 0.0)
-        }
-        val mainStatRolls = if (artifact.slotKey.lowercase() in VARIABLE_MAIN_STAT_SLOTS) {
-            val maximum = MAIN_STAT_MAX_VALUES[artifact.rarity]?.get(artifact.mainStatKey)
-            if (maximum == null || maximum <= 0.0) {
-                0.0
-            } else {
-                strategy.effectiveValue(
-                    artifact.mainStatKey,
-                    artifactMainStatValue(artifact),
-                    contextTotals,
-                ) / maximum * MAIN_STAT_ROLL_EQUIVALENT *
-                    strategy.mainStatWeight(artifact.slotKey.lowercase(), artifact.mainStatKey)
-            }
-        } else {
-            0.0
-        }
-        val weightedRolls = substatRolls + mainStatRolls
+        val substatRolls = strategy.weightedRolls(artifact)
         val mainStatFit = strategy.mainStatFit(
             artifact.slotKey.lowercase(),
             artifact.mainStatKey,
         )
-        val bestSubstatWeight = strategy.statWeights.values.maxOrNull()
-            ?.coerceAtLeast(BUILD_COMPARISON_EPSILON)
-            ?: 1.0
-        val substatEfficiency = if (rollAnalysis.totalRolls > 0) {
-            (substatRolls / (rollAnalysis.totalRolls * bestSubstatWeight))
-                .coerceIn(0.0, 1.0)
+        // Four distinct initial substats and five upgrades into the best one.
+        // The reference stays fixed at a perfect +20 five-star piece, including
+        // for three-line starters and lower-level/lower-rarity artifacts.
+        val bestPossibleRolls = strategy.bestPossibleRolls(artifact.mainStatKey)
+        val substatEfficiency = if (bestPossibleRolls > 0.0) {
+            (substatRolls / bestPossibleRolls).coerceIn(0.0, 1.0)
         } else {
             0.0
         }
-        val variableMainStat = artifact.slotKey.lowercase() in VARIABLE_MAIN_STAT_SLOTS
-        val mainStatMaximum = MAIN_STAT_MAX_VALUES[artifact.rarity]?.get(artifact.mainStatKey)
-        val mainStatQuality = if (mainStatMaximum != null && mainStatMaximum > 0.0) {
-            val effectiveMainStatValue = strategy.effectiveValue(
-                artifact.mainStatKey,
-                artifactMainStatValue(artifact),
-                contextTotals,
-            )
-            (effectiveMainStatValue / mainStatMaximum).coerceIn(0.0, 1.0) * mainStatFit
-        } else {
-            mainStatFit
-        }
-        val score = if (variableMainStat) {
-            (
-                mainStatQuality * VARIABLE_MAIN_STAT_SCORE_SHARE +
-                    substatEfficiency * (1.0 - VARIABLE_MAIN_STAT_SCORE_SHARE)
-                ) * 100.0
-        } else {
-            substatEfficiency * 100.0
-        }.coerceIn(0.0, 100.0)
+        val score = substatEfficiency * 100.0
         return ArtifactEvaluation(
             score = score,
             grade = grade(score),
-            weightedRolls = weightedRolls,
+            weightedRolls = substatRolls,
             mainStatFit = mainStatFit,
             statWeights = strategy.statWeights,
             substatEfficiency = substatEfficiency,
+            bestPossibleRolls = bestPossibleRolls,
             rollAnalysis = rollAnalysis,
         )
     }
+
+    private fun projectArtifactQuality(
+        artifact: PlayerArtifact,
+        strategy: ArtifactScoringStrategy,
+    ): ArtifactQualityProjection? {
+        if (artifact.rarity != 5 || artifact.level >= 20 || strategy.bestPossibleRolls(artifact.mainStatKey) <= 0.0) return null
+        val random = Random(stableSeed(
+            "quality-projection", artifact.slotKey, artifact.mainStatKey,
+            artifact.level, artifact.rarity, artifact.substats, strategy.seedKey,
+        ))
+        val scores = DoubleArray(LEVELING_SIMULATIONS) {
+            strategy.qualityScore(simulateRemainingLevels(artifact, random, strategy).artifact)
+        }
+        scores.sort()
+        return ArtifactQualityProjection(
+            averageFinalScore = scores.average(),
+            likelyLowScore = percentile(scores, 0.1),
+            likelyHighScore = percentile(scores, 0.9),
+        )
+    }
+
+    private fun setFitKey(artifact: PlayerArtifact, setPlan: ArtifactSetPlan): String = when {
+        setPlan.requirements.isEmpty() -> "optimizer.setFit.unrestricted"
+        setPlan.requirements.any { it.setKey == GoodKeyNormalizer.normalize(artifact.setKey) } ->
+            "optimizer.setFit.target"
+        else -> "optimizer.setFit.offPiece"
+    }
+
+    private fun beatsPiece(
+        artifact: PlayerArtifact,
+        target: ScoredArtifact,
+        strategy: ArtifactScoringStrategy,
+    ): Boolean = strategy.acceptsExplicitMainStat(artifact.slotKey.lowercase(), artifact.mainStatKey) &&
+        (!target.suitable || strategy.qualityScore(artifact) > target.score + SCORE_EPSILON)
 
     private fun analyzeArtifactRolls(
         artifact: PlayerArtifact,
@@ -1214,17 +1157,14 @@ class ArtifactOptimizationService(
     private fun optimisticScore(
         artifact: PlayerArtifact,
         strategy: ArtifactScoringStrategy,
-        contextTotals: Map<String, Double> = emptyMap(),
     ): Double = evaluateArtifact(
-        optimisticallyFinishArtifact(artifact, strategy, contextTotals),
+        optimisticallyFinishArtifact(artifact, strategy),
         strategy,
-        contextTotals,
     ).score
 
     private fun optimisticallyFinishArtifact(
         artifact: PlayerArtifact,
         strategy: ArtifactScoringStrategy,
-        contextTotals: Map<String, Double>,
     ): PlayerArtifact {
         val remaining = remainingUpgradeMilestones(artifact)
         val stats = artifact.substats.associateTo(linkedMapOf()) { it.key to it.value }
@@ -1247,7 +1187,6 @@ class ArtifactOptimizationService(
                         totalRolls = artifact.totalRolls?.plus(step + 1),
                     ),
                     strategy,
-                    contextTotals,
                 ).score
             } ?: return@repeat
             stats[bestKey] = stats.getOrDefault(bestKey, 0.0) +
@@ -1384,8 +1323,10 @@ class ArtifactOptimizationService(
     private fun remainingUpgradeMilestones(artifact: PlayerArtifact): Int =
         (5 - artifact.level.coerceIn(0, 20) / 4).coerceAtLeast(0)
 
-    private fun averageLoadoutScore(pieces: List<ScoredArtifact>): Double =
-        pieces.sumOf(ScoredArtifact::score) / SLOTS.size
+    private fun averageLoadoutScore(pieces: List<ScoredArtifact>): Double {
+        val scoredSlots = SLOTS.size - pieces.count { it.bestPossibleRolls <= 0.0 }
+        return if (scoredSlots > 0) pieces.sumOf(ScoredArtifact::score) / scoredSlots else 0.0
+    }
 
     private fun probabilityAtLeastOne(chance: Double, attempts: Int): Double =
         1.0 - (1.0 - chance).pow(attempts)
@@ -1410,7 +1351,6 @@ class ArtifactOptimizationService(
     private fun evaluationCacheKey(
         artifact: PlayerArtifact,
         strategy: ArtifactScoringStrategy,
-        contextTotals: Map<String, Double>,
     ): String {
         val rawKey = buildString {
             append("v=").append(ARTIFACT_EVALUATION_CACHE_VERSION)
@@ -1430,16 +1370,6 @@ class ArtifactOptimizationService(
                     append(stat.key)
                     append('=')
                     append(fingerprintNumber(stat.value))
-                }
-            append("|context=")
-            contextTotals
-                .filterValues(Double::isFinite)
-                .toSortedMap()
-                .forEach { (key, value) ->
-                    append(key)
-                    append('=')
-                    append(fingerprintNumber(value))
-                    append(',')
                 }
         }
         return sha256(rawKey)
@@ -1505,7 +1435,7 @@ class ArtifactOptimizationService(
                     key to PRIORITY_WEIGHT_DECAY.pow(index)
                 }.toMap().toMutableMap().also { weights ->
                     targets.minimumTargets.keys.forEach {
-                        weights[it] = maxOf(weights[it] ?: 0.0, MINIMUM_TARGET_WEIGHT)
+                        weights.putIfAbsent(it, USEFUL_STAT_WEIGHT)
                     }
                 }
             } else {
@@ -1519,70 +1449,40 @@ class ArtifactOptimizationService(
             }
             append('|')
             append(targets.substatPriorities.joinToString(","))
-            append('|')
-            targets.minimumTargets.toSortedMap().forEach { (key, value) ->
-                append(key).append(">=").append(value).append(',')
-            }
-            append('|')
-            targets.maximumTargets.toSortedMap().forEach { (key, value) ->
-                append(key).append("<=").append(value).append(',')
-            }
-            append("|bonuses=")
-            targets.additionalStats.toSortedMap().forEach { (key, value) ->
+            append("|weights=")
+            statWeights.toSortedMap().forEach { (key, value) ->
                 append(key).append('=').append(value).append(',')
             }
         }
 
         fun mainStatFit(slotKey: String, mainStatKey: String): Double {
             val explicitTarget = targets.mainStats[slotKey]
-            val baseFit = if (targets.custom && explicitTarget != null) {
-                if (mainStatKey == explicitTarget) 1.0 else CUSTOM_MAIN_STAT_MISMATCH
+            return if (targets.custom && explicitTarget != null) {
+                if (mainStatKey in explicitTarget.split('|')) 1.0 else 0.0
             } else {
                 profile.mainStatFit(slotKey, mainStatKey)
             }
-            if (targets.custom && explicitTarget != null) return baseFit
-            if (slotKey == "circlet" &&
-                mainStatKey !in CRIT_STAT_KEYS &&
-                isCritOriented()
-            ) {
-                return minOf(baseFit, NON_CRIT_CIRCLET_DAMAGE_FIT)
-            }
-            return baseFit
         }
 
-        fun mainStatWeight(slotKey: String, mainStatKey: String): Double {
-            val explicitTarget = targets.mainStats[slotKey]
-            return when {
-                targets.custom && explicitTarget == mainStatKey -> 1.0
-                targets.custom && explicitTarget != null -> CUSTOM_MAIN_STAT_MISMATCH
-                else -> maxOf(
-                    statWeights[mainStatKey] ?: 0.0,
-                    mainStatFit(slotKey, mainStatKey),
-                )
-            }
+        fun weightedRolls(artifact: PlayerArtifact): Double = artifact.substats.sumOf { stat ->
+            val maximum = MAX_SUBSTAT_ROLLS[stat.key] ?: return@sumOf 0.0
+            if (stat.key == artifact.mainStatKey) return@sumOf 0.0
+            (stat.value.coerceAtLeast(0.0) / maximum) * (statWeights[stat.key] ?: 0.0)
         }
 
-        fun effectiveValue(
-            statKey: String,
-            value: Double,
-            contextTotals: Map<String, Double>,
-        ): Double {
-            val cappedValue = targets.maximumTargets[statKey]?.let { maximum ->
-                val context = contextTotals.getOrDefault(statKey, 0.0)
-                minOf(value, (maximum - context).coerceAtLeast(0.0))
-            } ?: value
-            return when {
-                statKey == "critRate_" ->
-                    effectiveCritRateValue(cappedValue, contextTotals)
-                statKey == "critDMG_" ->
-                    effectiveCritDamageValue(cappedValue, contextTotals)
-                else -> cappedValue
-            }
+        fun bestPossibleRolls(mainStatKey: String): Double {
+            val weights = statWeights.filterKeys { it != mainStatKey && it in MAX_SUBSTAT_ROLLS }
+                .values.sortedDescending().take(4)
+            return weights.sum() + 5.0 * (weights.firstOrNull() ?: 0.0)
+        }
+
+        fun qualityScore(artifact: PlayerArtifact): Double {
+            val maximum = bestPossibleRolls(artifact.mainStatKey)
+            return if (maximum > 0.0) (100.0 * weightedRolls(artifact) / maximum).coerceIn(0.0, 100.0) else 0.0
         }
 
         fun acceptsExplicitMainStat(slotKey: String, mainStatKey: String): Boolean {
-            val explicitTarget = targets.mainStats[slotKey]
-            return !targets.custom || explicitTarget == null || mainStatKey == explicitTarget
+            return mainStatFit(slotKey, mainStatKey) >= VIABLE_MAIN_STAT_FIT
         }
 
         fun isWantedStat(statKey: String): Boolean =
@@ -1592,56 +1492,6 @@ class ArtifactOptimizationService(
                 (statWeights[statKey] ?: 0.0) >= USEFUL_STAT_WEIGHT
             }
 
-        private fun isCritOriented(): Boolean =
-            CRIT_STAT_KEYS.any { key ->
-                key in targets.substatPriorities ||
-                    key in targets.minimumTargets ||
-                    (statWeights[key] ?: 0.0) >= CRIT_ORIENTED_STAT_WEIGHT
-            }
-
-        private fun effectiveCritRateValue(
-            value: Double,
-            contextTotals: Map<String, Double>,
-        ): Double {
-            val maximum = targets.maximumTargets["critRate_"] ?: CRIT_RATE_CAP
-            if (value <= 0.0 || maximum <= 0.0) return 0.0
-            val start = contextTotals.getOrDefault("critRate_", 0.0)
-                .coerceIn(0.0, maximum)
-            val end = (start + value).coerceAtMost(maximum)
-            val usableValue = (end - start).coerceAtLeast(0.0)
-            if (usableValue <= 0.0) return 0.0
-
-            val critDamage = contextTotals.getOrDefault("critDMG_", 0.0)
-                .coerceAtLeast(0.0)
-            val ratioFactor = (critDamage / (CRIT_DAMAGE_RATIO * maximum))
-                .coerceIn(CRIT_RATIO_MIN_FACTOR, CRIT_RATIO_MAX_FACTOR)
-            val averageCritRate = (start + end) / 2.0
-            return usableValue * ratioFactor * critRateCapFactor(averageCritRate, maximum)
-        }
-
-        private fun effectiveCritDamageValue(
-            value: Double,
-            contextTotals: Map<String, Double>,
-        ): Double {
-            if (value <= 0.0) return 0.0
-            val critRateTarget = targets.maximumTargets["critRate_"] ?: CRIT_RATE_CAP
-            val critRate = contextTotals.getOrDefault("critRate_", 0.0)
-                .coerceIn(0.0, critRateTarget)
-            val ratioFactor = (critRate / critRateTarget)
-                .coerceIn(CRIT_RATIO_MIN_FACTOR, 1.0)
-            return value * ratioFactor
-        }
-
-        private fun critRateCapFactor(
-            averageCritRate: Double,
-            maximum: Double,
-        ): Double {
-            val softCap = maximum * CRIT_RATE_SOFT_CAP_SHARE
-            if (averageCritRate <= softCap) return 1.0
-            val progress = ((averageCritRate - softCap) / (maximum - softCap))
-                .coerceIn(0.0, 1.0)
-            return 1.0 - progress * (1.0 - CRIT_RATE_MIN_CAP_FACTOR)
-        }
     }
 
     companion object {
@@ -1660,22 +1510,12 @@ class ArtifactOptimizationService(
         private const val LOADOUT_BEAM_WIDTH = 320
         private const val SCORE_EPSILON = 0.5
         private const val BUILD_COMPARISON_EPSILON = 0.01
-        private const val MAIN_STAT_ROLL_EQUIVALENT = 8.0
-        private const val VARIABLE_MAIN_STAT_SCORE_SHARE = 0.8
         private const val USEFUL_STAT_WEIGHT = 0.4
-        private const val CRIT_ORIENTED_STAT_WEIGHT = 0.6
-        private const val CUSTOM_MAIN_STAT_MISMATCH = 0.2
-        private const val NON_CRIT_CIRCLET_DAMAGE_FIT = 0.25
+        private const val VIABLE_MAIN_STAT_FIT = 0.70
         private const val PRIORITY_WEIGHT_DECAY = 0.85
-        private const val MINIMUM_TARGET_WEIGHT = 1.15
         private const val CRIT_RATE_CAP = 100.0
-        private const val CRIT_DAMAGE_RATIO = 2.0
-        private const val CRIT_RATIO_MIN_FACTOR = 0.25
-        private const val CRIT_RATIO_MAX_FACTOR = 1.25
-        private const val CRIT_RATE_SOFT_CAP_SHARE = 0.85
-        private const val CRIT_RATE_MIN_CAP_FACTOR = 0.25
         private const val MAX_TARGET_VALUE = 100_000.0
-        private const val ARTIFACT_EVALUATION_CACHE_VERSION = 2
+        private const val ARTIFACT_EVALUATION_CACHE_VERSION = 3
         private const val HEX_CHARS = "0123456789abcdef"
         private val CRIT_STAT_KEYS = setOf("critRate_", "critDMG_")
 
@@ -1887,7 +1727,7 @@ enum class ArtifactOptimizationProfile(
             "critRate_" to 1.0,
             "critDMG_" to 1.0,
             "atk_" to 0.8,
-            "enerRech_" to 0.55,
+            "enerRech_" to 0.5,
             "eleMas" to 0.45,
             "atk" to 0.2,
         ),
@@ -2089,6 +1929,7 @@ data class ArtifactEvaluation(
     val statWeights: Map<String, Double>,
     val substatEfficiency: Double,
     val rollAnalysis: ArtifactRollAnalysis,
+    val bestPossibleRolls: Double = 0.0,
 )
 
 data class ArtifactRollAnalysis(
@@ -2230,6 +2071,17 @@ data class ScoredArtifact(
     val upgradeRolls: Int,
     val targetEfficiency: Double,
     val currentArtifact: Boolean,
+    val bestPossibleRolls: Double = 0.0,
+    val setFitKey: String? = null,
+    val qualityProjection: ArtifactQualityProjection? = null,
+) {
+    val suitable: Boolean get() = mainStatFit >= 0.70
+}
+
+data class ArtifactQualityProjection(
+    val averageFinalScore: Double,
+    val likelyLowScore: Double,
+    val likelyHighScore: Double,
 )
 
 data class ScoredArtifactStat(

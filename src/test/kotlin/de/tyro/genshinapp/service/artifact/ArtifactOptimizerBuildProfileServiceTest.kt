@@ -12,7 +12,7 @@ import kotlin.test.assertFalse
 
 class ArtifactOptimizerBuildProfileServiceTest {
     @Test
-    fun `source goal ranges become optimizer minimums maximums and priorities`() {
+    fun `source goals preserve substat priorities and recommended maxima stay guidance`() {
         val mapper = jacksonObjectMapper()
         val profileService = ArtifactOptimizerBuildProfileService(mapper)
         val optimizationService = ArtifactOptimizationService(ArtifactCatalogService(mapper))
@@ -46,7 +46,7 @@ class ArtifactOptimizerBuildProfileServiceTest {
         val targets = profileService.targetsFor(build, optimizationService)
 
         assertEquals(
-            listOf("eleMas", "enerRech_", "critRate_", "critDMG_"),
+            listOf("enerRech_", "eleMas", "critRate_", "critDMG_"),
             targets.substatPriorities,
         )
         assertEquals(
@@ -59,12 +59,7 @@ class ArtifactOptimizerBuildProfileServiceTest {
             targets.minimumTargets,
         )
         assertEquals(
-            mapOf(
-                "critRate_" to 70.0,
-                "eleMas" to 800.0,
-                "enerRech_" to 180.0,
-                "critDMG_" to 120.0,
-            ),
+            mapOf("critRate_" to 100.0),
             targets.maximumTargets,
         )
     }
