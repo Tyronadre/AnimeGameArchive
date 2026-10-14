@@ -11,6 +11,7 @@ import de.tyro.genshinapp.model.MaterialDefinition
 import de.tyro.genshinapp.model.MaterialSourceDefinition
 import de.tyro.genshinapp.model.MaterialSourceType
 import org.springframework.stereotype.Service
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.web.util.UriComponentsBuilder
 import java.util.concurrent.ConcurrentHashMap
 
@@ -20,6 +21,7 @@ class MaterialCatalogService(
     private val characterCatalogService: CharacterCatalogService? = null,
     private val imageUrlRegistry: ImageUrlRegistry? = null,
     private val identityCatalog: MaterialIdentityCatalog? = null,
+    private val events: ApplicationEventPublisher? = null,
 ) {
     private val materialsById = ConcurrentHashMap<Int, MaterialDefinition>()
     private val materialIdByHoyolabPageId = ConcurrentHashMap<Int, Int>()
@@ -119,6 +121,7 @@ class MaterialCatalogService(
             }
         }
         if (discovered.isNotEmpty()) catalogStore?.saveMaterials(discovered)
+        if (discovered.isNotEmpty()) events?.publishEvent(MaterialCatalogChanged())
         imageUrlRegistry?.registerMaterialDefaults(imageDefaults)
     }
 
@@ -161,6 +164,7 @@ class MaterialCatalogService(
         catalogStore?.saveMaterials(materialsById.values)
         catalogStore?.ensureSources(MaterialCatalogSeed.sources)
         synchronizedCharacterSignature = characterSignature(characters)
+        events?.publishEvent(MaterialCatalogChanged())
     }
 
     fun materialsOf(characters: Collection<CharacterDefinition>): List<MaterialDefinition> =
@@ -210,6 +214,7 @@ class MaterialCatalogService(
             .forEach(::remember)
         catalogStore?.saveMaterials(materialsById.values)
         catalogStore?.ensureSources(MaterialCatalogSeed.sources)
+        events?.publishEvent(MaterialCatalogChanged())
     }
 
     private fun canonicalReference(reference: HoyolabMaterialReference): HoyolabMaterialReference {

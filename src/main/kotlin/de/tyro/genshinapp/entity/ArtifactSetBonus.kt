@@ -6,6 +6,9 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Lob
+import jakarta.persistence.FetchType
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import jakarta.persistence.UniqueConstraint
 import java.time.Instant
@@ -21,6 +24,10 @@ import java.time.Instant
     ],
 )
 open class ArtifactSetBonus {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hoyowiki_entry_id")
+    open var hoyowikiEntry: HoyowikiEntry? = null
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)

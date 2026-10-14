@@ -1,6 +1,7 @@
 package de.tyro.genshinapp.service.catalog
 
 import de.tyro.genshinapp.service.importer.HoyolabWikiEntry
+import de.tyro.genshinapp.service.importer.HoyolabWikiMenu
 import de.tyro.genshinapp.service.importer.isAllowedHoyolabImageUrl
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -13,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder
 @Service
 class ArtifactCatalogService(
     private val objectMapper: ObjectMapper,
+    private val hoyowikiCatalogStore: HoyowikiCatalogStore? = null,
 ) {
     private val bundledArtifactSets: Map<String, ArtifactSetDefinition> =
         ClassPathResource(CATALOG_RESOURCE).inputStream.use {
@@ -25,8 +27,11 @@ class ArtifactCatalogService(
     @Volatile
     private var artifactSets: Map<String, ArtifactSetDefinition> = bundledArtifactSets
 
+    init { refreshFromDatabase() }
+
     fun refreshFromDatabase() {
-        // Artifact catalogue data is supplied by the bundled/live HoYoWiki synchronization.
+        val stored = hoyowikiCatalogStore?.entries(HoyolabWikiMenu.ARTIFACTS).orEmpty()
+        if (stored.isNotEmpty()) synchronizeHoyolabArtifactList(stored)
     }
 
     @Synchronized

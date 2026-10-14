@@ -8,8 +8,18 @@ Thymeleaf interface.
 The official HoYoWiki is the catalogue and detail source for characters,
 weapons, artifacts, and materials. Packaging creates a JSON snapshot containing
 the current HoYoWiki records (but not image bytes). The snapshot is projected
-into typed database tables on startup, followed by one live catalogue refresh.
+into typed database tables once per packaged snapshot. After startup, four concurrent
+one-entry HoYoWiki requests compare each category's total and first page ID with the
+last successful synchronization. Only changed categories are downloaded in full.
+An unchanged category is also refreshed after seven days to catch edits that do not
+change its count; failed or incomplete downloads leave its previous checkpoint intact.
 Persisted data remains available if the live request fails.
+
+`hoyowiki_entry` stores wiki page IDs, catalog summaries, fetched page details, and
+the last live query times. Characters, weapons, materials, and persisted artifact
+sets link to those records through `hoyowiki_entry_id`; wiki IDs remain separate
+from game item IDs. Bundled imports do not count as live queries. Artifact summaries
+are restored from the database when the startup check skips their download.
 
 HoYoWiki exposes page ids for materials, while GOOD inventories and source groups use
 in-game item ids. [`material-identities.json`](src/main/resources/data/material-identities.json)
@@ -24,6 +34,7 @@ The import is controlled with these properties:
 ```properties
 genshin.content.hoyolab-wiki-enabled=true
 genshin.content.hoyolab-catalog-sync-enabled=true
+genshin.content.hoyolab-catalog-full-refresh-interval=7d
 genshin.content.rerun-character-imports=false
 genshin.content.material-identity-catalog-url=https://raw.githubusercontent.com/Tyronadre/AnimeGameArchive/master/src/main/resources/data/material-identities.json
 ```

@@ -12,12 +12,19 @@ import jakarta.persistence.Id
 import jakarta.persistence.Lob
 import jakarta.persistence.OneToMany
 import jakarta.persistence.OrderBy
+import jakarta.persistence.FetchType
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import org.hibernate.annotations.BatchSize
 
 @Entity
 @Table(name = "game_character")
 class GameCharacter {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hoyowiki_entry_id")
+    var hoyowikiEntry: HoyowikiEntry? = null
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false)

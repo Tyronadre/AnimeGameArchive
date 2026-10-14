@@ -1,6 +1,8 @@
 package de.tyro.genshinapp.service.planning
 
 import de.tyro.genshinapp.service.catalog.MaterialCatalogService
+import de.tyro.genshinapp.service.catalog.MaterialCatalogChanged
+import org.springframework.context.event.EventListener
 import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.model.InventoryMaterialBalance
 import de.tyro.genshinapp.model.MaterialCategory
@@ -8,19 +10,38 @@ import de.tyro.genshinapp.model.MaterialCraftingInfo
 import de.tyro.genshinapp.model.MaterialDefinition
 import de.tyro.genshinapp.model.MaterialInventoryAvailability
 import org.springframework.stereotype.Service
+import java.util.concurrent.atomic.AtomicLong
 
 @Service
 class MaterialCraftingService(
     private val materialCatalogService: MaterialCatalogService,
 ) {
-    private val craftingInfoById: Map<Int, MaterialCraftingInfo> by lazy {
-        buildCraftingCatalog()
+    @Volatile
+    private var cachedCatalog: CraftingCatalog? = null
+    private val catalogRevision = AtomicLong()
+
+    private val craftingInfoById get() = catalog().byId
+    private val craftingFamilies get() = catalog().families
+
+    @EventListener
+    fun onCatalogChanged(event: MaterialCatalogChanged) {
+        catalogRevision.incrementAndGet()
     }
-    private val craftingFamilies: Map<String, List<MaterialCraftingInfo>> by lazy {
-        craftingInfoById.values
-            .filter { it.familyKey != null }
-            .groupBy { requireNotNull(it.familyKey) }
+
+    private fun catalog(): CraftingCatalog = cachedCatalog
+        ?.takeIf { it.revision == catalogRevision.get() } ?: synchronized(this) {
+        val revision = catalogRevision.get()
+        cachedCatalog?.takeIf { it.revision == revision } ?: buildCraftingCatalog().let { byId ->
+            CraftingCatalog(revision, byId, byId.values.filter { it.familyKey != null }
+                .groupBy { requireNotNull(it.familyKey) }).also { cachedCatalog = it }
+        }
     }
+
+    private data class CraftingCatalog(
+        val revision: Long,
+        val byId: Map<Int, MaterialCraftingInfo>,
+        val families: Map<String, List<MaterialCraftingInfo>>,
+    )
 
     fun infoFor(materialId: Int): MaterialCraftingInfo? =
         craftingInfoById[materialId]

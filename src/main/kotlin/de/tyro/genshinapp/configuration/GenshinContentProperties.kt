@@ -21,6 +21,9 @@ class GenshinContentProperties {
 
     var hoyolabCatalogSyncEnabled: Boolean = true
 
+    /** Catch same-count edits even when the lightweight startup probes are unchanged. */
+    var hoyolabCatalogFullRefreshInterval: Duration = Duration.ofDays(7)
+
     /** Reapply character page imports once during this startup, for development. */
     var rerunCharacterImports: Boolean = false
 

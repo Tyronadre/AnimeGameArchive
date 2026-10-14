@@ -3,6 +3,7 @@ package de.tyro.genshinapp.service.importer
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.tyro.genshinapp.configuration.GenshinContentProperties
+import de.tyro.genshinapp.service.catalog.HoyowikiCatalogStore
 import org.springframework.stereotype.Service
 import java.net.URI
 import java.net.URLEncoder
@@ -10,15 +11,21 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.nio.charset.StandardCharsets
+import java.time.Instant
 
 /** The stable application boundary around HoYoWiki's HTTP API. */
 interface HoyolabWikiDataSource {
     fun listEntries(menu: HoyolabWikiMenu): List<HoyolabWikiEntry>
 
+    fun probeCatalog(menu: HoyolabWikiMenu): HoyolabCatalogProbe =
+        throw UnsupportedOperationException("Catalog probes are not supported by this data source")
+
     fun search(keyword: String): List<HoyolabWikiSearchHit>
 
     fun fetchPage(entryPageId: Long): JsonNode?
 }
+
+data class HoyolabCatalogProbe(val total: Int, val firstPageId: Long)
 
 enum class HoyolabWikiMenu(val id: String) {
     CHARACTERS("2"),
@@ -49,6 +56,7 @@ data class HoyolabWikiSearchHit(
 class HttpHoyolabWikiDataSource(
     private val objectMapper: ObjectMapper,
     private val properties: GenshinContentProperties,
+    private val catalogStore: HoyowikiCatalogStore? = null,
 ) : HoyolabWikiDataSource {
     private val httpClient = HttpClient.newBuilder()
         .connectTimeout(properties.connectTimeout)
@@ -79,7 +87,24 @@ class HttpHoyolabWikiDataSource(
             page.mapNotNull(::toEntry).forEach { entry -> entries[entry.entryPageId] = entry }
             if (fetchedCount >= totalCount) break
         }
+        check(totalCount != Int.MAX_VALUE && entries.size == totalCount) {
+            "HoYoWiki returned an incomplete ${menu.name.lowercase()} catalogue (${entries.size} of $totalCount)"
+        }
         return entries.values.toList()
+    }
+
+    override fun probeCatalog(menu: HoyolabWikiMenu): HoyolabCatalogProbe {
+        val data = post(
+            "/get_entry_page_list",
+            mapOf("filters" to emptyList<String>(), "menu_id" to menu.id,
+                "page_num" to 1, "page_size" to 1, "use_es" to true),
+        ).path("data")
+        val total = data.path("total").asText().toIntOrNull()
+        val firstId = data.path("list").firstOrNull()?.let(::entryId)
+        check(total != null && total > 0 && firstId != null && firstId > 0) {
+            "HoYoWiki returned an invalid ${menu.name.lowercase()} catalogue probe"
+        }
+        return HoyolabCatalogProbe(total, firstId)
     }
 
     override fun search(keyword: String): List<HoyolabWikiSearchHit> {
@@ -112,6 +137,7 @@ class HttpHoyolabWikiDataSource(
             .path("data")
             .path("page")
             .takeIf(JsonNode::isObject)
+            ?.also { catalogStore?.recordDetailQuery(entryPageId, it, Instant.now()) }
     }
 
     private fun toEntry(node: JsonNode): HoyolabWikiEntry? {

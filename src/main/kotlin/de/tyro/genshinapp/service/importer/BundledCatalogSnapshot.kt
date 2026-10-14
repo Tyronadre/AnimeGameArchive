@@ -4,6 +4,7 @@ import de.tyro.genshinapp.service.catalog.ArtifactCatalogService
 import de.tyro.genshinapp.service.catalog.CharacterCatalogService
 import de.tyro.genshinapp.service.catalog.MaterialCatalogService
 import de.tyro.genshinapp.service.catalog.WeaponCatalogService
+import de.tyro.genshinapp.service.catalog.HoyowikiCatalogStore
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import de.tyro.genshinapp.configuration.GenshinContentProperties
@@ -49,6 +50,7 @@ class BundledCatalogSnapshotImporter(
     private val characterPageService: HoyolabCharacterPageService,
     private val weaponPageService: HoyolabWeaponGalleryService,
     private val properties: GenshinContentProperties,
+    private val hoyowikiCatalogStore: HoyowikiCatalogStore,
 ) : ApplicationRunner {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val objectMapper = jacksonObjectMapper()
@@ -71,6 +73,12 @@ class BundledCatalogSnapshotImporter(
             objectMapper.readValue(input, BundledCatalogSnapshot::class.java)
         }
         validate(snapshot)
+
+        if (hoyowikiCatalogStore.hasBundledVersion(snapshot.generatedAt) && !properties.rerunCharacterImports) {
+            logger.info("Bundled catalogue {} is already imported", snapshot.generatedAt)
+            artifactCatalogService.refreshFromDatabase()
+            return
+        }
 
         ApplicationStartupStatus.report(
             "Importing bundled materials…",
@@ -115,6 +123,16 @@ class BundledCatalogSnapshotImporter(
             "Connecting character requirements to the material catalogue",
         )
         materialCatalogService.synchronizeCharacters(characterCatalogService.getCharacters())
+        val generatedAt = Instant.parse(snapshot.generatedAt)
+        listOf(
+            HoyolabWikiMenu.MATERIALS to snapshot.hoyolabMaterials,
+            HoyolabWikiMenu.CHARACTERS to snapshot.hoyolabCharacters,
+            HoyolabWikiMenu.WEAPONS to snapshot.hoyolabWeapons,
+            HoyolabWikiMenu.ARTIFACTS to snapshot.hoyolabArtifacts,
+        ).forEach { (menu, entries) ->
+            hoyowikiCatalogStore.recordCatalog(menu, entries, generatedAt, live = false)
+        }
+        hoyowikiCatalogStore.markBundledVersion(snapshot.generatedAt)
         logger.info(
             "Imported bundled catalog snapshot from {}: {} characters, {} weapons, " +
                 "{} artifacts changed",
