@@ -1,0 +1,282 @@
+{
+  "schemaVersion": 2,
+  "key": "reliquaryoftruth",
+  "name": "Reliquary of Truth",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "secret",
+      "label": "Secret of Lies active",
+      "description": "After using Skill; lasts 12s.",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "moon",
+      "label": "Moon of Truth active",
+      "description": "After dealing Lunar-Bloom damage; lasts 4s.",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "effect": {
+        "id": "crit",
+        "name": "Essence of Falsity",
+        "description": "Unconditional refinement-scaled CRIT Rate.",
+        "source": "Weapon",
+        "category": "weapon",
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "critRate",
+            "operation": "flatAdd",
+            "value": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 6
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 2
+                    },
+                    {
+                      "type": "input",
+                      "input": "local:refinement"
+                    }
+                  ]
+                }
+              ]
+            },
+            "conditions": []
+          }
+        ],
+        "formulaModifiers": []
+      }
+    },
+    {
+      "effect": {
+        "id": "secret",
+        "name": "Secret of Lies",
+        "description": "Skill grants EM for 12s.",
+        "source": "Weapon",
+        "category": "weapon",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:secret",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [
+          {
+            "stat": "elementalMastery",
+            "operation": "flatAdd",
+            "value": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 60
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 20
+                    },
+                    {
+                      "type": "input",
+                      "input": "local:refinement"
+                    }
+                  ]
+                }
+              ]
+            },
+            "conditions": []
+          }
+        ],
+        "formulaModifiers": []
+      }
+    },
+    {
+      "effect": {
+        "id": "moon",
+        "name": "Moon of Truth",
+        "description": "Lunar-Bloom damage grants CRIT DMG for 4s.",
+        "source": "Weapon",
+        "category": "weapon",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:moon",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [
+          {
+            "stat": "critDamage",
+            "operation": "flatAdd",
+            "value": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 18
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 6
+                    },
+                    {
+                      "type": "input",
+                      "input": "local:refinement"
+                    }
+                  ]
+                }
+              ]
+            },
+            "conditions": []
+          }
+        ],
+        "formulaModifiers": []
+      }
+    },
+    {
+      "effect": {
+        "id": "both",
+        "name": "Essence of Falsity · combined effects",
+        "description": "Both active buffs gain another 50% of their individual bonuses.",
+        "source": "Weapon",
+        "category": "weapon",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:secret",
+              "value": 1
+            },
+            {
+              "type": "inputAtLeast",
+              "input": "local:moon",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [
+          {
+            "stat": "elementalMastery",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 0.5
+                },
+                {
+                  "type": "add",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 60
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 20
+                        },
+                        {
+                          "type": "input",
+                          "input": "local:refinement"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "conditions": []
+          },
+          {
+            "stat": "critDamage",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 0.5
+                },
+                {
+                  "type": "add",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 18
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 6
+                        },
+                        {
+                          "type": "input",
+                          "input": "local:refinement"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "conditions": []
+          }
+        ],
+        "formulaModifiers": [],
+        "requiresEffects": [
+          "secret",
+          "moon"
+        ]
+      }
+    }
+  ],
+  "sources": [
+    "https://www.icy-veins.com/genshin-impact/weapons/14521"
+  ]
+}

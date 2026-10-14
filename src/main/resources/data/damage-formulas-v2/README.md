@@ -5,6 +5,30 @@ teammates supply support definitions from `teammates/<character>.json`. These ar
 reviewed formulas, not an automatic interpretation of character descriptions.
 The original `data/damage-calculators` implementation remains independent.
 
+## Weapon definitions
+
+`weapons/<normalized-weapon-key>.json` defines equipped weapon passives using
+schema version 2. Supported weapons currently include Reliquary of Truth,
+Nightweaver's Looking Glass, A Thousand Floating Dreams, and Nocturne's Curtain
+Call. Base ATK and secondary stats still come from the saved build; these files
+add only passive effects, avoiding duplicate equipment stats.
+
+Define `inputs`, `effects` (each containing a `recipient` and an `effect`), and
+reference URLs in `sources`. Recipients are `wearer`, `party`, or `others`.
+The shared equipment binder resolves `wearer:<stat>`, `recipient:<stat>`,
+`local:<input>`, and team composition `context` expressions exactly as for
+artifact effects. Inputs and effect dependencies are namespaced as
+`weapon.<character>.<weapon>.<id>`. Refinement is initialized from the equipped
+copy and can be previewed from R1 to R5 in its weapon section. Only selected
+party members' equipped weapons contribute.
+
+Trigger controls describe an active combat snapshot: durations, cooldowns,
+rotations, and energy spending are not simulated. Nocturne exposes energy per
+proc as a metric. HP bonuses add a percentage of character base HP, and Lunar
+CRIT bonuses target the Lunar damage kind. Nightweaver's party bonus uses one
+shared stacking group with the highest active refinement winning; Floating
+Dreams' party EM from different wearers stacks.
+
 ## Adding a teammate
 
 1. Add a schema-version-2 JSON file under `teammates/`. Files are discovered on

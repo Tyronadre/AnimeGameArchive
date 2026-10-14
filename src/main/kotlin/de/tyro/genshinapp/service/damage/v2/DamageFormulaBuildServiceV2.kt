@@ -19,13 +19,14 @@ class DamageFormulaBuildServiceV2(
     private val targetService: CharacterTargetService,
     private val artifactService: DamageFormulaArtifactServiceV2,
     private val characterStatCatalog: CharacterStatCatalog,
+    private val weaponService: DamageFormulaWeaponServiceV2,
 ) {
     fun applyCurrentValues(
         profile: DamageFormulaProfileV2,
         userId: Long,
     ): DamageFormulaProfileV2 {
         val snapshot = snapshotStore.current(userId)
-        val equippedProfile = artifactService.attach(profile, snapshot?.artifacts.orEmpty())
+        val equippedProfile = weaponService.attach(artifactService.attach(profile, snapshot?.artifacts.orEmpty()), snapshot?.weapons.orEmpty())
         if (snapshot == null) return equippedProfile
         val valuesByCharacter = mutableMapOf<String, CurrentValuesV2?>()
         fun values(characterKey: String): CurrentValuesV2? =

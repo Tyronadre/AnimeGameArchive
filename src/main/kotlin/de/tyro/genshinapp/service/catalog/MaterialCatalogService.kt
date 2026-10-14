@@ -98,7 +98,10 @@ class MaterialCatalogService(
     fun synchronizeHoyolabReferences(references: Collection<HoyolabMaterialReference>) {
         val imageDefaults = mutableListOf<MaterialImageDefault>()
         val discovered = mutableListOf<MaterialDefinition>()
-        references.map(::canonicalReference).distinctBy(HoyolabMaterialReference::id).forEach { reference ->
+        // Resolve named references first so bare references to the same page use its canonical game id.
+        val resolvedReferences = references.sortedBy { it.name == null }.map(::canonicalReference)
+            .distinctBy(HoyolabMaterialReference::id)
+        resolvedReferences.forEach { reference ->
             val current = materialsById[reference.id] ?: catalogStore?.findMaterial(reference.id)
             val name = reference.name ?: current?.name ?: "HoYoWiki material ${reference.hoyolabPageId}"
             if (current == null) {

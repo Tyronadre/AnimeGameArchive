@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * after the bundled snapshot so a fresh official catalogue list wins.
  */
 @Service
-@Order(Ordered.LOWEST_PRECEDENCE)
+@Order(Ordered.LOWEST_PRECEDENCE - 1)
 class HoyolabCatalogStartupSynchronizer(
     private val source: HoyolabWikiDataSource,
     private val properties: GenshinContentProperties,

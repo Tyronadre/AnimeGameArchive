@@ -21,6 +21,9 @@ class GenshinContentProperties {
 
     var hoyolabCatalogSyncEnabled: Boolean = true
 
+    /** Reapply character page imports once during this startup, for development. */
+    var rerunCharacterImports: Boolean = false
+
     var materialIdentityCatalogUrl: String =
         "https://raw.githubusercontent.com/Tyronadre/AnimeGameArchive/master/" +
             "src/main/resources/data/material-identities.json"

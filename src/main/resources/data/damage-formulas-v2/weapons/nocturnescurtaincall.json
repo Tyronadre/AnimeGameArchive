@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 2,
+  "key": "nocturnescurtaincall",
+  "name": "Nocturne's Curtain Call",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "wine",
+      "label": "Bountiful Sea's Sacred Wine active",
+      "description": "After triggering or dealing Lunar reaction damage; lasts 12s. Energy recovery has an 18s cooldown and works off-field.",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "effect": {
+        "id": "hp",
+        "name": "Ballad of the Crossroads",
+        "description": "Unconditional HP bonus, calculated from character base HP.",
+        "source": "Weapon",
+        "category": "weapon",
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "maxHp",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "input",
+                  "input": "wearer:baseHp"
+                },
+                {
+                  "type": "add",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 8
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 2
+                        },
+                        {
+                          "type": "input",
+                          "input": "local:refinement"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "constant",
+                  "value": 0.01
+                }
+              ]
+            },
+            "conditions": []
+          }
+        ],
+        "formulaModifiers": []
+      }
+    },
+    {
+      "effect": {
+        "id": "wine",
+        "name": "Bountiful Sea's Sacred Wine",
+        "description": "Additional base-HP-scaled Max HP and Lunar reaction CRIT DMG for 12s.",
+        "source": "Weapon",
+        "category": "weapon",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:wine",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [
+          {
+            "stat": "maxHp",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "input",
+                  "input": "wearer:baseHp"
+                },
+                {
+                  "type": "add",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 12
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 2
+                        },
+                        {
+                          "type": "input",
+                          "input": "local:refinement"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "constant",
+                  "value": 0.01
+                }
+              ]
+            },
+            "conditions": []
+          }
+        ],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "lunar"
+              ]
+            },
+            "crit": {
+              "additionalDamage": {
+                "expression": {
+                  "type": "add",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 40
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 20
+                        },
+                        {
+                          "type": "input",
+                          "input": "local:refinement"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "label": "Energy recovered per proc (18s cooldown)",
+            "expression": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 13
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 1
+                    },
+                    {
+                      "type": "input",
+                      "input": "local:refinement"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "sources": [
+    "https://paimon.moe/weapons/nocturnes_curtain_call"
+  ]
+}

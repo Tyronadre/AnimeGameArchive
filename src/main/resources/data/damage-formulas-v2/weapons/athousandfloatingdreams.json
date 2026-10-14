@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 2,
+  "key": "athousandfloatingdreams",
+  "name": "A Thousand Floating Dreams",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "effect": {
+        "id": "same",
+        "name": "A Thousand Nights' Dawnsong · matching elements",
+        "description": "Each same-element teammate grants EM, up to three.",
+        "source": "Weapon",
+        "category": "weapon",
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "elementalMastery",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "add",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 24
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 8
+                        },
+                        {
+                          "type": "input",
+                          "input": "local:refinement"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "min",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 3
+                    },
+                    {
+                      "type": "context",
+                      "input": "sameElementAllies"
+                    }
+                  ]
+                }
+              ]
+            },
+            "conditions": []
+          }
+        ],
+        "formulaModifiers": []
+      }
+    },
+    {
+      "effect": {
+        "id": "different",
+        "name": "A Thousand Nights' Dawnsong · different elements",
+        "description": "Each different-element teammate grants wearer elemental damage, up to three.",
+        "source": "Weapon",
+        "category": "weapon",
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "elements": [
+                "wearer"
+              ],
+              "damageKinds": [
+                "talent"
+              ]
+            },
+            "damageBonus": {
+              "expression": {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "add",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 6
+                      },
+                      {
+                        "type": "multiply",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 4
+                          },
+                          {
+                            "type": "input",
+                            "input": "local:refinement"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "min",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 3
+                      },
+                      {
+                        "type": "context",
+                        "input": "differentElementAllies"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "recipient": "others",
+      "effect": {
+        "id": "party",
+        "name": "A Thousand Nights' Dawnsong · party EM",
+        "description": "Other party members gain EM. Buffs from multiple equipped copies stack.",
+        "source": "Weapon",
+        "category": "weapon",
+        "activation": {
+          "event": "buffActive",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "elementalMastery",
+            "operation": "flatAdd",
+            "value": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 38
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 2
+                    },
+                    {
+                      "type": "input",
+                      "input": "local:refinement"
+                    }
+                  ]
+                }
+              ]
+            },
+            "conditions": []
+          }
+        ],
+        "formulaModifiers": []
+      }
+    }
+  ],
+  "sources": [
+    "https://www.icy-veins.com/genshin-impact/weapons/14511"
+  ]
+}

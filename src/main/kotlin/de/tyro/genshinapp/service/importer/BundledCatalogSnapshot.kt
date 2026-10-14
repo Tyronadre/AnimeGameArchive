@@ -48,6 +48,7 @@ class BundledCatalogSnapshotImporter(
     private val hoyolabEntryMapper: HoyolabCatalogEntryMapper,
     private val characterPageService: HoyolabCharacterPageService,
     private val weaponPageService: HoyolabWeaponGalleryService,
+    private val properties: GenshinContentProperties,
 ) : ApplicationRunner {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val objectMapper = jacksonObjectMapper()
@@ -102,7 +103,7 @@ class BundledCatalogSnapshotImporter(
         val characterPageChanges = importPagesWithProgress(
             "Importing character details…",
             snapshot.hoyolabCharacterPages,
-            characterPageService::importPage,
+            { page -> characterPageService.importPage(page, force = properties.rerunCharacterImports) },
         )
         val weaponPageChanges = importPagesWithProgress(
             "Importing weapon details…",

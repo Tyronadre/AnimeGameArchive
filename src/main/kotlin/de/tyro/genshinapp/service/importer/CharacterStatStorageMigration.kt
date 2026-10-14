@@ -2,6 +2,7 @@ package de.tyro.genshinapp.service.importer
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.tyro.genshinapp.service.catalog.CharacterCatalogService
+import de.tyro.genshinapp.service.catalog.CharacterBaseStatCorrections
 import org.slf4j.LoggerFactory
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
@@ -59,7 +60,9 @@ class CharacterStatStorageMigration(
             if (stats == null) {
                 logger.warn("Legacy stats for {} are incomplete; a HoYoWiki page refresh is needed", key)
             } else {
-                characters.saveHoyolabEnrichment(character.copy(stats = stats))
+                characters.saveHoyolabEnrichment(character.copy(
+                    stats = CharacterBaseStatCorrections.fillMissing(key, stats),
+                ))
             }
         }
     }

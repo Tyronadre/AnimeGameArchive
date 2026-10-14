@@ -14,6 +14,12 @@ import de.tyro.genshinapp.service.importer.*
 import jakarta.persistence.EntityManager
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verifyNoInteractions
+import org.mockito.Mockito.doThrow
+import org.mockito.ArgumentMatchers.anyCollection
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.DefaultApplicationArguments
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -103,7 +109,7 @@ class CharacterStatCatalogIntegrationTest @Autowired constructor(
             }
         }
         component.put("data", mapper.writeValueAsString(data))
-        importer.importPage(page)
+        forceImport(page)
         entityManager.flush()
         entityManager.clear()
         assertEquals(3, count("game_character_base_stat"))
@@ -117,13 +123,15 @@ class CharacterStatCatalogIntegrationTest @Autowired constructor(
         import("nefer")
         entityManager.flush()
         entityManager.clear()
-        assertEquals(3, count("game_character_base_stat"))
+        assertEquals(4, count("game_character_base_stat"))
         val first = assertNotNull(catalog.resolve("nefer", 1, 0))
         val last = assertNotNull(catalog.resolve("nefer", 90, 6))
         assertEquals(50.0, first["critDMG_"])
         assertEquals(88.4, last.getValue("critDMG_"), 1e-8)
         assertEquals(12704.0, last["hp"])
         assertEquals(344.0, last["atk"])
+        assertEquals(100.0, first["eleMas"])
+        assertEquals(100.0, last["eleMas"])
     }
 
     @Test
@@ -143,10 +151,10 @@ class CharacterStatCatalogIntegrationTest @Autowired constructor(
             }
         }
         component.put("data", mapper.writeValueAsString(data))
-        importer.importPage(page)
+        forceImport(page)
         entityManager.flush()
         entityManager.clear()
-        assertEquals(4, count("game_character_base_stat"))
+        assertEquals(5, count("game_character_base_stat"))
         assertEquals(50.0, catalog.find("nefer")?.baseStats?.get(FIGHT_PROP_CRITICAL_HURT))
         assertEquals(50.0, catalog.resolve("nefer", 1, 0)?.get("critDMG_"))
         assertEquals(88.4, catalog.resolve("nefer", 90, 6)?.get("critDMG_"))
@@ -176,10 +184,10 @@ class CharacterStatCatalogIntegrationTest @Autowired constructor(
             combat.removeAll().addAll(reversed)
         }
         component.put("data", mapper.writeValueAsString(data))
-        assertEquals(original.stats, importer.importPage(page)?.stats)
+        assertEquals(original.stats, forceImport(page)?.stats)
         (data.path("list") as ArrayNode).remove(2)
         component.put("data", mapper.writeValueAsString(data))
-        assertEquals(original.stats, importer.importPage(page)?.stats)
+        assertEquals(original.stats, forceImport(page)?.stats)
     }
 
     @Test
@@ -221,6 +229,143 @@ class CharacterStatCatalogIntegrationTest @Autowired constructor(
         } finally {
             jdbc.execute("DROP TABLE game_character_progression")
         }
+    }
+
+    @Test
+    fun `completed page imports preserve manual stats across service restarts and version changes`() {
+        val original = import("lauma")
+        val stats = assertNotNull(original.stats)
+        characters.saveHoyolabEnrichment(original.copy(hoyolabDataVersion = 1,
+            stats = stats.copy(baseStats = stats.baseStats + (FIGHT_PROP_ELEMENT_MASTERY to 250.0))))
+        entityManager.flush()
+        entityManager.clear()
+        val restarted = CharacterCatalogService(mock(DynamicContentLoader::class.java), FandomImageUrlResolver(properties), store)
+        val source = mock(HoyolabWikiDataSource::class.java)
+        val pages = HoyolabCharacterPageService(mapper, properties, restarted, mock(MaterialCatalogService::class.java), source)
+        assertEquals(250.0, pages.importPage(page("lauma"))?.stats?.baseStats?.get(FIGHT_PROP_ELEMENT_MASTERY))
+        assertEquals(250.0, pages.enrichExact("lauma")?.stats?.baseStats?.get(FIGHT_PROP_ELEMENT_MASTERY))
+        verifyNoInteractions(source)
+    }
+
+    @Test
+    fun `startup option reruns saved characters once and leaves normal requests using saved values`() {
+        val original = import("lauma")
+        val stats = assertNotNull(original.stats)
+        characters.saveHoyolabEnrichment(original.copy(
+            stats = stats.copy(baseStats = stats.baseStats + (FIGHT_PROP_ELEMENT_MASTERY to 250.0))))
+        val source = mock(HoyolabWikiDataSource::class.java)
+        `when`(source.fetchPage(assertNotNull(original.hoyolabEntryId))).thenReturn(page("lauma"))
+        val pages = HoyolabCharacterPageService(mapper, properties, characters, mock(MaterialCatalogService::class.java), source)
+        val rerunner = HoyolabCharacterImportRerunner(properties, store, pages)
+        rerunner.run(DefaultApplicationArguments())
+        verifyNoInteractions(source)
+        properties.rerunCharacterImports = true
+        rerunner.run(DefaultApplicationArguments())
+        rerunner.run(DefaultApplicationArguments())
+        pages.enrichExact("lauma")
+        verify(source, times(1)).fetchPage(assertNotNull(original.hoyolabEntryId))
+        assertEquals(200.0, catalog.resolve("lauma", 1, 0)?.get("eleMas"))
+    }
+
+    @Test
+    fun `a bundled rerun does not trigger another live import at startup`() {
+        import("lauma")
+        properties.rerunCharacterImports = true
+        val source = mock(HoyolabWikiDataSource::class.java)
+        val pages = HoyolabCharacterPageService(mapper, properties, characters, mock(MaterialCatalogService::class.java), source)
+        pages.importPage(page("lauma"), force = properties.rerunCharacterImports)
+        HoyolabCharacterImportRerunner(properties, store, pages).run(DefaultApplicationArguments())
+        verifyNoInteractions(source)
+    }
+
+    @Test
+    fun `bare ascension materials resolve using named talent references before costs are converted`() {
+        import("lauma")
+        val page = page("lauma")
+        val component = component(page)
+        val data = mapper.readTree(component.path("data").asText())
+        val materials = (data.path("list")[1] as ObjectNode).putArray("materials")
+        materials.addObject().put("ep_id", 447).put("amount", 3)
+        materials.addObject().put("ep_id", 448).put("amount", 2)
+        component.put("data", mapper.writeValueAsString(data))
+        val talent = mapper.readTree("""{
+            "list": [{"title": "Test Talent", "attributes": [{"key": "DMG", "values": ["100%"]}],
+                "materials": [[], [{"ep_id":447,"name":"Slime Condensate","amount":4},
+                    {"ep_id":448,"amount":5}]]}]
+        }""")
+        (page.path("modules")[0].path("components") as ArrayNode).addObject()
+            .put("component_id", "talent").set<JsonNode>("data", talent)
+        val catalog = MaterialCatalogService(identityCatalog = MaterialIdentityCatalog(mapper, properties))
+        val pages = HoyolabCharacterPageService(mapper, properties, characters, catalog)
+        val imported = assertNotNull(pages.importPage(page, force = true))
+        entityManager.flush()
+        entityManager.clear()
+        val saved = assertNotNull(store.findCharacter("lauma"))
+        assertEquals(imported.ascensionCosts, saved.ascensionCosts)
+        val ascension = saved.ascensionCosts.getValue(1)
+        assertEquals(112002, ascension[0].id)
+        assertEquals("Slime Condensate", ascension[0].name)
+        assertEquals(3, ascension[0].count)
+        assertEquals("HoYoWiki material 448", ascension[1].name)
+        assertEquals(2, ascension[1].count)
+        val costs = saved.talentCosts.getValue(2)
+        assertEquals(112002, costs[0].id)
+        assertEquals(4, costs[0].count)
+        assertEquals(ascension[1].id, costs[1].id)
+        assertEquals(5, costs[1].count)
+    }
+
+    @Test
+    fun `a failed live import preserves saved data and does not mark the rerun complete`() {
+        val original = import("lauma")
+        val source = mock(HoyolabWikiDataSource::class.java)
+        `when`(source.fetchPage(assertNotNull(original.hoyolabEntryId))).thenReturn(page("lauma"))
+        val materials = mock(MaterialCatalogService::class.java)
+        doThrow(IllegalArgumentException("Unresolved material")).`when`(materials)
+            .synchronizeHoyolabReferences(anyCollection())
+        val pages = HoyolabCharacterPageService(mapper, properties, characters, materials, source)
+        assertEquals(original, pages.enrichExact("lauma", force = true))
+        assertEquals(original, pages.enrichExact("lauma", force = true))
+        verify(source, times(1)).fetchPage(assertNotNull(original.hoyolabEntryId))
+        assertEquals(original.stats, store.findCharacter("lauma")?.stats)
+    }
+
+    private fun forceImport(page: JsonNode): CharacterDefinition? = HoyolabCharacterPageService(
+        mapper, properties, characters, mock(MaterialCatalogService::class.java),
+    ).importPage(page, force = true)
+
+    @Test
+    fun `Nefer correction backfills existing records once preserves manual values and survives reruns`() {
+        val original = import("nefer")
+        val profile = assertNotNull(original.stats)
+        characters.saveHoyolabEnrichment(original.copy(
+            stats = profile.copy(baseStats = profile.baseStats - FIGHT_PROP_ELEMENT_MASTERY),
+        ))
+        entityManager.flush()
+        entityManager.clear()
+        assertEquals(0.0, catalog.resolve("nefer", 1, 0)?.get("eleMas"))
+        val correctionImporter = CharacterBaseStatCorrectionImporter(store, characters)
+        correctionImporter.run(DefaultApplicationArguments())
+        entityManager.flush()
+        entityManager.clear()
+        assertEquals(100.0, catalog.resolve("nefer", 1, 0)?.get("eleMas"))
+        assertEquals(100.0, catalog.resolve("nefer", 90, 6)?.get("eleMas"))
+        assertEquals(original.hoyolabDataVersion, store.findCharacter("nefer")?.hoyolabDataVersion)
+        val ids = jdbc.queryForList("SELECT id FROM game_character_base_stat ORDER BY id", Long::class.java)
+        correctionImporter.run(DefaultApplicationArguments())
+        entityManager.flush()
+        assertEquals(ids, jdbc.queryForList("SELECT id FROM game_character_base_stat ORDER BY id", Long::class.java))
+
+        val saved = assertNotNull(store.findCharacter("nefer"))
+        val savedProfile = assertNotNull(saved.stats)
+        characters.saveHoyolabEnrichment(saved.copy(stats = savedProfile.copy(
+            baseStats = savedProfile.baseStats + (FIGHT_PROP_ELEMENT_MASTERY to 125.0),
+        )))
+        correctionImporter.run(DefaultApplicationArguments())
+        assertEquals(125.0, catalog.resolve("nefer", 90, 6)?.get("eleMas"))
+        forceImport(page("nefer"))
+        assertEquals(100.0, catalog.resolve("nefer", 90, 6)?.get("eleMas"))
+        assertEquals(4, count("game_character_base_stat"))
     }
 
     private fun import(key: String): CharacterDefinition {

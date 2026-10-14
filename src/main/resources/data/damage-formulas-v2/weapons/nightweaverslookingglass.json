@@ -1,0 +1,276 @@
+{
+  "schemaVersion": 2,
+  "key": "nightweaverslookingglass",
+  "name": "Nightweaver's Looking Glass",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "prayer",
+      "label": "Prayer of the Far North active",
+      "description": "Skill dealing Hydro or Dendro damage; lasts 4.5s, works off-field.",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "verse",
+      "label": "New Moon Verse active",
+      "description": "A nearby party member triggers Lunar-Bloom; lasts 10s, works off-field.",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "effect": {
+        "id": "prayer",
+        "name": "Prayer of the Far North",
+        "description": "Hydro or Dendro Skill damage grants wearer EM.",
+        "source": "Weapon",
+        "category": "weapon",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:prayer",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [
+          {
+            "stat": "elementalMastery",
+            "operation": "flatAdd",
+            "value": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 45
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 15
+                    },
+                    {
+                      "type": "input",
+                      "input": "local:refinement"
+                    }
+                  ]
+                }
+              ]
+            },
+            "conditions": []
+          }
+        ],
+        "formulaModifiers": []
+      }
+    },
+    {
+      "effect": {
+        "id": "verse",
+        "name": "New Moon Verse",
+        "description": "A nearby Lunar-Bloom reaction grants wearer EM.",
+        "source": "Weapon",
+        "category": "weapon",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:verse",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [
+          {
+            "stat": "elementalMastery",
+            "operation": "flatAdd",
+            "value": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 45
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 15
+                    },
+                    {
+                      "type": "input",
+                      "input": "local:refinement"
+                    }
+                  ]
+                }
+              ]
+            },
+            "conditions": []
+          }
+        ],
+        "formulaModifiers": []
+      }
+    },
+    {
+      "recipient": "party",
+      "effect": {
+        "id": "both",
+        "name": "Millennial Hymn · party reaction bonuses",
+        "description": "Both buffs grant party reaction damage bonuses. Multiple copies do not stack.",
+        "source": "Weapon",
+        "category": "weapon",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:prayer",
+              "value": 1
+            },
+            {
+              "type": "inputAtLeast",
+              "input": "local:verse",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "anyTags": [
+                "bloom"
+              ],
+              "damageKinds": [
+                "reaction"
+              ]
+            },
+            "damageBonus": {
+              "expression": {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 90
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 30
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:refinement"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "targets": {
+              "anyTags": [
+                "hyperbloom",
+                "burgeon"
+              ],
+              "damageKinds": [
+                "reaction"
+              ]
+            },
+            "damageBonus": {
+              "expression": {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 60
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 20
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:refinement"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "targets": {
+              "anyTags": [
+                "lunarBloom"
+              ],
+              "damageKinds": [
+                "lunar"
+              ]
+            },
+            "damageBonus": {
+              "expression": {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 30
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 10
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:refinement"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "requiresEffects": [
+          "prayer",
+          "verse"
+        ],
+        "stackingGroup": "weapon.nightweaverslookingglass.party",
+        "stackingPriority": {
+          "type": "input",
+          "input": "local:refinement"
+        }
+      }
+    }
+  ],
+  "sources": [
+    "https://www.icy-veins.com/genshin-impact/weapons/14520"
+  ]
+}

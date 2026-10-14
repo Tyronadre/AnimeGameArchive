@@ -10,6 +10,8 @@ The importer converts a complete level 1–90 table into three collections owned
 
 For example, Lauma's imported base EM is 200 and her phase-six EM bonus is 115, giving 315 EM. Characters with a zero level-one CRIT DMG bonus retain the universal 50% and receive their ascension bonus once.
 
+`data/character-base-stat-corrections.json` supplies known base stats absent from HoYoWiki. Its Nefer entry supplies 100 base EM. The page importer and legacy migration fill missing values from this file; `CharacterBaseStatCorrectionImporter` also backfills existing records at startup without a page reimport. Existing nonzero values are preserved, and repeated startups do not add the correction again. Lauma needs no correction because her EM is already imported from HoYoWiki. Add future missing stats to this data file rather than adding character conditions to stat calculations.
+
 All requests for stats at a level and ascension go through `CharacterStatCatalog.resolve(key, level, ascension)`:
 
 ```text
@@ -26,4 +28,6 @@ The offline curve resource `src/main/resources/data/character-growth-curves.json
 
 On upgrade, `CharacterStatStorageMigration` converts complete legacy `game_character_progression` records that have no normalized base stats. The old table is no longer mapped or written; an existing copy is left untouched. Incomplete legacy records require a page refresh. Fresh databases only create the three new stat tables.
 
-`BundledCatalogSnapshotImporter` then reapplies the packaged full-page snapshot at startup. The page import version is 2, so live enrichment also refreshes previously imported pages. Re-importing updates existing child rows and removes obsolete values without duplicates. Incomplete imports preserve the previous usable stat profile.
+`BundledCatalogSnapshotImporter` imports packaged character pages only for characters that have never completed a page import. Completion is persisted through `hoyolabDataVersion > 0`; changing the importer version does not overwrite saved character stats. Live enrichment follows the same rule. Failed fetches may be retried; an imported page with incomplete stats preserves its previous usable profile and is still marked imported.
+
+For development, start with `--genshin.content.rerun-character-imports=true`. Bundled character pages are reapplied once for that startup. The startup rerunner fetches remaining saved characters when live HoYoWiki access is enabled. A character already rerun from the snapshot is skipped by the live rerunner. Re-importing updates existing child rows and removes obsolete values without duplicates.

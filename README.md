@@ -24,10 +24,22 @@ The import is controlled with these properties:
 ```properties
 genshin.content.hoyolab-wiki-enabled=true
 genshin.content.hoyolab-catalog-sync-enabled=true
+genshin.content.rerun-character-imports=false
 genshin.content.material-identity-catalog-url=https://raw.githubusercontent.com/Tyronadre/AnimeGameArchive/master/src/main/resources/data/material-identities.json
 ```
 
 ## Web mode
+
+Character detail pages are imported once per character, with completion saved in the database.
+For development, rerun them at startup with:
+
+```powershell
+.\gradlew.bat bootRun --args="--genshin.content.rerun-character-imports=true"
+```
+
+The option reapplies bundled character pages and fetches remaining saved characters when
+`hoyolab-wiki-enabled` is true. Each character is rerun at most once during that startup.
+Without the option, existing character stats are preserved across restarts and importer version changes.
 
 The normal web application keeps account authentication and the configured
 MySQL database:

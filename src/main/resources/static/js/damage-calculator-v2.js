@@ -193,7 +193,7 @@
         const effectDefinitions = profile.inputs.filter((definition) =>
             !statInputIds.has(definition.id) && !progressInputIds.has(definition.id) &&
             !calculationIds.has(definition.id) && definition.section !== "internal" &&
-            !definition.section?.startsWith("artifact:"),
+            !definition.section?.startsWith("artifact:") && !definition.section?.startsWith("weapon:"),
         );
 
         renderInputSections(inputsNode, effectDefinitions,
@@ -398,7 +398,7 @@
     }
 
     function statEffectClass(effect) {
-        if (effect?.category?.startsWith("artifact:")) return "formula-token-effect-weapon";
+        if (effect?.category?.startsWith("artifact:") || effect?.category?.startsWith("weapon:")) return "formula-token-effect-weapon";
         if (effect?.category === "team") return "formula-token-effect-team";
         return "formula-token-effect-character";
     }
@@ -891,6 +891,13 @@
     }
 
     function effectCategoryDefinition(key) {
+        if (key.startsWith("weapon:")) {
+            return {
+                name: profile.effects.find((effect) => effect.category === key)?.source || "Weapon effects",
+                help: "Equipped weapon passives. Set refinement and active buffs for this combat snapshot.",
+                defaultOpen: true,
+            };
+        }
         if (key.startsWith("artifact:")) {
             const loadout = profile.artifactLoadouts.find((item) => `artifact:${item.characterKey}` === key);
             return {
@@ -998,6 +1005,7 @@
         const existingSections = new Map(Array.from(effectsNode.querySelectorAll("[data-v2-effect-category]"))
             .map((section) => [section.dataset.v2EffectCategory, section]));
         const categories = ["passive", "team", "constellation",
+            ...new Set(profile.effects.filter((effect) => effect.category.startsWith("weapon:")).map((effect) => effect.category)),
             ...(profile.artifactLoadouts || []).filter((loadout) => loadout.sets.length > 0)
                 .map((loadout) => `artifact:${loadout.characterKey}`)];
         categories.forEach((categoryKey) => {
@@ -1049,6 +1057,8 @@
                     equipment.append(chip);
                 });
                 details.append(equipment);
+            }
+            if (loadout || categoryKey.startsWith("weapon:")) {
                 const artifactInputs = profile.inputs.filter((input) => input.section === categoryKey);
                 if (artifactInputs.length) {
                     const fields = el("div", "damage-v2-artifact-inputs");

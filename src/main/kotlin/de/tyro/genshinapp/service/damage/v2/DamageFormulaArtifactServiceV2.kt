@@ -7,6 +7,8 @@ import de.tyro.genshinapp.model.TravelerIdentity
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import org.springframework.stereotype.Service
 
+internal data class EquippedEffectItemV2(val owner: String, val key: String, val slot: String)
+
 /** Binds reusable artifact expressions to equipped wearers and the current damage recipient. */
 @Service
 class DamageFormulaArtifactServiceV2(private val objectMapper: ObjectMapper) {
@@ -25,9 +27,17 @@ class DamageFormulaArtifactServiceV2(private val objectMapper: ObjectMapper) {
     fun allDefinitions(): Collection<DamageArtifactSetV2> = definitions.values
 
     fun attach(profile: DamageFormulaProfileV2, artifacts: List<PlayerArtifact>): DamageFormulaProfileV2 {
+        return bindEquipment(profile, artifacts.map { EquippedEffectItemV2(it.location.orEmpty(), it.setKey, it.slotKey) }, definitions)
+    }
+
+    // Shared expression binding for equipped effects; weapons supply a single equipped tier.
+    internal fun bindEquipment(profile: DamageFormulaProfileV2, equipment: List<EquippedEffectItemV2>,
+                               definitions: Map<String, DamageArtifactSetV2>, kind: String = "artifact",
+                               refinements: Map<String, Int> = emptyMap()): DamageFormulaProfileV2 {
         val members = profile.teamMembers.filter { it.key in profile.selectedTeam }.ifEmpty {
             listOf(DamageTeamMemberV2(profile.characterKey, profile.name, profile.element, profile.moonsignContribution))
         }
+        val minimumTier = if (kind == "weapon") 1 else 2
         val inputs = profile.inputs.associateByTo(linkedMapOf()) { it.id }
         val effects = profile.effects.toMutableList()
         val talents = profile.talents.toMutableList()
@@ -41,27 +51,27 @@ class DamageFormulaArtifactServiceV2(private val objectMapper: ObjectMapper) {
 
         fun statInput(character: String, stat: String): String {
             return bindings.getValue(character).getOrPut(stat) {
-                val id = "artifactStat.$character.$stat"
+                val id = "${kind}Stat.$character.$stat"
                 val spec = statDefinition(stat)
                 val name = members.first { it.key == character }.name
                 inputs[id] = DamageFormulaInputV2(id, "$name · ${spec.label}", spec.defaultValue,
                     spec.min, spec.max, spec.step, spec.unit,
-                    spec.initialValueSource?.copy(characterKey = character), section = "artifact:$character",
+                    spec.initialValueSource?.copy(characterKey = character), section = "$kind:$character",
                     hintTag = spec.hintTag, description = spec.description)
                 id
             }
         }
 
         val loadouts = members.map { wearer ->
-            val equipped = artifacts.filter { TravelerIdentity.canonicalCharacterKey(it.location.orEmpty()) ==
+            val equipped = equipment.filter { TravelerIdentity.canonicalCharacterKey(it.owner) ==
                 TravelerIdentity.canonicalCharacterKey(wearer.key) }
-            require(equipped.map { it.slotKey.lowercase() }.distinct().size == equipped.size) {
-                "${wearer.name} has multiple equipped artifacts in the same slot"
+            require(equipped.map { it.slot.lowercase() }.distinct().size == equipped.size) {
+                "${wearer.name} has multiple equipped items in the same slot"
             }
-            val counts = equipped.groupingBy { GoodKeyNormalizer.normalize(it.setKey) }.eachCount().toSortedMap()
+            val counts = equipped.groupingBy { GoodKeyNormalizer.normalize(it.key) }.eachCount().toSortedMap()
             counts.forEach setLoop@{ (key, pieces) ->
                 val set = definitions[key] ?: return@setLoop
-                val prefix = "artifact.${wearer.key}.$key."
+                val prefix = "$kind.${wearer.key}.$key."
                 val countContext = "${prefix}pieces"
                 context[countContext] = pieces.toDouble()
                 val weapon = if (wearer.key == profile.characterKey) profile.weaponType
@@ -84,13 +94,14 @@ class DamageFormulaArtifactServiceV2(private val objectMapper: ObjectMapper) {
                     }
                     if (node.isContainerNode) node.forEach(::collectInputs)
                 }
-                set.effects.filter { it.pieces >= 2 && pieces >= it.pieces }.forEach {
+                set.effects.filter { it.pieces >= minimumTier && pieces >= it.pieces }.forEach {
                     collectInputs(objectMapper.valueToTree(it))
                 }
                 set.inputs.filter { it.id in neededInputs }.forEach { input ->
                     inputs[prefix + input.id] = input.copy(id = prefix + input.id,
-                        label = "${wearer.name} · ${input.label}", section = "artifact:${wearer.key}",
-                        defaultValue = input.defaultContext?.let { localContext.getValue(it) } ?: input.defaultValue)
+                        label = "${wearer.name} · ${input.label}", section = "$kind:${wearer.key}",
+                        defaultValue = if (input.id == "refinement" && kind == "weapon") refinements.getValue(wearer.key).toDouble()
+                            else input.defaultContext?.let { localContext.getValue(it) } ?: input.defaultValue)
                 }
                 fun expression(node: FormulaExpressionV2, recipient: String): FormulaExpressionV2 {
                     if (node.type == "context") return FormulaExpressionV2("constant", value = localContext[node.input] ?: 0.0)
@@ -129,7 +140,7 @@ class DamageFormulaArtifactServiceV2(private val objectMapper: ObjectMapper) {
                     elevation = contribution(modifier.elevation, recipient),
                     postBonusBase = modifier.postBonusBase?.let { expression(it, recipient) },
                 ) }
-                set.effects.filter { it.pieces >= 2 && pieces >= it.pieces }.forEach { template ->
+                set.effects.filter { it.pieces >= minimumTier && pieces >= it.pieces }.forEach { template ->
                     val origin = DamageArtifactOriginV2(wearer.key, key, set.name, pieces, template.pieces)
                     val source = template.effect
                     val recipients = when (template.recipient) {
@@ -141,8 +152,8 @@ class DamageFormulaArtifactServiceV2(private val objectMapper: ObjectMapper) {
                         stat = statInput(recipient, change.stat), value = expression(change.value, recipient),
                         conditions = conditions(change.conditions), requiresEffects = change.requiresEffects.map { prefix + it },
                     ) } }
-                    effects += source.copy(id = prefix + source.id, category = "artifact:${wearer.key}",
-                        source = "${wearer.name} · ${set.name}", artifactOrigin = origin,
+                    effects += source.copy(id = prefix + source.id, category = "$kind:${wearer.key}",
+                        source = "${wearer.name} · ${set.name}", artifactOrigin = origin.takeIf { kind == "artifact" },
                         activation = source.activation.copy(conditions = conditions(source.activation.conditions) +
                             EffectActivationConditionV2("contextAtLeast", countContext, template.pieces.toDouble())),
                         requiresEffects = source.requiresEffects.map { prefix + it }, statChanges = statChanges,
@@ -172,7 +183,8 @@ class DamageFormulaArtifactServiceV2(private val objectMapper: ObjectMapper) {
             })
         }
         return profile.copy(inputs = inputs.values.toList(), effects = effects, talents = talents,
-            damageTypes = types.values.toList(), teamContext = context, artifactLoadouts = loadouts,
+            damageTypes = types.values.toList(), teamContext = context,
+            artifactLoadouts = if (kind == "artifact") loadouts else profile.artifactLoadouts,
             teamStatInputs = bindings.values.flatMap { it.entries }.groupBy({ it.key }, { it.value }))
     }
 
@@ -180,6 +192,8 @@ class DamageFormulaArtifactServiceV2(private val objectMapper: ObjectMapper) {
         val source = when (stat) {
             "attack" -> "totalAttack"
             "baseAttack" -> "baseAttack"
+            "maxHp" -> "totalHp"
+            "baseHp" -> "baseHp"
             "elementalMastery" -> "stat:eleMas"
             "critRate" -> "stat:critRate_"
             "critDamage" -> "stat:critDMG_"

@@ -43,6 +43,9 @@ class FandomImageUrlResolver(
     }
 
     fun talentImageUrl(talentName: String): String {
+        if (talentName.trim() == "Sacred Vow: True Eye's Phantasm") {
+            return hashedImageUrl("Talent_Sacred_Vow_True_Eye's_Phantasm.png")
+        }
         val normalizedName = talentName
             .replace(TALENT_SPECIAL_CHARACTERS, "")
             .trim()
@@ -51,7 +54,8 @@ class FandomImageUrlResolver(
     }
 
     fun normalAttackImageUrl(weaponName: String, elementName: String): String {
-        val normalizedName = "$weaponName $elementName".trim().replace(WHITESPACE, "_")
+        val element = elementName.trim().lowercase().replaceFirstChar { it.uppercase() }
+        val normalizedName = "$weaponName $element".trim().replace(WHITESPACE, "_")
         return hashedImageUrl("$normalizedName.png")
     }
 

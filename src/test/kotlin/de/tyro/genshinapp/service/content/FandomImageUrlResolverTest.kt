@@ -9,6 +9,14 @@ class FandomImageUrlResolverTest {
     private val resolver = FandomImageUrlResolver(GenshinContentProperties())
 
     @Test
+    fun `uses Nefer's apostrophe and capitalized Dendro in hashed image paths`() {
+        assertEquals("https://static.wikia.nocookie.net/gensin-impact/images/c/c2/Talent_Sacred_Vow_True_Eye%27s_Phantasm.png",
+            resolver.talentImageUrl("Sacred Vow: True Eye's Phantasm"))
+        assertEquals("https://static.wikia.nocookie.net/gensin-impact/images/c/c4/Catalyst_Dendro.png",
+            resolver.normalAttackImageUrl("Catalyst", "dendro"))
+    }
+
+    @Test
     fun `calculates the MediaWiki hash paths for all Aino image types`() {
         assertEquals(
             "https://static.wikia.nocookie.net/gensin-impact/images/a/a3/Aino_Icon.png",
