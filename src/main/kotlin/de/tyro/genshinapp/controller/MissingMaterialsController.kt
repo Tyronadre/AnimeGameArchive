@@ -122,6 +122,7 @@ class MissingMaterialsController(
                 characterCount = plan.matchedCharacters + plan.unmatchedCharacterKeys.size,
                 inventoryEntries = snapshot.exportedInventoryKeys,
                 missingMaterialKinds = plan.missingMaterialKinds,
+                incompleteCharacterNames = plan.incompleteCharacterNames,
             ),
             materials = materials,
         )
@@ -139,6 +140,7 @@ data class MissingMaterialsLiveSummary(
     val characterCount: Int,
     val inventoryEntries: Int,
     val missingMaterialKinds: Int,
+    val incompleteCharacterNames: List<String> = emptyList(),
 )
 
 data class MissingMaterialLiveValue(

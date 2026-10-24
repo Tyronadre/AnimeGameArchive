@@ -271,6 +271,10 @@ class DashboardController(
         val title: String
         val detail: String
         when (event.type) {
+            SnapshotActivityType.WEEKLY_BOSS_COLLECTED -> {
+                title = messages.get("dashboard.recent.weeklyBossCollected", event.name)
+                detail = messages.get("dashboard.recent.weeklyBossCollected.detail", event.amount ?: 0)
+            }
             SnapshotActivityType.MATERIAL_GAIN -> {
                 title = messages.get("dashboard.recent.materialGain", event.name)
                 detail = messages.get(

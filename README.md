@@ -21,6 +21,11 @@ sets link to those records through `hoyowiki_entry_id`; wiki IDs remain separate
 from game item IDs. Bundled imports do not count as live queries. Artifact summaries
 are restored from the database when the startup check skips their download.
 
+Material wiki-to-game ID mappings are also restored from persisted links, so
+character and weapon detail imports do not depend on a full catalog download.
+Before the catalog caches load, startup repairs verified legacy/synthetic material
+aliases and their cost/source links. Conflicting cost amounts are retained and logged.
+
 HoYoWiki exposes page ids for materials, while GOOD inventories and source groups use
 in-game item ids. [`material-identities.json`](src/main/resources/data/material-identities.json)
 is the versioned bridge between both namespaces. It is bundled for offline/fresh installs and
@@ -42,6 +47,10 @@ genshin.content.material-identity-catalog-url=https://raw.githubusercontent.com/
 ## Web mode
 
 Character detail pages are imported once per character, with completion saved in the database.
+Before calculating a material plan, missing cost details are fetched for the included
+characters (including the selected Traveler element), with at most four imports in parallel.
+Saved costs are reused on later calculations. If a fetch fails, the materials page identifies
+the affected characters and labels the totals as incomplete.
 For development, rerun them at startup with:
 
 ```powershell
@@ -68,6 +77,32 @@ immediately while the local database and Spring services initialize. Use its
 button to open the full interface in the default browser.
 
 Set `GENSHIN_DESKTOP_HOME` before launch to use another local data directory.
+
+H2 runs in automatic mixed mode, so an external H2 client (for example, IntelliJ's
+database tool window or DBeaver) can inspect the same database while the app runs.
+No Docker container or separately installed database server is required. The
+automatic server binds to `127.0.0.1` and chooses an available port.
+
+Use the H2 JDBC driver matching the app's version (currently 2.3.232), username
+`sa`, and an empty password. For the default data directory, use this JDBC URL
+(replace `<username>` with your Windows user name):
+
+```text
+jdbc:h2:file:C:/Users/<username>/.genshinapp/desktop/database/genshinapp;MODE=MySQL;DATABASE_TO_LOWER=TRUE;AUTO_SERVER=TRUE;IFEXISTS=TRUE
+```
+
+Use the same absolute database path in both processes. `IFEXISTS=TRUE` prevents a
+client with an incorrect path from silently creating a different database.
+Restart the app after upgrading from embedded-only mode before connecting the
+external client.
+
+To start fresh while keeping the old database and cache intact, use a new data
+directory for the next launch:
+
+```powershell
+$env:GENSHIN_DESKTOP_HOME = "$env:USERPROFILE/.genshinapp/desktop-fresh"
+.\gradlew.bat desktopRun
+```
 
 For development:
 

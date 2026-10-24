@@ -6,6 +6,7 @@ import de.tyro.genshinapp.repository.GameCharacterRepository
 import de.tyro.genshinapp.repository.MaterialRepository
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.context.annotation.DependsOn
 import org.springframework.transaction.annotation.Transactional
 
 interface CharacterCatalogStore {
@@ -17,6 +18,7 @@ interface CharacterCatalogStore {
 }
 
 @Service
+@DependsOn("materialIdentityRepair")
 class JpaCharacterCatalogStore(
     private val characterRepository: GameCharacterRepository,
     private val materialRepository: MaterialRepository,

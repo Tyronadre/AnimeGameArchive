@@ -15,6 +15,9 @@ import de.tyro.genshinapp.service.catalog.MaterialCatalogService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
+import jakarta.annotation.PreDestroy
 
 /** Imports structured character details directly from the official HoYoWiki page format. */
 @Service
@@ -30,6 +33,23 @@ class HoyolabCharacterPageService(
     private val locks = ConcurrentHashMap<String, Any>()
     private val failedAt = ConcurrentHashMap<String, Long>()
     private val rerunCompleted = ConcurrentHashMap.newKeySet<String>()
+    private val planningImports = Executors.newFixedThreadPool(4) { task ->
+        Thread(task, "hoyowiki-planning-import").apply { isDaemon = true }
+    }
+
+    /** A catalog summary has no costs. Resolve missing details before adding up a plan. */
+    fun ensureMaterialCosts(keys: Collection<String>) {
+        val missing = keys.map(GoodKeyNormalizer::normalize).distinct().filter { key ->
+            characterCatalogService.findExactCharacter(key)?.let {
+                it.ascensionCosts.isEmpty() || it.talentCosts.isEmpty()
+            } == true
+        }
+        planningImports.invokeAll(missing.map { key -> Callable { enrichExact(key) } })
+            .forEach { it.get() }
+    }
+
+    @PreDestroy
+    fun close() { planningImports.shutdownNow() }
 
     fun enrichExact(key: String, force: Boolean = false): CharacterDefinition? {
         val normalizedKey = GoodKeyNormalizer.normalize(key)
@@ -55,7 +75,9 @@ class HoyolabCharacterPageService(
                 val imported = runCatching { importPage(page, force) }
                     .onFailure { logger.warn("Could not import the HoYoWiki page for {}", current.name, it) }
                     .getOrNull()
-                if (imported == null) failedAt[normalizedKey] = System.currentTimeMillis()
+                if (imported == null || imported.ascensionCosts.isEmpty() || imported.talentCosts.isEmpty()) {
+                    failedAt[normalizedKey] = System.currentTimeMillis()
+                }
                 else failedAt.remove(normalizedKey)
                 imported ?: current
             }
@@ -75,7 +97,8 @@ class HoyolabCharacterPageService(
     }
 
     private fun shouldSkip(character: CharacterDefinition, force: Boolean): Boolean =
-        if (force) character.key in rerunCompleted else character.hoyolabDataVersion > 0
+        if (force) character.key in rerunCompleted else character.hoyolabDataVersion > 0 &&
+            character.ascensionCosts.isNotEmpty() && character.talentCosts.isNotEmpty()
 
     private fun importPageDetails(page: JsonNode, current: CharacterDefinition): CharacterDefinition? {
         val name = page.path("name").asText().trim()
@@ -143,13 +166,12 @@ class HoyolabCharacterPageService(
     }
 
     private fun lookupPage(character: CharacterDefinition): JsonNode? {
-        val ids = buildList {
-            character.hoyolabEntryId?.let(::add)
-            addAll(source.search(character.name).filter {
+        character.hoyolabEntryId?.let { id -> source.fetchPage(id)?.let { return it } }
+        val ids = source.search(character.name).filter {
                 it.name.equals(character.name, ignoreCase = true)
             }.sortedByDescending { HoyolabWikiMenu.CHARACTERS.id in it.menuIds }
-                .map(HoyolabWikiSearchHit::entryPageId))
-        }.distinct()
+                .map(HoyolabWikiSearchHit::entryPageId).distinct()
+                .filter { it != character.hoyolabEntryId }
         return ids.firstNotNullOfOrNull(source::fetchPage)
     }
 

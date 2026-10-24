@@ -7,6 +7,7 @@ data class MaterialDefinition(
     val craftingFamily: String? = null,
     val craftingTier: Int? = null,
     val conversionGroup: String? = null,
+    val hoyolabEntryId: Long? = null,
 )
 
 enum class MaterialCategory(val messageKey: String) {

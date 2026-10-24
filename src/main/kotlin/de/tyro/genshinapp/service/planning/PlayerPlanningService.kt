@@ -1,6 +1,7 @@
 package de.tyro.genshinapp.service.planning
 
 import de.tyro.genshinapp.service.catalog.CharacterCatalogService
+import de.tyro.genshinapp.service.importer.HoyolabCharacterPageService
 import de.tyro.genshinapp.service.player.TravelerService
 import de.tyro.genshinapp.model.CharacterDefinition
 import de.tyro.genshinapp.model.CharacterProgress
@@ -21,6 +22,7 @@ class PlayerPlanningService(
     private val materialCalculator: MaterialCalculator,
     private val materialCraftingService: MaterialCraftingService,
     private val travelerService: TravelerService? = null,
+    private val characterPages: HoyolabCharacterPageService? = null,
 ) {
     fun createPlan(
         snapshot: PlayerSnapshot,
@@ -75,7 +77,7 @@ class PlayerPlanningService(
             )
         }
 
-        val characterPlans = candidates.mapNotNull { (normalizedKey, candidate) ->
+        val plannedCandidates = candidates.mapNotNull { (normalizedKey, candidate) ->
             val (character, state) = candidate
             val form = CharacterProgressForm().also {
                 if (normalizedKey == TravelerIdentity.KEY && travelerSelection != null) {
@@ -98,6 +100,35 @@ class PlayerPlanningService(
             val progress = form.normalized()
             if (!progress.owned) return@mapNotNull null
 
+            Triple(normalizedKey, state, progress)
+        }
+
+        characterPages?.ensureMaterialCosts(buildList {
+            plannedCandidates.forEach { (key, _, _) ->
+                add(key)
+                if (key == TravelerIdentity.KEY && travelerSelection != null) {
+                    add(travelerSelection.element.variantKey)
+                }
+            }
+        })
+        val incompleteCharacterNames = mutableListOf<String>()
+        val characterPlans = plannedCandidates.map { (key, state, progress) ->
+            // Enrichment replaces immutable catalog definitions and invalidates Traveler variants.
+            val character = if (key == TravelerIdentity.KEY && travelerSelection != null) {
+                catalogService.findTraveler(travelerSelection.element, travelerSelection.appearance)
+            } else {
+                catalogService.findCharacter(key) ?: candidates.getValue(key).first
+            }
+            val missingAscension = ((progress.ascension + 1)..progress.targetAscension)
+                .any { character.ascensionCosts[it].isNullOrEmpty() }
+            val missingTalents = listOf(
+                progress.normalTalent to progress.targetNormalTalent,
+                progress.skillTalent to progress.targetSkillTalent,
+                progress.burstTalent to progress.targetBurstTalent,
+            ).any { (current, target) ->
+                ((current + 1)..target).any { character.talentCosts[it].isNullOrEmpty() }
+            }
+            if (missingAscension || missingTalents) incompleteCharacterNames += character.name
             createCharacterPlan(character, state, snapshot, progress)
         }
 
@@ -133,6 +164,7 @@ class PlayerPlanningService(
             characters = characterPlans,
             aggregateMaterials = aggregateMaterials,
             unmatchedCharacterKeys = unmatched,
+            incompleteCharacterNames = incompleteCharacterNames,
         )
     }
 

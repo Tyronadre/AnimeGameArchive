@@ -48,6 +48,8 @@ import java.nio.file.Path
 
 fun main(args: Array<String>) {
     System.setProperty("java.awt.headless", "false")
+    // H2's automatic mixed-mode server is only for clients on this computer.
+    System.setProperty("h2.bindAddress", "127.0.0.1")
     val desktopDirectory = desktopDirectory().toAbsolutePath().normalize()
     System.setProperty("genshin.desktop.home", desktopDirectory.toString())
     createDesktopDirectories(desktopDirectory)

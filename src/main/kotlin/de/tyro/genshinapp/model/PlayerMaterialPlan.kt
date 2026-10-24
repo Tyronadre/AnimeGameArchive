@@ -5,6 +5,7 @@ data class PlayerMaterialPlan(
     val characters: List<PlayerCharacterPlan>,
     val aggregateMaterials: List<InventoryMaterialBalance>,
     val unmatchedCharacterKeys: List<String>,
+    val incompleteCharacterNames: List<String> = emptyList(),
 ) {
     val matchedCharacters: Int
         get() = characters.size

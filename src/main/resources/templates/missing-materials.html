@@ -60,6 +60,12 @@
             <span th:text="${#strings.listJoin(plan.unmatchedCharacterKeys, ', ')}">Unknown</span>
         </section>
 
+        <section class="unmatched-warning" data-incomplete-costs
+                 th:hidden="${plan.incompleteCharacterNames.isEmpty()}">
+            <strong th:text="#{planning.incompleteCosts}">Totals are incomplete. Material costs could not be loaded for:</strong>
+            <span th:text="${#strings.listJoin(plan.incompleteCharacterNames, ', ')}"></span>
+        </section>
+
         <th:block th:if="${selectedMaterial != null}"
                   th:replace="~{missing-material-dialog :: materialDialog}"></th:block>
 
@@ -532,6 +538,12 @@
                     .forEach(element => updateMaterial(element, material));
             });
             if (payload.summary) {
+                const incomplete = payload.summary.incompleteCharacterNames || [];
+                const warning = content.querySelector('[data-incomplete-costs]');
+                if (warning) {
+                    warning.hidden = incomplete.length === 0;
+                    warning.querySelector('span').textContent = incomplete.join(', ');
+                }
                 const characters = content.querySelector('[data-material-summary="characters"]');
                 if (characters) {
                     characters.textContent = `${formatNumber(payload.summary.matchedCharacters)} / ` +

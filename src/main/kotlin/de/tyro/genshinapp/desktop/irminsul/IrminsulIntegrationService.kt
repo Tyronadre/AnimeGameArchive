@@ -2,6 +2,9 @@ package de.tyro.genshinapp.desktop.irminsul
 
 import de.tyro.genshinapp.configuration.DesktopUserProvider
 import de.tyro.genshinapp.service.player.PlayerSnapshotStore
+import de.tyro.genshinapp.model.PlayerSnapshot
+import de.tyro.genshinapp.service.player.livesync.LiveSyncChange
+import de.tyro.genshinapp.service.player.livesync.LiveSyncHookDispatcher
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext
 import org.springframework.context.ApplicationContext
@@ -72,11 +75,15 @@ class IrminsulIntegrationService(
     private val properties: IrminsulProperties,
     private val desktopUserProvider: DesktopUserProvider,
     private val snapshotStore: PlayerSnapshotStore,
+    private val liveSyncHooks: LiveSyncHookDispatcher,
 ) {
     private val token = ByteArray(32).also(SecureRandom()::nextBytes)
         .let(Base64.getUrlEncoder().withoutPadding()::encodeToString)
     private val currentStatus = AtomicReference(initialStatus())
     private val listeners = CopyOnWriteArrayList<(IrminsulCaptureStatus) -> Unit>()
+    private var liveBaseline: LiveBaseline? = null
+
+    private data class LiveBaseline(val sessionId: String, val userId: Long, val snapshot: PlayerSnapshot)
 
     @Volatile
     private var activeSession: String? = null
@@ -121,6 +128,7 @@ class IrminsulIntegrationService(
 
         val session = UUID.randomUUID().toString()
         activeSession = session
+        liveBaseline = null
         cancelRequested = false
         update(
             IrminsulCaptureState.STARTING,
@@ -204,6 +212,7 @@ class IrminsulIntegrationService(
     fun cancellationRequested(session: String): Boolean =
         session == activeSession && cancelRequested
 
+    @Synchronized
     fun receiveStatus(event: IrminsulStatusEvent) {
         when (event.state.lowercase()) {
             "waiting_for_game" -> update(
@@ -223,11 +232,13 @@ class IrminsulIntegrationService(
                 event.message ?: "Saving live game changes…",
             )
             "stopped" -> {
+                liveBaseline = null
                 activeSession = null
                 cancelRequested = false
                 update(IrminsulCaptureState.IDLE, event.message ?: "Capture stopped.")
             }
             "error" -> {
+                liveBaseline = null
                 activeSession = null
                 cancelRequested = false
                 update(
@@ -244,6 +255,19 @@ class IrminsulIntegrationService(
         return try {
             val principal = desktopUserProvider.principal()
             val snapshot = snapshotStore.save(principal.id, bytes)
+            val session = activeSession
+            if (session != null) {
+                val previous = liveBaseline?.takeIf {
+                    it.sessionId == session && it.userId == principal.id
+                }?.snapshot
+                // Advance before invoking hooks so a failing listener cannot replay this change.
+                liveBaseline = LiveBaseline(session, principal.id, snapshot)
+                if (previous != null) {
+                    liveSyncHooks.dispatch(LiveSyncChange(principal.id, session, previous, snapshot))
+                }
+            } else {
+                liveBaseline = null
+            }
             val summary = "${snapshot.characters.size} characters, " +
                 "${snapshot.artifacts.size} artifacts, and ${snapshot.weapons.size} weapons"
             if (activeSession != null) {
@@ -258,6 +282,7 @@ class IrminsulIntegrationService(
                 )
             }
         } catch (exception: Exception) {
+            liveBaseline = null
             activeSession = null
             cancelRequested = false
             update(

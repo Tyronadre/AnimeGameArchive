@@ -81,6 +81,7 @@ class MaterialCatalogService(
             val current = materialsById[id]
             val candidate = (current ?: MaterialDefinition(id, entry.name)).copy(
                 name = entry.name,
+                hoyolabEntryId = entry.entryPageId,
                 category = current?.category?.takeUnless { it == MaterialCategory.OTHER }
                     ?: entry.category.takeUnless { it == MaterialCategory.OTHER }
                     ?: MaterialCategory.OTHER,
@@ -206,6 +207,11 @@ class MaterialCatalogService(
 
     private fun remember(material: MaterialDefinition) {
         materialsById[material.id] = material
+        material.hoyolabEntryId?.toInt()?.let { pageId ->
+            materialIdByHoyolabPageId.compute(pageId) { _, existing ->
+                if (material.id < HOYOLAB_SYNTHETIC_ID_BASE || existing == null) material.id else existing
+            }
+        }
     }
 
     private fun normalizeAndPersist(characters: Collection<CharacterDefinition>) {
@@ -218,9 +224,9 @@ class MaterialCatalogService(
     }
 
     private fun canonicalReference(reference: HoyolabMaterialReference): HoyolabMaterialReference {
-        val id = materialIdByHoyolabPageId[reference.hoyolabPageId]
-            ?: canonicalMaterialId(reference.hoyolabPageId, reference.name)
-                .also { materialIdByHoyolabPageId[reference.hoyolabPageId] = it }
+        // A newly resolved name must replace an earlier synthetic fallback for the same page.
+        val id = canonicalMaterialId(reference.hoyolabPageId, reference.name)
+            .also { materialIdByHoyolabPageId[reference.hoyolabPageId] = it }
         val name = materialsById[id]?.name ?: reference.name
         return reference.copy(id = id, name = name)
     }

@@ -1,6 +1,9 @@
 package de.tyro.genshinapp.service.catalog
 
 import de.tyro.genshinapp.entity.Material
+import de.tyro.genshinapp.entity.HoyowikiEntry
+import jakarta.persistence.EntityManager
+import org.springframework.context.annotation.DependsOn
 import de.tyro.genshinapp.entity.MaterialSource
 import de.tyro.genshinapp.entity.MaterialSourceMaterial
 import de.tyro.genshinapp.model.MaterialCategory
@@ -32,9 +35,11 @@ interface MaterialCatalogStore {
 }
 
 @Service
+@DependsOn("materialIdentityRepair")
 class JpaMaterialCatalogStore(
     private val materialRepository: MaterialRepository,
     private val sourceRepository: MaterialSourceRepository,
+    private val entityManager: EntityManager,
 ) : MaterialCatalogStore {
     @Transactional(readOnly = true)
     override fun getMaterials(): List<MaterialDefinition> =
@@ -64,10 +69,14 @@ class JpaMaterialCatalogStore(
         val existingByGameId = materialRepository
             .findAllByGameIdInOrderByNameAsc(desired.map(MaterialDefinition::id))
             .associateBy(Material::gameId)
+        val pageIds = desired.mapNotNull(MaterialDefinition::hoyolabEntryId).distinct()
+        val pages = if (pageIds.isEmpty()) emptyMap() else entityManager.createQuery(
+            "select e from HoyowikiEntry e where e.pageId in :ids", HoyowikiEntry::class.java,
+        ).setParameter("ids", pageIds).resultList.associateBy { it.pageId }
         materialRepository.saveAll(
             desired.map { material ->
                 (existingByGameId[material.id] ?: Material().also { it.gameId = material.id })
-                    .apply(material)
+                    .apply(material, pages)
             },
         )
     }
@@ -115,12 +124,13 @@ class JpaMaterialCatalogStore(
         ).map(::toDefinition)
     }
 
-    private fun Material.apply(material: MaterialDefinition): Material {
+    private fun Material.apply(material: MaterialDefinition, pages: Map<Long, HoyowikiEntry>): Material {
         name = material.name
         type = material.category.name
         craftingFamily = material.craftingFamily
         craftingTier = material.craftingTier
         conversionGroup = material.conversionGroup
+        material.hoyolabEntryId?.let { pages[it] }?.let { hoyowikiEntry = it }
         return this
     }
 
@@ -133,6 +143,7 @@ class JpaMaterialCatalogStore(
             craftingFamily = entity.craftingFamily,
             craftingTier = entity.craftingTier,
             conversionGroup = entity.conversionGroup,
+            hoyolabEntryId = entity.hoyowikiEntry?.pageId,
         )
 
     private fun toDefinition(entity: MaterialSource): MaterialSourceDefinition =

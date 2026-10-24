@@ -12,6 +12,7 @@ import de.tyro.genshinapp.repository.GameWeaponRepository
 import de.tyro.genshinapp.repository.MaterialRepository
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.context.annotation.DependsOn
 import org.springframework.transaction.annotation.Transactional
 
 interface WeaponCatalogStore {
@@ -23,6 +24,7 @@ interface WeaponCatalogStore {
 }
 
 @Service
+@DependsOn("materialIdentityRepair")
 class JpaWeaponCatalogStore(
     private val repository: GameWeaponRepository,
     private val materialRepository: MaterialRepository,

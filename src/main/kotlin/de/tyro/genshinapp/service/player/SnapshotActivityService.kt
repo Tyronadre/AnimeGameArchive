@@ -22,6 +22,7 @@ enum class SnapshotActivityType(
 ) {
     MATERIAL_GAIN("＋", "gain"),
     MATERIAL_SPEND("−", "spend"),
+    WEEKLY_BOSS_COLLECTED("★", "gain"),
     ARTIFACT_LEVEL("✦", "upgrade"),
     ARTIFACT_ADDED("◆", "new"),
     ARTIFACTS_REMOVED("◇", "removed"),
@@ -63,6 +64,10 @@ class SnapshotActivityService(
     ) {
         if (previous == null) return
         val detected = detector.detect(previous, current)
+        recordEvents(userId, detected)
+    }
+
+    fun recordEvents(userId: Long, detected: List<SnapshotActivityEvent>) {
         if (detected.isEmpty()) return
 
         synchronized(lockFor(userId)) {
