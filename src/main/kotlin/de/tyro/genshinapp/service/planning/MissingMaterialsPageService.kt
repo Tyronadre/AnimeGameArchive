@@ -55,12 +55,12 @@ class MissingMaterialsPageService(
                             name = familyMaterials.first().name.substringAfter(" of "),
                             farmableToday = schedule?.let(domainScheduleService::isFarmable)
                                 ?: false,
-                            daysMessageKey = schedule?.messageKey.orEmpty(),
+                            daysMessageKey = schedule?.messageKey ?: "materials.scheduleUnknown",
                             materials = familyMaterials,
                         )
                     }
                 if (families.isEmpty()) return@domain null
-                TalentDomain(source.name, source.region.orEmpty(), families)
+                TalentDomain(source.name, source.region.orEmpty(), families, source.origin == "HOYOWIKI_CHALLENGE")
             }
 
         fun boss(source: MaterialSourceDefinition): BossMaterialGroup {
@@ -88,13 +88,18 @@ class MissingMaterialsPageService(
         val worldBosses = sources.filter { it.type == MaterialSourceType.WORLD_BOSS }.map(::boss)
         val weeklyBosses = sources.filter { it.type == MaterialSourceType.WEEKLY_BOSS }.map(::boss)
         val enemyDrops = sources.filter { it.type == MaterialSourceType.ENEMY }
-            .mapNotNull { source ->
-                val familyMaterials = source.materials.sortedBy { it.materialOrder }
+            .filter { it.materials.any { membership -> membership.role == MaterialSourceRole.DROP } }
+            .groupBy { source -> source.materials.filter { it.role == MaterialSourceRole.DROP }.map { it.material.id }.sorted() }
+            .mapNotNull { (_, grouped) ->
+                val live = grouped.filter { it.origin == "HOYOWIKI_ENEMY" }
+                val displayed = live.ifEmpty { grouped }
+                val source = displayed.first()
+                val familyMaterials = source.materials.filter { it.role == MaterialSourceRole.DROP }.sortedBy { it.materialOrder }
                     .mapNotNull { item(it.material.id) }
                 if (familyMaterials.isEmpty()) {
                     null
                 } else {
-                    EnemyMaterialFamily(source.name, familyMaterials)
+                    EnemyMaterialFamily(displayed.map { it.name }.distinct().sorted().joinToString(", "), familyMaterials)
                 }
             }
 
@@ -200,6 +205,7 @@ data class TalentDomain(
     val name: String,
     val region: String,
     val families: List<TalentBookFamily>,
+    val challenge: Boolean = false,
 )
 
 data class TalentBookFamily(

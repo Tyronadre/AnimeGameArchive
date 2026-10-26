@@ -8,6 +8,7 @@ data class MaterialDefinition(
     val craftingTier: Int? = null,
     val conversionGroup: String? = null,
     val hoyolabEntryId: Long? = null,
+    val categoryOrigin: String? = null,
 )
 
 enum class MaterialCategory(val messageKey: String) {
@@ -62,6 +63,8 @@ data class MaterialSourceDefinition(
     val region: String? = null,
     val displayOrder: Int = 0,
     val materials: List<MaterialSourceMaterialDefinition> = emptyList(),
+    val origin: String = "BUNDLED",
+    val hoyolabEntryId: Long? = null,
 )
 
 data class MaterialSourceMaterialDefinition(

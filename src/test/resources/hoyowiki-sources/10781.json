@@ -1,0 +1,49 @@
+{
+  "id": "10781",
+  "name": "Il Dottore",
+  "menu_id": "7",
+  "filter_values": {
+    "enemy_and_monster_type": {
+      "values": [
+        "Enemies of Note"
+      ],
+      "value_types": [
+        {
+          "id": "1343",
+          "value": "Enemies of Note",
+          "mi18n_key": "filter_1343",
+          "icon": "",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "enemy_and_monster_type",
+        "text": "Type",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_enemy_and_monster_type",
+        "is_multi_select": false,
+        "id": "11",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    }
+  },
+  "modules": [
+    {
+      "components": [
+        {
+          "component_id": "baseInfo",
+          "layout": "",
+          "data": "{\"list\":[{\"key\":\"Name\",\"value\":[\"Il Dottore\"],\"id\":\"baseInfo2552\"},{\"key\":\"Type\",\"value\":[\"<p>Enemies of Note</p><p>Weekly Boss</p>\"],\"id\":\"baseInfo16755\"},{\"key\":\"Region\",\"value\":[\"<p>Sumeru</p>\"],\"id\":\"baseInfo50361\"},{\"key\":\"Version Released\",\"value\":[\"<p>Luna VII</p>\"],\"id\":\"baseInfo83814\"}]}",
+          "style": ""
+        },
+        {
+          "component_id": "drop_material",
+          "layout": "",
+          "data": "{\"list\":[\"$[{\\\"ep_id\\\":757,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Mora_icon.png\\\",\\\"name\\\":\\\"Mora\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":10782,\\\"icon\\\":\\\"https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/f59452c2c38db4ecc7f8c98f0c1f462b_5805450641328677635.png\\\",\\\"name\\\":\\\"Counterfeit Resin\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":10783,\\\"icon\\\":\\\"https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/a29e1779a2b45a13ca93d51eb7fc3d62_6989866766084972216.png\\\",\\\"name\\\":\\\"Twisted Withered Branch\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":10784,\\\"icon\\\":\\\"https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/0cff1d5f16e4920b7c3676fb9979e3f1_2003560884382445010.png\\\",\\\"name\\\":\\\"Profaned Sprout\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":411,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Shivada Jade Sliver_icon.png\\\",\\\"name\\\":\\\"Shivada Jade Sliver\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":410,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Shivada Jade Fragment_icon.png\\\",\\\"name\\\":\\\"Shivada Jade Fragment\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":409,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Shivada Jade Chunk_icon.png\\\",\\\"name\\\":\\\"Shivada Jade Chunk\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":408,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Shivada Jade Gemstone_icon.png\\\",\\\"name\\\":\\\"Shivada Jade Gemstone\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":1100,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Agnidus Agate Sliver_icon.png\\\",\\\"name\\\":\\\"Agnidus Agate Sliver\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":1099,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Agnidus Agate Fragment_icon.png\\\",\\\"name\\\":\\\"Agnidus Agate Fragment\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":1098,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Agnidus Agate Chunk_icon.png\\\",\\\"name\\\":\\\"Agnidus Agate Chunk\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":1097,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Agnidus Agate Gemstone_icon.png\\\",\\\"name\\\":\\\"Agnidus Agate Gemstone\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":905,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Vajrada Amethyst Sliver_icon.png\\\",\\\"name\\\":\\\"Vajrada Amethyst Sliver\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":904,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Vajrada Amethyst Fragment_icon.png\\\",\\\"name\\\":\\\"Vajrada Amethyst Fragment\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":903,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Vajrada Amethyst Chunk_icon.png\\\",\\\"name\\\":\\\"Vajrada Amethyst Chunk\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":902,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Vajrada Amethyst Gemstone_icon.png\\\",\\\"name\\\":\\\"Vajrada Amethyst Gemstone\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":706,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Dream Solvent_icon.png\\\",\\\"name\\\":\\\"Dream Solvent\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":2809,\\\"icon\\\":\\\"https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/23/194600931/1f346babd68af1542ddca8e159953643_8830193669134886701.png\\\",\\\"name\\\":\\\"Midlander Sword Billet\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":2805,\\\"icon\\\":\\\"https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/23/194600931/97e38fbf6fc732314998d47522bd1645_5091571100464246471.png\\\",\\\"name\\\":\\\"Midlander Bow Billet\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":2808,\\\"icon\\\":\\\"https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/23/194600931/98f23f2c0bd057336b6090af7b383422_8850963736162442349.png\\\",\\\"name\\\":\\\"Midlander Claymore Billet\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":2806,\\\"icon\\\":\\\"https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/23/194600931/94ff9dbff4a1a878579fe8b7162d51a6_2739846376087724823.png\\\",\\\"name\\\":\\\"Midlander Catalyst Billet\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":2807,\\\"icon\\\":\\\"https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/23/194600931/bb87d94717e67487fdd91d08eda8c47d_1031716787196314523.png\\\",\\\"name\\\":\\\"Midlander Polearm Billet\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":2073,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Berserker/flower_of_life_icon.png\\\",\\\"name\\\":\\\"Berserker\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":2074,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Instructor/flower_of_life_icon.png\\\",\\\"name\\\":\\\"Instructor\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":2080,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/reliquary/The Exile/flower_of_life_icon.png\\\",\\\"name\\\":\\\"The Exile\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":2095,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Gladiator's Finale/flower_of_life_icon.png\\\",\\\"name\\\":\\\"Gladiator's Finale\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":2081,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Wanderer's Troupe/flower_of_life_icon.png\\\",\\\"name\\\":\\\"Wanderer's Troupe\\\",\\\"amount\\\":0}]$\"]}",
+          "style": ""
+        }
+      ]
+    }
+  ]
+}

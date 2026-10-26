@@ -49,6 +49,22 @@ class HoyowikiCatalogStore(
             objectMapper.readValue(it.summaryJson, HoyolabWikiEntry::class.java)
         }
 
+    @Transactional(readOnly = true)
+    fun sourcePage(pageId: Long): SourcePageState? =
+        entityManager.find(HoyowikiEntry::class.java, pageId)?.let {
+            SourcePageState(it.detailJson?.let(objectMapper::readTree), it.sourceParserVersion,
+                it.sourceParsedAt, it.sourceLastError, it.lastDetailQueriedAt)
+        }
+
+    @Transactional
+    fun sourceFailure(pageId: Long, message: String) {
+        val page = entityManager.find(HoyowikiEntry::class.java, pageId) ?: HoyowikiEntry().also {
+            it.pageId = pageId
+            entityManager.persist(it)
+        }
+        page.sourceLastError = message.take(2048)
+    }
+
     /** Called only after the entire category has been downloaded and projected successfully. */
     @Transactional
     fun recordCatalog(menu: HoyolabWikiMenu, entries: List<HoyolabWikiEntry>, at: Instant, live: Boolean) {
@@ -86,6 +102,8 @@ class HoyowikiCatalogStore(
             entityManager.persist(it)
         }
         page.detailJson = objectMapper.writeValueAsString(detail)
+        detail.path("menu_id").asText().takeIf(String::isNotBlank)?.let { page.menuId = it }
+        detail.path("name").asText().takeIf(String::isNotBlank)?.let { page.name = it }
         page.lastQueriedAt = at
         page.lastDetailQueriedAt = at
     }

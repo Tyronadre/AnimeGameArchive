@@ -11990,3 +11990,46 @@ html[data-theme="dark"] .missing-materials-page .character-need-row:focus-visibl
 html[data-theme="dark"] .missing-materials-page .character-need-row > b {
     color: #e7c77f;
 }
+
+/* Dashboard: elemental activity motifs and a spacious desktop workbench. */
+.dashboard-page { width: min(1680px, calc(100% - 5rem)); }
+.dashboard-hero-today { min-height: 0; grid-template-columns: 1fr; padding: 2rem 2.5rem; }
+.dashboard-hero-today h1 { font-size: clamp(2rem, 3vw, 3.3rem); max-width: none; }
+.dashboard-hero-today .lead { max-width: 85ch; margin-bottom: .8rem; }
+.dashboard-hero-today::after { display: none; }
+#dashboard-routine { display: grid; gap: 1.5rem; }
+.dashboard-lane { padding: 1.6rem; border-radius: 22px; }
+.dashboard-weekly-layout { grid-template-columns: 260px minmax(0, 1fr); align-items: stretch; }
+[data-dashboard-list="weekly-main"] { grid-template-columns: repeat(auto-fit, minmax(265px, 1fr)); align-content: start; }
+.dashboard-weekly-action { align-content: center; }
+.dashboard-task-card { min-height: 94px; padding: .85rem; }
+.dashboard-task-main h3 { white-space: normal; line-height: 1.35; }
+.dashboard-lane-grid { gap: 1.5rem; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
+.dashboard-task-card:hover .dashboard-task-art img { transform: translateY(-4px) rotate(-5deg) scale(1.08); }
+.dashboard-task-art img { transition: transform 280ms ease; }
+.dashboard-resin-status { display: flex; align-items: center; flex-wrap: wrap; gap: .7rem 1.2rem; padding: .8rem 1rem; margin-bottom: .8rem; border: 1px solid var(--line); border-radius: 12px; color: var(--muted); font-size: .7rem; }
+.dashboard-resin-status strong { color: var(--blue); font-size: 1.15rem; }
+.dashboard-resin-status .dashboard-reset-button { margin-left: auto; }
+.dashboard-claim-count { gap: .15rem; grid-auto-flow: column; }
+.dashboard-claim-count small { font-size: .65rem; }
+.dashboard-motif { position: relative; display: block; width: 58px; height: 58px; flex: none; color: var(--gold); }
+.dashboard-motif i, .dashboard-motif b { position: absolute; display: block; }
+.motif-blossom i { inset: 11px 19px; border: 1px solid currentColor; border-radius: 60% 60% 35% 35%; background: color-mix(in srgb, currentColor 12%, transparent); transform: rotate(var(--petal-angle, 0deg)); animation: dashboard-bloom 5s ease-in-out infinite; }
+.motif-blossom i:nth-child(2) { --petal-angle: 60deg; animation-delay: -.4s; }
+.motif-blossom i:nth-child(3) { --petal-angle: 120deg; animation-delay: -.8s; }
+.motif-blossom b { inset: 0; display: grid; place-items: center; font-size: 1.2rem; animation: dashboard-starlight 5s ease-in-out infinite; }
+.motif-crystal { color: #7cb6d3; }
+.motif-crystal i { width: 17px; height: 28px; left: 20px; top: 12px; clip-path: polygon(50% 0, 100% 38%, 65% 100%, 15% 78%, 0 28%); background: linear-gradient(115deg, #d1edf4 0 35%, #72acc5 36% 62%, #37627e 63%); animation: dashboard-levitate 4s ease-in-out infinite; }
+.motif-crystal i:nth-child(2) { left: 4px; top: 26px; width: 10px; height: 17px; animation-delay: -1.3s; }
+.motif-crystal i:nth-child(3) { left: 43px; top: 21px; width: 9px; height: 15px; animation-delay: -2.6s; }
+.motif-leaves { color: #8fc5a4; }
+.motif-leaves i { width: 15px; height: 25px; top: 10px; left: 13px; border-radius: 90% 0 90% 0; border: 1px solid currentColor; background: linear-gradient(135deg, transparent 47%, currentColor 49% 52%, transparent 54%), color-mix(in srgb, currentColor 16%, transparent); animation: dashboard-leaf-drift 6s ease-in-out infinite; }
+.motif-leaves i:nth-child(2) { left: 34px; top: 21px; animation-delay: -2s; }
+.motif-leaves i:nth-child(3) { left: 13px; top: 35px; width: 9px; height: 14px; animation-delay: -4s; }
+@keyframes dashboard-bloom { 0%, 100% { transform: rotate(var(--petal-angle, 0deg)) scale(.85); opacity: .45; } 50% { transform: rotate(var(--petal-angle, 0deg)) scale(1.15); opacity: 1; } }
+@keyframes dashboard-starlight { 0%, 100% { opacity: .65; transform: scale(.85); } 50% { opacity: 1; transform: scale(1.12); } }
+@keyframes dashboard-levitate { 0%, 100% { transform: translateY(3px) rotate(-8deg); } 50% { transform: translateY(-6px) rotate(6deg); } }
+@keyframes dashboard-leaf-drift { 0%, 100% { transform: translate(0, 0) rotate(-20deg); opacity: .5; } 50% { transform: translate(5px, -5px) rotate(15deg); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+    .dashboard-page *, .dashboard-page *::before, .dashboard-page *::after { animation: none !important; transition: none !important; }
+}

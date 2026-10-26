@@ -7,6 +7,7 @@ import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.model.PlayerArtifact
 import de.tyro.genshinapp.model.PlayerSnapshot
 import de.tyro.genshinapp.model.PlayerWeapon
+import de.tyro.genshinapp.service.planning.DomainScheduleService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.nio.file.AtomicMoveNotSupportedException
@@ -14,6 +15,9 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 import java.time.Instant
+import java.time.DayOfWeek
+import java.time.ZoneOffset
+import java.time.temporal.TemporalAdjusters
 import java.util.concurrent.ConcurrentHashMap
 
 enum class SnapshotActivityType(
@@ -23,6 +27,11 @@ enum class SnapshotActivityType(
     MATERIAL_GAIN("＋", "gain"),
     MATERIAL_SPEND("−", "spend"),
     WEEKLY_BOSS_COLLECTED("★", "gain"),
+    MORA_LEY_LINE("₥", "gain"),
+    EXPERIENCE_LEY_LINE("✦", "gain"),
+    TALENT_DOMAIN("◆", "gain"),
+    WEAPON_DOMAIN("◇", "gain"),
+    ARTIFACT_DOMAIN("✧", "gain"),
     ARTIFACT_LEVEL("✦", "upgrade"),
     ARTIFACT_ADDED("◆", "new"),
     ARTIFACTS_REMOVED("◇", "removed"),
@@ -42,12 +51,16 @@ data class SnapshotActivityEvent(
     val total: Long? = null,
     val previousLevel: Int? = null,
     val currentLevel: Int? = null,
+    val eventId: String? = null,
+    val taskKey: String? = null,
+    val resinCost: Int? = null,
 )
 
 @Service
 class SnapshotActivityService(
     properties: GenshinContentProperties,
     private val objectMapper: ObjectMapper,
+    private val domainScheduleService: DomainScheduleService = DomainScheduleService(),
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val playerDataDirectory = Path.of(properties.cacheDirectory)
@@ -72,12 +85,79 @@ class SnapshotActivityService(
 
         synchronized(lockFor(userId)) {
             runCatching {
-                val history = (detected + readHistory(userId)).take(MAX_STORED_EVENTS)
+                val previous = readHistory(userId)
+                runCatching { rememberFarmingClaims(userId, detected + previous) }.onFailure {
+                    logger.warn("Farming claims for user {} could not be saved", userId, it)
+                }
+                // Keep claims independently of the short activity feed, including legacy entries.
+                runCatching { rememberWeeklyClaims(userId, detected + previous) }.onFailure {
+                    logger.warn("Weekly boss claims for user {} could not be saved", userId, it)
+                }
+                val history = (detected + previous).take(MAX_STORED_EVENTS)
                 writeAtomically(activityPath(userId), objectMapper.writeValueAsBytes(history))
             }.onFailure {
                 logger.warn("Recent snapshot activity for user {} could not be saved", userId, it)
             }
         }
+    }
+
+    fun weeklyBossProgress(userId: Long, now: Instant = Instant.now()): WeeklyBossProgress =
+        synchronized(lockFor(userId)) {
+            val day = gameDate(now)
+            val week = day.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+            val claims = runCatching { rememberWeeklyClaims(userId, readHistory(userId)) }
+                .onFailure { logger.warn("Weekly boss claims for user {} could not be loaded", userId, it) }
+                .getOrDefault(emptyList())
+                .filter { gameDate(it.occurredAt) in week..day }
+                .sortedBy { it.occurredAt }
+                .map { WeeklyBossClaim(GoodKeyNormalizer.normalize(it.name), gameDate(it.occurredAt).toString()) }
+            WeeklyBossProgress(day.toString(), week.toString(), claims)
+        }
+
+    private fun gameDate(instant: Instant) =
+        domainScheduleService.currentGameDate(instant.atZone(ZoneOffset.UTC))
+
+    fun dailyFarmingProgress(userId: Long, now: Instant = Instant.now()): DailyFarmingProgress =
+        synchronized(lockFor(userId)) {
+            val day = gameDate(now)
+            val events = runCatching { rememberFarmingClaims(userId, readHistory(userId)) }
+                .onFailure { logger.warn("Farming claims for user {} could not be loaded", userId, it) }
+                .getOrDefault(emptyList())
+                .filter { gameDate(it.occurredAt) == day }
+            DailyFarmingProgress(day.toString(), events.groupBy { requireNotNull(it.taskKey) }.map { (key, claims) ->
+                DailyFarmingRun(key, claims.size, claims.sumOf { it.resinCost ?: 0 }, claims.count { it.resinCost == null })
+            })
+        }
+
+    private fun rememberFarmingClaims(userId: Long, events: List<SnapshotActivityEvent>): List<SnapshotActivityEvent> {
+        val path = activityPath(userId).resolveSibling("farming-claims.json")
+        val saved: List<SnapshotActivityEvent> = if (Files.isRegularFile(path)) Files.newInputStream(path).use {
+            objectMapper.readValue(it, object : TypeReference<List<SnapshotActivityEvent>>() {})
+        } else emptyList()
+        val merged = (saved + events.filter { it.type in FARMING_TYPES && it.taskKey != null && it.eventId != null })
+            .distinctBy { it.eventId }.sortedBy { it.occurredAt }
+        val earliest = merged.lastOrNull()?.let { gameDate(it.occurredAt).minusDays(1) }
+        val claims = if (earliest == null) emptyList() else merged.filter { gameDate(it.occurredAt) >= earliest }
+        if (saved != claims) writeAtomically(path, objectMapper.writeValueAsBytes(claims))
+        return claims
+    }
+
+    private fun rememberWeeklyClaims(userId: Long, events: List<SnapshotActivityEvent>): List<SnapshotActivityEvent> {
+        val path = activityPath(userId).resolveSibling("weekly-boss-claims.json")
+        val saved: List<SnapshotActivityEvent> = if (Files.isRegularFile(path)) {
+            Files.newInputStream(path).use {
+                objectMapper.readValue(it, object : TypeReference<List<SnapshotActivityEvent>>() {})
+            }
+        } else emptyList()
+        val claims = (saved + events.filter { it.type == SnapshotActivityType.WEEKLY_BOSS_COLLECTED })
+            .sortedBy { it.occurredAt }
+            .distinctBy {
+                gameDate(it.occurredAt).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)) to
+                    GoodKeyNormalizer.normalize(it.name)
+            }
+            .takeLast(MAX_STORED_EVENTS)
+        if (saved != claims) writeAtomically(path, objectMapper.writeValueAsBytes(claims))
+        return claims
     }
 
     fun recent(userId: Long, limit: Int = DEFAULT_VISIBLE_EVENTS): List<SnapshotActivityEvent> {
@@ -134,8 +214,20 @@ class SnapshotActivityService(
     companion object {
         const val DEFAULT_VISIBLE_EVENTS = 10
         private const val MAX_STORED_EVENTS = 50
+        val FARMING_TYPES = setOf(
+            SnapshotActivityType.MORA_LEY_LINE, SnapshotActivityType.EXPERIENCE_LEY_LINE,
+            SnapshotActivityType.TALENT_DOMAIN, SnapshotActivityType.WEAPON_DOMAIN, SnapshotActivityType.ARTIFACT_DOMAIN,
+        )
     }
 }
+
+data class WeeklyBossClaim(val bossKey: String, val day: String)
+
+data class WeeklyBossProgress(val day: String, val week: String, val claims: List<WeeklyBossClaim>)
+
+data class DailyFarmingRun(val taskKey: String, val count: Int, val resin: Int, val unconfirmedCount: Int)
+
+data class DailyFarmingProgress(val day: String, val runs: List<DailyFarmingRun>)
 
 class SnapshotActivityDetector {
     fun detect(

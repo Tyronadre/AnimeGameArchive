@@ -139,6 +139,7 @@
                             <header>
                                 <span th:text="${domain.region}">Mondstadt</span>
                                 <h3 th:text="${domain.name}">Forsaken Rift</h3>
+                                <span th:if="${domain.challenge}" th:text="#{materials.talentChallenge}">Talent challenge</span>
                             </header>
                             <div class="talent-family-grid">
                                 <section class="talent-family" th:each="family : ${domain.families}"

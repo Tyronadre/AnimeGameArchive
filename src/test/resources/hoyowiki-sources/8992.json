@@ -1,0 +1,49 @@
+{
+  "id": "8992",
+  "name": "Frostnight Herra",
+  "menu_id": "7",
+  "filter_values": {
+    "enemy_and_monster_type": {
+      "values": [
+        "Elemental Lifeforms"
+      ],
+      "value_types": [
+        {
+          "id": "1374",
+          "value": "Elemental Lifeforms",
+          "mi18n_key": "filter_1374",
+          "icon": "",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "enemy_and_monster_type",
+        "text": "Type",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_enemy_and_monster_type",
+        "is_multi_select": false,
+        "id": "11",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    }
+  },
+  "modules": [
+    {
+      "components": [
+        {
+          "component_id": "baseInfo",
+          "layout": "",
+          "data": "{\"list\":[{\"key\":\"Name\",\"value\":[\"Frostnight Herra\"],\"id\":\"baseInfo3302\"},{\"key\":\"Type\",\"value\":[\"<p>Elemental Lifeforms </p><p>Boss</p>\"],\"id\":\"baseInfo36229\"},{\"key\":\"Region\",\"value\":[\"<p>Nod-Krai</p>\"],\"id\":\"baseInfo9680\"},{\"key\":\"Version Released\",\"value\":[\"<p>Luna II</p>\"],\"id\":\"baseInfo29429\"}]}",
+          "style": ""
+        },
+        {
+          "component_id": "drop_material",
+          "layout": "",
+          "data": "{\"list\":[\"$[{\\\"ep_id\\\":757,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Mora_icon.png\\\",\\\"name\\\":\\\"Mora\\\",\\\"amount\\\":0,\\\"id\\\":\\\"drop_material39862\\\"}]$\",\"$[{\\\"ep_id\\\":4927,\\\"icon\\\":\\\"https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/01/24/94376896/5bcd7c1bb38117a29ef80acde9931434_5831688416291044295.png\\\",\\\"name\\\":\\\"Companionship EXP\\\",\\\"amount\\\":0,\\\"id\\\":\\\"drop_material68659\\\"}]$\",\"$[{\\\"ep_id\\\":8967,\\\"icon\\\":\\\"https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/10/20/634bc5225330f7fd1d3e0892e850b5d7_8635514673712724074.png\\\",\\\"name\\\":\\\"Radiant Antler\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":411,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Shivada Jade Sliver_icon.png\\\",\\\"name\\\":\\\"Shivada Jade Sliver\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":410,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Shivada Jade Fragment_icon.png\\\",\\\"name\\\":\\\"Shivada Jade Fragment\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":409,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Shivada Jade Chunk_icon.png\\\",\\\"name\\\":\\\"Shivada Jade Chunk\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":408,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Shivada Jade Gemstone_icon.png\\\",\\\"name\\\":\\\"Shivada Jade Gemstone\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":1037,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Varunada Lazurite Sliver_icon.png\\\",\\\"name\\\":\\\"Varunada Lazurite Sliver\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":1036,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Varunada Lazurite Fragment_icon.png\\\",\\\"name\\\":\\\"Varunada Lazurite Fragment\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":1035,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Varunada Lazurite Chunk_icon.png\\\",\\\"name\\\":\\\"Varunada Lazurite Chunk\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":1034,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Varunada Lazurite Gemstone_icon.png\\\",\\\"name\\\":\\\"Varunada Lazurite Gemstone\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":2095,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Gladiator's Finale/flower_of_life_icon.png\\\",\\\"name\\\":\\\"Gladiator's Finale\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":2081,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Wanderer's Troupe/flower_of_life_icon.png\\\",\\\"name\\\":\\\"Wanderer's Troupe\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":2073,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Berserker/flower_of_life_icon.png\\\",\\\"name\\\":\\\"Berserker\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":2080,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/reliquary/The Exile/flower_of_life_icon.png\\\",\\\"name\\\":\\\"The Exile\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":2086,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Prayers to Springtime/circlet_of_logos_icon.png\\\",\\\"name\\\":\\\"Prayers to Springtime\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":2071,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Lucky Dog/flower_of_life_icon.png\\\",\\\"name\\\":\\\"Lucky Dog\\\",\\\"amount\\\":0}]$\"]}",
+          "style": ""
+        }
+      ]
+    }
+  ]
+}

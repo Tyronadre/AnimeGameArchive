@@ -22,6 +22,7 @@ class MaterialCatalogService(
     private val imageUrlRegistry: ImageUrlRegistry? = null,
     private val identityCatalog: MaterialIdentityCatalog? = null,
     private val events: ApplicationEventPublisher? = null,
+    private val identityRepair: MaterialIdentityRepair? = null,
 ) {
     private val materialsById = ConcurrentHashMap<Int, MaterialDefinition>()
     private val materialIdByHoyolabPageId = ConcurrentHashMap<Int, Int>()
@@ -128,11 +129,23 @@ class MaterialCatalogService(
 
     fun canonicalCost(reference: HoyolabMaterialReference) = canonicalReference(reference).toCost()
 
+    fun findByWikiPage(pageId: Long): MaterialDefinition? =
+        materialIdByHoyolabPageId[pageId.toInt()]?.let(materialsById::get)
+
+    @Synchronized
+    fun resolveSourceMaterial(entry: de.tyro.genshinapp.service.importer.HoyolabWikiEntry): MaterialDefinition {
+        findByWikiPage(entry.entryPageId)?.let { return it }
+        synchronizeHoyolabMaterialList(listOf(HoyolabMaterialSummary(entry.entryPageId, entry.name, entry.iconUrl)))
+        return requireNotNull(findByWikiPage(entry.entryPageId))
+    }
+
     /** Refreshes the source-controlled game-id bridge before a live HoYoWiki import. */
     @Synchronized
     fun refreshIdentityCatalog(): Boolean {
         val catalog = identityCatalog ?: return false
         if (!catalog.refreshRemote()) return false
+        identityRepair?.repair()
+        reloadFromDatabase()
         catalog.materials().forEach(::rememberIdentity)
         normalizeAndPersist(characterCatalogService?.getCharacters().orEmpty())
         return true
@@ -159,6 +172,7 @@ class MaterialCatalogService(
                     craftingFamily = candidate.craftingFamily,
                     craftingTier = candidate.craftingTier,
                     conversionGroup = candidate.conversionGroup,
+                    categoryOrigin = candidate.categoryOrigin,
                 )
             )
         }
@@ -194,7 +208,9 @@ class MaterialCatalogService(
 
     private fun rememberIdentity(material: MaterialDefinition) {
         materialsById.compute(material.id) { _, existing ->
-            if (existing == null) material else existing.copy(
+            if (existing == null) material
+            else if (existing.categoryOrigin == "HOYOWIKI") existing.copy(name = material.name)
+            else existing.copy(
                 name = material.name,
                 category = material.category.takeUnless { it == MaterialCategory.OTHER }
                     ?: existing.category,
@@ -212,6 +228,16 @@ class MaterialCatalogService(
                 if (material.id < HOYOLAB_SYNTHETIC_ID_BASE || existing == null) material.id else existing
             }
         }
+    }
+
+    @Synchronized
+    fun reloadFromDatabase() {
+        if (catalogStore == null) return
+        materialsById.clear()
+        materialIdByHoyolabPageId.clear()
+        catalogStore.getMaterials().forEach(::remember)
+        synchronizedCharacterSignature = null
+        events?.publishEvent(MaterialCatalogChanged())
     }
 
     private fun normalizeAndPersist(characters: Collection<CharacterDefinition>) {

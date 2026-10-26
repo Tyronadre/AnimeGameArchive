@@ -32,9 +32,12 @@ data class BundledCatalogSnapshot(
     val hoyolabMaterials: List<HoyolabWikiEntry> = emptyList(),
     val hoyolabCharacterPages: List<JsonNode> = emptyList(),
     val hoyolabWeaponPages: List<JsonNode> = emptyList(),
+    val hoyolabEnemies: List<HoyolabWikiEntry> = emptyList(),
+    val hoyolabEnemyPages: List<JsonNode> = emptyList(),
+    val hoyolabSourceMaterialPages: List<JsonNode> = emptyList(),
 ) {
     companion object {
-        const val CURRENT_FORMAT_VERSION = 2
+        const val CURRENT_FORMAT_VERSION = 3
     }
 }
 
@@ -51,6 +54,7 @@ class BundledCatalogSnapshotImporter(
     private val weaponPageService: HoyolabWeaponGalleryService,
     private val properties: GenshinContentProperties,
     private val hoyowikiCatalogStore: HoyowikiCatalogStore,
+    private val sourceSynchronizer: HoyolabSourceSynchronizer? = null,
 ) : ApplicationRunner {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val objectMapper = jacksonObjectMapper()
@@ -77,6 +81,7 @@ class BundledCatalogSnapshotImporter(
         if (hoyowikiCatalogStore.hasBundledVersion(snapshot.generatedAt) && !properties.rerunCharacterImports) {
             logger.info("Bundled catalogue {} is already imported", snapshot.generatedAt)
             artifactCatalogService.refreshFromDatabase()
+            sourceSynchronizer?.synchronize(bundled = emptyList())
             return
         }
 
@@ -129,9 +134,11 @@ class BundledCatalogSnapshotImporter(
             HoyolabWikiMenu.CHARACTERS to snapshot.hoyolabCharacters,
             HoyolabWikiMenu.WEAPONS to snapshot.hoyolabWeapons,
             HoyolabWikiMenu.ARTIFACTS to snapshot.hoyolabArtifacts,
+            HoyolabWikiMenu.ENEMIES to snapshot.hoyolabEnemies,
         ).forEach { (menu, entries) ->
             hoyowikiCatalogStore.recordCatalog(menu, entries, generatedAt, live = false)
         }
+        sourceSynchronizer?.synchronize(bundled = snapshot.hoyolabEnemyPages + snapshot.hoyolabSourceMaterialPages, bundledAt = generatedAt)
         hoyowikiCatalogStore.markBundledVersion(snapshot.generatedAt)
         logger.info(
             "Imported bundled catalog snapshot from {}: {} characters, {} weapons, " +
@@ -188,6 +195,9 @@ class BundledCatalogSnapshotImporter(
         require(snapshot.hoyolabWeaponPages.isNotEmpty()) {
             "Bundled catalog snapshot has no HoYoWiki weapon pages"
         }
+        require(snapshot.hoyolabEnemies.isNotEmpty() && snapshot.hoyolabEnemyPages.isNotEmpty()) {
+            "Bundled catalog snapshot has no enemy source pages"
+        }
     }
 
     private companion object {
@@ -204,14 +214,28 @@ fun main(args: Array<String>) {
     val hoyolab = HttpHoyolabWikiDataSource(objectMapper, properties)
     val characters = hoyolab.listEntries(HoyolabWikiMenu.CHARACTERS)
     val weapons = hoyolab.listEntries(HoyolabWikiMenu.WEAPONS)
+    val materials = hoyolab.listEntries(HoyolabWikiMenu.MATERIALS)
+    val artifacts = hoyolab.listEntries(HoyolabWikiMenu.ARTIFACTS)
+    val enemies = hoyolab.listEntries(HoyolabWikiMenu.ENEMIES)
+    val enemyPages = fetchPages(enemies, hoyolab)
+    val pageParser = HoyolabPageParser(objectMapper)
+    val artifactIds = artifacts.map { it.entryPageId }.toSet()
+    val rewardIds = enemyPages.flatMap { page ->
+        pageParser.componentData(page, "drop_material")?.path("list")?.flatMap(pageParser::materialReferences).orEmpty()
+    }.map { it.hoyolabPageId.toLong() }.filterNot { it in artifactIds }
+    val detailIds = (rewardIds + materials.filter(HoyolabSourceParser::isTalent).map { it.entryPageId }).distinct()
+    val sourcePages = fetchPages(detailIds.map { HoyolabWikiEntry(it, "Source material $it") }, hoyolab)
     val snapshot = BundledCatalogSnapshot(
         generatedAt = Instant.now().toString(),
         hoyolabCharacters = characters,
         hoyolabWeapons = weapons,
-        hoyolabArtifacts = hoyolab.listEntries(HoyolabWikiMenu.ARTIFACTS),
-        hoyolabMaterials = hoyolab.listEntries(HoyolabWikiMenu.MATERIALS),
+        hoyolabArtifacts = artifacts,
+        hoyolabMaterials = materials,
         hoyolabCharacterPages = fetchPages(characters, hoyolab),
         hoyolabWeaponPages = fetchPages(weapons, hoyolab),
+        hoyolabEnemies = enemies,
+        hoyolabEnemyPages = enemyPages,
+        hoyolabSourceMaterialPages = sourcePages,
     )
     Files.createDirectories(output.toAbsolutePath().normalize().parent)
     val temporary = Files.createTempFile(output.parent, "bundled-catalog-snapshot", ".tmp")
@@ -227,7 +251,7 @@ private fun fetchPages(
     entries: List<HoyolabWikiEntry>,
     source: HoyolabWikiDataSource,
 ): List<JsonNode> {
-    val executor = Executors.newFixedThreadPool(8)
+    val executor = Executors.newFixedThreadPool(4)
     return try {
         executor.invokeAll(entries.map { entry ->
             Callable {

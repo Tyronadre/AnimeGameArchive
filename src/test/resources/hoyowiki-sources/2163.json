@@ -1,0 +1,49 @@
+{
+  "id": "2163",
+  "name": "Anemo Hypostasis",
+  "menu_id": "7",
+  "filter_values": {
+    "enemy_and_monster_type": {
+      "values": [
+        "Elemental Lifeforms"
+      ],
+      "value_types": [
+        {
+          "id": "1374",
+          "value": "Elemental Lifeforms",
+          "mi18n_key": "filter_1374",
+          "icon": "",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "enemy_and_monster_type",
+        "text": "Type",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_enemy_and_monster_type",
+        "is_multi_select": false,
+        "id": "11",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    }
+  },
+  "modules": [
+    {
+      "components": [
+        {
+          "component_id": "baseInfo",
+          "layout": "",
+          "data": "{\"list\":[{\"key\":\"Name\",\"value\":[\"Anemo Hypostasis\"],\"id\":\"baseInfo24481\"},{\"key\":\"Type\",\"value\":[\"<p>Elemental Lifeforms</p><p>Boss</p>\"],\"id\":\"baseInfo68468\"},{\"key\":\"Region\",\"value\":[\"<p>Mondstadt</p>\"],\"id\":\"baseInfo53660\"},{\"key\":\"Version Released\",\"value\":[\"<p>1.0</p>\"],\"id\":\"baseInfo97527\"}]}",
+          "style": ""
+        },
+        {
+          "component_id": "drop_material",
+          "layout": "",
+          "data": "{\"list\":[\"$[{\\\"ep_id\\\":757,\\\"nickname\\\":\\\"摩拉\\\",\\\"id\\\":\\\"drop_material10287\\\"}]$\",\"$[{\\\"ep_id\\\":1751,\\\"nickname\\\":\\\"飓风之种\\\",\\\"id\\\":\\\"drop_material9292\\\"}]$\",\"$[{\\\"ep_id\\\":1496,\\\"nickname\\\":\\\"自在松石碎屑\\\",\\\"id\\\":\\\"drop_material95974\\\"}]$\",\"$[{\\\"ep_id\\\":1495,\\\"nickname\\\":\\\"自在松石断片\\\",\\\"id\\\":\\\"drop_material14630\\\"}]$\",\"$[{\\\"ep_id\\\":1494,\\\"nickname\\\":\\\"自在松石块\\\",\\\"id\\\":\\\"drop_material73921\\\"}]$\",\"$[{\\\"ep_id\\\":1493,\\\"nickname\\\":\\\"自在松石\\\",\\\"id\\\":\\\"drop_material66321\\\"}]$\",\"$[{\\\"ep_id\\\":2071,\\\"nickname\\\":\\\"幸运儿\\\",\\\"id\\\":\\\"drop_material77703\\\"}]$\",\"$[{\\\"ep_id\\\":2073,\\\"nickname\\\":\\\"战狂\\\",\\\"id\\\":\\\"drop_material99899\\\"}]$\",\"$[{\\\"ep_id\\\":2074,\\\"nickname\\\":\\\"教官\\\",\\\"id\\\":\\\"drop_material96141\\\"}]$\",\"$[{\\\"ep_id\\\":2095,\\\"nickname\\\":\\\"角斗士的终幕礼\\\",\\\"id\\\":\\\"drop_material65786\\\"}]$\",\"$[{\\\"ep_id\\\":2081,\\\"nickname\\\":\\\"流浪大地的乐团\\\",\\\"id\\\":\\\"drop_material69083\\\"}]$\"]}",
+          "style": ""
+        }
+      ]
+    }
+  ]
+}

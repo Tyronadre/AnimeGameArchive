@@ -1,0 +1,49 @@
+{
+  "id": "2220",
+  "name": "Ruin Guard",
+  "menu_id": "7",
+  "filter_values": {
+    "enemy_and_monster_type": {
+      "values": [
+        "Automatons"
+      ],
+      "value_types": [
+        {
+          "id": "1320",
+          "value": "Automatons",
+          "mi18n_key": "filter_1320",
+          "icon": "",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "enemy_and_monster_type",
+        "text": "Type",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_enemy_and_monster_type",
+        "is_multi_select": false,
+        "id": "11",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    }
+  },
+  "modules": [
+    {
+      "components": [
+        {
+          "component_id": "baseInfo",
+          "layout": "",
+          "data": "{\"list\":[{\"key\":\"Name\",\"value\":[\"Ruin Guard\"],\"id\":\"baseInfo40125\"},{\"key\":\"Type\",\"value\":[\"<p>Automatons</p><p>Elite Enemy</p>\"],\"id\":\"baseInfo83467\"},{\"key\":\"Region\",\"value\":[\"<p>-</p>\"],\"id\":\"baseInfo49305\"},{\"key\":\"TCG Entry\",\"value\":[\"$[{\\\"ep_id\\\":4785,\\\"icon\\\":\\\"https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2023/12/21/35428890/a8dcb2fea4b75d4954cde6ce93f14fb4_8556033524630425911.png\\\",\\\"amount\\\":0,\\\"name\\\":\\\"Ruin Guard\\\",\\\"menuId\\\":\\\"19\\\",\\\"_menuId\\\":\\\"19\\\"}]$\"],\"id\":\"baseInfo1699\",\"isMaterial\":true},{\"key\":\"Version Released\",\"value\":[\"<p>1.0</p>\"],\"id\":\"baseInfo13024\"}]}",
+          "style": ""
+        },
+        {
+          "component_id": "drop_material",
+          "layout": "",
+          "data": "{\"list\":[\"$[{\\\"ep_id\\\":757,\\\"nickname\\\":\\\"摩拉\\\",\\\"id\\\":\\\"drop_material93913\\\"}]$\",\"$[{\\\"ep_id\\\":1047,\\\"nickname\\\":\\\"混沌装置\\\",\\\"id\\\":\\\"drop_material47744\\\"}]$\",\"$[{\\\"ep_id\\\":1042,\\\"nickname\\\":\\\"混沌回路\\\",\\\"id\\\":\\\"drop_material70837\\\"}]$\",\"$[{\\\"ep_id\\\":1045,\\\"nickname\\\":\\\"混沌炉心\\\",\\\"id\\\":\\\"drop_material68288\\\"}]$\",\"$[{\\\"ep_id\\\":2073,\\\"nickname\\\":\\\"战狂\\\",\\\"id\\\":\\\"drop_material2549\\\"}]$\",\"$[{\\\"ep_id\\\":2074,\\\"nickname\\\":\\\"教官\\\",\\\"id\\\":\\\"drop_material86084\\\"}]$\",\"$[{\\\"ep_id\\\":2080,\\\"nickname\\\":\\\"流放者\\\",\\\"id\\\":\\\"drop_material7094\\\"}]$\",\"$[{\\\"ep_id\\\":2084,\\\"nickname\\\":\\\"游医\\\",\\\"id\\\":\\\"drop_material89412\\\"}]$\"]}",
+          "style": ""
+        }
+      ]
+    }
+  ]
+}

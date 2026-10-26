@@ -1,0 +1,107 @@
+{
+  "id": "164",
+  "name": "Teachings of Freedom",
+  "menu_id": "9",
+  "filter_values": {
+    "filter_key_42": {
+      "values": [
+        "★★"
+      ],
+      "value_types": [
+        {
+          "id": "4251",
+          "value": "★★",
+          "mi18n_key": "filter_custom_56",
+          "icon": "",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "filter_key_42",
+        "text": "Quality",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_weapon_rarity",
+        "is_multi_select": true,
+        "id": "42",
+        "is_hidden": false,
+        "updated_at": "1772530376"
+      }
+    },
+    "filter_key_51": {
+      "values": [],
+      "value_types": [],
+      "key": null
+    },
+    "filter_key_46": {
+      "values": [],
+      "value_types": [],
+      "key": null
+    },
+    "filter_key_47": {
+      "values": [],
+      "value_types": [],
+      "key": null
+    },
+    "filter_key_41": {
+      "values": [],
+      "value_types": [],
+      "key": null
+    },
+    "filter_key_48": {
+      "values": [],
+      "value_types": [],
+      "key": null
+    },
+    "filter_key_45": {
+      "values": [],
+      "value_types": [],
+      "key": null
+    },
+    "filter_key_49": {
+      "values": [],
+      "value_types": [],
+      "key": null
+    },
+    "filter_key_50": {
+      "values": [
+        "Character Talent Material"
+      ],
+      "value_types": [
+        {
+          "id": "4247",
+          "value": "Character Talent Material",
+          "mi18n_key": "filter_1228",
+          "icon": "",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "filter_key_50",
+        "text": "Character Development Items",
+        "values": [],
+        "mi18n_key": "filter_custom_62",
+        "is_multi_select": false,
+        "id": "50",
+        "is_hidden": false,
+        "updated_at": "1777617025"
+      }
+    },
+    "object_type": {
+      "values": [],
+      "value_types": [],
+      "key": null
+    }
+  },
+  "modules": [
+    {
+      "components": [
+        {
+          "component_id": "baseInfo",
+          "layout": "",
+          "data": "{\"list\":[{\"key\":\"Name\",\"value\":[\"Teachings of Freedom\"],\"id\":\"baseInfo57057\"},{\"key\":\"Type\",\"value\":[\"<p>Character Talent Material</p>\"],\"id\":\"baseInfo57160\"},{\"key\":\"Region\",\"value\":[\"<p>Mondstadt</p>\"],\"id\":\"baseInfo2744\"},{\"key\":\"Source\",\"value\":[\"<p>Domain of Mastery: Frosted Altar <span style=\\\"color: rgb(255, 225, 75)\\\">(Monday/Thursday/Sunday)</span></p>\"],\"id\":\"baseInfo22509\"},{\"key\":\"Version Released\",\"value\":[\"<p>1.0</p>\"],\"id\":\"baseInfo22076\"}]}",
+          "style": ""
+        }
+      ]
+    }
+  ]
+}

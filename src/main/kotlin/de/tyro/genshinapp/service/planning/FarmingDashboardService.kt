@@ -20,6 +20,8 @@ import de.tyro.genshinapp.model.InventoryMaterialBalance
 import de.tyro.genshinapp.model.MaterialCategory
 import de.tyro.genshinapp.model.MaterialDefinition
 import de.tyro.genshinapp.model.MaterialRequirement
+import de.tyro.genshinapp.model.MaterialSourceType
+import de.tyro.genshinapp.model.MaterialSourceRole
 import de.tyro.genshinapp.model.PlayerArtifact
 import de.tyro.genshinapp.model.PlayerSnapshot
 import de.tyro.genshinapp.model.TravelerIdentity
@@ -50,6 +52,7 @@ class FarmingDashboardService(
         selections: Set<DashboardGoalSelection>,
         automaticPlan: Boolean = false,
         activeMaterialKeys: Set<String> = emptySet(),
+        collectedWeeklyBossKeys: Set<String> = emptySet(),
     ): FarmingDashboard {
         val charactersByKey = catalogService.getCharacters().associateBy {
             GoodKeyNormalizer.normalize(it.key)
@@ -233,20 +236,43 @@ class FarmingDashboardService(
             GoodKeyNormalizer.normalize(it)
         }
         val activeRecommendationKeys = activeRecommendationKeys(normalizedActiveMaterialKeys)
-
+        val ranked = recommendations.values.map {
+            it.toRecommendation(normalizedActiveMaterialKeys, activeRecommendationKeys)
+        }.sortedWith(compareByDescending<FarmingRecommendation> { it.priority }.thenBy { it.title })
+        val sources = materialCatalogService.getSources(listOf(MaterialSourceType.WEEKLY_BOSS))
+        val claimed = collectedWeeklyBossKeys.mapTo(mutableSetOf(), GoodKeyNormalizer::normalize)
+        val needs = ranked.flatMap { it.materials }.associateBy { it.id }
+        val remaining = (3 - claimed.size).coerceAtLeast(0)
+        val bosses = sources.filter { GoodKeyNormalizer.normalize(it.name) !in claimed }.map { source ->
+            val drops = source.materials.filter { it.role == MaterialSourceRole.DROP }
+                .mapNotNull { needs[it.material.id] }.filter { it.missing > 0 }
+            val gems = source.materials.filter { it.role == MaterialSourceRole.GEM }
+                .mapNotNull { needs[it.material.id] }.filter { it.missing > 0 }
+            val relevant = (drops + gems).distinctBy { it.id }
+            val matching = ranked.filter { recommendation ->
+                recommendation.materials.any { need -> relevant.any { it.id == need.id } }
+            }
+            FarmingRecommendation(
+                key = source.key,
+                activity = FarmingActivity.WEEKLY_BOSS,
+                title = source.name,
+                imageUrl = relevant.firstOrNull()?.imageUrl,
+                characters = matching.flatMap { it.characters }.distinctBy { it.key },
+                materials = relevant,
+                artifactScore = null,
+                impactPercent = matching.maxOfOrNull { it.impactPercent } ?: 0,
+                priority = (if (drops.isNotEmpty()) 2 else if (gems.isNotEmpty()) 1 else 0),
+                href = relevant.firstOrNull()?.let { "/materials?materialId=${it.id}" } ?: "/materials",
+            )
+        }.sortedWith(compareByDescending<FarmingRecommendation> { it.priority }
+            .thenByDescending { it.missingTotal }.thenBy { it.title })
+        // Keep all useful bosses; fill the remaining discounted claims with gem or stock options.
+        val usefulCount = bosses.count { it.priority == 2 }
+        val weekly = if (sources.isEmpty()) ranked.filter { it.activity == FarmingActivity.WEEKLY_BOSS }
+            else bosses.take(maxOf(remaining, usefulCount))
         return FarmingDashboard(
             goals = summaries,
-            recommendations = recommendations.values
-                .map {
-                    it.toRecommendation(
-                        activeMaterialKeys = normalizedActiveMaterialKeys,
-                        activeRecommendationKeys = activeRecommendationKeys,
-                    )
-                }
-                .sortedWith(
-                    compareByDescending<FarmingRecommendation> { it.priority }
-                        .thenBy { it.title },
-                ),
+            recommendations = weekly + ranked.filter { it.activity != FarmingActivity.WEEKLY_BOSS },
         )
     }
 

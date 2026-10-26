@@ -30,6 +30,15 @@ open class HoyowikiEntry {
 
     @Column(name = "last_detail_queried_at")
     open var lastDetailQueriedAt: Instant? = null
+
+    @Column(name = "source_parser_version")
+    open var sourceParserVersion: Int? = null
+
+    @Column(name = "source_parsed_at")
+    open var sourceParsedAt: Instant? = null
+
+    @Column(name = "source_last_error", length = 2048)
+    open var sourceLastError: String? = null
 }
 
 /** Totals describe the last successfully projected full list, never a partial download. */

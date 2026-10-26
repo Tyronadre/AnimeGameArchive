@@ -33,6 +33,9 @@ class Material {
     @Column(name = "game_id", nullable = false, unique = true)
     var gameId: Int = 0
 
+    @Column(name = "category_origin", length = 32)
+    var categoryOrigin: String? = null
+
     @Column(nullable = false)
     var name: String = ""
 

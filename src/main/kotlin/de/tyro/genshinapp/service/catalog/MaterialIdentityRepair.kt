@@ -76,6 +76,13 @@ class MaterialIdentityRepair(
                 return@forEach
             }
             if (canonical.hoyowikiEntry == null) canonical.hoyowikiEntry = page
+            if (alias.categoryOrigin == "HOYOWIKI" && canonical.categoryOrigin != "HOYOWIKI") {
+                canonical.type = alias.type
+                canonical.categoryOrigin = alias.categoryOrigin
+                canonical.craftingFamily = alias.craftingFamily
+                canonical.craftingTier = alias.craftingTier
+                canonical.conversionGroup = alias.conversionGroup
+            }
             sources.forEach { source ->
                 if (source.key in targets) {
                     entityManager.remove(source.entity)

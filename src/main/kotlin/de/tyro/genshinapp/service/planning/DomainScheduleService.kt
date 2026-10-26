@@ -1,6 +1,8 @@
 package de.tyro.genshinapp.service.planning
 
 import de.tyro.genshinapp.model.MaterialSchedule
+import de.tyro.genshinapp.model.MaterialSourceType
+import de.tyro.genshinapp.service.catalog.MaterialCatalogService
 import org.springframework.stereotype.Service
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -8,7 +10,7 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 @Service
-class DomainScheduleService {
+class DomainScheduleService(private val materials: MaterialCatalogService? = null) {
     fun isFarmable(
         schedule: MaterialSchedule,
         date: LocalDate = currentGameDate(),
@@ -17,15 +19,24 @@ class DomainScheduleService {
     fun isTalentBookFarmable(
         materialId: Int,
         date: LocalDate = currentGameDate(),
-    ): Boolean = isFarmable(rotationForTalentBook(materialId), date.dayOfWeek)
+    ): Boolean {
+        val membership = materials?.getSources(listOf(MaterialSourceType.TALENT_DOMAIN))
+            ?.flatMap { it.materials }?.firstOrNull { it.material.id == materialId }
+        return if (membership != null) membership.schedule?.let { isFarmable(it, date) } ?: false
+        else isFarmable(rotationForTalentBook(materialId), date.dayOfWeek)
+    }
 
     fun isWeaponMaterialFarmable(
         materialId: Int,
         date: LocalDate = currentGameDate(),
     ): Boolean = isFarmable(rotationForWeaponMaterial(materialId), date.dayOfWeek)
 
-    fun talentBookDays(materialId: Int): Set<DayOfWeek> =
-        daysFor(rotationForTalentBook(materialId))
+    fun talentBookDays(materialId: Int): Set<DayOfWeek> {
+        val membership = materials?.getSources(listOf(MaterialSourceType.TALENT_DOMAIN))
+            ?.flatMap { it.materials }?.firstOrNull { it.material.id == materialId }
+        return if (membership != null) membership.schedule?.let { daysFor(it.ordinal) }.orEmpty()
+        else daysFor(rotationForTalentBook(materialId))
+    }
 
     fun weaponMaterialDays(materialId: Int): Set<DayOfWeek> =
         daysFor(rotationForWeaponMaterial(materialId))

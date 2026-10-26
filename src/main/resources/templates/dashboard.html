@@ -29,9 +29,6 @@
                 </span>
             </span>
         </div>
-        <div class="dashboard-hero-route" aria-hidden="true">
-            <span>1</span><i></i><span>2</span><i></i><span>3</span>
-        </div>
     </section>
 
     <div class="flash success" th:if="${successMessage != null}"
@@ -54,60 +51,12 @@
 
     <div th:if="${snapshot != null}" id="dashboard-content" class="dashboard-content"
          th:attr="data-snapshot-revision=${snapshot.revision}">
-        <section id="dashboard-routine" class="dashboard-routine-bar"
-                 data-day-budget="200" data-weekly-limit="3"
-                 th:attr="data-weekly-open=#{dashboard.routine.weeklyOpen},
-                          data-weekly-done=#{dashboard.routine.weeklyDone}">
-            <div class="dashboard-routine-stat dashboard-routine-weekly">
-                <span class="dashboard-routine-icon">✹</span>
-                <div>
-                    <small th:text="#{dashboard.routine.weekly}">Weekly rewards</small>
-                    <strong><span data-weekly-count>0</span><b>/3</b></strong>
-                </div>
-                <div class="dashboard-weekly-dots" aria-hidden="true">
-                    <i data-weekly-dot></i><i data-weekly-dot></i><i data-weekly-dot></i>
-                </div>
-            </div>
-            <div class="dashboard-routine-stat">
-                <div class="dashboard-resin-ring" data-resin-ring>
-                    <strong data-resin-remaining>200</strong>
-                    <small th:text="#{dashboard.routine.resinUnit}">Resin</small>
-                </div>
-                <div>
-                    <small th:text="#{dashboard.routine.today}">Today's budget</small>
-                    <strong><span data-resin-used>0</span><b>/200</b></strong>
-                </div>
-            </div>
-            <div class="dashboard-routine-copy">
-                <small th:text="${dashboardAutomatic
-                    ? #messages.msg('dashboard.routine.autoLabel')
-                    : #messages.msg('dashboard.routine.customLabel')}">
-                    Planned automatically
-                </small>
-                <p th:text="${dashboardAutomatic
-                    ? #messages.msg('dashboard.routine.autoText')
-                    : #messages.msg('dashboard.routine.customText')}">
-                    Based on your most invested unfinished characters.
-                </p>
-                <button type="button" class="dashboard-reset-button" data-routine-reset
-                        th:text="#{dashboard.routine.reset}">Reset today</button>
-            </div>
-        </section>
-
+        <div id="dashboard-routine" data-day-budget="200" data-weekly-limit="3"
+             th:attr="data-weekly-open=#{dashboard.routine.weeklyOpen}, data-weekly-done=#{dashboard.routine.weeklyDone}">
         <div id="dashboard-live-plan" class="dashboard-live-plan" aria-live="polite">
-        <div class="dashboard-plan-heading">
-            <div>
-                <p class="eyebrow" th:text="#{dashboard.plan.eyebrow}">Your route</p>
-                <h2 th:text="#{dashboard.plan.heading}">Three decisions. No checklist chaos.</h2>
-            </div>
-            <a href="#dashboard-goals" th:text="#{dashboard.goals.manage}">
-                Adjust priorities
-            </a>
-        </div>
-
         <section class="dashboard-lane dashboard-lane-weekly">
             <header class="dashboard-lane-heading">
-                <span class="dashboard-step">1</span>
+                <span class="dashboard-motif motif-blossom" aria-hidden="true"><i></i><i></i><i></i><b>✦</b></span>
                 <div>
                     <p class="eyebrow" th:text="#{dashboard.weekly.eyebrow}">Do first</p>
                     <h2 th:text="#{dashboard.weekly.heading}">Secure weekly rewards</h2>
@@ -118,7 +67,7 @@
             </header>
             <div class="dashboard-weekly-layout">
                 <div class="dashboard-weekly-action">
-                    <span>✹</span>
+                    <span class="dashboard-claim-count"><b data-weekly-count>0</b><small>/ 3</small></span>
                     <div>
                         <strong th:text="#{dashboard.weekly.counterHeading}">
                             Weekly claim
@@ -133,8 +82,7 @@
                 <div class="dashboard-task-list" data-dashboard-list="weekly-main"
                      th:hidden="${dashboard.weeklyRecommendations.isEmpty()}">
                     <article class="dashboard-task-card is-weekly"
-                             th:each="recommendation, iteration : ${dashboard.weeklyRecommendations}"
-                             th:if="${iteration.index < 3}">
+                             th:each="recommendation : ${dashboard.weeklyRecommendations}">
                         <div class="dashboard-task-art">
                             <span th:text="${recommendation.activity.icon}">✹</span>
                             <img th:if="${recommendation.imageUrl != null}"
@@ -179,7 +127,7 @@
         <div class="dashboard-lane-grid">
             <section class="dashboard-lane dashboard-lane-resin">
                 <header class="dashboard-lane-heading">
-                    <span class="dashboard-step">2</span>
+                    <span class="dashboard-motif motif-crystal" aria-hidden="true"><i></i><i></i><i></i></span>
                     <div>
                         <p class="eyebrow" th:text="#{dashboard.resin.eyebrow}">Spend deliberately</p>
                         <h2 th:text="#{dashboard.resin.heading}">Use today's resin</h2>
@@ -188,6 +136,12 @@
                         Best returns for the characters in focus, available today.
                     </p>
                 </header>
+                <div class="dashboard-resin-status">
+                    <div data-resin-ring><strong data-resin-remaining>200</strong> <span th:text="#{dashboard.routine.resinUnit}">Resin</span></div>
+                    <span><b data-resin-used>0</b> / 200 <span th:text="#{dashboard.routine.today}">Today's budget</span></span>
+                    <small data-resin-unconfirmed hidden th:text="#{dashboard.routine.unconfirmed}"></small>
+                    <button type="button" class="dashboard-reset-button" data-routine-reset th:text="#{dashboard.routine.reset}">Reset today</button>
+                </div>
                 <div class="dashboard-task-list" data-dashboard-list="resin-main"
                      th:hidden="${dashboard.resinRecommendations.isEmpty()}">
                     <article class="dashboard-task-card"
@@ -295,7 +249,7 @@
 
             <section class="dashboard-lane dashboard-lane-free">
                 <header class="dashboard-lane-heading">
-                    <span class="dashboard-step">3</span>
+                    <span class="dashboard-motif motif-leaves" aria-hidden="true"><i></i><i></i><i></i></span>
                     <div>
                         <p class="eyebrow" th:text="#{dashboard.free.eyebrow}">Any time</p>
                         <h2 th:text="#{dashboard.free.heading}">Continue without resin</h2>
@@ -456,6 +410,8 @@
                 </p>
             </div>
         </section>
+        </div>
+
         </div>
 
         <section id="dashboard-goals" class="dashboard-section dashboard-goal-manager">
@@ -646,7 +602,7 @@
         applyFilters();
     })();
 </script>
-<script>
+<script th:inline="javascript">
     (() => {
         const root = document.getElementById("dashboard-routine");
         if (!root) return;
@@ -654,7 +610,10 @@
         const budget = Number(root.dataset.dayBudget || 200);
         const weeklyLimit = Number(root.dataset.weeklyLimit || 3);
         const storageKey = "genshin-dashboard-routine-v1";
-        const today = new Date().toLocaleDateString("en-CA");
+        const initialProgress = /*[[${weeklyBossProgress}]]*/ null;
+        const initialFarming = /*[[${dailyFarmingProgress}]]*/ null;
+        let detectedRuns = initialFarming?.runs || [];
+        let today = initialProgress?.day || new Date().toLocaleDateString("en-CA");
         const weekKey = date => {
             const utc = new Date(Date.UTC(
                 date.getFullYear(), date.getMonth(), date.getDate()
@@ -664,12 +623,17 @@
             const first = new Date(Date.UTC(utc.getUTCFullYear(), 0, 1));
             return `${utc.getUTCFullYear()}-${Math.ceil((((utc - first) / 86400000) + 1) / 7)}`;
         };
-        const currentWeek = weekKey(new Date());
+        let currentWeek = initialProgress?.week || weekKey(new Date());
+        let detectedClaims = initialProgress?.claims || [];
         let state;
         try {
             state = JSON.parse(localStorage.getItem(storageKey)) || {};
         } catch (_) {
             state = {};
+        }
+        // Migrate the original browser-only ISO week key without losing manual claims.
+        if (initialProgress && state.week === weekKey(new Date(`${today}T12:00:00`))) {
+            state.week = currentWeek;
         }
         if (state.week !== currentWeek) {
             state.week = currentWeek;
@@ -690,15 +654,58 @@
             }
         };
         const resinSpent = () => {
-            const runs = Object.values(state.runs).reduce(
-                (sum, run) => sum + (Number(run.count) * Number(run.cost)), 0
-            );
-            const weeklyToday = state.weeklyClaims.filter(day => day === today).length * 30;
+            const runs = Object.values(combinedRuns()).reduce((sum, run) => sum + run.resin, 0);
+            const weeklyToday = combinedClaims().reduce((sum, day, index) =>
+                sum + (day === today ? (index < weeklyLimit ? 30 : 60) : 0), 0);
             return runs + weeklyToday;
         };
+        const combinedRuns = () => {
+            const result = {};
+            Object.entries(state.runs).forEach(([key, run]) => result[key] = {
+                count: Number(run.count), resin: Number(run.resin ?? (run.count * run.cost)),
+                unconfirmedCount: Number(run.unconfirmedCount || 0)
+            });
+            detectedRuns.forEach(run => {
+                // Artifact rewards do not identify a physical domain. Reconcile the daily
+                // artifact total without assigning a run to every set recommendation.
+                if (run.taskKey === "artifacts:domain") {
+                    const manual = Object.entries(result).filter(([key]) => key.startsWith("artifacts:"))
+                        .reduce((sum, [, value]) => ({count: sum.count + value.count,
+                            resin: sum.resin + value.resin,
+                            unconfirmedCount: sum.unconfirmedCount + value.unconfirmedCount}),
+                        {count: 0, resin: 0, unconfirmedCount: 0});
+                    result[run.taskKey] = {count: run.count,
+                        resin: Math.max(0, run.resin - manual.resin),
+                        unconfirmedCount: Math.max(0, run.unconfirmedCount - (manual.count - manual.unconfirmedCount))};
+                    return;
+                }
+                const manual = result[run.taskKey] || {count: 0, resin: 0, unconfirmedCount: 0};
+                result[run.taskKey] = {
+                    count: Math.max(manual.count, run.count),
+                    resin: Math.max(manual.resin, run.resin),
+                    unconfirmedCount: Math.max(manual.unconfirmedCount,
+                        run.unconfirmedCount - (manual.count - manual.unconfirmedCount))
+                };
+            });
+            return result;
+        };
+        // Manual claims are anonymous daily totals. Treat detected claims as a lower bound
+        // for each day so a claim already entered manually is not counted twice.
+        const combinedClaims = () => {
+            const manual = {};
+            const detected = {};
+            state.weeklyClaims.forEach(day => manual[day] = (manual[day] || 0) + 1);
+            detectedClaims.forEach(claim => detected[claim.day] = (detected[claim.day] || 0) + 1);
+            return [...new Set([...Object.keys(manual), ...Object.keys(detected)])].sort()
+                .flatMap(day => Array(Math.max(manual[day] || 0, detected[day] || 0)).fill(day));
+        };
         const render = () => {
+            const claimCount = combinedClaims().length;
             const spent = resinSpent();
             const remaining = Math.max(0, budget - spent);
+            const runs = combinedRuns();
+            const unconfirmed = root.querySelector("[data-resin-unconfirmed]");
+            if (unconfirmed) unconfirmed.hidden = !Object.values(runs).some(run => run.unconfirmedCount > 0);
             root.querySelector("[data-resin-remaining]").textContent = remaining;
             root.querySelector("[data-resin-used]").textContent = spent;
             root.querySelector("[data-resin-ring]").style.setProperty(
@@ -706,15 +713,15 @@
                 `${Math.min(1, spent / budget) * 360}deg`
             );
             root.querySelector("[data-weekly-count]").textContent =
-                state.weeklyClaims.length;
+                Math.min(weeklyLimit, claimCount);
             root.querySelectorAll("[data-weekly-dot]").forEach((dot, index) => {
-                dot.classList.toggle("is-used", index < state.weeklyClaims.length);
+                dot.classList.toggle("is-used", index < claimCount);
             });
 
             document.querySelectorAll("[data-resin-run]").forEach(button => {
                 const key = button.dataset.taskKey;
                 const cost = Number(button.dataset.resinCost);
-                const count = Number(state.runs[key]?.count || 0);
+                const count = Number(runs[key]?.count || 0);
                 button.disabled = cost > remaining;
                 button.querySelector("[data-run-count]").textContent =
                     count > 0 ? `${count}×` : "+";
@@ -723,8 +730,8 @@
             const weeklyButton = document.querySelector("[data-weekly-claim]");
             if (weeklyButton) {
                 weeklyButton.disabled =
-                    state.weeklyClaims.length >= weeklyLimit || remaining < 30;
-                weeklyButton.textContent = state.weeklyClaims.length >= weeklyLimit
+                    claimCount >= weeklyLimit || remaining < 30;
+                weeklyButton.textContent = claimCount >= weeklyLimit
                     ? root.dataset.weeklyDone
                     : root.dataset.weeklyOpen;
             }
@@ -739,8 +746,9 @@
             const key = button.dataset.taskKey;
             const cost = Number(button.dataset.resinCost);
             if (resinSpent() + cost > budget) return;
-            const current = state.runs[key] || {count: 0, cost};
+            const current = combinedRuns()[key] || {count: 0, resin: 0};
             current.count += 1;
+            current.resin += cost;
             current.cost = cost;
             state.runs[key] = current;
             save();
@@ -749,7 +757,9 @@
 
         const weeklyButton = document.querySelector("[data-weekly-claim]");
         weeklyButton?.addEventListener("click", () => {
-            if (state.weeklyClaims.length >= weeklyLimit || resinSpent() + 30 > budget) return;
+            const claims = combinedClaims();
+            if (claims.length >= weeklyLimit || resinSpent() + 30 > budget) return;
+            state.weeklyClaims = claims;
             state.weeklyClaims.push(today);
             save();
             render();
@@ -765,6 +775,26 @@
         save();
         render();
         document.addEventListener("dashboard:plan-updated", render);
+        document.addEventListener("dashboard:weekly-progress", event => {
+            const progress = event.detail;
+            if (!progress) return;
+            if (currentWeek !== progress.week) state.weeklyClaims = [];
+            if (today !== progress.day) state.runs = {};
+            if (today !== progress.day) detectedRuns = [];
+            today = progress.day;
+            currentWeek = progress.week;
+            state.day = today;
+            state.week = currentWeek;
+            detectedClaims = progress.claims || [];
+            save();
+            render();
+        });
+        document.addEventListener("dashboard:farming-progress", event => {
+            const progress = event.detail;
+            if (!progress || progress.day !== today) return;
+            detectedRuns = progress.runs || [];
+            render();
+        });
     })();
 </script>
 <script>
@@ -776,6 +806,7 @@
         let rendered = "";
         const content = document.getElementById("dashboard-content");
         let knownRevision = Number(content?.dataset.snapshotRevision || 0);
+        let knownWeeklyBosses = null;
         const render = activities => {
             const signature = JSON.stringify(activities);
             if (signature === rendered) return;
@@ -903,7 +934,7 @@
         };
         const syncGroup = (name, group, createCard) => {
             const items = group.items || [];
-            const visibleLimit = group.visibleLimit || 5;
+            const visibleLimit = name === "weekly" ? items.length : (group.visibleLimit || 5);
             const visible = items.slice(0, visibleLimit);
             const hidden = items.slice(visibleLimit);
             replaceList(`[data-dashboard-list="${name}-main"]`, visible, createCard);
@@ -923,8 +954,8 @@
             syncGroup("free", plan.free || {items: [], visibleLimit: 5}, createFreeCard);
             document.dispatchEvent(new CustomEvent("dashboard:plan-updated"));
         };
-        const refreshDashboardPlan = async revision => {
-            if (!content || revision === knownRevision) return;
+        const refreshDashboardPlan = async (revision, weeklyBosses) => {
+            if (!content || (revision === knownRevision && weeklyBosses === knownWeeklyBosses)) return;
             const response = await fetch("/api/dashboard/plan", {
                 headers: {"Accept": "application/json"},
                 cache: "no-store"
@@ -933,6 +964,7 @@
             const plan = await response.json();
             applyDashboardPlan(plan);
             knownRevision = Number(plan.revision || revision);
+            knownWeeklyBosses = weeklyBosses;
             content.dataset.snapshotRevision = String(knownRevision);
         };
 
@@ -945,14 +977,28 @@
                 });
                 if (response.ok) {
                     const payload = await response.json();
+                    // Claims may be saved after the snapshot revision advances. Refresh on
+                    // every poll, even if inventory has not changed since the previous poll.
+                    document.dispatchEvent(new CustomEvent("dashboard:weekly-progress", {
+                        detail: payload.weeklyBossProgress
+                    }));
+                    document.dispatchEvent(new CustomEvent("dashboard:farming-progress", {
+                        detail: payload.dailyFarmingProgress
+                    }));
                     const activities = Array.isArray(payload)
                         ? payload
                         : payload.activities || [];
                     const revision = Array.isArray(payload)
                         ? knownRevision
                         : Number(payload.revision || knownRevision);
-                    if (revision !== knownRevision) {
-                        await refreshDashboardPlan(revision);
+                    const progress = payload.weeklyBossProgress;
+                    const weeklyBosses = JSON.stringify([
+                        progress?.week || "",
+                        (progress?.claims || []).map(claim => claim.bossKey).sort()
+                    ]);
+                    // New claims and weekly resets can change availability without a new snapshot.
+                    if (revision !== knownRevision || weeklyBosses !== knownWeeklyBosses) {
+                        await refreshDashboardPlan(revision, weeklyBosses);
                     }
                     render(activities);
                 }

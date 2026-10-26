@@ -18,6 +18,8 @@ import de.tyro.genshinapp.service.player.PlayerSnapshotStore
 import de.tyro.genshinapp.service.player.SnapshotActivityEvent
 import de.tyro.genshinapp.service.player.SnapshotActivityService
 import de.tyro.genshinapp.service.player.SnapshotActivityType
+import de.tyro.genshinapp.service.player.WeeklyBossProgress
+import de.tyro.genshinapp.service.player.DailyFarmingProgress
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -58,6 +60,9 @@ class DashboardController(
         model.addAttribute("selectedGoalCount", selections.size)
         model.addAttribute("dashboardAutomatic", selections.isEmpty())
         model.addAttribute("recentActivity", recentActivityViews(principal.id))
+        val weeklyBossProgress = activityService.weeklyBossProgress(principal.id)
+        model.addAttribute("weeklyBossProgress", weeklyBossProgress)
+        model.addAttribute("dailyFarmingProgress", activityService.dailyFarmingProgress(principal.id))
         model.addAttribute(
             "dashboard",
             snapshot?.let {
@@ -67,6 +72,7 @@ class DashboardController(
                     effectiveSelections,
                     automaticPlan = selections.isEmpty(),
                     activeMaterialKeys = activeMaterialKeys(principal.id),
+                    collectedWeeklyBossKeys = weeklyBossProgress.claims.mapTo(mutableSetOf()) { it.bossKey },
                 )
             },
         )
@@ -80,6 +86,8 @@ class DashboardController(
     ): DashboardActivityResponse = DashboardActivityResponse(
         revision = snapshotStore.current(principal.id)?.revision ?: 0,
         activities = recentActivityViews(principal.id),
+        weeklyBossProgress = activityService.weeklyBossProgress(principal.id),
+        dailyFarmingProgress = activityService.dailyFarmingProgress(principal.id),
     )
 
     @GetMapping("/api/dashboard/plan")
@@ -99,6 +107,8 @@ class DashboardController(
             selections.ifEmpty { automaticSelections(options) },
             automaticPlan = selections.isEmpty(),
             activeMaterialKeys = activeMaterialKeys(principal.id),
+            collectedWeeklyBossKeys = activityService.weeklyBossProgress(principal.id)
+                .claims.mapTo(mutableSetOf()) { it.bossKey },
         )
         return DashboardPlanResponse(
             revision = snapshot.revision,
@@ -271,6 +281,17 @@ class DashboardController(
         val title: String
         val detail: String
         when (event.type) {
+            SnapshotActivityType.MORA_LEY_LINE,
+            SnapshotActivityType.EXPERIENCE_LEY_LINE,
+            SnapshotActivityType.TALENT_DOMAIN,
+            SnapshotActivityType.WEAPON_DOMAIN,
+            SnapshotActivityType.ARTIFACT_DOMAIN,
+            -> {
+                title = messages.get("dashboard.recent.${event.type.name}")
+                val resin = event.resinCost?.let { messages.get("dashboard.recent.farming.resin", it) }
+                    ?: messages.get("dashboard.recent.farming.unconfirmed")
+                detail = listOfNotNull(event.name.takeIf(String::isNotBlank), resin).joinToString(" · ")
+            }
             SnapshotActivityType.WEEKLY_BOSS_COLLECTED -> {
                 title = messages.get("dashboard.recent.weeklyBossCollected", event.name)
                 detail = messages.get("dashboard.recent.weeklyBossCollected.detail", event.amount ?: 0)
@@ -487,6 +508,8 @@ data class DashboardActivityView(
 data class DashboardActivityResponse(
     val revision: Long,
     val activities: List<DashboardActivityView>,
+    val weeklyBossProgress: WeeklyBossProgress,
+    val dailyFarmingProgress: DailyFarmingProgress,
 )
 
 data class DashboardPlanResponse(

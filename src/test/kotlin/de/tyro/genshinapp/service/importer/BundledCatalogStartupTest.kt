@@ -34,6 +34,8 @@ class BundledCatalogStartupTest {
             hoyolabArtifacts = listOf(HoyolabWikiEntry(30, "Artifact")),
             hoyolabCharacterPages = listOf(jacksonObjectMapper().readTree("""{"id":"10","name":"Character"}""")),
             hoyolabWeaponPages = listOf(jacksonObjectMapper().readTree("""{"id":"20","name":"Weapon"}""")),
+            hoyolabEnemies = listOf(HoyolabWikiEntry(40, "Enemy")),
+            hoyolabEnemyPages = listOf(jacksonObjectMapper().readTree("""{"id":"40","name":"Enemy"}""")),
         )
         val resource = directory.resolve("data/bundled-catalog-snapshot.json")
         Files.createDirectories(resource.parent)
@@ -52,7 +54,7 @@ class BundledCatalogStartupTest {
             importer.run(DefaultApplicationArguments())
             importer.run(DefaultApplicationArguments())
             val projections = mockingDetails(store).invocations.filter { it.method.name == "recordCatalog" }
-            assertEquals(4, projections.size)
+            assertEquals(5, projections.size)
             assertTrue(projections.all { it.arguments[3] == false })
             verify(artifacts).synchronizeHoyolabArtifactList(snapshot.hoyolabArtifacts)
             verify(artifacts).refreshFromDatabase()

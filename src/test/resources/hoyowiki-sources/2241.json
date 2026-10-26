@@ -1,0 +1,49 @@
+{
+  "id": "2241",
+  "name": "Anemo Slime",
+  "menu_id": "7",
+  "filter_values": {
+    "enemy_and_monster_type": {
+      "values": [
+        "Elemental Lifeforms"
+      ],
+      "value_types": [
+        {
+          "id": "1374",
+          "value": "Elemental Lifeforms",
+          "mi18n_key": "filter_1374",
+          "icon": "",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "enemy_and_monster_type",
+        "text": "Type",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_enemy_and_monster_type",
+        "is_multi_select": false,
+        "id": "11",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    }
+  },
+  "modules": [
+    {
+      "components": [
+        {
+          "component_id": "baseInfo",
+          "layout": "",
+          "data": "{\"list\":[{\"key\":\"Name\",\"value\":[\"Anemo Slime\"],\"id\":\"baseInfo69695\"},{\"key\":\"Type\",\"value\":[\"<p>Elemental Lifeforms</p><p>Common Enemy</p>\"],\"id\":\"baseInfo26226\"},{\"key\":\"Region\",\"value\":[\"<p>-</p>\"],\"id\":\"baseInfo27870\"},{\"key\":\"Version Released\",\"value\":[\"<p>1.0</p>\"],\"id\":\"baseInfo60307\"}]}",
+          "style": ""
+        },
+        {
+          "component_id": "drop_material",
+          "layout": "",
+          "data": "{\"list\":[\"$[{\\\"ep_id\\\":757,\\\"nickname\\\":\\\"摩拉\\\",\\\"id\\\":\\\"drop_material29885\\\"}]$\",\"$[{\\\"ep_id\\\":396,\\\"nickname\\\":\\\"史莱姆凝液\\\",\\\"id\\\":\\\"drop_material57816\\\"}]$\",\"$[{\\\"ep_id\\\":398,\\\"nickname\\\":\\\"史莱姆清\\\",\\\"id\\\":\\\"drop_material66586\\\"}]$\",\"$[{\\\"ep_id\\\":397,\\\"nickname\\\":\\\"史莱姆原浆\\\",\\\"id\\\":\\\"drop_material84475\\\"}]$\"]}",
+          "style": ""
+        }
+      ]
+    }
+  ]
+}

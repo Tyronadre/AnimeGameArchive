@@ -20,7 +20,7 @@ class HoyolabCatalogStartupSynchronizerTest {
     private val service = HoyolabCatalogStartupSynchronizer(source, GenshinContentProperties(),
         characters, weapons, artifacts, materials, HoyolabCatalogEntryMapper(), store)
     private val menus = listOf(HoyolabWikiMenu.MATERIALS, HoyolabWikiMenu.CHARACTERS,
-        HoyolabWikiMenu.WEAPONS, HoyolabWikiMenu.ARTIFACTS)
+        HoyolabWikiMenu.WEAPONS, HoyolabWikiMenu.ARTIFACTS, HoyolabWikiMenu.ENEMIES)
 
     private fun recordedMenus() = mockingDetails(store).invocations
         .filter { it.method.name == "recordCatalog" }.map { it.arguments[0] }

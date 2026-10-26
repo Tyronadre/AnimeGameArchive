@@ -1,0 +1,107 @@
+{
+  "id": "8967",
+  "name": "Radiant Antler",
+  "menu_id": "9",
+  "filter_values": {
+    "filter_key_46": {
+      "values": [],
+      "value_types": [],
+      "key": null
+    },
+    "filter_key_41": {
+      "values": [],
+      "value_types": [],
+      "key": null
+    },
+    "object_type": {
+      "values": [],
+      "value_types": [],
+      "key": null
+    },
+    "filter_key_47": {
+      "values": [],
+      "value_types": [],
+      "key": null
+    },
+    "filter_key_50": {
+      "values": [
+        "Character Level-Up Material"
+      ],
+      "value_types": [
+        {
+          "id": "4245",
+          "value": "Character Level-Up Material",
+          "mi18n_key": "filter_custom_10",
+          "icon": "",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "filter_key_50",
+        "text": "Character Development Items",
+        "values": [],
+        "mi18n_key": "filter_custom_62",
+        "is_multi_select": false,
+        "id": "50",
+        "is_hidden": false,
+        "updated_at": "1777617025"
+      }
+    },
+    "filter_key_42": {
+      "values": [
+        "★★★★"
+      ],
+      "value_types": [
+        {
+          "id": "4253",
+          "value": "★★★★",
+          "mi18n_key": "filter_custom_58",
+          "icon": "",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "filter_key_42",
+        "text": "Quality",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_weapon_rarity",
+        "is_multi_select": true,
+        "id": "42",
+        "is_hidden": false,
+        "updated_at": "1772530376"
+      }
+    },
+    "filter_key_45": {
+      "values": [],
+      "value_types": [],
+      "key": null
+    },
+    "filter_key_49": {
+      "values": [],
+      "value_types": [],
+      "key": null
+    },
+    "filter_key_48": {
+      "values": [],
+      "value_types": [],
+      "key": null
+    },
+    "filter_key_51": {
+      "values": [],
+      "value_types": [],
+      "key": null
+    }
+  },
+  "modules": [
+    {
+      "components": [
+        {
+          "component_id": "baseInfo",
+          "layout": "",
+          "data": "{\"list\":[{\"key\":\"Name\",\"value\":[\"Radiant Antler\"],\"id\":\"baseInfo5732\"},{\"key\":\"Type\",\"value\":[\"Character Level-Up Material\"],\"id\":\"baseInfo6248\"},{\"key\":\"Region\",\"value\":[\"<p>Nod-Krai</p>\"],\"id\":\"baseInfo23281\"},{\"key\":\"Source\",\"value\":[\"<p>Dropped by Lv. 30+ Frostnight Herras</p>\"],\"id\":\"baseInfo19871\"},{\"key\":\"Version Released\",\"value\":[\"<p>Luna II</p>\"],\"id\":\"baseInfo93510\"}]}",
+          "style": ""
+        }
+      ]
+    }
+  ]
+}

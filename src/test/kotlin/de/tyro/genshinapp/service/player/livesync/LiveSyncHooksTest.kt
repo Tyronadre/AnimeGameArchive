@@ -55,6 +55,7 @@ class LiveSyncHooksTest {
         assertEquals(listOf(3L, 1L), events.map { it.amount })
         assertTrue(events.all { it.type == SnapshotActivityType.WEEKLY_BOSS_COLLECTED && it.occurredAt == Instant.EPOCH })
         assertTrue(service.recent(8).isEmpty())
+        assertEquals(2, service.weeklyBossProgress(7, Instant.EPOCH).claims.size)
     }
 
     @Test

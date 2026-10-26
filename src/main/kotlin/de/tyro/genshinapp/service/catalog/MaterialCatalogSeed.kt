@@ -168,8 +168,10 @@ object MaterialCatalogSeed {
 
     /** Source membership is authoritative when usage/name inference is ambiguous. */
     fun applySourceMetadata(material: MaterialDefinition): MaterialDefinition {
+        if (material.categoryOrigin == "HOYOWIKI") return material
         val metadata = metadataByMaterialId[material.id] ?: return material
         return material.copy(
+            categoryOrigin = "BUNDLED",
             category = metadata.category,
             craftingFamily = metadata.craftingFamily ?: material.craftingFamily,
             craftingTier = metadata.craftingTier ?: material.craftingTier,

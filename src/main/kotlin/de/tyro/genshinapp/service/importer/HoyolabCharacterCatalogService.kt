@@ -31,6 +31,7 @@ class HoyolabCatalogStartupSynchronizer(
     private val materialCatalogService: MaterialCatalogService,
     private val entryMapper: HoyolabCatalogEntryMapper,
     private val catalogStore: HoyowikiCatalogStore,
+    private val sourceSynchronizer: HoyolabSourceSynchronizer? = null,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val started = AtomicBoolean()
@@ -57,14 +58,14 @@ class HoyolabCatalogStartupSynchronizer(
     fun synchronizeNow(force: Boolean = false): Int {
         materialCatalogService.refreshIdentityCatalog()
         val menus = listOf(HoyolabWikiMenu.MATERIALS, HoyolabWikiMenu.CHARACTERS,
-            HoyolabWikiMenu.WEAPONS, HoyolabWikiMenu.ARTIFACTS)
-        val probes = Executors.newFixedThreadPool(menus.size).use { executor ->
+            HoyolabWikiMenu.WEAPONS, HoyolabWikiMenu.ARTIFACTS, HoyolabWikiMenu.ENEMIES)
+        val probes = Executors.newFixedThreadPool(4).use { executor ->
             val pending = menus.associateWith { menu ->
                 executor.submit(Callable { runCatching { source.probeCatalog(menu) } })
             }
             pending.mapValues { (_, future) -> future.get() }
         }
-        return menus.sumOf { menu ->
+        val changes = menus.sumOf { menu ->
             runCatching {
                 val probe = probes.getValue(menu).getOrThrow()
                 val now = Instant.now()
@@ -94,6 +95,7 @@ class HoyolabCatalogStartupSynchronizer(
             }.onFailure { logger.warn("Could not refresh {} catalogue; keeping its previous checkpoint", menu, it) }
                 .getOrDefault(0)
         }
+        return changes + (sourceSynchronizer?.synchronize(force) ?: 0)
     }
 }
 

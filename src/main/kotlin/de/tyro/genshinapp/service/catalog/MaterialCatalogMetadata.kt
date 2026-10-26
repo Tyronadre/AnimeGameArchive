@@ -67,6 +67,11 @@ object MaterialCatalogMetadata {
             .flatMap { (_, family) -> family.sortedBy { it.id }.mapIndexed { tier, item -> item.id to tier } }
             .toMap()
         return preliminary.map { it.copy(craftingTier = tiers[it.id]) }
+            .map { inferred ->
+                val original = materials.first { it.id == inferred.id }
+                if (original.categoryOrigin == "HOYOWIKI") original
+                else inferred.copy(categoryOrigin = original.categoryOrigin ?: "INFERRED")
+            }
     }
 
     private fun category(
@@ -112,7 +117,7 @@ object MaterialCatalogMetadata {
         return GoodKeyNormalizer.normalize(name.dropLast(suffix.length))
     }
 
-    private fun isElementalGem(name: String): Boolean = ELEMENTAL_GEM_FAMILIES.any { family ->
+    fun isElementalGem(name: String): Boolean = ELEMENTAL_GEM_FAMILIES.any { family ->
         GEM_SUFFIXES.any { suffix -> name.equals(family + suffix, ignoreCase = true) }
     }
 

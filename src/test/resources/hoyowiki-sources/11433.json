@@ -1,0 +1,49 @@
+{
+  "id": "11433",
+  "name": "Bandersnatch",
+  "menu_id": "7",
+  "filter_values": {
+    "enemy_and_monster_type": {
+      "values": [
+        "Local Legend"
+      ],
+      "value_types": [
+        {
+          "id": "4140",
+          "value": "Local Legend",
+          "mi18n_key": "filter_custom_21",
+          "icon": "",
+          "enum_string": ""
+        }
+      ],
+      "key": {
+        "key": "enemy_and_monster_type",
+        "text": "Type",
+        "values": [],
+        "mi18n_key": "hoyowikihoyowiki.filter_key_enemy_and_monster_type",
+        "is_multi_select": false,
+        "id": "11",
+        "is_hidden": false,
+        "updated_at": "1711524197"
+      }
+    }
+  },
+  "modules": [
+    {
+      "components": [
+        {
+          "component_id": "baseInfo",
+          "layout": "",
+          "data": "{\"list\":[{\"key\":\"Name\",\"value\":[\"Bandersnatch\"],\"id\":\"baseInfo32079\"},{\"key\":\"Type\",\"value\":[\"<p>Local Legend</p>\"],\"id\":\"baseInfo44015\"},{\"key\":\"Region\",\"value\":[\"<p>Snezhnaya</p>\"],\"id\":\"baseInfo26177\"},{\"key\":\"Version Released\",\"value\":[\"<p>7.0</p>\"],\"id\":\"baseInfo38354\"}]}",
+          "style": ""
+        },
+        {
+          "component_id": "drop_material",
+          "layout": "",
+          "data": "{\"list\":[\"$[{\\\"ep_id\\\":757,\\\"icon\\\":\\\"https://bbs.hoyolab.com/hoyowiki/picture/object/Mora_icon.png\\\",\\\"name\\\":\\\"Mora\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":11370,\\\"icon\\\":\\\"https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/b94b5fa73fb34960af243acac3ac1c07_3307140821949221996.png\\\",\\\"name\\\":\\\"Chimeric Core\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":11371,\\\"icon\\\":\\\"https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/c87fadf67414f0136afeaf4eb426cb3e_7980414230349093139.png\\\",\\\"name\\\":\\\"Symbiotic Chimeric Nucleus\\\",\\\"amount\\\":0}]$\",\"$[{\\\"ep_id\\\":11372,\\\"icon\\\":\\\"https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/6b950359dfc3dbb85095d4932120e586_1697057902607906986.png\\\",\\\"name\\\":\\\"Prime Chimeric Nexus\\\",\\\"amount\\\":0}]$\"]}",
+          "style": ""
+        }
+      ]
+    }
+  ]
+}

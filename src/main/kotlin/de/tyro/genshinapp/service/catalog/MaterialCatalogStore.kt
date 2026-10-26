@@ -89,12 +89,14 @@ class JpaMaterialCatalogStore(
 
         sources.forEach { seed ->
             val existing = sourceRepository.findByCatalogKey(seed.key)
+            if (existing?.origin?.startsWith("HOYOWIKI") == true) return@forEach
             val source = existing ?: MaterialSource().also {
                 it.catalogKey = seed.key
                 it.name = seed.name
                 it.sourceType = seed.type.name
                 it.region = seed.region
                 it.displayOrder = seed.displayOrder
+                it.origin = "BUNDLED"
             }
             val existingMemberships = source.materials.mapTo(mutableSetOf()) {
                 it.material.gameId to it.sourceRole
@@ -126,10 +128,13 @@ class JpaMaterialCatalogStore(
 
     private fun Material.apply(material: MaterialDefinition, pages: Map<Long, HoyowikiEntry>): Material {
         name = material.name
-        type = material.category.name
-        craftingFamily = material.craftingFamily
-        craftingTier = material.craftingTier
-        conversionGroup = material.conversionGroup
+        if (categoryOrigin != "HOYOWIKI" || material.categoryOrigin == "HOYOWIKI") {
+            type = material.category.name
+            categoryOrigin = material.categoryOrigin
+            craftingFamily = material.craftingFamily
+            craftingTier = material.craftingTier
+            conversionGroup = material.conversionGroup
+        }
         material.hoyolabEntryId?.let { pages[it] }?.let { hoyowikiEntry = it }
         return this
     }
@@ -144,6 +149,7 @@ class JpaMaterialCatalogStore(
             craftingTier = entity.craftingTier,
             conversionGroup = entity.conversionGroup,
             hoyolabEntryId = entity.hoyowikiEntry?.pageId,
+            categoryOrigin = entity.categoryOrigin,
         )
 
     private fun toDefinition(entity: MaterialSource): MaterialSourceDefinition =
@@ -153,6 +159,8 @@ class JpaMaterialCatalogStore(
             type = MaterialSourceType.valueOf(entity.sourceType),
             region = entity.region,
             displayOrder = entity.displayOrder,
+            origin = entity.origin ?: "BUNDLED",
+            hoyolabEntryId = entity.hoyowikiEntry?.pageId,
             materials = entity.materials
                 .sortedWith(
                     compareBy(

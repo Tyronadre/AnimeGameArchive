@@ -30,6 +30,13 @@ class MaterialSource {
     @Column(name = "catalog_key", nullable = false, unique = true)
     var catalogKey: String = ""
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hoyowiki_entry_id", unique = true)
+    var hoyowikiEntry: HoyowikiEntry? = null
+
+    @Column(name = "source_origin", length = 32)
+    var origin: String? = null
+
     @Column(nullable = false)
     var name: String = ""
 
