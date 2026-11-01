@@ -1971,6 +1971,7 @@
         calculateController = new AbortController();
         workspace.classList.add("is-updating");
         statusNode.classList.remove("damage-v2-update-error");
+        const companionActivity = window.archiveCompanion?.begin();
         try {
             const headers = requestHeaders();
             const response = await fetch(root.dataset.calculateUrl, {
@@ -1989,6 +1990,8 @@
             statusNode.hidden = false;
             statusNode.classList.add("damage-v2-update-error");
             statusNode.lastElementChild.textContent = error.message || label("labelError", "Calculation failed");
+        } finally {
+            window.archiveCompanion?.end(companionActivity);
         }
     }
 

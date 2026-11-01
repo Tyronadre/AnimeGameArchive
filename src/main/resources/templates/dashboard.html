@@ -956,16 +956,21 @@
         };
         const refreshDashboardPlan = async (revision, weeklyBosses) => {
             if (!content || (revision === knownRevision && weeklyBosses === knownWeeklyBosses)) return;
-            const response = await fetch("/api/dashboard/plan", {
-                headers: {"Accept": "application/json"},
-                cache: "no-store"
-            });
-            if (!response.ok) return;
-            const plan = await response.json();
-            applyDashboardPlan(plan);
-            knownRevision = Number(plan.revision || revision);
-            knownWeeklyBosses = weeklyBosses;
-            content.dataset.snapshotRevision = String(knownRevision);
+            const companionActivity = window.archiveCompanion?.begin();
+            try {
+                const response = await fetch("/api/dashboard/plan", {
+                    headers: {"Accept": "application/json"},
+                    cache: "no-store"
+                });
+                if (!response.ok) return;
+                const plan = await response.json();
+                applyDashboardPlan(plan);
+                knownRevision = Number(plan.revision || revision);
+                knownWeeklyBosses = weeklyBosses;
+                content.dataset.snapshotRevision = String(knownRevision);
+            } finally {
+                window.archiveCompanion?.end(companionActivity);
+            }
         };
 
         const refresh = async () => {

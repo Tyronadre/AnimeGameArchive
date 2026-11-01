@@ -869,3 +869,4 @@ html[data-theme="dark"] .damage-v2-schema-chip {
 .damage-v2-effects .damage-toggle-control:has(input:disabled) { opacity: 0.45; cursor: not-allowed; }
 .damage-instance-heading > .damage-v2-type-badge.is-physical { --formula-token-rgb: 123, 129, 146; }
 .damage-calculator-v2-page .formula-token-element-physical { --formula-token-rgb: 123, 129, 146; }
+

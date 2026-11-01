@@ -1,0 +1,26 @@
+{
+  "character": "Lumine",
+  "motionAuthor": "PAC_MMD",
+  "motionSource": "2_Female_Motions/4_Master_Root_Movement_Motions/290L-220_Female-Idle_L_to_Jog-Forward(Requires_UpperBody2).vmd",
+  "sourceSha256": "c62eec0475c9c134d8e489b9e53c59c1e307ae4d2817dcda11dc1cdcc8651234",
+  "frames": 22,
+  "frameWidth": 256,
+  "frameHeight": 320,
+  "fps": 10,
+  "blenderFrames": [
+    83,
+    146
+  ],
+  "inPlace": true,
+  "basePoseSource": "2_Female_Motions/3_Center_Bone_Movement_Motions/202_Female-Walk-Forward_to_Stop(Requires_UpperBody2).vmd",
+  "basePoseFrame": 333,
+  "basePoseForwardTravelRemoved": true,
+  "loop": false,
+  "sourceFrames": [
+    16,
+    78
+  ],
+  "masterTravelRemoved": true,
+  "strideScale": 0.94,
+  "cameraBlend": "idle-to-sprint"
+}

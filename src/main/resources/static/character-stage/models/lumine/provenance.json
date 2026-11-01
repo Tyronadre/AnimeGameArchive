@@ -1,0 +1,9 @@
+{
+  "character": "Lumine",
+  "originalDirectory": "【Female Traveler Lumine】_by_Genshin_Impact_39fd8673fd145a6c65858227788cb173",
+  "originalSourceSha256": "b92cf1066bbc8762c899c48e993f9d91321fdc02150f13c4a8c840e55b6371eb",
+  "exportSource": ".tmp/loader-lumine-source.blend",
+  "fittedSkirtClearance": 0.15,
+  "sourceSceneUnchanged": true,
+  "exportScript": "scripts/export-fitted-lumine-stage.py"
+}

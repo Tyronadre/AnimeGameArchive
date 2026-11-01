@@ -1,0 +1,1171 @@
+{
+  "models": [
+    {
+      "key": "aino",
+      "aliases": [
+        "aino"
+      ],
+      "directory": "Aino_by_Genshin_Impact_4a86f932ed71ac264e132febc3232e6e",
+      "model": "爱诺.pmx",
+      "assets": [
+        "爱诺.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/髮.png",
+        "toon_defo.bmp",
+        "spa/Metal.png",
+        "tex/体.png",
+        "tex/sp.png",
+        "spa/hair_s.bmp"
+      ],
+      "profile": "female",
+      "variant": "Aino",
+      "sourceSha256": "19f0028f76375c253e377bac2207a35454e3ff0ac4bc6c425b5fc177b7eae64f"
+    },
+    {
+      "key": "aloxia",
+      "aliases": [
+        "aloxia",
+        "alyosha"
+      ],
+      "directory": "【Aloxia】_by_Genshin_Impact_67c91e8554a6ca0de5b09cf55c9f93e8",
+      "model": "阿罗夏.pmx",
+      "assets": [
+        "阿罗夏.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "tex/目.png",
+        "tex/目光3.png",
+        "hair.bmp",
+        "toon_defo.bmp",
+        "tex/髮.png",
+        "tex/体1.png",
+        "tex/体.png",
+        "tex/照れ.png",
+        "tex/sp.png",
+        "spa/hair_s.bmp"
+      ],
+      "profile": "female",
+      "variant": "Aloxia",
+      "sourceSha256": "7daa72a944008298bb92cf4ea05277726aa23d4e933e938e8eb3e1426361622d"
+    },
+    {
+      "key": "arlecchino",
+      "aliases": [
+        "arlecchino"
+      ],
+      "directory": "Arlecchino_by_Genshin_Impact_a41d31758452f076dbd5f07db5ffc19a",
+      "model": "仆人.pmx",
+      "assets": [
+        "仆人.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "tex/髮.png",
+        "hair.bmp",
+        "tex/体.png",
+        "toon_defo.bmp",
+        "tex/肌.png"
+      ],
+      "profile": "female",
+      "variant": "Arlecchino",
+      "sourceSha256": "5cb0ed604e02da5c3fa4d911780d6dcbba6325f30c0a0577ac8c1dc24e39a31a"
+    },
+    {
+      "key": "chasca",
+      "aliases": [
+        "chasca"
+      ],
+      "directory": "【Chasca】_by_Genshin_Impact_6c70a79c0dfed123e1f1300f7e2377c1",
+      "model": "恰斯卡.pmx",
+      "assets": [
+        "恰斯卡.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/髮.png",
+        "toon_defo.bmp",
+        "tex/体.png",
+        "tex/肌.png",
+        "sph/s2.bmp",
+        "sph/s.bmp",
+        "sph/s1.bmp",
+        "tex/spa_h.png",
+        "sph/hair_s.bmp"
+      ],
+      "profile": "female",
+      "variant": "Chasca",
+      "sourceSha256": "f22291fceab89b320f9aaa5df0e91a6c95a21dbc0e25ed66e943be848c3f2dd4"
+    },
+    {
+      "key": "chiori",
+      "aliases": [
+        "chiori"
+      ],
+      "directory": "【Chiori】_by_Genshin_Impact_f9767d1cbe718d0755deff1fecf0895b",
+      "model": "千织.pmx",
+      "assets": [
+        "千织.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/体.png",
+        "tex/髮.png",
+        "tex/肌.png",
+        "tex/spa_h.png",
+        "sph/hair_s.bmp",
+        "tex/照れ.png"
+      ],
+      "profile": "female",
+      "variant": "Chiori",
+      "sourceSha256": "bde1939e7fd3669f3fb6f9e6b2918350bfeef02862a67ac397be35c11205fdbe"
+    },
+    {
+      "key": "citlali",
+      "aliases": [
+        "citlali"
+      ],
+      "directory": "【Citlali】_by_Genshin_Impact_75d81dc500cc3037a23bfcc318290baa",
+      "model": "茜特拉莉.pmx",
+      "assets": [
+        "茜特拉莉.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/体.png",
+        "tex/髮.png",
+        "toon_defo.bmp",
+        "sph/s.bmp",
+        "tex/spa_h.png",
+        "sph/hair_s.bmp",
+        "tex/照れ.png",
+        "tex/目1.png"
+      ],
+      "profile": "female",
+      "variant": "Citlali",
+      "sourceSha256": "adfa449cec82857734ed33dfd895d4e4237245c5ad866b335c07afba28314c29"
+    },
+    {
+      "key": "clorinde",
+      "aliases": [
+        "clorinde"
+      ],
+      "directory": "【Clorinde】_by_Genshin_Impact_89cce08076062b27cecf86c016eeb943",
+      "model": "克洛琳德.pmx",
+      "assets": [
+        "克洛琳德.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "tex/髮.png",
+        "hair.bmp",
+        "toon_defo.bmp",
+        "tex/体.png",
+        "sph/metal.png",
+        "sph/stk.png",
+        "tex/袜.png",
+        "tex/spa_h.png",
+        "sph/hair_s.bmp"
+      ],
+      "profile": "female",
+      "variant": "Clorinde",
+      "sourceSha256": "ba13b9e8b125afda90a855b9a6568a32ff27bbc32e98e231c6bf0171cdf3aca5"
+    },
+    {
+      "key": "durin",
+      "aliases": [
+        "durin"
+      ],
+      "directory": "【Durin】_by_Genshin_Impact_4da19f384bb6e54cdbfe4a7fce805d40",
+      "model": "杜林.pmx",
+      "assets": [
+        "杜林.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/目.png",
+        "tex/髮.png",
+        "toon_defo.bmp",
+        "tex/体.png",
+        "tex/sp.png",
+        "spa/hair_s.bmp"
+      ],
+      "profile": "male",
+      "variant": "Durin",
+      "sourceSha256": "9fa432745bbc436d2b32b5284ba08ee6adb1bea84452e2be5a06e2e0fec325cd"
+    },
+    {
+      "key": "emilie",
+      "aliases": [
+        "emilie"
+      ],
+      "directory": "Emilie_by_Genshin_Impact_6d6213999a4e1701a2b4a71bade7e6fd",
+      "model": "艾梅莉埃.pmx",
+      "assets": [
+        "艾梅莉埃.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/髮.png",
+        "tex/体.png",
+        "toon_defo.bmp",
+        "tex/肌.png"
+      ],
+      "profile": "female",
+      "variant": "Emilie",
+      "sourceSha256": "f79979db3fae5b57b828a1bda0ba1e939f294cc045d02b6da092d2803c058d2b"
+    },
+    {
+      "key": "escoffier",
+      "aliases": [
+        "escoffier"
+      ],
+      "directory": "Escoffier_by_Genshin_Impact_f49087885016467ef86ca6f34a19ad89",
+      "model": "爱可菲.pmx",
+      "assets": [
+        "爱可菲.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/髮.png",
+        "toon_defo.bmp",
+        "tex/体.png",
+        "tex/肌.png",
+        "tex/肌2.png",
+        "tex/颜2.png",
+        "tex/spa_h.png",
+        "sph/hair_s.bmp"
+      ],
+      "profile": "female",
+      "variant": "Escoffier",
+      "sourceSha256": "dc51a09398dc21f73386fbcc04911055c8ff09b133e44854aff83e604e17f32f"
+    },
+    {
+      "key": "flins",
+      "aliases": [
+        "flins"
+      ],
+      "directory": "Flins_by_Genshin_Impact_44139d7581a7559def2ab94455fb938a",
+      "model": "菲林斯.pmx",
+      "assets": [
+        "菲林斯.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/髮.png",
+        "toon_defo.bmp",
+        "tex/体.png",
+        "tex/肌.png",
+        "tex/灯.png",
+        "spa/Metal.png",
+        "spa/s1.bmp",
+        "tex/sp.png",
+        "spa/hair_s.bmp"
+      ],
+      "profile": "male",
+      "variant": "Flins",
+      "sourceSha256": "07dfff88b16ec2bd39f73968d1ee384215b0d7e4cfca7e9a73d73ec8ca84ac71"
+    },
+    {
+      "key": "gaming",
+      "aliases": [
+        "gaming"
+      ],
+      "directory": "【Gaming】_by_Genshin_Impact_5d8e96a2904abeaa547c1b23eb0cb552",
+      "model": "嘉明.pmx",
+      "assets": [
+        "嘉明.pmx",
+        "tex/颜.tga",
+        "skin.bmp",
+        "tex/体.tga",
+        "hair.bmp",
+        "toon_defo.bmp",
+        "tex/髮.tga",
+        "tex/spa_h.tga",
+        "sph/hair_s.bmp",
+        "tex/帽特效1.png"
+      ],
+      "profile": "male",
+      "variant": "Gaming",
+      "sourceSha256": "682b6d8c45079a3018bb53ad5954e305bc743de303830cc14a730de7eb0d8372"
+    },
+    {
+      "key": "ganyu",
+      "aliases": [
+        "ganyu"
+      ],
+      "directory": "【Lantern Rite Ganyu】_by_Genshin_Impact_184eacac02ae273260923b7a2962f004",
+      "model": "甘雨.pmx",
+      "assets": [
+        "甘雨.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "tex/髮.png",
+        "tex/颜赤.tga",
+        "hair.bmp",
+        "tex/spa_h.png",
+        "sph/hair_s.bmp",
+        "toon_defo.bmp",
+        "tex/体.png",
+        "tex/肌.png",
+        "tex/肌2.png"
+      ],
+      "profile": "female",
+      "variant": "Lantern Rite Ganyu",
+      "sourceSha256": "8d653750942c78078bbb1603e0f4a1a423f3717e0bf0e54e1441ea52c0e456de"
+    },
+    {
+      "key": "hutao",
+      "aliases": [
+        "hutao"
+      ],
+      "directory": "Hu Tao - Lantern Rite_by_Genshin_Impact_3e7dfc32a966c97870f6cfa288059697",
+      "model": "胡桃-海灯节.pmx",
+      "assets": [
+        "胡桃-海灯节.pmx",
+        "tex/face.png",
+        "skin.bmp",
+        "tex/hair.png",
+        "haiR.bmp",
+        "tex/F.png"
+      ],
+      "profile": "female",
+      "variant": "Hu Tao - Lantern Rite",
+      "sourceSha256": "f61f67f214194201f7e529cbb614d087438136b9aa907811b60408036114b358"
+    },
+    {
+      "key": "iansan",
+      "aliases": [
+        "iansan"
+      ],
+      "directory": "Iansan_by_Genshin_Impact_fa45f974b0ea9106b9e3652896de13f7",
+      "model": "伊安珊.pmx",
+      "assets": [
+        "伊安珊.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/髮.png",
+        "tex/体.png",
+        "toon_defo.bmp"
+      ],
+      "profile": "child",
+      "variant": "Iansan",
+      "sourceSha256": "44da46896270a0bcb7b26c37716e6750ea297f979391d23060ff3ca017cb4e54"
+    },
+    {
+      "key": "ifa",
+      "aliases": [
+        "ifa"
+      ],
+      "directory": "Ifa_by_Genshin_Impact_3f147466e2508b0f35774b2ece4d2f9e",
+      "model": "伊法.pmx",
+      "assets": [
+        "伊法.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/髮.png",
+        "tex/体.png",
+        "toon_defo.bmp",
+        "tex/枪.png",
+        "tex/sp.png",
+        "spa/hair_s.bmp"
+      ],
+      "profile": "male",
+      "variant": "Ifa",
+      "sourceSha256": "bfe676bdf9a484ca063928371e394acba30383243f8ca0cb8da52cb7af9cfe07"
+    },
+    {
+      "key": "ineffa",
+      "aliases": [
+        "ineffa"
+      ],
+      "directory": "【Ineffa】_by_Genshin_Impact_03205807107fabfd72716d4b1954111a",
+      "model": "伊涅芙.pmx",
+      "assets": [
+        "伊涅芙.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/髮.png",
+        "toon_defo.bmp",
+        "tex/体.png"
+      ],
+      "profile": "female",
+      "variant": "Ineffa",
+      "sourceSha256": "e96dc6695460dc2366fc3931d4929f5a3bbe2c2450e9caee83140255462b1935"
+    },
+    {
+      "key": "kachina",
+      "aliases": [
+        "kachina"
+      ],
+      "directory": "Kachina_by_Genshin_Impact_c22ebef183fd1c6f3b18708e44ffb6bd",
+      "model": "卡齐娜.pmx",
+      "assets": [
+        "卡齐娜.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/体.png",
+        "tex/髮.png",
+        "toon_defo.bmp",
+        "tex/肌.png",
+        "tex/spa_h.png",
+        "spa/hair_s.bmp"
+      ],
+      "profile": "child",
+      "variant": "Kachina",
+      "sourceSha256": "b3864893df1ebca288098e5ede4b7dcb81b2ea9ee5cbca21d81e844e23590a8e"
+    },
+    {
+      "key": "kirara",
+      "aliases": [
+        "kirara"
+      ],
+      "directory": "Kirara - Phantom in Boots_by_Genshin_Impact_d997cfd9cc49c6caecca29368e252a6e",
+      "model": "绮良良.pmx",
+      "assets": [
+        "绮良良.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "tex/髮.png",
+        "hair.bmp",
+        "toon_defo.bmp",
+        "tex/体.png",
+        "tex/肌.png",
+        "tex/sp.png",
+        "spa/hair_s.bmp"
+      ],
+      "profile": "female",
+      "variant": "Kirara - Phantom in Boots",
+      "sourceSha256": "ac6726ba61635cdc301a5e3bde1efc85e8111169eaae9251114977a94f46904f"
+    },
+    {
+      "key": "lauma",
+      "aliases": [
+        "lauma"
+      ],
+      "directory": "【Lauma】_by_Genshin_Impact_7dcc0a06a756419b3308770c74e94877",
+      "model": "菈乌玛.pmx",
+      "assets": [
+        "菈乌玛.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/体.png",
+        "tex/髮.png",
+        "toon_defo.bmp",
+        "tex/肌.png",
+        "tex/sp.png",
+        "spa/hair_s.bmp"
+      ],
+      "profile": "female",
+      "variant": "Lauma",
+      "sourceSha256": "e9bf787d2558edb81b21978ec14d45b0890e32cd9045c243eeae74aa4c8c74ed"
+    },
+    {
+      "key": "lorn",
+      "aliases": [
+        "lorn",
+        "lohen"
+      ],
+      "directory": "【Lorn】_by_Genshin_Impact_b60fc2699a8425780e5cdc5f5a3a424d",
+      "model": "洛恩.pmx",
+      "assets": [
+        "洛恩.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "tex/髮.png",
+        "toon_defo.bmp",
+        "tex/体.png",
+        "tex/肌.png",
+        "tex/sp.png",
+        "spa/s1.bmp",
+        "spa/hair_s.bmp",
+        "tex/脸红.png"
+      ],
+      "profile": "male",
+      "variant": "Lorn",
+      "sourceSha256": "b0bdaad681b5a748c752f05d5b95336d150c2522957189707875e2268229db39"
+    },
+    {
+      "key": "lumine",
+      "aliases": [
+        "lumine",
+        "travelerlumine"
+      ],
+      "directory": "models/lumine",
+      "model": "lumine.pmx",
+      "assets": [
+        "lumine.pmx",
+        "Texture/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "teeth.bmp",
+        "Texture/髪.png",
+        "Texture/衣.png",
+        "toon_defo.bmp",
+        "Texture/肌.png",
+        "Texture/元素1.png",
+        "Texture/sp.png",
+        "sph/hair_s.bmp"
+      ],
+      "profile": "female",
+      "variant": "Female Traveler Lumine",
+      "sourceSha256": "68223228a9b515c033fca7b8bb1a93b365f08414f8c513cfdcfbe442f0785fa3",
+      "bundled": true,
+      "fittedSkirtClearance": true
+    },
+    {
+      "key": "lynette",
+      "aliases": [
+        "lynette"
+      ],
+      "directory": "【Lynette】_by_Genshin_Impact_82c4527df590fc2b1a28c26b93cbeeac",
+      "model": "【琳妮特】.pmx",
+      "assets": [
+        "【琳妮特】.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/髮.png",
+        "tex/spa_h.png",
+        "sph/hair_s.bmp",
+        "toon_defo.bmp",
+        "tex/体.png"
+      ],
+      "profile": "female",
+      "variant": "Lynette",
+      "sourceSha256": "c8ae596cd241eef8bbd553b6f2c4b6c4fcdda7e5dfdb4414d7f43b6553990f81"
+    },
+    {
+      "key": "mavuika",
+      "aliases": [
+        "mavuika"
+      ],
+      "directory": "【Mavuika】_by_Genshin_Impact_b324ba034d5afadf825fc2ab1c0c9e7e",
+      "model": "玛薇卡.pmx",
+      "assets": [
+        "玛薇卡.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/髮.png",
+        "tex/体.png",
+        "sph/s1.bmp",
+        "toon_defo.bmp",
+        "tex/肌.png",
+        "tex/肌2.png",
+        "tex/墨镜.png"
+      ],
+      "profile": "female",
+      "variant": "Mavuika",
+      "sourceSha256": "b6eb799a5a1b2e1ef6eaef40148cc7b6730a90ebef5df71fd19bbef0bdd3887c"
+    },
+    {
+      "key": "mualani",
+      "aliases": [
+        "mualani"
+      ],
+      "directory": "Mualani_by_Genshin_Impact_074da51697594bfe1d3c6b7635d04bd2",
+      "model": "玛拉妮.pmx",
+      "assets": [
+        "玛拉妮.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/髮.png",
+        "toon_defo.bmp",
+        "tex/体.png",
+        "tex/肌.png"
+      ],
+      "profile": "female",
+      "variant": "Mualani",
+      "sourceSha256": "5fb4e67fc5e8a34bfa208207d958dd4caa5fb0e016dd0dc332f22e197e1fc914"
+    },
+    {
+      "key": "nefer",
+      "aliases": [
+        "nefer"
+      ],
+      "directory": "【Nefer】_by_Genshin_Impact_84160da4b0978cb565ae05d241490ce5",
+      "model": "奈芙尔.pmx",
+      "assets": [
+        "奈芙尔.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "tex/髮.png",
+        "hair.bmp",
+        "spa/gold.png",
+        "toon_defo.bmp",
+        "tex/体.png",
+        "tex/肌.png",
+        "tex/sp.png",
+        "spa/hair_s.bmp"
+      ],
+      "profile": "female",
+      "variant": "Nefer",
+      "sourceSha256": "6a0cf65a5a7890347643ad51a3fb872c43af95c6c2ba74716bdf4912576d76d5"
+    },
+    {
+      "key": "nicole",
+      "aliases": [
+        "nicole"
+      ],
+      "directory": "Nicole_by_Genshin_Impact_5142d3deee64aa4f83485eba9b32bde9",
+      "model": "尼可.pmx",
+      "assets": [
+        "尼可.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "tex/髮.png",
+        "toon_defo.bmp",
+        "tex/体2.png",
+        "tex/体.png",
+        "spa/spa2.png",
+        "tex/肌.png",
+        "tex/肌2.png",
+        "tex/sp.png",
+        "spa/hair_s.bmp"
+      ],
+      "profile": "female",
+      "variant": "Nicole",
+      "sourceSha256": "1538993255139d6d2debacbe6d241c483bded0ee19f3fb763c09d276053a23b1"
+    },
+    {
+      "key": "odette",
+      "aliases": [
+        "odette"
+      ],
+      "directory": "【Odette】_by_Genshin_Impact_57404140f0067f5fef7860a9539de39f",
+      "model": "奥黛塔.pmx",
+      "assets": [
+        "奥黛塔.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "toon_defo.bmp",
+        "hair.bmp",
+        "tex/目2.png",
+        "tex/sp2_6.png",
+        "tex/瞳.png",
+        "tex/目光3.png",
+        "spa/Eye_s.png",
+        "tex/目光.png",
+        "tex/髮.png",
+        "spa/jewel2.png",
+        "tex/体.png",
+        "spa/s1.bmp",
+        "spa/metal.png",
+        "tex/体s.png",
+        "tex/肌.png",
+        "tex/体s2.png",
+        "spa/spa.png",
+        "tex/裙.png",
+        "tex/裙_菱形s.png",
+        "spa/spa2_1.png",
+        "tex/裙_菱形sp.png",
+        "spa/spa2_2.png",
+        "tex/裙_多边形s.png",
+        "spa/spa2.png",
+        "tex/裙_三角形s.png",
+        "spa/spa2_31.png",
+        "tex/裙sp.png",
+        "spa/spa_d.png",
+        "tex/照れ.png",
+        "tex/sp.png",
+        "spa/hair_s.bmp"
+      ],
+      "profile": "female",
+      "variant": "Odette",
+      "sourceSha256": "ab0e8fe964888c4f419bee3213bb42438ee216e83761e27fe91bd5f3def6aee1"
+    },
+    {
+      "key": "ororon",
+      "aliases": [
+        "ororon",
+        "olorun"
+      ],
+      "directory": "【Ororon】_by_Genshin_Impact_ae5044292724db05e93f9cdaaef927aa",
+      "model": "欧洛伦.pmx",
+      "assets": [
+        "欧洛伦.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/体.png",
+        "tex/髮.png",
+        "toon_defo.bmp",
+        "tex/肌.png",
+        "tex/spa_h.png",
+        "sph/hair_s.bmp"
+      ],
+      "profile": "male",
+      "variant": "Ororon",
+      "sourceSha256": "927841b61869e91cf861fb8b02b7ed65903a2df1ff8937dfe8b195bd7b7f1e60"
+    },
+    {
+      "key": "sandrone",
+      "aliases": [
+        "sandrone",
+        "marionette"
+      ],
+      "directory": "【Sandrone】_by_Genshin_Impact_e06bb339ac99ae18f7cf88d619e9b975",
+      "model": "桑多涅.pmx",
+      "assets": [
+        "桑多涅.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "toon_defo.bmp",
+        "tex/目.png",
+        "spa/目sp.png",
+        "tex/目齿轮2.png",
+        "tex/目3.png",
+        "tex/目_1.png",
+        "tex/目光.png",
+        "tex/髮.png",
+        "tex/体.png",
+        "tex/肌.png",
+        "tex/裙.png",
+        "tex/sp.png",
+        "spa/stk.png",
+        "spa/hair_s.bmp",
+        "tex/脸红.png"
+      ],
+      "profile": "female",
+      "variant": "Sandrone",
+      "sourceSha256": "f73cd498580b0950856536223d57df04eb1164e01836c783cc75188a4c5c7514"
+    },
+    {
+      "key": "sethos",
+      "aliases": [
+        "sethos"
+      ],
+      "directory": "Sethos_by_Genshin_Impact_eb1a9a9c90be02cd2cb5e5005587728b",
+      "model": "赛索斯.pmx",
+      "assets": [
+        "赛索斯.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "tex/髮.png",
+        "hair.bmp",
+        "sph/metal.png",
+        "toon_defo.bmp",
+        "tex/体.png",
+        "tex/肌.png",
+        "tex/肌2.png",
+        "tex/spa_h.png",
+        "sph/hair_s.bmp"
+      ],
+      "profile": "male",
+      "variant": "Sethos",
+      "sourceSha256": "4e617655abc15bb7e6c16a4b01cb9801d9a7c5ed5d4385c6cae5bc5bbfa288d0"
+    },
+    {
+      "key": "shenhe",
+      "aliases": [
+        "shenhe"
+      ],
+      "directory": "【Lantern Rite Shenhe】_by_Genshin_Impact_7f3284023680e3f3b51798fefd08c5e1",
+      "model": "申鹤.pmx",
+      "assets": [
+        "申鹤.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "tex/髮.png",
+        "hair.bmp",
+        "tex/体.png",
+        "toon_defo.bmp",
+        "tex/肌.png",
+        "tex/肌2.png",
+        "tex/spa_h.png",
+        "sph/hair_s.bmp"
+      ],
+      "profile": "female",
+      "variant": "Lantern Rite Shenhe",
+      "sourceSha256": "ee34024b77d0865f622e8b4b51e8734ccf0160695dbfbd24ab6244b3a8f30a70"
+    },
+    {
+      "key": "sigewinne",
+      "aliases": [
+        "sigewinne"
+      ],
+      "directory": "【Sigewinne】_by_Genshin_Impact_43c8d72ab60163c67f0a0fb7a953e3ee",
+      "model": "希格雯.pmx",
+      "assets": [
+        "希格雯.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "tex/髮.png",
+        "hair.bmp",
+        "tex/体.png",
+        "toon_defo.bmp",
+        "sph/gold2.png",
+        "tex/spa_h.png",
+        "sph/hair_s.bmp",
+        "tex/照れ.png"
+      ],
+      "profile": "child",
+      "variant": "Sigewinne",
+      "sourceSha256": "d8e28a2846491c74c23de6195ed2fd17b7892bac1ad2f4f76b91e96991eae479"
+    },
+    {
+      "key": "skirk",
+      "aliases": [
+        "skirk"
+      ],
+      "directory": "Skirk_by_Genshin_Impact_8920e33db8f4548302e3c0cbb7192bcd",
+      "model": "丝柯克.pmx",
+      "assets": [
+        "丝柯克.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "tex/体1.png",
+        "hair.bmp",
+        "tex/髮.png",
+        "toon_defo.bmp",
+        "tex/特效.png",
+        "tex/尾.png"
+      ],
+      "profile": "female",
+      "variant": "Skirk",
+      "sourceSha256": "3d59ff7b1d25ad2234ed99c7968ea8665d99a4c01e9b4eb7c7637afdc20b7738"
+    },
+    {
+      "key": "talia",
+      "aliases": [
+        "talia",
+        "dahlia"
+      ],
+      "directory": "Talia_by_Genshin_Impact_28bfea91269907b7d9c016301594e7d8",
+      "model": "塔利雅.pmx",
+      "assets": [
+        "塔利雅.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/体.png",
+        "tex/髮.png",
+        "toon_defo.bmp",
+        "tex/spa_h.png",
+        "spa/hair_s.bmp"
+      ],
+      "profile": "male",
+      "variant": "Talia",
+      "sourceSha256": "a67930a204d1a44a2475296fe8fada42648fa9e183581af919b33372b3d82435"
+    },
+    {
+      "key": "varesa",
+      "aliases": [
+        "varesa"
+      ],
+      "directory": "Varesa_by_Genshin_Impact_c8d072042bcb97ad2cf6ef698ebdbc62",
+      "model": "瓦雷莎.pmx",
+      "assets": [
+        "瓦雷莎.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "tex/髮.png",
+        "hair.bmp",
+        "tex/体.png",
+        "toon_defo.bmp",
+        "tex/肌.png",
+        "tex/面具.png",
+        "tex/spa_h.png",
+        "sph/hair_s.bmp"
+      ],
+      "profile": "female",
+      "variant": "Varesa",
+      "sourceSha256": "4c9cbbe092c9c04f5dca8be0de8d74bc6b678a3db3d114d684a3656bd196bc4e"
+    },
+    {
+      "key": "vennessa",
+      "aliases": [
+        "vennessa",
+        "vodyanitsa"
+      ],
+      "directory": "Vennessa_by_Genshin_Impact_38d02a4776171baabd5f3ce9584fb227",
+      "model": "沃雅妮莎.pmx",
+      "assets": [
+        "沃雅妮莎.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/目.png",
+        "tex/瞳.png",
+        "tex/目2.png",
+        "tex/目光.png",
+        "toon_defo.bmp",
+        "tex/照れ.png",
+        "tex/髮.png",
+        "tex/体.png",
+        "tex/裙.png",
+        "spa/s1.bmp",
+        "spa/jewel3.png",
+        "tex/体_alpha.png",
+        "tex/裙s.png",
+        "spa/spa2.png",
+        "spa/jewel2.png",
+        "tex/裙_alpha.png",
+        "tex/技能.png",
+        "tex/sp.png",
+        "spa/hair_s.bmp"
+      ],
+      "profile": "female",
+      "variant": "Vennessa",
+      "sourceSha256": "20a419604cfc093120d55d09f510dbb8eda5d7e096ab9c6c356582d401c99848"
+    },
+    {
+      "key": "vysnara",
+      "aliases": [
+        "vysnara",
+        "vesna"
+      ],
+      "directory": "Vysnara_by_Genshin_Impact_0576ff5aa94fad52f3d88c00e2702390",
+      "model": "薇斯纳.pmx",
+      "assets": [
+        "薇斯纳.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "tex/表情1.png",
+        "hair.bmp",
+        "tex/目.png",
+        "tex/瞳.png",
+        "tex/目光.png",
+        "toon_defo.bmp",
+        "tex/髮.png",
+        "spa/metal.png",
+        "tex/体.png",
+        "tex/裙.png",
+        "tex/体s.png",
+        "spa/jewel2.png",
+        "tex/裙s.png",
+        "spa/s3.bmp",
+        "tex/袜s.png",
+        "spa/spa.png",
+        "tex/肌.png",
+        "spa/jewel3.png",
+        "tex/结晶.png",
+        "tex/sp.png",
+        "spa/hair_s.bmp",
+        "tex/照れ.png",
+        "tex/翼s.png",
+        "tex/结晶s.png",
+        "spa/spa2.png"
+      ],
+      "profile": "female",
+      "variant": "Vysnara",
+      "sourceSha256": "19750dbd0c20413b98efbba515fd79ca7b8a8dc51305b111b84a0fad1ab4a948"
+    },
+    {
+      "key": "xianglinglanternrite",
+      "aliases": [
+        "xianglinglanternrite"
+      ],
+      "directory": "Xiangling - Lantern Rite_by_Genshin_Impact_85811a7b0ddd27ad861aa68598ba5ddb",
+      "model": "香菱-海灯节.pmx",
+      "assets": [
+        "香菱-海灯节.pmx",
+        "tex/face.png",
+        "skin.bmp",
+        "tex/t.png",
+        "haiR.bmp",
+        "tex/F.png"
+      ],
+      "profile": "female",
+      "variant": "Xiangling - Lantern Rite",
+      "sourceSha256": "cf716eacea677f609d5bb3dfe24dad4e320e05f155f8eec70fe8680523317458"
+    },
+    {
+      "key": "xianyun",
+      "aliases": [
+        "xianyun"
+      ],
+      "directory": "【Xianyun】_by_Genshin_Impact_0993344b399bf615e3f9e4a7a0001208",
+      "model": "闲云.pmx",
+      "assets": [
+        "闲云.pmx",
+        "tex/颜.tga",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/体.tga",
+        "tex/髮.tga",
+        "toon_defo.bmp",
+        "tex/spa_h.png",
+        "sph/hair_s.bmp",
+        "sph/stk.png",
+        "tex/黑丝.tga",
+        "tex/肌1.tga",
+        "tex/肌2.tga"
+      ],
+      "profile": "female",
+      "variant": "Xianyun",
+      "sourceSha256": "bf7c0a9f63aacf22bdfc9f1a769349863777fe7c7858297a5c75e448dc3dffd4"
+    },
+    {
+      "key": "xilonen",
+      "aliases": [
+        "xilonen"
+      ],
+      "directory": "【Xilonen】_by_Genshin_Impact_ca69bc23db6949cb29ee0383230b6184",
+      "model": "希诺宁.pmx",
+      "assets": [
+        "希诺宁.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/体.png",
+        "tex/髮.png",
+        "toon_defo.bmp",
+        "tex/肌.png",
+        "tex/spa_h.png",
+        "sph/hair_s.bmp",
+        "tex/鞋2.png",
+        "tex/鞋.png",
+        "sph/s.bmp"
+      ],
+      "profile": "female",
+      "variant": "Xilonen",
+      "sourceSha256": "afa2f83801b46bdbacc59dd4a59b41ff549d7bcb78bd82db52fa73dba4c4d872"
+    },
+    {
+      "key": "xingqiu",
+      "aliases": [
+        "xingqiu"
+      ],
+      "directory": "【Lantern Rite Xingqiu】_by_Genshin_Impact_9a45901421922fa519c329476841dd5a",
+      "model": "行秋.pmx",
+      "assets": [
+        "行秋.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "tex/髮.png",
+        "hair.bmp",
+        "tex/spa_h.png",
+        "sph/hair_s.bmp",
+        "tex/体.png",
+        "toon_defo.bmp"
+      ],
+      "profile": "male",
+      "variant": "Lantern Rite Xingqiu",
+      "sourceSha256": "1f38813d972fca920d29653ee252d894f691e5a4dc421f7798e8e55c7d6785de"
+    },
+    {
+      "key": "yumemizukimizuki",
+      "aliases": [
+        "yumemizukimizuki",
+        "mizuki"
+      ],
+      "directory": "Yumemizuki Mizuki_by_Genshin_Impact_23d9c77cecd5d3fcee8024c65f641081",
+      "model": "梦见月瑞希.pmx",
+      "assets": [
+        "梦见月瑞希.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "tex/髮.png",
+        "hair.bmp",
+        "toon_defo.bmp",
+        "tex/体.png",
+        "tex/spa_h.png",
+        "sph/hair_s.bmp"
+      ],
+      "profile": "female",
+      "variant": "Yumemizuki Mizuki",
+      "sourceSha256": "f097200e689e734097f8fe14c292fa498b38c977b97c42bfbce97cd04e3e2e92"
+    },
+    {
+      "key": "bennett",
+      "aliases": [
+        "bennett",
+        "bennettcostumesummer"
+      ],
+      "directory": "Bennett Skin_by_Genshin_Impact_c60c03fdd66795640c6bbbdf119ca847",
+      "model": "班尼特皮肤.pmx",
+      "assets": [
+        "班尼特皮肤.pmx",
+        "tex/颜.png",
+        "tex/髮.png",
+        "tex/体.png"
+      ],
+      "profile": "male",
+      "variant": "Bennett Skin",
+      "sourceSha256": "30740ae01af4b83a8d5342d30aaa050b5f720efbd30f11b8e7383df799f51c79"
+    },
+    {
+      "key": "charlotte",
+      "aliases": [
+        "charlotte"
+      ],
+      "directory": "【Charlotte Skin】_by_Genshin_Impact_0ad5f955fe8e22bd262976dc56dfe48f",
+      "model": "夏洛蒂_夏日.pmx",
+      "assets": [
+        "夏洛蒂_夏日.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/体.png",
+        "tex/髮.png",
+        "toon_defo.bmp",
+        "spa/s1.bmp",
+        "tex/肌2.png",
+        "spa/s2.bmp",
+        "spa/s3.bmp",
+        "tex/sp.png",
+        "spa/hair_s.bmp",
+        "tex/照れ.png"
+      ],
+      "profile": "female",
+      "variant": "Charlotte Skin",
+      "sourceSha256": "635a8c29617842837556ffc35a4e85c2b72e872dc2d199ebbe21875ef55e7294"
+    },
+    {
+      "key": "nilou",
+      "aliases": [
+        "nilou"
+      ],
+      "directory": "【Nilou Skin】_by_Genshin_Impact_a318bfdc30d2e981cc0148f065ec3908",
+      "model": "妮露.pmx",
+      "assets": [
+        "妮露.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "tex/髮.png",
+        "hair.bmp",
+        "toon_defo.bmp",
+        "tex/体.png",
+        "tex/肌.png",
+        "tex/肌2.png",
+        "tex/spa_h.png",
+        "spa/hair_s.bmp"
+      ],
+      "profile": "female",
+      "variant": "Nilou Skin",
+      "sourceSha256": "8c4d6cf90a2ad04ff9ed2ebfce446994d309cd3e56143887283bfbc3ae4e8d30"
+    },
+    {
+      "key": "yelan",
+      "aliases": [
+        "yelan",
+        "yelancostume"
+      ],
+      "directory": "Yelan Skin_by_Genshin_Impact_68447a6a0b84226f3bfa8fa6900c3134",
+      "model": "夜兰皮肤.pmx",
+      "assets": [
+        "夜兰皮肤.pmx",
+        "tex/颜.png",
+        "skin.bmp",
+        "hair.bmp",
+        "tex/髮.png",
+        "toon_defo.bmp",
+        "tex/肌.png",
+        "tex/体.png",
+        "tex/sp.png",
+        "spa/hair_s.bmp"
+      ],
+      "profile": "female",
+      "variant": "Yelan Skin",
+      "sourceSha256": "93568711294ea74df2354e00fd8175244971aa6e2bcf6c0124d0558ae6940c16"
+    }
+  ]
+}

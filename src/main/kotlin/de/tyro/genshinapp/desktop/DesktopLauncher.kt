@@ -12,12 +12,15 @@ import javafx.application.Application
 import javafx.application.Platform
 import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.geometry.Rectangle2D
 import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.ProgressIndicator
 import javafx.scene.control.Separator
 import javafx.scene.control.TextArea
+import javafx.scene.image.Image
+import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
@@ -67,6 +70,7 @@ class GenshinDesktopApplication : Application() {
     private var captureStatusSubscription: AutoCloseable? = null
     private var startupStatusSubscription: AutoCloseable? = null
     private var captureLogRefresh: Timeline? = null
+    private var startupRunner: Timeline? = null
 
     @Volatile
     private var shutdownRequested = false
@@ -116,6 +120,7 @@ class GenshinDesktopApplication : Application() {
         startupStatusSubscription?.close()
         captureStatusSubscription?.close()
         captureLogRefresh?.stop()
+        startupRunner?.stop()
         if (::irminsulIntegrationService.isInitialized) {
             irminsulIntegrationService.stopCapture()
         }
@@ -171,6 +176,7 @@ class GenshinDesktopApplication : Application() {
     }
 
     private fun showMainWindow(stage: Stage) {
+        startupRunner?.stop()
         startupStatusSubscription?.close()
         startupStatusSubscription = null
         if (!runtimeProperties.showWindow) {
@@ -204,14 +210,21 @@ class GenshinDesktopApplication : Application() {
     }
 
     private fun createStartupScene(status: Label, detail: Label): Scene {
-        val emblem = StackPane(
-            Label("✦").apply { styleClass.add("startup-mark") },
-        ).apply {
-            styleClass.add("startup-emblem")
-            minWidth = 76.0
-            minHeight = 76.0
-            maxWidth = 76.0
-            maxHeight = 76.0
+        val sprite = Image(requireNotNull(javaClass.getResourceAsStream("/static/startup/lumine-sprint.png")))
+        val runner = ImageView(sprite).apply {
+            viewport = Rectangle2D(0.0, 0.0, 256.0, 320.0)
+            fitWidth = 192.0
+            fitHeight = 240.0
+            isPreserveRatio = true
+            accessibleText = "Lumine running while the archive starts"
+        }
+        var frame = 0
+        startupRunner = Timeline(KeyFrame(Duration.millis(1000.0 / 30.0), {
+            frame = (frame + 1) % 18
+            runner.viewport = Rectangle2D(frame * 256.0, 0.0, 256.0, 320.0)
+        })).apply {
+            cycleCount = Timeline.INDEFINITE
+            play()
         }
         val progress = ProgressIndicator().apply {
             styleClass.add("startup-progress")
@@ -220,9 +233,9 @@ class GenshinDesktopApplication : Application() {
         }
         val content = VBox(
             14.0,
-            emblem,
+            runner,
             Label("Genshin Archive").apply { styleClass.add("startup-title") },
-            Label("Your local companion is waking up").apply {
+            Label("Lumine is keeping pace while your archive gets ready").apply {
                 styleClass.add("startup-subtitle")
             },
             Region().apply {
@@ -243,11 +256,12 @@ class GenshinDesktopApplication : Application() {
         return Scene(
             StackPane(content).apply { styleClass.add("startup-root") },
             560.0,
-            420.0,
+            580.0,
         ).apply { addDesktopStylesheet() }
     }
 
     private fun showStartupFailure(stage: Stage, exception: Exception) {
+        startupRunner?.stop()
         startupStatusSubscription?.close()
         startupStatusSubscription = null
         val message = exception.message?.takeIf(String::isNotBlank)?.take(300) ?: "The local services could not be started."

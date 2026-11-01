@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <meta name="robots" content="noindex">
+    <title>Opening your archive · Genshin Archive</title>
+    <link rel="preload" as="image" href="__ARCHIVE_CONTEXT_PATH__/startup/lumine-sprint.png" media="(prefers-reduced-motion: no-preference)" fetchpriority="high">
+    <link rel="preload" as="image" href="__ARCHIVE_CONTEXT_PATH__/startup/lumine-sprint-poster.png" media="(prefers-reduced-motion: reduce)">
+    <style>
+        :root{color-scheme:dark;font-family:"Segoe UI",system-ui,sans-serif;background:#1d192d;color:#f7f2ff}
+        *{box-sizing:border-box}body{margin:0;min-height:100svh;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 37%,#44365c66,transparent 62%),#1d192d}
+        .journey{width:min(100%,480px);padding:32px 24px 44px;text-align:center}
+        .brand{margin:0 0 8px;color:#c7b8da;font-size:11px;letter-spacing:.24em;text-transform:uppercase}.brand span{color:#f1d890;margin-right:8px}
+        .stage{height:338px;position:relative;display:grid;place-items:center}.stage::after{content:"";position:absolute;bottom:8px;width:118px;height:12px;border-radius:50%;background:#0b081c88;filter:blur(5px)}
+        .runner{width:256px;height:320px;position:relative;z-index:1;background-image:url("__ARCHIVE_CONTEXT_PATH__/startup/lumine-sprint.png");background-repeat:no-repeat;background-size:4608px 320px;animation:sprint .6s steps(18,end) infinite}
+        @keyframes sprint{to{background-position:-4608px 0}}
+        h1{margin:8px 0 10px;font-size:clamp(25px,5vw,32px);font-weight:600;letter-spacing:-.035em}
+        .copy{margin:0 auto;max-width:340px;font-size:14px;line-height:1.65;color:#c3b8d3}
+        .trail{position:relative;overflow:hidden;width:112px;height:2px;margin:24px auto 18px;background:#c3b8d326;border-radius:2px}.trail::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,#f1d890,transparent);transform:translateX(-100%);animation:trail 1.5s ease-in-out infinite}
+        @keyframes trail{to{transform:translateX(100%)}}
+        .status{margin:0;font-size:12px;color:#a99cbd;line-height:1.6;min-height:20px}.actions{margin-top:18px;display:flex;justify-content:center;gap:18px;align-items:center;flex-wrap:wrap}.actions[hidden]{display:none}
+        a,button{font:inherit;font-size:12px;color:#f1d890}button{padding:8px 16px;border:1px solid #f1d89066;border-radius:7px;background:#f1d8900d;cursor:pointer}a{text-underline-offset:4px}a:focus-visible,button:focus-visible{outline:2px solid #f1d890;outline-offset:5px}
+        body[data-state="error"] .runner,body[data-state="error"] .trail::after{animation-play-state:paused}
+        @media(max-height:620px){.journey{padding:20px}.stage{height:236px}.runner{transform:scale(.72)}.stage::after{bottom:4px}h1{margin-top:2px}}
+        @media(prefers-reduced-motion:reduce){.runner,.trail::after{animation:none}.runner{background-image:url("__ARCHIVE_CONTEXT_PATH__/startup/lumine-sprint-poster.png");background-size:256px 320px}.trail::after{transform:none;background:#f1d89088}}
+    </style>
+    <script defer src="__ARCHIVE_CONTEXT_PATH__/startup/loader.js"></script>
+</head>
+<body data-state="loading">
+<main class="journey" aria-labelledby="heading">
+    <p class="brand"><span aria-hidden="true">✦</span> Genshin Archive</p>
+    <div class="stage"><div class="runner" role="img" aria-label="Lumine running in place"></div></div>
+    <h1 id="heading">A little further…</h1>
+    <p class="copy" id="copy">Lumine is keeping pace while your archive gets ready.</p>
+    <div class="trail" aria-hidden="true"></div>
+    <p class="status" id="status" role="status" aria-live="polite">Opening your dashboard…</p>
+    <div class="actions" id="actions" hidden>
+        <button id="retry" type="button">Try again</button>
+        <a id="direct" href="?direct=1">Open dashboard directly</a>
+    </div>
+    <noscript><p><a href="?direct=1">Open dashboard without JavaScript</a></p></noscript>
+</main>
+</body>
+</html>

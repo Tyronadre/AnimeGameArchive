@@ -28,7 +28,10 @@ class DesktopSecurityConfiguration {
         desktopAuthenticationFilter: DesktopAuthenticationFilter,
     ): SecurityFilterChain {
         http
-            .authorizeHttpRequests { it.anyRequest().authenticated() }
+            .authorizeHttpRequests {
+                it.requestMatchers("/startup/**").permitAll()
+                    .anyRequest().authenticated()
+            }
             .csrf {
                 it.ignoringRequestMatchers(
                     "/api/desktop/irminsul/**",
@@ -46,6 +49,9 @@ class DesktopSecurityConfiguration {
 class DesktopAuthenticationFilter(
     private val desktopUserProvider: DesktopUserProvider,
 ) : OncePerRequestFilter() {
+    override fun shouldNotFilter(request: HttpServletRequest): Boolean =
+        request.requestURI.removePrefix(request.contextPath).startsWith("/startup/")
+
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,

@@ -1,0 +1,19 @@
+{
+  "source": "Existing local PMX Character Studio runtime; unmodified bundles",
+  "sha256": {
+    "babylon.js": "9fa39c6e3f66c714f3b52b5e0b3b19059bb8e0c7dadd65b6db48fd8e297d00bf",
+    "babylon.mmd.min.js": "e1ed2f5bffb92ba26d9b0307df7782bcde3352eb411f0f93672117bc00afcfb4",
+    "169655dbbecbfdb6b17f.wasm": "6eb577aac385fbb8b65ae522563b14917eaa420ae237954493e178efa00be37f",
+    "3a5c8d09afffd64ee4d9.wasm": "68bb2ec32ca88bca7fc49c07166a15bd2586fc050f422965913c9f1c8b46a4e6",
+    "6985bc89875b8d51d1cb.wasm": "3c861f26efd4e5ac51cc3930220ce56398596b50324d74465d6ed9363c24738b",
+    "8d1001de8d6cf5b9798d.wasm": "abcd3fd86d04e2042cab169cb87ae944e312bdea9e4386a1d765b3821e9131ee",
+    "9820065a928cd2df6b02.wasm": "bd73d96a613c0c83dc987aac1afca1a222fa894ecd89b5efe2c8c6551ea0b37c",
+    "a1c546d740911bfab6c9.wasm": "0536d26bdd4816497a4c6659603f7181c316197cd26e1a4ad7ad9999f242fde3",
+    "d3fa035cf13a1164a2a4.wasm": "12c6eb9a03bb54074ce1351178494a572b7b7b751c75c0864257813fbe5819dd",
+    "de3a745abd25949dc527.wasm": "ad452786d631958e04dfe73fc2023a4f2804ca6e67de25378641e0066d6e6219"
+  },
+  "projects": [
+    "https://github.com/BabylonJS/Babylon.js",
+    "https://github.com/noname0310/babylon-mmd"
+  ]
+}

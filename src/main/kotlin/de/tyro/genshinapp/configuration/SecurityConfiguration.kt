@@ -26,6 +26,7 @@ class SecurityConfiguration {
                     "/registration",
                     "/css/**",
                     "/images/**",
+                    "/startup/**",
                     "/error",
                 ).permitAll()
                     .anyRequest().authenticated()

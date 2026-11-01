@@ -2,6 +2,29 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <header class="site-header" th:fragment="siteHeader(activeSection)">
+    <script data-companion-continuity>
+        (() => {
+            try {
+                if (document.getElementById('archive-startup-handoff') || document.getElementById('archive-companion-continuation')) return;
+                const settings = JSON.parse(localStorage.getItem('genshin-archive.companion.v1') || 'null');
+                const frame = JSON.parse(sessionStorage.getItem('genshin-archive.companion.navigation') || 'null');
+                if (settings?.visible === false || !frame || Date.now() - frame.at < 0 || Date.now() - frame.at >= 15000
+                    || typeof frame.image !== 'string' || !frame.image.startsWith('data:image/png;base64,') || frame.image.length >= 262144
+                    || !['left', 'top', 'width', 'height'].every(key => Number.isFinite(frame[key]))
+                    || frame.width <= 0 || frame.width > 512 || frame.height <= 0 || frame.height > 640) return;
+                const visual = document.createElement('div');
+                visual.id = 'archive-companion-continuation'; visual.setAttribute('aria-hidden', 'true');
+                Object.assign(visual.style, {position: 'fixed', pointerEvents: 'none', zIndex: '80', lineHeight: '0',
+                    left: `${Math.max(0, Math.min(innerWidth - frame.width, frame.left))}px`,
+                    top: `${Math.max(0, Math.min(innerHeight - frame.height, frame.top))}px`,
+                    width: `${frame.width}px`, height: `${frame.height}px`});
+                const image = document.createElement('img'); image.alt = ''; image.decoding = 'sync'; image.src = frame.image;
+                image.style.cssText = 'display:block;width:100%;height:100%;max-width:none;margin:0;filter:drop-shadow(0 5px 5px rgba(0,0,0,.15))';
+                visual.append(image); document.body.append(visual);
+                setTimeout(() => visual.remove(), 14000);
+            } catch (_) { /* Navigation remains usable when storage is unavailable. */ }
+        })();
+    </script>
     <a class="brand" th:href="@{/}">
         <span class="brand-mark">✦</span>
         <span th:text="#{app.name}">Genshin Archive</span>
@@ -24,12 +47,15 @@
     </nav>
     <div class="account-controls">
         <span class="account-name" th:text="${currentUser.name}">Player</span>
+        <button type="button" class="companion-toggle" data-companion-toggle hidden
+                aria-pressed="true" th:text="#{companion.toggle}">Lumine</button>
         <button th:replace="~{fragments :: themeToggle}"></button>
         <div th:replace="~{fragments :: languageSwitcher}"></div>
         <form th:unless="${desktopMode}" th:action="@{/logout}" method="post">
             <button type="submit" th:text="#{nav.logout}">Log out</button>
         </form>
     </div>
+    <script defer th:src="@{/js/companion.js}" src="/js/companion.js"></script>
 </header>
 
 <button class="theme-toggle" type="button" th:fragment="themeToggle"

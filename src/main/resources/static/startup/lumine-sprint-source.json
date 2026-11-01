@@ -1,0 +1,17 @@
+{
+  "character": "Lumine",
+  "motionAuthor": "PAC_MMD",
+  "motionSource": "2_Female_Motions/3_Center_Bone_Movement_Motions/241_Female-Sprint_A-Forward(Requires_UpperBody2).vmd",
+  "sourceSha256": "ae9eba32932f48a3e72526dfe8a991763533d120c1bb47c3e6ecf55990fa31fd",
+  "frames": 18,
+  "frameWidth": 256,
+  "frameHeight": 320,
+  "fps": 30,
+  "blenderFrames": [
+    120,
+    137
+  ],
+  "inPlace": true,
+  "originalArmSwing": true,
+  "strideScale": 0.94
+}

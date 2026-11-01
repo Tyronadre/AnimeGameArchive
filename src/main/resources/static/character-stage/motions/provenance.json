@@ -1,0 +1,38 @@
+{
+  "female": {
+    "baseSource": "2_Female_Motions/3_Center_Bone_Movement_Motions/202_Female-Walk-Forward_to_Stop(Requires_UpperBody2).vmd",
+    "baseSourceSha256": "223d643218c4d78756dfee3330cf83234d802284f0098b159bed0c5f43e3c393",
+    "motionSource": "2_Female_Motions/2_Idle_Motions/290L-290L_Female-Idle_L(Requires_UpperBody2).vmd",
+    "sourceSha256": "b57f3bdf5b6cb7430713604c9b33bf900ebd95a905c8838e1caee8707ce8741b",
+    "frames": 66,
+    "fps": 30,
+    "basePoseFrame": 333,
+    "baseForwardTravelRemoved": true,
+    "loopSeamFrame": 66,
+    "loopSeamCorrectedTracks": 46
+  },
+  "male": {
+    "baseSource": "1_Male_Motions/3_Center_Bone_Movement_Motions/102_Male_A-Walk-Forward_to_Stop(Requires_UpperBody2).vmd",
+    "baseSourceSha256": "ad5da0a99e3332ff776d0c194d0d28b8cc37659e38c91157d6a170eb4a4c3103",
+    "motionSource": "1_Male_Motions/2_Idle_Motions/190-190_Male_A-Idle(Requires_UpperBody2).vmd",
+    "sourceSha256": "69c1d87996358ac5cb831d745e907f8c95455d5a2510ed72bf2a9c43adca7c54",
+    "frames": 66,
+    "fps": 30,
+    "basePoseFrame": 324,
+    "baseForwardTravelRemoved": true,
+    "loopSeamFrame": 66,
+    "loopSeamCorrectedTracks": 48
+  },
+  "child": {
+    "baseSource": "3_Child_Motions/3_Center_Bone_Movement_Motions/302_Child-Walk-Forward_to_Idle(Requires_UpperBody2).vmd",
+    "baseSourceSha256": "a18b37d5498b76993a3191d9456215ea95b213d5cad3b84aaf88fa2ba2f10f6d",
+    "motionSource": "3_Child_Motions/2_Idle_Motions/390-390_Child-Idle(Requires_UpperBody2).vmd",
+    "sourceSha256": "3ef04c2fb210f5c7be55db43a642797d5a2e19179cd88ce58a2375e0c30c1779",
+    "frames": 64,
+    "fps": 30,
+    "basePoseFrame": 330,
+    "baseForwardTravelRemoved": true,
+    "loopSeamFrame": 64,
+    "loopSeamCorrectedTracks": 46
+  }
+}

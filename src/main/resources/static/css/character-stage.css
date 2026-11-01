@@ -1,0 +1,67 @@
+.character-stage { min-width: 0; }
+.character-stage-light, .character-stage-floor, .character-stage .hero-orbit, .character-stage .hero-spark { pointer-events: none; position: absolute; }
+.character-stage-light {
+    inset: 0 -12% 5%; z-index: 0;
+    background: conic-gradient(from 161deg at 50% -6%, transparent 0deg, var(--hero-glow) 16deg, transparent 39deg);
+    opacity: .65; filter: blur(12px); mask-image: linear-gradient(black, transparent);
+}
+.character-stage-floor {
+    width: 66%; height: 15%; bottom: 6%; left: 17%; border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--hero-accent) 48%, transparent);
+    background: radial-gradient(ellipse, var(--hero-glow), transparent 70%);
+    box-shadow: 0 0 50px var(--hero-glow); transform: rotate(-5deg);
+}
+.character-hero .character-stage .character-stage-portrait {
+    animation: none; z-index: 2; pointer-events: none;
+    inset: 0; width: 100%; height: calc(100% - 60px); margin: 0;
+    transition: opacity .22s ease;
+}
+.character-stage .character-stage-canvas {
+    position: absolute; inset: 0; display: block; width: 100%; height: calc(100% - 60px);
+    z-index: 2; pointer-events: none; outline: none;
+}
+.character-stage[data-presentation="model"] .character-stage-canvas {
+    pointer-events: auto; touch-action: none; cursor: grab;
+}
+.character-stage[data-presentation="model"] .character-stage-canvas[data-dragging="true"] { cursor: grabbing; }
+.character-stage-camera-hint {
+    position: absolute; z-index: 3; top: 12px; left: 50%; transform: translateX(-50%);
+    padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px;
+    background: var(--surface-soft); color: var(--muted); font-size: .72rem;
+    white-space: nowrap; pointer-events: none; backdrop-filter: blur(10px);
+}
+.character-stage [hidden] { display: none !important; }
+.character-stage[data-presentation="model"] .character-stage-portrait,
+.character-stage[data-presentation="model"] .hero-art-fallback { opacity: 0; }
+.character-stage-controls {
+    position: absolute; left: 0; right: 0; bottom: -6px; z-index: 4;
+    display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;
+    padding: 10px; border: 1px solid var(--line); border-radius: 16px;
+    background: var(--surface-soft); backdrop-filter: blur(12px);
+}
+.character-stage-caption { color: var(--muted); font-size: .75rem; margin-right: auto; max-width: 50%; }
+.character-stage-controls button { font-size: .73rem; padding: 8px 10px; min-height: 36px; }
+.character-stage[data-paused="true"] .hero-orbit,
+.character-stage[data-paused="true"] .hero-spark,
+.character-stage[data-suspended="true"] .hero-orbit,
+.character-stage[data-suspended="true"] .hero-spark { animation-play-state: paused; }
+.character-stage:has(.character-stage-portrait:not([hidden])) .hero-art-fallback { opacity: .18; }
+@media (max-width: 900px) {
+    .character-hero:has([data-character-stage]) { grid-template-columns: minmax(0, 1fr); }
+    .character-stage { min-height: 460px; }
+    .character-stage-controls { bottom: 0; }
+}
+@media (max-width: 640px) {
+    .character-hero:has([data-character-stage]) { padding: 24px; gap: 24px; }
+    .character-hero:has([data-character-stage]) .hero-copy { min-width: 0; }
+    .character-stage { min-height: 420px; }
+    .character-hero .character-stage .character-stage-portrait,
+    .character-stage .character-stage-canvas { height: calc(100% - 112px); }
+    .character-hero .character-stage { order: -1; }
+    .character-stage-caption { max-width: 100%; width: 100%; margin: 0; text-align: center; }
+    .character-stage-floor { bottom: 12%; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .character-stage .hero-orbit, .character-stage .hero-spark { animation: none; }
+    .character-stage .character-stage-portrait { transition: none; }
+}
