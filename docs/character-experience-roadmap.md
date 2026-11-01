@@ -25,25 +25,27 @@ Implement the following milestones in order; keep this file current as each ship
    React to genuine calculations and navigation. Start with renders of the fitted
    3D character so ordinary pages do not need a 3D engine. Add an authored walk
    between docks and a thinking state after their source poses are validated.
-2. **Character page entrances — implemented.** A silhouette resolves into the character
-   stage, the camera settles, then the name and statistics appear. Use elemental
-   light and a portrait presentation whenever a compatible model is unavailable.
+2. **Character page presentation — implemented.** Character artwork and facts render
+   immediately; the 3D stage is an explicit opt-in so model motion never runs as a
+   competing page entrance. Use elemental light and portrait fallback when needed.
 3. **Animated team lineup — queued.** Four shared stage positions; a character
    enters the selected slot and the active character receives a camera/lighting
    emphasis. Keep team editing fully usable with portraits and keyboard controls.
 4. **Elemental page transitions — queued.** Brief Hydro ripples, Anemo particles,
    Electro arcs or Geo fragments, with instantaneous navigation under reduced
    motion. Transitions must never delay a completed request.
-5. **Interactive collection — queued.** Cards lift subtly on hover/focus; an
-   expanded showcase displays idle motion and equipment while other cards recede.
-   Load only the opened showcase, including on touch devices.
+5. **Interactive collection — implemented.** Cards lift on hover/focus and have
+   an explicit showcase action for touch. The expanded modal presents character
+   artwork or a lazily loaded idle 3D stage with camera controls and character
+   details; the dimmed catalog recedes behind it. The stage is disposed on close.
 6. **Equipment comparison stages — queued.** Keep the character visible beside
    comparison statistics; selected equipment affects stage light/aura. Mark a
    completed goal with constellation effects using available motions only.
 7. **Farming guide — queued.** The companion follows the selected activity, turns
    toward a task and marks meaningful completed goals with constellation light.
-8. **Inspection mode — queued.** Orbit, zoom, lighting/background controls and an
-   animation picker limited to compatible, reviewed numbered motions.
+8. **Inspection mode — implemented.** A single opt-in detail-page viewer provides
+   camera orbit/zoom, lighting and backdrop controls, plus profile-compatible,
+   in-place idle/walk/jog/sprint clips sourced only from reviewed numbered packs.
 9. **Personal home scene — queued.** Saved character, elemental backdrop and stage
    style, with a lightweight first paint and deferred 3D enhancement.
 
@@ -60,6 +62,17 @@ The running-Lumine startup screen is implemented separately. See
 [startup-loading-screen.md](startup-loading-screen.md) for assets, provenance and
 verification. The old animation shortlist includes candidates outside the allowed
 numbered packs and is **not** an implementation allowlist.
+
+## Interactive collection delivery
+
+Character cards retain their normal details link and add a separate preview
+button. Only opening a preview fetches its model descriptor and, when available,
+the shared Babylon/MMD renderer and idle motion. Unsupported characters keep the
+artwork presentation. The modal includes weapon type, rarity, region, camera
+rotation/zoom, pause and artwork controls, plus a link to full character details.
+Closing the modal disposes its scene so browsing the collection does not retain
+renderers for previously viewed characters. Card filters hide the card and its
+preview action together.
 
 ## Companion delivery
 
@@ -95,12 +108,20 @@ rebuilding to pick up the new packaged resources.
 
 ## Character entrance delivery
 
-Character detail pages now have elemental stages, silhouette reveals, camera
-settling and a staggered name/facts entrance. After the page is usable, compatible
-desktop pages load one real PMX model with an authored numbered-pack idle. Artwork
-remains visible while assets load. The same stage frames portrait fallbacks.
-Phones, reduced-motion and data-saver users start with artwork and can choose 3D.
-Pause and artwork preferences persist; offscreen/background rendering stops.
+Character detail pages start with artwork and usable facts. A compatible PMX model
+loads only after the user opens the inspection stage. That stage provides camera
+orbit/zoom, three lighting presets, three backdrops and profile-matched numbered
+idle/walk/jog/sprint motions modified to stay in place. The same stage frames
+portrait fallbacks. Pause and artwork preferences persist; offscreen/background
+rendering stops. The Dendro backdrop now loads a real, material-batched 3D forest
+stage with terrain, a stone clearing, textured tree and plant models, ruins,
+ferns and a pool. The tree and plant models use the CC0 Standard pack by
+[Quaternius](https://quaternius.com/packs/stylizednaturemegakit.html), downloaded
+from [OpenGameArt](https://opengameart.org/content/stylized-nature-megakit). The
+ground uses ambientCG's CC0 [Grass 001](https://ambientcg.com/view?id=Grass001)
+color and normal maps. The GLB preserves foliage textures, alpha-cutout leaves,
+UVs and vertex colors. Its panorama remains visible while the scene loads and if
+the GLB cannot be fetched; the character viewer does not depend on the environment.
 
 The library maps 47 character identities, choosing the base outfit when present
 and excluding props. Kinich currently falls back because `hair_s.bmp` is missing.

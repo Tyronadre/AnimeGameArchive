@@ -1,0 +1,113 @@
+.character-card-shell { position: relative; min-width: 0; }
+.character-card-shell > .character-card { display: block; }
+.character-card-shell:hover > .character-card,
+.character-card-shell:focus-within > .character-card {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow), 0 18px 38px color-mix(in srgb, var(--line) 48%, transparent);
+}
+.character-showcase-open {
+    position: absolute;
+    z-index: 5;
+    top: 3.7rem;
+    right: .8rem;
+    padding: .5rem .78rem;
+    border: 1px solid rgba(255,255,255,.46);
+    border-radius: 999px;
+    color: #fff;
+    background: rgba(15,25,35,.76);
+    box-shadow: 0 5px 18px rgba(0,0,0,.18);
+    backdrop-filter: blur(10px);
+    font: 700 .72rem/1 Inter, sans-serif;
+    cursor: pointer;
+    transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+.character-showcase-open:hover,
+.character-showcase-open:focus-visible { transform: translateY(-2px); background: rgba(15,25,35,.94); border-color: #f0d69c; }
+.character-showcase-open:focus-visible { outline: 2px solid #f0d69c; outline-offset: 3px; }
+.character-showcase-dialog {
+    width: min(1240px, 96vw);
+    max-width: none;
+    max-height: 94vh;
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    border-radius: 28px;
+    color: var(--ink);
+    background: transparent;
+}
+.character-showcase-dialog:not([open]) { display: none; }
+.character-showcase-dialog.is-fallback-open {
+    position: fixed;
+    z-index: 9999;
+    top: 3vh;
+    left: 50%;
+    display: block;
+    margin: 0;
+    transform: translateX(-50%);
+}
+.character-showcase-fallback-backdrop {
+    position: fixed;
+    z-index: 9998;
+    inset: 0;
+    background: rgba(5,10,17,.78);
+    backdrop-filter: blur(12px) saturate(.75);
+}
+.character-showcase-fallback-backdrop[hidden] { display: none; }
+.character-showcase-dialog::backdrop { background: rgba(5,10,17,.78); backdrop-filter: blur(12px) saturate(.75); }
+.character-showcase-shell {
+    max-height: 94vh;
+    overflow: auto;
+    border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+    border-radius: 28px;
+    background: var(--surface);
+    box-shadow: 0 36px 100px rgba(0,0,0,.45);
+}
+.character-showcase-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.4rem 0; }
+.character-showcase-header .eyebrow { margin: 0 0 .22rem; color: var(--muted); font-size: .65rem; text-transform: uppercase; letter-spacing: .13em; }
+.character-showcase-header h2 { margin: 0; color: var(--ink); font-size: 1.15rem; }
+.character-showcase-close { display: grid; width: 40px; height: 40px; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--ink); background: var(--surface-soft); font-size: 1.45rem; cursor: pointer; }
+.character-showcase-close:hover, .character-showcase-close:focus-visible { border-color: var(--damage-accent, var(--line)); }
+.character-showcase-close:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.character-showcase-hero {
+    grid-template-columns: minmax(280px, .72fr) minmax(400px, 1.28fr);
+    min-height: min(680px, 78vh);
+    margin: .5rem 1rem 1rem;
+    padding: clamp(1.25rem, 3vw, 3rem);
+    border: 1px solid rgba(255,255,255,.62);
+    border-radius: 24px;
+}
+.character-showcase-copy { min-width: 0; }
+.character-showcase-copy > .eyebrow { margin: 0 0 .7rem; color: var(--hero-accent-deep); font-size: .72rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.character-showcase-copy h1 { font-size: clamp(2.4rem, 5vw, 4.8rem); overflow-wrap: anywhere; }
+.character-showcase-copy .character-title { max-width: 30rem; margin: .8rem 0 1.3rem; color: var(--muted); font-size: 1rem; }
+.character-showcase-facts { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: .7rem; margin: 1.4rem 0; }
+.character-showcase-facts > div { display: grid; gap: .2rem; min-width: 0; padding: .75rem .85rem; border: 1px solid color-mix(in srgb, var(--hero-accent) 24%, var(--line)); border-radius: 13px; background: color-mix(in srgb, var(--hero-accent) 7%, rgba(255,255,255,.72)); }
+.character-showcase-facts small { color: var(--muted); font-size: .68rem; }
+.character-showcase-facts b { color: var(--ink); font-size: .88rem; overflow-wrap: anywhere; }
+.character-showcase-details { display: inline-flex; align-items: center; gap: .5rem; padding: .72rem 1rem; border: 1px solid color-mix(in srgb, var(--hero-accent) 38%, var(--line)); border-radius: 999px; color: var(--hero-accent-deep); background: rgba(255,255,255,.68); font-weight: 750; text-decoration: none; }
+.character-showcase-details:hover, .character-showcase-details:focus-visible { color: #fff; background: var(--hero-accent-deep); }
+.character-showcase-details:focus-visible { outline: 2px solid var(--hero-accent); outline-offset: 3px; }
+.character-showcase-stage { min-height: min(580px, 70vh); }
+.character-showcase-stage .character-stage-camera-hint { top: 10px; }
+.character-showcase-stage .character-stage-controls { bottom: 0; }
+.character-showcase-stage .character-stage-portrait,
+.character-showcase-stage .character-stage-canvas { height: calc(100% - 58px); }
+.character-showcase-loading { min-height: 1.3rem; margin: 0 1.5rem .8rem; color: var(--muted); font-size: .76rem; text-align: center; }
+.character-showcase-dialog [hidden] { display: none !important; }
+@media (max-width: 900px) {
+    .character-showcase-dialog { width: min(720px, 96vw); }
+    .character-showcase-hero { grid-template-columns: minmax(0,1fr); min-height: 0; gap: .5rem; }
+    .character-showcase-stage { min-height: 470px; order: -1; }
+    .character-showcase-copy h1 { font-size: clamp(2.4rem, 8vw, 4rem); }
+}
+@media (max-width: 560px) {
+    .character-showcase-dialog { width: 100vw; max-height: 100dvh; margin: 0; border-radius: 0; }
+    .character-showcase-dialog.is-fallback-open { top: 0; }
+    .character-showcase-shell { max-height: 100dvh; border-radius: 0; }
+    .character-showcase-header { padding: .8rem .9rem 0; }
+    .character-showcase-hero { margin: .4rem; padding: 1rem; border-radius: 18px; }
+    .character-showcase-stage { min-height: 390px; }
+    .character-showcase-facts { gap: .45rem; }
+    .character-showcase-facts > div { padding: .65rem; }
+    .character-showcase-loading { margin-inline: .75rem; }
+}

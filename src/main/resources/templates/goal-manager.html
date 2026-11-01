@@ -1,0 +1,105 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<section th:fragment="manager" id="dashboard-goals" class="dashboard-section dashboard-goal-manager">
+
+            <details open>
+                <summary>
+                    <div>
+                        <p class="eyebrow" th:text="#{dashboard.goals.eyebrow}">Optional focus</p>
+                        <h2 th:text="#{dashboard.goals.heading}">Prioritize specific characters</h2>
+                    </div>
+                    <span th:text="${dashboardAutomatic
+                        ? #messages.msg('dashboard.goals.autoSummary')
+                        : #messages.msg('dashboard.goals.customSummary',
+                            selectedGoalCount)}">
+                        Optional: the automatic plan already works without this.
+                    </span>
+                </summary>
+                <form action="/goals" method="post">
+                    <input th:unless="${desktopMode}" type="hidden"
+                           th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <div class="dashboard-priority-note" th:if="${dashboardAutomatic}">
+                        <span>✦</span>
+                        <p th:text="#{dashboard.goals.autoNote}">
+                            No priorities selected. The dashboard currently chooses invested,
+                            unfinished characters automatically.
+                        </p>
+                    </div>
+                    <label class="dashboard-goal-search">
+                        <span class="sr-only" th:text="#{dashboard.goals.searchLabel}">
+                            Search characters
+                        </span>
+                        <input id="dashboard-goal-search" type="search"
+                               th:placeholder="#{dashboard.goals.search}"
+                               placeholder="Find a character…" autocomplete="off">
+                    </label>
+                    <div class="dashboard-element-filters"
+                         th:if="${!goalElementFilters.isEmpty()}"
+                         role="group"
+                         th:attr="aria-label=#{dashboard.goals.elementFilters}">
+                        <button type="button" class="is-active" data-element-filter="all"
+                                aria-pressed="true"
+                                th:text="#{dashboard.goals.allElements}">
+                            All
+                        </button>
+                        <button type="button" th:each="element : ${goalElementFilters}"
+                                th:attr="data-element-filter=${element.key}"
+                                aria-pressed="false"
+                                th:text="${element.label}">
+                            Pyro
+                        </button>
+                    </div>
+                    <div class="dashboard-goal-table-head">
+                        <span th:text="#{nav.characters}">Characters</span>
+                        <span th:text="#{dashboard.goal.character}">Character progress</span>
+                        <span th:text="#{dashboard.goal.artifacts}">Build optimization</span>
+                    </div>
+                    <div class="dashboard-goal-option" th:each="option : ${goalOptions}"
+                         th:attr="data-character-search=${option.searchText},
+                                  data-character-element=${option.elementKey}">
+                        <a th:href="@{/characters/{key}(key=${option.key})}">
+                            <span class="dashboard-goal-option-avatar">
+                                <i th:text="${#strings.substring(option.name, 0, 1)}">F</i>
+                                <img th:if="${option.iconUrl != null}" th:src="${option.iconUrl}"
+                                     th:alt="${option.name}" loading="lazy"
+                                     onerror="this.remove()">
+                            </span>
+                            <span>
+                                <b th:text="${option.name}">Furina</b>
+                                <small th:text="#{dashboard.goal.level(
+                                    ${option.currentLevel},${option.targetLevel})}">
+                                    Level 70 → 80
+                                </small>
+                            </span>
+                        </a>
+                        <label>
+                            <input type="checkbox" name="characterGoals"
+                                   th:value="${option.key}"
+                                   th:checked="${option.characterSelected}">
+                            <span th:text="#{dashboard.goal.characterShort}">Materials</span>
+                        </label>
+                        <label th:classappend="${!option.canOptimize ? ' disabled' : ''}">
+                            <input type="checkbox" name="artifactGoals"
+                                   th:value="${option.key}"
+                                   th:checked="${option.artifactsSelected}"
+                                   th:disabled="${!option.canOptimize}">
+                            <span th:text="${option.canOptimize
+                                ? #messages.msg('dashboard.goal.artifactsShort')
+                                : #messages.msg('dashboard.goal.noArtifacts')}">
+                                Artifacts & weapon
+                            </span>
+                        </label>
+                    </div>
+                    <div class="dashboard-goal-actions">
+                        <p th:text="#{dashboard.goals.hint}">
+                            Leave everything empty to return to the automatic plan.
+                        </p>
+                        <button class="primary-button" type="submit"
+                                th:text="#{dashboard.goals.save}">Save priorities</button>
+                    </div>
+                </form>
+            </details>
+        </section>
+</body>
+</html>

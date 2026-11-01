@@ -5,8 +5,10 @@ import de.tyro.genshinapp.model.CharacterProgressForm
 import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.model.TravelerIdentity
 import de.tyro.genshinapp.model.PlayerSnapshot
+import de.tyro.genshinapp.model.MaterialDefinition
 import de.tyro.genshinapp.security.AppUserPrincipal
 import de.tyro.genshinapp.service.catalog.CharacterCatalogService
+import de.tyro.genshinapp.service.catalog.MaterialCatalogService
 import de.tyro.genshinapp.service.planning.CharacterTargetService
 import de.tyro.genshinapp.service.planning.DashboardGoalSelection
 import de.tyro.genshinapp.service.planning.DashboardGoalService
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
+import org.springframework.web.util.UriComponentsBuilder
 import java.time.Duration
 import java.time.Instant
 import java.util.Locale
@@ -36,6 +39,7 @@ import java.util.Locale
 class DashboardController(
     private val snapshotStore: PlayerSnapshotStore,
     private val catalogService: CharacterCatalogService,
+    private val materialCatalogService: MaterialCatalogService,
     private val targetService: CharacterTargetService,
     private val goalService: DashboardGoalService,
     private val dashboardService: FarmingDashboardService,
@@ -77,6 +81,28 @@ class DashboardController(
             },
         )
         return "dashboard"
+    }
+
+    @GetMapping("/settings")
+    fun settings(): String = "settings"
+
+    @GetMapping("/settings/appearance")
+    fun appearance(): String = "settings-appearance"
+
+    @GetMapping("/settings/character-priorities")
+    fun characterPriorities(
+        @AuthenticationPrincipal principal: AppUserPrincipal,
+        model: Model,
+    ): String {
+        val snapshot = snapshotStore.current(principal.id)
+        val selections = goalService.findAll(principal.id)
+        val options = goalOptions(principal.id, snapshot, selections)
+        model.addAttribute("snapshot", snapshot)
+        model.addAttribute("goalOptions", options)
+        model.addAttribute("goalElementFilters", goalElementFilters(options))
+        model.addAttribute("selectedGoalCount", selections.size)
+        model.addAttribute("dashboardAutomatic", selections.isEmpty())
+        return "settings-character-priorities"
     }
 
     @GetMapping("/api/dashboard/recent-activity")
@@ -131,7 +157,7 @@ class DashboardController(
                 "errorMessage",
                 messages.get("dashboard.goals.noInventory"),
             )
-            return "redirect:/"
+            return "redirect:/settings/character-priorities"
         }
         val availableOptions = goalOptions(principal.id, snapshot, emptySet())
         val characterKeys = availableOptions.filter(DashboardCharacterGoalOption::owned)
@@ -153,7 +179,7 @@ class DashboardController(
             "successMessage",
             messages.get("dashboard.goals.saved", selections.size),
         )
-        return "redirect:/"
+        return "redirect:/settings/character-priorities"
     }
 
     private fun goalOptions(
@@ -277,7 +303,10 @@ class DashboardController(
         }
     }
 
-    private fun activityView(event: SnapshotActivityEvent): DashboardActivityView {
+    private fun activityView(
+        event: SnapshotActivityEvent,
+        mappedMaterial: MaterialDefinition? = null,
+    ): DashboardActivityView {
         val title: String
         val detail: String
         when (event.type) {
@@ -297,7 +326,7 @@ class DashboardController(
                 detail = messages.get("dashboard.recent.weeklyBossCollected.detail", event.amount ?: 0)
             }
             SnapshotActivityType.MATERIAL_GAIN -> {
-                title = messages.get("dashboard.recent.materialGain", event.name)
+                title = messages.get("dashboard.recent.materialGain", mappedMaterial?.name ?: event.name)
                 detail = messages.get(
                     "dashboard.recent.materialGain.detail",
                     event.amount ?: 0,
@@ -305,7 +334,7 @@ class DashboardController(
                 )
             }
             SnapshotActivityType.MATERIAL_SPEND -> {
-                title = messages.get("dashboard.recent.materialSpend", event.name)
+                title = messages.get("dashboard.recent.materialSpend", mappedMaterial?.name ?: event.name)
                 detail = messages.get(
                     "dashboard.recent.materialSpend.detail",
                     event.amount ?: 0,
@@ -368,17 +397,53 @@ class DashboardController(
             }
         }
         return DashboardActivityView(
+            id = event.eventId ?: listOf(
+                event.occurredAt,
+                event.type.name,
+                event.materialKey.orEmpty(),
+                event.name,
+                event.detailName.orEmpty(),
+                event.amount,
+                event.total,
+                event.previousLevel,
+                event.currentLevel,
+            ).joinToString(":"),
             icon = event.type.icon,
             tone = event.type.tone,
             title = title,
             detail = detail,
+            materialHref = mappedMaterial?.let {
+                UriComponentsBuilder.fromPath("/inventory/items")
+                    .queryParam("query", it.name)
+                    .build()
+                    .encode()
+                    .toUriString()
+            },
+            materialImageUrl = mappedMaterial?.let { materialCatalogService.materialImageUrl(it.id) },
             occurredAt = event.occurredAt.toString(),
             age = activityAge(event.occurredAt),
         )
     }
 
-    private fun recentActivityViews(userId: Long): List<DashboardActivityView> =
-        activityService.recent(userId).map(::activityView)
+    private fun recentActivityViews(userId: Long): List<DashboardActivityView> {
+        val events = activityService.recent(userId)
+        val materialsByName = if (events.any {
+                it.type == SnapshotActivityType.MATERIAL_GAIN ||
+                    it.type == SnapshotActivityType.MATERIAL_SPEND
+            }
+        ) {
+            materialCatalogService.getMaterials()
+                .associateBy { GoodKeyNormalizer.normalize(it.name) }
+        } else {
+            emptyMap()
+        }
+        return events.map { event ->
+            val mappedMaterial = event.materialKey
+                ?.let(GoodKeyNormalizer::normalize)
+                ?.let(materialsByName::get)
+            activityView(event, mappedMaterial)
+        }
+    }
 
     private fun activeMaterialKeys(userId: Long): Set<String> {
         val now = Instant.now()
@@ -497,10 +562,13 @@ data class DashboardElementFilterView(
 )
 
 data class DashboardActivityView(
+    val id: String,
     val icon: String,
     val tone: String,
     val title: String,
     val detail: String,
+    val materialHref: String? = null,
+    val materialImageUrl: String? = null,
     val occurredAt: String,
     val age: String,
 )

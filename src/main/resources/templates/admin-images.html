@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}" href="/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="#{images.title}">Image Management · Genshin Archive</title>
@@ -8,10 +9,11 @@
     <script th:src="@{/js/theme.js}" src="/js/theme.js"></script>
 </head>
 <body>
-<header th:replace="~{fragments :: siteHeader('images')}"></header>
+<header th:replace="~{fragments :: siteHeader('settings')}"></header>
 
 <main class="admin-page">
     <section class="admin-intro">
+        <a class="settings-subpage-back" th:href="@{/settings}" th:text="#{settings.back}">← Settings</a>
         <p class="eyebrow" th:text="#{images.administration}">Administration</p>
         <h1 th:text="#{images.heading}">Image Sources</h1>
         <p class="lead" th:text="#{images.lead}">
@@ -32,7 +34,7 @@
     </div>
 
     <section class="admin-content">
-        <form class="admin-filters" th:action="@{/admin/images}" method="get">
+        <form class="admin-filters" th:action="@{/settings/image-management}" method="get">
             <label>
                 <span th:text="#{action.search}">Search</span>
                 <input type="search" name="query" th:value="${query}"
@@ -69,7 +71,7 @@
                 </select>
             </label>
             <button type="submit" th:text="#{action.filter}">Filter</button>
-            <a th:href="@{/admin/images}" th:text="#{action.reset}">Reset</a>
+            <a th:href="@{/settings/image-management}" th:text="#{action.reset}">Reset</a>
         </form>
 
         <div class="admin-summary">

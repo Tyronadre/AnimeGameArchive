@@ -1,0 +1,4 @@
+Grass 001, AmbientCG
+https://ambientcg.com/view?id=Grass001
+Maps used: Grass001_1K-JPG_Color.jpg, Grass001_1K-JPG_NormalGL.jpg
+License: CC0 1.0, as stated on the asset page.

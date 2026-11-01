@@ -1,7 +1,9 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<header class="site-header" th:fragment="siteHeader(activeSection)">
+<header class="site-header" th:fragment="siteHeader(activeSection)"
+        th:attr="data-activity-url=@{/api/dashboard/recent-activity},data-toast-account=${currentUser.email}"
+        data-activity-toasts>
     <script data-companion-continuity>
         (() => {
             try {
@@ -26,7 +28,7 @@
         })();
     </script>
     <a class="brand" th:href="@{/}">
-        <span class="brand-mark">✦</span>
+        <span class="brand-mark"><img th:src="@{/favicon.ico}" src="/favicon.ico" alt=""></span>
         <span th:text="#{app.name}">Genshin Archive</span>
     </a>
     <nav class="header-actions" th:attr="aria-label=#{nav.main}">
@@ -40,22 +42,19 @@
            th:href="@{/inventory}" th:text="#{nav.inventory}">Inventory</a>
         <a class="back-link" th:classappend="${activeSection == 'materials'} ? ' active' : ''"
            th:href="@{/materials}" th:text="#{nav.materials}">Materials</a>
-        <a class="back-link" th:classappend="${activeSection == 'database'} ? ' active' : ''"
-           th:href="@{/database}" th:text="#{nav.database}">Database</a>
-        <a class="back-link" th:classappend="${activeSection == 'images'} ? ' active' : ''"
-           th:href="@{/admin/images}" th:text="#{nav.images}">Image management</a>
+        <a class="back-link" th:classappend="${activeSection == 'settings'} ? ' active' : ''"
+           th:href="@{/settings}" th:text="#{nav.settings}">Settings</a>
     </nav>
     <div class="account-controls">
         <span class="account-name" th:text="${currentUser.name}">Player</span>
         <button type="button" class="companion-toggle" data-companion-toggle hidden
                 aria-pressed="true" th:text="#{companion.toggle}">Lumine</button>
-        <button th:replace="~{fragments :: themeToggle}"></button>
-        <div th:replace="~{fragments :: languageSwitcher}"></div>
         <form th:unless="${desktopMode}" th:action="@{/logout}" method="post">
             <button type="submit" th:text="#{nav.logout}">Log out</button>
         </form>
     </div>
     <script defer th:src="@{/js/companion.js}" src="/js/companion.js"></script>
+    <script defer th:src="@{/js/activity-toasts.js}" src="/js/activity-toasts.js"></script>
 </header>
 
 <button class="theme-toggle" type="button" th:fragment="themeToggle"

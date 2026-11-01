@@ -1,12 +1,16 @@
 <!doctype html>
 <html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}" href="/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="#{home.title}">Genshin Characters</title>
     <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+    <link rel="stylesheet" th:href="@{/css/character-stage.css(v=5)}" href="/css/character-stage.css?v=5">
+    <link rel="stylesheet" th:href="@{/css/character-showcase.css(v=2)}" href="/css/character-showcase.css?v=2">
     <script th:src="@{/js/theme.js}" src="/js/theme.js"></script>
     <script defer th:src="@{/js/character-catalog.js}" src="/js/character-catalog.js"></script>
+    <script defer th:src="@{/js/character-showcase.js(v=2)}" src="/js/character-showcase.js?v=2"></script>
 </head>
 <body>
 <header th:replace="~{fragments :: siteHeader('characters')}"></header>
@@ -19,9 +23,10 @@
         <p class="lead" th:text="#{home.lead}">
             Search the bundled data and calculate ascension and talent materials.
         </p>
+    </section>
 
-        <form class="character-catalog-controls" th:action="@{/characters}" method="get"
-              data-character-filter-form>
+    <form class="character-catalog-controls" th:action="@{/characters}" method="get"
+          data-character-filter-form>
             <div class="character-catalog-search-row">
                 <label class="character-catalog-search" for="query">
                     <span class="sr-only" th:text="#{home.search.label}">Search characters</span>
@@ -114,8 +119,7 @@
                     </div>
                 </div>
             </div>
-        </form>
-    </section>
+    </form>
 
     <section class="catalog" aria-labelledby="catalog-heading">
         <div class="section-heading">
@@ -128,13 +132,13 @@
         </div>
 
         <div class="character-grid" data-character-grid>
-            <a class="character-card" th:each="card : ${characterCards}"
-               th:with="character=${card.character}"
-               data-character-card="true"
-               th:attr="data-element=${card.elementKey},data-weapon=${card.weaponTypeKey},
-                        data-owned=${card.owned},data-rarity=${character.rarity},
-                        data-search=${card.searchText}"
-               th:href="@{/characters/{key}(key=${character.key})}">
+            <div class="character-card-shell" th:each="card : ${characterCards}" data-character-card-shell>
+              <a class="character-card" th:with="character=${card.character}"
+                 data-character-card="true"
+                 th:attr="data-element=${card.elementKey},data-weapon=${card.weaponTypeKey},
+                          data-owned=${card.owned},data-rarity=${character.rarity},
+                          data-search=${card.searchText}"
+                 th:href="@{/characters/{key}(key=${character.key})}">
                 <div class="portrait">
                     <span class="portrait-fallback"
                           th:text="${#strings.substring(character.name, 0, 1)}">?</span>
@@ -165,7 +169,17 @@
                         <span th:if="${character.weapon != null}" th:text="${character.weapon}">Sword</span>
                     </div>
                 </div>
-            </a>
+              </a>
+              <button type="button" class="character-showcase-open" data-character-showcase-open
+                      th:with="character=${card.character}"
+                      th:attr="aria-label=#{home.showcase.preview(${character.name})},
+                               data-stage-key=${character.imageResourceKey ?: character.key},data-name=${character.name},
+                               data-element=${card.elementKey},data-weapon=${character.weapon},
+                               data-region=${character.region},data-rarity=${character.rarity},
+                               data-portrait=${character.wishImageUrl ?: (character.cardImageUrl ?: character.iconImageUrl)},
+                               data-detail-url=@{/characters/{key}(key=${character.key})}"
+                      th:text="#{home.showcase.button}">Preview</button>
+            </div>
         </div>
 
         <div class="empty-state character-catalog-empty" data-character-empty
@@ -175,6 +189,57 @@
             <p th:text="#{home.empty.text}">Try another name, element, or region.</p>
         </div>
     </section>
+
+    <dialog class="character-showcase-dialog" data-character-showcase-dialog
+            aria-modal="true"
+            th:attr="data-stage-api=@{/api/character-stages/},data-stage-assets=@{/character-stage/},
+                     data-label-close=#{home.showcase.close},data-label-element=#{home.showcase.element},
+                     data-label-weapon=#{home.showcase.weapon},data-label-region=#{home.showcase.region},
+                     data-label-rarity=#{home.showcase.rarity},data-label-loading=#{character.stage.loading},
+                     data-label-model=#{character.stage.model},data-label-art=#{character.stage.artwork},
+                     data-label-show-3d=#{character.stage.show3d},data-label-pause=#{character.stage.pause},
+                     data-label-detail=#{home.showcase.details},data-label-camera-hint=#{character.stage.cameraHint}">
+        <div class="character-showcase-shell">
+            <header class="character-showcase-header">
+                <div>
+                    <p class="eyebrow" th:text="#{home.showcase.eyebrow}">Character showcase</p>
+                    <h2 data-showcase-title>Character</h2>
+                </div>
+                <button type="button" class="character-showcase-close" data-showcase-close
+                        th:attr="aria-label=#{home.showcase.close}" aria-label="Close">×</button>
+            </header>
+            <section class="character-hero character-showcase-hero element-neutral" data-showcase-hero>
+                <div class="hero-copy character-showcase-copy">
+                    <p class="eyebrow" data-showcase-element></p>
+                    <h1 data-showcase-heading>Character</h1>
+                    <p class="character-title" data-showcase-weapon></p>
+                    <div class="character-showcase-facts">
+                        <div><small th:text="#{home.showcase.rarity}">Rarity</small><b data-showcase-rarity></b></div>
+                        <div><small th:text="#{home.showcase.region}">Region</small><b data-showcase-region></b></div>
+                        <div><small th:text="#{home.showcase.weapon}">Weapon</small><b data-showcase-weapon-fact></b></div>
+                    </div>
+                    <a class="character-showcase-details" data-showcase-detail-link href="#"
+                       th:text="#{home.showcase.details}">Open character details</a>
+                </div>
+                <div class="hero-art character-stage character-showcase-stage" data-character-stage>
+                    <div class="hero-orbit orbit-one" aria-hidden="true"></div>
+                    <div class="hero-orbit orbit-two" aria-hidden="true"></div>
+                    <div class="character-stage-light" aria-hidden="true"></div>
+                    <div class="character-stage-floor" aria-hidden="true"></div>
+                    <span class="hero-art-fallback" aria-hidden="true" data-showcase-fallback>✦</span>
+                    <img class="character-stage-portrait" data-stage-portrait hidden alt="" decoding="async">
+                    <canvas class="character-stage-canvas" data-stage-canvas hidden role="img"></canvas>
+                    <span class="character-stage-camera-hint" data-stage-camera-hint hidden aria-hidden="true"></span>
+                    <div class="character-stage-controls" data-stage-controls hidden>
+                        <span class="character-stage-caption" data-stage-status role="status"></span>
+                        <button type="button" data-stage-mode hidden aria-pressed="false"></button>
+                        <button type="button" data-stage-pause aria-pressed="false"></button>
+                    </div>
+                </div>
+            </section>
+            <p class="character-showcase-loading" data-showcase-loading role="status" aria-live="polite"></p>
+        </div>
+    </dialog>
 </main>
 
 <footer>

@@ -20,6 +20,7 @@ class CharacterStageController(private val catalog: CharacterStageCatalog, objec
     private val motionFrames = ClassPathResource("static/character-stage/motions/provenance.json").inputStream.use { stream ->
         objectMapper.readTree(stream).fields().asSequence().associate { it.key to it.value["frames"].asInt() }
     }
+    private val inspectionMotions = ClassPathResource("static/character-stage/motions/inspection-motions.json").inputStream.use { stream -> objectMapper.readTree(stream) }
 
     @GetMapping("/api/character-stages/{key}")
     fun descriptor(@PathVariable key: String, request: HttpServletRequest): Map<String, Any> {
@@ -30,6 +31,10 @@ class CharacterStageController(private val catalog: CharacterStageCatalog, objec
             "modelUrl" to "${request.contextPath}/media/character-stages/${entry.key}/files/$model",
             "motionUrl" to "${request.contextPath}/character-stage/motions/${entry.profile}-idle.vmd",
             "motionFrames" to (motionFrames[entry.profile] ?: 66),
+            "motions" to inspectionMotions[entry.profile].map { motion ->
+                motion.deepCopy<com.fasterxml.jackson.databind.node.ObjectNode>()
+                    .put("url", "${request.contextPath}${motion["url"].asText()}")
+            },
             "variant" to entry.variant,
         )
     }

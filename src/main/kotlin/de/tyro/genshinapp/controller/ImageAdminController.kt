@@ -22,7 +22,7 @@ import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 @Controller
-@RequestMapping("/admin/images")
+@RequestMapping(value = ["/admin/images", "/settings/image-management"])
 class ImageAdminController(
     private val catalogService: CharacterCatalogService,
     private val materialCatalogService: MaterialCatalogService,
@@ -81,7 +81,7 @@ class ImageAdminController(
             contentLoader.updateCharacterImageUrl(character, imageType, url)
         }
         addResult(result, redirectAttributes)
-        return "redirect:/admin/images"
+        return "redirect:/settings/image-management"
     }
 
     @PostMapping("/materials/{id}")
@@ -104,7 +104,7 @@ class ImageAdminController(
             contentLoader.updateMaterialImageUrl(material, url)
         }
         addResult(result, redirectAttributes)
-        return "redirect:/admin/images"
+        return "redirect:/settings/image-management"
     }
 
     @PostMapping("/weapons/{key}/{type}")
@@ -130,7 +130,7 @@ class ImageAdminController(
             contentLoader.updateWeaponImageUrl(weapon.key, weapon.name, imageType, url)
         }
         addResult(result, redirectAttributes)
-        return "redirect:/admin/images"
+        return "redirect:/settings/image-management"
     }
 
     @PostMapping("/characters/{characterKey}/talents/{talentKey}")
@@ -156,7 +156,7 @@ class ImageAdminController(
             contentLoader.updateTalentImageUrl(character, talent, url)
         }
         addResult(result, redirectAttributes)
-        return "redirect:/admin/images"
+        return "redirect:/settings/image-management"
     }
 
     private fun imageRows(): List<AdminImageRow> {
@@ -181,7 +181,7 @@ class ImageAdminController(
                     hasOverride = link.hasOverride,
                     state = state,
                     previewUrl = character.imageUrls[imageType].takeIf { state.hasPreview },
-                    updatePath = "/admin/images/characters/" +
+                    updatePath = "/settings/image-management/characters/" +
                         "${character.imageResourceKey}/${imageType.key}",
                 )
             }
@@ -201,7 +201,7 @@ class ImageAdminController(
                 state = state,
                 previewUrl = materialCatalogService.materialImageUrl(material.id)
                     .takeIf { state.hasPreview },
-                updatePath = "/admin/images/materials/${material.id}",
+                updatePath = "/settings/image-management/materials/${material.id}",
             )
         }
         val talentCharacters = catalogService.getCharacters()
@@ -225,7 +225,7 @@ class ImageAdminController(
                         "/media/characters/" +
                             "${character.talentResourceKey}/talents/${talent.key}"
                         ).takeIf { state.hasPreview },
-                    updatePath = "/admin/images/characters/" +
+                    updatePath = "/settings/image-management/characters/" +
                         "${character.talentResourceKey}/talents/${talent.key}",
                 )
             }
@@ -254,7 +254,7 @@ class ImageAdminController(
                     state = state,
                     previewUrl = weaponCatalogService.imageUrl(weapon.key, imageType)
                         .takeIf { state.hasPreview },
-                    updatePath = "/admin/images/weapons/${weapon.key}/${imageType.key}",
+                    updatePath = "/settings/image-management/weapons/${weapon.key}/${imageType.key}",
                 )
             }
         }

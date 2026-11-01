@@ -109,7 +109,9 @@ const initializeCharacterCatalog = () => {
                     (state.ownership === "unowned" && card.dataset.owned === "false")) &&
                 (state.rarity === "all" || card.dataset.rarity === state.rarity) &&
                 (!normalizedQuery || normalize(card.dataset.search).includes(normalizedQuery));
-            card.hidden = !matches;
+            const cardShell = card.closest("[data-character-card-shell]");
+            if (cardShell) cardShell.hidden = !matches;
+            else card.hidden = !matches;
             if (matches) visible += 1;
         });
 

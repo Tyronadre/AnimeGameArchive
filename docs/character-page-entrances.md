@@ -1,26 +1,27 @@
 # Character page entrances
 
-The character detail hero has an elemental stage with a silhouette reveal and a
-small camera settle. Name/title and facts appear in sequence; they remain usable
-server HTML throughout. The existing element palette, light/dark themes, Traveler
-selection, planning forms, ownership and calculators remain part of the page.
-No animation is needed to read or edit character data.
+The character detail hero renders artwork and facts immediately. The existing
+element palette, light/dark themes, Traveler selection, planning forms, ownership
+and calculators remain part of the page. No animation is needed to read or edit
+character data.
 
 The initial presentation uses existing wish/card/icon artwork, or a styled initial
 when no image loads. After window load and browser idle time, a small descriptor
-request checks model availability. On desktop, compatible models enhance the
-stage with one transparent WebGL canvas. Phones, reduced-motion and data-saver
-connections start with artwork and offer the 3D button when a model is available.
+request checks model availability. Compatible models can be opened explicitly in
+a large modal inspection stage with room for the character and controls. Artwork
+remains the default on every device until the user requests the model.
 The renderer and model assets are not requested on the startup loading document,
 character catalog cards, or missing-model pages.
 
 The stage has persistent Pause motion and Artwork controls. When the model is
-visible, drag to orbit the camera and scroll to zoom. Character, podium and CSS
-background meshes are not pickable, so pointer input is reserved for camera
-movement. Offscreen stages and hidden tabs stop rendering. Pausing or enabling reduced motion finishes any
-silhouette reveal instead of leaving the character dark. Returning to a stage
-does not restart its text entrance. Asset failures return to artwork and expose
-a retry; automatic loading is attempted once per page. Page exit disposes the
+visible, drag to orbit the camera and scroll to zoom. Inspection controls select
+a compatible numbered-pack idle, in-place walk, jog or sprint, plus lighting and
+backdrop presets. Dendro characters open into a high-detail panoramic forest
+sanctuary with softly animated fireflies. The panorama is loaded only when the
+Dendro environment is selected. Character and environment meshes are not pickable,
+so pointer input is reserved for camera movement. Offscreen stages and hidden
+tabs stop rendering. Pausing or enabling reduced motion stops model playback.
+Asset failures return to artwork and expose a retry. Page exit disposes the
 renderer, while back/forward cache suspension can resume it.
 
 ## Model library
@@ -49,8 +50,12 @@ and provenance accompany the export. The character detail stage loads the local
 single-threaded MMD physics runtime for models with rigid bodies. It holds physics
 state through animation loops, and generated idle clips now end on their opening
 pose. If WebAssembly physics cannot initialize, the model falls back to bone
-animation. This milestone adds neither a physics editor nor an animation/inspection
-picker.
+animation. The detail view uses one explicit inspection stage. Its idle/walk/jog/
+sprint choices are filtered to the model's female, male or child rig profile.
+Numbered locomotion clips have center-bone forward travel removed during
+preparation so they play in place. Lighting presets adjust stage lights, and
+backdrop choices style the stage surface. Page entrance camera and model reveal
+animations are disabled.
 
 Descriptors and assets use authenticated endpoints. Only the PMX and texture paths
 in the selected manifest entry can be served. Directory traversal, unlisted files
@@ -96,12 +101,13 @@ To refresh the fitted mesh, use a copy of the fitted source scene:
 ```powershell
 & 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background .tmp/loader-lumine-source.blend --python scripts/export-fitted-lumine-stage.py
 node scripts/prepare-character-stages.cjs
+node scripts/prepare-character-inspection-motions.cjs
 ```
 
-The preparation script reads the configured library (or the existing E: folder),
+The preparation scripts read the configured library (or the existing E: folder),
 numbered VMDs under `.tmp/model-download-test/animations`, and the existing local
 prototype runtime bundles. It writes the model allowlist, complete idle VMDs,
-runtime copies and fitted Lumine export. It never saves the Blender input scene
+in-place inspection motions, runtime copies and fitted Lumine export. They never save the Blender input scene
 or writes to the external model/animation source folders. Normal app builds need
 none of the regeneration tools or `.tmp` inputs.
 

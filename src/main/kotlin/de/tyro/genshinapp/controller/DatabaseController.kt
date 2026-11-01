@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 @Controller
-@RequestMapping("/database")
+@RequestMapping(value = ["/database", "/settings/database"])
 class DatabaseController(
     private val snapshotStore: PlayerSnapshotStore,
     private val databaseService: GoodDatabaseService,
@@ -102,6 +102,6 @@ class DatabaseController(
     }
 
     companion object {
-        private const val REDIRECT_DATABASE = "redirect:/database"
+        private const val REDIRECT_DATABASE = "redirect:/settings/database"
     }
 }

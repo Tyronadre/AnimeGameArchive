@@ -1,14 +1,15 @@
 <!doctype html>
 <html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}" href="/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="#{character.title(${character.name})}">Character · Genshin Archive</title>
     <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
-    <link rel="stylesheet" th:href="@{/css/character-stage.css}" href="/css/character-stage.css">
+    <link rel="stylesheet" th:href="@{/css/character-stage.css(v=8)}" href="/css/character-stage.css?v=8">
     <script th:src="@{/js/theme.js}" src="/js/theme.js"></script>
     <script defer th:src="@{/js/character-talents.js}" src="/js/character-talents.js"></script>
-    <script defer th:src="@{/js/character-stage.js}" src="/js/character-stage.js"></script>
+    <script defer th:src="@{/js/character-stage.js(v=9)}" src="/js/character-stage.js?v=9"></script>
 </head>
 <body>
 <header th:replace="~{fragments :: siteHeader('characters')}"></header>
@@ -172,9 +173,7 @@
                 <b aria-hidden="true">→</b>
             </a>
         </div>
-        <div class="hero-art character-stage" data-character-stage
-             th:attr="data-descriptor-url=@{/api/character-stages/{key}(key=${character.imageResourceKey})},
-                      data-character-name=${character.name}">
+        <div class="hero-art character-stage-preview">
             <div class="hero-orbit orbit-one" aria-hidden="true"></div>
             <div class="hero-orbit orbit-two" aria-hidden="true"></div>
             <span class="hero-spark spark-one" aria-hidden="true">✦</span>
@@ -191,16 +190,74 @@
                  decoding="async"
                  fetchpriority="high"
                  onerror="this.hidden=true">
-            <canvas class="character-stage-canvas" data-stage-canvas hidden
-                    th:attr="aria-label=#{character.stage.canvas(${character.name})}" role="img"></canvas>
-            <span class="character-stage-camera-hint" data-stage-camera-hint hidden aria-hidden="true"></span>
-            <div class="character-stage-controls" data-stage-controls hidden>
-                <span class="character-stage-caption" data-stage-status role="status" th:text="#{character.stage.artwork}">Character artwork</span>
-                <button type="button" data-stage-mode hidden aria-pressed="false" th:text="#{character.stage.show3d}">3D stage</button>
-                <button type="button" data-stage-pause aria-pressed="false" th:text="#{character.stage.pause}">Pause motion</button>
-            </div>
+            <button class="character-inspector-open" type="button" data-inspector-open hidden
+                    th:text="#{character.stage.show3d}">Inspect 3D model</button>
         </div>
     </section>
+
+    <dialog class="character-inspector-dialog" data-character-inspector
+            aria-labelledby="character-inspector-title">
+        <div class="character-inspector-shell">
+            <header class="character-inspector-header">
+                <div>
+                    <p class="eyebrow" th:text="#{character.stage.inspector}">Character inspection</p>
+                    <h2 id="character-inspector-title" th:text="${character.name}">Character</h2>
+                </div>
+                <button class="character-inspector-close" type="button" data-inspector-close
+                        th:attr="aria-label=#{character.stage.inspector.close}" aria-label="Close">×</button>
+            </header>
+            <div class="hero-art character-stage character-inspector-stage" data-character-stage
+                 th:attr="data-descriptor-url=@{/api/character-stages/{key}(key=${character.imageResourceKey})},
+                          data-character-name=${character.name},
+                          data-element=${isTraveler ? travelerSelection.element.key : (character.element != null ? #strings.toLowerCase(character.element) : 'neutral')}"
+                 data-backdrop="element">
+                <div class="hero-orbit orbit-one" aria-hidden="true"></div>
+                <div class="hero-orbit orbit-two" aria-hidden="true"></div>
+                <span class="hero-spark spark-one" aria-hidden="true">✦</span>
+                <span class="hero-spark spark-two" aria-hidden="true">✧</span>
+                <span class="hero-spark spark-three" aria-hidden="true">✦</span>
+                <div class="character-stage-light" aria-hidden="true"></div>
+                <div class="character-stage-floor" aria-hidden="true"></div>
+                <span class="hero-art-fallback" aria-hidden="true" th:text="${#strings.substring(character.name, 0, 1)}">✦</span>
+                <img class="character-stage-portrait" data-stage-portrait
+                     th:if="${character.wishImageUrl != null || character.cardImageUrl != null || character.iconImageUrl != null}"
+                     th:src="${character.wishImageUrl ?: character.cardImageUrl ?: character.iconImageUrl}"
+                     th:attr="data-fallback-src=${character.cardImageUrl ?: character.iconImageUrl}"
+                     th:alt="${character.name}" decoding="async" onerror="this.hidden=true">
+                <canvas class="character-stage-canvas" data-stage-canvas hidden
+                        th:attr="aria-label=#{character.stage.canvas(${character.name})}" role="img"></canvas>
+                <span class="character-stage-camera-hint" data-stage-camera-hint hidden aria-hidden="true"></span>
+                <div class="character-stage-controls" data-stage-controls hidden>
+                    <span class="character-stage-caption" data-stage-status role="status" th:text="#{character.stage.artwork}">Character artwork</span>
+                    <label class="character-stage-select" data-inspector-control>
+                        <span class="sr-only" th:text="#{character.stage.motion}">Motion</span>
+                        <select data-stage-motion th:attr="aria-label=#{character.stage.motion}">
+                            <option value="idle" th:text="#{character.stage.motion.idle}">Idle</option>
+                        </select>
+                    </label>
+                    <label class="character-stage-select" data-inspector-control>
+                        <span class="sr-only" th:text="#{character.stage.lighting}">Lighting</span>
+                        <select data-stage-lighting th:attr="aria-label=#{character.stage.lighting}">
+                            <option value="soft" th:text="#{character.stage.lighting.soft}">Soft</option>
+                            <option value="warm" th:text="#{character.stage.lighting.warm}">Warm</option>
+                            <option value="dramatic" th:text="#{character.stage.lighting.dramatic}">Dramatic</option>
+                        </select>
+                    </label>
+                    <label class="character-stage-select" data-inspector-control>
+                        <span class="sr-only" th:text="#{character.stage.background}">Background</span>
+                        <select data-stage-background th:attr="aria-label=#{character.stage.background}">
+                            <option value="element" th:text="#{character.stage.background.element}">Elemental</option>
+                            <option value="dendro" th:text="#{character.stage.background.dendro}">Dendro forest</option>
+                            <option value="studio" th:text="#{character.stage.background.studio}">Studio</option>
+                            <option value="night" th:text="#{character.stage.background.night}">Night</option>
+                        </select>
+                    </label>
+                    <button type="button" data-stage-mode hidden aria-pressed="false" th:text="#{character.stage.show3d}">Inspect 3D model</button>
+                    <button type="button" data-stage-pause aria-pressed="false" th:text="#{character.stage.pause}">Pause motion</button>
+                </div>
+            </div>
+        </div>
+    </dialog>
 
     <div class="flash success" th:if="${successMessage != null}" th:text="${successMessage}">
         Target saved.

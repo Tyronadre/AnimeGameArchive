@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}" href="/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="#{dashboard.title}">Farming Dashboard · Genshin Archive</title>
@@ -13,12 +14,7 @@
 <main class="dashboard-page">
     <section class="dashboard-hero dashboard-hero-today">
         <div>
-            <p class="eyebrow" th:text="#{dashboard.eyebrow}">Today in Teyvat</p>
             <h1 th:text="#{dashboard.heading}">What is worth doing today?</h1>
-            <p class="lead" th:text="#{dashboard.lead}">
-                Your inventory becomes a short plan: use weekly rewards first,
-                spend resin with purpose, then collect what costs nothing.
-            </p>
             <span class="dashboard-mode-pill" th:if="${snapshot != null}"
                   th:classappend="${dashboardAutomatic ? ' is-automatic' : ' is-custom'}">
                 <i th:text="${dashboardAutomatic ? '✦' : '◆'}">✦</i>
@@ -58,12 +54,8 @@
             <header class="dashboard-lane-heading">
                 <span class="dashboard-motif motif-blossom" aria-hidden="true"><i></i><i></i><i></i><b>✦</b></span>
                 <div>
-                    <p class="eyebrow" th:text="#{dashboard.weekly.eyebrow}">Do first</p>
                     <h2 th:text="#{dashboard.weekly.heading}">Secure weekly rewards</h2>
                 </div>
-                <p th:text="#{dashboard.weekly.help}">
-                    Three discounted claims refresh each week. Let none expire.
-                </p>
             </header>
             <div class="dashboard-weekly-layout">
                 <div class="dashboard-weekly-action">
@@ -72,9 +64,6 @@
                         <strong th:text="#{dashboard.weekly.counterHeading}">
                             Weekly claim
                         </strong>
-                        <p th:text="#{dashboard.weekly.counterText}">
-                            Record a claim after collecting the blossom.
-                        </p>
                     </div>
                     <button type="button" class="primary-button" data-weekly-claim
                             th:text="#{dashboard.weekly.claim}">Record claim</button>
@@ -129,19 +118,14 @@
                 <header class="dashboard-lane-heading">
                     <span class="dashboard-motif motif-crystal" aria-hidden="true"><i></i><i></i><i></i></span>
                     <div>
-                        <p class="eyebrow" th:text="#{dashboard.resin.eyebrow}">Spend deliberately</p>
                         <h2 th:text="#{dashboard.resin.heading}">Use today's resin</h2>
                     </div>
-                    <p th:text="#{dashboard.resin.help}">
-                        Best returns for the characters in focus, available today.
-                    </p>
+                    <div class="dashboard-resin-status">
+                        <span><b data-resin-used>0</b> <span th:text="#{dashboard.routine.usedLabel}">resin used</span></span>
+                        <small data-resin-unconfirmed hidden th:text="#{dashboard.routine.unconfirmed}"></small>
+                        <button type="button" class="dashboard-reset-button" data-routine-reset th:text="#{dashboard.routine.reset}">Reset today</button>
+                    </div>
                 </header>
-                <div class="dashboard-resin-status">
-                    <div data-resin-ring><strong data-resin-remaining>200</strong> <span th:text="#{dashboard.routine.resinUnit}">Resin</span></div>
-                    <span><b data-resin-used>0</b> / 200 <span th:text="#{dashboard.routine.today}">Today's budget</span></span>
-                    <small data-resin-unconfirmed hidden th:text="#{dashboard.routine.unconfirmed}"></small>
-                    <button type="button" class="dashboard-reset-button" data-routine-reset th:text="#{dashboard.routine.reset}">Reset today</button>
-                </div>
                 <div class="dashboard-task-list" data-dashboard-list="resin-main"
                      th:hidden="${dashboard.resinRecommendations.isEmpty()}">
                     <article class="dashboard-task-card"
@@ -251,12 +235,8 @@
                 <header class="dashboard-lane-heading">
                     <span class="dashboard-motif motif-leaves" aria-hidden="true"><i></i><i></i><i></i></span>
                     <div>
-                        <p class="eyebrow" th:text="#{dashboard.free.eyebrow}">Any time</p>
                         <h2 th:text="#{dashboard.free.heading}">Continue without resin</h2>
                     </div>
-                    <p th:text="#{dashboard.free.help}">
-                        Pick one route whenever you still feel like playing.
-                    </p>
                 </header>
                 <div class="dashboard-task-list" data-dashboard-list="free-main"
                      th:hidden="${dashboard.freeRecommendations.isEmpty()}">
@@ -341,59 +321,10 @@
                         <strong th:text="#{dashboard.free.emptyHeading}">
                             Nothing needs an overworld route right now.
                         </strong>
-                        <p th:text="#{dashboard.free.emptyText}">
-                            Explore freely or adjust your character priorities.
-                        </p>
                     </div>
                 </div>
             </section>
         </div>
-
-        <section class="dashboard-priority-summary"
-                 th:if="${!dashboardAutomatic && !dashboard.goals.isEmpty()}">
-            <div class="dashboard-priority-summary-heading">
-                <div>
-                    <p class="eyebrow" th:text="#{dashboard.active.eyebrow}">In focus</p>
-                    <h2 th:text="#{dashboard.active.heading}">Your priorities</h2>
-                </div>
-                <a href="#dashboard-goals" th:text="#{dashboard.goals.manage}">
-                    Adjust priorities
-                </a>
-            </div>
-            <div class="dashboard-priority-cards">
-                <a class="dashboard-priority-card" th:each="goal : ${dashboard.goals}"
-                   th:href="${goal.type.key == 'artifacts'
-                        ? '/inventory/artifact-optimizer?character=' + goal.characterKey
-                        : '/characters/' + goal.characterKey}">
-                    <span class="dashboard-goal-avatar">
-                        <i th:text="${#strings.substring(goal.characterName, 0, 1)}">F</i>
-                        <img th:if="${goal.iconUrl != null}" th:src="${goal.iconUrl}"
-                             th:alt="${goal.characterName}" onerror="this.remove()">
-                    </span>
-                    <span>
-                        <small th:text="${goal.type.key == 'artifacts'
-                            ? #messages.msg('dashboard.goal.artifacts')
-                            : #messages.msg('dashboard.goal.character')}">
-                            Character progress
-                        </small>
-                        <strong th:text="${goal.characterName}">Furina</strong>
-                        <b th:if="${goal.type.key == 'character'}"
-                           th:text="#{dashboard.goal.level(
-                            ${goal.currentLevel},${goal.targetLevel})}">
-                            Level 70 → 80
-                        </b>
-                        <b th:if="${goal.type.key == 'artifacts'
-                            && goal.weaponName != null}"
-                           th:text="#{dashboard.goal.weapon(
-                            ${goal.weaponName},${goal.weaponCurrentLevel},
-                            ${goal.weaponTargetLevel})}">
-                            Rust · Level 20 → 90
-                        </b>
-                    </span>
-                    <i>→</i>
-                </a>
-            </div>
-        </section>
 
         <section class="dashboard-complete"
                  th:if="${!dashboard.goals.isEmpty()
@@ -405,114 +336,11 @@
                 <h2 th:text="#{dashboard.complete.heading}">
                     Your inventory already covers the current progression goals.
                 </h2>
-                <p th:text="#{dashboard.complete.text}">
-                    Raise the targets or choose another character when you are ready.
-                </p>
             </div>
         </section>
         </div>
 
         </div>
-
-        <section id="dashboard-goals" class="dashboard-section dashboard-goal-manager">
-            <details>
-                <summary>
-                    <div>
-                        <p class="eyebrow" th:text="#{dashboard.goals.eyebrow}">Optional focus</p>
-                        <h2 th:text="#{dashboard.goals.heading}">Prioritize specific characters</h2>
-                    </div>
-                    <span th:text="${dashboardAutomatic
-                        ? #messages.msg('dashboard.goals.autoSummary')
-                        : #messages.msg('dashboard.goals.customSummary',
-                            selectedGoalCount)}">
-                        Optional: the automatic plan already works without this.
-                    </span>
-                </summary>
-                <form action="/goals" method="post">
-                    <input th:unless="${desktopMode}" type="hidden"
-                           th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                    <div class="dashboard-priority-note" th:if="${dashboardAutomatic}">
-                        <span>✦</span>
-                        <p th:text="#{dashboard.goals.autoNote}">
-                            No priorities selected. The dashboard currently chooses invested,
-                            unfinished characters automatically.
-                        </p>
-                    </div>
-                    <label class="dashboard-goal-search">
-                        <span class="sr-only" th:text="#{dashboard.goals.searchLabel}">
-                            Search characters
-                        </span>
-                        <input id="dashboard-goal-search" type="search"
-                               th:placeholder="#{dashboard.goals.search}"
-                               placeholder="Find a character…" autocomplete="off">
-                    </label>
-                    <div class="dashboard-element-filters"
-                         th:if="${!goalElementFilters.isEmpty()}"
-                         role="group"
-                         th:attr="aria-label=#{dashboard.goals.elementFilters}">
-                        <button type="button" class="is-active" data-element-filter="all"
-                                aria-pressed="true"
-                                th:text="#{dashboard.goals.allElements}">
-                            All
-                        </button>
-                        <button type="button" th:each="element : ${goalElementFilters}"
-                                th:attr="data-element-filter=${element.key}"
-                                aria-pressed="false"
-                                th:text="${element.label}">
-                            Pyro
-                        </button>
-                    </div>
-                    <div class="dashboard-goal-table-head">
-                        <span th:text="#{nav.characters}">Characters</span>
-                        <span th:text="#{dashboard.goal.character}">Character progress</span>
-                        <span th:text="#{dashboard.goal.artifacts}">Build optimization</span>
-                    </div>
-                    <div class="dashboard-goal-option" th:each="option : ${goalOptions}"
-                         th:attr="data-character-search=${option.searchText},
-                                  data-character-element=${option.elementKey}">
-                        <a th:href="@{/characters/{key}(key=${option.key})}">
-                            <span class="dashboard-goal-option-avatar">
-                                <i th:text="${#strings.substring(option.name, 0, 1)}">F</i>
-                                <img th:if="${option.iconUrl != null}" th:src="${option.iconUrl}"
-                                     th:alt="${option.name}" loading="lazy"
-                                     onerror="this.remove()">
-                            </span>
-                            <span>
-                                <b th:text="${option.name}">Furina</b>
-                                <small th:text="#{dashboard.goal.level(
-                                    ${option.currentLevel},${option.targetLevel})}">
-                                    Level 70 → 80
-                                </small>
-                            </span>
-                        </a>
-                        <label>
-                            <input type="checkbox" name="characterGoals"
-                                   th:value="${option.key}"
-                                   th:checked="${option.characterSelected}">
-                            <span th:text="#{dashboard.goal.characterShort}">Materials</span>
-                        </label>
-                        <label th:classappend="${!option.canOptimize ? ' disabled' : ''}">
-                            <input type="checkbox" name="artifactGoals"
-                                   th:value="${option.key}"
-                                   th:checked="${option.artifactsSelected}"
-                                   th:disabled="${!option.canOptimize}">
-                            <span th:text="${option.canOptimize
-                                ? #messages.msg('dashboard.goal.artifactsShort')
-                                : #messages.msg('dashboard.goal.noArtifacts')}">
-                                Artifacts & weapon
-                            </span>
-                        </label>
-                    </div>
-                    <div class="dashboard-goal-actions">
-                        <p th:text="#{dashboard.goals.hint}">
-                            Leave everything empty to return to the automatic plan.
-                        </p>
-                        <button class="primary-button" type="submit"
-                                th:text="#{dashboard.goals.save}">Save priorities</button>
-                    </div>
-                </form>
-            </details>
-        </section>
 
         <section class="dashboard-section dashboard-recent-activity">
             <details>
@@ -521,17 +349,26 @@
                         <p class="eyebrow" th:text="#{dashboard.recent.eyebrow}">Live inventory</p>
                         <h2 th:text="#{dashboard.recent.heading}">Latest updates</h2>
                     </div>
-                    <span th:text="#{dashboard.recent.help}">
-                        Changes captured from the game appear here automatically.
-                    </span>
                 </summary>
                 <ol id="dashboard-recent-list" class="dashboard-recent-list"
                     aria-live="polite" th:hidden="${recentActivity.isEmpty()}">
                     <li th:each="activity : ${recentActivity}"
                         th:classappend="${' tone-' + activity.tone}">
-                        <span class="dashboard-recent-icon" th:text="${activity.icon}">＋</span>
+                        <span class="dashboard-recent-icon">
+                            <img th:if="${activity.materialImageUrl != null}"
+                                 th:src="${activity.materialImageUrl}" alt="" loading="lazy"
+                                 onerror="this.remove()">
+                            <span th:unless="${activity.materialImageUrl != null}"
+                                  th:text="${activity.icon}">＋</span>
+                        </span>
                         <div>
-                            <h3 th:text="${activity.title}">Mora collected</h3>
+                            <h3>
+                                <a th:if="${activity.materialHref != null}"
+                                   th:href="${activity.materialHref}"
+                                   th:text="${activity.title}">Material collected</a>
+                                <span th:unless="${activity.materialHref != null}"
+                                      th:text="${activity.title}">Mora collected</span>
+                            </h3>
                             <p th:text="${activity.detail}">+2,400 · 120,000 total</p>
                         </div>
                         <time th:datetime="${activity.occurredAt}"
@@ -541,67 +378,14 @@
                 <p id="dashboard-recent-empty" class="dashboard-recent-empty"
                    th:hidden="${!recentActivity.isEmpty()}"
                    th:text="#{dashboard.recent.empty}">
-                    Start live capture and make an inventory change to see it here.
+                    No recent updates.
                 </p>
             </details>
         </section>
     </div>
 </main>
 
-<script>
-    (() => {
-        const search = document.getElementById("dashboard-goal-search");
-        if (!search) return;
-        const options = [...document.querySelectorAll(".dashboard-goal-option")];
-        const elementFilters = [...document.querySelectorAll("[data-element-filter]")];
-        let activeElement = "all";
 
-        const applyFilters = () => {
-            const query = search.value.trim().toLocaleLowerCase();
-            options.forEach(option => {
-                const searchableText = (
-                    option.dataset.characterSearch ||
-                    option.textContent ||
-                    ""
-                ).toLocaleLowerCase();
-                const characterElement = option.dataset.characterElement || "";
-                const matchesSearch = query === "" || searchableText.includes(query);
-                const matchesElement = activeElement === "all" ||
-                    characterElement === activeElement;
-                const filteredOut = !(matchesSearch && matchesElement);
-                option.hidden = filteredOut;
-                option.classList.toggle("is-filtered-out", filteredOut);
-                option.setAttribute("aria-hidden", filteredOut ? "true" : "false");
-            });
-        };
-
-        const scheduleApplyFilters = () => window.requestAnimationFrame(applyFilters);
-
-        search.addEventListener("input", applyFilters);
-        search.addEventListener("keyup", applyFilters);
-        search.addEventListener("keydown", scheduleApplyFilters);
-        search.addEventListener("search", applyFilters);
-
-        elementFilters.forEach(button => {
-            button.addEventListener("click", () => {
-                activeElement = button.dataset.elementFilter || "all";
-                elementFilters.forEach(filter => {
-                    const selected = filter === button;
-                    filter.classList.toggle("is-active", selected);
-                    filter.setAttribute("aria-pressed", selected ? "true" : "false");
-                });
-                applyFilters();
-                try {
-                    search.focus({preventScroll: true});
-                } catch (_) {
-                    search.focus();
-                }
-            });
-        });
-
-        applyFilters();
-    })();
-</script>
 <script th:inline="javascript">
     (() => {
         const root = document.getElementById("dashboard-routine");
@@ -706,12 +490,7 @@
             const runs = combinedRuns();
             const unconfirmed = root.querySelector("[data-resin-unconfirmed]");
             if (unconfirmed) unconfirmed.hidden = !Object.values(runs).some(run => run.unconfirmedCount > 0);
-            root.querySelector("[data-resin-remaining]").textContent = remaining;
             root.querySelector("[data-resin-used]").textContent = spent;
-            root.querySelector("[data-resin-ring]").style.setProperty(
-                "--routine-progress",
-                `${Math.min(1, spent / budget) * 360}deg`
-            );
             root.querySelector("[data-weekly-count]").textContent =
                 Math.min(weeklyLimit, claimCount);
             root.querySelectorAll("[data-weekly-dot]").forEach((dot, index) => {
@@ -817,11 +596,27 @@
 
                 const icon = document.createElement("span");
                 icon.className = "dashboard-recent-icon";
-                icon.textContent = activity.icon;
+                if (activity.materialImageUrl) {
+                    const image = document.createElement("img");
+                    image.src = activity.materialImageUrl;
+                    image.alt = "";
+                    image.loading = "lazy";
+                    image.addEventListener("error", () => image.remove(), {once: true});
+                    icon.append(image);
+                } else {
+                    icon.textContent = activity.icon;
+                }
 
                 const copy = document.createElement("div");
                 const title = document.createElement("h3");
-                title.textContent = activity.title;
+                if (activity.materialHref) {
+                    const link = document.createElement("a");
+                    link.href = activity.materialHref;
+                    link.textContent = activity.title;
+                    title.append(link);
+                } else {
+                    title.textContent = activity.title;
+                }
                 const detail = document.createElement("p");
                 detail.textContent = activity.detail;
                 copy.append(title, detail);

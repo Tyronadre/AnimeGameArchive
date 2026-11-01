@@ -1,0 +1,104 @@
+{
+  "female": [
+    {
+      "id": "idle",
+      "label": "Idle",
+      "url": "/character-stage/motions/female-idle.vmd",
+      "frames": 66,
+      "loop": true,
+      "source": "2_Female_Motions/2_Idle_Motions/290L-290L_Female-Idle_L(Requires_UpperBody2).vmd"
+    },
+    {
+      "id": "walk",
+      "label": "Walk",
+      "url": "/character-stage/motions/female-walk.vmd",
+      "frames": 316,
+      "loop": true,
+      "source": "2_Female_Motions/3_Center_Bone_Movement_Motions/201_Female-Walk-Forward(Requires_UpperBody2).vmd"
+    },
+    {
+      "id": "jog",
+      "label": "Jog",
+      "url": "/character-stage/motions/female-jog.vmd",
+      "frames": 357,
+      "loop": true,
+      "source": "2_Female_Motions/3_Center_Bone_Movement_Motions/221_Female-Jog-Forward(Requires_UpperBody2).vmd"
+    },
+    {
+      "id": "sprint",
+      "label": "Sprint",
+      "url": "/character-stage/motions/female-sprint.vmd",
+      "frames": 308,
+      "loop": true,
+      "source": "2_Female_Motions/3_Center_Bone_Movement_Motions/241_Female-Sprint_A-Forward(Requires_UpperBody2).vmd"
+    }
+  ],
+  "male": [
+    {
+      "id": "idle",
+      "label": "Idle",
+      "url": "/character-stage/motions/male-idle.vmd",
+      "frames": 66,
+      "loop": true,
+      "source": "1_Male_Motions/2_Idle_Motions/190-190_Male_A-Idle(Requires_UpperBody2).vmd"
+    },
+    {
+      "id": "walk",
+      "label": "Walk",
+      "url": "/character-stage/motions/male-walk.vmd",
+      "frames": 338,
+      "loop": true,
+      "source": "1_Male_Motions/3_Center_Bone_Movement_Motions/101_Male_A-Walk-Forward(Requires_UpperBody2).vmd"
+    },
+    {
+      "id": "jog",
+      "label": "Jog",
+      "url": "/character-stage/motions/male-jog.vmd",
+      "frames": 334,
+      "loop": true,
+      "source": "1_Male_Motions/3_Center_Bone_Movement_Motions/121_Male_A-Jog-Forward(Requires_UpperBody2).vmd"
+    },
+    {
+      "id": "sprint",
+      "label": "Sprint",
+      "url": "/character-stage/motions/male-sprint.vmd",
+      "frames": 308,
+      "loop": true,
+      "source": "1_Male_Motions/3_Center_Bone_Movement_Motions/141_Male_A-Sprint_A-Forward(Requires_UpperBody2).vmd"
+    }
+  ],
+  "child": [
+    {
+      "id": "idle",
+      "label": "Idle",
+      "url": "/character-stage/motions/child-idle.vmd",
+      "frames": 64,
+      "loop": true,
+      "source": "3_Child_Motions/2_Idle_Motions/390-390_Child-Idle(Requires_UpperBody2).vmd"
+    },
+    {
+      "id": "walk",
+      "label": "Walk",
+      "url": "/character-stage/motions/child-walk.vmd",
+      "frames": 313,
+      "loop": true,
+      "source": "3_Child_Motions/3_Center_Bone_Movement_Motions/301_Child-Walk-Forward(Requires_UpperBody2).vmd"
+    },
+    {
+      "id": "jog",
+      "label": "Jog",
+      "url": "/character-stage/motions/child-jog.vmd",
+      "frames": 345,
+      "loop": true,
+      "source": "3_Child_Motions/3_Center_Bone_Movement_Motions/321_Child-Jog-Forward(Requires_UpperBody2).vmd"
+    },
+    {
+      "id": "sprint",
+      "label": "Sprint",
+      "url": "/character-stage/motions/child-sprint.vmd",
+      "frames": 308,
+      "loop": true,
+      "source": "3_Child_Motions/3_Center_Bone_Movement_Motions/341_Child-Sprint-Forward(Requires_UpperBody2).vmd"
+    }
+  ]
+}

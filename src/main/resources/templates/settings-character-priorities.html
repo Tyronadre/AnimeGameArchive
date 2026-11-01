@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}" href="/favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{settings.priorities.title}">Character priorities · Genshin Archive</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+    <script th:src="@{/js/theme.js}" src="/js/theme.js"></script>
+</head>
+<body>
+<header th:replace="~{fragments :: siteHeader('settings')}"></header>
+<main class="dashboard-page">
+    <section class="dashboard-hero dashboard-hero-today">
+        <div>
+            <a class="settings-back-link" th:href="@{/settings}" th:text="#{settings.back}">← Settings</a>
+            <h1 th:text="#{settings.priorities.title}">Character priorities</h1>
+        </div>
+    </section>
+    <div class="flash success" th:if="${successMessage != null}"
+         th:text="${successMessage}">Priorities saved.</div>
+    <div class="flash error" th:if="${errorMessage != null}"
+         th:text="${errorMessage}">Priorities could not be saved.</div>
+    <section class="dashboard-import-empty" th:if="${snapshot == null}">
+        <div>
+            <h2 th:text="#{dashboard.empty.heading}">Import a GOOD export to start planning.</h2>
+            <a class="primary-button" th:href="@{/inventory/items}"
+               th:text="#{dashboard.empty.action}">Import inventory</a>
+        </div>
+    </section>
+    <div th:if="${snapshot != null}" th:replace="~{goal-manager :: manager}"></div>
+</main>
+<script>
+    (() => {
+        const search = document.getElementById("dashboard-goal-search");
+        if (!search) return;
+        const options = [...document.querySelectorAll(".dashboard-goal-option")];
+        const elementFilters = [...document.querySelectorAll("[data-element-filter]")];
+        let activeElement = "all";
+        const applyFilters = () => {
+            const query = search.value.trim().toLocaleLowerCase();
+            options.forEach(option => {
+                const searchableText = (option.dataset.characterSearch || option.textContent || "").toLocaleLowerCase();
+                const matchesSearch = query === "" || searchableText.includes(query);
+                const matchesElement = activeElement === "all" || option.dataset.characterElement === activeElement;
+                const filteredOut = !(matchesSearch && matchesElement);
+                option.hidden = filteredOut;
+                option.classList.toggle("is-filtered-out", filteredOut);
+                option.setAttribute("aria-hidden", filteredOut ? "true" : "false");
+            });
+        };
+        search.addEventListener("input", applyFilters);
+        search.addEventListener("search", applyFilters);
+        elementFilters.forEach(button => button.addEventListener("click", () => {
+            activeElement = button.dataset.elementFilter || "all";
+            elementFilters.forEach(filter => {
+                const selected = filter === button;
+                filter.classList.toggle("is-active", selected);
+                filter.setAttribute("aria-pressed", selected ? "true" : "false");
+            });
+            applyFilters();
+        }));
+        applyFilters();
+    })();
+</script>
+</body>
+</html>
