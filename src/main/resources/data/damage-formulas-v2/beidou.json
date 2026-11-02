@@ -1,0 +1,705 @@
+{
+  "schemaVersion": 3,
+  "key": "beidou",
+  "characterKey": "beidou",
+  "name": "Beidou",
+  "element": "Electro",
+  "weaponType": "Claymore",
+  "characterDataResource": "data/characters/data/beidou.json",
+  "inputs": [
+    {
+      "id": "tidecallerPower",
+      "label": "Tidecaller power stacks (hits or held charge)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 2,
+      "step": 1
+    },
+    {
+      "id": "witchRevelationComplete",
+      "label": "Witch's Revelation completed",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "polestarFieldActive",
+      "label": "Inside a Polestar Field",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Oceanborne",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "normal 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-2",
+          "label": "normal 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-3",
+          "label": "normal 3",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-4",
+          "label": "normal 4",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-5",
+          "label": "normal 5",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "charged-loop",
+          "label": "charged loop",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "charged-final",
+          "label": "charged final",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge",
+          "label": "plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-low",
+          "label": "plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param11",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-high",
+          "label": "plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param12",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "c4-electro",
+          "label": "C4 · additional Electro hit",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 0.2
+              }
+            ]
+          },
+          "tags": [
+            "beidouC4"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "beidouC4"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Tidecaller",
+      "formulas": [
+        {
+          "id": "tidecaller",
+          "label": "Tidecaller release",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param3",
+                    "levelInput": "source:skillTalentLevel"
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "talentParameter",
+                        "talent": "combat2",
+                        "parameter": "param4",
+                        "levelInput": "source:skillTalentLevel"
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:tidecallerPower"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directElectro"
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Stormbreaker",
+      "formulas": [
+        {
+          "id": "burst-cast",
+          "label": "Stormbreaker activation",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directElectro"
+        },
+        {
+          "id": "lightning",
+          "label": "Stormbreaker discharge · one hit",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param2",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst",
+            "stormbreakerDischarge"
+          ],
+          "damageType": "directElectro"
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "stormbreakerActive",
+      "name": "Stormbreaker active",
+      "source": "Stormbreaker active",
+      "description": "Stormbreaker active",
+      "category": "talent",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      }
+    },
+    {
+      "id": "lightningStorm",
+      "name": "Lightning Storm",
+      "source": "Lightning Storm",
+      "description": "Enable after a full-power release, including a perfect counter. This bonus belongs to Beidou, not the active teammate.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "anyTags": [
+              "normalAttack",
+              "chargedAttack"
+            ],
+            "damageKinds": [
+              "talent"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 15
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    },
+    {
+      "id": "polaris",
+      "name": "Polaris · Witch's Revelation",
+      "source": "Polaris · Witch's Revelation",
+      "description": "Held Skill gains a power stack every 0.8 seconds without enemy hits. Use the power control to select the release. Energy/cooldown refunds are timing effects, not damage multipliers.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:witchRevelationComplete",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "stellarConductRadiance",
+      "name": "Radiance · Stellar-Conduct",
+      "source": "Radiance · Stellar-Conduct",
+      "description": "Radiance · Stellar-Conduct",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:polestarFieldActive",
+            "value": 1
+          }
+        ]
+      },
+      "requiresEffects": [
+        "polaris"
+      ]
+    },
+    {
+      "id": "beidouC1",
+      "name": "C1",
+      "source": "C1",
+      "description": "Creates a Shield on Burst; no outgoing damage modifier.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 1
+      }
+    },
+    {
+      "id": "beidouC2",
+      "name": "C2",
+      "source": "C2",
+      "description": "Two additional discharge jumps. Each listed discharge is one hit, so bounce count does not multiply that hit.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      }
+    },
+    {
+      "id": "beidouC3",
+      "name": "C3",
+      "source": "C3",
+      "description": "C3",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "beidouC4",
+      "name": "C4",
+      "source": "C4",
+      "description": "Enable after Beidou has been attacked; the separate Electro hit has no Normal/Skill/Burst damage classification.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      }
+    },
+    {
+      "id": "beidouC5",
+      "name": "C5",
+      "source": "C5",
+      "description": "C5",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "beidouC6",
+      "name": "C6",
+      "source": "C6",
+      "description": "Electro RES reduction while Burst is active; the initial Burst hit does not benefit. Revelation adds Cryo shred and active-character EM in a Polestar Field.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 6
+      },
+      "requiresEffects": [
+        "stormbreakerActive"
+      ],
+      "formulaModifiers": [
+        {
+          "recipient": "self",
+          "targets": {
+            "elements": [
+              "Electro"
+            ],
+            "anyTags": [
+              "normalAttack",
+              "chargedAttack",
+              "plungingAttack",
+              "elementalSkill",
+              "stormbreakerDischarge",
+              "beidouC4"
+            ]
+          },
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 15
+              },
+              "unit": "percentPoints"
+            }
+          }
+        },
+        {
+          "recipient": "others",
+          "targets": {
+            "elements": [
+              "Electro"
+            ]
+          },
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 15
+              },
+              "unit": "percentPoints"
+            }
+          }
+        },
+        {
+          "recipient": "enemy",
+          "requiresEffects": [
+            "stellarConductRadiance"
+          ],
+          "targets": {
+            "elements": [
+              "Cryo"
+            ]
+          },
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 15
+              },
+              "unit": "percentPoints"
+            }
+          }
+        }
+      ],
+      "statChanges": [
+        {
+          "stat": "recipient:elementalMastery",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 200
+          },
+          "recipient": "activeCharacter",
+          "requiresEffects": [
+            "stellarConductRadiance"
+          ]
+        }
+      ]
+    }
+  ],
+  "defaultTeam": [
+    "beidou"
+  ],
+  "inputDefaults": {
+    "attack": 1500,
+    "maxHp": 30000,
+    "defense": 2000,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  },
+  "notes": [
+    "Each entry represents one hit unless stated otherwise. Trigger availability and buff duration are combat snapshots, not a rotation simulation.",
+    "Tidecaller power is capped at two. A perfect counter or Revelation hold can supply full power without two enemy hits.",
+    "Polestar Field is an explicit external-state snapshot; Beidou cannot create it by herself. Revelation unlock and field presence gate the upgraded C6 effects.",
+    "Discharge bounces and C4 proc counts depend on targets and attacks; they are not automatically multiplied into each listed hit."
+  ],
+  "sources": [
+    "/api/characters/beidou",
+    "data/characters/data/beidou.json",
+    "https://library.keqingmains.com/characters/electro/beidou"
+  ]
+}

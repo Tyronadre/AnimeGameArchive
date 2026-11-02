@@ -259,7 +259,8 @@
           "label": "Low Plunge DMG",
           "damageType": "directPhysical",
           "tags": [
-            "plungingAttack"
+            "plungingAttack",
+            "plungeImpact"
           ],
           "base": {
             "type": "multiply",
@@ -282,7 +283,8 @@
           "label": "High Plunge DMG",
           "damageType": "directPhysical",
           "tags": [
-            "plungingAttack"
+            "plungingAttack",
+            "plungeImpact"
           ],
           "base": {
             "type": "multiply",
@@ -329,7 +331,8 @@
                 "levelInput": "local:skillTalentLevel"
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "warp-normal-2",
@@ -354,7 +357,8 @@
                 "levelInput": "local:skillTalentLevel"
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "warp-normal-3",
@@ -391,7 +395,8 @@
                 ]
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "warp-normal-4",
@@ -428,7 +433,8 @@
                 ]
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "warp-normal-5",
@@ -453,7 +459,8 @@
                 "levelInput": "local:skillTalentLevel"
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "warp-charged",
@@ -482,7 +489,8 @@
                 "value": 3
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "warp-plunge",
@@ -506,7 +514,8 @@
                 "levelInput": "local:skillTalentLevel"
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "warp-low-plunge",
@@ -514,7 +523,8 @@
           "damageType": "directCryo",
           "tags": [
             "plungingAttack",
-            "elementalSkillState"
+            "elementalSkillState",
+            "plungeImpact"
           ],
           "base": {
             "type": "multiply",
@@ -530,7 +540,8 @@
                 "levelInput": "local:skillTalentLevel"
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "warp-high-plunge",
@@ -538,7 +549,8 @@
           "damageType": "directCryo",
           "tags": [
             "plungingAttack",
-            "elementalSkillState"
+            "elementalSkillState",
+            "plungeImpact"
           ],
           "base": {
             "type": "multiply",
@@ -554,7 +566,8 @@
                 "levelInput": "local:skillTalentLevel"
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "c1-crystal-blades",
@@ -583,7 +596,8 @@
                 "input": "local:voidRiftsAbsorbed"
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "c6-normal-sever",
@@ -609,7 +623,8 @@
                 "value": 5.4
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "c6-charged-sever",
@@ -635,7 +650,8 @@
                 "value": 5.4
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         }
       ]
     },

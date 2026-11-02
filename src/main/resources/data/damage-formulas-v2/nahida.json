@@ -27,6 +27,15 @@
       "step": 1,
       "section": "combat",
       "description": "Only enable if the marked enemy has received a Quicken-related reaction in the last 8 seconds. The default team cannot trigger one by itself."
+    },
+    {
+      "id": "burstExtraPyro",
+      "label": "C1 extra Pyro count",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1,
+      "section": "internal"
     }
   ],
   "effects": [
@@ -140,7 +149,17 @@
       },
       "impact": "Nahida's Burst effects / duration only.",
       "recipient": "party",
-      "statChanges": []
+      "statChanges": [
+        {
+          "stat": "local:burstExtraPyro",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 1
+          },
+          "recipient": "self"
+        }
+      ]
     },
     {
       "id": "nahidaC2",
@@ -211,7 +230,7 @@
       "id": "nahidaC3",
       "name": "C3 · The Shoot of Conscious Attainment",
       "source": "Nahida constellation",
-      "description": "Adds Skill talent levels to Nahida's personal attacks; no teammate damage modifier.",
+      "description": "Adds three skillTalentLevel levels to Nahida, capped at 15.",
       "category": "constellation",
       "defaultEnabled": false,
       "activation": {
@@ -220,9 +239,19 @@
       "ownershipRequirements": {
         "local:nahidaConstellation": 3
       },
-      "impact": "Personal damage only.",
       "recipient": "party",
-      "statChanges": []
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15,
+          "recipient": "self"
+        }
+      ]
     },
     {
       "id": "nahidaC4",
@@ -288,7 +317,7 @@
       "id": "nahidaC5",
       "name": "C5 · The Leaves of Enlightening Speech",
       "source": "Nahida constellation",
-      "description": "Adds Burst talent levels; affects Nahida's own buffs and duration, not Compassion Illuminated's EM share.",
+      "description": "Adds three burstTalentLevel levels to Nahida, capped at 15.",
       "category": "constellation",
       "defaultEnabled": false,
       "activation": {
@@ -297,9 +326,19 @@
       "ownershipRequirements": {
         "local:nahidaConstellation": 5
       },
-      "impact": "Nahida's Burst effects / duration only.",
       "recipient": "party",
-      "statChanges": []
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15,
+          "recipient": "self"
+        }
+      ]
     },
     {
       "id": "nahidaC6",
@@ -317,11 +356,256 @@
       "impact": "Personal damage only.",
       "recipient": "party",
       "statChanges": []
+    },
+    {
+      "id": "nahidaAwakeningElucidated",
+      "name": "Awakening Elucidated",
+      "source": "Awakening Elucidated",
+      "description": "Awakening Elucidated",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "always"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "triKarma"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "min",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 80
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "max",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 0
+                        },
+                        {
+                          "type": "add",
+                          "operands": [
+                            {
+                              "type": "input",
+                              "input": "source:elementalMastery"
+                            },
+                            {
+                              "type": "constant",
+                              "value": -200
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "constant",
+                      "value": 0.1
+                    }
+                  ]
+                }
+              ]
+            },
+            "unit": "percentPoints"
+          },
+          "crit": {
+            "additionalRate": {
+              "expression": {
+                "type": "min",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 24
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "max",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 0
+                          },
+                          {
+                            "type": "add",
+                            "operands": [
+                              {
+                                "type": "input",
+                                "input": "source:elementalMastery"
+                              },
+                              {
+                                "type": "constant",
+                                "value": -200
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "constant",
+                        "value": 0.03
+                      }
+                    ]
+                  }
+                ]
+              },
+              "unit": "percentPoints"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "nahidaShrinePyroBonus",
+      "name": "Shrine of Maya · Pyro bonus",
+      "source": "Shrine of Maya · Pyro bonus",
+      "description": "Shrine of Maya · Pyro bonus",
+      "category": "talent",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "burstActive"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "triKarma"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "talentParameter",
+                      "talent": "combat3",
+                      "parameter": "param1",
+                      "levelInput": "source:burstTalentLevel"
+                    },
+                    {
+                      "type": "min",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 1
+                        },
+                        {
+                          "type": "add",
+                          "operands": [
+                            {
+                              "type": "context",
+                              "input": "pyroCount"
+                            },
+                            {
+                              "type": "input",
+                              "input": "local:burstExtraPyro"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "add",
+                      "operands": [
+                        {
+                          "type": "talentParameter",
+                          "talent": "combat3",
+                          "parameter": "param2",
+                          "levelInput": "source:burstTalentLevel"
+                        },
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": -1
+                            },
+                            {
+                              "type": "talentParameter",
+                              "talent": "combat3",
+                              "parameter": "param1",
+                              "levelInput": "source:burstTalentLevel"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "min",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 1
+                        },
+                        {
+                          "type": "max",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 0
+                            },
+                            {
+                              "type": "add",
+                              "operands": [
+                                {
+                                  "type": "add",
+                                  "operands": [
+                                    {
+                                      "type": "context",
+                                      "input": "pyroCount"
+                                    },
+                                    {
+                                      "type": "input",
+                                      "input": "local:burstExtraPyro"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "constant",
+                                  "value": -1
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "unit": "ratio"
+          }
+        }
+      ],
+      "requiresEffects": [
+        "nahidaCompassionIlluminated"
+      ]
     }
   ],
   "notes": [
-    "Support profile only. Awakening Elucidated affects Nahida's own Tri-Karma Purification; her utility passive has no damage modifier.",
-    "Deepwood Memories and weapon effects are equipment effects, not inherent Nahida buffs; they are not assumed here."
+    "Burst has no direct damage. Its Pyro bonus and C1 extra element count affect Tri-Karma damage. Electro/Hydro Burst effects affect timing and duration, not damage per hit.",
+    "C6 displays one Karmic Oblivion hit; the six-hit limit and trigger timing are not simulated."
   ],
   "sources": [
     "data/characters/data/nahida.json",
@@ -329,11 +613,346 @@
     "https://keqingmains.com/misc/lunar-reactions/"
   ],
   "characterKey": "nahida",
-  "talents": [],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Akara",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "1-Hit DMG",
+          "damageType": "directDendro",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-2",
+          "label": "2-Hit DMG",
+          "damageType": "directDendro",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-3",
+          "label": "3-Hit DMG",
+          "damageType": "directDendro",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-4",
+          "label": "4-Hit DMG",
+          "damageType": "directDendro",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "charged",
+          "label": "Charged Attack",
+          "damageType": "directDendro",
+          "tags": [
+            "chargedAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "plunge-0",
+          "label": "Plunge",
+          "damageType": "directDendro",
+          "tags": [
+            "plungingAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "plunge-1",
+          "label": "Low Plunge",
+          "damageType": "directDendro",
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param8",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "plunge-2",
+          "label": "High Plunge",
+          "damageType": "directDendro",
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "All Schemes to Know",
+      "formulas": [
+        {
+          "id": "skill-press",
+          "label": "Press DMG",
+          "damageType": "directDendro",
+          "tags": [
+            "elementalSkill"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "skill-hold",
+          "label": "Hold DMG",
+          "damageType": "directDendro",
+          "tags": [
+            "elementalSkill"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param2",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "tri-karma",
+          "label": "Tri-Karma Purification",
+          "damageType": "directDendro",
+          "tags": [
+            "elementalSkill",
+            "triKarma"
+          ],
+          "base": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param3",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:elementalMastery"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param4",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "karmic-oblivion",
+          "label": "Tri-Karma Purification: Karmic Oblivion",
+          "damageType": "directDendro",
+          "tags": [
+            "elementalSkill",
+            "triKarma"
+          ],
+          "base": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "constant",
+                    "value": 2
+                  }
+                ]
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:elementalMastery"
+                  },
+                  {
+                    "type": "constant",
+                    "value": 4
+                  }
+                ]
+              }
+            ]
+          },
+          "requiredEffects": [
+            "nahidaC6"
+          ]
+        }
+      ]
+    }
+  ],
   "defaultTeam": [
     "nahida"
   ],
   "inputDefaults": {
-    "elementalMastery": 1000
+    "elementalMastery": 1000,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
   }
 }

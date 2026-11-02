@@ -18,13 +18,13 @@ class UnifiedCharacterFormulaV3Test {
         DamageCalculationRequestV2(values, profile.effects.associate { it.id to (it.id in effects) }))
 
     @Test fun `one registry owns all characters and partial kits do not claim a damage calculator`() {
-        assertEquals(12, registry.definitions.size)
+        assertEquals(37, registry.definitions.size)
         assertTrue(registry.definitions.values.all { it.schemaVersion == 3 })
         for (key in listOf("lauma", "nahida", "columbina")) {
-            assertFalse(service.supports(key))
-            assertNull(service.profile(key))
+            assertTrue(service.supports(key))
+            assertNotNull(service.profile(key))
             service.validateCharacter(key)
-            assertTrue(party("nefer", key).teamMembers.first { it.key == key }.calculatorAvailable.not())
+            assertTrue(party("nefer", key).teamMembers.first { it.key == key }.calculatorAvailable)
         }
         assertTrue(service.supports("bennett"))
         assertTrue(DamageFormulaResourcesV2.resources("classpath*:data/damage-formulas-v2/teammates/*.json").isEmpty())

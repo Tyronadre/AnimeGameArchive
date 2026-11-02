@@ -1,0 +1,639 @@
+{
+  "schemaVersion": 3,
+  "key": "collei",
+  "characterKey": "collei",
+  "name": "Collei",
+  "element": "Dendro",
+  "weaponType": "Bow",
+  "characterDataResource": "data/characters/data/collei.json",
+  "inputs": [
+    {
+      "id": "sproutReactionTriggered",
+      "label": "Qualifying Dendro reaction before ring returns",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "floralRingReturned",
+      "label": "Floral Ring returned to character",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Supplicant's Bowmanship",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "normal 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-2",
+          "label": "normal 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-3",
+          "label": "normal 3",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-4",
+          "label": "normal 4",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "aimed",
+          "label": "aimed",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge",
+          "label": "plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-low",
+          "label": "plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param8",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-high",
+          "label": "plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "fully-charged",
+          "label": "Fully charged aimed shot",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directDendro"
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Floral Brush",
+      "formulas": [
+        {
+          "id": "floral-outgoing",
+          "label": "Floral Ring · outgoing",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directDendro"
+        },
+        {
+          "id": "floral-return",
+          "label": "Floral Ring · returning",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directDendro"
+        },
+        {
+          "id": "c6-miniature",
+          "label": "C6 · miniature Cuilein-Anbar",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 2
+              }
+            ]
+          },
+          "tags": [
+            "colleiC6"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "colleiC6"
+          ]
+        },
+        {
+          "id": "sprout",
+          "label": "Sprout · one tick",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 0.4
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "sproutReaction",
+            "sproutAvailable"
+          ],
+          "excludedEffects": [
+            "colleiC2"
+          ]
+        },
+        {
+          "id": "sprout-c2",
+          "label": "C2 · Sprout tick",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 0.4
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "colleiC2",
+            "sproutAvailable"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Trump-Card Kitty",
+      "formulas": [
+        {
+          "id": "burst-cast",
+          "label": "Trump-Card Kitty · explosion",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directDendro"
+        },
+        {
+          "id": "kitty-leap",
+          "label": "Cuilein-Anbar · one leap",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param2",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directDendro"
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "sproutReaction",
+      "name": "Floral Sidewinder · reaction trigger",
+      "source": "Floral Sidewinder · reaction trigger",
+      "description": "Floral Sidewinder · reaction trigger",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:sproutReactionTriggered",
+            "value": 1
+          }
+        ]
+      },
+      "stackingGroup": "colleiSproutTrigger",
+      "stackingPriority": {
+        "type": "constant",
+        "value": 0
+      }
+    },
+    {
+      "id": "sproutAvailable",
+      "name": "Floral Sidewinder · Sprout",
+      "source": "Floral Sidewinder · Sprout",
+      "description": "One 40% ATK Skill tick. C2 grants Sprout without a reaction and can extend its duration; it does not double each tick.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:floralRingReturned",
+            "value": 1
+          }
+        ]
+      },
+      "requiresEffects": []
+    },
+    {
+      "id": "colleiC1",
+      "name": "C1",
+      "source": "C1",
+      "description": "C1",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "contextAtLeast",
+            "input": "offField",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 1
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:energyRecharge",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 20
+          },
+          "recipient": "self"
+        }
+      ]
+    },
+    {
+      "id": "colleiC2",
+      "name": "C2",
+      "source": "C2",
+      "description": "Replaces the Sprout reaction prerequisite; the Floral Ring must still return.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      },
+      "stackingGroup": "colleiSproutTrigger",
+      "stackingPriority": {
+        "type": "constant",
+        "value": 1
+      }
+    },
+    {
+      "id": "colleiC3",
+      "name": "C3",
+      "source": "C3",
+      "description": "C3",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "colleiC4",
+      "name": "C4",
+      "source": "C4",
+      "description": "Enable for 12 seconds after Burst; Collei herself is excluded.",
+      "category": "constellation",
+      "recipient": "others",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:elementalMastery",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 60
+          },
+          "recipient": "others"
+        }
+      ]
+    },
+    {
+      "id": "colleiC5",
+      "name": "C5",
+      "source": "C5",
+      "description": "C5",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "colleiC6",
+      "name": "C6",
+      "source": "C6",
+      "description": "One miniature Cuilein-Anbar per Skill use. This proc has no Normal/Charged/Skill/Burst damage classification.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 6
+      }
+    }
+  ],
+  "defaultTeam": [
+    "collei"
+  ],
+  "inputDefaults": {
+    "attack": 1500,
+    "maxHp": 30000,
+    "defense": 2000,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  },
+  "notes": [
+    "Each entry represents one hit unless stated otherwise. Trigger availability and buff duration are combat snapshots, not a rotation simulation.",
+    "Floral Ring outgoing and return hits are separate. Sprout and C2 Sprout are alternative views of the same tick; Lunar-Bloom qualifies for the reaction prerequisite. Burst extensions and extra Sprout duration change hit count only."
+  ],
+  "sources": [
+    "/api/characters/collei",
+    "data/characters/data/collei.json",
+    "https://library.keqingmains.com/characters/dendro/collei"
+  ]
+}

@@ -2,7 +2,7 @@
 
 Each character has one `<character>.json` definition containing both personal damage and support effects. There are no authored teammate files. Character sources use `schemaVersion: 3`; the composer compiles them to the existing V2 calculation response. Artifact, weapon, reaction, and shared-rule formats remain version 2.
 
-Damage types are defined once in `damage-types.json`. Character and artifact files reference their IDs on individual damage instances; they do not contain a `damageTypes` array. The loader includes the types each profile actually uses. Lauma, Nahida, and Columbina currently have support-only definitions without talent formulas. They remain valid teammates; the damage-character picker becomes available only when a definition contains damage formulas.
+Damage types are defined once in `damage-types.json`. Character and artifact files reference their IDs on individual damage instances; they do not contain a `damageTypes` array. The loader includes the types each profile actually uses. Lauma, Nahida, and Columbina now include personal damage formulas as well as support effects. New support-only definitions remain valid teammates; the damage-character picker becomes available when a definition contains damage formulas.
 
 ## Shared damage types
 

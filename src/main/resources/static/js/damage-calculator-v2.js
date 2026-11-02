@@ -70,12 +70,12 @@
         maxHp: "formula-token-hp",
         defense: "formula-token-defense",
         elementalMastery: "formula-token-em",
-        elementalDamageBonus: "formula-token-element-dendro",
+        elementalDamageBonus: "formula-token-input",
         physicalDamageBonus: "formula-token-element-physical",
         energyRecharge: "formula-token-buff",
         critRate: "formula-token-crit-rate",
         critDamage: "formula-token-crit-damage",
-        enemyResistance: "formula-token-element-dendro formula-token-resistance",
+        enemyResistance: "formula-token-resistance",
         enemyPhysicalResistance: "formula-token-element-physical formula-token-resistance",
         defenseReduction: "formula-token-defense",
         defenseIgnore: "formula-token-defense-ignore",
@@ -412,7 +412,7 @@
         const formula = el("code");
         formula.append(token(
             `${label("labelEntered", "Base")} ${formatInput(definition, baseValue)}`,
-            inputTokenClass[definition.hintTag] || inputTokenClass[definition.id] || "formula-token-input",
+            inputClassName(definition.id),
             baseTooltip,
         ));
         changes.forEach((change) => {
@@ -1093,7 +1093,24 @@
         return token(text, className, hint(hintTag, context));
     }
 
-    function inputTooltip(inputId) {
+    function elementalInput(inputId, resolved = null) {
+        if (resolved) return resolved;
+        const local = inputId.split(".").at(-1);
+        const resistance = local.match(/^enemy(?:Reaction)?([A-Z][a-z]+)Resistance$/);
+        if (resistance || local === "enemyResistance") return {element:resistance?.[1] || profile.element, kind:"resistance"};
+        const stat = inputById.get(inputId)?.initialValueSource?.valueKey?.match(/^stat:(pyro|hydro|cryo|electro|dendro|anemo|geo|physical)_dmg_$/i);
+        if (stat) return {element:stat[1][0].toUpperCase()+stat[1].slice(1).toLowerCase(), kind:"bonus"};
+        if (local === "elementalDamageBonus") return {element:profile.element, kind:"bonus"};
+        return null;
+    }
+
+    function inputClassName(inputId, resolved = null) {
+        const semantic = elementalInput(inputId, resolved);
+        return semantic ? `formula-token-element-${semantic.element.toLowerCase()}${semantic.kind === "resistance" ? " formula-token-resistance" : ""}`
+            : inputTokenClass[inputId] || inputTokenClass[inputById.get(inputId)?.hintTag] || "formula-token-input";
+    }
+
+    function inputTooltip(inputId, resolved = null) {
         const definition = inputById.get(inputId);
         if (!definition) return inputId;
         const baseValue = calculation.inputs[inputId] ?? 0;
@@ -1104,16 +1121,15 @@
         const valueText = effectiveValue !== baseValue
             ? ` Base value: ${formatInput(definition, baseValue)}; effective value: ${formatInput(definition, effectiveValue)}.`
             : ` Current evaluated value: ${formatInput(definition, effectiveValue)}.`;
-        const sharedHint = hint(definition.hintTag || inputHintTag[inputId] || inputId) || definition.label;
+        const semantic = elementalInput(inputId, resolved);
+        const sharedHint = semantic
+            ? `${semantic.element} ${semantic.kind === "resistance" ? "RES" : "DMG Bonus"} — ${hintCatalog.get(semantic.kind === "resistance" ? "enemyResistance" : "elementalDamageBonus")?.tooltip || ""}`
+            : hint(definition.hintTag || inputHintTag[inputId] || inputId) || definition.label;
         return `${sharedHint} ${inputSource(definition)}.${valueText}${sourceText} ${definition.description || ""}`;
     }
 
-    function inputToken(inputId, text) {
-        const reactionResistance = inputId.match(/^enemyReaction([A-Z][a-z]+)Resistance$/);
-        const className = reactionResistance
-            ? `formula-token-element-${reactionResistance[1].toLowerCase()} formula-token-resistance`
-            : inputTokenClass[inputId] || inputTokenClass[inputById.get(inputId)?.hintTag] || "formula-token-input";
-        return token(text, className, inputTooltip(inputId));
+    function inputToken(inputId, text, resolved = null) {
+        return token(text, inputClassName(inputId, resolved), inputTooltip(inputId, resolved));
     }
 
     function resultToken(value, result) {
@@ -1291,7 +1307,7 @@
     function damageTypeBadge(damageType) {
         const lunar = damageType.kind === "lunar";
         const badge = taggedToken(
-            lunar ? (hintCatalog.get("lunarBloom")?.name || "Lunar-Bloom") : damageType.element,
+            damageType.kind === "stellar" ? "Stellar-Conduct" : lunar ? (hintCatalog.get("lunarBloom")?.name || "Lunar-Bloom") : damageType.element,
             `damage-v2-type-badge ${lunar ? "is-lunar" : "is-direct"} is-${damageType.element.toLowerCase()}`,
             damageType.id,
         );
@@ -1306,11 +1322,13 @@
     }
 
     function targetMatches(targets, formula) {
-        const damageType = profile.damageTypes.find((type) => type.id === formula.damageType);
+        const resolved = calculation.results.find(result => result.formulaId === formula.id);
+        const damageType = profile.damageTypes.find((type) => type.id === (resolved?.damageType || formula.damageType));
+        const tags = resolved?.infusionSourceEffectId ? [...formula.tags, "infusedAttack"] : formula.tags;
         const element = damageType?.element;
         return (!targets.formulaIds.length || targets.formulaIds.includes(formula.id)) &&
-            targets.requiredTags.every((tag) => formula.tags.includes(tag)) &&
-            (!targets.anyTags?.length || targets.anyTags.some((tag) => formula.tags.includes(tag))) &&
+            targets.requiredTags.every((tag) => tags.includes(tag)) &&
+            (!targets.anyTags?.length || targets.anyTags.some((tag) => tags.includes(tag))) &&
             (!targets.damageKinds?.length || targets.damageKinds.includes(damageType?.kind)) &&
             (!targets.elements?.length || targets.elements.some((target) => target.toLowerCase() === element?.toLowerCase()));
     }
@@ -1452,7 +1470,7 @@
         if (damageType.appliesElementalDamageBonus) {
             segments.push(
                 " + ",
-                inputToken(damageType.elementalBonusInput || "elementalDamageBonus", formatPercentRatio(result.damageBonus.elementalBonus)),
+                inputToken(damageType.elementalBonusInput || "elementalDamageBonus", formatPercentRatio(result.damageBonus.elementalBonus), {element:result.element, kind:"bonus"}),
             );
         }
         if (damageType.innateDamageBonus) {
@@ -1539,7 +1557,7 @@
         const resistanceInput = profile.damageTypes.find((type) => type.id === result.damageType)?.resistanceInput || "enemyResistance";
         const elementClass = `formula-token-element-${result.element.toLowerCase()}`;
         const segments = [
-            inputToken(resistanceInput, `${numberFormatter.format(calculation.inputs[resistanceInput])}%`),
+            inputToken(resistanceInput, `${numberFormatter.format(calculation.inputs[resistanceInput])}%`, {element:result.element, kind:"resistance"}),
         ];
         const reductions = [];
         if (formula.resistanceMitigation?.reduction) {
@@ -1826,8 +1844,9 @@
             talent.formulas.forEach((formula) => {
                 const result = resultById.get(formula.id);
                 if (!result) return;
-                const damageType = damageTypeById.get(formula.damageType);
-                grid.append(renderFormulaCard(formula, result, damageType, openFormulaIds.has(formula.id) || allExpanded));
+                const damageType = damageTypeById.get(result.damageType);
+                const resolvedFormula = result.infusionSourceEffectId ? {...formula, damageType:result.damageType, tags:[...new Set([...formula.tags, "infusedAttack"])]} : formula;
+                grid.append(renderFormulaCard(resolvedFormula, result, damageType, openFormulaIds.has(formula.id) || allExpanded));
             });
             section.append(heading);
             const description = renderTalentDescription(talent, openTalentDescriptions.has(talent.key));
@@ -1848,6 +1867,10 @@
         const scaling = el("small", "damage-v2-main-scaling");
         appendSegments(scaling, compactScalingSegments(formula.base, result.base.references));
         title.append(titleRow, scaling);
+        if (result.infusionSourceEffectId) {
+            const source = profile.effects.find(effect => effect.id === result.infusionSourceEffectId);
+            title.append(el("small", "damage-v2-infusion-source", `${damageType.element} infusion · ${source?.name || result.infusionSourceEffectId}`));
+        }
         heading.append(title, damageTypeBadge(damageType));
 
         const average = el("div", "damage-average-result");

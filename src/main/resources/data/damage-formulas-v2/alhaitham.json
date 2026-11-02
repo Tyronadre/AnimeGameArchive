@@ -1,0 +1,1283 @@
+{
+  "schemaVersion": 3,
+  "key": "alhaitham",
+  "characterKey": "alhaitham",
+  "name": "Alhaitham",
+  "element": "Dendro",
+  "weaponType": "Sword",
+  "characterDataResource": "data/characters/data/alhaitham.json",
+  "inputs": [
+    {
+      "id": "c2MirrorStacks",
+      "label": "C2 Mirror generation stacks",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 4,
+      "step": 1
+    },
+    {
+      "id": "mirrorsConsumed",
+      "label": "Mirrors consumed by Burst",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 3,
+      "step": 1
+    },
+    {
+      "id": "mirrorsGenerated",
+      "label": "Mirrors generated after Burst",
+      "defaultValue": 3,
+      "min": 0,
+      "max": 3,
+      "step": 1
+    }
+  ],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Abductive Reasoning",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "normal 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "mirrorInfusion"
+          ]
+        },
+        {
+          "id": "normal-1-dendro",
+          "label": "normal 1 · Dendro infusion",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "mirrorInfusion"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "normal-2",
+          "label": "normal 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "mirrorInfusion"
+          ]
+        },
+        {
+          "id": "normal-2-dendro",
+          "label": "normal 2 · Dendro infusion",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "mirrorInfusion"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "normal-3a",
+          "label": "normal 3a",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "mirrorInfusion"
+          ]
+        },
+        {
+          "id": "normal-3a-dendro",
+          "label": "normal 3a · Dendro infusion",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "mirrorInfusion"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "normal-3b",
+          "label": "normal 3b",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "mirrorInfusion"
+          ]
+        },
+        {
+          "id": "normal-3b-dendro",
+          "label": "normal 3b · Dendro infusion",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "mirrorInfusion"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "normal-4",
+          "label": "normal 4",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "mirrorInfusion"
+          ]
+        },
+        {
+          "id": "normal-4-dendro",
+          "label": "normal 4 · Dendro infusion",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "mirrorInfusion"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "normal-5",
+          "label": "normal 5",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "mirrorInfusion"
+          ]
+        },
+        {
+          "id": "normal-5-dendro",
+          "label": "normal 5 · Dendro infusion",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "mirrorInfusion"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "charged-1",
+          "label": "charged 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "mirrorInfusion"
+          ]
+        },
+        {
+          "id": "charged-1-dendro",
+          "label": "charged 1 · Dendro infusion",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "mirrorInfusion"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "charged-2",
+          "label": "charged 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param8",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "mirrorInfusion"
+          ]
+        },
+        {
+          "id": "charged-2-dendro",
+          "label": "charged 2 · Dendro infusion",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param8",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "mirrorInfusion"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "plunge",
+          "label": "plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "mirrorInfusion"
+          ]
+        },
+        {
+          "id": "plunge-dendro",
+          "label": "plunge · Dendro infusion",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "mirrorInfusion"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "plunge-low",
+          "label": "plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param11",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "mirrorInfusion"
+          ]
+        },
+        {
+          "id": "plunge-low-dendro",
+          "label": "plunge low · Dendro infusion",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param11",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "mirrorInfusion"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "plunge-high",
+          "label": "plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param12",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "mirrorInfusion"
+          ]
+        },
+        {
+          "id": "plunge-high-dendro",
+          "label": "plunge high · Dendro infusion",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param12",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "mirrorInfusion"
+          ],
+          "infusionRule": "locked"
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Universality: An Elaboration on Form",
+      "formulas": [
+        {
+          "id": "rush",
+          "label": "Rush",
+          "base": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param1",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:elementalMastery"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param2",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directDendro"
+        },
+        {
+          "id": "projection-1-1",
+          "label": "1-Mirror Projection · hit 1",
+          "base": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param4",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:elementalMastery"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param5",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill",
+            "projection"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "mirrorInfusion"
+          ]
+        },
+        {
+          "id": "projection-2-1",
+          "label": "2-Mirror Projection · hit 1",
+          "base": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param6",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:elementalMastery"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param7",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill",
+            "projection"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "mirrorInfusion"
+          ]
+        },
+        {
+          "id": "projection-2-2",
+          "label": "2-Mirror Projection · hit 2",
+          "base": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param6",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:elementalMastery"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param7",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill",
+            "projection"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "mirrorInfusion"
+          ]
+        },
+        {
+          "id": "projection-3-1",
+          "label": "3-Mirror Projection · hit 1",
+          "base": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param8",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:elementalMastery"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param9",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill",
+            "projection"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "mirrorInfusion"
+          ]
+        },
+        {
+          "id": "projection-3-2",
+          "label": "3-Mirror Projection · hit 2",
+          "base": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param8",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:elementalMastery"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param9",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill",
+            "projection"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "mirrorInfusion"
+          ]
+        },
+        {
+          "id": "projection-3-3",
+          "label": "3-Mirror Projection · hit 3",
+          "base": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param8",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:elementalMastery"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param9",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill",
+            "projection"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "mirrorInfusion"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Particular Field: Fetters of Phenomena",
+      "formulas": [
+        {
+          "id": "burst-hit",
+          "label": "Burst · single instance",
+          "base": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat3",
+                    "parameter": "param1",
+                    "levelInput": "source:burstTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:elementalMastery"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat3",
+                    "parameter": "param2",
+                    "levelInput": "source:burstTalentLevel"
+                  }
+                ]
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directDendro"
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "mirrorInfusion",
+      "name": "Chisel-Light Mirror infusion",
+      "source": "Chisel-Light Mirror infusion",
+      "description": "Chisel-Light Mirror infusion",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      }
+    },
+    {
+      "id": "mysteriesLaidBare",
+      "name": "Mysteries Laid Bare",
+      "source": "Mysteries Laid Bare",
+      "description": "Mysteries Laid Bare",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "anyTags": [
+              "projection",
+              "elementalBurst"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "min",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 100
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "input",
+                      "input": "source:elementalMastery"
+                    },
+                    {
+                      "type": "constant",
+                      "value": 0.1
+                    }
+                  ]
+                }
+              ]
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    },
+    {
+      "id": "alhaithamC1",
+      "name": "C1",
+      "source": "C1",
+      "description": "Skill cooldown reduction only.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 1
+      }
+    },
+    {
+      "id": "alhaithamC2",
+      "name": "C2",
+      "source": "C2",
+      "description": "C2",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:elementalMastery",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "local:c2MirrorStacks"
+              },
+              {
+                "type": "constant",
+                "value": 50
+              }
+            ]
+          },
+          "recipient": "self"
+        }
+      ]
+    },
+    {
+      "id": "alhaithamC3",
+      "name": "C3",
+      "source": "C3",
+      "description": "C3",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "alhaithamC4",
+      "name": "C4",
+      "source": "C4",
+      "description": "C4",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:elementalMastery",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "local:mirrorsConsumed"
+              },
+              {
+                "type": "constant",
+                "value": 30
+              }
+            ]
+          },
+          "recipient": "others"
+        },
+        {
+          "stat": "recipient:elementalDamageBonus",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "local:mirrorsGenerated"
+              },
+              {
+                "type": "constant",
+                "value": 10
+              }
+            ]
+          },
+          "recipient": "self"
+        }
+      ]
+    },
+    {
+      "id": "alhaithamC5",
+      "name": "C5",
+      "source": "C5",
+      "description": "C5",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "alhaithamC6",
+      "name": "C6",
+      "source": "C6",
+      "description": "Enable when excess Mirror generation has triggered the CRIT buff.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 6
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:critRate",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 10
+          },
+          "recipient": "self"
+        },
+        {
+          "stat": "recipient:critDamage",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 70
+          },
+          "recipient": "self"
+        }
+      ]
+    }
+  ],
+  "defaultTeam": [
+    "alhaitham"
+  ],
+  "inputDefaults": {
+    "attack": 1800,
+    "defense": 1800,
+    "elementalMastery": 200,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  },
+  "notes": [
+    "Each entry is a single hit unless labelled as a total. Conditional effects assert a combat snapshot; durations, resource depletion and rotations are not simulated.",
+    "Physical and infused attacks are mutually exclusive. Projection variants are alternatives; individual rays are listed separately. Burst shows one instance; Mirror-dependent total counts and generation timing are not simulated."
+  ],
+  "sources": [
+    "/api/characters/alhaitham",
+    "data/characters/data/alhaitham.json",
+    "https://library.keqingmains.com/characters/dendro/alhaitham"
+  ]
+}

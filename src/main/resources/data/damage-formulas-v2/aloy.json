@@ -1,0 +1,766 @@
+{
+  "schemaVersion": 3,
+  "key": "aloy",
+  "characterKey": "aloy",
+  "name": "Aloy",
+  "element": "Cryo",
+  "weaponType": "Bow",
+  "characterDataResource": "data/characters/data/aloy.json",
+  "inputs": [
+    {
+      "id": "coilStacks",
+      "label": "Coil stacks before Rushing Ice",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 3,
+      "step": 1
+    },
+    {
+      "id": "rushingIceSeconds",
+      "label": "Seconds in Rushing Ice",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 10,
+      "step": 1
+    }
+  ],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Rapid Fire",
+      "formulas": [
+        {
+          "id": "normal-1a",
+          "label": "normal 1a",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "rushingIce"
+          ]
+        },
+        {
+          "id": "normal-1a-cryo",
+          "label": "normal 1a · Rushing Ice",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directCryo",
+          "requiredEffects": [
+            "rushingIce"
+          ]
+        },
+        {
+          "id": "normal-1b",
+          "label": "normal 1b",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "rushingIce"
+          ]
+        },
+        {
+          "id": "normal-1b-cryo",
+          "label": "normal 1b · Rushing Ice",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directCryo",
+          "requiredEffects": [
+            "rushingIce"
+          ]
+        },
+        {
+          "id": "normal-2",
+          "label": "normal 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "rushingIce"
+          ]
+        },
+        {
+          "id": "normal-2-cryo",
+          "label": "normal 2 · Rushing Ice",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directCryo",
+          "requiredEffects": [
+            "rushingIce"
+          ]
+        },
+        {
+          "id": "normal-3",
+          "label": "normal 3",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "rushingIce"
+          ]
+        },
+        {
+          "id": "normal-3-cryo",
+          "label": "normal 3 · Rushing Ice",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directCryo",
+          "requiredEffects": [
+            "rushingIce"
+          ]
+        },
+        {
+          "id": "normal-4",
+          "label": "normal 4",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "rushingIce"
+          ]
+        },
+        {
+          "id": "normal-4-cryo",
+          "label": "normal 4 · Rushing Ice",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directCryo",
+          "requiredEffects": [
+            "rushingIce"
+          ]
+        },
+        {
+          "id": "aimed",
+          "label": "aimed",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "charged",
+          "label": "charged",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directCryo"
+        },
+        {
+          "id": "plunge",
+          "label": "plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param8",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-low",
+          "label": "plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-high",
+          "label": "plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Frozen Wilds",
+      "formulas": [
+        {
+          "id": "freeze-bomb",
+          "label": "Freeze Bomb",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directCryo"
+        },
+        {
+          "id": "chillwater",
+          "label": "Chillwater Bomblet",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param2",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directCryo"
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Prophecies of Dawn",
+      "formulas": [
+        {
+          "id": "burst",
+          "label": "Burst",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directCryo"
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "rushingIce",
+      "name": "Rushing Ice",
+      "source": "Rushing Ice",
+      "description": "Rushing Ice",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "normalAttack"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "talentParameter",
+              "talent": "combat2",
+              "parameter": "param8",
+              "levelInput": "source:skillTalentLevel"
+            },
+            "unit": "ratio"
+          }
+        }
+      ]
+    },
+    {
+      "id": "coil1",
+      "name": "Coil · 1 stacks",
+      "source": "Coil · 1 stacks",
+      "description": "Coil · 1 stacks",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:coilStacks",
+            "value": 1
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:coilStacks",
+            "value": 1
+          }
+        ]
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "normalAttack"
+            ],
+            "elements": [
+              "Physical"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "talentParameter",
+              "talent": "combat2",
+              "parameter": "param5",
+              "levelInput": "source:skillTalentLevel"
+            },
+            "unit": "ratio"
+          }
+        }
+      ]
+    },
+    {
+      "id": "coil2",
+      "name": "Coil · 2 stacks",
+      "source": "Coil · 2 stacks",
+      "description": "Coil · 2 stacks",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:coilStacks",
+            "value": 2
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:coilStacks",
+            "value": 2
+          }
+        ]
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "normalAttack"
+            ],
+            "elements": [
+              "Physical"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "talentParameter",
+              "talent": "combat2",
+              "parameter": "param6",
+              "levelInput": "source:skillTalentLevel"
+            },
+            "unit": "ratio"
+          }
+        }
+      ]
+    },
+    {
+      "id": "coil3",
+      "name": "Coil · 3 stacks",
+      "source": "Coil · 3 stacks",
+      "description": "Coil · 3 stacks",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:coilStacks",
+            "value": 3
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:coilStacks",
+            "value": 3
+          }
+        ]
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "normalAttack"
+            ],
+            "elements": [
+              "Physical"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "talentParameter",
+              "talent": "combat2",
+              "parameter": "param7",
+              "levelInput": "source:skillTalentLevel"
+            },
+            "unit": "ratio"
+          }
+        }
+      ]
+    },
+    {
+      "id": "combatOverride",
+      "name": "Combat Override",
+      "source": "Combat Override",
+      "description": "Combat Override",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:attack",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "recipient:baseAttack"
+              },
+              {
+                "type": "constant",
+                "value": 0.16
+              }
+            ]
+          },
+          "recipient": "self"
+        },
+        {
+          "stat": "recipient:attack",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "recipient:baseAttack"
+              },
+              {
+                "type": "constant",
+                "value": 0.08
+              }
+            ]
+          },
+          "recipient": "others",
+          "excludeSource": true
+        }
+      ]
+    },
+    {
+      "id": "strongStrike",
+      "name": "Strong Strike",
+      "source": "Strong Strike",
+      "description": "Strong Strike",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "requiresEffects": [
+        "rushingIce"
+      ],
+      "statChanges": [
+        {
+          "stat": "recipient:elementalDamageBonus",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "local:rushingIceSeconds"
+              },
+              {
+                "type": "constant",
+                "value": 3.5
+              }
+            ]
+          },
+          "recipient": "self"
+        }
+      ]
+    }
+  ],
+  "defaultTeam": [
+    "aloy"
+  ],
+  "inputDefaults": {
+    "attack": 1800,
+    "defense": 1800,
+    "elementalMastery": 200,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  },
+  "notes": [
+    "Each entry is a single hit unless labelled as a total. Conditional effects assert a combat snapshot; durations, resource depletion and rotations are not simulated.",
+    "Aloy has no unlockable constellations. Coil is replaced by Rushing Ice rather than added to it. Enemy ATK reduction does not affect outgoing damage."
+  ],
+  "sources": [
+    "/api/characters/aloy",
+    "data/characters/data/aloy.json",
+    "https://library.keqingmains.com/characters/cryo/aloy"
+  ]
+}

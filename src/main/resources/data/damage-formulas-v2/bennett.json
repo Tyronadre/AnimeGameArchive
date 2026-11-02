@@ -24,6 +24,16 @@
       "max": 1,
       "step": 1,
       "section": "combat"
+    },
+    {
+      "id": "pyroInfusionActive",
+      "label": "Bennett C6 · Pyro infusion",
+      "description": "Apply the weapon infusion while C6 and Fantastic Voyage are active. The separate field Pyro DMG Bonus remains active.",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1,
+      "section": "combat"
     }
   ],
   "talents": [
@@ -37,9 +47,6 @@
           "damageType": "directPhysical",
           "tags": [
             "normalAttack"
-          ],
-          "excludedEffects": [
-            "bennettC6"
           ],
           "base": {
             "type": "multiply",
@@ -64,9 +71,6 @@
           "tags": [
             "normalAttack"
           ],
-          "excludedEffects": [
-            "bennettC6"
-          ],
           "base": {
             "type": "multiply",
             "operands": [
@@ -89,9 +93,6 @@
           "damageType": "directPhysical",
           "tags": [
             "normalAttack"
-          ],
-          "excludedEffects": [
-            "bennettC6"
           ],
           "base": {
             "type": "multiply",
@@ -116,9 +117,6 @@
           "tags": [
             "normalAttack"
           ],
-          "excludedEffects": [
-            "bennettC6"
-          ],
           "base": {
             "type": "multiply",
             "operands": [
@@ -141,9 +139,6 @@
           "damageType": "directPhysical",
           "tags": [
             "normalAttack"
-          ],
-          "excludedEffects": [
-            "bennettC6"
           ],
           "base": {
             "type": "multiply",
@@ -168,9 +163,6 @@
           "tags": [
             "chargedAttack",
             "multiHit"
-          ],
-          "excludedEffects": [
-            "bennettC6"
           ],
           "base": {
             "type": "multiply",
@@ -206,9 +198,6 @@
           "tags": [
             "plungingAttack"
           ],
-          "excludedEffects": [
-            "bennettC6"
-          ],
           "base": {
             "type": "multiply",
             "operands": [
@@ -230,10 +219,8 @@
           "label": "Low Plunge DMG",
           "damageType": "directPhysical",
           "tags": [
-            "plungingAttack"
-          ],
-          "excludedEffects": [
-            "bennettC6"
+            "plungingAttack",
+            "plungeImpact"
           ],
           "base": {
             "type": "multiply",
@@ -256,265 +243,8 @@
           "label": "High Plunge DMG",
           "damageType": "directPhysical",
           "tags": [
-            "plungingAttack"
-          ],
-          "excludedEffects": [
-            "bennettC6"
-          ],
-          "base": {
-            "type": "multiply",
-            "operands": [
-              {
-                "type": "input",
-                "input": "source:attack"
-              },
-              {
-                "type": "talentParameter",
-                "talent": "combat1",
-                "parameter": "param11",
-                "levelInput": "local:normalTalentLevel"
-              }
-            ]
-          }
-        },
-        {
-          "id": "c6-normal-1",
-          "label": "1-Hit DMG (C6 Pyro Infusion)",
-          "damageType": "directPyro",
-          "tags": [
-            "normalAttack",
-            "infusedAttack"
-          ],
-          "requiredEffects": [
-            "bennettC6"
-          ],
-          "base": {
-            "type": "multiply",
-            "operands": [
-              {
-                "type": "input",
-                "input": "source:attack"
-              },
-              {
-                "type": "talentParameter",
-                "talent": "combat1",
-                "parameter": "param1",
-                "levelInput": "local:normalTalentLevel"
-              }
-            ]
-          }
-        },
-        {
-          "id": "c6-normal-2",
-          "label": "2-Hit DMG (C6 Pyro Infusion)",
-          "damageType": "directPyro",
-          "tags": [
-            "normalAttack",
-            "infusedAttack"
-          ],
-          "requiredEffects": [
-            "bennettC6"
-          ],
-          "base": {
-            "type": "multiply",
-            "operands": [
-              {
-                "type": "input",
-                "input": "source:attack"
-              },
-              {
-                "type": "talentParameter",
-                "talent": "combat1",
-                "parameter": "param2",
-                "levelInput": "local:normalTalentLevel"
-              }
-            ]
-          }
-        },
-        {
-          "id": "c6-normal-3",
-          "label": "3-Hit DMG (C6 Pyro Infusion)",
-          "damageType": "directPyro",
-          "tags": [
-            "normalAttack",
-            "infusedAttack"
-          ],
-          "requiredEffects": [
-            "bennettC6"
-          ],
-          "base": {
-            "type": "multiply",
-            "operands": [
-              {
-                "type": "input",
-                "input": "source:attack"
-              },
-              {
-                "type": "talentParameter",
-                "talent": "combat1",
-                "parameter": "param3",
-                "levelInput": "local:normalTalentLevel"
-              }
-            ]
-          }
-        },
-        {
-          "id": "c6-normal-4",
-          "label": "4-Hit DMG (C6 Pyro Infusion)",
-          "damageType": "directPyro",
-          "tags": [
-            "normalAttack",
-            "infusedAttack"
-          ],
-          "requiredEffects": [
-            "bennettC6"
-          ],
-          "base": {
-            "type": "multiply",
-            "operands": [
-              {
-                "type": "input",
-                "input": "source:attack"
-              },
-              {
-                "type": "talentParameter",
-                "talent": "combat1",
-                "parameter": "param4",
-                "levelInput": "local:normalTalentLevel"
-              }
-            ]
-          }
-        },
-        {
-          "id": "c6-normal-5",
-          "label": "5-Hit DMG (C6 Pyro Infusion)",
-          "damageType": "directPyro",
-          "tags": [
-            "normalAttack",
-            "infusedAttack"
-          ],
-          "requiredEffects": [
-            "bennettC6"
-          ],
-          "base": {
-            "type": "multiply",
-            "operands": [
-              {
-                "type": "input",
-                "input": "source:attack"
-              },
-              {
-                "type": "talentParameter",
-                "talent": "combat1",
-                "parameter": "param5",
-                "levelInput": "local:normalTalentLevel"
-              }
-            ]
-          }
-        },
-        {
-          "id": "c6-charged",
-          "label": "Charged Attack DMG (C6, 2 hits)",
-          "damageType": "directPyro",
-          "tags": [
-            "chargedAttack",
-            "multiHit",
-            "infusedAttack"
-          ],
-          "requiredEffects": [
-            "bennettC6"
-          ],
-          "base": {
-            "type": "multiply",
-            "operands": [
-              {
-                "type": "input",
-                "input": "source:attack"
-              },
-              {
-                "type": "add",
-                "operands": [
-                  {
-                    "type": "talentParameter",
-                    "talent": "combat1",
-                    "parameter": "param6",
-                    "levelInput": "local:normalTalentLevel"
-                  },
-                  {
-                    "type": "talentParameter",
-                    "talent": "combat1",
-                    "parameter": "param7",
-                    "levelInput": "local:normalTalentLevel"
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "id": "c6-plunge",
-          "label": "Plunge DMG (C6 Pyro Infusion)",
-          "damageType": "directPyro",
-          "tags": [
             "plungingAttack",
-            "infusedAttack"
-          ],
-          "requiredEffects": [
-            "bennettC6"
-          ],
-          "base": {
-            "type": "multiply",
-            "operands": [
-              {
-                "type": "input",
-                "input": "source:attack"
-              },
-              {
-                "type": "talentParameter",
-                "talent": "combat1",
-                "parameter": "param9",
-                "levelInput": "local:normalTalentLevel"
-              }
-            ]
-          }
-        },
-        {
-          "id": "c6-low-plunge",
-          "label": "Low Plunge DMG (C6 Pyro Infusion)",
-          "damageType": "directPyro",
-          "tags": [
-            "plungingAttack",
-            "infusedAttack"
-          ],
-          "requiredEffects": [
-            "bennettC6"
-          ],
-          "base": {
-            "type": "multiply",
-            "operands": [
-              {
-                "type": "input",
-                "input": "source:attack"
-              },
-              {
-                "type": "talentParameter",
-                "talent": "combat1",
-                "parameter": "param10",
-                "levelInput": "local:normalTalentLevel"
-              }
-            ]
-          }
-        },
-        {
-          "id": "c6-high-plunge",
-          "label": "High Plunge DMG (C6 Pyro Infusion)",
-          "damageType": "directPyro",
-          "tags": [
-            "plungingAttack",
-            "infusedAttack"
-          ],
-          "requiredEffects": [
-            "bennettC6"
+            "plungeImpact"
           ],
           "base": {
             "type": "multiply",
@@ -978,7 +708,7 @@
       "name": "C6 · Fire Ventures With Me",
       "source": "Bennett · Constellation",
       "category": "constellation",
-      "description": "Inside Fantastic Voyage, grants 15% Pyro DMG Bonus. Bennett's Sword Normal, Charged, and Plunging Attacks are shown as Pyro-infused replacements.",
+      "description": "Inside Fantastic Voyage, all recipients gain 15% Pyro DMG Bonus. Sword, Claymore and Polearm Normal, Charged and Plunging attacks gain overrideable Pyro infusion; locked conversions are preserved.",
       "ownershipRequirements": {
         "local:bennettConstellation": 6
       },
@@ -987,25 +717,50 @@
       },
       "formulaModifiers": [
         {
+          "recipient": "activeCharacter",
           "targets": {
-            "elements": [
-              "Pyro"
+            "anyTags": [
+              "normalAttack",
+              "chargedAttack",
+              "plungingAttack"
+            ],
+            "damageKinds": [
+              "talent"
             ]
           },
-          "damageBonus": {
-            "expression": {
-              "type": "constant",
-              "value": 15
-            }
+          "infusion": {
+            "damageType": "directPyro",
+            "weaponTypes": [
+              "Sword",
+              "Claymore",
+              "Polearm"
+            ],
+            "priority": 10
           },
-          "recipient": "activeCharacter"
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:pyroInfusionActive",
+              "value": 1
+            }
+          ]
         }
       ],
       "requiresEffects": [
         "fantasticVoyageField"
       ],
       "recipient": "self",
-      "statChanges": []
+      "statChanges": [
+        {
+          "stat": "recipient:pyroDamageBonus",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 15
+          },
+          "recipient": "activeCharacter"
+        }
+      ]
     }
   ],
   "notes": [

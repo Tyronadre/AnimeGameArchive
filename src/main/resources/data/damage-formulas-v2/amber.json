@@ -1,0 +1,664 @@
+{
+  "schemaVersion": 3,
+  "key": "amber",
+  "characterKey": "amber",
+  "name": "Amber",
+  "element": "Pyro",
+  "weaponType": "Bow",
+  "characterDataResource": "data/characters/data/amber.json",
+  "inputs": [],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Sharpshooter",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "normal 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-2",
+          "label": "normal 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-3",
+          "label": "normal 3",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-4",
+          "label": "normal 4",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-5",
+          "label": "normal 5",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "aimed",
+          "label": "aimed",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "charged",
+          "label": "charged",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPyro"
+        },
+        {
+          "id": "plunge",
+          "label": "plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param8",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-low",
+          "label": "plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-high",
+          "label": "plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "aimed-c1",
+          "label": "C1 · aimed secondary arrow",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat1",
+                    "parameter": "param6",
+                    "levelInput": "source:normalTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "constant",
+                "value": 0.2
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical",
+          "requiredEffects": [
+            "amberC1"
+          ]
+        },
+        {
+          "id": "charged-c1",
+          "label": "C1 · charged secondary arrow",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat1",
+                    "parameter": "param7",
+                    "levelInput": "source:normalTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "constant",
+                "value": 0.2
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPyro",
+          "requiredEffects": [
+            "amberC1"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Explosive Puppet",
+      "formulas": [
+        {
+          "id": "bunny",
+          "label": "Baron Bunny explosion",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param2",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directPyro",
+          "excludedEffects": [
+            "amberC2"
+          ]
+        },
+        {
+          "id": "bunny-manual",
+          "label": "C2 · manual Baron Bunny explosion",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param2",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directPyro",
+          "requiredEffects": [
+            "amberC2"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Fiery Rain",
+      "formulas": [
+        {
+          "id": "rain-wave",
+          "label": "Fiery Rain · one wave",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directPyro"
+        },
+        {
+          "id": "rain-total",
+          "label": "Fiery Rain · full duration total",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param4",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directPyro"
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "everyArrow",
+      "name": "Every Arrow Finds Its Target",
+      "source": "Every Arrow Finds Its Target",
+      "description": "Every Arrow Finds Its Target",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "elementalBurst"
+            ]
+          },
+          "crit": {
+            "additionalRate": {
+              "expression": {
+                "type": "constant",
+                "value": 10
+              },
+              "unit": "percentPoints"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "preciseShot",
+      "name": "Precise Shot",
+      "source": "Precise Shot",
+      "description": "Enable after an Aimed Shot hits a weak point.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:attack",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "recipient:baseAttack"
+              },
+              {
+                "type": "constant",
+                "value": 0.15
+              }
+            ]
+          },
+          "recipient": "self"
+        }
+      ]
+    },
+    {
+      "id": "amberC1",
+      "name": "C1",
+      "source": "C1",
+      "description": "C1",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 1
+      }
+    },
+    {
+      "id": "amberC2",
+      "name": "C2",
+      "source": "C2",
+      "description": "Enable for a manually detonated Bunny; replaces the ordinary explosion.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "formulaIds": [
+              "bunny-manual"
+            ]
+          },
+          "baseDamageMultiplier": {
+            "expression": {
+              "type": "constant",
+              "value": 200
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    },
+    {
+      "id": "amberC3",
+      "name": "C3",
+      "source": "C3",
+      "description": "C3",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "amberC4",
+      "name": "C4",
+      "source": "C4",
+      "description": "Additional Skill charge and cooldown reduction only.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      }
+    },
+    {
+      "id": "amberC5",
+      "name": "C5",
+      "source": "C5",
+      "description": "C5",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "amberC6",
+      "name": "C6",
+      "source": "C6",
+      "description": "C6",
+      "category": "constellation",
+      "recipient": "party",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 6
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:attack",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "recipient:baseAttack"
+              },
+              {
+                "type": "constant",
+                "value": 0.15
+              }
+            ]
+          },
+          "recipient": "party"
+        }
+      ]
+    }
+  ],
+  "defaultTeam": [
+    "amber"
+  ],
+  "inputDefaults": {
+    "attack": 1800,
+    "defense": 1800,
+    "elementalMastery": 200,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  },
+  "notes": [
+    "Each entry is a single hit unless labelled as a total. Conditional effects assert a combat snapshot; durations, resource depletion and rotations are not simulated.",
+    "Fiery Rain wave and full-duration total are alternative views; do not sum them. Weak-point guaranteed CRIT is not forced for every enemy; the toggle asserts only the subsequent ATK buff."
+  ],
+  "sources": [
+    "/api/characters/amber",
+    "data/characters/data/amber.json",
+    "https://library.keqingmains.com/characters/pyro/amber"
+  ]
+}

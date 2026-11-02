@@ -321,13 +321,13 @@
         <span data-formula-hint-tag="elementalMastery"
               th:attr="data-formula-name=#{damage.input.elementalMastery},data-formula-tooltip=#{damage.v2.tooltip.elementalMastery}"></span>
         <span data-formula-hint-tag="elementalDamageBonus"
-              th:attr="data-formula-name=#{damage.input.dendroBonus},data-formula-tooltip=#{damage.v2.tooltip.elementalDamageBonus}"></span>
+              th:attr="data-formula-name=${character.element + ' DMG Bonus'},data-formula-tooltip=#{damage.v2.tooltip.elementalDamageBonus}"></span>
         <span data-formula-hint-tag="critRate"
               th:attr="data-formula-name=#{damage.input.critRate},data-formula-tooltip=#{damage.tooltip.critRate}"></span>
         <span data-formula-hint-tag="critDamage"
               th:attr="data-formula-name=#{damage.input.critDamage},data-formula-tooltip=#{damage.tooltip.critDamage}"></span>
         <span data-formula-hint-tag="enemyResistance"
-              th:attr="data-formula-name=#{damage.input.dendroResistance},data-formula-tooltip=#{damage.v2.tooltip.enemyResistance}"></span>
+              th:attr="data-formula-name=${character.element + ' RES'},data-formula-tooltip=#{damage.v2.tooltip.enemyResistance}"></span>
         <span data-formula-hint-tag="defenseReduction"
               th:attr="data-formula-name=#{damage.input.defenseReduction},data-formula-tooltip=#{damage.tooltip.defenseReduction}"></span>
         <span data-formula-hint-tag="defenseIgnore"

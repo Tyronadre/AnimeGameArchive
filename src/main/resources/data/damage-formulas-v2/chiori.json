@@ -1,0 +1,848 @@
+{
+  "schemaVersion": 3,
+  "key": "chiori",
+  "characterKey": "chiori",
+  "name": "Chiori",
+  "element": "Geo",
+  "weaponType": "Sword",
+  "characterDataResource": "data/characters/data/chiori.json",
+  "inputs": [
+    {
+      "id": "tailorMadeMode",
+      "label": "Tailor-Made follow-up (0 none, 1 Tapestry, 2 Tailoring)",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 2,
+      "step": 1
+    },
+    {
+      "id": "geoConstructCreated",
+      "label": "Geo Construct created within 20 seconds",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Weaving Blade",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "normal 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-2",
+          "label": "normal 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-3a",
+          "label": "normal 3a",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-3b",
+          "label": "normal 3b",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-4",
+          "label": "normal 4",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "charged-a",
+          "label": "charged a",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "charged-b",
+          "label": "charged b",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge",
+          "label": "plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-low",
+          "label": "plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-high",
+          "label": "plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param11",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Fluttering Hasode",
+      "formulas": [
+        {
+          "id": "upward-sweep",
+          "label": "Upward sweep",
+          "base": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param5",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:defense"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param6",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directGeo"
+        },
+        {
+          "id": "tamoto",
+          "label": "Tamoto · one slash",
+          "base": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param1",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:defense"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param2",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directGeo"
+        },
+        {
+          "id": "tapestry-coordinated",
+          "label": "Tapestry · one coordinated attack",
+          "base": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param5",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:defense"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param6",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directGeo",
+          "requiredEffects": [
+            "tapestry"
+          ]
+        },
+        {
+          "id": "c2-kinu",
+          "label": "C2 · one Kinu hit",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "input",
+                        "input": "source:attack"
+                      },
+                      {
+                        "type": "talentParameter",
+                        "talent": "combat2",
+                        "parameter": "param1",
+                        "levelInput": "source:skillTalentLevel"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "input",
+                        "input": "source:defense"
+                      },
+                      {
+                        "type": "talentParameter",
+                        "talent": "combat2",
+                        "parameter": "param2",
+                        "levelInput": "source:skillTalentLevel"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "constant",
+                "value": 1.7
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directGeo",
+          "requiredEffects": [
+            "chioriC2"
+          ]
+        },
+        {
+          "id": "c4-kinu",
+          "label": "C4 · one Kinu hit",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "input",
+                        "input": "source:attack"
+                      },
+                      {
+                        "type": "talentParameter",
+                        "talent": "combat2",
+                        "parameter": "param1",
+                        "levelInput": "source:skillTalentLevel"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "input",
+                        "input": "source:defense"
+                      },
+                      {
+                        "type": "talentParameter",
+                        "talent": "combat2",
+                        "parameter": "param2",
+                        "levelInput": "source:skillTalentLevel"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "constant",
+                "value": 1.7
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directGeo",
+          "requiredEffects": [
+            "chioriC4"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Hiyoku: Twin Blades",
+      "formulas": [
+        {
+          "id": "burst",
+          "label": "Hiyoku: Twin Blades",
+          "base": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat3",
+                    "parameter": "param1",
+                    "levelInput": "source:burstTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:defense"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat3",
+                    "parameter": "param2",
+                    "levelInput": "source:burstTalentLevel"
+                  }
+                ]
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directGeo"
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "tapestry",
+      "name": "Tailor-Made · Tapestry",
+      "source": "Tailor-Made · Tapestry",
+      "description": "One coordinated Skill hit per trigger, up to twice per Seize the Moment.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:tailorMadeMode",
+            "value": 1
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:tailorMadeMode",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "tailoring",
+      "name": "Tailor-Made · Tailoring",
+      "source": "Tailor-Made · Tailoring",
+      "description": "Five-second Geo infusion; can be overridden by external infusions.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:tailorMadeMode",
+            "value": 2
+          }
+        ]
+      },
+      "formulaModifiers": [
+        {
+          "infusion": {
+            "damageType": "directGeo",
+            "weaponTypes": [
+              "Sword"
+            ],
+            "priority": 0
+          },
+          "targets": {}
+        }
+      ]
+    },
+    {
+      "id": "finishingTouch",
+      "name": "The Finishing Touch · construct",
+      "source": "The Finishing Touch · construct",
+      "description": "The Finishing Touch · construct",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:geoConstructCreated",
+            "value": 1
+          }
+        ]
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "elements": [
+              "Geo"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 20
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    },
+    {
+      "id": "chioriC1",
+      "name": "C1",
+      "source": "C1",
+      "description": "After Skill with another Geo teammate: grants the Finishing Touch without a construct. An additional Tamoto affects hit count, not each slash.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "contextAtLeast",
+            "input": "geoCount",
+            "value": 2
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:geoConstructCreated",
+            "value": 0
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 1
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "elements": [
+              "Geo"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 20
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    },
+    {
+      "id": "chioriC2",
+      "name": "C2",
+      "source": "C2",
+      "description": "One Kinu hit after Burst. Up to three dolls; not multiplied into an individual hit.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      }
+    },
+    {
+      "id": "chioriC3",
+      "name": "C3",
+      "source": "C3",
+      "description": "C3",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "chioriC4",
+      "name": "C4",
+      "source": "C4",
+      "description": "One Kinu hit after a Tailor-Made follow-up and an active character’s Normal/Charged/Plunging hit; at most three triggers.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:tailorMadeMode",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      }
+    },
+    {
+      "id": "chioriC5",
+      "name": "C5",
+      "source": "C5",
+      "description": "C5",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "chioriC6",
+      "name": "C6",
+      "source": "C6",
+      "description": "Flat DEF addition applies to Normal Attack damage in any element. Cooldown reduction changes frequency only.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 6
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "normalAttack"
+            ]
+          },
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:defense"
+              },
+              {
+                "type": "constant",
+                "value": 2.35
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "defaultTeam": [
+    "chiori"
+  ],
+  "inputDefaults": {
+    "attack": 1500,
+    "maxHp": 30000,
+    "defense": 2000,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  },
+  "notes": [
+    "Each entry represents one hit unless stated otherwise. Trigger availability and buff duration are combat snapshots, not a rotation simulation.",
+    "Each Tamoto/Kinu entry is one hit; extra doll count is not a multiplier on a slash. Tapestry and Tailoring are mutually exclusive follow-up states.",
+    "C1 and construct-triggered Finishing Touch share the same 20% Geo bonus and never stack. C6 adds DEF to Normal Attacks, not Charged or Plunging Attacks."
+  ],
+  "sources": [
+    "/api/characters/chiori",
+    "data/characters/data/chiori.json",
+    "https://library.keqingmains.com/characters/geo/chiori"
+  ]
+}

@@ -1,0 +1,922 @@
+{
+  "schemaVersion": 3,
+  "key": "emilie",
+  "characterKey": "emilie",
+  "name": "Emilie",
+  "element": "Dendro",
+  "weaponType": "Polearm",
+  "characterDataResource": "data/characters/data/emilie.json",
+  "inputs": [
+    {
+      "id": "enemyBurning",
+      "label": "Target affected by Burning",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "caseLevel",
+      "label": "Lumidouce Case level (1 or 2)",
+      "defaultValue": 2,
+      "min": 1,
+      "max": 2,
+      "step": 1
+    },
+    {
+      "id": "cleardewReady",
+      "label": "Two Scents consumed · Cleardew Cologne available",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "dendroShredActive",
+      "label": "C2 · target already has Dendro RES debuff",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "abidingFragranceActive",
+      "label": "C6 · Abiding Fragrance active with charges remaining",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Shadow-Hunting Spear (Custom)",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "normal 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "emilieC6"
+          ]
+        },
+        {
+          "id": "normal-1-dendro",
+          "label": "normal 1 · Abiding Fragrance",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack",
+            "abidingFragrance"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "emilieC6"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "normal-2",
+          "label": "normal 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "emilieC6"
+          ]
+        },
+        {
+          "id": "normal-2-dendro",
+          "label": "normal 2 · Abiding Fragrance",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack",
+            "abidingFragrance"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "emilieC6"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "normal-3",
+          "label": "normal 3",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "emilieC6"
+          ]
+        },
+        {
+          "id": "normal-3-dendro",
+          "label": "normal 3 · Abiding Fragrance",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack",
+            "abidingFragrance"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "emilieC6"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "normal-4",
+          "label": "normal 4",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "emilieC6"
+          ]
+        },
+        {
+          "id": "normal-4-dendro",
+          "label": "normal 4 · Abiding Fragrance",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack",
+            "abidingFragrance"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "emilieC6"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "charged",
+          "label": "charged",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "emilieC6"
+          ]
+        },
+        {
+          "id": "charged-dendro",
+          "label": "charged · Abiding Fragrance",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack",
+            "abidingFragrance"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "emilieC6"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "plunge",
+          "label": "plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-low",
+          "label": "plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param8",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-high",
+          "label": "plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Fragrance Extraction",
+      "formulas": [
+        {
+          "id": "case-cast",
+          "label": "Fragrance Extraction · cast",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill",
+            "fragranceExtraction"
+          ],
+          "damageType": "directDendro"
+        },
+        {
+          "id": "level-1-puff",
+          "label": "Level 1 · one Puff of Puredew",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param2",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill",
+            "fragranceExtraction"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "caseLevelOne"
+          ]
+        },
+        {
+          "id": "level-2-puff-a",
+          "label": "Level 2 · first Puff of Puredew",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param3",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill",
+            "fragranceExtraction"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "caseLevelTwo"
+          ]
+        },
+        {
+          "id": "level-2-puff-b",
+          "label": "Level 2 · second Puff of Puredew",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param3",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill",
+            "fragranceExtraction"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "caseLevelTwo"
+          ]
+        },
+        {
+          "id": "spiritbreath-thorn",
+          "label": "Spiritbreath Thorn · Pneuma",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param5",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "arkhe"
+          ],
+          "damageType": "directDendro"
+        },
+        {
+          "id": "cleardew",
+          "label": "Cleardew Cologne · Lingering Fragrance",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 6
+              }
+            ]
+          },
+          "tags": [
+            "cleardewCologne"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "lingeringFragrance"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Aromatic Explication",
+      "formulas": [
+        {
+          "id": "scented-dew",
+          "label": "Level 3 · one Scented Dew",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directDendro"
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "caseLevelOne",
+      "name": "Level 1 Lumidouce Case",
+      "source": "Level 1 Lumidouce Case",
+      "description": "Level 1 Lumidouce Case",
+      "category": "talent",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtMost",
+            "input": "local:caseLevel",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "caseLevelTwo",
+      "name": "Level 2 Lumidouce Case",
+      "source": "Level 2 Lumidouce Case",
+      "description": "Level 2 Lumidouce Case",
+      "category": "talent",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:caseLevel",
+            "value": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "lingeringFragrance",
+      "name": "Lingering Fragrance",
+      "source": "Lingering Fragrance",
+      "description": "600% ATK untyped Dendro damage after two Scents are consumed. Not Skill damage.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:cleardewReady",
+            "value": 1
+          }
+        ]
+      },
+      "requiresEffects": [
+        "caseLevelTwo"
+      ]
+    },
+    {
+      "id": "rectification",
+      "name": "Rectification",
+      "source": "Rectification",
+      "description": "Rectification",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:enemyBurning",
+            "value": 1
+          }
+        ]
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "damageKinds": [
+              "talent"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "min",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 36
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "input",
+                      "input": "source:attack"
+                    },
+                    {
+                      "type": "constant",
+                      "value": 0.015
+                    }
+                  ]
+                }
+              ]
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    },
+    {
+      "id": "headspaceCapture",
+      "name": "Headspace Capture",
+      "source": "Headspace Capture",
+      "description": "85% Pyro RES against Burning damage while the Case exists; defensive resistance, not enemy RES reduction.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      }
+    },
+    {
+      "id": "emilieC1",
+      "name": "C1",
+      "source": "C1",
+      "description": "20% damage to Skill-classified hits and Cleardew; Arkhe is excluded. Additional Scents change frequency, not each hit.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 1
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "anyTags": [
+              "fragranceExtraction",
+              "cleardewCologne"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 20
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    },
+    {
+      "id": "emilieC2",
+      "name": "C2",
+      "source": "C2",
+      "description": "Enable after a previous qualifying Skill/Burst/Cleardew hit. Does not automatically apply to the initial triggering hit.",
+      "category": "constellation",
+      "recipient": "enemy",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:dendroShredActive",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "elements": [
+              "Dendro"
+            ]
+          },
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 30
+              },
+              "unit": "percentPoints"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "emilieC3",
+      "name": "C3",
+      "source": "C3",
+      "description": "C3",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "emilieC4",
+      "name": "C4",
+      "source": "C4",
+      "description": "Extends Burst and lowers target-selection interval; no per-hit damage modifier.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      }
+    },
+    {
+      "id": "emilieC5",
+      "name": "C5",
+      "source": "C5",
+      "description": "C5",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "emilieC6",
+      "name": "C6",
+      "source": "C6",
+      "description": "Protected Dendro Normal/Charged conversion with flat 300% ATK addition. At most four Scent-generating attacks within five seconds; no automatic charge consumption.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:abidingFragranceActive",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 6
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "abidingFragrance"
+            ]
+          },
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 3
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "defaultTeam": [
+    "emilie"
+  ],
+  "inputDefaults": {
+    "attack": 1500,
+    "maxHp": 30000,
+    "defense": 2000,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  },
+  "notes": [
+    "Each entry represents one hit unless stated otherwise. Trigger availability and buff duration are combat snapshots, not a rotation simulation.",
+    "Level 1 and Level 2 puffs are mutually exclusive. Each Level 2 attack has two individually listed hits; Level 3 Scented Dew uses Burst scaling.",
+    "Cleardew is untyped damage, not Skill/Burst. Burning target state is independent of existing Case level and recent Scents; Rectification caps at 2,400 ATK.",
+    "C6 affects Normal/Charged damage, not plunges, and cannot be overridden by external infusions. Healing/defensive effects and attack frequency are not outgoing per-hit multipliers."
+  ],
+  "sources": [
+    "/api/characters/emilie",
+    "data/characters/data/emilie.json",
+    "https://library.keqingmains.com/characters/dendro/emilie",
+    "https://github.com/frzyc/genshin-optimizer/blob/master/libs/gi/sheets/src/Characters/Emilie/index.tsx"
+  ]
+}

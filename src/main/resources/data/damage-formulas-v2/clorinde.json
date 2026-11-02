@@ -1,0 +1,1090 @@
+{
+  "schemaVersion": 3,
+  "key": "clorinde",
+  "characterKey": "clorinde",
+  "name": "Clorinde",
+  "element": "Electro",
+  "weaponType": "Sword",
+  "characterDataResource": "data/characters/data/clorinde.json",
+  "inputs": [
+    {
+      "id": "reactionStacks",
+      "label": "Dark-Shattering Flame stacks",
+      "defaultValue": 3,
+      "min": 0,
+      "max": 3,
+      "step": 1
+    },
+    {
+      "id": "lawfulStacks",
+      "label": "Lawful Remuneration CRIT Rate stacks",
+      "defaultValue": 2,
+      "min": 0,
+      "max": 2,
+      "step": 1
+    },
+    {
+      "id": "burstBondOfLife",
+      "label": "Bond of Life at Burst damage (% of Max HP)",
+      "defaultValue": 100,
+      "min": 0,
+      "max": 200,
+      "step": 1
+    }
+  ],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Oath of Hunting Shadows",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "normal 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "nightVigil"
+          ]
+        },
+        {
+          "id": "normal-2",
+          "label": "normal 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "nightVigil"
+          ]
+        },
+        {
+          "id": "normal-3a",
+          "label": "normal 3a",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "nightVigil"
+          ]
+        },
+        {
+          "id": "normal-3b",
+          "label": "normal 3b",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "nightVigil"
+          ]
+        },
+        {
+          "id": "normal-4a",
+          "label": "normal 4a",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "nightVigil"
+          ]
+        },
+        {
+          "id": "normal-4b",
+          "label": "normal 4b",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "nightVigil"
+          ]
+        },
+        {
+          "id": "normal-4c",
+          "label": "normal 4c",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "nightVigil"
+          ]
+        },
+        {
+          "id": "normal-5",
+          "label": "normal 5",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "nightVigil"
+          ]
+        },
+        {
+          "id": "charged",
+          "label": "charged",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param11",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "nightVigil"
+          ]
+        },
+        {
+          "id": "plunge",
+          "label": "plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param13",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-low",
+          "label": "plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param14",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-high",
+          "label": "plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param15",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Hunter's Vigil",
+      "formulas": [
+        {
+          "id": "swift-hunt-high-bond",
+          "label": "Swift Hunt · Bond of Life ≥100%",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack",
+            "nightVigilAttack"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "nightVigil"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "swift-hunt-piercing",
+          "label": "Swift Hunt · Bond of Life <100%",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param2",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack",
+            "nightVigilAttack"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "nightVigil"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "impale-zero",
+          "label": "Impale the Night · no Bond of Life",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack",
+            "nightVigilAttack"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "nightVigil"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "impale-low",
+          "label": "Impale the Night · Bond of Life between 0 and 100%",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param5",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack",
+            "nightVigilAttack"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "nightVigil"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "impale-pact-a",
+          "label": "Impale the Night: Pact · hit a",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param7",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack",
+            "nightVigilAttack"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "nightVigil"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "impale-pact-b",
+          "label": "Impale the Night: Pact · hit b",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param7",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack",
+            "nightVigilAttack"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "nightVigil"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "impale-pact-c",
+          "label": "Impale the Night: Pact · hit c",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param7",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack",
+            "nightVigilAttack"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "nightVigil"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "surging-blade",
+          "label": "Surging Blade · Ousia",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param10",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "arkhe"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "nightVigil"
+          ]
+        },
+        {
+          "id": "c1-shade",
+          "label": "C1 · one Nightvigil Shade hit",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 0.3
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "nightVigil",
+            "clorindeC1"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "c6-shade",
+          "label": "C6 · one Glimbright Shade hit",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 2
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "nightVigil",
+            "clorindeC6"
+          ],
+          "infusionRule": "locked"
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Last Lightfall",
+      "formulas": [
+        {
+          "id": "burst-a",
+          "label": "Last Lightfall · hit a",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directElectro"
+        },
+        {
+          "id": "burst-b",
+          "label": "Last Lightfall · hit b",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directElectro"
+        },
+        {
+          "id": "burst-c",
+          "label": "Last Lightfall · hit c",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directElectro"
+        },
+        {
+          "id": "burst-d",
+          "label": "Last Lightfall · hit d",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directElectro"
+        },
+        {
+          "id": "burst-e",
+          "label": "Last Lightfall · hit e",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directElectro"
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "nightVigil",
+      "name": "Night Vigil",
+      "source": "Night Vigil",
+      "description": "Locks Swift Hunt and Impale the Night to Electro Normal Attack damage. No charged attacks in this state.",
+      "category": "talent",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      }
+    },
+    {
+      "id": "darkShatteringFlame",
+      "name": "Dark-Shattering Flame",
+      "source": "Dark-Shattering Flame",
+      "description": "Dark-Shattering Flame",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "stackingGroup": "clorindeDarkShatteringFlame",
+      "stackingPriority": {
+        "type": "constant",
+        "value": 0
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "elements": [
+              "Electro"
+            ],
+            "anyTags": [
+              "normalAttack",
+              "elementalBurst"
+            ],
+            "damageKinds": [
+              "talent"
+            ]
+          },
+          "base": {
+            "type": "min",
+            "operands": [
+              {
+                "type": "constant",
+                "value": 1800
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "input",
+                    "input": "local:reactionStacks"
+                  },
+                  {
+                    "type": "constant",
+                    "value": 0.2
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "lawfulRemuneration",
+      "name": "Lawful Remuneration",
+      "source": "Lawful Remuneration",
+      "description": "Stacks persist for 15 seconds after qualifying Bond of Life changes; the current Bond need not remain above 100%.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:critRate",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "local:lawfulStacks"
+              },
+              {
+                "type": "constant",
+                "value": 10
+              }
+            ]
+          },
+          "recipient": "self"
+        }
+      ]
+    },
+    {
+      "id": "clorindeC1",
+      "name": "C1",
+      "source": "C1",
+      "description": "C1",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 1
+      }
+    },
+    {
+      "id": "clorindeC2",
+      "name": "C2",
+      "source": "C2",
+      "description": "C2",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      },
+      "stackingGroup": "clorindeDarkShatteringFlame",
+      "stackingPriority": {
+        "type": "constant",
+        "value": 1
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "elements": [
+              "Electro"
+            ],
+            "anyTags": [
+              "normalAttack",
+              "elementalBurst"
+            ],
+            "damageKinds": [
+              "talent"
+            ]
+          },
+          "base": {
+            "type": "min",
+            "operands": [
+              {
+                "type": "constant",
+                "value": 2700
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "input",
+                    "input": "local:reactionStacks"
+                  },
+                  {
+                    "type": "constant",
+                    "value": 0.3
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "clorindeC3",
+      "name": "C3",
+      "source": "C3",
+      "description": "C3",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "clorindeC4",
+      "name": "C4",
+      "source": "C4",
+      "description": "Bond of Life is the value when each Burst hit deals damage, including Bond granted by the Burst.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "elementalBurst"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "min",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 200
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "input",
+                      "input": "local:burstBondOfLife"
+                    },
+                    {
+                      "type": "constant",
+                      "value": 2
+                    }
+                  ]
+                }
+              ]
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    },
+    {
+      "id": "clorindeC5",
+      "name": "C5",
+      "source": "C5",
+      "description": "C5",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "clorindeC6",
+      "name": "C6",
+      "source": "C6",
+      "description": "Enable for the 12 seconds after Skill use. Separate Shade entries additionally require Night Vigil.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 6
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:critRate",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 10
+          },
+          "recipient": "self"
+        },
+        {
+          "stat": "recipient:critDamage",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 70
+          },
+          "recipient": "self"
+        }
+      ]
+    }
+  ],
+  "defaultTeam": [
+    "clorinde"
+  ],
+  "inputDefaults": {
+    "attack": 1500,
+    "maxHp": 30000,
+    "defense": 2000,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  },
+  "notes": [
+    "Each entry represents one hit unless stated otherwise. Trigger availability and buff duration are combat snapshots, not a rotation simulation.",
+    "Night Vigil shots/lunges use Skill talent parameters but are Normal Attack damage. Arkhe is untyped and receives neither Normal Attack nor Skill bonuses.",
+    "Bond-of-Life shot and lunge tiers are alternative snapshots. Pact has three individual hits and Burst five; each receives its own passive flat addition. C2 replaces the base passive and never stacks with it."
+  ],
+  "sources": [
+    "/api/characters/clorinde",
+    "data/characters/data/clorinde.json",
+    "https://library.keqingmains.com/characters/electro/clorinde"
+  ]
+}

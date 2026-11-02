@@ -31,7 +31,16 @@
     "constellation": "columbinaConstellation",
     "burstTalentLevel": "columbinaBurstTalentLevel"
   },
-  "inputs": [],
+  "inputs": [
+    {
+      "id": "lunacyStacks",
+      "label": "Lunacy stacks",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 3,
+      "step": 1
+    }
+  ],
   "effects": [
     {
       "id": "columbinaLunarDomain",
@@ -46,8 +55,8 @@
       "formulaModifiers": [
         {
           "targets": {
-            "requiredTags": [
-              "lunarBloom"
+            "damageKinds": [
+              "lunar"
             ]
           },
           "damageBonus": {
@@ -77,8 +86,8 @@
       "formulaModifiers": [
         {
           "targets": {
-            "requiredTags": [
-              "lunarBloom"
+            "damageKinds": [
+              "lunar"
             ]
           },
           "baseDamageBonus": {
@@ -143,8 +152,8 @@
       "formulaModifiers": [
         {
           "targets": {
-            "requiredTags": [
-              "lunarBloom"
+            "damageKinds": [
+              "lunar"
             ]
           },
           "elevation": {
@@ -220,8 +229,8 @@
       "formulaModifiers": [
         {
           "targets": {
-            "requiredTags": [
-              "lunarBloom"
+            "damageKinds": [
+              "lunar"
             ]
           },
           "elevation": {
@@ -250,8 +259,8 @@
       "formulaModifiers": [
         {
           "targets": {
-            "requiredTags": [
-              "lunarBloom"
+            "damageKinds": [
+              "lunar"
             ]
           },
           "elevation": {
@@ -263,7 +272,18 @@
         }
       ],
       "recipient": "party",
-      "statChanges": []
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15,
+          "recipient": "self"
+        }
+      ]
     },
     {
       "id": "columbinaC4",
@@ -281,8 +301,8 @@
       "formulaModifiers": [
         {
           "targets": {
-            "requiredTags": [
-              "lunarBloom"
+            "damageKinds": [
+              "lunar"
             ]
           },
           "elevation": {
@@ -290,6 +310,72 @@
               "type": "constant",
               "value": 1.5
             }
+          }
+        },
+        {
+          "recipient": "self",
+          "targets": {
+            "requiredTags": [
+              "gravityInterference",
+              "lunarBloom"
+            ]
+          },
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "constant",
+                "value": 0.025
+              }
+            ]
+          }
+        },
+        {
+          "recipient": "self",
+          "targets": {
+            "requiredTags": [
+              "gravityInterference",
+              "lunarCharged"
+            ]
+          },
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "constant",
+                "value": 0.375
+              }
+            ]
+          }
+        },
+        {
+          "recipient": "self",
+          "targets": {
+            "requiredTags": [
+              "gravityInterference",
+              "lunarCrystallize"
+            ]
+          },
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "constant",
+                "value": 0.2
+              }
+            ]
           }
         }
       ],
@@ -324,8 +410,8 @@
       "formulaModifiers": [
         {
           "targets": {
-            "requiredTags": [
-              "lunarBloom"
+            "damageKinds": [
+              "lunar"
             ]
           },
           "elevation": {
@@ -373,8 +459,8 @@
         },
         {
           "targets": {
-            "requiredTags": [
-              "lunarBloom"
+            "damageKinds": [
+              "lunar"
             ]
           },
           "elevation": {
@@ -387,25 +473,564 @@
       ],
       "recipient": "party",
       "statChanges": []
+    },
+    {
+      "id": "columbinaLunacysLure",
+      "name": "Lunacy's Lure",
+      "source": "Lunacy's Lure",
+      "description": "Lunacy's Lure",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "always"
+      },
+      "formulaModifiers": [],
+      "statChanges": [
+        {
+          "stat": "recipient:critRate",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "local:lunacyStacks"
+              },
+              {
+                "type": "constant",
+                "value": 5
+              }
+            ]
+          },
+          "recipient": "self"
+        }
+      ]
     }
   ],
   "notes": [
-    "Support profile only; Lunacy's Lure and personal damage instances do not modify the active character.",
-    "The bundled catalog has no Columbina talent file, so the Burst bonus table is explicitly authored here. Max HP and base HP are loaded from the stored build and character-stat database."
+    "Each Moondew Cleanse and Lunar-Bloom Gravity Interference hit is listed individually; resources, cooldowns and rotations are not simulated.",
+    "Talent references use the database-exported Columbina resource. Stored precision and available table lengths are preserved.",
+    "Direct Lunar-Charged and Lunar-Crystallize reaction factors (3 and 1.6) are explicit base factors; C4 additions include the same factor. Gravity Interference variants are alternatives, not a simultaneous multi-element hit."
   ],
   "sources": [
     "https://keqingmains.com/q/columbina-quickguide/",
     "https://genshin-impact.fandom.com/wiki/Moonlit_Melancholy",
-    "https://keqingmains.com/misc/lunar-reactions/"
+    "https://keqingmains.com/misc/lunar-reactions/",
+    "data/damage-talent-data-v2/columbina.json",
+    "https://library.keqingmains.com/characters/hydro/columbina",
+    "https://keqingmains.com/misc/lunar/"
   ],
   "characterKey": "columbina",
-  "talents": [],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Moondew Cascade",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "1-Hit DMG",
+          "damageType": "directHydro",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-2",
+          "label": "2-Hit DMG",
+          "damageType": "directHydro",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-3",
+          "label": "3-Hit DMG",
+          "damageType": "directHydro",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "charged",
+          "label": "Charged Attack",
+          "damageType": "directHydro",
+          "tags": [
+            "chargedAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "moondew-cleanse-1",
+          "label": "Moondew Cleanse · hit 1",
+          "damageType": "lunarBloom",
+          "tags": [
+            "chargedAttack",
+            "lunarBloom"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "moondew-cleanse-2",
+          "label": "Moondew Cleanse · hit 2",
+          "damageType": "lunarBloom",
+          "tags": [
+            "chargedAttack",
+            "lunarBloom"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "moondew-cleanse-3",
+          "label": "Moondew Cleanse · hit 3",
+          "damageType": "lunarBloom",
+          "tags": [
+            "chargedAttack",
+            "lunarBloom"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "plunge",
+          "label": "Plunge DMG",
+          "damageType": "directHydro",
+          "tags": [
+            "plungingAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "plunge-low",
+          "label": "Low Plunge DMG",
+          "damageType": "directHydro",
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param8_0",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "plunge-high",
+          "label": "High Plunge DMG",
+          "damageType": "directHydro",
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param8_1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Eternal Tides",
+      "formulas": [
+        {
+          "id": "skill-hit",
+          "label": "Skill DMG",
+          "damageType": "directHydro",
+          "tags": [
+            "elementalSkill"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "gravity-ripple",
+          "label": "Gravity Ripple",
+          "damageType": "directHydro",
+          "tags": [
+            "elementalSkill"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param2",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "gravity-bloom-1",
+          "label": "Gravity Interference · Lunar-Bloom · hit 1",
+          "damageType": "lunarBloom",
+          "tags": [
+            "lunarBloom",
+            "gravityInterference"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "gravity-bloom-2",
+          "label": "Gravity Interference · Lunar-Bloom · hit 2",
+          "damageType": "lunarBloom",
+          "tags": [
+            "lunarBloom",
+            "gravityInterference"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "gravity-bloom-3",
+          "label": "Gravity Interference · Lunar-Bloom · hit 3",
+          "damageType": "lunarBloom",
+          "tags": [
+            "lunarBloom",
+            "gravityInterference"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "gravity-bloom-4",
+          "label": "Gravity Interference · Lunar-Bloom · hit 4",
+          "damageType": "lunarBloom",
+          "tags": [
+            "lunarBloom",
+            "gravityInterference"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "gravity-bloom-5",
+          "label": "Gravity Interference · Lunar-Bloom · hit 5",
+          "damageType": "lunarBloom",
+          "tags": [
+            "lunarBloom",
+            "gravityInterference"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "gravity-charged",
+          "label": "Gravity Interference · Lunar-Charged",
+          "damageType": "lunarCharged",
+          "tags": [
+            "lunarCharged",
+            "gravityInterference"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param3",
+                "levelInput": "source:skillTalentLevel"
+              },
+              {
+                "type": "constant",
+                "value": 3
+              }
+            ]
+          }
+        },
+        {
+          "id": "gravity-crystallize",
+          "label": "Gravity Interference · Lunar-Crystallize",
+          "damageType": "lunarCrystallize",
+          "tags": [
+            "lunarCrystallize",
+            "gravityInterference"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param5",
+                "levelInput": "source:skillTalentLevel"
+              },
+              {
+                "type": "constant",
+                "value": 1.6
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Moonlit Melancholy",
+      "formulas": [
+        {
+          "id": "burst-hit",
+          "label": "Burst DMG",
+          "damageType": "directHydro",
+          "tags": [
+            "elementalBurst"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
   "defaultTeam": [
     "columbina"
   ],
   "inputDefaults": {
     "maxHp": 35000,
     "baseHp": 14695,
-    "burstTalentLevel": 10
-  }
+    "burstTalentLevel": 10,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10
+  },
+  "characterDataResource": "data/damage-talent-data-v2/columbina.json"
 }

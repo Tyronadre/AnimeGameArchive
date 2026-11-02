@@ -106,6 +106,136 @@
       "id": "directGeo",
       "element": "Geo",
       "resistanceInput": "enemyGeoResistance"
+    },
+    {
+      "id": "lunarCharged",
+      "resistanceInput": "enemyElectroResistance",
+      "kind": "lunar",
+      "element": "Electro",
+      "defenseBehavior": "bypass",
+      "appliesElementalDamageBonus": false,
+      "allowsCriticalHits": true,
+      "innateDamageBonus": {
+        "unit": "ratio",
+        "expression": {
+          "type": "divide",
+          "operands": [
+            {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 6
+                },
+                {
+                  "type": "input",
+                  "input": "source:elementalMastery"
+                }
+              ]
+            },
+            {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "input",
+                  "input": "source:elementalMastery"
+                },
+                {
+                  "type": "constant",
+                  "value": 2000
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "lunarCrystallize",
+      "resistanceInput": "enemyGeoResistance",
+      "kind": "lunar",
+      "element": "Geo",
+      "defenseBehavior": "bypass",
+      "appliesElementalDamageBonus": false,
+      "allowsCriticalHits": true,
+      "innateDamageBonus": {
+        "unit": "ratio",
+        "expression": {
+          "type": "divide",
+          "operands": [
+            {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 6
+                },
+                {
+                  "type": "input",
+                  "input": "source:elementalMastery"
+                }
+              ]
+            },
+            {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "input",
+                  "input": "source:elementalMastery"
+                },
+                {
+                  "type": "constant",
+                  "value": 2000
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "stellarConductElectro",
+      "kind": "stellar",
+      "element": "Electro",
+      "resistanceInput": "enemyElectroResistance",
+      "defenseBehavior": "bypass",
+      "appliesElementalDamageBonus": false,
+      "appliesOtherDamageBonus": false,
+      "allowsCriticalHits": true,
+      "innateDamageBonus": {
+        "expression": {
+          "type": "divide",
+          "operands": [
+            {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 6
+                },
+                {
+                  "type": "input",
+                  "input": "source:elementalMastery"
+                }
+              ]
+            },
+            {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "input",
+                  "input": "source:elementalMastery"
+                },
+                {
+                  "type": "constant",
+                  "value": 2000
+                }
+              ]
+            }
+          ]
+        },
+        "unit": "ratio"
+      }
     }
   ]
 }

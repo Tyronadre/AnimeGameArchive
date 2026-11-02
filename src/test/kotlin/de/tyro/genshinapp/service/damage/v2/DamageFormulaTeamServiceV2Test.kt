@@ -24,7 +24,7 @@ class DamageFormulaTeamServiceV2Test {
         assertEquals(3.0, full.teamContext["dendroCount"])
         assertEquals(4, full.teamMembers.count { it.key in full.selectedTeam })
         assertTrue(full.teamMembers.first { it.key == "nefer" }.calculatorAvailable)
-        assertFalse(full.teamMembers.first { it.key == "lauma" }.calculatorAvailable)
+        assertTrue(full.teamMembers.first { it.key == "lauma" }.calculatorAvailable)
         assertTrue(full.teamMembers.first { it.key == "arlecchino" }.calculatorAvailable)
         full.supportProfiles.forEach { support ->
             assertEquals(6, support.effects.count { it.category == "constellation" })
@@ -52,10 +52,10 @@ class DamageFormulaTeamServiceV2Test {
                 assertEquals("progress:$character", full.inputs.first { it.id == inputId }.section)
             }
         }
-        assertEquals(emptyList(), full.characterBuffInputs.getValue("lauma"))
+        assertEquals(setOf("character.lauma.verdantDew", "character.lauma.moonSong"), full.characterBuffInputs.getValue("lauma").toSet())
         assertEquals(setOf("character.nahida.nahidaMarkedOpponents", "character.nahida.nahidaQuickenActive"),
             full.characterBuffInputs.getValue("nahida").toSet())
-        assertEquals(emptyList(), full.characterBuffInputs.getValue("columbina"))
+        assertEquals(listOf("character.columbina.lunacyStacks"), full.characterBuffInputs.getValue("columbina"))
         assertEquals("internal", full.inputs.first { it.id == "character.columbina.columbinaBaseHp" }.section)
         assertTrue(service.document(full).defaultCalculation.results.isNotEmpty())
     }
@@ -64,22 +64,22 @@ class DamageFormulaTeamServiceV2Test {
     fun `catalog characters remain selectable without invented support effects`() {
         val roster = mock(DamageTeamRosterService::class.java)
         `when`(roster.members()).thenReturn(listOf(
-            DamageTeamMemberV2("amber", "Amber", "Pyro", 0, "/media/characters/amber/icon", "Bow"),
+            DamageTeamMemberV2("catalogarcher", "Catalog Archer", "Pyro", 0, "/media/characters/catalogarcher/icon", "Bow"),
         ))
-        val profile = DamageFormulaTeamServiceV2(mapper, roster).compose(base, setOf("amber"))
-        assertEquals(setOf("nefer", "amber"), profile.selectedTeam)
-        assertEquals("/media/characters/amber/icon", profile.teamMembers.first { it.key == "amber" }.iconUrl)
+        val profile = DamageFormulaTeamServiceV2(mapper, roster).compose(base, setOf("catalogarcher"))
+        assertEquals(setOf("nefer", "catalogarcher"), profile.selectedTeam)
+        assertEquals("/media/characters/catalogarcher/icon", profile.teamMembers.first { it.key == "catalogarcher" }.iconUrl)
         assertEquals(1.0, profile.teamContext["pyroCount"])
         assertEquals(1.0, profile.teamContext["dendroCount"])
         assertEquals(2.0, profile.teamContext["teamSize"])
         assertTrue(profile.supportProfiles.all { it.effects.isEmpty() })
-        assertFalse(profile.effects.any { it.id.startsWith("amber") })
-        assertEquals(9, profile.characterStatInputs.getValue("amber").size)
-        assertEquals(4, profile.characterProgressInputs.getValue("amber").size)
-        assertTrue(profile.characterBuffInputs.getValue("amber").isEmpty())
-        val amberAttack = profile.characterStatInputs.getValue("amber").getValue("attack")
-        val edited = service.calculate(profile, DamageCalculationRequestV2(inputs = mapOf(amberAttack to 4321.0)))
-        assertEquals(4321.0, edited.effectiveStats.getValue(amberAttack))
+        assertFalse(profile.effects.any { it.id.startsWith("catalogarcher") })
+        assertEquals(9, profile.characterStatInputs.getValue("catalogarcher").size)
+        assertEquals(4, profile.characterProgressInputs.getValue("catalogarcher").size)
+        assertTrue(profile.characterBuffInputs.getValue("catalogarcher").isEmpty())
+        val catalogarcherAttack = profile.characterStatInputs.getValue("catalogarcher").getValue("attack")
+        val edited = service.calculate(profile, DamageCalculationRequestV2(inputs = mapOf(catalogarcherAttack to 4321.0)))
+        assertEquals(4321.0, edited.effectiveStats.getValue(catalogarcherAttack))
     }
 
     @Test

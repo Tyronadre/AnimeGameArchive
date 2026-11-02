@@ -1,0 +1,641 @@
+{
+  "schemaVersion": 3,
+  "key": "baizhu",
+  "characterKey": "baizhu",
+  "name": "Baizhu",
+  "element": "dendro",
+  "weaponType": "Catalyst",
+  "characterDataResource": "data/characters/data/baizhu.json",
+  "inputs": [
+    {
+      "id": "activeCharacterHpPercent",
+      "label": "Active character HP (%)",
+      "defaultValue": 100,
+      "min": 0,
+      "max": 100,
+      "step": 1
+    }
+  ],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "The Classics of Acupuncture",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "normal 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directDendro"
+        },
+        {
+          "id": "normal-2",
+          "label": "normal 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directDendro"
+        },
+        {
+          "id": "normal-3a",
+          "label": "normal 3a",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directDendro"
+        },
+        {
+          "id": "normal-3b",
+          "label": "normal 3b",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directDendro"
+        },
+        {
+          "id": "normal-4",
+          "label": "normal 4",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directDendro"
+        },
+        {
+          "id": "charged",
+          "label": "charged",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directDendro"
+        },
+        {
+          "id": "plunge",
+          "label": "plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directDendro"
+        },
+        {
+          "id": "plunge-low",
+          "label": "plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param8",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directDendro"
+        },
+        {
+          "id": "plunge-high",
+          "label": "plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directDendro"
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Universal Diagnosis",
+      "formulas": [
+        {
+          "id": "gossamer-sprite",
+          "label": "Gossamer Sprite · one attack",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directDendro"
+        },
+        {
+          "id": "gossamer-splice",
+          "label": "C2 · Gossamer Sprite: Splice",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 2.5
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directDendro",
+          "requiredEffects": [
+            "baizhuC2"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Holistic Revivification",
+      "formulas": [
+        {
+          "id": "spiritvein",
+          "label": "Spiritvein · one hit",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param7",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst",
+            "spiritvein"
+          ],
+          "damageType": "directDendro"
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "fiveFortunes",
+      "name": "Five Fortunes Forever · Dendro bonus",
+      "source": "Five Fortunes Forever · Dendro bonus",
+      "description": "Five Fortunes Forever · Dendro bonus",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:activeCharacterHpPercent",
+            "value": 50
+          }
+        ]
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:elementalDamageBonus",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 25
+          },
+          "recipient": "self"
+        }
+      ]
+    },
+    {
+      "id": "verdantFavor",
+      "name": "Year of Verdant Favor",
+      "source": "Year of Verdant Favor",
+      "description": "Assumes the recipient was healed by a Seamless Shield in the last six seconds. The HP contribution caps at 50,000.",
+      "category": "passive",
+      "recipient": "activeCharacter",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "damageKinds": [
+              "reaction"
+            ],
+            "anyTags": [
+              "burning",
+              "bloom",
+              "hyperbloom",
+              "burgeon"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "min",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 50000
+                    },
+                    {
+                      "type": "input",
+                      "input": "source:maxHp"
+                    }
+                  ]
+                },
+                {
+                  "type": "constant",
+                  "value": 0.00002
+                }
+              ]
+            },
+            "unit": "ratio"
+          }
+        },
+        {
+          "targets": {
+            "damageKinds": [
+              "reaction"
+            ],
+            "anyTags": [
+              "aggravate",
+              "spread"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "min",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 50000
+                    },
+                    {
+                      "type": "input",
+                      "input": "source:maxHp"
+                    }
+                  ]
+                },
+                {
+                  "type": "constant",
+                  "value": 0.000008
+                }
+              ]
+            },
+            "unit": "ratio"
+          }
+        },
+        {
+          "targets": {
+            "damageKinds": [
+              "lunar"
+            ],
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "min",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 50000
+                    },
+                    {
+                      "type": "input",
+                      "input": "source:maxHp"
+                    }
+                  ]
+                },
+                {
+                  "type": "constant",
+                  "value": 0.000007
+                }
+              ]
+            },
+            "unit": "ratio"
+          }
+        }
+      ]
+    },
+    {
+      "id": "baizhuC1",
+      "name": "C1",
+      "source": "C1",
+      "description": "Additional Skill charge; does not double the damage of each Sprite hit.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 1
+      }
+    },
+    {
+      "id": "baizhuC2",
+      "name": "C2",
+      "source": "C2",
+      "description": "C2",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      }
+    },
+    {
+      "id": "baizhuC3",
+      "name": "C3",
+      "source": "C3",
+      "description": "C3",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "baizhuC4",
+      "name": "C4",
+      "source": "C4",
+      "description": "Enable for 15 seconds after using Burst.",
+      "category": "constellation",
+      "recipient": "party",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:elementalMastery",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 80
+          },
+          "recipient": "party"
+        }
+      ]
+    },
+    {
+      "id": "baizhuC5",
+      "name": "C5",
+      "source": "C5",
+      "description": "C5",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "baizhuC6",
+      "name": "C6",
+      "source": "C6",
+      "description": "Adds HP scaling to every Spiritvein. Extra Shield creation changes trigger availability, not damage per Spiritvein.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 6
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "spiritvein"
+            ]
+          },
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "constant",
+                "value": 0.08
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "defaultTeam": [
+    "baizhu"
+  ],
+  "inputDefaults": {
+    "attack": 1500,
+    "maxHp": 50000,
+    "defense": 2000,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  },
+  "notes": [
+    "Each entry represents one hit unless stated otherwise. Trigger availability and buff duration are combat snapshots, not a rotation simulation.",
+    "Skill shows one of up to three Sprite attacks. Healing and shields are not damage formulas; C6 Shield generation can enable Spiritveins outside the usual Burst timeline."
+  ],
+  "sources": [
+    "/api/characters/baizhu",
+    "data/characters/data/baizhu.json",
+    "https://library.keqingmains.com/characters/dendro/baizhu"
+  ]
+}

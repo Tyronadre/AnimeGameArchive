@@ -1,0 +1,879 @@
+{
+  "schemaVersion": 3,
+  "key": "eula",
+  "characterKey": "eula",
+  "name": "Eula",
+  "element": "Cryo",
+  "weaponType": "Claymore",
+  "characterDataResource": "data/characters/data/eula.json",
+  "inputs": [
+    {
+      "id": "grimheartStacks",
+      "label": "Current Grimheart stacks",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 2,
+      "step": 1
+    },
+    {
+      "id": "grimheartConsumed",
+      "label": "Grimheart stacks consumed by held Skill",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 2,
+      "step": 1
+    },
+    {
+      "id": "lightfallStacks",
+      "label": "Lightfall Sword total stacks (including C6 initial stacks)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 30,
+      "step": 1
+    },
+    {
+      "id": "resistanceDebuffActive",
+      "label": "Enemy has active Icetide Vortex resistance debuff",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "physicalC1Active",
+      "label": "C1 · Physical bonus remains active",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "enemyBelowHalf",
+      "label": "Enemy HP is strictly below 50%",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Favonius Bladework - Edel",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "normal 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-2",
+          "label": "normal 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-3a",
+          "label": "normal 3a",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-3b",
+          "label": "normal 3b",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-4",
+          "label": "normal 4",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-5a",
+          "label": "normal 5a",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-5b",
+          "label": "normal 5b",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "charged-loop",
+          "label": "charged loop",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "charged-final",
+          "label": "charged final",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge",
+          "label": "plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-low",
+          "label": "plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param11",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-high",
+          "label": "plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param12",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Icetide Vortex",
+      "formulas": [
+        {
+          "id": "skill-press",
+          "label": "Icetide Vortex · press",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directCryo"
+        },
+        {
+          "id": "skill-hold",
+          "label": "Icetide Vortex · hold slash",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param2",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directCryo"
+        },
+        {
+          "id": "icewhirl-brand",
+          "label": "One Icewhirl Brand per consumed Grimheart",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param3",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directCryo",
+          "requiredEffects": [
+            "icewhirlAvailable"
+          ]
+        },
+        {
+          "id": "shattered-lightfall",
+          "label": "Roiling Rime · Shattered Lightfall Sword",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat3",
+                    "parameter": "param2",
+                    "levelInput": "source:burstTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "constant",
+                "value": 0.5
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst",
+            "lightfallSword"
+          ],
+          "damageType": "directPhysical",
+          "requiredEffects": [
+            "roilingRime"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Glacial Illumination",
+      "formulas": [
+        {
+          "id": "burst-cast",
+          "label": "Glacial Illumination · Cryo cast",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directCryo"
+        },
+        {
+          "id": "lightfall-explosion",
+          "label": "Lightfall Sword · charged explosion",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat3",
+                    "parameter": "param2",
+                    "levelInput": "source:burstTalentLevel"
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "talentParameter",
+                        "talent": "combat3",
+                        "parameter": "param3",
+                        "levelInput": "source:burstTalentLevel"
+                      },
+                      {
+                        "type": "min",
+                        "operands": [
+                          {
+                            "type": "talentParameter",
+                            "talent": "combat3",
+                            "parameter": "param4",
+                            "levelInput": "source:burstTalentLevel"
+                          },
+                          {
+                            "type": "input",
+                            "input": "local:lightfallStacks"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst",
+            "lightfallSword"
+          ],
+          "damageType": "directPhysical"
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "grimheartDefense",
+      "name": "Grimheart · DEF",
+      "source": "Grimheart · DEF",
+      "description": "Grimheart · DEF",
+      "category": "talent",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:defense",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "recipient:baseDefense"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param9",
+                "levelInput": "source:skillTalentLevel"
+              },
+              {
+                "type": "input",
+                "input": "local:grimheartStacks"
+              }
+            ]
+          },
+          "recipient": "self"
+        }
+      ]
+    },
+    {
+      "id": "icewhirlAvailable",
+      "name": "Icewhirl Brands",
+      "source": "Icewhirl Brands",
+      "description": "One brand is shown per consumed stack, up to two.",
+      "category": "talent",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:grimheartConsumed",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "roilingRime",
+      "name": "Roiling Rime",
+      "source": "Roiling Rime",
+      "description": "Requires two consumed Grimheart stacks. Half of Burst’s zero-stack Physical base, with Burst damage classification; no Lightfall stack scaling.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:grimheartConsumed",
+            "value": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "icetideDebuff",
+      "name": "Icetide Vortex · resistance debuff",
+      "source": "Icetide Vortex · resistance debuff",
+      "description": "Separate seven-second debuff snapshot after consuming Grimheart. Can remain active without current Grimheart stacks.",
+      "category": "passive",
+      "recipient": "enemy",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:resistanceDebuffActive",
+            "value": 1
+          }
+        ]
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "elements": [
+              "Physical"
+            ]
+          },
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "source:skillTalentLevel"
+              },
+              "unit": "ratio"
+            }
+          }
+        },
+        {
+          "targets": {
+            "elements": [
+              "Cryo"
+            ]
+          },
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param5",
+                "levelInput": "source:skillTalentLevel"
+              },
+              "unit": "ratio"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "warLust",
+      "name": "Wellspring of War-Lust",
+      "source": "Wellspring of War-Lust",
+      "description": "Burst resets Skill cooldown and grants one Grimheart. Select the resulting current/consumed stacks; the initial Burst hit does not charge Lightfall.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      }
+    },
+    {
+      "id": "eulaC1",
+      "name": "C1",
+      "source": "C1",
+      "description": "30% Physical bonus after consuming Grimheart. More consumed stacks extend duration, not magnitude.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:physicalC1Active",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 1
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:physicalDamageBonus",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 30
+          },
+          "recipient": "self"
+        }
+      ]
+    },
+    {
+      "id": "eulaC2",
+      "name": "C2",
+      "source": "C2",
+      "description": "Held Skill uses Press cooldown; no per-hit modifier.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      }
+    },
+    {
+      "id": "eulaC3",
+      "name": "C3",
+      "source": "C3",
+      "description": "C3",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "eulaC4",
+      "name": "C4",
+      "source": "C4",
+      "description": "Additive 25% bonus affects both full and Shattered Lightfall swords below 50% enemy HP, not the initial Cryo cast.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:enemyBelowHalf",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lightfallSword"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 25
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    },
+    {
+      "id": "eulaC5",
+      "name": "C5",
+      "source": "C5",
+      "description": "C5",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "eulaC6",
+      "name": "C6",
+      "source": "C6",
+      "description": "Total Lightfall stacks are at least five at C6. Enter the final total including initial and random extra stacks; no extra five are added when already included. Chance-based stack generation is not simulated.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 6
+      },
+      "statChanges": [
+        {
+          "stat": "local:lightfallStacks",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 0
+          },
+          "minimum": 5,
+          "maximum": 30
+        }
+      ]
+    }
+  ],
+  "defaultTeam": [
+    "eula"
+  ],
+  "inputDefaults": {
+    "attack": 1500,
+    "maxHp": 30000,
+    "defense": 2000,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  },
+  "notes": [
+    "Each entry represents one hit unless stated otherwise. Trigger availability and buff duration are combat snapshots, not a rotation simulation.",
+    "Lightfall total stacks cap at the referenced Burst maximum. C6 sets a minimum of five rather than adding five to an already inclusive total.",
+    "Roiling Rime scales from half of Burst base only. Consumed Grimheart, current Grimheart, remaining debuff and C1 duration are separate snapshots.",
+    "Normal/Charged/Plunging attacks remain Physical unless externally infused. Cryo Skill/Burst casts and Physical Lightfall explosions do not convert with weapon infusion."
+  ],
+  "sources": [
+    "/api/characters/eula",
+    "data/characters/data/eula.json",
+    "https://library.keqingmains.com/characters/cryo/eula"
+  ]
+}

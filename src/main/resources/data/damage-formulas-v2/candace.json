@@ -1,0 +1,652 @@
+{
+  "schemaVersion": 3,
+  "key": "candace",
+  "characterKey": "candace",
+  "name": "Candace",
+  "element": "Hydro",
+  "weaponType": "Polearm",
+  "characterDataResource": "data/characters/data/candace.json",
+  "inputs": [
+    {
+      "id": "hydroInfusionActive",
+      "label": "Hydro infusion active",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "c6OffFieldTrigger",
+      "label": "C6 · another character triggered a wave",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Gleaming Spear - Guardian Stance",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "normal 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-2",
+          "label": "normal 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-3a",
+          "label": "normal 3a",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-3b",
+          "label": "normal 3b",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-4",
+          "label": "normal 4",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "charged",
+          "label": "charged",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge",
+          "label": "plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param8",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-low",
+          "label": "plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-high",
+          "label": "plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Sacred Rite: Heron's Sanctum",
+      "formulas": [
+        {
+          "id": "skill-press",
+          "label": "Heron’s Sanctum · press",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param3",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directHydro"
+        },
+        {
+          "id": "skill-charged",
+          "label": "Heron’s Sanctum · charged release",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directHydro"
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Sacred Rite: Wagtail's Tide",
+      "formulas": [
+        {
+          "id": "burst-cast",
+          "label": "Wagtail’s Tide · cast",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directHydro"
+        },
+        {
+          "id": "swap-wave",
+          "label": "Wagtail’s Tide · one swap wave",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param4",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directHydro"
+        },
+        {
+          "id": "c6-wave",
+          "label": "C6 · one off-field wave",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "constant",
+                "value": 0.15
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directHydro",
+          "requiredEffects": [
+            "candaceC6"
+          ]
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "crimsonCrown",
+      "name": "Prayer of the Crimson Crown",
+      "source": "Prayer of the Crimson Crown",
+      "description": "Burst snapshot. Elemental Normal Attacks gain the talent bonus; melee attacks may receive Hydro infusion. Infusion can be switched off independently.",
+      "category": "talent",
+      "recipient": "activeCharacter",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "formulaModifiers": [
+        {
+          "infusion": {
+            "damageType": "directHydro",
+            "weaponTypes": [
+              "Sword",
+              "Claymore",
+              "Polearm"
+            ],
+            "priority": 20
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:hydroInfusionActive",
+              "value": 1
+            }
+          ],
+          "targets": {}
+        },
+        {
+          "targets": {
+            "requiredTags": [
+              "normalAttack"
+            ],
+            "damageKinds": [
+              "talent"
+            ],
+            "elements": [
+              "Pyro",
+              "Hydro",
+              "Electro",
+              "Cryo",
+              "Dendro",
+              "Anemo",
+              "Geo"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "talentParameter",
+              "talent": "combat3",
+              "parameter": "param3",
+              "levelInput": "source:burstTalentLevel"
+            },
+            "unit": "ratio"
+          }
+        }
+      ]
+    },
+    {
+      "id": "celestialDome",
+      "name": "Celestial Dome of Sand",
+      "source": "Celestial Dome of Sand",
+      "description": "Celestial Dome of Sand",
+      "category": "passive",
+      "recipient": "activeCharacter",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "requiresEffects": [
+        "crimsonCrown"
+      ],
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "normalAttack"
+            ],
+            "damageKinds": [
+              "talent"
+            ],
+            "elements": [
+              "Pyro",
+              "Hydro",
+              "Electro",
+              "Cryo",
+              "Dendro",
+              "Anemo",
+              "Geo"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "input",
+                  "input": "source:maxHp"
+                },
+                {
+                  "type": "constant",
+                  "value": 0.000005
+                }
+              ]
+            },
+            "unit": "ratio"
+          }
+        }
+      ]
+    },
+    {
+      "id": "candaceC1",
+      "name": "C1",
+      "source": "C1",
+      "description": "Extends Prayer duration by three seconds; no per-hit damage multiplier.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 1
+      }
+    },
+    {
+      "id": "candaceC2",
+      "name": "C2",
+      "source": "C2",
+      "description": "Enable after a previous Skill hit. The triggering Skill hit does not receive the new HP bonus.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:maxHp",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "recipient:baseHp"
+              },
+              {
+                "type": "constant",
+                "value": 0.2
+              }
+            ]
+          },
+          "recipient": "self"
+        }
+      ]
+    },
+    {
+      "id": "candaceC3",
+      "name": "C3",
+      "source": "C3",
+      "description": "C3",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "candaceC4",
+      "name": "C4",
+      "source": "C4",
+      "description": "Reduces held Skill cooldown; no per-hit damage multiplier.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      }
+    },
+    {
+      "id": "candaceC5",
+      "name": "C5",
+      "source": "C5",
+      "description": "C5",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "candaceC6",
+      "name": "C6",
+      "source": "C6",
+      "description": "Separate off-field wave snapshot after another character’s elemental Normal Attack. Cannot trigger from Candace’s own attacks.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:c6OffFieldTrigger",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 6
+      },
+      "requiresEffects": [
+        "crimsonCrown"
+      ]
+    }
+  ],
+  "defaultTeam": [
+    "candace"
+  ],
+  "inputDefaults": {
+    "attack": 1500,
+    "maxHp": 30000,
+    "defense": 2000,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  },
+  "notes": [
+    "Each entry represents one hit unless stated otherwise. Trigger availability and buff duration are combat snapshots, not a rotation simulation.",
+    "Press and charged Skill releases are alternatives. Swap waves and C6 waves are individual hits, not a simulated rotation.",
+    "Hydro infusion wins over Bennett C6 in this steady-state snapshot (priority 20 versus 10); weapon gauge reactions and refresh timing are not simulated."
+  ],
+  "sources": [
+    "/api/characters/candace",
+    "data/characters/data/candace.json",
+    "https://library.keqingmains.com/characters/hydro/candace"
+  ]
+}

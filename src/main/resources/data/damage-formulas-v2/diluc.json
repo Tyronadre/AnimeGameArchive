@@ -1,0 +1,719 @@
+{
+  "schemaVersion": 3,
+  "key": "diluc",
+  "characterKey": "diluc",
+  "name": "Diluc",
+  "element": "Pyro",
+  "weaponType": "Claymore",
+  "characterDataResource": "data/characters/data/diluc.json",
+  "inputs": [
+    {
+      "id": "pyroInfusionActive",
+      "label": "Dawn · Pyro infusion active",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "enemyHpAboveHalf",
+      "label": "Enemy HP is above 50%",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "c2HitStacks",
+      "label": "C2 · hit-taken ATK stacks",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 3,
+      "step": 1
+    },
+    {
+      "id": "c4RhythmReady",
+      "label": "C4 · next combo Skill cast is timed correctly",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "c6NormalBuffReady",
+      "label": "C6 · next Normal Attack has an available buff charge",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Tempered Sword",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "normal 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-2",
+          "label": "normal 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-3",
+          "label": "normal 3",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-4",
+          "label": "normal 4",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "charged-loop",
+          "label": "charged loop",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "charged-final",
+          "label": "charged final",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge",
+          "label": "plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-low",
+          "label": "plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-high",
+          "label": "plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param11",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Searing Onslaught",
+      "formulas": [
+        {
+          "id": "onslaught-1",
+          "label": "Searing Onslaught · first slash",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directPyro"
+        },
+        {
+          "id": "onslaught-2",
+          "label": "Searing Onslaught · second slash",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param2",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill",
+            "rhythmEligible"
+          ],
+          "damageType": "directPyro"
+        },
+        {
+          "id": "onslaught-3",
+          "label": "Searing Onslaught · third slash",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param3",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill",
+            "rhythmEligible"
+          ],
+          "damageType": "directPyro"
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Dawn",
+      "formulas": [
+        {
+          "id": "dawn-slash",
+          "label": "Dawn · initial slash",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directPyro"
+        },
+        {
+          "id": "phoenix-tick",
+          "label": "Phoenix · one travel damage tick",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param2",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directPyro"
+        },
+        {
+          "id": "phoenix-explosion",
+          "label": "Phoenix · final explosion",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param3",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directPyro"
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "dawnInfusion",
+      "name": "Dawn · Pyro infusion",
+      "source": "Dawn · Pyro infusion",
+      "description": "Own Pyro infusion. Overrides Chongyun’s Cryo in the steady-state snapshot; Candace’s Hydro can override it.",
+      "category": "talent",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:pyroInfusionActive",
+            "value": 1
+          }
+        ]
+      },
+      "formulaModifiers": [
+        {
+          "targets": {},
+          "infusion": {
+            "damageType": "directPyro",
+            "weaponTypes": [
+              "Claymore"
+            ],
+            "priority": 10
+          }
+        }
+      ]
+    },
+    {
+      "id": "phoenixBlessing",
+      "name": "Blessing of Phoenix",
+      "source": "Blessing of Phoenix",
+      "description": "20% Pyro bonus during Dawn’s infusion, including the Burst’s own damage. Infusion duration extends by four seconds.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "requiresEffects": [
+        "dawnInfusion"
+      ],
+      "statChanges": [
+        {
+          "stat": "recipient:elementalDamageBonus",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 20
+          },
+          "recipient": "self"
+        }
+      ]
+    },
+    {
+      "id": "relentless",
+      "name": "Relentless",
+      "source": "Relentless",
+      "description": "Charged Attack stamina reduction and longer channel duration; no per-hit damage multiplier.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      }
+    },
+    {
+      "id": "dilucC1",
+      "name": "C1",
+      "source": "C1",
+      "description": "C1",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:enemyHpAboveHalf",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 1
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "damageKinds": [
+              "talent"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 15
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dilucC2",
+      "name": "C2",
+      "source": "C2",
+      "description": "Each hit-taken stack adds 10% of base ATK and 5% Attack Speed. Speed affects timing only.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:attack",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "recipient:baseAttack"
+              },
+              {
+                "type": "input",
+                "input": "local:c2HitStacks"
+              },
+              {
+                "type": "constant",
+                "value": 0.1
+              }
+            ]
+          },
+          "recipient": "self"
+        }
+      ]
+    },
+    {
+      "id": "dilucC3",
+      "name": "C3",
+      "source": "C3",
+      "description": "C3",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "dilucC4",
+      "name": "C4",
+      "source": "C4",
+      "description": "Only a second/third combo Skill slash cast in the timing window gains the additive 40% bonus.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:c4RhythmReady",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "rhythmEligible"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 40
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dilucC5",
+      "name": "C5",
+      "source": "C5",
+      "description": "C5",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "dilucC6",
+      "name": "C6",
+      "source": "C6",
+      "description": "One of the next two Normal Attacks after Skill gains 30% damage and Attack Speed. Does not buff Charged or Plunging Attacks.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:c6NormalBuffReady",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 6
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "normalAttack"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 30
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    }
+  ],
+  "defaultTeam": [
+    "diluc"
+  ],
+  "inputDefaults": {
+    "attack": 1500,
+    "maxHp": 30000,
+    "defense": 2000,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  },
+  "notes": [
+    "Each entry represents one hit unless stated otherwise. Trigger availability and buff duration are combat snapshots, not a rotation simulation.",
+    "Phoenix travel damage is one tick; target size and movement determine how many ticks land. Do not treat every entry as a single simultaneous hit.",
+    "Constellation bonuses are additive ordinary damage bonuses. C2 uses base ATK; C4 only affects the next eligible Skill slash; C6 requires an available Normal Attack buff charge."
+  ],
+  "sources": [
+    "/api/characters/diluc",
+    "data/characters/data/diluc.json",
+    "https://library.keqingmains.com/characters/pyro/diluc"
+  ]
+}

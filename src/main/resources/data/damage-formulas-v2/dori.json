@@ -1,0 +1,635 @@
+{
+  "schemaVersion": 3,
+  "key": "dori",
+  "characterKey": "dori",
+  "name": "Dori",
+  "element": "Electro",
+  "weaponType": "Claymore",
+  "characterDataResource": "data/characters/data/dori.json",
+  "inputs": [
+    {
+      "id": "jinniConnected",
+      "label": "Current character connected to Jinni",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "recipientHpPercent",
+      "label": "Connected character HP (%)",
+      "defaultValue": 100,
+      "min": 0,
+      "max": 100,
+      "step": 1
+    },
+    {
+      "id": "recipientEnergyPercent",
+      "label": "Connected character Energy (%)",
+      "defaultValue": 100,
+      "min": 0,
+      "max": 100,
+      "step": 1
+    },
+    {
+      "id": "c6InfusionActive",
+      "label": "C6 · within 3 seconds after Skill",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Marvelous Sword-Dance (Modified)",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "normal 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-2a",
+          "label": "normal 2a",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-2b",
+          "label": "normal 2b",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-3",
+          "label": "normal 3",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "charged-loop",
+          "label": "charged loop",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "charged-final",
+          "label": "charged final",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge",
+          "label": "plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-low",
+          "label": "plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-high",
+          "label": "plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param11",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Spirit-Warding Lamp: Troubleshooter Cannon",
+      "formulas": [
+        {
+          "id": "troubleshooter",
+          "label": "Troubleshooter Shot",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directElectro"
+        },
+        {
+          "id": "service-round",
+          "label": "One After-Sales Service Round",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param2",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directElectro"
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Alcazarzaray's Exactitude",
+      "formulas": [
+        {
+          "id": "connector",
+          "label": "Jinni connector · one hit",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "jinniConnection"
+          ]
+        },
+        {
+          "id": "jinni-toop",
+          "label": "C2 · one Jinni Toop",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 0.5
+              }
+            ]
+          },
+          "tags": [
+            "jinniToop"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "jinniConnection",
+            "doriC2"
+          ]
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "jinniConnection",
+      "name": "Jinni connection",
+      "source": "Jinni connection",
+      "description": "Connector damage and C2 require a connected character; HP/Energy restoration is not damage.",
+      "category": "talent",
+      "recipient": "activeCharacter",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:jinniConnected",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "eyeForGold",
+      "name": "An Eye for Gold",
+      "source": "An Eye for Gold",
+      "description": "Qualifying Electro reactions reduce Skill cooldown, not damage per hit.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      }
+    },
+    {
+      "id": "compoundInterest",
+      "name": "Compound Interest",
+      "source": "Compound Interest",
+      "description": "Once per Skill use, restores Energy continuously proportional to ER, capped at 15.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "metrics": [
+        {
+          "label": "Energy restored per Skill",
+          "expression": {
+            "type": "min",
+            "operands": [
+              {
+                "type": "constant",
+                "value": 15
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:energyRecharge"
+                  },
+                  {
+                    "type": "constant",
+                    "value": 0.05
+                  }
+                ]
+              }
+            ]
+          },
+          "unit": "number",
+          "conditions": []
+        }
+      ]
+    },
+    {
+      "id": "doriC1",
+      "name": "C1",
+      "source": "C1",
+      "description": "Adds one Service Round (three instead of two). The listed Round remains one hit.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 1
+      }
+    },
+    {
+      "id": "doriC2",
+      "name": "C2",
+      "source": "C2",
+      "description": "One untyped Electro Jinni Toop after Jinni heals the connected character in combat; not Burst or Skill damage.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      }
+    },
+    {
+      "id": "doriC3",
+      "name": "C3",
+      "source": "C3",
+      "description": "C3",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "doriC4",
+      "name": "C4",
+      "source": "C4",
+      "description": "Each threshold is strictly below 50%. ER and incoming healing conditions are independent.",
+      "category": "constellation",
+      "recipient": "activeCharacter",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      },
+      "requiresEffects": [
+        "jinniConnection"
+      ],
+      "statChanges": [
+        {
+          "stat": "recipient:energyRecharge",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 30
+          },
+          "recipient": "activeCharacter",
+          "conditions": [
+            {
+              "type": "inputAtMost",
+              "input": "local:recipientEnergyPercent",
+              "value": 49.9999999
+            }
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "label": "Incoming Healing bonus",
+          "expression": {
+            "type": "constant",
+            "value": 50
+          },
+          "unit": "percentPoints",
+          "conditions": [
+            {
+              "type": "inputAtMost",
+              "input": "local:recipientHpPercent",
+              "value": 49.9999999
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doriC5",
+      "name": "C5",
+      "source": "C5",
+      "description": "C5",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "doriC6",
+      "name": "C6",
+      "source": "C6",
+      "description": "Three-second overridable Electro infusion after Skill. Normal-hit healing scales with HP and is not outgoing damage.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:c6InfusionActive",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 6
+      },
+      "formulaModifiers": [
+        {
+          "targets": {},
+          "infusion": {
+            "damageType": "directElectro",
+            "weaponTypes": [
+              "Claymore"
+            ],
+            "priority": 0
+          }
+        }
+      ]
+    }
+  ],
+  "defaultTeam": [
+    "dori"
+  ],
+  "inputDefaults": {
+    "attack": 1500,
+    "maxHp": 30000,
+    "defense": 2000,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  },
+  "notes": [
+    "Each entry represents one hit unless stated otherwise. Trigger availability and buff duration are combat snapshots, not a rotation simulation.",
+    "Jinni cast itself has no damage; connector contact is one Burst hit. C2 fires after a healing tick in combat and is an untyped Electro proc.",
+    "C1 alters projectile count; healing, cooldown reductions, Energy regeneration and C6 healing are not additional damage instances."
+  ],
+  "sources": [
+    "/api/characters/dori",
+    "data/characters/data/dori.json",
+    "https://library.keqingmains.com/characters/electro/dori"
+  ]
+}

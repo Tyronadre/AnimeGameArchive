@@ -151,7 +151,8 @@
           "label": "Low Plunge DMG",
           "damageType": "directCryo",
           "tags": [
-            "plungingAttack"
+            "plungingAttack",
+            "plungeImpact"
           ],
           "base": {
             "type": "multiply",
@@ -174,7 +175,8 @@
           "label": "High Plunge DMG",
           "damageType": "directCryo",
           "tags": [
-            "plungingAttack"
+            "plungingAttack",
+            "plungeImpact"
           ],
           "base": {
             "type": "multiply",

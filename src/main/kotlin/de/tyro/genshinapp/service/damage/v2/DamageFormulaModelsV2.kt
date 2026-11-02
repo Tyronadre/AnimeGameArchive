@@ -59,9 +59,11 @@ data class DamageTeamMemberV2(
     val iconUrl: String? = null,
     val weaponType: String = "",
     val calculatorAvailable: Boolean = false,
+    val region: String = "",
 )
 
 data class DamageTeamRulesV2(
+    val hexereiCharacters: List<String> = emptyList(),
     val inputs: List<DamageFormulaInputV2> = emptyList(),
     val effects: List<DamageEffectV2> = emptyList(),
 )
@@ -147,6 +149,8 @@ data class DamageFormulaV2(
     val defenseMitigation: DefenseMitigationContributionV2? = null,
     val resistanceMitigation: ResistanceMitigationContributionV2? = null,
     val crit: CritContributionV2? = null,
+    /** physicalOnly (default), overrideable, or locked against external weapon infusion. */
+    val infusionRule: String = "physicalOnly",
 )
 
 /**
@@ -250,6 +254,14 @@ data class FormulaModifierV2(
     val baseDamageMultiplier: FormulaContributionV2? = null,
     val recipient: String? = null,
     val excludeSource: Boolean = false,
+    val infusion: WeaponInfusionV2? = null,
+)
+
+data class WeaponInfusionV2(
+    val damageType: String,
+    val weaponTypes: List<String> = listOf("Sword", "Claymore", "Polearm"),
+    /** Resolves a configured snapshot; weapon-gauge reactions and refresh timing are not simulated. */
+    val priority: Int = 0,
 )
 
 data class EffectMetricV2(
@@ -308,6 +320,7 @@ data class DamageFormulaResultV2(
     val appliedEffectIds: Set<String>,
     val postBonusBase: EvaluatedFormulaPartV2 = EvaluatedFormulaPartV2(0.0, emptyList()),
     val reactions: List<DamageReactionResultV2> = emptyList(),
+    val infusionSourceEffectId: String? = null,
 )
 
 data class DamageReactionResultV2(

@@ -56,7 +56,7 @@ const schemas={
  inputDefinition:{id:'',label:'',defaultValue:0,min:0,max:100,step:1,unit:'number',initialValueSource:{valueKey:''},section:'combat',hintTag:'',description:'',defaultContext:''},
  effect:{id:'',name:'',source:'',description:'',category:'passive',recipient:'self',excludeSource:false,impact:'',defaultEnabled:true,ownershipRequirements:{},requiresEffects:[],activation:{event:'always'},statChanges:[],formulaModifiers:[],metrics:[],stackingGroup:'',stackingPriority:expr(),effectTags:[]},
  wrapper:{pieces:2,recipient:'wearer',effect:effect(),formulas:[]},weaponWrapper:{recipient:'wearer',effect:effect()},
- talent:{key:'',name:'',formulas:[]},formula:{id:'',label:'',damageType:'',tags:[],requiredEffects:[],excludedEffects:[],base:expr(),damageBonus:contribution(),defenseMitigation:{},resistanceMitigation:{},crit:{}},
+ talent:{key:'',name:'',formulas:[]},formula:{id:'',label:'',damageType:'',infusionRule:'physicalOnly',tags:[],requiredEffects:[],excludedEffects:[],base:expr(),damageBonus:contribution(),defenseMitigation:{},resistanceMitigation:{},crit:{}},
  modifier:{targets:{},conditions:[],requiresEffects:[],recipient:'self',excludeSource:false,base:expr(),baseDamageBonus:contribution(),baseDamageMultiplier:contribution(),damageBonus:contribution(),postBonusBase:expr(),defenseMitigation:{},resistanceMitigation:{},crit:{},elevation:contribution()},
  targets:{formulaIds:[],requiredTags:[],anyTags:[],elements:[],damageKinds:[]},
  statChange:{stat:'',operation:'flatAdd',value:expr(),phase:0,recipient:'self',excludeSource:false,minimum:0,maximum:100,conditions:[],requiresEffects:[]},
@@ -67,7 +67,7 @@ const schemas={
  contribution:{expression:expr(),unit:'percentPoints'},expression:{type:'constant',value:0,input:'',talent:'',parameter:'',levelInput:'',characterKey:'',operands:[]},
  reaction:{key:'',id:'',name:'',kind:'transformative',triggerElements:[],requiredTeamElements:[],auraLabel:'',damageElement:'',description:'',requiredFormulaTagsAny:[],baseMultiplier:1,elementalMasteryCoefficient:16,elementalMasteryDenominator:2000}
 };
-const topSchema={schemaVersion:3,key:'',name:'',characterKey:'',element:'Dendro',weaponType:'Catalyst',characterDataResource:'',moonsignContribution:0,statBindings:{},defaultTeam:[],inputs:[],damageTypes:[],talents:[],effects:[],sources:[],notes:[],talentParameters:{},characterLevelMultipliers:[],crystallizeLevelMultipliers:[],reactions:[]};
+const topSchema={hexereiCharacters:[],schemaVersion:3,key:'',name:'',characterKey:'',element:'Dendro',weaponType:'Catalyst',characterDataResource:'',moonsignContribution:0,statBindings:{},defaultTeam:[],inputs:[],damageTypes:[],talents:[],effects:[],sources:[],notes:[],talentParameters:{},characterLevelMultipliers:[],crystallizeLevelMultipliers:[],reactions:[]};
 function changed(){dirty=true;$('dirty').textContent='Unsaved changes';controls();syncSummaries();}
 function controls(){for(const id of ['save','validate','reload'])$(id).disabled=!data||busy;}
 function status(text,error=false){$('status').textContent=text;$('status').dataset.error=String(error);}
@@ -75,7 +75,7 @@ function select(options,value,onchange){const n=node('select');[...new Set([valu
 function enumValues(key,kind){
  if(key==='unit')return ['number','percentPoints','ratio'];
  if(key==='type')return kind==='condition'?['inputAtLeast','inputAtMost','teamMember','contextAtLeast']:['constant','input','talentParameter','teamMax','add','multiply','divide','min','max',...(path.includes('/')?['context']:[])];
- if(key==='kind')return kind==='reaction'?['amplifying','additive','transformative','utility','shield']:['talent','lunar','reaction','artifactProc'];
+ if(key==='kind')return kind==='reaction'?['amplifying','additive','transformative','utility','shield']:['talent','lunar','stellar','reaction','artifactProc'];
  return {element:['Pyro','Hydro','Electro','Cryo','Anemo','Geo','Dendro','Physical'],damageElement:['Pyro','Hydro','Electro','Cryo','Anemo','Geo','Dendro','Physical'],weaponType:['Sword','Claymore','Polearm','Bow','Catalyst'],operation:['flatAdd','percentAdd'],defenseBehavior:['standard','bypass'],category:['passive','talent','team','constellation'],recipient:(['wrapper','weaponWrapper'].includes(kind)?['wearer','party','others']:['self','party','others','activeCharacter','enemy']),pieces:[1,2,4],damageType:sharedDamageTypes.map(t=>t.id)}[key];
 }
 function primitive(value,set,key,kind){
@@ -119,13 +119,14 @@ const layerTypes=[
  ['resistanceMitigation.reduction','RES reduction','Percentage points subtracted from enemy resistance.'],
  ['crit.additionalRate','CRIT Rate','Additional CRIT Rate in percentage points.'],
  ['crit.additionalDamage','CRIT DMG','Additional CRIT DMG in percentage points.'],
- ['elevation','Elevation','Percentage added to the separate final multiplier.']
+ ['elevation','Elevation','Percentage added to the separate final multiplier.'],
+ ['infusion','Weapon infusion','Changes eligible weapon attacks to a shared damage type before damage bonuses, resistance, and reactions are calculated.']
 ];
 const expressionNames={constant:'Fixed number',input:'Character stat or input',talentParameter:'Talent multiplier',teamMax:'Highest team stat',context:'Team or equipment context',add:'Add (+)',multiply:'Multiply (×)',divide:'Divide (÷)',min:'Minimum / cap',max:'Maximum / floor'};
 const logicalStats=['pyroDamageBonus','hydroDamageBonus','cryoDamageBonus','dendroDamageBonus','electroDamageBonus','geoDamageBonus','anemoDamageBonus','attack','baseAttack','maxHp','baseHp','defense','baseDefense','elementalMastery','critRate','critDamage','energyRecharge','elementalDamageBonus','physicalDamageBonus','characterLevel','normalTalentLevel','skillTalentLevel','burstTalentLevel','constellation'];
 const recipientOptions=[['self','Self (source character)'],['party','Whole party'],['others','Other party members'],['activeCharacter','Active character'],['enemy','Enemy debuff']];
 const events=['always','buffActive','burstActive','burstFieldActive','skillActive','skillUsed','burstUsed','normalAttackHit','chargedAttackHit','reactionTriggered','teamComposition'];
-const knownTags=['lunarBloom','normalAttack','chargedAttack','plungingAttack','elementalSkill','elementalBurst','multiHit','noReaction'];
+const knownTags=['stellarSwirl','stellarConduct','lunarBloom','normalAttack','chargedAttack','plungingAttack','plungeImpact','elementalSkill','elementalBurst','multiHit','infusedAttack','noReaction'];
 function choice(options,value,apply){
  const n=node('select');const items=options.map(o=>Array.isArray(o)?o:[o,title(o)]);
  if(!items.some(o=>String(o[0])===String(value)))items.unshift([value,value||'Choose…']);
@@ -143,7 +144,7 @@ function setLayer(obj,key,value){const keys=key.split('.');let parent=obj;for(co
 function deleteLayer(obj,key){const [parent,child]=key.split('.');if(child){delete obj[parent][child];if(!Object.keys(obj[parent]).length)delete obj[parent];}else delete obj[parent];}
 function layerExpression(value){return value?.expression||(value?.type?value:expr());}
 function isFlatLayer(key){return ['base','postBonusBase'].includes(key);}
-function newLayerValue(key,expression=expr(),unit='percentPoints'){return key==='defenseMitigation.bypass'?true:isFlatLayer(key)?expression:{expression,unit};}
+function newLayerValue(key,expression=expr(),unit='percentPoints'){return key==='infusion'?{damageType:'directPyro',weaponTypes:['Sword','Claymore','Polearm'],priority:0}:key==='defenseMitigation.bypass'?true:isFlatLayer(key)?expression:{expression,unit};}
 function uniqueId(base,items){let id=base,n=2;const ids=new Set(items.map(x=>x.id||x.key));while(ids.has(id))id=base+n++;return id;}
 function allFormulas(){const formulas=[];function visit(value){if(!value||typeof value!=='object')return;for(const [key,child] of Object.entries(value)){if(key==='formulas'&&Array.isArray(child))formulas.push(...child);else if(child&&typeof child==='object')visit(child);}}visit(data);return formulas;}
 function newItem(kind){const item=defaultItem(kind);const collections={effect:data.effects||[],formula:allFormulas(),inputDefinition:availableInputs(),talent:data.talents||[],damageType:data.damageTypes||[]};if(item?.id)item.id=uniqueId(item.id,collections[kind]||[]);if(item?.key)item.key=uniqueId(item.key,collections[kind]||[]);if(['effect','formula'].includes(kind))autoIdentifiers.set(item,item.id);if(item?.effect)autoIdentifiers.set(item.effect,item.effect.id);return item;}
@@ -205,7 +206,7 @@ function expressionEditor(e){
  box.append(field('Scaling parameter',referenceControl(e.parameter||'',v=>e.parameter=v,parameters.map(p=>[p.key,`${p.label} · ${p.key}`]))));
  box.append(field('Read talent level from',referenceControl(e.levelInput||'',v=>e.levelInput=v,inputOptions(true,character)),'This uses the selected level at calculation time; it is not a fixed multiplier.'));
  const parameter=parameters.find(p=>p.key===e.parameter);if(parameter)box.append(node('p',`Talent table: ${parameter.values?.map(n=>Number(n.toFixed(4))).join(' · ')}`,'studio-help'));
- }else if(e.type==='context')box.append(field('Context',referenceControl(e.input||'',v=>e.input=v,['sameElementAllies','differentElementAllies','moonsignLevel','onField','offField','meleeWeapon','rangedWeapon'].map(k=>[k,title(k)]))));
+ }else if(e.type==='context')box.append(field('Context',referenceControl(e.input||'',v=>e.input=v,['hexereiCount','sourceHexerei','recipientHexerei','sourceNonFontaineAllies','recipientPyroElectro','pyroElectroOnly','sameElementAllies','differentElementAllies','moonsignLevel','onField','offField','meleeWeapon','rangedWeapon'].map(k=>[k,title(k)]))));
  else if(e.type==='teamMax')box.append(field('Team stat',referenceControl(e.input||'',v=>e.input=v,['elementalMastery','attack','maxHp','defense'].map(k=>[k,title(k)]))));
  else {
  const operands=e.operands??=[];
@@ -219,8 +220,8 @@ function expressionEditor(e){
 function targetEditor(target){
  const box=node('div',undefined,'studio-targets');
  const mode=Object.keys(target).length===0?'all':target.damageKinds?.length===1&&Object.keys(target).length===1?target.damageKinds[0]:target.requiredTags?.length===1&&Object.keys(target).length===1?target.requiredTags[0]:'custom';
- const options=[['all','All damage'],['lunar','All Lunar damage'],['lunarBloom','Lunar-Bloom hits'],['talent','Ordinary talent damage'],...knownTags.filter(t=>t!=='lunarBloom').map(t=>[t,title(t)]),['custom','Custom combination…']];
- box.append(field('Applies to',choice(options,mode,v=>{if(v==='custom')return;Object.keys(target).forEach(k=>delete target[k]);if(['lunar','talent'].includes(v))target.damageKinds=[v];else if(v!=='all')target.requiredTags=[v];}),'Selectors combine with AND. An empty selector applies to every hit.'));
+ const options=[['all','All damage'],['lunar','All Lunar damage'],['stellar','All Stellar damage'],['lunarBloom','Lunar-Bloom hits'],['talent','Ordinary talent damage'],...knownTags.filter(t=>t!=='lunarBloom').map(t=>[t,title(t)]),['custom','Custom combination…']];
+ box.append(field('Applies to',choice(options,mode,v=>{if(v==='custom')return;Object.keys(target).forEach(k=>delete target[k]);if(['lunar','stellar','talent'].includes(v))target.damageKinds=[v];else if(v!=='all')target.requiredTags=[v];}),'Selectors combine with AND. An empty selector applies to every hit.'));
  const details=node('details');details.dataset.studioCard=panelId(target,'targets');details.open=mode==='custom';details.append(node('summary','Refine targets'),objectEditor(target,'targets',true));box.append(details);return editorView(box,target,'targets',()=>targetEditor(target));
 }
 function modifierEditor(modifier){
@@ -231,7 +232,10 @@ function modifierEditor(modifier){
  const options=layerTypes.filter(([other])=>other===key||getLayer(modifier,other)==null).map(([id,name])=>[id,name]);
  change.append(field('What changes?',choice(options,key,next=>{const old=getLayer(modifier,key),expression=structuredClone(layerExpression(old));deleteLayer(modifier,key);setLayer(modifier,next,newLayerValue(next,expression,old?.unit||'percentPoints'));}),help));
  const value=getLayer(modifier,key);
- if(key==='defenseMitigation.bypass')change.append(field('Bypass defense',checkbox(value,v=>setLayer(modifier,key,v))));
+ if(key==='infusion'){
+  change.append(field('Infused damage type',choice(sharedDamageTypes.filter(t=>(t.kind||'talent')==='talent').map(t=>[t.id,damageTypeLabel(t)]),value.damageType,v=>value.damageType=v)));
+  const weapons=node('div',undefined,'studio-tag-choices');for(const weapon of ['Sword','Claymore','Polearm','Bow','Catalyst'])weapons.append(field(weapon,checkbox((value.weaponTypes||['Sword','Claymore','Polearm']).includes(weapon),enabled=>{value.weaponTypes??=['Sword','Claymore','Polearm'];if(enabled&&!value.weaponTypes.includes(weapon))value.weaponTypes.push(weapon);else if(!enabled)value.weaponTypes=value.weaponTypes.filter(w=>w!==weapon);})));change.append(weapons,field('Infusion priority',numberControl(value.priority??0,v=>value.priority=v),'Higher priority wins. Different infusions with equal priority require an explicit choice.'));
+ }else if(key==='defenseMitigation.bypass')change.append(field('Bypass defense',checkbox(value,v=>setLayer(modifier,key,v))));
  else {
  if(!isFlatLayer(key))change.append(field('Amount is expressed as',choice([['percentPoints','Percentage points (20 means +20%)'],['ratio','Ratio (0.2 means +20%)']],value.unit||'percentPoints',v=>value.unit=v)));
  change.append(expressionEditor(isFlatLayer(key)?value:value.expression));
@@ -293,7 +297,7 @@ function conditionEditor(condition){
  box.append(field('Requirement',choice(types,condition.type,v=>{condition.type=v;delete condition.input;delete condition.teamMember;delete condition.value;if(v==='teamMember')condition.teamMember='';else {condition.input='';condition.value=1;}})));
  if(condition.type==='teamMember')box.append(field('Character',referenceControl(condition.teamMember||'',v=>condition.teamMember=v,[...new Map(catalog.map(c=>[c.key,[c.key,c.name]])).values()])));
  else {
- const options=condition.type==='contextAtLeast'?['teamSize','moonsignLevel','hydroCryoCount',...['pyro','hydro','cryo','dendro','electro','anemo','geo'].map(e=>e+'Count')].map(k=>[k,title(k)]):inputOptions();
+ const options=condition.type==='contextAtLeast'?['hexereiCount','sourceHexerei','recipientHexerei','recipientPyroElectro','pyroElectroOnly','teamSize','moonsignLevel','hydroCryoCount',...['pyro','hydro','cryo','dendro','electro','anemo','geo'].map(e=>e+'Count')].map(k=>[k,title(k)]):inputOptions();
  box.append(field(condition.type==='contextAtLeast'?'Context':'Input',referenceControl(condition.input||'',v=>condition.input=v,options)),field('Threshold',numberControl(condition.value,v=>condition.value=v)));
  }return box;
 }
@@ -328,7 +332,7 @@ function damageTypeEditor(type){
    if(!type.resistanceInput||['enemyResistance',`enemy${type.element}Resistance`].includes(type.resistanceInput))type.resistanceInput=`enemy${v}Resistance`;
    type.element=v;if(v==='Physical')type.appliesElementalDamageBonus=false;
   })),
-  field('Damage kind',choice([['talent','Talent damage'],['lunar','Lunar damage'],['reaction','Reaction damage'],['artifactProc','Artifact damage']],type.kind||'talent',v=>type.kind=v)),
+  field('Damage kind',choice([['talent','Talent damage'],['lunar','Lunar damage'],['stellar','Stellar damage'],['reaction','Reaction damage'],['artifactProc','Artifact damage']],type.kind||'talent',v=>type.kind=v)),
   field('Enemy DEF',choice([['standard','Apply DEF'],['bypass','Ignore DEF']],type.defenseBehavior||'standard',v=>type.defenseBehavior=v)));
  rules.append(
   field('Use elemental DMG bonus',checkbox(type.appliesElementalDamageBonus!==false,v=>{type.appliesElementalDamageBonus=v;})),
@@ -346,6 +350,7 @@ function damageTypeEditor(type){
 function formulaEditor(formula){
  const box=node('div',undefined,'studio-formula-form');
  box.append(field('Damage instance name',textControl(formula.label,v=>{formula.label=v;updateGeneratedId(formula,v);})),field('Damage type',choice(sharedDamageTypes.map(t=>[t.id,damageTypeLabel(t)]),formula.damageType,v=>formula.damageType=v),'Shared across all characters. Controls the element, DEF, CRIT, damage bonuses, and built-in scaling.'),
+  field('External weapon infusion',choice([['physicalOnly','Allow on physical attacks'],['overrideable','Allow overriding this attack’s element'],['locked','Cannot be overridden']],formula.infusionRule||'physicalOnly',v=>formula.infusionRule=v)),
   button('Edit shared damage types',()=>load('damage-types.json')),node('h3','How is its base damage calculated?'),expressionEditor(formula.base??=expr()));
  const classification=node('div',undefined,'studio-tag-choices');
  const tags=formula.tags??=[];
@@ -387,7 +392,7 @@ function objectEditor(obj,kind,advanced=false){
  box.append(grid);
  let schema=kind==='overview'?topSchema:schemas[kind];
  if(kind==='overview'){
-  const fields=path==='damage-types.json'?['schemaVersion','damageTypes']:path==='team-rules.json'?['inputs','effects']:path.startsWith('weapons/')?['schemaVersion','key','name','inputs','effects','sources']:path.startsWith('artifacts/')?['schemaVersion','key','name','inputs','effects','sources']:path==='elemental-reactions.json'?['schemaVersion','characterLevelMultipliers','crystallizeLevelMultipliers','reactions','sources']:Object.keys(topSchema).filter(k=>!['characterLevelMultipliers','crystallizeLevelMultipliers','reactions','damageTypes'].includes(k));
+  const fields=path==='damage-types.json'?['schemaVersion','damageTypes']:path==='team-rules.json'?['inputs','effects','hexereiCharacters']:path.startsWith('weapons/')?['schemaVersion','key','name','inputs','effects','sources']:path.startsWith('artifacts/')?['schemaVersion','key','name','inputs','effects','sources']:path==='elemental-reactions.json'?['schemaVersion','characterLevelMultipliers','crystallizeLevelMultipliers','reactions','sources']:Object.keys(topSchema).filter(k=>!['characterLevelMultipliers','crystallizeLevelMultipliers','reactions','damageTypes','hexereiCharacters'].includes(k));
   schema=Object.fromEntries(fields.map(k=>[k,topSchema[k]]));
  }
 

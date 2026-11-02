@@ -1,0 +1,543 @@
+{
+  "schemaVersion": 3,
+  "key": "dahlia",
+  "characterKey": "dahlia",
+  "name": "Dahlia",
+  "element": "Hydro",
+  "weaponType": "Sword",
+  "characterDataResource": "data/characters/data/dahlia.json",
+  "inputs": [
+    {
+      "id": "favonianFavorActive",
+      "label": "Favonian Favor active on current character",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Favonius Bladework - Ritual",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "normal 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-2",
+          "label": "normal 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-3a",
+          "label": "normal 3a",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-3b",
+          "label": "normal 3b",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-4",
+          "label": "normal 4",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "charged-a",
+          "label": "charged a",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "charged-b",
+          "label": "charged b",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge",
+          "label": "plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-low",
+          "label": "plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-high",
+          "label": "plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param11",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Immersive Ordinance",
+      "formulas": [
+        {
+          "id": "shower-explosion",
+          "label": "Sacramental Shower · enemy contact explosion",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directHydro"
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Radiant Psalter",
+      "formulas": [
+        {
+          "id": "burst-cast",
+          "label": "Radiant Psalter · cast",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directHydro"
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "favonianFavor",
+      "name": "Favonian Favor",
+      "source": "Favonian Favor",
+      "description": "Burst grants the Shield of Sacred Favor. Benison renews the shield, without dealing additional damage.",
+      "category": "talent",
+      "recipient": "activeCharacter",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:favonianFavorActive",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "wellWroughtJoy",
+      "name": "Prayer of Well-Wrought Joy",
+      "source": "Prayer of Well-Wrought Joy",
+      "description": "HP-dependent Attack Speed; affects attack frequency rather than damage per hit.",
+      "category": "passive",
+      "recipient": "activeCharacter",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "requiresEffects": [
+        "favonianFavor"
+      ],
+      "metrics": [
+        {
+          "label": "Attack Speed bonus",
+          "expression": {
+            "type": "min",
+            "operands": [
+              {
+                "type": "constant",
+                "value": 20
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:maxHp"
+                  },
+                  {
+                    "type": "constant",
+                    "value": 0.0005
+                  }
+                ]
+              }
+            ]
+          },
+          "unit": "percentPoints",
+          "conditions": []
+        }
+      ]
+    },
+    {
+      "id": "windGentleGrace",
+      "name": "The Wind’s Gentle Grace",
+      "source": "The Wind’s Gentle Grace",
+      "description": "Frozen reactions grant Benison stacks, renewing the shield rather than increasing damage per hit.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      }
+    },
+    {
+      "id": "dahliaC1",
+      "name": "C1",
+      "source": "C1",
+      "description": "Each Benison stack restores 2.5 Energy; no per-hit damage modifier.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 1
+      }
+    },
+    {
+      "id": "dahliaC2",
+      "name": "C2",
+      "source": "C2",
+      "description": "Consuming Benison grants 25% Shield Strength to the protected character for 12 seconds; not an outgoing damage bonus.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      }
+    },
+    {
+      "id": "dahliaC3",
+      "name": "C3",
+      "source": "C3",
+      "description": "C3",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "dahliaC4",
+      "name": "C4",
+      "source": "C4",
+      "description": "Extends Favonian Favor by three seconds; no per-hit damage modifier.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      }
+    },
+    {
+      "id": "dahliaC5",
+      "name": "C5",
+      "source": "C5",
+      "description": "C5",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "dahliaC6",
+      "name": "C6",
+      "source": "C6",
+      "description": "Additional Attack Speed during Favonian Favor and a revive every 15 minutes. No per-hit damage multiplier.",
+      "category": "constellation",
+      "recipient": "activeCharacter",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 6
+      },
+      "requiresEffects": [
+        "favonianFavor"
+      ],
+      "metrics": [
+        {
+          "label": "Additional Attack Speed bonus",
+          "expression": {
+            "type": "constant",
+            "value": 10
+          },
+          "unit": "percentPoints",
+          "conditions": []
+        }
+      ]
+    }
+  ],
+  "defaultTeam": [
+    "dahlia"
+  ],
+  "inputDefaults": {
+    "attack": 1500,
+    "maxHp": 30000,
+    "defense": 2000,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  },
+  "notes": [
+    "Each entry represents one hit unless stated otherwise. Trigger availability and buff duration are combat snapshots, not a rotation simulation.",
+    "Skill deals damage only when an opponent triggers the Shower explosion. A teammate jumping from the Shower, shield creation/renewals, and revival do not deal damage.",
+    "Dahlia’s damage talents scale with ATK. HP scales his shield and Attack Speed passive, not his Skill/Burst damage. Attack Speed metrics are informational; rotations are not simulated."
+  ],
+  "sources": [
+    "/api/characters/dahlia",
+    "data/characters/data/dahlia.json",
+    "https://library.keqingmains.com/characters/hydro/dahlia"
+  ]
+}

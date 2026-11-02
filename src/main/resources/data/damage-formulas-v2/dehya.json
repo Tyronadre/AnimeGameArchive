@@ -1,0 +1,713 @@
+{
+  "schemaVersion": 3,
+  "key": "dehya",
+  "characterKey": "dehya",
+  "name": "Dehya",
+  "element": "Pyro",
+  "weaponType": "Claymore",
+  "characterDataResource": "data/characters/data/dehya.json",
+  "inputs": [
+    {
+      "id": "coordinatedAttackBoostReady",
+      "label": "C2 · next field attack boosted after taking a hit",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "c6CritStacks",
+      "label": "C6 · previous critical punch stacks",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 4,
+      "step": 1
+    }
+  ],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Sandstorm Assault",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "normal 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-2",
+          "label": "normal 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-3",
+          "label": "normal 3",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-4",
+          "label": "normal 4",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "charged-loop",
+          "label": "charged loop",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "charged-final",
+          "label": "charged final",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge",
+          "label": "plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-low",
+          "label": "plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-high",
+          "label": "plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param11",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Molten Inferno",
+      "formulas": [
+        {
+          "id": "indomitable-flame",
+          "label": "Indomitable Flame · initial cast",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directPyro"
+        },
+        {
+          "id": "ranging-flame",
+          "label": "Ranging Flame · recast",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param2",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directPyro"
+        },
+        {
+          "id": "fiery-sanctum",
+          "label": "Fiery Sanctum · one coordinated attack",
+          "base": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param3",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:maxHp"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param4",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill",
+            "fierySanctum"
+          ],
+          "damageType": "directPyro"
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Leonine Bite",
+      "formulas": [
+        {
+          "id": "flame-mane-fist",
+          "label": "Flame-Mane’s Fist · one punch",
+          "base": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat3",
+                    "parameter": "param1",
+                    "levelInput": "source:burstTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:maxHp"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat3",
+                    "parameter": "param2",
+                    "levelInput": "source:burstTalentLevel"
+                  }
+                ]
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directPyro"
+        },
+        {
+          "id": "incineration-drive",
+          "label": "Incineration Drive · final kick",
+          "base": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat3",
+                    "parameter": "param3",
+                    "levelInput": "source:burstTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "source:maxHp"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat3",
+                    "parameter": "param4",
+                    "levelInput": "source:burstTalentLevel"
+                  }
+                ]
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directPyro"
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "unstintingSuccor",
+      "name": "Unstinting Succor",
+      "source": "Unstinting Succor",
+      "description": "Redmane damage mitigation and Gold-Forged Form interruption resistance are defensive effects, not outgoing damage multipliers.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      }
+    },
+    {
+      "id": "stalwartAndTrue",
+      "name": "Stalwart and True",
+      "source": "Stalwart and True",
+      "description": "Self-healing at low HP; does not change damage per hit.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      }
+    },
+    {
+      "id": "dehyaC1",
+      "name": "C1",
+      "source": "C1",
+      "description": "Adds 20% base HP to Max HP, then adds effective HP scaling to all Skill and Burst damage.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 1
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:maxHp",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "recipient:baseHp"
+              },
+              {
+                "type": "constant",
+                "value": 0.2
+              }
+            ]
+          },
+          "recipient": "self"
+        }
+      ],
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "elementalSkill"
+            ]
+          },
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "constant",
+                "value": 0.036
+              }
+            ]
+          }
+        },
+        {
+          "targets": {
+            "requiredTags": [
+              "elementalBurst"
+            ]
+          },
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "constant",
+                "value": 0.06
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "dehyaC2",
+      "name": "C2",
+      "source": "C2",
+      "description": "Ranging Flame extends field duration. The next coordinated attack gains 50% damage after the active character in the field takes a hit.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "fierySanctum"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:coordinatedAttackBoostReady",
+              "value": 1
+            }
+          ],
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 50
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dehyaC3",
+      "name": "C3",
+      "source": "C3",
+      "description": "C3",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "dehyaC4",
+      "name": "C4",
+      "source": "C4",
+      "description": "Burst hits restore HP and Energy; no outgoing damage modifier.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      }
+    },
+    {
+      "id": "dehyaC5",
+      "name": "C5",
+      "source": "C5",
+      "description": "C5",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "dehyaC6",
+      "name": "C6",
+      "source": "C6",
+      "description": "Burst-only CRIT Rate and CRIT DMG. Stacks represent preceding critical punches; a punch does not grant its own new CRIT DMG stack. Duration extension changes hit count only.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 6
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "elementalBurst"
+            ]
+          },
+          "crit": {
+            "additionalRate": {
+              "expression": {
+                "type": "constant",
+                "value": 10
+              },
+              "unit": "percentPoints"
+            },
+            "additionalDamage": {
+              "expression": {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "local:c6CritStacks"
+                  },
+                  {
+                    "type": "constant",
+                    "value": 15
+                  }
+                ]
+              },
+              "unit": "percentPoints"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "defaultTeam": [
+    "dehya"
+  ],
+  "inputDefaults": {
+    "attack": 1500,
+    "maxHp": 30000,
+    "defense": 2000,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  },
+  "notes": [
+    "Each entry represents one hit unless stated otherwise. Trigger availability and buff duration are combat snapshots, not a rotation simulation.",
+    "Punches and the final kick are Burst damage, not Normal Attack damage. Roaring Barrage changes punch timing and is not an additional damage instance.",
+    "Skill casts scale with ATK at C0; field attacks and Burst hits use mixed ATK/HP scaling. C1 adds HP scaling to all three Skill stages and both Burst hit types.",
+    "Entries are independent snapshots outside/during Burst. The field is retrieved during Burst, so field ticks and punches are not simultaneous rotation events. Damage transfer, shield/defensive effects and healing are not outgoing damage."
+  ],
+  "sources": [
+    "/api/characters/dehya",
+    "data/characters/data/dehya.json",
+    "https://library.keqingmains.com/characters/pyro/dehya"
+  ]
+}

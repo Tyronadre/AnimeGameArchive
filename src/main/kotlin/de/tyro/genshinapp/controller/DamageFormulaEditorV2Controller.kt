@@ -58,7 +58,7 @@ class DamageFormulaEditorV2Controller(
         if (!document.has("characterKey")) return@mapNotNull null
         val inputs = CharacterStandardInputsV3.complete(mapper.treeToValue(document, DamageFormulaProfileV2::class.java)).inputs
         val resource = document.path("characterDataResource").asText()
-        val character = if (resource.matches(Regex("data/characters/data/[a-z0-9_-]+\\.json"))) {
+        val character = if (resource.matches(Regex("data/(characters/data|damage-talent-data-v2)/[a-z0-9_-]+\\.json"))) {
             org.springframework.core.io.ClassPathResource(resource).inputStream.use { mapper.readTree(it) }
         } else mapper.createObjectNode()
         val talents = character.path("talents").properties().filter { it.key.startsWith("combat") }.map { (key, talent) ->

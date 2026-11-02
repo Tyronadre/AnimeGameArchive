@@ -65,6 +65,14 @@ class FormulaEditorV2Test {
         assertEquals("Lunar-Bloom DMG Increase", scaling.path("label").asText())
         assertEquals(15, scaling.path("values").size())
     }
+    @Test fun `talent picker exposes database exported Columbina parameters`() {
+        val catalog = mapper.valueToTree<com.fasterxml.jackson.databind.JsonNode>(editor.catalog())
+        val columbina = catalog.first { it.path("key").asText() == "columbina" }
+        val skill = columbina.path("talents").first { it.path("key").asText() == "combat2" }
+        val bloom = skill.path("parameters").first { it.path("key").asText() == "param4" }
+        assertEquals("Gravity Interference: Lunar-Bloom DMG", bloom.path("label").asText())
+        assertEquals(13, bloom.path("values").size())
+    }
     @Test fun `editor saves a unified party buff and runtime binds its portable references`() {
         val current = editor.read("lauma.json")
         val document = mapper.readTree(current.getValue("content")) as com.fasterxml.jackson.databind.node.ObjectNode
@@ -179,7 +187,7 @@ class FormulaEditorV2Test {
         val standards = editor.standardInputs().getValue("Dendro")
         assertEquals(6.0, standards.first { it.id == "constellation" }.max)
         val authored = mapper.readTree(editor.read("lauma.json").getValue("content"))
-        assertTrue(authored["inputs"].isEmpty)
+        assertTrue(authored["inputs"].all { it["id"].asText() in setOf("verdantDew", "moonSong") })
         assertEquals(1000.0, authored["inputDefaults"]["elementalMastery"].asDouble())
     }
 

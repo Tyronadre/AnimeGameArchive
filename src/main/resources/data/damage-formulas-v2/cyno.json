@@ -1,0 +1,1381 @@
+{
+  "schemaVersion": 3,
+  "key": "cyno",
+  "characterKey": "cyno",
+  "name": "Cyno",
+  "element": "Electro",
+  "weaponType": "Polearm",
+  "characterDataResource": "data/characters/data/cyno.json",
+  "inputs": [
+    {
+      "id": "judicationActive",
+      "label": "Skill used during Endseer (Judication)",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "c2ElectroStacks",
+      "label": "C2 · Electro bonus stacks",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "witchRevelationComplete",
+      "label": "Witch’s Revelation completed",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "polestarFieldActive",
+      "label": "Inside an externally created Polestar Field",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "polestarApplications",
+      "label": "Polestar Field · recorded applications",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 12,
+      "step": 1
+    },
+    {
+      "id": "togetherWeRiseActive",
+      "label": "C1 · Together We Rise remains active",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "stellarConductStacks",
+      "label": "C2 · Together We Rise attack stacks",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 5,
+      "step": 1
+    }
+  ],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Invoker's Spear",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "normal 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "pactswornPathclearer"
+          ]
+        },
+        {
+          "id": "normal-2",
+          "label": "normal 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "pactswornPathclearer"
+          ]
+        },
+        {
+          "id": "normal-3a",
+          "label": "normal 3a",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "pactswornPathclearer"
+          ]
+        },
+        {
+          "id": "normal-3b",
+          "label": "normal 3b",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "pactswornPathclearer"
+          ]
+        },
+        {
+          "id": "normal-4",
+          "label": "normal 4",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "pactswornPathclearer"
+          ]
+        },
+        {
+          "id": "charged",
+          "label": "charged",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "pactswornPathclearer"
+          ]
+        },
+        {
+          "id": "plunge",
+          "label": "plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param8",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "pactswornPathclearer"
+          ]
+        },
+        {
+          "id": "plunge-low",
+          "label": "plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "pactswornPathclearer"
+          ]
+        },
+        {
+          "id": "plunge-high",
+          "label": "plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical",
+          "excludedEffects": [
+            "pactswornPathclearer"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Secret Rite: Chasmic Soulfarer",
+      "formulas": [
+        {
+          "id": "skill-thrust",
+          "label": "Chasmic Soulfarer · ordinary thrust",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directElectro",
+          "excludedEffects": [
+            "pactswornPathclearer"
+          ]
+        },
+        {
+          "id": "mortuary-rite",
+          "label": "Mortuary Rite",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param2",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill",
+            "mortuaryRite"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "pactswornPathclearer"
+          ]
+        },
+        {
+          "id": "duststalker",
+          "label": "Judication · one Duststalker Bolt",
+          "base": {
+            "type": "input",
+            "input": "source:attack"
+          },
+          "tags": [
+            "elementalSkill",
+            "duststalkerBolt"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "pactswornPathclearer",
+            "judication"
+          ],
+          "excludedEffects": [
+            "stellarRadiance"
+          ]
+        },
+        {
+          "id": "starsame",
+          "label": "Judication · one Starsame Bolt",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 2
+              }
+            ]
+          },
+          "tags": [
+            "stellarConduct",
+            "starsameBolt"
+          ],
+          "damageType": "stellarConductElectro",
+          "requiredEffects": [
+            "pactswornPathclearer",
+            "judication",
+            "stellarRadiance"
+          ]
+        },
+        {
+          "id": "c6-duststalker",
+          "label": "C6 · one Duststalker Bolt",
+          "base": {
+            "type": "input",
+            "input": "source:attack"
+          },
+          "tags": [
+            "elementalSkill",
+            "duststalkerBolt"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "pactswornPathclearer",
+            "cynoC6"
+          ],
+          "excludedEffects": [
+            "togetherWeRise"
+          ]
+        },
+        {
+          "id": "c6-starsame",
+          "label": "C6 · one Starsame Bolt",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 2
+              }
+            ]
+          },
+          "tags": [
+            "stellarConduct",
+            "starsameBolt"
+          ],
+          "damageType": "stellarConductElectro",
+          "requiredEffects": [
+            "pactswornPathclearer",
+            "cynoC6",
+            "togetherWeRise"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Sacred Rite: Wolf's Swiftness",
+      "formulas": [
+        {
+          "id": "pact-normal-1",
+          "label": "pact normal 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack",
+            "pactsworn"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "pactswornPathclearer"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "pact-normal-2",
+          "label": "pact normal 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param2",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack",
+            "pactsworn"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "pactswornPathclearer"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "pact-normal-3",
+          "label": "pact normal 3",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param3",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack",
+            "pactsworn"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "pactswornPathclearer"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "pact-normal-4a",
+          "label": "pact normal 4a",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param4",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack",
+            "pactsworn"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "pactswornPathclearer"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "pact-normal-4b",
+          "label": "pact normal 4b",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param5",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack",
+            "pactsworn"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "pactswornPathclearer"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "pact-normal-5",
+          "label": "pact normal 5",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param6",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack",
+            "pactsworn"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "pactswornPathclearer"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "pact-charged",
+          "label": "pact charged",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param7",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack",
+            "pactsworn"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "pactswornPathclearer"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "pact-plunge",
+          "label": "pact plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param9",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "pactsworn"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "pactswornPathclearer"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "pact-plunge-low",
+          "label": "pact plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param10",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "pactsworn",
+            "plungeImpact"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "pactswornPathclearer"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "pact-plunge-high",
+          "label": "pact plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param11",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "pactsworn",
+            "plungeImpact"
+          ],
+          "damageType": "directElectro",
+          "requiredEffects": [
+            "pactswornPathclearer"
+          ],
+          "infusionRule": "locked"
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "pactswornPathclearer",
+      "name": "Pactsworn Pathclearer",
+      "source": "Pactsworn Pathclearer",
+      "description": "Burst state, or six-second Skill-granted state after Witch’s Revelation. Uses Burst talent scaling; cannot be overridden. Burst activation itself has no damage.",
+      "category": "talent",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:elementalMastery",
+          "operation": "flatAdd",
+          "value": {
+            "type": "talentParameter",
+            "talent": "combat3",
+            "parameter": "param12",
+            "levelInput": "source:burstTalentLevel"
+          },
+          "recipient": "self"
+        }
+      ]
+    },
+    {
+      "id": "judication",
+      "name": "Featherfall Judgment · Judication",
+      "source": "Featherfall Judgment · Judication",
+      "description": "Featherfall Judgment · Judication",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:judicationActive",
+            "value": 1
+          }
+        ]
+      },
+      "requiresEffects": [
+        "pactswornPathclearer"
+      ],
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "mortuaryRite"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 35
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    },
+    {
+      "id": "authorityNineBows",
+      "name": "Authority Over the Nine Bows",
+      "source": "Authority Over the Nine Bows",
+      "description": "Authority Over the Nine Bows",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "pactsworn",
+              "normalAttack"
+            ]
+          },
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:elementalMastery"
+              },
+              {
+                "type": "constant",
+                "value": 1.5
+              }
+            ]
+          }
+        },
+        {
+          "targets": {
+            "requiredTags": [
+              "duststalkerBolt"
+            ]
+          },
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:elementalMastery"
+              },
+              {
+                "type": "constant",
+                "value": 2.5
+              }
+            ]
+          }
+        },
+        {
+          "targets": {
+            "requiredTags": [
+              "starsameBolt"
+            ]
+          },
+          "postBonusBase": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:elementalMastery"
+              },
+              {
+                "type": "constant",
+                "value": 6
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "witchRevelation",
+      "name": "A Star With Which to Start the Journey",
+      "source": "A Star With Which to Start the Journey",
+      "description": "Ordinary Skill can grant Pactsworn for six seconds. Select Pactsworn to calculate subsequent converted attacks; Skill activation remains an ordinary thrust snapshot.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:witchRevelationComplete",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "stellarRadiance",
+      "name": "Radiance · Stellar-Conduct",
+      "source": "Radiance · Stellar-Conduct",
+      "description": "Radiance · Stellar-Conduct",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:polestarFieldActive",
+            "value": 1
+          }
+        ]
+      },
+      "requiresEffects": [
+        "witchRevelation"
+      ]
+    },
+    {
+      "id": "polestarField",
+      "name": "Polestar Field · external state",
+      "source": "Polestar Field · external state",
+      "description": "External field snapshot; Cyno cannot create it alone. Applications set the field’s current tier (0–12).",
+      "category": "passive",
+      "recipient": "party",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:polestarFieldActive",
+            "value": 1
+          }
+        ]
+      },
+      "stackingGroup": "polestarField",
+      "stackingPriority": {
+        "type": "input",
+        "input": "local:polestarApplications"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:cryoDamageBonus",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 1
+                  },
+                  {
+                    "type": "add",
+                    "operands": [
+                      {
+                        "type": "multiply",
+                        "operands": [
+                          {
+                            "type": "min",
+                            "operands": [
+                              {
+                                "type": "constant",
+                                "value": 1
+                              },
+                              {
+                                "type": "input",
+                                "input": "local:polestarApplications"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "constant",
+                            "value": 0.4
+                          }
+                        ]
+                      },
+                      {
+                        "type": "multiply",
+                        "operands": [
+                          {
+                            "type": "input",
+                            "input": "local:polestarApplications"
+                          },
+                          {
+                            "type": "constant",
+                            "value": 0.05
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "constant",
+                "value": 20
+              }
+            ]
+          },
+          "recipient": "party"
+        },
+        {
+          "stat": "recipient:electroDamageBonus",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 1
+                  },
+                  {
+                    "type": "add",
+                    "operands": [
+                      {
+                        "type": "multiply",
+                        "operands": [
+                          {
+                            "type": "min",
+                            "operands": [
+                              {
+                                "type": "constant",
+                                "value": 1
+                              },
+                              {
+                                "type": "input",
+                                "input": "local:polestarApplications"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "constant",
+                            "value": 0.4
+                          }
+                        ]
+                      },
+                      {
+                        "type": "multiply",
+                        "operands": [
+                          {
+                            "type": "input",
+                            "input": "local:polestarApplications"
+                          },
+                          {
+                            "type": "constant",
+                            "value": 0.05
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "constant",
+                "value": 20
+              }
+            ]
+          },
+          "recipient": "party"
+        }
+      ],
+      "formulaModifiers": [
+        {
+          "targets": {
+            "elements": [
+              "Physical"
+            ]
+          },
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 40
+              },
+              "unit": "percentPoints"
+            }
+          }
+        },
+        {
+          "targets": {
+            "requiredTags": [
+              "stellarConduct"
+            ],
+            "damageKinds": [
+              "stellar"
+            ]
+          },
+          "baseDamageMultiplier": {
+            "expression": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "min",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 1
+                        },
+                        {
+                          "type": "input",
+                          "input": "local:polestarApplications"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "constant",
+                      "value": 0.4
+                    }
+                  ]
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "input",
+                      "input": "local:polestarApplications"
+                    },
+                    {
+                      "type": "constant",
+                      "value": 0.05
+                    }
+                  ]
+                }
+              ]
+            },
+            "unit": "ratio"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cynoC1",
+      "name": "C1",
+      "source": "C1",
+      "description": "Normal Attack speed changes timing. Revelation adds the separately controlled, transferable Together We Rise buff.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 1
+      }
+    },
+    {
+      "id": "togetherWeRise",
+      "name": "Together We Rise · current recipient",
+      "source": "Together We Rise · current recipient",
+      "description": "Enable only after Cyno entered Pactsworn while in Radiance and before the buff expires. Can transfer on switching and persist outside the field.",
+      "category": "passive",
+      "recipient": "activeCharacter",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:togetherWeRiseActive",
+            "value": 1
+          }
+        ]
+      },
+      "requiresEffects": [
+        "witchRevelation",
+        "cynoC1"
+      ],
+      "statChanges": [
+        {
+          "stat": "recipient:elementalMastery",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 200
+          },
+          "recipient": "activeCharacter"
+        }
+      ]
+    },
+    {
+      "id": "cynoC2",
+      "name": "C2",
+      "source": "C2",
+      "description": "C2",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:elementalDamageBonus",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "local:c2ElectroStacks"
+              },
+              {
+                "type": "constant",
+                "value": 10
+              }
+            ]
+          },
+          "recipient": "self"
+        }
+      ],
+      "formulaModifiers": [
+        {
+          "recipient": "activeCharacter",
+          "requiresEffects": [
+            "togetherWeRise"
+          ],
+          "targets": {
+            "requiredTags": [
+              "stellarConduct"
+            ],
+            "damageKinds": [
+              "stellar"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "input",
+                  "input": "local:stellarConductStacks"
+                },
+                {
+                  "type": "constant",
+                  "value": 16
+                }
+              ]
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cynoC3",
+      "name": "C3",
+      "source": "C3",
+      "description": "C3",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "cynoC4",
+      "name": "C4",
+      "source": "C4",
+      "description": "Reaction-triggered Energy refunds, including Revelation’s refund to Cyno from a Together We Rise teammate. No outgoing per-hit damage modifier.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      }
+    },
+    {
+      "id": "cynoC5",
+      "name": "C5",
+      "source": "C5",
+      "description": "C5",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "cynoC6",
+      "name": "C6",
+      "source": "C6",
+      "description": "One available Day of the Jackal stack is consumed per listed bolt. Together We Rise selects Starsame instead of the ordinary bolt.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 6
+      }
+    }
+  ],
+  "defaultTeam": [
+    "cyno"
+  ],
+  "inputDefaults": {
+    "attack": 1500,
+    "maxHp": 30000,
+    "defense": 2000,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10,
+    "elementalMastery": 300
+  },
+  "notes": [
+    "Each entry represents one hit unless stated otherwise. Trigger availability and buff duration are combat snapshots, not a rotation simulation.",
+    "Pactsworn attacks use Burst talent levels but retain Normal/Charged/Plunging classifications. Judication’s 35% applies to Mortuary Rite, not either bolt.",
+    "Starsame is 200% ATK Stellar-Conduct damage. It ignores DEF and ordinary DMG bonuses, uses 6EM/(EM+2000), and adds A4’s 600% EM after the reaction bonus before CRIT/RES/Elevation.",
+    "Polestar Field and Together We Rise are externally established state snapshots, not automatic reaction/transfer simulation. Day of the Jackal availability and proc counts are manual."
+  ],
+  "sources": [
+    "/api/characters/cyno",
+    "data/characters/data/cyno.json",
+    "https://library.keqingmains.com/characters/electro/cyno",
+    "https://keqingmains.com/misc/stellar-reaction-guide/",
+    "https://paimon.moe/characters/cyno"
+  ]
+}

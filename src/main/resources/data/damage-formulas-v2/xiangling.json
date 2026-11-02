@@ -197,7 +197,8 @@
           "label": "Low Plunge DMG",
           "damageType": "directPhysical",
           "tags": [
-            "plungingAttack"
+            "plungingAttack",
+            "plungeImpact"
           ],
           "base": {
             "type": "multiply",
@@ -220,7 +221,8 @@
           "label": "High Plunge DMG",
           "damageType": "directPhysical",
           "tags": [
-            "plungingAttack"
+            "plungingAttack",
+            "plungeImpact"
           ],
           "base": {
             "type": "multiply",

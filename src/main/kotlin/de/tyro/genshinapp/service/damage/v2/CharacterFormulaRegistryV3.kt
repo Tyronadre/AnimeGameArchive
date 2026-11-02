@@ -7,6 +7,11 @@ import org.springframework.stereotype.Service
 @Service
 class CharacterFormulaRegistryV3(private val mapper: ObjectMapper) {
     private val damageTypes = DamageTypeRegistryV2(mapper)
+    private val hexereiCharacters by reloadableFormulaV2 {
+        DamageFormulaResourcesV2.resource("data/damage-formulas-v2/team-rules.json").inputStream.use {
+            mapper.readValue(it, DamageTeamRulesV2::class.java).hexereiCharacters.toSet()
+        }
+    }
     val definitions: Map<String, DamageFormulaProfileV2> by reloadableFormulaV2 {
         require(DamageFormulaResourcesV2.resources("classpath*:data/damage-formulas-v2/teammates/*.json").isEmpty()) {
             "Legacy teammate definitions remain. Use a single schema-3 character file and remove teammates/*.json."
@@ -40,17 +45,35 @@ class CharacterFormulaRegistryV3(private val mapper: ObjectMapper) {
             teamMembers = members, teamContext = context, teamStatInputs = bound.statBindings.mapValues { listOf(it.value) })
     }
     fun member(definition: DamageFormulaProfileV2) = DamageTeamMemberV2(definition.key, definition.name, definition.element,
-        definition.moonsignContribution, weaponType = definition.weaponType, calculatorAvailable = definition.talents.any { it.formulas.isNotEmpty() })
+        definition.moonsignContribution, weaponType = definition.weaponType, calculatorAvailable = definition.talents.any { it.formulas.isNotEmpty() },
+        region = definition.characterDataResource.takeIf { it.isNotBlank() }?.let { path ->
+            DamageFormulaResourcesV2.resource(path).inputStream.use { mapper.readTree(it).path("region").asText("") }
+        }.orEmpty())
 
     fun context(members: List<DamageTeamMemberV2>): Map<String, Double> =
         members.groupingBy { it.element.lowercase() }.eachCount().mapKeys { "${it.key}Count" }.mapValues { it.value.toDouble() } +
-            mapOf("teamSize" to members.size.toDouble(), "moonsignLevel" to members.sumOf { it.moonsignContribution }.coerceAtMost(2).toDouble(),
+            mapOf("hexereiCount" to members.count { it.key in hexereiCharacters }.toDouble(),
+                "pyroElectroOnly" to if (members.all { it.element.lowercase() in setOf("pyro", "electro") }) 1.0 else 0.0,
+                "teamSize" to members.size.toDouble(), "moonsignLevel" to members.sumOf { it.moonsignContribution }.coerceAtMost(2).toDouble(),
                 "hydroCryoCount" to members.count { it.element.equals("Hydro", true) || it.element.equals("Cryo", true) }.toDouble()) +
-            members.flatMap { listOf("character.${it.key}.onField" to if (it == members.first()) 1.0 else 0.0,
+            members.flatMap { listOf("character.${it.key}.hexerei" to if (it.key in hexereiCharacters) 1.0 else 0.0,
+                "character.${it.key}.pyroElectro" to if (it.element.lowercase() in setOf("pyro", "electro")) 1.0 else 0.0,
+                "character.${it.key}.nonFontaineAllies" to members.count { other -> other.key != it.key && other.region.isNotBlank() && !other.region.equals("Fontaine", true) }.toDouble(),
+                "character.${it.key}.onField" to if (it == members.first()) 1.0 else 0.0,
                 "character.${it.key}.offField" to if (it != members.first()) 1.0 else 0.0) }.toMap()
 
     fun generic(member: DamageTeamMemberV2) = complete(DamageFormulaProfileV2(3, member.key, member.key, member.name, member.element,
         inputs = emptyList(), weaponType = member.weaponType))
+
+    fun withDamageTypes(profile: DamageFormulaProfileV2, ids: Collection<String>): DamageFormulaProfileV2 {
+        val missing = ids.distinct().filter { id -> profile.damageTypes.none { it.id == id } }
+        if (missing.isEmpty()) return profile
+        val extra = damageTypes.resolve(missing).map { it.copy(resistanceInput = DamageTypeRegistryV2.resistanceInput(it, profile.element)) }
+        val completed = complete(profile.copy(damageTypes = profile.damageTypes + extra))
+        val boundTypes = CharacterEffectBinderV3(listOf(completed), completed.key, completed.teamContext)
+            .bind(completed.copy(damageTypes = extra, effects = emptyList(), talents = emptyList())).damageTypes
+        return completed.copy(damageTypes = profile.damageTypes + boundTypes)
+    }
 
     private fun complete(definition: DamageFormulaProfileV2): DamageFormulaProfileV2 {
         val standard = CharacterStandardInputsV3.complete(definition)
@@ -102,6 +125,10 @@ class CharacterEffectBinderV3(
         "context" -> FormulaExpressionV2("constant", value = when(e.input) {
             "onField" -> if (owner == damageOwner) 1.0 else 0.0
             "offField" -> if (owner == damageOwner) 0.0 else 1.0
+            "recipientHexerei" -> context.getOrDefault("character.$recipient.hexerei", 0.0)
+            "sourceHexerei" -> context.getOrDefault("character.$owner.hexerei", 0.0)
+            "sourceNonFontaineAllies" -> context.getOrDefault("character.$owner.nonFontaineAllies", 0.0)
+            "recipientPyroElectro" -> context.getOrDefault("character.$recipient.pyroElectro", 0.0)
             else -> context.getOrDefault(e.input, 0.0)
         })
         else -> e.copy(operands = e.operands.map { expression(it, owner, recipient) })
@@ -110,7 +137,11 @@ class CharacterEffectBinderV3(
     private fun conditions(list: List<EffectActivationConditionV2>, owner: String, recipient: String) = list.map { condition ->
         if (condition.type in setOf("inputAtLeast", "inputAtMost")) condition.copy(input = input(owner, recipient, requireNotNull(condition.input)))
         else if (condition.type == "contextAtLeast" && condition.input in setOf("onField", "offField"))
-            condition.copy(input = "character.$owner.${condition.input}") else condition
+            condition.copy(input = "character.$owner.${condition.input}")
+        else if (condition.type == "contextAtLeast" && condition.input in setOf("recipientHexerei", "sourceHexerei"))
+            condition.copy(input = "character.${if (condition.input == "recipientHexerei") recipient else owner}.hexerei")
+        else if (condition.type == "contextAtLeast" && condition.input == "recipientPyroElectro")
+            condition.copy(input = "character.$recipient.pyroElectro") else condition
     }
     private fun recipients(scope: String, owner: String, exclude: Boolean): List<String> {
         require(scope in scopes) { "Unknown recipient '$scope'" }
@@ -160,7 +191,7 @@ class CharacterEffectBinderV3(
                 crit = f.crit?.copy(additionalRate = contribution(f.crit.additionalRate, owner, owner), additionalDamage = contribution(f.crit.additionalDamage, owner, owner)))
         }) }
         return source.copy(schemaVersion = 2, inputs = source.inputs.filter { definition ->
-            owner == damageOwner || !(definition.id.startsWith("enemy") || definition.id in setOf("defenseReduction", "defenseIgnore"))
+            owner == damageOwner || !(definition.section == "enemy" || definition.id in setOf("defenseReduction", "defenseIgnore"))
         }.map { definition -> definition.copy(id = inputId(owner, definition.id),
             initialValueSource = definition.initialValueSource?.copy(characterKey = owner)) }, effects = effects, talents = talents,
             damageTypes = source.damageTypes.map { type -> type.copy(innateDamageBonus = contribution(type.innateDamageBonus, owner, owner),

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 class DamageTeamRosterService(private val characters: CharacterCatalogService, private val registry: CharacterFormulaRegistryV3) {
     fun members(): List<DamageTeamMemberV2> = characters.getCharacters().map {
         DamageTeamMemberV2(it.key, it.name, it.element.orEmpty(), 0, it.iconImageUrl, it.weapon.orEmpty(),
-            registry.available(it.key))
+            registry.available(it.key), region = it.region.orEmpty())
     }
 }
 

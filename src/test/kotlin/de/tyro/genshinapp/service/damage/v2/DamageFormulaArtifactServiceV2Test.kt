@@ -206,15 +206,15 @@ class DamageFormulaArtifactServiceV2Test {
 
     @Test
     fun `artifact formulas accept a selected character without a support profile`() {
-        val amber = DamageTeamMemberV2("amber", "Amber", "Pyro", 0,
-            "/media/characters/amber/icon", "Bow")
+        val catalogarcher = DamageTeamMemberV2("catalogarcher", "Catalog Archer", "Pyro", 0,
+            "/media/characters/catalogarcher/icon", "Bow")
         val party = base.copy(
-            teamMembers = base.teamMembers + amber,
-            selectedTeam = setOf("nefer", "amber"),
+            teamMembers = base.teamMembers + catalogarcher,
+            selectedTeam = setOf("nefer", "catalogarcher"),
             supportProfiles = emptyList(),
         )
-        val attached = artifacts.attach(party, gear("amber", "deepwoodmemories"))
-        assertTrue(attached.artifactLoadouts.single { it.characterKey == "amber" }.sets.single().supported)
-        assertTrue(attached.effects.any { it.artifactOrigin?.characterKey == "amber" })
+        val attached = artifacts.attach(party, gear("catalogarcher", "deepwoodmemories"))
+        assertTrue(attached.artifactLoadouts.single { it.characterKey == "catalogarcher" }.sets.single().supported)
+        assertTrue(attached.effects.any { it.artifactOrigin?.characterKey == "catalogarcher" })
     }
 }

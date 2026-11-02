@@ -228,7 +228,8 @@
           "label": "Low Plunge DMG",
           "damageType": "directPhysical",
           "tags": [
-            "plungingAttack"
+            "plungingAttack",
+            "plungeImpact"
           ],
           "excludedEffects": [
             "furinaC6"
@@ -254,7 +255,8 @@
           "label": "High Plunge DMG",
           "damageType": "directPhysical",
           "tags": [
-            "plungingAttack"
+            "plungingAttack",
+            "plungeImpact"
           ],
           "excludedEffects": [
             "furinaC6"
@@ -574,7 +576,8 @@
           "damageType": "directHydro",
           "tags": [
             "plungingAttack",
-            "infusedAttack"
+            "infusedAttack",
+            "plungeImpact"
           ],
           "requiredEffects": [
             "furinaC6"
@@ -619,7 +622,8 @@
           "damageType": "directHydro",
           "tags": [
             "plungingAttack",
-            "infusedAttack"
+            "infusedAttack",
+            "plungeImpact"
           ],
           "requiredEffects": [
             "furinaC6"

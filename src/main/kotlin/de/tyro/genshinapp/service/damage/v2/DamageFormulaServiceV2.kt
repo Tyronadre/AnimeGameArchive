@@ -11,6 +11,7 @@ class DamageFormulaServiceV2(
     private val objectMapper: ObjectMapper,
     private val registry: CharacterFormulaRegistryV3 = CharacterFormulaRegistryV3(objectMapper),
 ) {
+    private val sharedDamageTypes = DamageTypeRegistryV2(objectMapper)
     private val profiles = ConcurrentHashMap<String, LoadedDamageProfileV2>()
     private val supportRoots = ConcurrentHashMap<String, JsonNode>()
     private val reactionCatalog by reloadableFormulaV2 {
@@ -67,11 +68,16 @@ class DamageFormulaServiceV2(
         return document(profile)
     }
 
-    fun document(profile: DamageFormulaProfileV2): DamageFormulaDocumentV2 =
+    fun document(profile: DamageFormulaProfileV2): DamageFormulaDocumentV2 = prepareInfusions(profile).let { prepared ->
         DamageFormulaDocumentV2(
-            profile = profile,
-            defaultCalculation = calculate(profile, DamageCalculationRequestV2()),
+            profile = prepared,
+            defaultCalculation = calculate(prepared, DamageCalculationRequestV2()),
         )
+    }
+
+    private fun prepareInfusions(profile: DamageFormulaProfileV2): DamageFormulaProfileV2 = registry.withDamageTypes(profile,
+        profile.effects.flatMap { it.formulaModifiers }.mapNotNull { it.infusion }
+            .filter { profile.weaponType in it.weaponTypes }.map { it.damageType })
 
     fun calculate(
         profile: DamageFormulaProfileV2,
@@ -83,7 +89,7 @@ class DamageFormulaServiceV2(
         require(profile.characterKey == loaded.source.characterKey) {
             "Damage formula profile '${profile.key}' changed its character key"
         }
-        val composed = loaded.copy(source = profile, supportRoots = profile.supportProfiles.mapNotNull { support ->
+        val composed = loaded.copy(source = prepareInfusions(profile), supportRoots = profile.supportProfiles.mapNotNull { support ->
             support.characterDataResource?.let { resource -> support.key to supportRoots.computeIfAbsent(resource) {
                 DamageFormulaResourcesV2.resource(resource).inputStream.use(objectMapper::readTree)
             } }
@@ -169,15 +175,17 @@ class DamageFormulaServiceV2(
                         formula.excludedEffects.none(activeEffectIds::contains)
                 }
                 .map { formula ->
+                val (type, source) = resolveInfusion(formula, damageTypes.getValue(formula.damageType), activeEffects, inputs, profile)
                 calculateFormula(
                     talent = talent,
-                    formula = formula,
-                    damageType = damageTypes.getValue(formula.damageType),
+                    formula = if (source == null) formula else formula.copy(damageType = type.id, tags = (formula.tags + "infusedAttack").distinct()),
+                    damageType = type,
                     inputs = inputs,
                     effectiveStats = effectiveStats,
                     activeEffects = activeEffects,
                     loaded = loaded,
-                )
+                ).let { result -> result.copy(infusionSourceEffectId = source,
+                    appliedEffectIds = result.appliedEffectIds + listOfNotNull(source)) }
                 }
         }
         return DamageCalculationV2(
@@ -613,6 +621,38 @@ class DamageFormulaServiceV2(
         }
     }
 
+    private fun resolveInfusion(
+        formula: DamageFormulaV2, original: DamageTypeDefinitionV2, effects: List<DamageEffectV2>,
+        inputs: Map<String, Double>, profile: DamageFormulaProfileV2,
+    ): Pair<DamageTypeDefinitionV2, String?> {
+        if (formula.infusionRule == "locked" || original.kind != "talent" || original.independentProc ||
+            formula.tags.none { it in setOf("normalAttack", "chargedAttack", "plungingAttack") } ||
+            (formula.infusionRule == "physicalOnly" && original.element != "Physical")) return original to null
+        val active = effects.map { it.id }.toSet()
+        val candidates = effects.flatMap { effect -> effect.formulaModifiers.mapNotNull { modifier ->
+            val infusion = modifier.infusion ?: return@mapNotNull null
+            if (profile.weaponType !in infusion.weaponTypes || !modifier.targets.matches(formula, original) ||
+                !modifier.requiresEffects.all(active::contains) ||
+                !modifier.conditions.all { activationConditionIsSatisfied(it, inputs, profile) }) null
+            else effect.id to infusion
+        } }
+        val priority = candidates.maxOfOrNull { it.second.priority } ?: return original to null
+        val winners = candidates.filter { it.second.priority == priority }
+        require(winners.map { it.second.damageType }.distinct().size == 1) {
+            "Conflicting weapon infusions for '${formula.id}'; assign distinct infusion priorities for this snapshot."
+        }
+        val winner = winners.minBy { it.first }
+        // A Hydro/Cryo weapon reaction leaves Frozen aura and deals Cryo damage.
+        // This models the persistent state, not the intermediate gauge refreshes.
+        if (profile.damageTypes.first { it.id == winner.second.damageType }.element == "Hydro") {
+            val frozen = candidates.filter { candidate ->
+                profile.damageTypes.first { it.id == candidate.second.damageType }.element == "Cryo"
+            }.maxByOrNull { it.second.priority }
+            if (frozen != null) return profile.damageTypes.first { it.id == frozen.second.damageType } to frozen.first
+        }
+        return profile.damageTypes.first { it.id == winner.second.damageType } to winner.first
+    }
+
     private fun reactionResistanceInput(element: String): String =
         "enemyReaction${element.lowercase().replaceFirstChar(Char::uppercase)}Resistance"
 
@@ -628,7 +668,7 @@ class DamageFormulaServiceV2(
     }
 
     private fun loadProfile(key: String): LoadedDamageProfileV2 {
-        val source = requireNotNull(registry.solo(key)) { "No damage formulas for '$key'" }
+        val source = prepareInfusions(requireNotNull(registry.solo(key)) { "No damage formulas for '$key'" })
         val characterRoot = if (source.characterDataResource.isBlank()) objectMapper.createObjectNode() else
             DamageFormulaResourcesV2.resource(source.characterDataResource).inputStream.use(objectMapper::readTree)
         val loaded = LoadedDamageProfileV2(source, characterRoot)
@@ -663,6 +703,7 @@ class DamageFormulaServiceV2(
         val formulaIds = formulas.map(DamageFormulaV2::id).toSet()
         require(formulaIds.size == formulas.size) { "Profile '${profile.key}' has duplicate formula IDs" }
         formulas.forEach { formula ->
+            require(formula.infusionRule in setOf("physicalOnly", "overrideable", "locked")) { "Invalid infusion rule on '${formula.id}'" }
             require(formula.damageType in damageTypeIds) {
                 "Formula '${formula.id}' references undefined damage type '${formula.damageType}'"
             }
@@ -718,6 +759,11 @@ class DamageFormulaServiceV2(
                 }
             }
             effect.formulaModifiers.forEach { modifier ->
+                modifier.infusion?.let { infusion ->
+                    val type = requireNotNull(sharedDamageTypes.definitions[infusion.damageType]) { "Unknown infusion damage type '${infusion.damageType}'" }
+                    require(type.kind == "talent" && !type.independentProc) { "Weapon infusions must use ordinary talent damage" }
+                    require(infusion.weaponTypes.isNotEmpty() && infusion.weaponTypes.all { it in setOf("Sword", "Claymore", "Polearm", "Bow", "Catalyst") }) { "Invalid infusion weapon types" }
+                }
                 require(modifier.targets.formulaIds.all(formulaIds::contains)) {
                     "Effect '${effect.id}' targets undefined formulas"
                 }

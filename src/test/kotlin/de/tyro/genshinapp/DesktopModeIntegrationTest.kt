@@ -416,7 +416,8 @@ class DesktopModeIntegrationTest @Autowired constructor(
             .andExpect(status().isOk).andReturn().response.contentAsString)
         assertEquals(setOf("nefer", "amber"), arbitrary.path("profile").path("selectedTeam").map { it.asText() }.toSet())
         assertEquals(setOf("nefer", "amber"), arbitrary.path("teamBuilds").map { it.path("key").asText() }.toSet())
-        assertTrue(arbitrary.path("profile").path("supportProfiles").filter { it.path("key").asText() == "amber" }.all { it.path("effects").isEmpty })
+        assertEquals(6, arbitrary.path("profile").path("supportProfiles").first { it.path("key").asText() == "amber" }
+            .path("effects").count { it.path("category").asText() == "constellation" })
     }
 
     @Test

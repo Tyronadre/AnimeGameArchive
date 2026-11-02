@@ -1,0 +1,1575 @@
+{
+  "schemaVersion": 3,
+  "key": "durin",
+  "characterKey": "durin",
+  "name": "Durin",
+  "element": "Pyro",
+  "weaponType": "Sword",
+  "characterDataResource": "data/damage-talent-data-v2/durin.json",
+  "inputs": [
+    {
+      "id": "burstForm",
+      "label": "Burst form (0 White Flame, 1 Dark Decay)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "burstRecent",
+      "label": "Within 20 seconds after Burst",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "witchHomeworkComplete",
+      "label": "Witch’s Homework completed",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "primordialFusionAvailable",
+      "label": "Primordial Fusion stack available for this periodic hit",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "cycleStacksRemaining",
+      "label": "C1 · recipient Cycle of Enlightenment stacks remaining",
+      "defaultValue": 20,
+      "min": 0,
+      "max": 20,
+      "step": 1
+    },
+    {
+      "id": "whiteDefenseDebuffActive",
+      "label": "C6 · enemy DEF debuff from a previous White Burst hit",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "burningTriggerActive",
+      "label": "Burning · qualifying Pyro interaction within 6 seconds",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "overloadedTriggerActive",
+      "label": "Overloaded · qualifying Pyro interaction within 6 seconds",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "swirlTriggerActive",
+      "label": "Swirl · qualifying Pyro interaction within 6 seconds",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "crystallizeTriggerActive",
+      "label": "Crystallize · qualifying Pyro interaction within 6 seconds",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "vaporizeTriggerActive",
+      "label": "Vaporize · qualifying Pyro interaction within 6 seconds",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "meltTriggerActive",
+      "label": "Melt · qualifying Pyro interaction within 6 seconds",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Radiant Wingslash",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "normal 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-2",
+          "label": "normal 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-3a",
+          "label": "normal 3a",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-3b",
+          "label": "normal 3b",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-4",
+          "label": "normal 4",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "charged",
+          "label": "charged",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge",
+          "label": "plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param8",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-low",
+          "label": "plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-high",
+          "label": "plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Binary Form: Convergence and Division",
+      "formulas": [
+        {
+          "id": "confirmation-purity",
+          "label": "Transmutation · Confirmation of Purity",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directPyro"
+        },
+        {
+          "id": "denial-darkness-1",
+          "label": "Transmutation · Denial of Darkness hit 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param2",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directPyro"
+        },
+        {
+          "id": "denial-darkness-2",
+          "label": "Transmutation · Denial of Darkness hit 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param3",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directPyro"
+        },
+        {
+          "id": "denial-darkness-3",
+          "label": "Transmutation · Denial of Darkness hit 3",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill"
+          ],
+          "damageType": "directPyro"
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Principle of Purity: As the Light Shifts",
+      "formulas": [
+        {
+          "id": "white-cast-1",
+          "label": "Purity Burst · hit 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst",
+            "whiteBurst"
+          ],
+          "damageType": "directPyro",
+          "requiredEffects": [
+            "whiteForm"
+          ]
+        },
+        {
+          "id": "white-cast-2",
+          "label": "Purity Burst · hit 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param2",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst",
+            "whiteBurst"
+          ],
+          "damageType": "directPyro",
+          "requiredEffects": [
+            "whiteForm"
+          ]
+        },
+        {
+          "id": "white-cast-3",
+          "label": "Purity Burst · hit 3",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param3",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst",
+            "whiteBurst"
+          ],
+          "damageType": "directPyro",
+          "requiredEffects": [
+            "whiteForm"
+          ]
+        },
+        {
+          "id": "dark-cast-1",
+          "label": "Darkness Burst · hit 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param4",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst",
+            "darkBurst"
+          ],
+          "damageType": "directPyro",
+          "requiredEffects": [
+            "darkForm"
+          ]
+        },
+        {
+          "id": "dark-cast-2",
+          "label": "Darkness Burst · hit 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param5",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst",
+            "darkBurst"
+          ],
+          "damageType": "directPyro",
+          "requiredEffects": [
+            "darkForm"
+          ]
+        },
+        {
+          "id": "dark-cast-3",
+          "label": "Darkness Burst · hit 3",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param6",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst",
+            "darkBurst"
+          ],
+          "damageType": "directPyro",
+          "requiredEffects": [
+            "darkForm"
+          ]
+        },
+        {
+          "id": "white-dragon",
+          "label": "Dragon of White Flame · one periodic hit",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param7",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst",
+            "whiteBurst",
+            "dragonPeriodic"
+          ],
+          "damageType": "directPyro",
+          "requiredEffects": [
+            "whiteForm"
+          ]
+        },
+        {
+          "id": "dark-dragon",
+          "label": "Dragon of Dark Decay · one periodic hit",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param8",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst",
+            "darkBurst",
+            "dragonPeriodic"
+          ],
+          "damageType": "directPyro",
+          "requiredEffects": [
+            "darkForm"
+          ]
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "burstWindow",
+      "name": "Elemental Burst · 20-second window",
+      "source": "Elemental Burst · 20-second window",
+      "description": "Elemental Burst · 20-second window",
+      "category": "talent",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:burstRecent",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "whiteForm",
+      "name": "Dragon of White Flame",
+      "source": "Dragon of White Flame",
+      "description": "Dragon of White Flame",
+      "category": "talent",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtMost",
+            "input": "local:burstForm",
+            "value": 0
+          }
+        ]
+      },
+      "requiresEffects": [
+        "burstWindow"
+      ]
+    },
+    {
+      "id": "darkForm",
+      "name": "Dragon of Dark Decay",
+      "source": "Dragon of Dark Decay",
+      "description": "Dragon of Dark Decay",
+      "category": "talent",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:burstForm",
+            "value": 1
+          }
+        ]
+      },
+      "requiresEffects": [
+        "burstWindow"
+      ]
+    },
+    {
+      "id": "secretRite",
+      "name": "Hexerei · Secret Rite",
+      "source": "Hexerei · Secret Rite",
+      "description": "Requires completed Homework and a second eligible Hexerei member (assumed to have completed their Homework). Increases A1 effects by 75%, not A4 or constellations.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:witchHomeworkComplete",
+            "value": 1
+          },
+          {
+            "type": "contextAtLeast",
+            "input": "hexereiCount",
+            "value": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "whiteCalculus",
+      "name": "Light Manifest · White Flame",
+      "source": "Light Manifest · White Flame",
+      "description": "Select the qualifying reactions/attacks whose six-second debuffs remain. Pyro shred applies once, with separate matching Dendro/Electro/Anemo/Geo shred.",
+      "category": "passive",
+      "recipient": "enemy",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "requiresEffects": [
+        "whiteForm"
+      ],
+      "formulaModifiers": [
+        {
+          "targets": {
+            "elements": [
+              "Pyro"
+            ]
+          },
+          "requiresEffects": [],
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 20
+                  },
+                  {
+                    "type": "max",
+                    "operands": [
+                      {
+                        "type": "input",
+                        "input": "local:burningTriggerActive"
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:overloadedTriggerActive"
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:swirlTriggerActive"
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:crystallizeTriggerActive"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "unit": "percentPoints"
+            }
+          }
+        },
+        {
+          "targets": {
+            "elements": [
+              "Dendro"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:burningTriggerActive",
+              "value": 1
+            }
+          ],
+          "requiresEffects": [],
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 20
+              },
+              "unit": "percentPoints"
+            }
+          }
+        },
+        {
+          "targets": {
+            "elements": [
+              "Electro"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:overloadedTriggerActive",
+              "value": 1
+            }
+          ],
+          "requiresEffects": [],
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 20
+              },
+              "unit": "percentPoints"
+            }
+          }
+        },
+        {
+          "targets": {
+            "elements": [
+              "Anemo"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:swirlTriggerActive",
+              "value": 1
+            }
+          ],
+          "requiresEffects": [],
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 20
+              },
+              "unit": "percentPoints"
+            }
+          }
+        },
+        {
+          "targets": {
+            "elements": [
+              "Geo"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:crystallizeTriggerActive",
+              "value": 1
+            }
+          ],
+          "requiresEffects": [],
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 20
+              },
+              "unit": "percentPoints"
+            }
+          }
+        },
+        {
+          "targets": {
+            "elements": [
+              "Pyro"
+            ]
+          },
+          "requiresEffects": [
+            "secretRite"
+          ],
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 15
+                  },
+                  {
+                    "type": "max",
+                    "operands": [
+                      {
+                        "type": "input",
+                        "input": "local:burningTriggerActive"
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:overloadedTriggerActive"
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:swirlTriggerActive"
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:crystallizeTriggerActive"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "unit": "percentPoints"
+            }
+          }
+        },
+        {
+          "targets": {
+            "elements": [
+              "Dendro"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:burningTriggerActive",
+              "value": 1
+            }
+          ],
+          "requiresEffects": [
+            "secretRite"
+          ],
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 15
+              },
+              "unit": "percentPoints"
+            }
+          }
+        },
+        {
+          "targets": {
+            "elements": [
+              "Electro"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:overloadedTriggerActive",
+              "value": 1
+            }
+          ],
+          "requiresEffects": [
+            "secretRite"
+          ],
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 15
+              },
+              "unit": "percentPoints"
+            }
+          }
+        },
+        {
+          "targets": {
+            "elements": [
+              "Anemo"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:swirlTriggerActive",
+              "value": 1
+            }
+          ],
+          "requiresEffects": [
+            "secretRite"
+          ],
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 15
+              },
+              "unit": "percentPoints"
+            }
+          }
+        },
+        {
+          "targets": {
+            "elements": [
+              "Geo"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:crystallizeTriggerActive",
+              "value": 1
+            }
+          ],
+          "requiresEffects": [
+            "secretRite"
+          ],
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 15
+              },
+              "unit": "percentPoints"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "darkCalculus",
+      "name": "Light Manifest · Dark Decay",
+      "source": "Light Manifest · Dark Decay",
+      "description": "Light Manifest · Dark Decay",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "requiresEffects": [
+        "darkForm"
+      ],
+      "formulaModifiers": [
+        {
+          "targets": {
+            "damageKinds": [
+              "reaction"
+            ],
+            "anyTags": [
+              "vaporize",
+              "melt"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 40
+            },
+            "unit": "percentPoints"
+          }
+        },
+        {
+          "targets": {
+            "damageKinds": [
+              "reaction"
+            ],
+            "anyTags": [
+              "vaporize",
+              "melt"
+            ]
+          },
+          "requiresEffects": [
+            "secretRite"
+          ],
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 30
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    },
+    {
+      "id": "primordialFusion",
+      "name": "Chaos Formed Like the Night",
+      "source": "Chaos Formed Like the Night",
+      "description": "One of the ten available periodic dragon hits. Base multiplier affects original talent scaling, not C1’s separate flat addition. Caps at 2,500 ATK.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:primordialFusionAvailable",
+            "value": 1
+          }
+        ]
+      },
+      "requiresEffects": [
+        "burstWindow"
+      ],
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "dragonPeriodic"
+            ]
+          },
+          "baseDamageBonus": {
+            "expression": {
+              "type": "min",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 75
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "input",
+                      "input": "source:attack"
+                    },
+                    {
+                      "type": "constant",
+                      "value": 0.03
+                    }
+                  ]
+                }
+              ]
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    },
+    {
+      "id": "durinC1",
+      "name": "C1",
+      "source": "C1",
+      "description": "White: a remaining recipient stack adds 60% of Durin’s ATK to active teammates’ ordinary talent hits, excluding Durin. Dark: two stacks add 150% of his ATK to his own Burst hit. No automatic depletion.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 1
+      },
+      "formulaModifiers": [
+        {
+          "recipient": "activeCharacter",
+          "excludeSource": true,
+          "requiresEffects": [
+            "whiteForm"
+          ],
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:cycleStacksRemaining",
+              "value": 1
+            }
+          ],
+          "targets": {
+            "damageKinds": [
+              "talent"
+            ],
+            "anyTags": [
+              "normalAttack",
+              "chargedAttack",
+              "plungingAttack",
+              "elementalSkill",
+              "elementalBurst"
+            ]
+          },
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 0.6
+              }
+            ]
+          }
+        },
+        {
+          "requiresEffects": [
+            "darkForm"
+          ],
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:cycleStacksRemaining",
+              "value": 2
+            }
+          ],
+          "targets": {
+            "requiredTags": [
+              "elementalBurst"
+            ]
+          },
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 1.5
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "durinC2",
+      "name": "C2",
+      "source": "C2",
+      "description": "Pyro and matching-element bonuses apply once per element regardless of multiple qualifying reactions.",
+      "category": "constellation",
+      "recipient": "party",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      },
+      "requiresEffects": [
+        "burstWindow"
+      ],
+      "statChanges": [
+        {
+          "stat": "recipient:pyroDamageBonus",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "constant",
+                "value": 50
+              },
+              {
+                "type": "max",
+                "operands": [
+                  {
+                    "type": "input",
+                    "input": "local:burningTriggerActive"
+                  },
+                  {
+                    "type": "input",
+                    "input": "local:overloadedTriggerActive"
+                  },
+                  {
+                    "type": "input",
+                    "input": "local:swirlTriggerActive"
+                  },
+                  {
+                    "type": "input",
+                    "input": "local:crystallizeTriggerActive"
+                  },
+                  {
+                    "type": "input",
+                    "input": "local:vaporizeTriggerActive"
+                  },
+                  {
+                    "type": "input",
+                    "input": "local:meltTriggerActive"
+                  }
+                ]
+              }
+            ]
+          },
+          "recipient": "party"
+        },
+        {
+          "stat": "recipient:dendroDamageBonus",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 50
+          },
+          "recipient": "party",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:burningTriggerActive",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "stat": "recipient:electroDamageBonus",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 50
+          },
+          "recipient": "party",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:overloadedTriggerActive",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "stat": "recipient:anemoDamageBonus",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 50
+          },
+          "recipient": "party",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:swirlTriggerActive",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "stat": "recipient:geoDamageBonus",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 50
+          },
+          "recipient": "party",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:crystallizeTriggerActive",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "stat": "recipient:hydroDamageBonus",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 50
+          },
+          "recipient": "party",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:vaporizeTriggerActive",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "stat": "recipient:cryoDamageBonus",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 50
+          },
+          "recipient": "party",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:meltTriggerActive",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "durinC3",
+      "name": "C3",
+      "source": "C3",
+      "description": "C3",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "durinC4",
+      "name": "C4",
+      "source": "C4",
+      "description": "40% Burst damage. Stack-preservation chance changes available C1 proc count only.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "elementalBurst"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 40
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    },
+    {
+      "id": "durinC5",
+      "name": "C5",
+      "source": "C5",
+      "description": "C5",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "durinC6",
+      "name": "C6",
+      "source": "C6",
+      "description": "30% Burst DEF ignore, plus another 40% for Dark Burst hits. White Burst hits apply a separate 30% enemy DEF debuff; enable after a previous hit, including lingering debuff after changing form.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 6
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "elementalBurst"
+            ]
+          },
+          "defenseMitigation": {
+            "ignore": {
+              "expression": {
+                "type": "constant",
+                "value": 30
+              },
+              "unit": "percentPoints"
+            }
+          }
+        },
+        {
+          "targets": {
+            "requiredTags": [
+              "darkBurst"
+            ]
+          },
+          "defenseMitigation": {
+            "ignore": {
+              "expression": {
+                "type": "constant",
+                "value": 40
+              },
+              "unit": "percentPoints"
+            }
+          }
+        },
+        {
+          "recipient": "enemy",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:whiteDefenseDebuffActive",
+              "value": 1
+            }
+          ],
+          "targets": {},
+          "defenseMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 30
+              },
+              "unit": "percentPoints"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "defaultTeam": [
+    "durin"
+  ],
+  "inputDefaults": {
+    "attack": 1500,
+    "maxHp": 30000,
+    "defense": 2000,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  },
+  "notes": [
+    "Each entry represents one hit unless stated otherwise. Trigger availability and buff duration are combat snapshots, not a rotation simulation.",
+    "White and Dark Burst forms are mutually exclusive. Skill follow-ups are separate alternatives and Denial of Darkness is Skill damage, despite using the Normal Attack button.",
+    "A4 multiplies original periodic-hit talent scaling before C1 flat damage. Hexerei upgrades A1 to 35% shred or 70% Vaporize/Melt bonus; it does not strengthen A4 or constellations.",
+    "Trigger flags include the specified Pyro/Dendro attacks against Burning enemies. A1 does not shred Hydro/Cryo; C2 can buff those elements through Vaporize/Melt.",
+    "Talent tables retain precise cached game parameters cross-checked against the database display tables. Counts, durations, stack depletion and reaction uptime are snapshots."
+  ],
+  "sources": [
+    "/api/characters/durin",
+    "https://library.keqingmains.com/characters/pyro/durin",
+    "data/damage-talent-data-v2/durin.json",
+    "https://keqingmains.com/q/durin-quickguide/"
+  ]
+}

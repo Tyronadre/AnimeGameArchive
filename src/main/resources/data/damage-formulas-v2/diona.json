@@ -1,0 +1,882 @@
+{
+  "schemaVersion": 3,
+  "key": "diona",
+  "characterKey": "diona",
+  "name": "Diona",
+  "element": "Cryo",
+  "weaponType": "Bow",
+  "characterDataResource": "data/characters/data/diona.json",
+  "inputs": [
+    {
+      "id": "signatureMixRecipientActive",
+      "label": "Current character inside Signature Mix (or C6 EM linger)",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "recipientHpPercent",
+      "label": "Current character HP (%)",
+      "defaultValue": 100,
+      "min": 0,
+      "max": 100,
+      "step": 1
+    },
+    {
+      "id": "witchRevelationComplete",
+      "label": "Witch’s Revelation completed",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "revelationPawsReady",
+      "label": "Choice Treasures · qualifying reaction within 20 seconds of Skill",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "radianceState",
+      "label": "Radiance state (0 none, 1 Stellar-Conduct, 2 Stellar Swirl)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 2,
+      "step": 1
+    },
+    {
+      "id": "recipientInsideField",
+      "label": "Current character actually inside Signature Mix",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Kätzlein Style",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "normal 1",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-2",
+          "label": "normal 2",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-3",
+          "label": "normal 3",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-4",
+          "label": "normal 4",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "normal-5",
+          "label": "normal 5",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "normalAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "aimed",
+          "label": "aimed",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge",
+          "label": "plunge",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-low",
+          "label": "plunge low",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "plunge-high",
+          "label": "plunge high",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param11",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "damageType": "directPhysical"
+        },
+        {
+          "id": "fully-charged",
+          "label": "Fully charged frost arrow",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param8",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "chargedAttack"
+          ],
+          "damageType": "directCryo"
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Icy Paws",
+      "formulas": [
+        {
+          "id": "icy-paw",
+          "label": "Icy Paws · one paw",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill",
+            "icyPaws"
+          ],
+          "damageType": "directCryo"
+        },
+        {
+          "id": "revelation-paw",
+          "label": "Choice Treasures · one of three additional paws",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalSkill",
+            "icyPaws"
+          ],
+          "damageType": "directCryo",
+          "requiredEffects": [
+            "choiceTreasures"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Signature Mix",
+      "formulas": [
+        {
+          "id": "burst-cast",
+          "label": "Signature Mix · initial throw",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directCryo"
+        },
+        {
+          "id": "mist-tick",
+          "label": "Drunken Mist · one damage tick",
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param2",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "tags": [
+            "elementalBurst"
+          ],
+          "damageType": "directCryo"
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "signatureMixRecipient",
+      "name": "Signature Mix · recipient in field",
+      "source": "Signature Mix · recipient in field",
+      "description": "The current character is in the field. For C6 EM only, this can also represent its two-second linger after leaving.",
+      "category": "talent",
+      "recipient": "activeCharacter",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:signatureMixRecipientActive",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "catsTailMenu",
+      "name": "Cat’s Tail Secret Menu",
+      "source": "Cat’s Tail Secret Menu",
+      "description": "Icy Paws shield provides movement speed and stamina reduction; no outgoing damage modifier.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      }
+    },
+    {
+      "id": "drunkardsFarce",
+      "name": "Drunkards’ Farce",
+      "source": "Drunkards’ Farce",
+      "description": "Enemies entering the field lose 10% ATK. This is not enemy DEF or RES reduction and does not increase outgoing damage.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      }
+    },
+    {
+      "id": "witchRevelation",
+      "name": "Witch’s Revelation",
+      "source": "Witch’s Revelation",
+      "description": "Witch’s Revelation",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:witchRevelationComplete",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "choiceTreasures",
+      "name": "Choice Treasures",
+      "source": "Choice Treasures",
+      "description": "Within 20 seconds after Skill, a qualifying Superconduct/Stellar-Conduct/Cryo Swirl/Stellar Swirl reaction fires three extra paws. One paw is shown; no particles or shield creation.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:revelationPawsReady",
+            "value": 1
+          }
+        ]
+      },
+      "requiresEffects": [
+        "witchRevelation"
+      ]
+    },
+    {
+      "id": "radianceConduct",
+      "name": "Radiance · Stellar-Conduct",
+      "source": "Radiance · Stellar-Conduct",
+      "description": "Radiance · Stellar-Conduct",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:radianceState",
+            "value": 1
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:radianceState",
+            "value": 1
+          }
+        ]
+      },
+      "requiresEffects": [
+        "witchRevelation"
+      ]
+    },
+    {
+      "id": "radianceSwirl",
+      "name": "Radiance · Stellar Swirl",
+      "source": "Radiance · Stellar Swirl",
+      "description": "Radiance · Stellar Swirl",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:radianceState",
+            "value": 2
+          }
+        ]
+      },
+      "requiresEffects": [
+        "witchRevelation"
+      ]
+    },
+    {
+      "id": "dionaC1",
+      "name": "C1",
+      "source": "C1",
+      "description": "Restores 15 Energy after Burst ends; no per-hit damage modifier.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 1
+      }
+    },
+    {
+      "id": "dionaC2",
+      "name": "C2",
+      "source": "C2",
+      "description": "Additive 15% Icy Paws damage bonus, including Revelation’s extra paws. Shield absorption and co-op shields are defensive effects.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "icyPaws"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 15
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dionaC3",
+      "name": "C3",
+      "source": "C3",
+      "description": "C3",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "dionaC4",
+      "name": "C4",
+      "source": "C4",
+      "description": "Aimed shots charge 60% faster inside Signature Mix; no per-hit damage multiplier.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      }
+    },
+    {
+      "id": "dionaC5",
+      "name": "C5",
+      "source": "C5",
+      "description": "C5",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "recipient": "self",
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "dionaC6",
+      "name": "C6",
+      "source": "C6",
+      "description": "Above 50% HP: 200 EM in the field (including two-second linger). At or below 50%: incoming healing instead. Revelation grants permanent 25% base HP to Diona and a 40% reaction bonus in the corresponding Radiance state while in the field.",
+      "category": "constellation",
+      "recipient": "activeCharacter",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "source:constellation": 6
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:elementalMastery",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 200
+          },
+          "recipient": "activeCharacter",
+          "requiresEffects": [
+            "signatureMixRecipient"
+          ],
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:recipientHpPercent",
+              "value": 50.0000001
+            }
+          ]
+        },
+        {
+          "stat": "recipient:maxHp",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:baseHp"
+              },
+              {
+                "type": "constant",
+                "value": 0.25
+              }
+            ]
+          },
+          "recipient": "self",
+          "requiresEffects": [
+            "witchRevelation"
+          ]
+        }
+      ],
+      "formulaModifiers": [
+        {
+          "targets": {
+            "damageKinds": [
+              "stellar"
+            ],
+            "requiredTags": [
+              "stellarConduct"
+            ]
+          },
+          "requiresEffects": [
+            "radianceConduct",
+            "signatureMixRecipient"
+          ],
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 40
+            },
+            "unit": "percentPoints"
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:recipientInsideField",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "targets": {
+            "damageKinds": [
+              "reaction"
+            ],
+            "requiredTags": [
+              "superconduct"
+            ]
+          },
+          "requiresEffects": [
+            "radianceConduct",
+            "signatureMixRecipient"
+          ],
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 40
+            },
+            "unit": "percentPoints"
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:recipientInsideField",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "targets": {
+            "damageKinds": [
+              "stellar"
+            ],
+            "requiredTags": [
+              "stellarSwirl"
+            ]
+          },
+          "requiresEffects": [
+            "radianceSwirl",
+            "signatureMixRecipient"
+          ],
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 40
+            },
+            "unit": "percentPoints"
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:recipientInsideField",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "targets": {
+            "damageKinds": [
+              "reaction"
+            ],
+            "requiredTags": [
+              "swirl"
+            ],
+            "elements": [
+              "Cryo"
+            ]
+          },
+          "requiresEffects": [
+            "radianceSwirl",
+            "signatureMixRecipient"
+          ],
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 40
+            },
+            "unit": "percentPoints"
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:recipientInsideField",
+              "value": 1
+            }
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "label": "Incoming Healing bonus",
+          "expression": {
+            "type": "constant",
+            "value": 30
+          },
+          "unit": "percentPoints",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:signatureMixRecipientActive",
+              "value": 1
+            },
+            {
+              "type": "inputAtMost",
+              "input": "local:recipientHpPercent",
+              "value": 50
+            },
+            {
+              "type": "inputAtLeast",
+              "input": "local:recipientInsideField",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "defaultTeam": [
+    "diona"
+  ],
+  "inputDefaults": {
+    "attack": 1500,
+    "maxHp": 30000,
+    "defense": 2000,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  },
+  "notes": [
+    "Each entry represents one hit unless stated otherwise. Trigger availability and buff duration are combat snapshots, not a rotation simulation.",
+    "Press fires two paws and Hold five; entries show one paw, not a multiplied total. Revelation fires three additional paws per trigger, with the same Skill damage scaling.",
+    "Shield absorption, healing, charge speed, movement, stamina and enemy ATK reduction are described separately from outgoing damage. C6’s 200 EM requires strictly above 50% recipient HP.",
+    "Radiance is an external-state snapshot and cannot be both Conduct and Swirl. C6’s reaction bonuses do not require high HP, do require the actual field, and never increase ordinary Cryo or Lunar damage.",
+    "Stellar Swirl selectors also cover future authored direct Stellar Swirl hits; this character does not generate direct Stellar damage itself."
+  ],
+  "sources": [
+    "/api/characters/diona",
+    "data/characters/data/diona.json",
+    "https://library.keqingmains.com/characters/cryo/diona"
+  ]
+}

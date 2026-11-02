@@ -1,6 +1,7 @@
 const fs=require('fs'),http=require('http'),path=require('path'),assert=require('assert/strict');
 const {withBrowser}=require('./browser-test-session.cjs');
 const resources=path.resolve(__dirname,'../src/main/resources');
+const damageTypeCount=JSON.parse(fs.readFileSync(path.join(resources,'data/damage-formulas-v2/damage-types.json'),'utf8')).damageTypes.length;
 let saved=null;
 const savedDocuments=new Map();
 // Server metadata fixture; the real endpoint is covered by the Kotlin editor tests.
@@ -88,7 +89,7 @@ withBrowser(server,async({base,call,evaluate,until,screenshot,errors})=>{
  assert.equal(original.base.operands[1].parameter,'param1');assert.equal(copies[0].base.operands[1].parameter,'param1');assert.equal(copies[1].base.operands[1].parameter,'param2');
  const unchangedScaling=structuredClone(copies[1].base);unchangedScaling.operands[1].parameter='param1';assert.deepEqual(unchangedScaling,original.base,'Copies must retain all other scaling terms independently');
  await until(()=>evaluate(`!document.getElementById('studio-save').disabled`),'Save did not finish');
- assert.equal(await evaluate(`[...document.querySelectorAll('#studio-fields .studio-form-field')].find(f=>f.querySelector(':scope > span')?.textContent==='Damage type').querySelectorAll('option').length`),10);
+ assert.equal(await evaluate(`[...document.querySelectorAll('#studio-fields .studio-form-field')].find(f=>f.querySelector(':scope > span')?.textContent==='Damage type').querySelectorAll('option').length`),damageTypeCount);
  await evaluate(`(()=>{const field=[...document.querySelectorAll('#studio-fields .studio-form-field')].find(f=>f.querySelector(':scope > span')?.textContent==='Damage type');const n=field.querySelector('select');n.value='directPyro';n.dispatchEvent(new Event('change',{bubbles:true}));document.getElementById('studio-save').click();})()`);
  await until(()=>JSON.parse(saved.content).talents?.[0]?.formulas?.[0]?.damageType==='directPyro','Shared type choice was not saved');
  assert.equal(JSON.parse(saved.content).damageTypes,undefined);
@@ -132,6 +133,15 @@ withBrowser(server,async({base,call,evaluate,until,screenshot,errors})=>{
  await evaluate(`document.getElementById('studio-save').click()`);
  await until(()=>JSON.parse(saved.content).effects.find(e=>e.id==='newEffect')?.formulaModifiers[0]?.baseDamageMultiplier,'Independent multiplier was not serialized');
  added=JSON.parse(saved.content).effects.find(e=>e.id==='newEffect');assert.equal(added.formulaModifiers[0].baseDamageBonus,undefined);assert.equal(added.formulaModifiers[0].baseDamageMultiplier.unit,'percentPoints');assert.equal(added.formulaModifiers[0].baseDamageMultiplier.expression.type,'multiply');
+ await until(()=>evaluate(`!document.getElementById('studio-save').disabled`),'Save did not finish');
+ await action(`[...card.querySelectorAll('button')].find(b=>b.textContent==='+ Add Modifier').click();`);
+ await action(`const m=card.querySelectorAll('.studio-modifier')[1];change(field('Applies to',m).querySelector('select'),'normalAttack');`);
+ await action(`const m=card.querySelectorAll('.studio-modifier')[1];change(m.querySelector('[aria-label="Damage change to add"]'),'infusion');[...m.querySelectorAll('button')].find(b=>b.textContent==='+ Add damage change').click();`);
+ await action(`change(field('Infused damage type').querySelector('select'),'directCryo');`);
+ await action(`const n=field('Infusion priority').querySelector('input');n.value='20';n.dispatchEvent(new Event('input',{bubbles:true}));`);
+ await evaluate(`document.getElementById('studio-save').click()`);
+ await until(()=>JSON.parse(saved.content).effects.find(e=>e.id==='newEffect')?.formulaModifiers[1]?.infusion?.priority===20,'Weapon infusion was not serialized');
+ assert.deepEqual(JSON.parse(saved.content).effects.find(e=>e.id==='newEffect').formulaModifiers[1].infusion,{damageType:'directCryo',weaponTypes:['Sword','Claymore','Polearm'],priority:20});
  assert.equal(errors.length,0,JSON.stringify(errors));
  await call('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
  assert.equal(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth`),true,'Mobile layout must not overflow');

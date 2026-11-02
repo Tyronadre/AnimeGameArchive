@@ -250,7 +250,8 @@
           "label": "Low Plunge Physical DMG",
           "damageType": "directPhysical",
           "tags": [
-            "plungingAttack"
+            "plungingAttack",
+            "plungeImpact"
           ],
           "excludedEffects": [
             "masqueRedDeath"
@@ -276,7 +277,8 @@
           "label": "High Plunge Physical DMG",
           "damageType": "directPhysical",
           "tags": [
-            "plungingAttack"
+            "plungingAttack",
+            "plungeImpact"
           ],
           "excludedEffects": [
             "masqueRedDeath"
@@ -347,7 +349,8 @@
                 ]
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "masque-normal-2",
@@ -399,7 +402,8 @@
                 ]
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "masque-normal-3",
@@ -451,7 +455,8 @@
                 ]
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "masque-normal-4",
@@ -508,7 +513,8 @@
                 ]
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "masque-normal-5",
@@ -560,7 +566,8 @@
                 ]
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "masque-normal-6",
@@ -612,7 +619,8 @@
                 ]
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "masque-charged",
@@ -639,7 +647,8 @@
                 "levelInput": "local:normalTalentLevel"
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "masque-plunge",
@@ -666,7 +675,8 @@
                 "levelInput": "local:normalTalentLevel"
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "masque-low-plunge",
@@ -674,7 +684,8 @@
           "damageType": "directPyro",
           "tags": [
             "plungingAttack",
-            "infusedAttack"
+            "infusedAttack",
+            "plungeImpact"
           ],
           "requiredEffects": [
             "masqueRedDeath"
@@ -693,7 +704,8 @@
                 "levelInput": "local:normalTalentLevel"
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         },
         {
           "id": "masque-high-plunge",
@@ -701,7 +713,8 @@
           "damageType": "directPyro",
           "tags": [
             "plungingAttack",
-            "infusedAttack"
+            "infusedAttack",
+            "plungeImpact"
           ],
           "requiredEffects": [
             "masqueRedDeath"
@@ -720,7 +733,8 @@
                 "levelInput": "local:normalTalentLevel"
               }
             ]
-          }
+          },
+          "infusionRule": "locked"
         }
       ]
     },

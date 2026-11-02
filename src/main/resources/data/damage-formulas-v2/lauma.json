@@ -413,11 +413,81 @@
       ],
       "recipient": "party",
       "statChanges": []
+    },
+    {
+      "id": "laumaHeldSkillAvailable",
+      "name": "Held Skill · Verdant Dew available",
+      "source": "Held Skill · Verdant Dew available",
+      "description": "Held Skill · Verdant Dew available",
+      "category": "talent",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "skillUsed",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:verdantDew",
+            "value": 1
+          }
+        ]
+      },
+      "formulaModifiers": []
+    },
+    {
+      "id": "laumaCleansingForTheSpring",
+      "name": "Cleansing for the Spring",
+      "source": "Cleansing for the Spring",
+      "description": "Cleansing for the Spring",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "always"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "elementalSkill"
+            ],
+            "damageKinds": [
+              "talent"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "min",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 32
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "input",
+                      "input": "source:elementalMastery"
+                    },
+                    {
+                      "type": "constant",
+                      "value": 0.04
+                    }
+                  ]
+                }
+              ]
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ]
     }
   ],
   "notes": [
-    "Support profile: personal attacks, healing timelines and stack consumption are not simulated.",
-    "Cleansing for the Spring and Prayers for the Forest do not modify a teammate's damage."
+    "Individual hits are evaluated as combat snapshots. Stack consumption, healing timelines and rotations are not simulated.",
+    "Held Skill consumes up to three Verdant Dew. Moon Song controls Burst stack generation, not Held Skill damage.",
+    "Burst has no direct hit; Pale Hymn remains a separate buff. C6 procs are displayed per hit; trigger limits are not simulated."
   ],
   "sources": [
     "data/characters/data/lauma.json",
@@ -531,7 +601,7 @@
           "label": "Plunge DMG",
           "damageType": "directDendro",
           "tags": [
-            "chargedAttack"
+            "plungingAttack"
           ],
           "base": {
             "type": "multiply",
@@ -555,7 +625,8 @@
           "label": "Low Plunge DMG",
           "damageType": "directDendro",
           "tags": [
-            "chargedAttack"
+            "plungingAttack",
+            "plungeImpact"
           ],
           "base": {
             "type": "multiply",
@@ -579,7 +650,8 @@
           "label": "High Plunge DMG",
           "damageType": "directDendro",
           "tags": [
-            "chargedAttack"
+            "plungingAttack",
+            "plungeImpact"
           ],
           "base": {
             "type": "multiply",
@@ -597,6 +669,31 @@
               }
             ]
           }
+        },
+        {
+          "id": "laumaC6NormalProc",
+          "label": "C6 · Normal Attack additional hit",
+          "damageType": "lunarBloom",
+          "tags": [
+            "lunarBloom"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:elementalMastery"
+              },
+              {
+                "type": "constant",
+                "value": 1.5
+              }
+            ]
+          },
+          "requiredEffects": [
+            "laumaC6",
+            "laumaPaleHymn"
+          ]
         }
       ]
     },
@@ -607,21 +704,22 @@
         {
           "id": "laumaPressDMG",
           "label": "Press DMG",
-          "damageType": "directPyro",
-          "tags": [],
+          "damageType": "directDendro",
+          "tags": [
+            "elementalSkill"
+          ],
           "base": {
             "type": "multiply",
             "operands": [
               {
-                "type": "talentParameter",
-                "characterKey": "lauma",
-                "talent": "combat2",
-                "levelInput": "source:skillTalentLevel",
-                "parameter": "param1"
+                "type": "input",
+                "input": "source:attack"
               },
               {
-                "type": "input",
-                "input": "source:elementalMastery"
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
               }
             ]
           }
@@ -638,17 +736,19 @@
             "operands": [
               {
                 "type": "input",
-                "input": "source:elementalMastery"
+                "input": "source:attack"
               },
               {
                 "type": "talentParameter",
-                "characterKey": "lauma",
                 "talent": "combat2",
-                "levelInput": "source:skillTalentLevel",
-                "parameter": "param2"
+                "parameter": "param2",
+                "levelInput": "source:skillTalentLevel"
               }
             ]
-          }
+          },
+          "requiredEffects": [
+            "laumaHeldSkillAvailable"
+          ]
         },
         {
           "id": "lauma1HitHoldDMGCopy",
@@ -662,36 +762,38 @@
             "type": "multiply",
             "operands": [
               {
-                "type": "input",
-                "input": "source:elementalMastery"
-              },
-              {
                 "type": "multiply",
                 "operands": [
                   {
-                    "type": "talentParameter",
-                    "characterKey": "lauma",
-                    "talent": "combat2",
-                    "levelInput": "source:skillTalentLevel",
-                    "parameter": "param3"
+                    "type": "input",
+                    "input": "source:elementalMastery"
                   },
                   {
-                    "type": "max",
-                    "operands": [
-                      {
-                        "type": "input",
-                        "input": "local:moonSong"
-                      },
-                      {
-                        "type": "constant",
-                        "value": 3
-                      }
-                    ]
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param3",
+                    "levelInput": "source:skillTalentLevel"
+                  }
+                ]
+              },
+              {
+                "type": "min",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 3
+                  },
+                  {
+                    "type": "input",
+                    "input": "local:verdantDew"
                   }
                 ]
               }
             ]
-          }
+          },
+          "requiredEffects": [
+            "laumaHeldSkillAvailable"
+          ]
         },
         {
           "id": "laumaFrostmoonSanctuaryDMG",
@@ -737,6 +839,30 @@
               }
             ]
           }
+        },
+        {
+          "id": "laumaC6SanctuaryProc",
+          "label": "C6 · Sanctuary additional hit",
+          "damageType": "lunarBloom",
+          "tags": [
+            "lunarBloom"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:elementalMastery"
+              },
+              {
+                "type": "constant",
+                "value": 1.85
+              }
+            ]
+          },
+          "requiredEffects": [
+            "laumaC6"
+          ]
         }
       ]
     }
