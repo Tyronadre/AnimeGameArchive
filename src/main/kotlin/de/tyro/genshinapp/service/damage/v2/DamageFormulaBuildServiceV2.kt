@@ -7,6 +7,7 @@ import de.tyro.genshinapp.service.planning.CharacterTargetService
 import de.tyro.genshinapp.service.planning.PlayerPlanningService
 import de.tyro.genshinapp.service.player.PlayerEquipmentService
 import de.tyro.genshinapp.service.player.PlayerSnapshotStore
+import de.tyro.genshinapp.model.PlayerSnapshot
 import org.springframework.stereotype.Service
 
 @Service
@@ -21,11 +22,23 @@ class DamageFormulaBuildServiceV2(
     private val characterStatCatalog: CharacterStatCatalog,
     private val weaponService: DamageFormulaWeaponServiceV2,
 ) {
+    fun comparisonBaseValues(snapshot: PlayerSnapshot, characterKey: String): Map<String, Double> {
+        val state = planningService.findCharacterState(snapshot, characterKey) ?: return emptyMap()
+        val stats = characterStatCatalog.resolve(state.key, state.level, state.ascension) ?: return emptyMap()
+        return mapOf("baseHp" to stats.getValue("hp"), "baseDefense" to stats.getValue("def"))
+    }
+
     fun applyCurrentValues(
         profile: DamageFormulaProfileV2,
         userId: Long,
+    ): DamageFormulaProfileV2 = applySnapshot(profile, userId, snapshotStore.current(userId))
+
+    /** Explicit snapshot entry point for read-only hypothetical builds. */
+    fun applySnapshot(
+        profile: DamageFormulaProfileV2,
+        userId: Long,
+        snapshot: PlayerSnapshot?,
     ): DamageFormulaProfileV2 {
-        val snapshot = snapshotStore.current(userId)
         val equippedProfile = weaponService.attach(artifactService.attach(profile, snapshot?.artifacts.orEmpty()), snapshot?.weapons.orEmpty())
         if (snapshot == null) return equippedProfile
         val valuesByCharacter = mutableMapOf<String, CurrentValuesV2?>()

@@ -289,6 +289,7 @@ data class DamageFormulaDocumentV2(
     val profile: DamageFormulaProfileV2,
     val defaultCalculation: DamageCalculationV2,
     val teamBuilds: List<StoredTeamBuildV2> = emptyList(),
+    val contextFingerprint: String? = null,
 )
 
 data class DamageCalculationV2(

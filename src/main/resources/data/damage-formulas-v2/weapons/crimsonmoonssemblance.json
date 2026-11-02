@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 2,
+  "key": "crimsonmoonssemblance",
+  "name": "Crimson Moon’s Semblance",
+  "inputs": [
+    {
+      "id": "bondOfLife",
+      "label": "Bond Of Life",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 200,
+      "step": 1,
+      "unit": "percentPoints"
+    },
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 5,
+      "step": 1
+    }
+  ],
+  "effects": [],
+  "sources": []
+}

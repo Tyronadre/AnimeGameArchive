@@ -738,7 +738,7 @@ class ArtifactOptimizationService(
         )
     }
 
-    private fun artifactMainStatValue(artifact: PlayerArtifact): Double {
+    fun artifactMainStatValue(artifact: PlayerArtifact): Double {
         val values = MAIN_STAT_MAX_VALUES[artifact.rarity] ?: return 0.0
         val maximum = values[artifact.mainStatKey] ?: return 0.0
         val maximumLevel = when (artifact.rarity) {
@@ -1204,34 +1204,12 @@ class ArtifactOptimizationService(
         random: Random,
         strategy: ArtifactScoringStrategy,
     ): LevelingSimulationOutcome {
-        val stats = artifact.substats.associateTo(linkedMapOf()) { it.key to it.value }
-        val remaining = remainingUpgradeMilestones(artifact)
         var usefulUpgrades = 0
-        repeat(remaining) {
-            if (stats.size < 4) {
-                val newKey = randomSubstatKey(
-                    mainStatKey = artifact.mainStatKey,
-                    excludedKeys = stats.keys,
-                    random = random,
-                )
-                stats[newKey] = randomSubstatRoll(newKey, random)
-                if (strategy.isWantedStat(newKey)) usefulUpgrades++
-            } else {
-                val key = stats.keys.random(random)
-                stats[key] = stats.getValue(key) + randomSubstatRoll(key, random)
-                if (strategy.isWantedStat(key)) usefulUpgrades++
-            }
+        val finished = ArtifactUpgradeSimulator.finish(artifact, random) { key ->
+            if (strategy.isWantedStat(key)) usefulUpgrades++
         }
-        return LevelingSimulationOutcome(
-            artifact = artifact.copy(
-                level = 20,
-                substats = stats.map { (key, value) -> PlayerArtifactStat(key, value) },
-                totalRolls = artifact.totalRolls?.plus(remaining),
-            ),
-            usefulUpgrades = usefulUpgrades,
-        )
+        return LevelingSimulationOutcome(finished, usefulUpgrades)
     }
-
     private fun nextUsefulUpgradeChance(
         artifact: PlayerArtifact,
         strategy: ArtifactScoringStrategy,
@@ -1519,33 +1497,11 @@ class ArtifactOptimizationService(
         private const val HEX_CHARS = "0123456789abcdef"
         private val CRIT_STAT_KEYS = setOf("critRate_", "critDMG_")
 
-        private val SUBSTAT_ROLL_VALUES = mapOf(
-            "hp" to listOf(209.13, 239.0, 268.88, 298.75),
-            "hp_" to listOf(4.08, 4.66, 5.25, 5.83),
-            "atk" to listOf(13.62, 15.56, 17.51, 19.45),
-            "atk_" to listOf(4.08, 4.66, 5.25, 5.83),
-            "def" to listOf(16.2, 18.52, 20.83, 23.15),
-            "def_" to listOf(5.1, 5.83, 6.56, 7.29),
-            "critRate_" to listOf(2.72, 3.11, 3.5, 3.89),
-            "critDMG_" to listOf(5.44, 6.22, 6.99, 7.77),
-            "enerRech_" to listOf(4.53, 5.18, 5.83, 6.48),
-            "eleMas" to listOf(16.32, 18.65, 20.98, 23.31),
-        )
+        private val SUBSTAT_ROLL_VALUES = ArtifactUpgradeSimulator.rollValues
         private val MAX_SUBSTAT_ROLLS =
             SUBSTAT_ROLL_VALUES.mapValues { (_, values) -> values.last() }
 
-        private val SUBSTAT_WEIGHTS = mapOf(
-            "hp" to 6.0,
-            "atk" to 6.0,
-            "def" to 6.0,
-            "hp_" to 4.0,
-            "atk_" to 4.0,
-            "def_" to 4.0,
-            "enerRech_" to 4.0,
-            "eleMas" to 4.0,
-            "critRate_" to 3.0,
-            "critDMG_" to 3.0,
-        )
+        private val SUBSTAT_WEIGHTS = ArtifactUpgradeSimulator.weights
 
         private val MAIN_STATS_BY_SLOT = mapOf(
             "flower" to listOf("hp" to 1.0),

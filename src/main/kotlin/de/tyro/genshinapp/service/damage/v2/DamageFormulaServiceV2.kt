@@ -82,21 +82,32 @@ class DamageFormulaServiceV2(
     fun calculate(
         profile: DamageFormulaProfileV2,
         request: DamageCalculationRequestV2,
-    ): DamageCalculationV2 {
+    ): DamageCalculationV2 = prepare(profile)(request)
+
+    /** Validate a fixed equipment/effect layout once; every evaluation uses the normal V2 engine. */
+    fun prepare(profile: DamageFormulaProfileV2, formulaIds: Set<String>? = null): (DamageCalculationRequestV2) -> DamageCalculationV2 {
         val loaded = requireNotNull(loadedProfile(profile.key)) {
             "Damage formula profile '${profile.key}' is not available"
         }
         require(profile.characterKey == loaded.source.characterKey) {
             "Damage formula profile '${profile.key}' changed its character key"
         }
-        val composed = loaded.copy(source = prepareInfusions(profile), supportRoots = profile.supportProfiles.mapNotNull { support ->
+        val composed = loaded.copy(source = prepareInfusions(profile), reactions = reactionCatalog, supportRoots = profile.supportProfiles.mapNotNull { support ->
             support.characterDataResource?.let { resource -> support.key to supportRoots.computeIfAbsent(resource) {
                 DamageFormulaResourcesV2.resource(resource).inputStream.use(objectMapper::readTree)
             } }
         }.toMap())
         validate(composed)
-        return calculate(composed, request)
+        return { request -> calculate(composed, request, formulaIds) }
     }
+
+    fun definitionContext(profile: DamageFormulaProfileV2): String = objectMapper.writeValueAsString(
+        listOf(loadedProfile(profile.key)?.characterRoot, profile.supportProfiles.map { support ->
+            support.characterDataResource?.let { resource ->
+                DamageFormulaResourcesV2.resource(resource).inputStream.use(objectMapper::readTree)
+            }
+        }, reactionCatalog)
+    )
 
     fun calculate(
         characterKey: String,
@@ -108,6 +119,7 @@ class DamageFormulaServiceV2(
     private fun calculate(
         loaded: LoadedDamageProfileV2,
         request: DamageCalculationRequestV2,
+        formulaIds: Set<String>? = null,
     ): DamageCalculationV2 {
         val profile = loaded.source
         val inputs = profile.inputs.associate { definition ->
@@ -171,7 +183,8 @@ class DamageFormulaServiceV2(
         val results = profile.talents.flatMap { talent ->
             talent.formulas
                 .filter { formula ->
-                    formula.requiredEffects.all(activeEffectIds::contains) &&
+                    (formulaIds == null || formula.id in formulaIds) &&
+                        formula.requiredEffects.all(activeEffectIds::contains) &&
                         formula.excludedEffects.none(activeEffectIds::contains)
                 }
                 .map { formula ->
@@ -457,6 +470,7 @@ class DamageFormulaServiceV2(
         critRate: Double,
         critDamage: Double,
     ): List<DamageReactionResultV2> {
+        val reactionCatalog = loaded.reactions ?: this.reactionCatalog
         if (damageType.kind != "talent" || damageType.independentProc ||
             formula.tags.any { it in setOf("multiHit", "noReaction") }
         ) {
@@ -981,6 +995,7 @@ class DamageFormulaServiceV2(
         val source: DamageFormulaProfileV2,
         val characterRoot: JsonNode,
         val supportRoots: Map<String, JsonNode> = emptyMap(),
+        val reactions: DamageReactionCatalogV2? = null,
     ) {
         fun parameterValues(talent: String, parameter: String, characterKey: String? = null): List<Double> {
             if (characterKey == null || characterKey == source.characterKey) {

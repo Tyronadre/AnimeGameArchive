@@ -50,6 +50,11 @@
     let teamSlots = [];
     let storedBuilds = [];
     let statAlignmentFrame = null;
+    const artifactComparison = window.createArtifactComparisonV2(root, {
+        context: () => ({profile, inputs: inputState, enabledEffects: effectState, teamKeys: teamSlots.filter(Boolean)}),
+        headers: requestHeaders,
+        reload: initialize,
+    });
 
     const numberFormatter = new Intl.NumberFormat(undefined, {maximumFractionDigits: 2});
     const damageFormatter = new Intl.NumberFormat(undefined, {maximumFractionDigits: 0});
@@ -751,6 +756,7 @@
             if (version !== calculateVersion) return;
             teamSlots = nextSlots;
             profile = payload.profile;
+            artifactComparison.setDocument(payload);
             storedBuilds = payload.teamBuilds || [];
             inputById = new Map(profile.inputs.map((input) => [input.id, input]));
             inputState = payload.defaultCalculation.inputs;
@@ -1995,9 +2001,11 @@
         workspace.classList.remove("is-updating");
         statusNode.hidden = true;
         errorNode.hidden = true;
+        artifactComparison.changed();
     }
 
     function scheduleCalculation(delay = 90) {
+        artifactComparison.changed();
         window.clearTimeout(calculateTimer);
         calculateTimer = window.setTimeout(calculate, delay);
     }
@@ -2163,6 +2171,7 @@
                 throw new Error(label("labelError", "The endpoint returned an invalid profile."));
             }
             profile = documentPayload.profile;
+            artifactComparison.setDocument(documentPayload);
             storedBuilds = documentPayload.teamBuilds || [];
             const selectedOrder = requestedTeam.length ? requestedTeam : profile.selectedTeam;
             teamSlots = [profile.characterKey, ...selectedOrder.filter((key) => key !== profile.characterKey)];

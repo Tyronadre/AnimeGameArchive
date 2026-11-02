@@ -2,6 +2,33 @@
     min-width: 1120px;
 }
 
+.comparison-panel { color: var(--ink); }
+.comparison-panel [hidden] { display: none !important; }
+.comparison-goals { border: 1px solid var(--line); border-radius: 14px; padding: 1rem; margin-bottom: 1rem; }
+.comparison-goal-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem 1rem; max-height: 260px; overflow: auto; margin-top: .8rem; }
+.comparison-goal-options label { display: flex; gap: .5rem; align-items: baseline; font-size: .85rem; }
+.comparison-goal-options input { accent-color: var(--damage-accent); }
+.comparison-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .7rem; margin: 1rem 0; }
+.comparison-panel button, .comparison-panel select { background: var(--surface); color: inherit; border: 1px solid var(--line); border-radius: 9px; padding: .55rem .85rem; font: inherit; cursor: pointer; }
+.comparison-panel button:hover:not(:disabled) { border-color: var(--damage-accent); }
+.comparison-panel button:disabled { opacity: .5; cursor: default; }
+.comparison-panel button:focus-visible, .comparison-panel select:focus-visible { outline: 2px solid var(--damage-accent); outline-offset: 2px; }
+.comparison-progress { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.2rem; }
+.comparison-progress progress { display: block; width: 100%; accent-color: var(--damage-accent); margin: .8rem 0; }
+.comparison-progress p { margin: .4rem 0; }
+.comparison-progress code { user-select: all; margin-right: 1rem; }
+.comparison-baseline { font-weight: 700; }
+.comparison-notice { background: var(--surface-soft); border-left: 3px solid var(--damage-accent); padding: .8rem; }
+.comparison-error { color: #bd5045; }
+.comparison-card { display: grid; grid-template-columns: minmax(220px, .8fr) minmax(300px, 1.4fr); gap: 1.4rem; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.2rem; margin-bottom: .8rem; }
+.comparison-card.is-equipped { border-color: var(--damage-accent); background: var(--damage-accent-soft); }
+.comparison-card p { margin: .35rem 0; }
+.comparison-card ul { margin: .5rem 0 0; padding-left: 1.2rem; font-size: .85rem; }
+.comparison-card small { color: var(--muted); }
+.comparison-scores { font-variant-numeric: tabular-nums; }
+.comparison-scores > p:first-child { font-weight: 700; }
+.comparison-panel details { margin-top: .7rem; font-size: .85rem; }
+
 /* Desktop-only, read-only source builds. These never use the live input state. */
 .damage-stored-team {
     position: relative;

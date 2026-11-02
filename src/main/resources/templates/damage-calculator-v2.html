@@ -10,6 +10,7 @@
     <link rel="stylesheet" th:href="@{/css/damage-calculator-v2.css}" href="/css/damage-calculator-v2.css">
     <script th:src="@{/js/theme.js}" src="/js/theme.js"></script>
     <script defer th:src="@{/js/damage-calculator-v2.js}" src="/js/damage-calculator-v2.js"></script>
+    <script th:src="@{/js/artifact-comparison-v2.js}" src="/js/artifact-comparison-v2.js"></script>
 </head>
 <body>
 <header th:replace="~{fragments :: siteHeader('damage-calculator')}"></header>
@@ -217,6 +218,9 @@
                     <button type="button" role="tab" id="damage-v2-tab-damage" aria-selected="false" tabindex="-1"
                             aria-controls="damage-v2-panel-damage" data-v2-tab="damage"
                             th:text="#{damage.v2.tabs.damage}">Damage calculation</button>
+                    <button type="button" role="tab" id="damage-v2-tab-comparison" aria-selected="false" tabindex="-1"
+                            aria-controls="damage-v2-panel-comparison" data-v2-tab="comparison"
+                            th:text="#{damage.comparison.title}">Artifact comparison</button>
                 </div>
                 <button class="damage-reset-button" type="button" data-v2-reset th:text="#{action.reset}">Reset</button>
             </aside>
@@ -302,6 +306,7 @@
 
             <div data-v2-results></div>
             </section>
+            <section th:replace="~{artifact-comparison-v2 :: panel}"></section>
         </div>
     </section>
 

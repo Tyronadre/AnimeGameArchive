@@ -140,6 +140,8 @@ class DesktopModeIntegrationTest @Autowired constructor(
         mockMvc.perform(get("/damage-calculator-v2/nefer"))
             .andExpect(status().isOk)
             .andExpect(content().string(containsString("data-damage-calculator-v2")))
+            .andExpect(content().string(containsString("data-artifact-comparison")))
+            .andExpect(content().string(containsString("data-comparison-url=\"/api/damage-formulas/v2/nefer/artifact-comparisons\"")))
             .andExpect(content().string(containsString("damage-element-dendro")))
             .andExpect(content().string(containsString("data-profile-url=\"/api/damage-formulas/v2/nefer\"")))
             .andExpect(content().string(containsString("data-calculate-url=\"/api/damage-formulas/v2/nefer/calculate\"")))
@@ -174,6 +176,40 @@ class DesktopModeIntegrationTest @Autowired constructor(
             .andExpect(content().string(containsString("/css/damage-calculator-v2.css")))
             .andExpect(content().string(containsString("/js/damage-calculator-v2.js")))
             .andExpect(content().string(not(containsString("id=\"damage-profile\""))))
+    }
+
+    @Test
+    fun `V2 artifact analysis uses the imported team and can be cancelled without changing equipment`() {
+        val userId = requireNotNull(assertNotNull(userRepository.findByEmailIgnoreCase(DesktopUserProvider.DESKTOP_EMAIL)).id)
+        val snapshot = snapshotStore.save(userId, Files.readAllBytes(GoodImportServiceTest.SAMPLE_EXPORT))
+        val mapper = jacksonObjectMapper()
+        val document = mapper.readTree(mockMvc.perform(get("/api/damage-formulas/v2/nefer"))
+            .andExpect(status().isOk).andReturn().response.contentAsString)
+        val goals = listOf("shades-hit-1", "shades-hit-2", "shades-hit-3")
+        val request = mapper.writeValueAsString(mapOf(
+            "calculation" to mapOf("teamKeys" to listOf("nefer", "lauma", "nahida", "columbina")),
+            "formulaIds" to goals, "contextFingerprint" to document.path("contextFingerprint").asText(),
+        ))
+        val started = mapper.readTree(mockMvc.perform(post("/api/damage-formulas/v2/nefer/artifact-comparisons")
+            .with(csrf()).contentType(MediaType.APPLICATION_JSON).content(request))
+            .andExpect(status().isAccepted).andReturn().response.contentAsString)
+        val url = "/api/damage-formulas/v2/nefer/artifact-comparisons/" + started.path("runId").asText()
+        var result = started
+        val deadline = System.nanoTime() + 30_000_000_000L
+        try {
+            while (result.path("baselineDamage").isNull && System.nanoTime() < deadline) {
+                Thread.sleep(20)
+                result = mapper.readTree(mockMvc.perform(get(url)).andExpect(status().isOk).andReturn().response.contentAsString)
+            }
+            val expected = document.path("defaultCalculation").path("results").filter { it.path("formulaId").asText() in goals }
+                .sumOf { it.path("average").asDouble() }
+            assertFalse(result.path("baselineDamage").isNull, result.toString())
+            assertEquals(expected, result.path("baselineDamage").asDouble(), .000001)
+        } finally {
+            mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete(url).with(csrf()))
+                .andExpect(status().isOk)
+        }
+        assertEquals(snapshot.artifacts, assertNotNull(snapshotStore.current(userId)).artifacts)
     }
 
     @Test

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<section th:fragment="panel" class="damage-v2-tab-panel comparison-panel" id="damage-v2-panel-comparison"
+         role="tabpanel" aria-labelledby="damage-v2-tab-comparison" data-v2-tab-panel="comparison" hidden
+         data-artifact-comparison th:attr="data-comparison-url=@{/api/damage-formulas/v2/{key}/artifact-comparisons(key=${profileKey})}">
+<div hidden>
+<span data-comparison-label="title" th:text="#{damage.comparison.title}"></span>
+<span data-comparison-label="help" th:text="#{damage.comparison.help}"></span>
+<span data-comparison-label="goal" th:text="#{damage.comparison.goal}"></span>
+<span data-comparison-label="preset" th:text="#{damage.comparison.preset}"></span>
+<span data-comparison-label="analyze" th:text="#{damage.comparison.analyze}"></span>
+<span data-comparison-label="cancel" th:text="#{damage.comparison.cancel}"></span>
+<span data-comparison-label="cancelling" th:text="#{damage.comparison.cancelling}"></span>
+<span data-comparison-label="reload" th:text="#{damage.comparison.reload}"></span>
+<span data-comparison-label="stale" th:text="#{damage.comparison.stale}"></span>
+<span data-comparison-label="progress" th:text="#{damage.comparison.progress}"></span>
+<span data-comparison-label="diagnostics" th:text="#{damage.comparison.diagnostics}"></span>
+<span data-comparison-label="copyRun" th:text="#{damage.comparison.copyRun}"></span>
+<span data-comparison-label="slot" th:text="#{damage.comparison.slot}"></span>
+<span data-comparison-label="sort" th:text="#{damage.comparison.sort}"></span>
+<span data-comparison-label="allSlots" th:text="#{damage.comparison.allSlots}"></span>
+<span data-comparison-label="flower" th:text="#{damage.comparison.flower}"></span>
+<span data-comparison-label="plume" th:text="#{damage.comparison.plume}"></span>
+<span data-comparison-label="sands" th:text="#{damage.comparison.sands}"></span>
+<span data-comparison-label="goblet" th:text="#{damage.comparison.goblet}"></span>
+<span data-comparison-label="circlet" th:text="#{damage.comparison.circlet}"></span>
+<span data-comparison-label="sort.current" th:text="#{damage.comparison.sort.current}"></span>
+<span data-comparison-label="sort.potential" th:text="#{damage.comparison.sort.potential}"></span>
+<span data-comparison-label="sort.chance" th:text="#{damage.comparison.sort.chance}"></span>
+<span data-comparison-label="previous" th:text="#{damage.comparison.previous}"></span>
+<span data-comparison-label="next" th:text="#{damage.comparison.next}"></span>
+<span data-comparison-label="connectionLost" th:text="#{damage.comparison.connectionLost}"></span>
+<span data-comparison-label="seconds" th:text="#{damage.comparison.seconds}"></span>
+<span data-comparison-label="minutes" th:text="#{damage.comparison.minutes}"></span>
+<span data-comparison-label="elapsed" th:text="#{damage.comparison.elapsed}"></span>
+<span data-comparison-label="queuedFor" th:text="#{damage.comparison.queuedFor}"></span>
+<span data-comparison-label="estimating" th:text="#{damage.comparison.estimating}"></span>
+<span data-comparison-label="about" th:text="#{damage.comparison.about}"></span>
+<span data-comparison-label="phaseRemaining" th:text="#{damage.comparison.phaseRemaining}"></span>
+<span data-comparison-label="remaining" th:text="#{damage.comparison.remaining}"></span>
+<span data-comparison-label="artifacts" th:text="#{damage.comparison.artifacts}"></span>
+<span data-comparison-label="evaluations" th:text="#{damage.comparison.evaluations}"></span>
+<span data-comparison-label="baseline" th:text="#{damage.comparison.baseline}"></span>
+<span data-comparison-label="phase.queued" th:text="#{damage.comparison.phase.queued}"></span>
+<span data-comparison-label="phase.preparing" th:text="#{damage.comparison.phase.preparing}"></span>
+<span data-comparison-label="phase.current" th:text="#{damage.comparison.phase.current}"></span>
+<span data-comparison-label="phase.projections" th:text="#{damage.comparison.phase.projections}"></span>
+<span data-comparison-label="phase.completed" th:text="#{damage.comparison.phase.completed}"></span>
+<span data-comparison-label="phase.cancelled" th:text="#{damage.comparison.phase.cancelled}"></span>
+<span data-comparison-label="phase.failed" th:text="#{damage.comparison.phase.failed}"></span>
+<span data-comparison-label="partial" th:text="#{damage.comparison.partial}"></span>
+<span data-comparison-label="equipped" th:text="#{damage.comparison.equipped}"></span>
+<span data-comparison-label="owner" th:text="#{damage.comparison.owner}"></span>
+<span data-comparison-label="unequipped" th:text="#{damage.comparison.unequipped}"></span>
+<span data-comparison-label="locked" th:text="#{damage.comparison.locked}"></span>
+<span data-comparison-label="now" th:text="#{damage.comparison.now}"></span>
+<span data-comparison-label="expected" th:text="#{damage.comparison.expected}"></span>
+<span data-comparison-label="range" th:text="#{damage.comparison.range}"></span>
+<span data-comparison-label="chanceToday" th:text="#{damage.comparison.chanceToday}"></span>
+<span data-comparison-label="versusLeveled" th:text="#{damage.comparison.versusLeveled}"></span>
+<span data-comparison-label="chanceLeveled" th:text="#{damage.comparison.chanceLeveled}"></span>
+<span data-comparison-label="referenceUnavailable" th:text="#{damage.comparison.referenceUnavailable}"></span>
+<span data-comparison-label="samples" th:text="#{damage.comparison.samples}"></span>
+<span data-comparison-label="projectionPending" th:text="#{damage.comparison.projectionPending}"></span>
+<span data-comparison-label="assumptions" th:text="#{damage.comparison.assumptions}"></span>
+<span data-comparison-label="enabled" th:text="#{damage.comparison.enabled}"></span>
+<span data-comparison-label="disabled" th:text="#{damage.comparison.disabled}"></span>
+<span data-comparison-label="unsupportedSet" th:text="#{damage.comparison.unsupportedSet}"></span>
+<span data-comparison-label="unknownStats" th:text="#{damage.comparison.unknownStats}"></span>
+<span data-comparison-label="invalidArtifact" th:text="#{damage.comparison.invalidArtifact}"></span>
+<span data-comparison-label="fiveStarOnly" th:text="#{damage.comparison.fiveStarOnly}"></span>
+<span data-comparison-label="specialUpgrades" th:text="#{damage.comparison.specialUpgrades}"></span>
+<span data-comparison-label="alreadyRunning" th:text="#{damage.comparison.alreadyRunning}"></span>
+<span data-comparison-label="invalidInputs" th:text="#{damage.comparison.invalidInputs}"></span>
+<span data-comparison-label="explicitTeam" th:text="#{damage.comparison.explicitTeam}"></span>
+<span data-comparison-label="noInventory" th:text="#{damage.comparison.noInventory}"></span>
+<span data-comparison-label="noProfile" th:text="#{damage.comparison.noProfile}"></span>
+<span data-comparison-label="staleContext" th:text="#{damage.comparison.staleContext}"></span>
+<span data-comparison-label="invalidGoal" th:text="#{damage.comparison.invalidGoal}"></span>
+<span data-comparison-label="missingBuild" th:text="#{damage.comparison.missingBuild}"></span>
+<span data-comparison-label="incompleteLoadout" th:text="#{damage.comparison.incompleteLoadout}"></span>
+<span data-comparison-label="unsupportedTeamWeapon" th:text="#{damage.comparison.unsupportedTeamWeapon}"></span>
+<span data-comparison-label="unsupportedTeamSet" th:text="#{damage.comparison.unsupportedTeamSet}"></span>
+<span data-comparison-label="invalidTeamArtifact" th:text="#{damage.comparison.invalidTeamArtifact}"></span>
+<span data-comparison-label="busy" th:text="#{damage.comparison.busy}"></span>
+<span data-comparison-label="runNotFound" th:text="#{damage.comparison.runNotFound}"></span>
+<span data-comparison-label="invalidPage" th:text="#{damage.comparison.invalidPage}"></span>
+<span data-comparison-label="invalidSort" th:text="#{damage.comparison.invalidSort}"></span>
+<span data-comparison-label="failed" th:text="#{damage.comparison.failed}"></span>
+</div>
+</section>
+</body>
+</html>

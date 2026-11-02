@@ -8,6 +8,7 @@ import de.tyro.genshinapp.service.damage.v2.DamageFormulaServiceV2
 import de.tyro.genshinapp.service.damage.v2.DamageFormulaTeamServiceV2
 import de.tyro.genshinapp.service.damage.v2.DamageTeamBuildServiceV2
 import de.tyro.genshinapp.security.AppUserPrincipal
+import de.tyro.genshinapp.service.damage.v2.comparison.ArtifactComparisonContextService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -28,6 +29,7 @@ class DamageFormulaControllerV2(
     private val damageFormulaBuildService: DamageFormulaBuildServiceV2,
     private val damageFormulaTeamService: DamageFormulaTeamServiceV2,
     private val teamBuildService: DamageTeamBuildServiceV2,
+    private val comparisonContext: ArtifactComparisonContextService,
 ) {
     @GetMapping("/{key}")
     fun profile(
@@ -38,7 +40,8 @@ class DamageFormulaControllerV2(
         val profile = damageFormulaService.profile(key)
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Damage formula profile not found")
         val composed = damageFormulaBuildService.applyCurrentValues(damageFormulaTeamService.compose(profile, team), principal.id)
-        return damageFormulaService.document(composed).copy(teamBuilds = teamBuildService.builds(composed, principal.id))
+        return damageFormulaService.document(composed).copy(teamBuilds = teamBuildService.builds(composed, principal.id),
+            contextFingerprint = comparisonContext.fingerprint(composed, principal.id))
     }
 
     @PostMapping("/{key}/calculate")
@@ -66,7 +69,8 @@ class DamageFormulaControllerV2(
         val profile = damageFormulaBuildService.applyCurrentValues(
             damageFormulaTeamService.compose(base, request.teamKeys), principal.id,
         )
-        return DamageFormulaDocumentV2(profile, damageFormulaService.calculate(profile, request), teamBuildService.builds(profile, principal.id))
+        return DamageFormulaDocumentV2(profile, damageFormulaService.calculate(profile, request), teamBuildService.builds(profile, principal.id),
+            comparisonContext.fingerprint(profile, principal.id))
     }
 
     @ExceptionHandler(IllegalArgumentException::class)
