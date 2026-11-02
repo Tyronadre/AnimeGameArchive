@@ -2,15 +2,13 @@ package de.tyro.genshinapp.service.damage.v2
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.tyro.genshinapp.service.catalog.CharacterCatalogService
-import org.springframework.core.io.ClassPathResource
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import org.springframework.stereotype.Service
 
 @Service
-class DamageTeamRosterService(private val characters: CharacterCatalogService) {
+class DamageTeamRosterService(private val characters: CharacterCatalogService, private val registry: CharacterFormulaRegistryV3) {
     fun members(): List<DamageTeamMemberV2> = characters.getCharacters().map {
         DamageTeamMemberV2(it.key, it.name, it.element.orEmpty(), 0, it.iconImageUrl, it.weapon.orEmpty(),
-            ClassPathResource("data/damage-formulas-v2/${it.key}.json").exists())
+            registry.available(it.key))
     }
 }
 
@@ -18,27 +16,16 @@ class DamageTeamRosterService(private val characters: CharacterCatalogService) {
 class DamageFormulaTeamServiceV2(
     private val objectMapper: ObjectMapper,
     private val roster: DamageTeamRosterService? = null,
+    private val registry: CharacterFormulaRegistryV3 = CharacterFormulaRegistryV3(objectMapper),
 ) {
-    private val supports: Map<String, DamageSupportProfileV2> by lazy {
-        val profiles = PathMatchingResourcePatternResolver()
-            .getResources("classpath*:data/damage-formulas-v2/teammates/*.json")
-            .map { resource -> resource.inputStream.use { objectMapper.readValue(it, DamageSupportProfileV2::class.java) } }
-        require(profiles.map { it.key }.distinct().size == profiles.size) { "Duplicate support character keys" }
-        profiles.forEach { require(it.schemaVersion == 2) { "Unsupported support schema for '${it.key}'" } }
-        profiles.sortedBy { it.name }.associateBy { it.key }
-    }
-    private val rules: DamageTeamRulesV2 by lazy {
-        ClassPathResource("data/damage-formulas-v2/team-rules.json").inputStream.use {
+    private val rules: DamageTeamRulesV2 by reloadableFormulaV2 {
+        DamageFormulaResourcesV2.resource("data/damage-formulas-v2/team-rules.json").inputStream.use {
             objectMapper.readValue(it, DamageTeamRulesV2::class.java)
         }
     }
 
     fun compose(base: DamageFormulaProfileV2, requestedTeam: Set<String>? = null): DamageFormulaProfileV2 {
-        val authoredMembers = supports.values.associate { support -> support.key to
-            DamageTeamMemberV2(support.key, support.name, support.element, support.moonsignContribution,
-                weaponType = support.weaponType,
-                calculatorAvailable = ClassPathResource("data/damage-formulas-v2/${support.key}.json").exists())
-        }
+        val authoredMembers = registry.definitions.values.associate { it.key to registry.member(it) }
         val catalogMembers = roster?.members().orEmpty().map { member -> authoredMembers[member.key]?.let { authored ->
             member.copy(name = authored.name, element = authored.element,
                 moonsignContribution = authored.moonsignContribution,
@@ -55,8 +42,19 @@ class DamageFormulaTeamServiceV2(
         val team = ((requestedTeam ?: base.defaultTeam.toSet()).map { it.trim().lowercase() } + base.characterKey).toSet()
         require(team.size <= 4) { "A team can contain at most four characters" }
         require(team.all { key -> members.any { it.key == key } }) { "Team contains an unknown character" }
-        val selected = supports.values.filter { it.key in team && it.key != base.characterKey }
-        val inputs = (base.inputs + selected.flatMap { support -> support.inputs.map { input -> input.copy(
+        val sourceMembers = members.filter { it.key in team }.sortedWith(compareBy<DamageTeamMemberV2> { it.key != base.characterKey }.thenBy { it.name })
+        val sources = sourceMembers.map { registry.definitions[it.key] ?: registry.generic(it) }
+        val boundContext = registry.context(sourceMembers)
+        val binder = CharacterEffectBinderV3(sources, base.characterKey, boundContext)
+        val bound = sources.associate { it.key to binder.bind(it) }
+        val carry = bound.getValue(base.characterKey)
+        val selected = sources.filter { it.key != base.characterKey }.map { source ->
+            val compiled = bound.getValue(source.key)
+            DamageSupportProfileV2(2, source.key, source.name, source.element, source.moonsignContribution,
+                source.characterDataResource.ifBlank { null }, source.talentParameters, compiled.statBindings, compiled.inputs,
+                compiled.effects, source.notes, source.sources, source.weaponType)
+        }
+        val inputs = (carry.inputs + selected.flatMap { support -> support.inputs.map { input -> input.copy(
             section = input.section ?: "teamStats",
             initialValueSource = input.initialValueSource?.let { it.copy(characterKey = support.key) },
         ) } } + rules.inputs).associateByTo(linkedMapOf()) { it.id }
@@ -88,7 +86,7 @@ class DamageFormulaTeamServiceV2(
         val progressBindings = linkedMapOf<String, Map<String, String>>()
         val buffBindings = linkedMapOf<String, List<String>>()
         selectedMembers.forEach { member ->
-            val authored = if (member.key == base.characterKey) base.statBindings
+            val authored = if (member.key == base.characterKey) carry.statBindings
                 else selected.firstOrNull { it.key == member.key }?.statBindings.orEmpty()
             val bindings = authored.toMutableMap()
             if (member.key == base.characterKey) {
@@ -161,12 +159,44 @@ class DamageFormulaTeamServiceV2(
             if (change.stat.startsWith("team:")) bindings[change.stat.removePrefix("team:")].orEmpty()
                 .map { change.copy(stat = it) } else listOf(change)
         }) }
+        val resonances = mutableListOf<DamageEffectV2>()
+        for ((element, stat, baseStat, source) in listOf(
+            listOf("pyro", "attack", "baseAttack", "baseAttack"),
+            listOf("hydro", "maxHp", "baseHp", "baseHp"),
+        )) {
+            if (team.size < 4 || context.getOrDefault("${element}Count", 0.0) < 2.0) continue
+            val changes = selectedMembers.map { member ->
+                val id = if (member.key == base.characterKey && baseStat in inputs) baseStat
+                    else "resonance.${member.key}.$baseStat"
+                inputs[id] = inputs[id]?.copy(section = "build") ?: DamageFormulaInputV2(
+                    id, "${member.name} Base $stat", 0.0, 0.0, 100000.0, 1.0,
+                    initialValueSource = DamageFormulaInitialValueSourceV2(source, member.key), section = "build")
+                StatChangeV2(completeBindings.getValue(member.key).getValue(stat), "flatAdd",
+                    FormulaExpressionV2("multiply", operands = listOf(FormulaExpressionV2("input", input = id),
+                        FormulaExpressionV2("constant", value = 0.25))))
+            }
+            resonances += DamageEffectV2("${element}Resonance", "$element resonance", "Team", "25% bonus based on base stats.",
+                category = "team", activation = EffectActivationV2("teamComposition", conditions = listOf(
+                    EffectActivationConditionV2("contextAtLeast", "teamSize", 4.0),
+                    EffectActivationConditionV2("contextAtLeast", "${element}Count", 2.0))), statChanges = changes)
+        }
+        inputs["cryoResonanceActive"] = DamageFormulaInputV2("cryoResonanceActive", "Enemy affected by Cryo or Frozen", 0.0, 0.0, 1.0, 1.0, section = "combat")
+        resonances += DamageEffectV2("cryoResonance", "Cryo resonance", "Team", "15% CRIT Rate against Cryo-affected or Frozen enemies.",
+            category = "team", activation = EffectActivationV2("teamComposition", conditions = listOf(
+                EffectActivationConditionV2("contextAtLeast", "teamSize", 4.0),
+                EffectActivationConditionV2("contextAtLeast", "cryoCount", 2.0),
+                EffectActivationConditionV2("inputAtLeast", "cryoResonanceActive", 1.0))),
+            formulaModifiers = listOf(FormulaModifierV2(FormulaTargetsV2(damageKinds = listOf("talent")),
+                crit = CritContributionV2(additionalRate = FormulaContributionV2(FormulaExpressionV2("constant", value = 15.0))))))
         return base.copy(
             inputs = inputs.values.toList(),
-            effects = base.effects + selected.flatMap { it.effects } + sharedEffects,
+            talents = carry.talents,
+            damageTypes = carry.damageTypes,
+            statBindings = carry.statBindings,
+            effects = carry.effects + selected.flatMap { it.effects } + sharedEffects + resonances,
             teamMembers = members,
             selectedTeam = team,
-            teamContext = context,
+            teamContext = context + boundContext,
             teamStatInputs = bindings,
             supportProfiles = selected,
             characterStatInputs = visibleBindings,

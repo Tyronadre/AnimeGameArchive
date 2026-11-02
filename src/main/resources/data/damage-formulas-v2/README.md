@@ -1,9 +1,16 @@
-# Hand-authored damage profiles (V2)
+# Unified character formulas (authoring V3, calculator V2)
 
-The active character's damage instances live in `<character>.json`. Selected
-teammates supply support definitions from `teammates/<character>.json`. These are
-reviewed formulas, not an automatic interpretation of character descriptions.
-The original `data/damage-calculators` implementation remains independent.
+Each character has one `<character>.json` definition containing both personal damage and support effects. There are no authored teammate files. Character sources use `schemaVersion: 3`; the composer compiles them to the existing V2 calculation response. Artifact, weapon, reaction, and shared-rule formats remain version 2.
+
+Damage types are defined once in `damage-types.json`. Character and artifact files reference their IDs on individual damage instances; they do not contain a `damageTypes` array. The loader includes the types each profile actually uses. Lauma, Nahida, and Columbina currently have support-only definitions without talent formulas. They remain valid teammates; the damage-character picker becomes available only when a definition contains damage formulas.
+
+## Shared damage types
+
+`damage-types.json` defines the element, damage kind, DEF behavior, CRIT eligibility, damage-bonus eligibility, enemy resistance input, and optional built-in scaling for each reusable type. Ordinary types cover all seven elements and Physical; Lunar-Bloom and independent artifact damage have their own rules. A hit saves only `"damageType": "directPyro"`, for example. Its stat/talent scaling, attack tags, and per-hit modifiers remain on the hit.
+
+In Formula Studio, choose a type from a damage instance's **Damage type** dropdown. Use **Edit shared damage types**, or open `damage-types.json` in the library, to edit the shared rules. Changes affect every consumer. Validation checks unused type expressions as well and prevents removing types that any formula references.
+
+Shared scaling reads logical stats such as `source:elementalMastery` and `source:physicalDamageBonus`; it must not depend on character-specific control IDs. The loader binds these to each character's inputs. The damage type's element selects its elemental damage bonus and resistance, including hits whose element differs from the character's. Main-element damage keeps the existing bonus and enemy RES controls.
 
 ## Weapon definitions
 
@@ -29,44 +36,33 @@ CRIT bonuses target the Lunar damage kind. Nightweaver's party bonus uses one
 shared stacking group with the highest active refinement winning; Floating
 Dreams' party EM from different wearers stacks.
 
-## Adding a teammate
+## Adding or editing a character
 
-1. Add a schema-version-2 JSON file under `teammates/`. Files are discovered on
-   application startup; there is no character registry in the page JavaScript.
-2. Set `key`, `name`, `element`, `weaponType`, and `moonsignContribution`. Record sources and
-   limitations in `sources` / `notes`; the page displays these.
-3. Give inputs globally unique, character-prefixed IDs. `initialValueSource`
-   reads the selected character's owned build. The composer supplies its
-   `characterKey`. A missing imported value retains the fallback without a
-   “Current” marker. Use `section` and reusable `hintTag` metadata for presentation.
-4. Map logical stats to input IDs in `statBindings`, e.g.
-   `"elementalMastery": "laumaElementalMastery"`. Shared team rules and `teamMax`
-   expressions use these bindings, not hard-coded teammate names.
-5. Define support `effects` using the same nullable formula layers as the carry.
-   Use category `team` for buffs and `constellation` for constellation effects.
-   Every constellation has a card, including those with no per-hit support effect;
-   their descriptions explicitly distinguish personal damage and utility.
-6. Use `ownershipRequirements` to define constellation defaults. Explicit toggles
-   can disable owned effects or preview unowned effects. Ownership is not a lock.
-7. Add calculation tests, including activation/dependency-off cases and a team
-   removal check. Only selected characters' inputs and effects enter calculation.
+1. Create/edit one root character file with `schemaVersion: 3`, matching `key` and `characterKey`, identity, and effects. Add talent formulas when personal damage has been authored, selecting a shared `damageType` ID for each hit. Define `inputs` only for special controls; the list may be empty or omitted.
+2. `CharacterStandardInputsV3` supplies character level, all three talent levels, constellation, combat/base stats, elemental bonuses, and shared enemy controls for every character. Optional `inputDefaults` changes preview values by logical name without copying definitions; owned builds supply actual values. `statBindings` is needed only to retain or customize an input ID.
+3. Effects default to `recipient: self`. Choose `party`, `others`, `activeCharacter`, or `enemy` when appropriate. Each stat change or formula modifier can override the effect default. `excludeSource: true` excludes the source character as a recipient.
+4. Read an owned stat with `source:elementalMastery`, a recipient stat with `recipient:baseAttack`, and a character control with `local:<input-id>`. A stat-change target such as `recipient:attack` is bound separately for each recipient. Local/source stat-change targets must use a Self recipient to avoid repeated source changes.
+5. Talent references default to the source character. Their level input uses `source:normalTalentLevel`, `source:skillTalentLevel`, or `source:burstTalentLevel`; existing `local:<id>` aliases remain valid. Both bundled character tables and explicitly authored `talentParameters` are supported.
+6. Ownership requirements, conditions, effect dependencies, metrics, and expressions are bound to unique character IDs during composition. Do not store compiled `character.<key>.<id>` references in source files. Enemy input reads can use `battle:<id>` and remain shared rather than copied into each teammate's stats.
+7. Hit selectors retain their meaning. Local formula IDs belong to the source character; they cannot accidentally select another character's same-named hit. Tag/kind/element selectors are preferred for party buffs.
+8. Preserve the existing immutable stat phases and genuine non-stacking groups. Personal stat changes remain active for sources whose own hits are not being calculated, since those stats can feed party buffs and equipment.
 
-Support files deliberately do not implement the teammate's personal damage
-rotation. To make that character the damage target, author a complete top-level
-damage profile as well. Do not apply personal buffs to another carry merely
-because the source character is present.
+The chosen damage character is currently treated as on field. This calculator evaluates a combat snapshot, not a rotation. Enemy debuffs belong in formula mitigation modifiers, not in character stat changes.
+
+Formula Studio shows one entry per character, support-only capability badges, default and per-change recipient controls, and portable source/recipient stat pickers. Its saved JSON remains the authored definition; runtime support metadata in API responses is derived, never another source file.
 
 ## Expressions and damage layers
 
 Expressions support `constant`, `input`, `talentParameter`, `teamMax`, `add`,
 `multiply`, `divide`, `min`, and `max`. `talentParameter` optionally specifies
 `characterKey`; the level comes from `levelInput` at calculation time. Lauma uses
-the bundled talent tables. If no bundled table exists, a support file can hold
+the bundled talent tables. If no bundled table exists, a character definition can hold
 explicitly reviewed `talentParameters` keyed by `talent.parameter`, as Columbina
 does. References returned by the endpoint retain source character and talent level.
 
-- `base`: adds to the talent base before `baseDamageBonus` (Nefer C1).
+- `base`: adds to the talent base before `baseDamageBonus` (for example, Nefer C1).
 - `baseDamageBonus`: additive percentage contributions to a base multiplier.
+- `baseDamageMultiplier`: independent percentage contributions. Each matching modifier applies its own `(1 + contribution)` factor to the completed base, including flat base additions.
 - `damageBonus`: adds to the ordinary/reaction bonus layer selected by damage type.
 - `postBonusBase`: flat addition **after** damage bonuses (Lauma's Pale Hymn).
 - `defenseMitigation`, `resistanceMitigation`: nullable reduction/ignore fields.
@@ -76,7 +72,9 @@ does. References returned by the endpoint retain source character and talent lev
 Current pipeline:
 
 ```
-Base = (talent base + sum(base)) × (1 + sum(baseDamageBonus))
+Independent = product(1 + each baseDamageMultiplier)
+Talent Base = (talent base × (1 + sum(baseDamageBonus)) + sum(base)) × Independent
+Lunar Base = (talent base + sum(base)) × (1 + sum(baseDamageBonus)) × Independent
 Non-CRIT = (Base × DamageBonus + sum(postBonusBase)) × DEF × RES × Elevation
 CRIT = Non-CRIT × (1 + effective CRIT DMG)
 Average = Non-CRIT × (1 + effective CRIT Rate × effective CRIT DMG)
@@ -122,7 +120,7 @@ assumed maximum bonuses are parsed into formulas. The coverage test compares
 the catalog keys and evaluates every definition on the carry and a teammate at
 1, 2, 4, and 5 equipped pieces.
 
-Each definition contains `inputs`, `effects` and optional `damageTypes`. An effect
+Each definition contains `inputs` and `effects`. Extra formulas select a damage type from the shared catalog. An effect
 wrapper declares its required `pieces` (1/2/4), `recipient` (`wearer`, `party`, or
 `others`), an ordinary V2 `effect`, and optional extra damage `formulas`.
 All ordinary nullable formula layers remain available. Utility, healing,
@@ -212,7 +210,7 @@ Unknown members are rejected. Inputs/effects belonging to removed members cannot
 affect damage, even if a stale client submits them.
 
 This is a per-hit snapshot: Pale Hymn depletion, buff duration, reaction timelines,
-healing and resource consumption are not simulated. The team files cover support
+healing and resource consumption are not simulated. The character definitions cover support
 effects relevant to Nefer's Dendro/Lunar-Bloom hits. Other reaction branches must
 be authored before claiming support for those damage forms. Artifact reaction
 modifiers are ready to target those future branches, not a claim that every
@@ -223,5 +221,44 @@ explicit manual inputs because the current build catalog cannot resolve them.
 Mechanics references: [Lunar Reaction Guide](https://keqingmains.com/misc/lunar-reactions/),
 [Lauma](https://library.keqingmains.com/characters/dendro/lauma),
 [Columbina](https://keqingmains.com/q/columbina-quickguide/).
-Character-specific provenance is also recorded in each support file.
+Character-specific provenance is also recorded in each character file.
 Set mechanics and trigger details: [Artifact reference](https://library.keqingmains.com/equipment/artifacts).
+
+Pyro and Hydro resonance use base ATK/HP with a full party and two matching elements.
+Cryo resonance requires the explicit Cryo/Frozen enemy toggle. DEF reduction is capped
+at 90% after stacking. Ordinary Furina and Citlali buffs exclude Lunar damage.
+Fanfare inputs represent current total points; C1 raises the cap to 400 without
+adding its starting points a second time. Bennett C1/C6 require his active field.
+
+## Formula studio (UI development)
+
+Start with `bootRun -PuiDev` or `desktopRun -PuiDev`, then open
+`/damage-calculator-v2/editor` (also linked as **Edit formulas** on the v2 page).
+The structured forms edit inputs, damage types, talents, effects, expressions,
+weapon/artifact definitions, and shared rules. Add optional fields using the field
+selector. No JSON text editing is required.
+
+Validate checks the proposed document against the formula engine and team
+composition. Save validates again, checks for concurrent disk edits, writes the
+source file atomically, and invalidates formula caches. Refresh the calculator to
+use the saved definitions. Unsaved edits are guarded when switching files or
+leaving the editor. The editor is available only with the `ui-dev` profile and
+requires the repository root as the working directory.
+
+### Independent base multiplier example
+
+```json
+{
+  "targets": { "damageKinds": ["lunar"] },
+  "baseDamageMultiplier": {
+    "unit": "percentPoints",
+    "expression": { "type": "constant", "value": 20 }
+  }
+}
+```
+
+This adds a separate ×1.2 factor. A second matching modifier with 30 percentage
+points adds ×1.3 (combined ×1.56). To add percentages within one independent
+factor, use an `add` expression in a single contribution. The existing
+`baseDamageBonus` contributions still sum together. Independent base multipliers
+do not affect `postBonusBase`; those flat amounts are added later.

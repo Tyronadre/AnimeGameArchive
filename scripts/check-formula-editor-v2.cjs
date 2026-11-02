@@ -1,0 +1,147 @@
+const fs=require('fs'),http=require('http'),path=require('path'),assert=require('assert/strict');
+const {withBrowser}=require('./browser-test-session.cjs');
+const resources=path.resolve(__dirname,'../src/main/resources');
+let saved=null;
+const savedDocuments=new Map();
+// Server metadata fixture; the real endpoint is covered by the Kotlin editor tests.
+const standardFixture=[['characterLevel','Character level','level',90],['normalTalentLevel','Normal Attack level','normalTalent',1],['skillTalentLevel','Elemental Skill level','skillTalent',1],['burstTalentLevel','Elemental Burst level','burstTalent',1],['constellation','Constellation','constellation',0],['attack','Total ATK','totalAttack',0],['elementalMastery','Elemental Mastery','stat:eleMas',0],['critRate','CRIT Rate','stat:critRate_',5],['critDamage','CRIT DMG','stat:critDMG_',50],['enemyLevel','Enemy level',null,90],['enemyResistance','Enemy RES',null,10],['defenseReduction','DEF reduction',null,0],['defenseIgnore','DEF ignore',null,0]].map(([id,label,source,defaultValue])=>({id,label,defaultValue,min:0,max:10000,step:1,...(source?{initialValueSource:{valueKey:source}}:{})}));
+const server=http.createServer(async(req,res)=>{
+ const url=new URL(req.url,'http://localhost');
+ const json=x=>{res.setHeader('Content-Type','application/json');res.end(JSON.stringify(x));};
+ if(url.pathname.endsWith('/damage-types'))return json(JSON.parse(savedDocuments.get('damage-types.json')||fs.readFileSync(path.join(resources,'data/damage-formulas-v2/damage-types.json'),'utf8')).damageTypes);
+ if(url.pathname.endsWith('/standard-inputs'))return json({Dendro:standardFixture});
+ if(url.pathname.endsWith('/catalog')){
+ return json(['nefer','lauma'].map(key=>{const support=JSON.parse(fs.readFileSync(path.join(resources,`data/damage-formulas-v2/${key}.json`))),character=JSON.parse(fs.readFileSync(path.join(resources,`data/characters/data/${key}.json`)));
+ return {key,name:support.name,file:key+'.json',damageAvailable:support.talents.length>0,inputs:[...standardFixture.map(i=>({...i,id:support.statBindings?.[i.id]||i.id,defaultValue:support.inputDefaults?.[i.id]??i.defaultValue})),...support.inputs],talents:Object.entries(character.talents).filter(([k])=>k.startsWith('combat')).map(([key,t])=>({key,name:t.name,parameters:Object.entries(t.attributes.parameters).map(([key,values])=>({key,values,label:t.attributes.labels.find(l=>l.includes('{'+key+':'))?.split('|')[0]||key}))}))};}));
+ }
+ if(url.pathname.endsWith('/files'))return json(['nefer.json','lauma.json','damage-types.json']);
+ if(url.pathname.endsWith('/file'))return json({content:savedDocuments.get(url.searchParams.get('path'))||fs.readFileSync(path.join(resources,'data/damage-formulas-v2',url.searchParams.get('path')),'utf8'),revision:'one'});
+ if(req.method==='POST'){let body='';for await(const chunk of req)body+=chunk;saved=JSON.parse(body);savedDocuments.set(saved.path,saved.content);return json({message:'Saved',revision:'two'});}
+ if(url.pathname==='/'){
+ let html=fs.readFileSync(path.join(resources,'templates/damage-formula-editor-v2.html'),'utf8');
+ html=html.replace(/th:(href|src)="@\{([^}]+)\}"/g,'$1="$2"').replace('data-formula-studio th:attr=', 'data-formula-studio data-api="/api/damage-formulas/v2/editor" th:attr=');
+ res.setHeader('Content-Type','text/html');return res.end(html);
+ }
+ const file=path.join(resources,'static',url.pathname);if(fs.existsSync(file)){res.setHeader('Content-Type',file.endsWith('.js')?'text/javascript':'text/css');return res.end(fs.readFileSync(file));}res.statusCode=404;res.end();
+});
+withBrowser(server,async({base,call,evaluate,until,screenshot,errors})=>{
+ await call('Emulation.setDeviceMetricsOverride',{width:1600,height:1000,deviceScaleFactor:1,mobile:false});
+ await call('Page.navigate',{url:base});
+ await until(()=>evaluate(`document.querySelectorAll('#studio-files button').length===3`),'File library did not load');
+ await evaluate(`document.querySelector('#studio-files button').click()`);
+ await until(()=>evaluate(`document.querySelectorAll('#studio-tabs button').length>1`),'Editor did not load');
+ await evaluate(`[...document.querySelectorAll('#studio-tabs button')].find(b=>b.textContent.startsWith('Inputs')).click()`);
+ await until(()=>evaluate(`document.querySelectorAll('.studio-standard-row').length>10`),'Inherited standard inputs did not load');
+ const count=await evaluate(`document.querySelectorAll('#studio-fields > div > div > .studio-list-item').length`);
+ assert.equal(count,2,'Only character-specific inputs should render as editable cards');
+ await evaluate(`document.querySelector('.studio-standard-inputs').open=true;(()=>{const row=[...document.querySelectorAll('.studio-standard-row')].find(r=>r.querySelector('strong').textContent==='Character level');const input=row.querySelector('input');input.value='80';input.dispatchEvent(new Event('input',{bubbles:true}));})()`);
+ await evaluate(`document.getElementById('studio-save').click()`);
+ await until(()=>saved&&JSON.parse(saved.content).inputDefaults?.characterLevel===80,'Standard preview default was not saved');
+ assert.equal(JSON.parse(saved.content).inputs.some(i=>i.id==='characterLevel'),false);
+ await until(()=>evaluate(`!document.getElementById('studio-save').disabled`),'Save did not finish');
+ await evaluate(`(()=>{const row=[...document.querySelectorAll('.studio-standard-row')].find(r=>r.querySelector('strong').textContent==='Character level');row.querySelector('button').click();})()`);
+ await evaluate(`const card=document.querySelector('#studio-fields .studio-list-item details');card.open=true;const field=[...card.querySelectorAll('.studio-form-field')].find(f=>f.querySelector(':scope > span')?.textContent==='Display name');const input=field.querySelector('input');input.value='Edited special control';input.dispatchEvent(new Event('input',{bubbles:true}));`);
+ await evaluate(`document.getElementById('studio-save').click()`);
+ await until(()=>saved&&JSON.parse(saved.content).inputs[0].label==='Edited special control','Special control edit was not saved');
+ assert.equal(JSON.parse(saved.content).inputDefaults.characterLevel,undefined);
+ await screenshot('formula-studio-standard-inputs.png');
+ await evaluate(`[...document.querySelectorAll('#studio-tabs button')].find(b=>b.textContent.startsWith('Effects')).click()`);
+ await evaluate(`document.querySelector('#studio-fields details').open=true`);
+ await screenshot('formula-studio-desktop.png');
+ // A talent chooses a globally defined type without copying its definition into the character file.
+ await evaluate(`[...document.querySelectorAll('#studio-tabs button')].find(b=>b.textContent.startsWith('Talents')).click();`);
+ // Editing one formula preserves the other DOM nodes, all panel states, focus, and viewport.
+ await evaluate(`window.attackTalent=document.querySelector('#studio-fields > div > .studio-list-item > details');attackTalent.open=true;
+ window.attackArray=()=>[...attackTalent.querySelectorAll('.studio-field')].find(f=>f.querySelector(':scope > .studio-field-header > span')?.textContent==='Formulas').querySelector(':scope > [data-studio-view]');
+ window.attackCards=()=>[...attackArray().querySelectorAll(':scope > .studio-list-item > details')];
+ attackCards().forEach((c,i)=>c.open=i===0||i===2);window.unchangedFormula=attackCards()[1];window.openStates=attackCards().map(c=>[c.dataset.studioCard,c.open]);
+ const first=attackCards()[0];first.querySelector('.studio-advanced').open=true;
+ window.typeSelect=()=>[...attackCards()[0].querySelectorAll('.studio-form-field')].find(f=>f.querySelector(':scope > span')?.textContent==='Damage type').querySelector('select');
+ typeSelect().scrollIntoView({block:'center'});typeSelect().focus({preventScroll:true});window.savedScroll=window.scrollY;window.savedFocus=typeSelect().dataset.studioControl;`);
+ const beforeDropdown=await evaluate(`({scroll:savedScroll,focus:savedFocus})`);
+ assert.ok(beforeDropdown.scroll>100,'The scroll regression must exercise a scrolled editor');
+ await evaluate(`typeSelect().value='directHydro';typeSelect().dispatchEvent(new Event('change',{bubbles:true}));new Promise(resolve=>requestAnimationFrame(()=>resolve(true)))`);
+ assert.deepEqual(await evaluate(`attackCards().map(c=>[c.dataset.studioCard,c.open])`),await evaluate(`openStates`));
+ assert.equal(await evaluate(`unchangedFormula===attackCards()[1]&&unchangedFormula.isConnected`),true,'Dropdown changes must not rebuild sibling formulas');
+ assert.equal(await evaluate(`document.activeElement.dataset.studioControl`),beforeDropdown.focus,'Dropdown focus must stay on the same control');
+ assert.ok(Math.abs((await evaluate(`window.scrollY`))-beforeDropdown.scroll)<=1,'Dropdown changes must preserve scroll position');
+ assert.equal(await evaluate(`attackCards()[0].querySelector('.studio-advanced').open`),true,'Advanced panels must stay open');
+ assert.equal(await evaluate(`[...document.querySelectorAll('#studio-fields button')].some(b=>b.textContent==='Remove field')`),false,'Individual fields must not be removable');
+ assert.equal(await evaluate(`document.getElementById('studio-fields').textContent.includes('For a single-stat hit')`),false,'The unwanted formula hint must be removed');
+ // Adding a hit retains the previous open/closed states and only opens the new hit.
+ await evaluate(`window.addHit=()=>[...attackArray().children].find(n=>n.tagName==='BUTTON'&&n.textContent==='+ Add Formula');addHit().scrollIntoView({block:'center'});window.addScroll=window.scrollY;addHit().click();new Promise(resolve=>requestAnimationFrame(()=>resolve(true)))`);
+ assert.deepEqual(await evaluate(`attackCards().slice(0,-1).map(c=>[c.dataset.studioCard,c.open])`),await evaluate(`openStates`));
+ assert.equal(await evaluate(`attackCards().at(-1).open`),true,'New formulas should open without expanding their siblings');
+ assert.ok(await evaluate(`Math.abs(window.scrollY-addScroll)<=1`),'Adding a formula must preserve scroll position');
+ await evaluate(`[...attackCards().at(-1).parentElement.querySelectorAll(':scope > .studio-item-actions > button')].find(b=>b.textContent==='Remove').click()`);
+ // Duplicate the first attack twice; edit only one copy's multiplier parameter.
+ await evaluate(`window.duplicateFirst=()=>[...attackCards()[0].parentElement.querySelectorAll(':scope > .studio-item-actions > button')].find(b=>b.textContent==='Duplicate');duplicateFirst().scrollIntoView({block:'center'});window.copyScroll=window.scrollY;duplicateFirst().click();new Promise(resolve=>requestAnimationFrame(()=>resolve(true)))`);
+ assert.ok(await evaluate(`Math.abs(window.scrollY-copyScroll)<=1`),'Duplication must preserve scroll position');
+ await evaluate(`(()=>{const copy=attackCards()[1];const select=[...copy.querySelectorAll('.studio-form-field')].find(f=>f.querySelector(':scope > span')?.textContent==='Scaling parameter').querySelector('select');select.value='param2';select.dispatchEvent(new Event('change',{bubbles:true}));})()`);
+ assert.equal(await evaluate(`attackCards()[1].querySelector('.studio-formula-form > .studio-expression').querySelector(':scope > .studio-expression-summary').textContent.includes('param2')`),true,'Parent expression summaries must reflect edits to a nested term');
+ assert.deepEqual(await evaluate(`[...attackCards()[1].querySelectorAll('.studio-form-field')].filter(f=>f.querySelector(':scope > span')?.textContent==='Scaling parameter').map(f=>f.querySelector('select').value)`),['param2','param2'],'Guided and advanced views of the same term must stay in sync');
+ await evaluate(`duplicateFirst().click();document.getElementById('studio-save').click();`);
+ await until(()=>saved.path==='nefer.json'&&JSON.parse(saved.content).talents[0].formulas.length===10,'Duplicated formulas were not saved');
+ const attacks=JSON.parse(saved.content).talents[0].formulas,original=attacks[0],copies=attacks.slice(1,3);
+ assert.equal(new Set(attacks.map(f=>f.id)).size,attacks.length,'Copies must have distinct formula IDs');
+ assert.deepEqual(copies.map(f=>f.tags),[original.tags,original.tags]);
+ assert.equal(original.base.operands[1].parameter,'param1');assert.equal(copies[0].base.operands[1].parameter,'param1');assert.equal(copies[1].base.operands[1].parameter,'param2');
+ const unchangedScaling=structuredClone(copies[1].base);unchangedScaling.operands[1].parameter='param1';assert.deepEqual(unchangedScaling,original.base,'Copies must retain all other scaling terms independently');
+ await until(()=>evaluate(`!document.getElementById('studio-save').disabled`),'Save did not finish');
+ assert.equal(await evaluate(`[...document.querySelectorAll('#studio-fields .studio-form-field')].find(f=>f.querySelector(':scope > span')?.textContent==='Damage type').querySelectorAll('option').length`),10);
+ await evaluate(`(()=>{const field=[...document.querySelectorAll('#studio-fields .studio-form-field')].find(f=>f.querySelector(':scope > span')?.textContent==='Damage type');const n=field.querySelector('select');n.value='directPyro';n.dispatchEvent(new Event('change',{bubbles:true}));document.getElementById('studio-save').click();})()`);
+ await until(()=>JSON.parse(saved.content).talents?.[0]?.formulas?.[0]?.damageType==='directPyro','Shared type choice was not saved');
+ assert.equal(JSON.parse(saved.content).damageTypes,undefined);
+ await until(()=>evaluate(`!document.getElementById('studio-save').disabled`),'Save did not finish');
+ await evaluate(`[...document.querySelectorAll('#studio-fields button')].find(b=>b.textContent==='Edit shared damage types').click();`);
+ await until(()=>evaluate(`document.getElementById('studio-name').textContent==='damage-types.json'`),'Shared catalog did not open');
+ await evaluate(`[...document.querySelectorAll('#studio-tabs button')].find(b=>b.textContent.startsWith('Damage Types')).click();`);
+ await evaluate(`(()=>{const card=document.querySelector('#studio-fields details');card.open=true;const n=[...card.querySelectorAll('.studio-form-field')].find(f=>f.querySelector(':scope > span')?.textContent==='Can critically hit').querySelector('input');n.checked=false;n.dispatchEvent(new Event('change',{bubbles:true}));document.getElementById('studio-save').click();})()`);
+ await until(()=>saved.path==='damage-types.json','Shared catalog changes not saved');
+ assert.equal(JSON.parse(saved.content).damageTypes.find(t=>t.id==='directPyro').allowsCriticalHits,false);
+ await screenshot('formula-studio-damage-types.png');
+ await until(()=>evaluate(`!document.querySelectorAll('#studio-files button')[1].disabled`),'File browser remained disabled');
+ await evaluate(`document.querySelectorAll('#studio-files button')[1].click()`);
+ await until(()=>evaluate(`document.getElementById('studio-name').textContent==='lauma.json'`),'Switching files failed');
+ // Author Pale Hymn using the guided controls and inspect the exact saved structure.
+ await evaluate(`[...document.querySelectorAll('#studio-tabs button')].find(b=>b.textContent.startsWith('Effects')).click();[...document.querySelectorAll('#studio-fields > div > button')].find(b=>b.textContent.includes('Add Effect')).click();`);
+ const action=async code=>evaluate(`(()=>{const card=[...document.querySelectorAll('#studio-fields > div > .studio-list-item > details')].find(c=>c.querySelector('summary').textContent==='New effect');card.open=true;const field=(label,scope=card)=>[...scope.querySelectorAll('.studio-form-field')].find(f=>f.querySelector(':scope > span')?.textContent===label);const change=(n,value)=>{n.value=value;n.dispatchEvent(new Event('change',{bubbles:true}));};`+code+`})()`);
+ await action(`change(field('Default recipient').querySelector('select'),'party');`);
+ await action(`change(field('When is this effect available?').querySelector('select'),'buffActive');`);
+ await action(`[...card.querySelectorAll('button')].find(b=>b.textContent==='+ Add Modifier').click();`);
+ await action(`change(field('Applies to').querySelector('select'),'lunarBloom');`);
+ await action(`[...card.querySelectorAll('button')].find(b=>b.textContent==='+ Add damage change').click();`);
+ await action(`change(field('Value comes from').querySelector('select'),'multiply');`);
+ await action(`const operand=card.querySelector('.studio-operand');change(field('Value comes from',operand).querySelector('select'),'input');`);
+ await action(`change(field('Stat / input').querySelector('select'),'source:elementalMastery');`);
+ await action(`const operand=card.querySelectorAll('.studio-operand')[1];change(field('Value comes from',operand).querySelector('select'),'talentParameter');`);
+ await action(`change(field('Talent').querySelector('select'),'combat3');`);
+ await action(`change(field('Scaling parameter').querySelector('select'),'param4');`);
+ await evaluate(`document.getElementById('studio-save').click()`);
+ await until(()=>saved.path==='lauma.json'&&JSON.parse(saved.content).effects?.some(e=>e.id==='newEffect'),'New effect was not serialized');
+ let added=JSON.parse(saved.content).effects.find(e=>e.id==='newEffect');
+ assert.equal(added.recipient,'party');assert.equal(added.activation.event,'buffActive');assert.deepEqual(added.formulaModifiers[0].targets,{requiredTags:['lunarBloom']});
+ assert.deepEqual(added.formulaModifiers[0].base,{type:'multiply',operands:[{type:'input',input:'source:elementalMastery'},{type:'talentParameter',characterKey:'lauma',talent:'combat3',parameter:'param4',levelInput:'source:burstTalentLevel'}]});
+ await until(()=>evaluate(`!document.getElementById('studio-save').disabled`),'Save did not finish');
+ await action(`change(field('What changes?').querySelector('select'),'baseDamageBonus');`);
+ await evaluate(`document.getElementById('studio-save').click()`);
+ await until(()=>JSON.parse(saved.content).effects.find(e=>e.id==='newEffect')?.formulaModifiers[0]?.baseDamageBonus,'Modifier layer could not be changed');
+ added=JSON.parse(saved.content).effects.find(e=>e.id==='newEffect');assert.equal(added.formulaModifiers[0].base,undefined);assert.equal(added.formulaModifiers[0].baseDamageBonus.expression.type,'multiply');
+ await until(()=>evaluate(`!document.getElementById('studio-save').disabled`),'Save did not finish');
+ await action(`change(field('What changes?').querySelector('select'),'baseDamageMultiplier');`);
+ await evaluate(`document.getElementById('studio-save').click()`);
+ await until(()=>JSON.parse(saved.content).effects.find(e=>e.id==='newEffect')?.formulaModifiers[0]?.baseDamageMultiplier,'Independent multiplier was not serialized');
+ added=JSON.parse(saved.content).effects.find(e=>e.id==='newEffect');assert.equal(added.formulaModifiers[0].baseDamageBonus,undefined);assert.equal(added.formulaModifiers[0].baseDamageMultiplier.unit,'percentPoints');assert.equal(added.formulaModifiers[0].baseDamageMultiplier.expression.type,'multiply');
+ assert.equal(errors.length,0,JSON.stringify(errors));
+ await call('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
+ assert.equal(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth`),true,'Mobile layout must not overflow');
+ await until(()=>evaluate(`!document.getElementById('studio-save').disabled`),'Save did not finish');
+ await evaluate(`document.querySelector('#studio-files button').click()`);
+ await until(()=>evaluate(`document.getElementById('studio-name').textContent==='nefer.json'`),'Switching back to character inputs failed');
+ await evaluate(`[...document.querySelectorAll('#studio-tabs button')].find(b=>b.textContent.startsWith('Inputs')).click();document.querySelector('.studio-standard-inputs').open=true;`);
+ assert.equal(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth`),true,'Inherited input controls must fit on mobile');
+ await evaluate(`[...document.querySelectorAll('#studio-tabs button')].find(b=>b.textContent.startsWith('Talents')).click();window.attackTalent=document.querySelector('#studio-fields > div > .studio-list-item > details');attackTalent.open=true;attackCards()[0].open=true;`);
+ assert.equal(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth`),true,'Expanded formulas and duplicate controls must fit on mobile');
+ assert.equal(errors.length,0,JSON.stringify(errors));
+ console.log('Formula studio browser checks passed: stable panels, scroll and focus; independent formula duplication; protected fields; inherited inputs; shared damage types; effect forms; mobile layout.');
+}).catch(error=>{console.error(error);process.exitCode=1;});

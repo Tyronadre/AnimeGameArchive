@@ -152,12 +152,12 @@ class DamageFormulaWeaponServiceV2Test {
     fun `support weapon EM and HP feed character conversions and damage layers`() {
         val profile = weapons.attach(base, listOf(weapon("NightweaversLookingGlass", "lauma"),
             weapon("NocturnesCurtainCall", "columbina")))
-        val inputs = mapOf("columbinaMaxHp" to 20000.0, "columbinaBaseHp" to 10000.0)
+        val inputs = mapOf("character.columbina.columbinaMaxHp" to 20000.0, "character.columbina.columbinaBaseHp" to 10000.0)
         val active = calculator.calculate(profile, DamageCalculationRequestV2(inputs))
         val inactive = calculator.calculate(profile, DamageCalculationRequestV2(inputs, profile.effects
             .filter { it.id.startsWith("weapon.") }.associate { it.id to false }))
-        assertEquals(inactive.effectiveStats.getValue("laumaElementalMastery") + 120, active.effectiveStats["laumaElementalMastery"])
-        assertEquals(22400.0, active.effectiveStats["columbinaMaxHp"])
+        assertEquals(inactive.effectiveStats.getValue("character.lauma.laumaElementalMastery") + 120, active.effectiveStats["character.lauma.laumaElementalMastery"])
+        assertEquals(22400.0, active.effectiveStats["character.columbina.columbinaMaxHp"])
         assertTrue(active.results.first { it.formulaId == "shades-hit-1" }.average > inactive.results.first { it.formulaId == "shades-hit-1" }.average)
     }
 

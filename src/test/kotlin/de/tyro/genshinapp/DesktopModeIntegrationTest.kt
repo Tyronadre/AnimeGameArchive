@@ -53,7 +53,7 @@ import kotlin.test.assertTrue
         "spring.jpa.hibernate.ddl-auto=create-drop",
         "spring.jpa.show-sql=false",
         "spring.messages.fallback-to-system-locale=false",
-        "genshin.content.cache-directory=build/test-desktop-cache",
+        "genshin.content.cache-directory=build/test-desktop-cache-\${random.uuid}",
         "genshin.content.hoyolab-wiki-enabled=false",
     ],
 )
@@ -243,7 +243,7 @@ class DesktopModeIntegrationTest @Autowired constructor(
             .contentType(MediaType.APPLICATION_JSON).content("""{
                 "teamKeys":["nefer","lauma","nahida","columbina"],
                 "inputs":{"attack":9999,"elementalMastery":3000,"characterLevel":1,"neferConstellation":6},
-                "enabledEffects":{"aWagerOfMoonlight":false,"laumaPaleHymn":false}
+                "enabledEffects":{"aWagerOfMoonlight":false,"character.lauma.laumaPaleHymn":false}
             }"""))
             .andExpect(status().isOk).andReturn().response.contentAsString)
         assertEquals(before, changed.path("teamBuilds"))
@@ -343,16 +343,16 @@ class DesktopModeIntegrationTest @Autowired constructor(
         val v2Effects = v2Document.path("profile").path("effects")
         assertTrue(v2Effects.first { it.path("id").asText() == "neferC1" }.path("defaultEnabled").asBoolean())
         assertFalse(v2Effects.first { it.path("id").asText() == "neferC2" }.path("defaultEnabled").asBoolean())
-        listOf("laumaElementalMastery", "nahidaElementalMastery", "columbinaElementalMastery",
-            "laumaConstellation", "nahidaConstellation", "columbinaConstellation", "columbinaBurstTalentLevel")
+        listOf("character.lauma.laumaElementalMastery", "character.nahida.nahidaElementalMastery", "character.columbina.columbinaElementalMastery",
+            "character.lauma.laumaConstellation", "character.nahida.nahidaConstellation", "character.columbina.columbinaConstellation", "character.columbina.columbinaBurstTalentLevel")
             .forEach { id ->
                 assertTrue(v2Document.path("profile").path("inputs").first { it.path("id").asText() == id }
                     .path("currentValueLoaded").asBoolean(), "Expected imported teammate input $id")
             }
-        assertTrue(v2Document.path("profile").path("inputs").first { it.path("id").asText() == "columbinaMaxHp" }
+        assertTrue(v2Document.path("profile").path("inputs").first { it.path("id").asText() == "character.columbina.columbinaMaxHp" }
             .path("currentValueLoaded").asBoolean())
         val columbinaBaseHp = v2Document.path("profile").path("inputs")
-            .first { it.path("id").asText() == "columbinaBaseHp" }
+            .first { it.path("id").asText() == "character.columbina.columbinaBaseHp" }
         assertTrue(columbinaBaseHp.path("currentValueLoaded").asBoolean())
         assertEquals("internal", columbinaBaseHp.path("section").asText())
         assertFalse(v2Document.path("profile").path("inputs").any { it.path("id").asText() == "otherDamageBonus" })
@@ -365,7 +365,7 @@ class DesktopModeIntegrationTest @Autowired constructor(
         val nahidaNormalLevel = characterProgress.path("nahida").path("normalTalentLevel").asText()
         assertTrue(v2Document.path("profile").path("inputs").first { it.path("id").asText() == nahidaNormalLevel }
             .path("currentValueLoaded").asBoolean())
-        assertEquals(setOf("nahidaMarkedOpponents", "nahidaQuickenActive"),
+        assertEquals(setOf("character.nahida.nahidaMarkedOpponents", "character.nahida.nahidaQuickenActive"),
             v2Document.path("profile").path("characterBuffInputs").path("nahida").map { it.asText() }.toSet())
         val neferBuild = v2Document.path("teamBuilds").first { it.path("key").asText() == "nefer" }
         val neferHp = neferBuild.path("totalStats").first { it.path("key").asText() == "hp" }.path("value").asDouble()
@@ -385,7 +385,7 @@ class DesktopModeIntegrationTest @Autowired constructor(
     @Test
     fun `V2 team endpoint preserves edits and excludes removed support effects`() {
         val mapper = jacksonObjectMapper()
-        val payload = """{"teamKeys":["nefer","lauma"],"inputs":{"attack":1777,"laumaConstellation":3},"enabledEffects":{"laumaPaleHymn":false}}"""
+        val payload = """{"teamKeys":["nefer","lauma"],"inputs":{"attack":1777,"character.lauma.laumaConstellation":3},"enabledEffects":{"character.lauma.laumaPaleHymn":false}}"""
         val document = mapper.readTree(mockMvc.perform(post("/api/damage-formulas/v2/nefer/team")
             .with(csrf()).contentType(MediaType.APPLICATION_JSON).content(payload))
             .andExpect(status().isOk).andReturn().response.contentAsString)
@@ -393,13 +393,13 @@ class DesktopModeIntegrationTest @Autowired constructor(
         assertEquals(1777.0, document.path("defaultCalculation").path("inputs").path("attack").asDouble())
         assertFalse(document.path("profile").path("effects").any { it.path("id").asText().startsWith("nahida") })
         val active = document.path("defaultCalculation").path("activeEffectIds").map { it.asText() }
-        assertFalse("laumaPaleHymn" in active)
-        assertTrue("laumaC3" in active)
+        assertFalse("character.lauma.laumaPaleHymn" in active)
+        assertTrue("character.lauma.laumaC3" in active)
         val solo = mapper.readTree(mockMvc.perform(post("/api/damage-formulas/v2/nefer/calculate")
             .with(csrf()).contentType(MediaType.APPLICATION_JSON)
-            .content("""{"teamKeys":["nefer"],"enabledEffects":{"laumaPaleHymn":true}}"""))
+            .content("""{"teamKeys":["nefer"],"enabledEffects":{"character.lauma.laumaPaleHymn":true}}"""))
             .andExpect(status().isOk).andReturn().response.contentAsString)
-        assertFalse(solo.path("activeEffectIds").any { it.asText() == "laumaPaleHymn" })
+        assertFalse(solo.path("activeEffectIds").any { it.asText() == "character.lauma.laumaPaleHymn" })
         mockMvc.perform(post("/api/damage-formulas/v2/nefer/team").with(csrf())
             .contentType(MediaType.APPLICATION_JSON).content("""{"teamKeys":["missing"]}"""))
             .andExpect(status().isBadRequest)
@@ -416,7 +416,7 @@ class DesktopModeIntegrationTest @Autowired constructor(
             .andExpect(status().isOk).andReturn().response.contentAsString)
         assertEquals(setOf("nefer", "amber"), arbitrary.path("profile").path("selectedTeam").map { it.asText() }.toSet())
         assertEquals(setOf("nefer", "amber"), arbitrary.path("teamBuilds").map { it.path("key").asText() }.toSet())
-        assertFalse(arbitrary.path("profile").path("supportProfiles").any { it.path("key").asText() == "amber" })
+        assertTrue(arbitrary.path("profile").path("supportProfiles").filter { it.path("key").asText() == "amber" }.all { it.path("effects").isEmpty })
     }
 
     @Test

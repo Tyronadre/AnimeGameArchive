@@ -1,65 +1,648 @@
 {
-  "schemaVersion":2,"key":"xiangling","characterKey":"xiangling","name":"Xiangling","element":"Pyro","weaponType":"Polearm",
-  "characterDataResource":"data/characters/data/xiangling.json","defaultTeam":["xiangling","arlecchino","bennett","xingqiu"],
-  "statBindings":{"attack":"attack","elementalMastery":"elementalMastery","energyRecharge":"energyRecharge","physicalDamageBonus":"physicalDamageBonus"},
-  "inputs":[
-    {"id":"characterLevel","label":"Character level","defaultValue":90,"min":1,"max":90,"step":1,"initialValueSource":{"valueKey":"level"}},
-    {"id":"enemyLevel","label":"Enemy level","defaultValue":90,"min":1,"max":120,"step":1,"section":"enemy"},
-    {"id":"maxHp","label":"Max HP","defaultValue":15000,"min":0,"max":200000,"step":1,"initialValueSource":{"valueKey":"totalHp"}},
-    {"id":"attack","label":"Total ATK","defaultValue":1500,"min":0,"max":20000,"step":1,"initialValueSource":{"valueKey":"totalAttack"}},
-    {"id":"baseAttack","label":"Base ATK","defaultValue":800,"min":0,"max":2000,"step":1,"initialValueSource":{"valueKey":"baseAttack"},"section":"internal"},
-    {"id":"defense","label":"Total DEF","defaultValue":800,"min":0,"max":20000,"step":1,"initialValueSource":{"valueKey":"totalDefense"}},
-    {"id":"elementalMastery","label":"Elemental Mastery","defaultValue":0,"min":0,"max":5000,"step":1,"initialValueSource":{"valueKey":"stat:eleMas"}},
-    {"id":"elementalDamageBonus","label":"Pyro DMG Bonus","defaultValue":0,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:pyro_dmg_"}},
-    {"id":"physicalDamageBonus","label":"Physical DMG Bonus","defaultValue":0,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:physical_dmg_"}},
-    {"id":"energyRecharge","label":"Energy Recharge","defaultValue":100,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:enerRech_"}},
-    {"id":"critRate","label":"CRIT Rate","defaultValue":5,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:critRate_"}},
-    {"id":"critDamage","label":"CRIT DMG","defaultValue":50,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:critDMG_"}},
-    {"id":"xianglingConstellation","label":"Xiangling constellation","defaultValue":0,"min":0,"max":6,"step":1,"initialValueSource":{"valueKey":"constellation"},"section":"constellations"},
-    {"id":"normalTalentLevel","label":"Normal Attack level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"normalTalent"}},
-    {"id":"skillTalentLevel","label":"Elemental Skill level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"skillTalent"}},
-    {"id":"burstTalentLevel","label":"Elemental Burst level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"burstTalent"}},
-    {"id":"enemyResistance","label":"Enemy Pyro RES","defaultValue":10,"min":-100,"max":150,"step":0.1,"unit":"percentPoints","section":"enemy"},
-    {"id":"enemyPhysicalResistance","label":"Enemy Physical RES","defaultValue":10,"min":-100,"max":150,"step":0.1,"unit":"percentPoints","section":"enemy"},
-    {"id":"defenseReduction","label":"DEF reduction","defaultValue":0,"min":0,"max":100,"step":0.1,"unit":"percentPoints","section":"enemy"},
-    {"id":"defenseIgnore","label":"DEF ignored","defaultValue":0,"min":0,"max":100,"step":0.1,"unit":"percentPoints","section":"enemy"}
+  "schemaVersion": 3,
+  "key": "xiangling",
+  "characterKey": "xiangling",
+  "name": "Xiangling",
+  "element": "Pyro",
+  "weaponType": "Polearm",
+  "characterDataResource": "data/characters/data/xiangling.json",
+  "defaultTeam": [
+    "xiangling",
+    "arlecchino",
+    "bennett",
+    "xingqiu"
   ],
-  "damageTypes":[
-    {"id":"directPyro","element":"Pyro"},
-    {"id":"directPhysical","element":"Physical","appliesElementalDamageBonus":false,"resistanceInput":"enemyPhysicalResistance","innateDamageBonus":{"unit":"percentPoints","expression":{"type":"input","input":"physicalDamageBonus"}}}
+  "statBindings": {
+    "constellation": "xianglingConstellation"
+  },
+  "inputs": [],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Dough-Fu",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "1-Hit DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-2",
+          "label": "2-Hit DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-3",
+          "label": "3-Hit DMG (2 strikes)",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack",
+            "multiHit"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "local:normalTalentLevel"
+              },
+              {
+                "type": "constant",
+                "value": 2
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-4",
+          "label": "4-Hit DMG (4 strikes)",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack",
+            "multiHit"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "local:normalTalentLevel"
+              },
+              {
+                "type": "constant",
+                "value": 4
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-5",
+          "label": "5-Hit DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "charged",
+          "label": "Charged Attack DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "chargedAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "plunge",
+          "label": "Plunge DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param8",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "low-plunge",
+          "label": "Low Plunge DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "high-plunge",
+          "label": "High Plunge DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "c2-implosion",
+          "label": "C2 Implosion DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "constellationDamage"
+          ],
+          "requiredEffects": [
+            "xianglingC2"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 0.75
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Guoba Attack",
+      "formulas": [
+        {
+          "id": "guoba-flame",
+          "label": "Flame DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalSkill"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Pyronado",
+      "formulas": [
+        {
+          "id": "pyronado-swing-1",
+          "label": "1-Hit Swing DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalBurst",
+            "initialSwing"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "local:burstTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "pyronado-swing-2",
+          "label": "2-Hit Swing DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalBurst",
+            "initialSwing"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param2",
+                "levelInput": "local:burstTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "pyronado-swing-3",
+          "label": "3-Hit Swing DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalBurst",
+            "initialSwing"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param3",
+                "levelInput": "local:burstTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "pyronado-hit",
+          "label": "Pyronado DMG (per hit)",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalBurst",
+            "pyronado"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param4",
+                "levelInput": "local:burstTalentLevel"
+              }
+            ]
+          }
+        }
+      ]
+    }
   ],
-  "talents":[
-    {"key":"normal","name":"Dough-Fu","formulas":[
-      {"id":"normal-1","label":"1-Hit DMG","damageType":"directPhysical","tags":["normalAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param1","levelInput":"normalTalentLevel"}]}},
-      {"id":"normal-2","label":"2-Hit DMG","damageType":"directPhysical","tags":["normalAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param2","levelInput":"normalTalentLevel"}]}},
-      {"id":"normal-3","label":"3-Hit DMG (2 strikes)","damageType":"directPhysical","tags":["normalAttack","multiHit"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param3","levelInput":"normalTalentLevel"},{"type":"constant","value":2}]}},
-      {"id":"normal-4","label":"4-Hit DMG (4 strikes)","damageType":"directPhysical","tags":["normalAttack","multiHit"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param4","levelInput":"normalTalentLevel"},{"type":"constant","value":4}]}},
-      {"id":"normal-5","label":"5-Hit DMG","damageType":"directPhysical","tags":["normalAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param5","levelInput":"normalTalentLevel"}]}},
-      {"id":"charged","label":"Charged Attack DMG","damageType":"directPhysical","tags":["chargedAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param6","levelInput":"normalTalentLevel"}]}},
-      {"id":"plunge","label":"Plunge DMG","damageType":"directPhysical","tags":["plungingAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param8","levelInput":"normalTalentLevel"}]}},
-      {"id":"low-plunge","label":"Low Plunge DMG","damageType":"directPhysical","tags":["plungingAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param9","levelInput":"normalTalentLevel"}]}},
-      {"id":"high-plunge","label":"High Plunge DMG","damageType":"directPhysical","tags":["plungingAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param10","levelInput":"normalTalentLevel"}]}},
-      {"id":"c2-implosion","label":"C2 Implosion DMG","damageType":"directPyro","tags":["constellationDamage"],"requiredEffects":["xianglingC2"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"constant","value":0.75}]}}
-    ]},
-    {"key":"skill","name":"Guoba Attack","formulas":[
-      {"id":"guoba-flame","label":"Flame DMG","damageType":"directPyro","tags":["elementalSkill"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param1","levelInput":"skillTalentLevel"}]}}
-    ]},
-    {"key":"burst","name":"Pyronado","formulas":[
-      {"id":"pyronado-swing-1","label":"1-Hit Swing DMG","damageType":"directPyro","tags":["elementalBurst","initialSwing"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat3","parameter":"param1","levelInput":"burstTalentLevel"}]}},
-      {"id":"pyronado-swing-2","label":"2-Hit Swing DMG","damageType":"directPyro","tags":["elementalBurst","initialSwing"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat3","parameter":"param2","levelInput":"burstTalentLevel"}]}},
-      {"id":"pyronado-swing-3","label":"3-Hit Swing DMG","damageType":"directPyro","tags":["elementalBurst","initialSwing"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat3","parameter":"param3","levelInput":"burstTalentLevel"}]}},
-      {"id":"pyronado-hit","label":"Pyronado DMG (per hit)","damageType":"directPyro","tags":["elementalBurst","pyronado"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat3","parameter":"param4","levelInput":"burstTalentLevel"}]}}
-    ]}
+  "effects": [
+    {
+      "id": "crossfire",
+      "name": "Crossfire",
+      "source": "Xiangling · Passive",
+      "category": "passive",
+      "description": "Increases Guoba's flame range by 20%.",
+      "impact": "Area/utility only; damage per flame is unchanged.",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "always"
+      },
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "bewareSuperHot",
+      "name": "Beware, It's Super Hot!",
+      "source": "Xiangling · Passive",
+      "category": "passive",
+      "description": "Picking up Guoba's chili pepper increases ATK by 10% for 10 seconds.",
+      "impact": "The 10% ATK is resolved from Base ATK and added before damage formulas.",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "chiliPepperCollected"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:attack",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "recipient:baseAttack"
+              },
+              {
+                "type": "constant",
+                "value": 0.1
+              }
+            ]
+          },
+          "recipient": "activeCharacter"
+        }
+      ],
+      "recipient": "self"
+    },
+    {
+      "id": "chefDeCuisine",
+      "name": "Chef de Cuisine",
+      "source": "Xiangling · Passive",
+      "category": "passive",
+      "description": "Cooking passive with no combat effect.",
+      "impact": "No calculator modifier.",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "always"
+      },
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "xianglingC1",
+      "name": "C1 · Crispy Outside, Tender Inside",
+      "source": "Xiangling · Constellation",
+      "category": "constellation",
+      "description": "Guoba hits reduce enemy Pyro RES by 15% for 6 seconds.",
+      "ownershipRequirements": {
+        "local:xianglingConstellation": 1
+      },
+      "activation": {
+        "event": "guobaHit"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "elements": [
+              "Pyro"
+            ]
+          },
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 15
+              }
+            }
+          },
+          "recipient": "enemy"
+        }
+      ],
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "xianglingC2",
+      "name": "C2 · Oil Meets Fire",
+      "source": "Xiangling · Constellation",
+      "category": "constellation",
+      "description": "The last Normal Attack marks the target; its explosion deals 75% ATK as AoE Pyro DMG.",
+      "ownershipRequirements": {
+        "local:xianglingConstellation": 2
+      },
+      "activation": {
+        "event": "normalSequenceCompleted"
+      },
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "xianglingC3",
+      "name": "C3 · Deepfry",
+      "source": "Xiangling · Constellation",
+      "category": "constellation",
+      "description": "Increases Pyronado's talent level by 3.",
+      "ownershipRequirements": {
+        "local:xianglingConstellation": 3
+      },
+      "activation": {
+        "event": "always"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15,
+          "recipient": "self"
+        }
+      ],
+      "recipient": "self"
+    },
+    {
+      "id": "xianglingC4",
+      "name": "C4 · Slowbake",
+      "source": "Xiangling · Constellation",
+      "category": "constellation",
+      "description": "Increases Pyronado's duration by 40%.",
+      "impact": "Rotation/hit-count utility; the displayed per-hit damage is unchanged.",
+      "ownershipRequirements": {
+        "local:xianglingConstellation": 4
+      },
+      "activation": {
+        "event": "always"
+      },
+      "metrics": [
+        {
+          "label": "Pyronado duration increase",
+          "unit": "percentPoints",
+          "expression": {
+            "type": "constant",
+            "value": 40
+          }
+        }
+      ],
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "xianglingC5",
+      "name": "C5 · Guoba Mad",
+      "source": "Xiangling · Constellation",
+      "category": "constellation",
+      "description": "Increases Guoba Attack's talent level by 3.",
+      "ownershipRequirements": {
+        "local:xianglingConstellation": 5
+      },
+      "activation": {
+        "event": "always"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15,
+          "recipient": "self"
+        }
+      ],
+      "recipient": "self"
+    },
+    {
+      "id": "xianglingC6",
+      "name": "C6 · Condensed Pyronado",
+      "source": "Xiangling · Constellation",
+      "category": "constellation",
+      "description": "During Pyronado, grants the party 15% Pyro DMG Bonus. Pyronado's rotating hits do not benefit, while Guoba and the third initial swing can.",
+      "ownershipRequirements": {
+        "local:xianglingConstellation": 6
+      },
+      "activation": {
+        "event": "pyronadoActive"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "formulaIds": [
+              "guoba-flame",
+              "pyronado-swing-3",
+              "c2-implosion"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 15
+            }
+          }
+        },
+        {
+          "targets": {
+            "elements": [
+              "Pyro"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 15
+            }
+          },
+          "recipient": "others"
+        }
+      ],
+      "recipient": "self",
+      "statChanges": []
+    }
   ],
-  "effects":[
-    {"id":"crossfire","name":"Crossfire","source":"Xiangling · Passive","category":"passive","description":"Increases Guoba's flame range by 20%.","impact":"Area/utility only; damage per flame is unchanged.","defaultEnabled":true,"activation":{"event":"always"}},
-    {"id":"bewareSuperHot","name":"Beware, It's Super Hot!","source":"Xiangling · Passive","category":"passive","description":"Picking up Guoba's chili pepper increases ATK by 10% for 10 seconds.","impact":"The 10% ATK is resolved from Base ATK and added before damage formulas.","defaultEnabled":true,"activation":{"event":"chiliPepperCollected"},"statChanges":[{"stat":"attack","operation":"flatAdd","value":{"type":"multiply","operands":[{"type":"input","input":"baseAttack"},{"type":"constant","value":0.1}]}}]},
-    {"id":"chefDeCuisine","name":"Chef de Cuisine","source":"Xiangling · Passive","category":"passive","description":"Cooking passive with no combat effect.","impact":"No calculator modifier.","defaultEnabled":true,"activation":{"event":"always"}},
-    {"id":"xianglingC1","name":"C1 · Crispy Outside, Tender Inside","source":"Xiangling · Constellation","category":"constellation","description":"Guoba hits reduce enemy Pyro RES by 15% for 6 seconds.","ownershipRequirements":{"xianglingConstellation":1},"activation":{"event":"guobaHit"},"formulaModifiers":[{"targets":{"elements":["Pyro"]},"resistanceMitigation":{"reduction":{"expression":{"type":"constant","value":15}}}}]},
-    {"id":"xianglingC2","name":"C2 · Oil Meets Fire","source":"Xiangling · Constellation","category":"constellation","description":"The last Normal Attack marks the target; its explosion deals 75% ATK as AoE Pyro DMG.","ownershipRequirements":{"xianglingConstellation":2},"activation":{"event":"normalSequenceCompleted"}},
-    {"id":"xianglingC3","name":"C3 · Deepfry","source":"Xiangling · Constellation","category":"constellation","description":"Increases Pyronado's talent level by 3.","ownershipRequirements":{"xianglingConstellation":3},"activation":{"event":"always"},"statChanges":[{"stat":"burstTalentLevel","operation":"flatAdd","value":{"type":"constant","value":3},"maximum":15}]},
-    {"id":"xianglingC4","name":"C4 · Slowbake","source":"Xiangling · Constellation","category":"constellation","description":"Increases Pyronado's duration by 40%.","impact":"Rotation/hit-count utility; the displayed per-hit damage is unchanged.","ownershipRequirements":{"xianglingConstellation":4},"activation":{"event":"always"},"metrics":[{"label":"Pyronado duration increase","unit":"percentPoints","expression":{"type":"constant","value":40}}]},
-    {"id":"xianglingC5","name":"C5 · Guoba Mad","source":"Xiangling · Constellation","category":"constellation","description":"Increases Guoba Attack's talent level by 3.","ownershipRequirements":{"xianglingConstellation":5},"activation":{"event":"always"},"statChanges":[{"stat":"skillTalentLevel","operation":"flatAdd","value":{"type":"constant","value":3},"maximum":15}]},
-    {"id":"xianglingC6","name":"C6 · Condensed Pyronado","source":"Xiangling · Constellation","category":"constellation","description":"During Pyronado, grants the party 15% Pyro DMG Bonus. Pyronado's rotating hits do not benefit, while Guoba and the third initial swing can.","ownershipRequirements":{"xianglingConstellation":6},"activation":{"event":"pyronadoActive"},"formulaModifiers":[{"targets":{"formulaIds":["guoba-flame","pyronado-swing-3","c2-implosion"]},"damageBonus":{"expression":{"type":"constant","value":15}}}]}
-  ]
+  "notes": [],
+  "sources": [
+    "data/characters/data/xiangling.json",
+    "https://library.keqingmains.com/characters/pyro/xiangling"
+  ],
+  "inputDefaults": {
+    "maxHp": 15000,
+    "attack": 1500,
+    "baseAttack": 800,
+    "defense": 800,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  }
 }

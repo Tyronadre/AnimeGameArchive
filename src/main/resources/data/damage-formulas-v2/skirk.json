@@ -1,87 +1,1292 @@
 {
-  "schemaVersion":2,"key":"skirk","characterKey":"skirk","name":"Skirk","element":"Cryo","weaponType":"Sword",
-  "characterDataResource":"data/characters/data/skirk.json","defaultTeam":["skirk","escoffier","furina","citlali"],
-  "statBindings":{"attack":"attack","elementalMastery":"elementalMastery","physicalDamageBonus":"physicalDamageBonus"},
-  "inputs":[
-    {"id":"characterLevel","label":"Character level","defaultValue":90,"min":1,"max":90,"step":1,"initialValueSource":{"valueKey":"level"}},
-    {"id":"enemyLevel","label":"Enemy level","defaultValue":90,"min":1,"max":120,"step":1,"section":"enemy"},
-    {"id":"maxHp","label":"Max HP","defaultValue":15000,"min":0,"max":200000,"step":1,"initialValueSource":{"valueKey":"totalHp"}},
-    {"id":"attack","label":"Total ATK","defaultValue":2000,"min":0,"max":20000,"step":1,"initialValueSource":{"valueKey":"totalAttack"}},
-    {"id":"baseAttack","label":"Base ATK","defaultValue":1000,"min":0,"max":2500,"step":1,"initialValueSource":{"valueKey":"baseAttack"},"section":"internal"},
-    {"id":"defense","label":"Total DEF","defaultValue":800,"min":0,"max":20000,"step":1,"initialValueSource":{"valueKey":"totalDefense"}},
-    {"id":"elementalMastery","label":"Elemental Mastery","defaultValue":0,"min":0,"max":5000,"step":1,"initialValueSource":{"valueKey":"stat:eleMas"}},
-    {"id":"elementalDamageBonus","label":"Cryo DMG Bonus","defaultValue":0,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:cryo_dmg_"}},
-    {"id":"physicalDamageBonus","label":"Physical DMG Bonus","defaultValue":0,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:physical_dmg_"}},
-    {"id":"energyRecharge","label":"Energy Recharge","defaultValue":100,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:enerRech_"}},
-    {"id":"critRate","label":"CRIT Rate","defaultValue":5,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:critRate_"}},
-    {"id":"critDamage","label":"CRIT DMG","defaultValue":50,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:critDMG_"}},
-    {"id":"skirkConstellation","label":"Skirk constellation","defaultValue":0,"min":0,"max":6,"step":1,"initialValueSource":{"valueKey":"constellation"},"section":"constellations"},
-    {"id":"normalTalentLevel","label":"Normal Attack level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"normalTalent"}},
-    {"id":"skillTalentLevel","label":"Elemental Skill level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"skillTalent"}},
-    {"id":"burstTalentLevel","label":"Elemental Burst level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"burstTalent"}},
-    {"id":"sevenPhaseActive","label":"Seven-Phase Flash active","defaultValue":1,"min":0,"max":1,"step":1,"section":"combat"},
-    {"id":"voidRiftsAbsorbed","label":"Void Rifts absorbed","defaultValue":3,"min":0,"max":3,"step":1,"section":"combat"},
-    {"id":"deathsCrossingStacks","label":"Death's Crossing stacks","defaultValue":3,"min":0,"max":3,"step":1,"section":"combat"},
-    {"id":"ruinBonusPoints","label":"Ruin Subtlety points above 50","defaultValue":12,"min":0,"max":12,"step":1,"section":"combat"},
-    {"id":"c2ExtraRuinPoints","label":"C2 additional Ruin points","defaultValue":10,"min":0,"max":10,"step":1,"section":"combat"},
-    {"id":"havocSeverStacks","label":"Havoc: Sever stacks","defaultValue":3,"min":0,"max":3,"step":1,"section":"combat"},
-    {"id":"enemyResistance","label":"Enemy Cryo RES","defaultValue":10,"min":-100,"max":150,"step":0.1,"unit":"percentPoints","section":"enemy"},
-    {"id":"enemyPhysicalResistance","label":"Enemy Physical RES","defaultValue":10,"min":-100,"max":150,"step":0.1,"unit":"percentPoints","section":"enemy"},
-    {"id":"defenseReduction","label":"DEF reduction","defaultValue":0,"min":0,"max":100,"step":0.1,"unit":"percentPoints","section":"enemy"},
-    {"id":"defenseIgnore","label":"DEF ignored","defaultValue":0,"min":0,"max":100,"step":0.1,"unit":"percentPoints","section":"enemy"}
+  "schemaVersion": 3,
+  "key": "skirk",
+  "characterKey": "skirk",
+  "name": "Skirk",
+  "element": "Cryo",
+  "weaponType": "Sword",
+  "characterDataResource": "data/characters/data/skirk.json",
+  "defaultTeam": [
+    "skirk",
+    "escoffier",
+    "furina",
+    "citlali"
   ],
-  "damageTypes":[
-    {"id":"directCryo","element":"Cryo"},
-    {"id":"directPhysical","element":"Physical","appliesElementalDamageBonus":false,"resistanceInput":"enemyPhysicalResistance","innateDamageBonus":{"unit":"percentPoints","expression":{"type":"input","input":"physicalDamageBonus"}}}
+  "statBindings": {
+    "constellation": "skirkConstellation"
+  },
+  "inputs": [
+    {
+      "id": "sevenPhaseActive",
+      "label": "Seven-Phase Flash active",
+      "defaultValue": 1,
+      "min": 0,
+      "max": 1,
+      "step": 1,
+      "section": "combat"
+    },
+    {
+      "id": "voidRiftsAbsorbed",
+      "label": "Void Rifts absorbed",
+      "defaultValue": 3,
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "section": "combat"
+    },
+    {
+      "id": "deathsCrossingStacks",
+      "label": "Death's Crossing stacks",
+      "defaultValue": 3,
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "section": "combat"
+    },
+    {
+      "id": "ruinBonusPoints",
+      "label": "Ruin Subtlety points above 50",
+      "defaultValue": 12,
+      "min": 0,
+      "max": 12,
+      "step": 1,
+      "section": "combat"
+    },
+    {
+      "id": "c2ExtraRuinPoints",
+      "label": "C2 additional Ruin points",
+      "defaultValue": 10,
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "section": "combat"
+    },
+    {
+      "id": "havocSeverStacks",
+      "label": "Havoc: Sever stacks",
+      "defaultValue": 3,
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "section": "combat"
+    }
   ],
-  "talents":[
-    {"key":"normal","name":"Havoc: Sunder","formulas":[
-      {"id":"normal-1","label":"1-Hit DMG","damageType":"directPhysical","tags":["normalAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param1","levelInput":"normalTalentLevel"}]}},
-      {"id":"normal-2","label":"2-Hit DMG","damageType":"directPhysical","tags":["normalAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param2","levelInput":"normalTalentLevel"}]}},
-      {"id":"normal-3","label":"3-Hit DMG (2 strikes)","damageType":"directPhysical","tags":["normalAttack","multiHit"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"add","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param3","levelInput":"normalTalentLevel"},{"type":"talentParameter","talent":"combat1","parameter":"param4","levelInput":"normalTalentLevel"}]}]}},
-      {"id":"normal-4","label":"4-Hit DMG","damageType":"directPhysical","tags":["normalAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param5","levelInput":"normalTalentLevel"}]}},
-      {"id":"normal-5","label":"5-Hit DMG","damageType":"directPhysical","tags":["normalAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param6","levelInput":"normalTalentLevel"}]}},
-      {"id":"charged","label":"Charged Attack DMG (2 hits)","damageType":"directPhysical","tags":["chargedAttack","multiHit"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param7","levelInput":"normalTalentLevel"},{"type":"constant","value":2}]}},
-      {"id":"plunge","label":"Plunge DMG","damageType":"directPhysical","tags":["plungingAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param9","levelInput":"normalTalentLevel"}]}},
-      {"id":"low-plunge","label":"Low Plunge DMG","damageType":"directPhysical","tags":["plungingAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param10","levelInput":"normalTalentLevel"}]}},
-      {"id":"high-plunge","label":"High Plunge DMG","damageType":"directPhysical","tags":["plungingAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param11","levelInput":"normalTalentLevel"}]}}
-    ]},
-    {"key":"skill","name":"Havoc: Warp · Seven-Phase Flash","formulas":[
-      {"id":"warp-normal-1","label":"Seven-Phase 1-Hit DMG","damageType":"directCryo","tags":["normalAttack","sevenPhaseNormal","elementalSkillState"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param1","levelInput":"skillTalentLevel"}]}},
-      {"id":"warp-normal-2","label":"Seven-Phase 2-Hit DMG","damageType":"directCryo","tags":["normalAttack","sevenPhaseNormal","elementalSkillState"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param2","levelInput":"skillTalentLevel"}]}},
-      {"id":"warp-normal-3","label":"Seven-Phase 3-Hit DMG (2 strikes)","damageType":"directCryo","tags":["normalAttack","sevenPhaseNormal","elementalSkillState","multiHit"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"add","operands":[{"type":"talentParameter","talent":"combat2","parameter":"param3","levelInput":"skillTalentLevel"},{"type":"talentParameter","talent":"combat2","parameter":"param4","levelInput":"skillTalentLevel"}]}]}},
-      {"id":"warp-normal-4","label":"Seven-Phase 4-Hit DMG (2 strikes)","damageType":"directCryo","tags":["normalAttack","sevenPhaseNormal","elementalSkillState","multiHit"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"add","operands":[{"type":"talentParameter","talent":"combat2","parameter":"param5","levelInput":"skillTalentLevel"},{"type":"talentParameter","talent":"combat2","parameter":"param6","levelInput":"skillTalentLevel"}]}]}},
-      {"id":"warp-normal-5","label":"Seven-Phase 5-Hit DMG","damageType":"directCryo","tags":["normalAttack","sevenPhaseNormal","elementalSkillState"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param7","levelInput":"skillTalentLevel"}]}},
-      {"id":"warp-charged","label":"Seven-Phase Charged DMG (3 hits)","damageType":"directCryo","tags":["chargedAttack","elementalSkillState","multiHit"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param8","levelInput":"skillTalentLevel"},{"type":"constant","value":3}]}},
-      {"id":"warp-plunge","label":"Seven-Phase Plunge DMG","damageType":"directCryo","tags":["plungingAttack","elementalSkillState"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param10","levelInput":"skillTalentLevel"}]}},
-      {"id":"warp-low-plunge","label":"Seven-Phase Low Plunge DMG","damageType":"directCryo","tags":["plungingAttack","elementalSkillState"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param11","levelInput":"skillTalentLevel"}]}},
-      {"id":"warp-high-plunge","label":"Seven-Phase High Plunge DMG","damageType":"directCryo","tags":["plungingAttack","elementalSkillState"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param12","levelInput":"skillTalentLevel"}]}},
-      {"id":"c1-crystal-blades","label":"C1 Crystal Blade DMG (current Rifts)","damageType":"directCryo","tags":["chargedAttack","constellationDamage"],"requiredEffects":["skirkC1"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"constant","value":5},{"type":"input","input":"voidRiftsAbsorbed"}]}},
-      {"id":"c6-normal-sever","label":"C6 Havoc: Sever · Normal Trigger (3 hits)","damageType":"directCryo","tags":["normalAttack","constellationDamage","multiHit"],"requiredEffects":["skirkC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"constant","value":5.4}]}},
-      {"id":"c6-charged-sever","label":"C6 Havoc: Sever · Damage-Taken Trigger (3 hits)","damageType":"directCryo","tags":["chargedAttack","constellationDamage","multiHit"],"requiredEffects":["skirkC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"constant","value":5.4}]}}
-    ]},
-    {"key":"burst","name":"Havoc: Ruin / Havoc: Extinction","formulas":[
-      {"id":"ruin-total","label":"Havoc: Ruin Total DMG (5 slashes + final + Subtlety)","damageType":"directCryo","tags":["elementalBurst","havocRuin"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"add","operands":[{"type":"multiply","operands":[{"type":"talentParameter","talent":"combat3","parameter":"param1","levelInput":"burstTalentLevel"},{"type":"constant","value":5}]},{"type":"talentParameter","talent":"combat3","parameter":"param2","levelInput":"burstTalentLevel"},{"type":"multiply","operands":[{"type":"talentParameter","talent":"combat3","parameter":"param3","levelInput":"burstTalentLevel"},{"type":"input","input":"ruinBonusPoints"}]}]}]}},
-      {"id":"c6-burst-sever","label":"C6 Havoc: Sever · Ruin Coordinated DMG","damageType":"directCryo","tags":["elementalBurst","constellationDamage","multiHit"],"requiredEffects":["skirkC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"constant","value":7.5},{"type":"input","input":"havocSeverStacks"}]}}
-    ]}
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Havoc: Sunder",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "1-Hit DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-2",
+          "label": "2-Hit DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-3",
+          "label": "3-Hit DMG (2 strikes)",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack",
+            "multiHit"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat1",
+                    "parameter": "param3",
+                    "levelInput": "local:normalTalentLevel"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat1",
+                    "parameter": "param4",
+                    "levelInput": "local:normalTalentLevel"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-4",
+          "label": "4-Hit DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-5",
+          "label": "5-Hit DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "charged",
+          "label": "Charged Attack DMG (2 hits)",
+          "damageType": "directPhysical",
+          "tags": [
+            "chargedAttack",
+            "multiHit"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "local:normalTalentLevel"
+              },
+              {
+                "type": "constant",
+                "value": 2
+              }
+            ]
+          }
+        },
+        {
+          "id": "plunge",
+          "label": "Plunge DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "low-plunge",
+          "label": "Low Plunge DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "high-plunge",
+          "label": "High Plunge DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param11",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Havoc: Warp · Seven-Phase Flash",
+      "formulas": [
+        {
+          "id": "warp-normal-1",
+          "label": "Seven-Phase 1-Hit DMG",
+          "damageType": "directCryo",
+          "tags": [
+            "normalAttack",
+            "sevenPhaseNormal",
+            "elementalSkillState"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "warp-normal-2",
+          "label": "Seven-Phase 2-Hit DMG",
+          "damageType": "directCryo",
+          "tags": [
+            "normalAttack",
+            "sevenPhaseNormal",
+            "elementalSkillState"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param2",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "warp-normal-3",
+          "label": "Seven-Phase 3-Hit DMG (2 strikes)",
+          "damageType": "directCryo",
+          "tags": [
+            "normalAttack",
+            "sevenPhaseNormal",
+            "elementalSkillState",
+            "multiHit"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param3",
+                    "levelInput": "local:skillTalentLevel"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param4",
+                    "levelInput": "local:skillTalentLevel"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "warp-normal-4",
+          "label": "Seven-Phase 4-Hit DMG (2 strikes)",
+          "damageType": "directCryo",
+          "tags": [
+            "normalAttack",
+            "sevenPhaseNormal",
+            "elementalSkillState",
+            "multiHit"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param5",
+                    "levelInput": "local:skillTalentLevel"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat2",
+                    "parameter": "param6",
+                    "levelInput": "local:skillTalentLevel"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "warp-normal-5",
+          "label": "Seven-Phase 5-Hit DMG",
+          "damageType": "directCryo",
+          "tags": [
+            "normalAttack",
+            "sevenPhaseNormal",
+            "elementalSkillState"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param7",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "warp-charged",
+          "label": "Seven-Phase Charged DMG (3 hits)",
+          "damageType": "directCryo",
+          "tags": [
+            "chargedAttack",
+            "elementalSkillState",
+            "multiHit"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param8",
+                "levelInput": "local:skillTalentLevel"
+              },
+              {
+                "type": "constant",
+                "value": 3
+              }
+            ]
+          }
+        },
+        {
+          "id": "warp-plunge",
+          "label": "Seven-Phase Plunge DMG",
+          "damageType": "directCryo",
+          "tags": [
+            "plungingAttack",
+            "elementalSkillState"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param10",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "warp-low-plunge",
+          "label": "Seven-Phase Low Plunge DMG",
+          "damageType": "directCryo",
+          "tags": [
+            "plungingAttack",
+            "elementalSkillState"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param11",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "warp-high-plunge",
+          "label": "Seven-Phase High Plunge DMG",
+          "damageType": "directCryo",
+          "tags": [
+            "plungingAttack",
+            "elementalSkillState"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param12",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "c1-crystal-blades",
+          "label": "C1 Crystal Blade DMG (current Rifts)",
+          "damageType": "directCryo",
+          "tags": [
+            "chargedAttack",
+            "constellationDamage"
+          ],
+          "requiredEffects": [
+            "skirkC1"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 5
+              },
+              {
+                "type": "input",
+                "input": "local:voidRiftsAbsorbed"
+              }
+            ]
+          }
+        },
+        {
+          "id": "c6-normal-sever",
+          "label": "C6 Havoc: Sever · Normal Trigger (3 hits)",
+          "damageType": "directCryo",
+          "tags": [
+            "normalAttack",
+            "constellationDamage",
+            "multiHit"
+          ],
+          "requiredEffects": [
+            "skirkC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 5.4
+              }
+            ]
+          }
+        },
+        {
+          "id": "c6-charged-sever",
+          "label": "C6 Havoc: Sever · Damage-Taken Trigger (3 hits)",
+          "damageType": "directCryo",
+          "tags": [
+            "chargedAttack",
+            "constellationDamage",
+            "multiHit"
+          ],
+          "requiredEffects": [
+            "skirkC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 5.4
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Havoc: Ruin / Havoc: Extinction",
+      "formulas": [
+        {
+          "id": "ruin-total",
+          "label": "Havoc: Ruin Total DMG (5 slashes + final + Subtlety)",
+          "damageType": "directCryo",
+          "tags": [
+            "elementalBurst",
+            "havocRuin"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "talentParameter",
+                        "talent": "combat3",
+                        "parameter": "param1",
+                        "levelInput": "local:burstTalentLevel"
+                      },
+                      {
+                        "type": "constant",
+                        "value": 5
+                      }
+                    ]
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat3",
+                    "parameter": "param2",
+                    "levelInput": "local:burstTalentLevel"
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "talentParameter",
+                        "talent": "combat3",
+                        "parameter": "param3",
+                        "levelInput": "local:burstTalentLevel"
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:ruinBonusPoints"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "c6-burst-sever",
+          "label": "C6 Havoc: Sever · Ruin Coordinated DMG",
+          "damageType": "directCryo",
+          "tags": [
+            "elementalBurst",
+            "constellationDamage",
+            "multiHit"
+          ],
+          "requiredEffects": [
+            "skirkC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 7.5
+              },
+              {
+                "type": "input",
+                "input": "local:havocSeverStacks"
+              }
+            ]
+          }
+        }
+      ]
+    }
   ],
-  "effects":[
-    {"id":"allShallWither","name":"All Shall Wither","source":"Skirk · Havoc: Extinction","category":"talent","description":"The next 10 Seven-Phase Flash Normal hits gain 8%/12%/16%/20% DMG Bonus after absorbing 0/1/2/3 Void Rifts.","defaultEnabled":true,"activation":{"event":"extinctionUsed","conditions":[{"type":"inputAtLeast","input":"sevenPhaseActive","value":1}]},"formulaModifiers":[{"targets":{"requiredTags":["sevenPhaseNormal"]},"damageBonus":{"unit":"ratio","expression":{"type":"add","operands":[{"type":"talentParameter","talent":"combat3","parameter":"param4","levelInput":"burstTalentLevel"},{"type":"multiply","operands":[{"type":"input","input":"voidRiftsAbsorbed"},{"type":"add","operands":[{"type":"talentParameter","talent":"combat3","parameter":"param5","levelInput":"burstTalentLevel"},{"type":"multiply","operands":[{"type":"talentParameter","talent":"combat3","parameter":"param4","levelInput":"burstTalentLevel"},{"type":"constant","value":-1}]}]}]}]}}}]},
-    {"id":"reasonBeyondReason","name":"Reason Beyond Reason","source":"Skirk · Passive","category":"passive","description":"Cryo reactions caused by nearby teammates create Void Rifts; absorbing each grants 8 Serpent's Subtlety.","impact":"Resource generation; the selected Rift count feeds Extinction and constellation formulas.","defaultEnabled":true,"activation":{"event":"cryoReaction"},"metrics":[{"label":"Subtlety from current Rifts","expression":{"type":"multiply","operands":[{"type":"input","input":"voidRiftsAbsorbed"},{"type":"constant","value":8}]}}]},
-    {"id":"returnToOblivion","name":"Return to Oblivion","source":"Skirk · Passive","category":"passive","description":"Death's Crossing makes Seven-Phase Normal DMG 110%/120%/170% and Havoc: Ruin DMG 105%/115%/160% of original at 1/2/3 stacks.","impact":"Applied as multiplicative Base DMG Bonus deltas.","defaultEnabled":true,"activation":{"event":"hydroOrCryoTeammateHit"},"formulaModifiers":[
-      {"targets":{"requiredTags":["sevenPhaseNormal"]},"conditions":[{"type":"inputAtLeast","input":"deathsCrossingStacks","value":1}],"baseDamageBonus":{"expression":{"type":"constant","value":10}}},
-      {"targets":{"requiredTags":["sevenPhaseNormal"]},"conditions":[{"type":"inputAtLeast","input":"deathsCrossingStacks","value":2}],"baseDamageBonus":{"expression":{"type":"constant","value":10}}},
-      {"targets":{"requiredTags":["sevenPhaseNormal"]},"conditions":[{"type":"inputAtLeast","input":"deathsCrossingStacks","value":3}],"baseDamageBonus":{"expression":{"type":"constant","value":50}}},
-      {"targets":{"requiredTags":["havocRuin"]},"conditions":[{"type":"inputAtLeast","input":"deathsCrossingStacks","value":1}],"baseDamageBonus":{"expression":{"type":"constant","value":5}}},
-      {"targets":{"requiredTags":["havocRuin"]},"conditions":[{"type":"inputAtLeast","input":"deathsCrossingStacks","value":2}],"baseDamageBonus":{"expression":{"type":"constant","value":10}}},
-      {"targets":{"requiredTags":["havocRuin"]},"conditions":[{"type":"inputAtLeast","input":"deathsCrossingStacks","value":3}],"baseDamageBonus":{"expression":{"type":"constant","value":45}}}
-    ]},
-    {"id":"mutualWeaponsMentorship","name":"Mutual Weapons Mentorship","source":"Skirk · Passive","category":"passive","description":"If all four party members are Hydro/Cryo and at least one of each is present, raises every party member's Elemental Skill level by 1.","defaultEnabled":true,"activation":{"event":"partyComposition","conditions":[{"type":"contextAtLeast","input":"hydroCryoCount","value":4},{"type":"contextAtLeast","input":"hydroCount","value":1},{"type":"contextAtLeast","input":"cryoCount","value":1}]},"statChanges":[{"stat":"skillTalentLevel","operation":"flatAdd","value":{"type":"constant","value":1},"maximum":15}]},
-    {"id":"skirkC1","name":"C1 · Far to Fall","source":"Skirk · Constellation","category":"constellation","description":"Each absorbed Void Rift summons a crystal blade dealing 500% ATK as Cryo Charged Attack DMG.","ownershipRequirements":{"skirkConstellation":1},"requiresEffects":["reasonBeyondReason"],"activation":{"event":"voidRiftAbsorbed"}},
-    {"id":"skirkC2","name":"C2 · Into the Abyss","source":"Skirk · Constellation","category":"constellation","description":"Skill grants 10 more Subtlety; Ruin can count 10 more bonus points. After Extinction, increases ATK by 70% for Seven-Phase Flash's remaining duration.","ownershipRequirements":{"skirkConstellation":2},"activation":{"event":"skillOrExtinctionUsed"},"statChanges":[{"stat":"attack","operation":"flatAdd","value":{"type":"multiply","operands":[{"type":"input","input":"baseAttack"},{"type":"constant","value":0.7}]},"conditions":[{"type":"inputAtLeast","input":"sevenPhaseActive","value":1}]}],"formulaModifiers":[{"targets":{"formulaIds":["ruin-total"]},"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat3","parameter":"param3","levelInput":"burstTalentLevel"},{"type":"input","input":"c2ExtraRuinPoints"}]}}]},
-    {"id":"skirkC3","name":"C3 · Serendipitous Sin","source":"Skirk · Constellation","category":"constellation","description":"Increases Havoc: Ruin's talent level by 3.","ownershipRequirements":{"skirkConstellation":3},"activation":{"event":"always"},"statChanges":[{"stat":"burstTalentLevel","operation":"flatAdd","value":{"type":"constant","value":3},"maximum":15}]},
-    {"id":"skirkC4","name":"C4 · Fractured Flow","source":"Skirk · Constellation","category":"constellation","description":"Death's Crossing additionally grants 10%/20%/40% ATK at 1/2/3 stacks.","ownershipRequirements":{"skirkConstellation":4},"requiresEffects":["returnToOblivion"],"activation":{"event":"deathsCrossingActive"},"statChanges":[{"stat":"attack","operation":"flatAdd","value":{"type":"multiply","operands":[{"type":"input","input":"baseAttack"},{"type":"constant","value":0.1}]},"conditions":[{"type":"inputAtLeast","input":"deathsCrossingStacks","value":1}]},{"stat":"attack","operation":"flatAdd","value":{"type":"multiply","operands":[{"type":"input","input":"baseAttack"},{"type":"constant","value":0.1}]},"conditions":[{"type":"inputAtLeast","input":"deathsCrossingStacks","value":2}]},{"stat":"attack","operation":"flatAdd","value":{"type":"multiply","operands":[{"type":"input","input":"baseAttack"},{"type":"constant","value":0.2}]},"conditions":[{"type":"inputAtLeast","input":"deathsCrossingStacks","value":3}]}]},
-    {"id":"skirkC5","name":"C5 · End of Wishes","source":"Skirk · Constellation","category":"constellation","description":"Increases Havoc: Warp's talent level by 3.","ownershipRequirements":{"skirkConstellation":5},"activation":{"event":"always"},"statChanges":[{"stat":"skillTalentLevel","operation":"flatAdd","value":{"type":"constant","value":3},"maximum":15}]},
-    {"id":"skirkC6","name":"C6 · To the Source","source":"Skirk · Constellation","category":"constellation","description":"Void Rifts grant up to three Havoc: Sever stacks. Ruin deals 750% ATK per stack; Normal- and damage-taken triggers each deal three 180% ATK hits.","ownershipRequirements":{"skirkConstellation":6},"requiresEffects":["reasonBeyondReason"],"activation":{"event":"havocSeverConsumed"}}
-  ]
+  "effects": [
+    {
+      "id": "allShallWither",
+      "name": "All Shall Wither",
+      "source": "Skirk · Havoc: Extinction",
+      "category": "talent",
+      "description": "The next 10 Seven-Phase Flash Normal hits gain 8%/12%/16%/20% DMG Bonus after absorbing 0/1/2/3 Void Rifts.",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "extinctionUsed",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:sevenPhaseActive",
+            "value": 1
+          }
+        ]
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "sevenPhaseNormal"
+            ]
+          },
+          "damageBonus": {
+            "unit": "ratio",
+            "expression": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "talentParameter",
+                  "talent": "combat3",
+                  "parameter": "param4",
+                  "levelInput": "local:burstTalentLevel"
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "input",
+                      "input": "local:voidRiftsAbsorbed"
+                    },
+                    {
+                      "type": "add",
+                      "operands": [
+                        {
+                          "type": "talentParameter",
+                          "talent": "combat3",
+                          "parameter": "param5",
+                          "levelInput": "local:burstTalentLevel"
+                        },
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "talentParameter",
+                              "talent": "combat3",
+                              "parameter": "param4",
+                              "levelInput": "local:burstTalentLevel"
+                            },
+                            {
+                              "type": "constant",
+                              "value": -1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "reasonBeyondReason",
+      "name": "Reason Beyond Reason",
+      "source": "Skirk · Passive",
+      "category": "passive",
+      "description": "Cryo reactions caused by nearby teammates create Void Rifts; absorbing each grants 8 Serpent's Subtlety.",
+      "impact": "Resource generation; the selected Rift count feeds Extinction and constellation formulas.",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "cryoReaction"
+      },
+      "metrics": [
+        {
+          "label": "Subtlety from current Rifts",
+          "expression": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "local:voidRiftsAbsorbed"
+              },
+              {
+                "type": "constant",
+                "value": 8
+              }
+            ]
+          }
+        }
+      ],
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "returnToOblivion",
+      "name": "Return to Oblivion",
+      "source": "Skirk · Passive",
+      "category": "passive",
+      "description": "Death's Crossing makes Seven-Phase Normal DMG 110%/120%/170% and Havoc: Ruin DMG 105%/115%/160% of original at 1/2/3 stacks.",
+      "impact": "Applied as multiplicative Base DMG Bonus deltas.",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "hydroOrCryoTeammateHit"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "sevenPhaseNormal"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:deathsCrossingStacks",
+              "value": 1
+            }
+          ],
+          "baseDamageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 10
+            }
+          }
+        },
+        {
+          "targets": {
+            "requiredTags": [
+              "sevenPhaseNormal"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:deathsCrossingStacks",
+              "value": 2
+            }
+          ],
+          "baseDamageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 10
+            }
+          }
+        },
+        {
+          "targets": {
+            "requiredTags": [
+              "sevenPhaseNormal"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:deathsCrossingStacks",
+              "value": 3
+            }
+          ],
+          "baseDamageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 50
+            }
+          }
+        },
+        {
+          "targets": {
+            "requiredTags": [
+              "havocRuin"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:deathsCrossingStacks",
+              "value": 1
+            }
+          ],
+          "baseDamageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 5
+            }
+          }
+        },
+        {
+          "targets": {
+            "requiredTags": [
+              "havocRuin"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:deathsCrossingStacks",
+              "value": 2
+            }
+          ],
+          "baseDamageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 10
+            }
+          }
+        },
+        {
+          "targets": {
+            "requiredTags": [
+              "havocRuin"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:deathsCrossingStacks",
+              "value": 3
+            }
+          ],
+          "baseDamageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 45
+            }
+          }
+        }
+      ],
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "mutualWeaponsMentorship",
+      "name": "Mutual Weapons Mentorship",
+      "source": "Skirk · Passive",
+      "category": "passive",
+      "description": "If all four party members are Hydro/Cryo and at least one of each is present, raises every party member's Elemental Skill level by 1.",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "partyComposition",
+        "conditions": [
+          {
+            "type": "contextAtLeast",
+            "input": "hydroCryoCount",
+            "value": 4
+          },
+          {
+            "type": "contextAtLeast",
+            "input": "hydroCount",
+            "value": 1
+          },
+          {
+            "type": "contextAtLeast",
+            "input": "cryoCount",
+            "value": 1
+          }
+        ]
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 1
+          },
+          "maximum": 15,
+          "recipient": "party"
+        }
+      ],
+      "recipient": "self"
+    },
+    {
+      "id": "skirkC1",
+      "name": "C1 · Far to Fall",
+      "source": "Skirk · Constellation",
+      "category": "constellation",
+      "description": "Each absorbed Void Rift summons a crystal blade dealing 500% ATK as Cryo Charged Attack DMG.",
+      "ownershipRequirements": {
+        "local:skirkConstellation": 1
+      },
+      "requiresEffects": [
+        "reasonBeyondReason"
+      ],
+      "activation": {
+        "event": "voidRiftAbsorbed"
+      },
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "skirkC2",
+      "name": "C2 · Into the Abyss",
+      "source": "Skirk · Constellation",
+      "category": "constellation",
+      "description": "Skill grants 10 more Subtlety; Ruin can count 10 more bonus points. After Extinction, increases ATK by 70% for Seven-Phase Flash's remaining duration.",
+      "ownershipRequirements": {
+        "local:skirkConstellation": 2
+      },
+      "activation": {
+        "event": "skillOrExtinctionUsed"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:attack",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:baseAttack"
+              },
+              {
+                "type": "constant",
+                "value": 0.7
+              }
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:sevenPhaseActive",
+              "value": 1
+            }
+          ],
+          "recipient": "self"
+        }
+      ],
+      "formulaModifiers": [
+        {
+          "targets": {
+            "formulaIds": [
+              "ruin-total"
+            ]
+          },
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param3",
+                "levelInput": "local:burstTalentLevel"
+              },
+              {
+                "type": "input",
+                "input": "local:c2ExtraRuinPoints"
+              }
+            ]
+          }
+        }
+      ],
+      "recipient": "self"
+    },
+    {
+      "id": "skirkC3",
+      "name": "C3 · Serendipitous Sin",
+      "source": "Skirk · Constellation",
+      "category": "constellation",
+      "description": "Increases Havoc: Ruin's talent level by 3.",
+      "ownershipRequirements": {
+        "local:skirkConstellation": 3
+      },
+      "activation": {
+        "event": "always"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15,
+          "recipient": "self"
+        }
+      ],
+      "recipient": "self"
+    },
+    {
+      "id": "skirkC4",
+      "name": "C4 · Fractured Flow",
+      "source": "Skirk · Constellation",
+      "category": "constellation",
+      "description": "Death's Crossing additionally grants 10%/20%/40% ATK at 1/2/3 stacks.",
+      "ownershipRequirements": {
+        "local:skirkConstellation": 4
+      },
+      "requiresEffects": [
+        "returnToOblivion"
+      ],
+      "activation": {
+        "event": "deathsCrossingActive"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:attack",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:baseAttack"
+              },
+              {
+                "type": "constant",
+                "value": 0.1
+              }
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:deathsCrossingStacks",
+              "value": 1
+            }
+          ],
+          "recipient": "self"
+        },
+        {
+          "stat": "recipient:attack",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:baseAttack"
+              },
+              {
+                "type": "constant",
+                "value": 0.1
+              }
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:deathsCrossingStacks",
+              "value": 2
+            }
+          ],
+          "recipient": "self"
+        },
+        {
+          "stat": "recipient:attack",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:baseAttack"
+              },
+              {
+                "type": "constant",
+                "value": 0.2
+              }
+            ]
+          },
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:deathsCrossingStacks",
+              "value": 3
+            }
+          ],
+          "recipient": "self"
+        }
+      ],
+      "recipient": "self"
+    },
+    {
+      "id": "skirkC5",
+      "name": "C5 · End of Wishes",
+      "source": "Skirk · Constellation",
+      "category": "constellation",
+      "description": "Increases Havoc: Warp's talent level by 3.",
+      "ownershipRequirements": {
+        "local:skirkConstellation": 5
+      },
+      "activation": {
+        "event": "always"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15,
+          "recipient": "self"
+        }
+      ],
+      "recipient": "self"
+    },
+    {
+      "id": "skirkC6",
+      "name": "C6 · To the Source",
+      "source": "Skirk · Constellation",
+      "category": "constellation",
+      "description": "Void Rifts grant up to three Havoc: Sever stacks. Ruin deals 750% ATK per stack; Normal- and damage-taken triggers each deal three 180% ATK hits.",
+      "ownershipRequirements": {
+        "local:skirkConstellation": 6
+      },
+      "requiresEffects": [
+        "reasonBeyondReason"
+      ],
+      "activation": {
+        "event": "havocSeverConsumed"
+      },
+      "recipient": "self",
+      "statChanges": []
+    }
+  ],
+  "notes": [],
+  "sources": [
+    "data/characters/data/skirk.json",
+    "https://keqingmains.com/q/skirk-quickguide/"
+  ],
+  "inputDefaults": {
+    "maxHp": 15000,
+    "attack": 2000,
+    "baseAttack": 1000,
+    "defense": 800,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  }
 }

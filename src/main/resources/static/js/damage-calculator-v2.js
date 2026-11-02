@@ -906,6 +906,11 @@
                 defaultOpen: true,
             };
         }
+        if (key === "talent") return {
+            name: label("labelTalentEffects", "Talent effects"),
+            help: label("labelTalentEffectsHelp", "Combat effects from the selected characters' skills and bursts."),
+            defaultOpen: true,
+        };
         if (key === "team") return {
             name: label("labelTeamEffects", "Team buffs"),
             help: label("labelTeamEffectsHelp", "Authored buffs from the selected party."),
@@ -920,7 +925,7 @@
         }
         return {
             name: label("labelPassiveEffects", "Character passives"),
-            help: label("labelPassiveEffectsHelp", "Nefer's own combat passives and calculated values."),
+            help: label("labelPassiveEffectsHelp", "Combat passives from the selected characters and their calculated values."),
             defaultOpen: true,
         };
     }
@@ -1004,7 +1009,7 @@
     function renderEffects() {
         const existingSections = new Map(Array.from(effectsNode.querySelectorAll("[data-v2-effect-category]"))
             .map((section) => [section.dataset.v2EffectCategory, section]));
-        const categories = ["passive", "team", "constellation",
+        const categories = ["talent", "passive", "team", "constellation",
             ...new Set(profile.effects.filter((effect) => effect.category.startsWith("weapon:")).map((effect) => effect.category)),
             ...(profile.artifactLoadouts || []).filter((loadout) => loadout.sets.length > 0)
                 .map((loadout) => `artifact:${loadout.characterKey}`)];
@@ -1346,10 +1351,12 @@
     function baseSegments(formula, result) {
         const segments = [...expressionSegments(formula.base, result.base.references)];
         const modifiers = activeFormulaModifiers(formula);
+        const lunar = profile.damageTypes.find(type => type.id === formula.damageType)?.kind === "lunar";
+        const additions = [];
         modifiers.forEach(({effect, modifier}) => {
             if (!modifier.base) return;
             const value = referenceValue(modifier.base, result.base.references);
-            segments.push(
+            additions.push(
                 " + [",
                 ...expressionSegments(modifier.base, result.base.references),
                 " = ",
@@ -1357,6 +1364,7 @@
                 "]",
             );
         });
+        if (lunar) segments.push(...additions);
         const baseDamageBonuses = modifiers.filter(({modifier}) => modifier.baseDamageBonus);
         if (baseDamageBonuses.length) {
             segments.unshift("(");
@@ -1371,6 +1379,18 @@
                 ));
             });
             segments.push(")");
+        }
+        if (!lunar) segments.push(...additions);
+        const independentBonuses = modifiers.filter(({modifier}) => modifier.baseDamageMultiplier);
+        if (independentBonuses.length) {
+            segments.unshift("(");
+            segments.push(")");
+            independentBonuses.forEach(({effect, modifier}) => {
+                segments.push(" × (1 + ", effectToken(
+                    formatPercentRatio(contributionRatio(modifier.baseDamageMultiplier, result.base.references)),
+                    effect, "formula-token-effect", modifier.baseDamageMultiplier.expression, result.base.references,
+                ), ")");
+            });
         }
         segments.push(" = ", resultToken(result.base.value, result));
         return segments;
@@ -1432,7 +1452,7 @@
         if (damageType.appliesElementalDamageBonus) {
             segments.push(
                 " + ",
-                inputToken("elementalDamageBonus", formatPercentRatio(result.damageBonus.elementalBonus)),
+                inputToken(damageType.elementalBonusInput || "elementalDamageBonus", formatPercentRatio(result.damageBonus.elementalBonus)),
             );
         }
         if (damageType.innateDamageBonus) {

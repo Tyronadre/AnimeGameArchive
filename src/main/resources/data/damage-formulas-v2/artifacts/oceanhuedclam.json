@@ -99,19 +99,6 @@
       ]
     }
   ],
-  "damageTypes": [
-    {
-      "id": "artifactPhysicalProc",
-      "element": "Physical",
-      "defenseBehavior": "bypass",
-      "appliesElementalDamageBonus": false,
-      "appliesOtherDamageBonus": false,
-      "allowsCriticalHits": false,
-      "resistanceInput": "enemyPhysicalResistance",
-      "independentProc": true,
-      "kind": "artifactProc"
-    }
-  ],
   "sources": [
     "Bundled artifact-set-bonuses.json: oceanhuedclam",
     "https://library.keqingmains.com/equipment/artifacts"

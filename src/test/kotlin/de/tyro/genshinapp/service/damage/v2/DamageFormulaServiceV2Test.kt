@@ -72,7 +72,7 @@ class DamageFormulaServiceV2Test {
     }
 
     @Test
-    fun `A Wager applies its stat change and only its targeted damage bonus`() {
+    fun `A Wager applies its stat change and only its targeted base bonus`() {
         val disabled = calculation(
             inputs = mapOf(
                 "elementalMastery" to 1000.0,
@@ -93,7 +93,7 @@ class DamageFormulaServiceV2Test {
         assertEquals(1000.0, disabled.effectiveStats.getValue("elementalMastery"))
         assertEquals(1100.0, enabled.effectiveStats.getValue("elementalMastery"))
         assertEquals(0.0, enabled.result("skill-hit").damageBonus.authoredBonus, 0.0001)
-        assertEquals(0.24, enabled.result("nefer-hit-1").damageBonus.authoredBonus, 0.0001)
+        assertEquals(1.24, enabled.result("nefer-hit-1").base.independentMultiplier, 0.0001)
         assertEquals(setOf("aWagerOfMoonlight"), enabled.result("nefer-hit-1").appliedEffectIds)
         assertTrue(enabled.result("nefer-hit-1").nonCritical > disabled.result("nefer-hit-1").nonCritical)
     }
@@ -153,9 +153,9 @@ class DamageFormulaServiceV2Test {
         ).result("shades-hit-1")
 
         assertEquals(960.0, shade.base.formulaValue, 0.0001)
-        assertEquals(840.0, shade.base.additiveValue, 0.0001)
+        assertEquals(600.0, shade.base.additiveValue, 0.0001)
         assertEquals(1.14, shade.base.multiplier, 0.0001)
-        assertEquals((960.0 + 840.0) * 1.14, shade.base.value, 0.0001)
+        assertEquals((960.0 + 600.0) * 1.14, shade.base.value, 0.0001)
     }
 
     @Test
@@ -170,9 +170,9 @@ class DamageFormulaServiceV2Test {
         )
 
         assertEquals(1000.0, twoVeils.effectiveStats.getValue("elementalMastery"), 0.0001)
-        assertEquals(0.16, twoVeils.result("nefer-hit-1").damageBonus.authoredBonus, 0.0001)
+        assertEquals(1.16, twoVeils.result("nefer-hit-1").base.independentMultiplier, 0.0001)
         assertEquals(1200.0, fiveVeils.effectiveStats.getValue("elementalMastery"), 0.0001)
-        assertEquals(0.40, fiveVeils.result("nefer-hit-1").damageBonus.authoredBonus, 0.0001)
+        assertEquals(1.40, fiveVeils.result("nefer-hit-1").base.independentMultiplier, 0.0001)
     }
 
     @Test

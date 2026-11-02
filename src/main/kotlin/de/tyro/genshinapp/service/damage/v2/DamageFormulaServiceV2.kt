@@ -2,7 +2,6 @@ package de.tyro.genshinapp.service.damage.v2
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Service
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.roundToInt
@@ -10,11 +9,12 @@ import kotlin.math.roundToInt
 @Service
 class DamageFormulaServiceV2(
     private val objectMapper: ObjectMapper,
+    private val registry: CharacterFormulaRegistryV3 = CharacterFormulaRegistryV3(objectMapper),
 ) {
     private val profiles = ConcurrentHashMap<String, LoadedDamageProfileV2>()
     private val supportRoots = ConcurrentHashMap<String, JsonNode>()
-    private val reactionCatalog by lazy {
-        ClassPathResource(REACTION_RESOURCE).inputStream.use { input ->
+    private val reactionCatalog by reloadableFormulaV2 {
+        DamageFormulaResourcesV2.resource(REACTION_RESOURCE).inputStream.use { input ->
             objectMapper.readValue(input, DamageReactionCatalogV2::class.java)
         }.also { catalog ->
             require(catalog.schemaVersion == 2) { "Unsupported reaction schema" }
@@ -37,10 +37,30 @@ class DamageFormulaServiceV2(
     }
 
     fun supports(characterKey: String): Boolean =
-        ClassPathResource(profileResource(characterKey)).exists()
+        registry.available(characterKey.trim().lowercase())
 
     fun profile(characterKey: String): DamageFormulaProfileV2? =
         loadedProfile(characterKey)?.source
+
+    /** Checks support-only definitions without pretending they have personal damage formulas. */
+    fun validateCharacter(characterKey: String) {
+        val profile = requireNotNull(registry.solo(characterKey, requireDamage = false))
+        val root = if (profile.characterDataResource.isBlank()) objectMapper.createObjectNode() else
+            DamageFormulaResourcesV2.resource(profile.characterDataResource).inputStream.use(objectMapper::readTree)
+        validate(LoadedDamageProfileV2(profile, root))
+    }
+
+    /** Validate unused catalog entries too, with only portable standard stats available. */
+    fun validateDamageTypes() {
+        val types = DamageTypeRegistryV2(objectMapper).definitions.values.toList()
+        val base = registry.generic(DamageTeamMemberV2("shared-types", "Shared damage types", "Dendro", 0))
+        val source = base.copy(damageTypes = types, inputs = base.inputs + types.map { it.resistanceInput }.distinct()
+            .filter { id -> base.inputs.none { it.id == id } }.map { id ->
+                DamageFormulaInputV2(id, id, 10.0, -200.0, 200.0, 1.0, "percentPoints")
+            })
+        val bound = CharacterEffectBinderV3(listOf(source), source.key, emptyMap()).bind(source)
+        validate(LoadedDamageProfileV2(bound, objectMapper.createObjectNode()))
+    }
 
     fun document(characterKey: String): DamageFormulaDocumentV2? {
         val profile = profile(characterKey) ?: return null
@@ -65,7 +85,7 @@ class DamageFormulaServiceV2(
         }
         val composed = loaded.copy(source = profile, supportRoots = profile.supportProfiles.mapNotNull { support ->
             support.characterDataResource?.let { resource -> support.key to supportRoots.computeIfAbsent(resource) {
-                ClassPathResource(resource).inputStream.use(objectMapper::readTree)
+                DamageFormulaResourcesV2.resource(resource).inputStream.use(objectMapper::readTree)
             } }
         }.toMap())
         validate(composed)
@@ -207,7 +227,15 @@ class DamageFormulaServiceV2(
         val additiveBase = additiveBaseEvaluations.sumOf(ExpressionEvaluationV2::value)
         val baseDamageBonus = baseDamageBonusEvaluations.sumOf(ExpressionEvaluationV2::value)
         val baseMultiplier = 1.0 + baseDamageBonus
-        val base = (formulaBaseEvaluation.value + additiveBase) * baseMultiplier
+        val independentBaseEvaluations = matchedModifiers.mapNotNull { (_, modifier) ->
+            modifier.baseDamageMultiplier?.let { evaluateContribution(it, effectiveStats, loaded) }
+        }
+        val independentBaseMultiplier = independentBaseEvaluations.fold(1.0) { product, contribution ->
+            product * (1.0 + contribution.value)
+        }
+        val groupedBase = if (damageType.kind == "lunar") (formulaBaseEvaluation.value + additiveBase) * baseMultiplier
+            else formulaBaseEvaluation.value * baseMultiplier + additiveBase
+        val base = groupedBase * independentBaseMultiplier
 
         val bonusContributions = buildList {
             formula.damageBonus?.let(::add)
@@ -223,7 +251,7 @@ class DamageFormulaServiceV2(
         val innateBonus = innateEvaluation?.value ?: 0.0
         val authoredBonus = bonusEvaluations.sumOf(ExpressionEvaluationV2::value) - innateBonus
         val elementalBonus = if (damageType.appliesElementalDamageBonus) {
-            effectiveStats.getValue("elementalDamageBonus") / 100.0
+            effectiveStats.getValue(damageType.elementalBonusInput ?: "elementalDamageBonus") / 100.0
         } else {
             0.0
         }
@@ -246,8 +274,8 @@ class DamageFormulaServiceV2(
         val defenseIgnoreEvaluations = defenseParts.mapNotNull { part ->
             part.ignore?.let { evaluateContribution(it, effectiveStats, loaded) }
         }
-        val defenseReduction = inputs.getValue("defenseReduction") / 100.0 +
-            defenseReductionEvaluations.sumOf(ExpressionEvaluationV2::value)
+        val defenseReduction = (inputs.getValue("defenseReduction") / 100.0 +
+            defenseReductionEvaluations.sumOf(ExpressionEvaluationV2::value)).coerceIn(0.0, 0.9)
         val defenseIgnore = inputs.getValue("defenseIgnore") / 100.0 +
             defenseIgnoreEvaluations.sumOf(ExpressionEvaluationV2::value)
         val defenseBypassed = damageType.defenseBehavior == "bypass" ||
@@ -325,7 +353,8 @@ class DamageFormulaServiceV2(
             critDamage = critDamage,
         )
         val inputReferences = listOf(
-            ResolvedFormulaReferenceV2("input", "elementalDamageBonus", effectiveStats.getValue("elementalDamageBonus")),
+            ResolvedFormulaReferenceV2("input", damageType.elementalBonusInput ?: "elementalDamageBonus",
+                effectiveStats.getValue(damageType.elementalBonusInput ?: "elementalDamageBonus")),
         )
         val defenseReferences = listOf(
             ResolvedFormulaReferenceV2("input", "characterLevel", characterLevel),
@@ -350,10 +379,12 @@ class DamageFormulaServiceV2(
                 value = base,
                 references = formulaBaseEvaluation.references +
                     additiveBaseEvaluations.flatMap(ExpressionEvaluationV2::references) +
-                    baseDamageBonusEvaluations.flatMap(ExpressionEvaluationV2::references),
+                    baseDamageBonusEvaluations.flatMap(ExpressionEvaluationV2::references) +
+                    independentBaseEvaluations.flatMap(ExpressionEvaluationV2::references),
                 formulaValue = formulaBaseEvaluation.value,
                 additiveValue = additiveBase,
                 multiplier = baseMultiplier,
+                independentMultiplier = independentBaseMultiplier,
             ),
             damageBonus = DamageBonusResultV2(
                 elementalBonus = elementalBonus,
@@ -585,21 +616,21 @@ class DamageFormulaServiceV2(
     private fun reactionResistanceInput(element: String): String =
         "enemyReaction${element.lowercase().replaceFirstChar(Char::uppercase)}Resistance"
 
+    private var resourceRevision = -1L
+
+    @Synchronized
     private fun loadedProfile(characterKey: String): LoadedDamageProfileV2? {
+        val revision = DamageFormulaResourcesV2.revision.get()
+        if (revision != resourceRevision) { profiles.clear(); supportRoots.clear(); resourceRevision = revision }
         val key = characterKey.trim().lowercase()
         if (!supports(key)) return null
         return profiles.computeIfAbsent(key, ::loadProfile)
     }
 
     private fun loadProfile(key: String): LoadedDamageProfileV2 {
-        val source = ClassPathResource(profileResource(key)).inputStream.use { input ->
-            objectMapper.readValue(input, DamageFormulaProfileV2::class.java)
-        }
-        require(source.schemaVersion == 2) { "Damage formula profile '$key' must use schema version 2" }
-        require(source.key == key) { "Damage formula profile '${source.key}' does not match '$key'" }
-        val characterRoot = ClassPathResource(source.characterDataResource).inputStream.use(
-            objectMapper::readTree,
-        )
+        val source = requireNotNull(registry.solo(key)) { "No damage formulas for '$key'" }
+        val characterRoot = if (source.characterDataResource.isBlank()) objectMapper.createObjectNode() else
+            DamageFormulaResourcesV2.resource(source.characterDataResource).inputStream.use(objectMapper::readTree)
         val loaded = LoadedDamageProfileV2(source, characterRoot)
         validate(loaded)
         return loaded
@@ -623,6 +654,7 @@ class DamageFormulaServiceV2(
             "Profile '${profile.key}' has an unsupported defense behavior"
         }
         profile.damageTypes.forEach { type ->
+            require(type.elementalBonusInput == null || type.elementalBonusInput in inputIds) { "Undefined elemental bonus input '${type.elementalBonusInput}'" }
             require(type.resistanceInput in inputIds) { "Undefined resistance input '${type.resistanceInput}'" }
             type.innateDamageBonus?.let { validateContribution(it, inputIds, loaded) }
         }
@@ -694,6 +726,7 @@ class DamageFormulaServiceV2(
                 modifier.conditions.forEach { validateActivationCondition(it, inputIds, effect.id) }
                 modifier.base?.let { validateExpression(it, inputIds, loaded) }
                 modifier.baseDamageBonus?.let { validateContribution(it, inputIds, loaded) }
+                modifier.baseDamageMultiplier?.let { validateContribution(it, inputIds, loaded) }
                 modifier.damageBonus?.let { validateContribution(it, inputIds, loaded) }
                 modifier.defenseMitigation?.let { validateDefense(it, inputIds, loaded) }
                 modifier.resistanceMitigation?.let { validateResistance(it, inputIds, loaded) }
@@ -904,6 +937,12 @@ class DamageFormulaServiceV2(
         val supportRoots: Map<String, JsonNode> = emptyMap(),
     ) {
         fun parameterValues(talent: String, parameter: String, characterKey: String? = null): List<Double> {
+            if (characterKey == null || characterKey == source.characterKey) {
+                source.talentParameters["$talent.$parameter"]?.let { values ->
+                    require(values.isNotEmpty() && values.all(Double::isFinite)) { "Invalid character talent table" }
+                    return values
+                }
+            }
             val support = source.supportProfiles.find { it.key == characterKey }
             support?.talentParameters?.get("$talent.$parameter")?.let { values ->
                 require(values.isNotEmpty() && values.all(Double::isFinite)) { "Invalid support talent table" }

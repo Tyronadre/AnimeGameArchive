@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "weaponType": "Catalyst",
   "key": "columbina",
   "name": "Columbina",
@@ -27,68 +27,11 @@
   "statBindings": {
     "elementalMastery": "columbinaElementalMastery",
     "maxHp": "columbinaMaxHp",
-    "baseHp": "columbinaBaseHp"
+    "baseHp": "columbinaBaseHp",
+    "constellation": "columbinaConstellation",
+    "burstTalentLevel": "columbinaBurstTalentLevel"
   },
-  "inputs": [
-    {
-      "id": "columbinaConstellation",
-      "label": "Columbina constellation",
-      "defaultValue": 0,
-      "min": 0,
-      "max": 6,
-      "step": 1,
-      "initialValueSource": {
-        "valueKey": "constellation"
-      },
-      "section": "constellations"
-    },
-    {
-      "id": "columbinaElementalMastery",
-      "label": "Columbina EM",
-      "defaultValue": 0,
-      "min": 0,
-      "max": 3000,
-      "step": 1,
-      "initialValueSource": {
-        "valueKey": "stat:eleMas"
-      },
-      "hintTag": "elementalMastery"
-    },
-    {
-      "id": "columbinaMaxHp",
-      "label": "Columbina Max HP (before conditional buffs)",
-      "defaultValue": 35000,
-      "min": 1,
-      "max": 100000,
-      "step": 1,
-      "description": "Loaded from Columbina's current character, weapon, and artifact data. Conditional combat buffs are applied separately."
-    },
-    {
-      "id": "columbinaBaseHp",
-      "label": "Columbina base HP",
-      "defaultValue": 14695,
-      "min": 1,
-      "max": 30000,
-      "step": 1,
-      "initialValueSource": {
-        "valueKey": "baseHp"
-      },
-      "section": "internal",
-      "description": "Resolved automatically from Columbina's character data and used for C2's +40% HP. It is not a player-entered combat stat."
-    },
-    {
-      "id": "columbinaBurstTalentLevel",
-      "label": "Columbina Burst level",
-      "defaultValue": 10,
-      "min": 1,
-      "max": 15,
-      "step": 1,
-      "initialValueSource": {
-        "valueKey": "burstTalent"
-      },
-      "hintTag": "talentLevel"
-    }
-  ],
+  "inputs": [],
   "effects": [
     {
       "id": "columbinaLunarDomain",
@@ -110,15 +53,16 @@
           "damageBonus": {
             "expression": {
               "type": "talentParameter",
-              "characterKey": "columbina",
               "talent": "combat3",
               "parameter": "lunarBonus",
-              "levelInput": "columbinaBurstTalentLevel"
+              "levelInput": "local:columbinaBurstTalentLevel"
             },
             "unit": "ratio"
           }
         }
-      ]
+      ],
+      "recipient": "party",
+      "statChanges": []
     },
     {
       "id": "columbinaMoonlightLent",
@@ -150,7 +94,7 @@
                   "operands": [
                     {
                       "type": "input",
-                      "input": "columbinaMaxHp"
+                      "input": "source:maxHp"
                     },
                     {
                       "type": "constant",
@@ -162,7 +106,9 @@
             }
           }
         }
-      ]
+      ],
+      "recipient": "party",
+      "statChanges": []
     },
     {
       "id": "columbinaMoonridgeDew",
@@ -177,7 +123,9 @@
       "requiresEffects": [
         "columbinaLunarDomain"
       ],
-      "impact": "Resource / rotation only."
+      "impact": "Resource / rotation only.",
+      "recipient": "party",
+      "statChanges": []
     },
     {
       "id": "columbinaC1",
@@ -190,7 +138,7 @@
         "event": "buffActive"
       },
       "ownershipRequirements": {
-        "columbinaConstellation": 1
+        "local:columbinaConstellation": 1
       },
       "formulaModifiers": [
         {
@@ -206,7 +154,9 @@
             }
           }
         }
-      ]
+      ],
+      "recipient": "party",
+      "statChanges": []
     },
     {
       "id": "columbinaC2",
@@ -219,35 +169,36 @@
         "event": "buffActive"
       },
       "ownershipRequirements": {
-        "columbinaConstellation": 2
+        "local:columbinaConstellation": 2
       },
       "statChanges": [
         {
-          "stat": "columbinaMaxHp",
+          "stat": "recipient:maxHp",
           "operation": "flatAdd",
           "value": {
             "type": "multiply",
             "operands": [
               {
                 "type": "input",
-                "input": "columbinaBaseHp"
+                "input": "source:baseHp"
               },
               {
                 "type": "constant",
                 "value": 0.4
               }
             ]
-          }
+          },
+          "recipient": "self"
         },
         {
-          "stat": "elementalMastery",
+          "stat": "recipient:elementalMastery",
           "operation": "flatAdd",
           "value": {
             "type": "multiply",
             "operands": [
               {
                 "type": "input",
-                "input": "columbinaMaxHp"
+                "input": "source:maxHp"
               },
               {
                 "type": "constant",
@@ -262,7 +213,8 @@
               "input": "moonsignLevel",
               "value": 2
             }
-          ]
+          ],
+          "recipient": "activeCharacter"
         }
       ],
       "formulaModifiers": [
@@ -279,7 +231,8 @@
             }
           }
         }
-      ]
+      ],
+      "recipient": "party"
     },
     {
       "id": "columbinaC3",
@@ -292,7 +245,7 @@
         "event": "buffActive"
       },
       "ownershipRequirements": {
-        "columbinaConstellation": 3
+        "local:columbinaConstellation": 3
       },
       "formulaModifiers": [
         {
@@ -308,7 +261,9 @@
             }
           }
         }
-      ]
+      ],
+      "recipient": "party",
+      "statChanges": []
     },
     {
       "id": "columbinaC4",
@@ -321,7 +276,7 @@
         "event": "buffActive"
       },
       "ownershipRequirements": {
-        "columbinaConstellation": 4
+        "local:columbinaConstellation": 4
       },
       "formulaModifiers": [
         {
@@ -337,7 +292,9 @@
             }
           }
         }
-      ]
+      ],
+      "recipient": "party",
+      "statChanges": []
     },
     {
       "id": "columbinaC5",
@@ -350,17 +307,18 @@
         "event": "buffActive"
       },
       "ownershipRequirements": {
-        "columbinaConstellation": 5
+        "local:columbinaConstellation": 5
       },
       "statChanges": [
         {
-          "stat": "columbinaBurstTalentLevel",
+          "stat": "recipient:burstTalentLevel",
           "operation": "flatAdd",
           "value": {
             "type": "constant",
             "value": 3
           },
-          "maximum": 15
+          "maximum": 15,
+          "recipient": "self"
         }
       ],
       "formulaModifiers": [
@@ -377,7 +335,8 @@
             }
           }
         }
-      ]
+      ],
+      "recipient": "party"
     },
     {
       "id": "columbinaC6",
@@ -390,7 +349,7 @@
         "event": "buffActive"
       },
       "ownershipRequirements": {
-        "columbinaConstellation": 6
+        "local:columbinaConstellation": 6
       },
       "formulaModifiers": [
         {
@@ -425,7 +384,9 @@
             }
           }
         }
-      ]
+      ],
+      "recipient": "party",
+      "statChanges": []
     }
   ],
   "notes": [
@@ -436,5 +397,15 @@
     "https://keqingmains.com/q/columbina-quickguide/",
     "https://genshin-impact.fandom.com/wiki/Moonlit_Melancholy",
     "https://keqingmains.com/misc/lunar-reactions/"
-  ]
+  ],
+  "characterKey": "columbina",
+  "talents": [],
+  "defaultTeam": [
+    "columbina"
+  ],
+  "inputDefaults": {
+    "maxHp": 35000,
+    "baseHp": 14695,
+    "burstTalentLevel": 10
+  }
 }

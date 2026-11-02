@@ -1,66 +1,658 @@
 {
-  "schemaVersion":2,"key":"escoffier","characterKey":"escoffier","name":"Escoffier","element":"Cryo","weaponType":"Polearm",
-  "characterDataResource":"data/characters/data/escoffier.json","defaultTeam":["escoffier","skirk","furina","citlali"],
-  "statBindings":{"attack":"attack","elementalMastery":"elementalMastery","energyRecharge":"energyRecharge","physicalDamageBonus":"physicalDamageBonus"},
-  "inputs":[
-    {"id":"characterLevel","label":"Character level","defaultValue":90,"min":1,"max":90,"step":1,"initialValueSource":{"valueKey":"level"}},
-    {"id":"enemyLevel","label":"Enemy level","defaultValue":90,"min":1,"max":120,"step":1,"section":"enemy"},
-    {"id":"maxHp","label":"Max HP","defaultValue":15000,"min":0,"max":200000,"step":1,"initialValueSource":{"valueKey":"totalHp"}},
-    {"id":"attack","label":"Total ATK","defaultValue":1800,"min":0,"max":20000,"step":1,"initialValueSource":{"valueKey":"totalAttack"}},
-    {"id":"defense","label":"Total DEF","defaultValue":800,"min":0,"max":20000,"step":1,"initialValueSource":{"valueKey":"totalDefense"}},
-    {"id":"elementalMastery","label":"Elemental Mastery","defaultValue":0,"min":0,"max":5000,"step":1,"initialValueSource":{"valueKey":"stat:eleMas"}},
-    {"id":"elementalDamageBonus","label":"Cryo DMG Bonus","defaultValue":0,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:cryo_dmg_"}},
-    {"id":"physicalDamageBonus","label":"Physical DMG Bonus","defaultValue":0,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:physical_dmg_"}},
-    {"id":"energyRecharge","label":"Energy Recharge","defaultValue":100,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:enerRech_"}},
-    {"id":"critRate","label":"CRIT Rate","defaultValue":5,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:critRate_"}},
-    {"id":"critDamage","label":"CRIT DMG","defaultValue":50,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:critDMG_"}},
-    {"id":"escoffierConstellation","label":"Escoffier constellation","defaultValue":0,"min":0,"max":6,"step":1,"initialValueSource":{"valueKey":"constellation"},"section":"constellations"},
-    {"id":"normalTalentLevel","label":"Normal Attack level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"normalTalent"}},
-    {"id":"skillTalentLevel","label":"Elemental Skill level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"skillTalent"}},
-    {"id":"burstTalentLevel","label":"Elemental Burst level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"burstTalent"}},
-    {"id":"enemyResistance","label":"Enemy Cryo RES","defaultValue":10,"min":-100,"max":150,"step":0.1,"unit":"percentPoints","section":"enemy"},
-    {"id":"enemyPhysicalResistance","label":"Enemy Physical RES","defaultValue":10,"min":-100,"max":150,"step":0.1,"unit":"percentPoints","section":"enemy"},
-    {"id":"defenseReduction","label":"DEF reduction","defaultValue":0,"min":0,"max":100,"step":0.1,"unit":"percentPoints","section":"enemy"},
-    {"id":"defenseIgnore","label":"DEF ignored","defaultValue":0,"min":0,"max":100,"step":0.1,"unit":"percentPoints","section":"enemy"}
+  "schemaVersion": 3,
+  "key": "escoffier",
+  "characterKey": "escoffier",
+  "name": "Escoffier",
+  "element": "Cryo",
+  "weaponType": "Polearm",
+  "characterDataResource": "data/characters/data/escoffier.json",
+  "defaultTeam": [
+    "escoffier",
+    "skirk",
+    "furina",
+    "citlali"
   ],
-  "damageTypes":[
-    {"id":"directCryo","element":"Cryo"},
-    {"id":"directPhysical","element":"Physical","appliesElementalDamageBonus":false,"resistanceInput":"enemyPhysicalResistance","innateDamageBonus":{"unit":"percentPoints","expression":{"type":"input","input":"physicalDamageBonus"}}}
+  "statBindings": {
+    "constellation": "escoffierConstellation"
+  },
+  "inputs": [],
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Kitchen Skills",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "1-Hit DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-2",
+          "label": "2-Hit DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-3",
+          "label": "3-Hit DMG (2 strikes)",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack",
+            "multiHit"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat1",
+                    "parameter": "param3",
+                    "levelInput": "local:normalTalentLevel"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat1",
+                    "parameter": "param4",
+                    "levelInput": "local:normalTalentLevel"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "charged",
+          "label": "Charged Attack DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "chargedAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "plunge",
+          "label": "Plunge DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "low-plunge",
+          "label": "Low Plunge DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param8",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "high-plunge",
+          "label": "High Plunge DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Low-Temperature Cooking",
+      "formulas": [
+        {
+          "id": "skill-hit",
+          "label": "Skill DMG",
+          "damageType": "directCryo",
+          "tags": [
+            "elementalSkill"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "frosty-parfait",
+          "label": "Frosty Parfait DMG",
+          "damageType": "directCryo",
+          "tags": [
+            "elementalSkill",
+            "frostyParfait"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param2",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "surging-blade",
+          "label": "Surging Blade DMG",
+          "damageType": "directCryo",
+          "tags": [
+            "elementalSkill",
+            "surgingBlade"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "c6-special-parfait",
+          "label": "C6 Special Frosty Parfait DMG",
+          "damageType": "directCryo",
+          "tags": [
+            "elementalSkill",
+            "frostyParfait",
+            "constellationDamage"
+          ],
+          "requiredEffects": [
+            "escoffierC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 5
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Scoring Cuts",
+      "formulas": [
+        {
+          "id": "burst-hit",
+          "label": "Skill DMG",
+          "damageType": "directCryo",
+          "tags": [
+            "elementalBurst"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "local:burstTalentLevel"
+              }
+            ]
+          }
+        }
+      ]
+    }
   ],
-  "talents":[
-    {"key":"normal","name":"Kitchen Skills","formulas":[
-      {"id":"normal-1","label":"1-Hit DMG","damageType":"directPhysical","tags":["normalAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param1","levelInput":"normalTalentLevel"}]}},
-      {"id":"normal-2","label":"2-Hit DMG","damageType":"directPhysical","tags":["normalAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param2","levelInput":"normalTalentLevel"}]}},
-      {"id":"normal-3","label":"3-Hit DMG (2 strikes)","damageType":"directPhysical","tags":["normalAttack","multiHit"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"add","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param3","levelInput":"normalTalentLevel"},{"type":"talentParameter","talent":"combat1","parameter":"param4","levelInput":"normalTalentLevel"}]}]}},
-      {"id":"charged","label":"Charged Attack DMG","damageType":"directPhysical","tags":["chargedAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param5","levelInput":"normalTalentLevel"}]}},
-      {"id":"plunge","label":"Plunge DMG","damageType":"directPhysical","tags":["plungingAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param7","levelInput":"normalTalentLevel"}]}},
-      {"id":"low-plunge","label":"Low Plunge DMG","damageType":"directPhysical","tags":["plungingAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param8","levelInput":"normalTalentLevel"}]}},
-      {"id":"high-plunge","label":"High Plunge DMG","damageType":"directPhysical","tags":["plungingAttack"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param9","levelInput":"normalTalentLevel"}]}}
-    ]},
-    {"key":"skill","name":"Low-Temperature Cooking","formulas":[
-      {"id":"skill-hit","label":"Skill DMG","damageType":"directCryo","tags":["elementalSkill"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param1","levelInput":"skillTalentLevel"}]}},
-      {"id":"frosty-parfait","label":"Frosty Parfait DMG","damageType":"directCryo","tags":["elementalSkill","frostyParfait"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param2","levelInput":"skillTalentLevel"}]}},
-      {"id":"surging-blade","label":"Surging Blade DMG","damageType":"directCryo","tags":["elementalSkill","surgingBlade"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param4","levelInput":"skillTalentLevel"}]}},
-      {"id":"c6-special-parfait","label":"C6 Special Frosty Parfait DMG","damageType":"directCryo","tags":["elementalSkill","frostyParfait","constellationDamage"],"requiredEffects":["escoffierC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"constant","value":5}]}}
-    ]},
-    {"key":"burst","name":"Scoring Cuts","formulas":[
-      {"id":"burst-hit","label":"Skill DMG","damageType":"directCryo","tags":["elementalBurst"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat3","parameter":"param1","levelInput":"burstTalentLevel"}]}}
-    ]}
+  "effects": [
+    {
+      "id": "betterToSalivate",
+      "name": "Better to Salivate Than Medicate",
+      "source": "Escoffier · Passive",
+      "category": "passive",
+      "description": "After Burst, applies Rehab Diet healing over time.",
+      "impact": "Healing only; no outgoing damage modifier.",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "burstUsed"
+      },
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "inspirationSeasoning",
+      "name": "Inspiration-Immersed Seasoning",
+      "source": "Escoffier · Passive",
+      "category": "passive",
+      "description": "After Skill or Burst hits, reduces enemy Hydro and Cryo RES by 5%/10%/15%/55% when the party contains 1/2/3/4 Hydro or Cryo characters.",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "skillOrBurstHit"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "elements": [
+              "Hydro",
+              "Cryo"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "contextAtLeast",
+              "input": "hydroCryoCount",
+              "value": 1
+            }
+          ],
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 5
+              }
+            }
+          },
+          "recipient": "enemy"
+        },
+        {
+          "targets": {
+            "elements": [
+              "Hydro",
+              "Cryo"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "contextAtLeast",
+              "input": "hydroCryoCount",
+              "value": 2
+            }
+          ],
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 5
+              }
+            }
+          },
+          "recipient": "enemy"
+        },
+        {
+          "targets": {
+            "elements": [
+              "Hydro",
+              "Cryo"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "contextAtLeast",
+              "input": "hydroCryoCount",
+              "value": 3
+            }
+          ],
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 5
+              }
+            }
+          },
+          "recipient": "enemy"
+        },
+        {
+          "targets": {
+            "elements": [
+              "Hydro",
+              "Cryo"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "contextAtLeast",
+              "input": "hydroCryoCount",
+              "value": 4
+            }
+          ],
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "constant",
+                "value": 40
+              }
+            }
+          },
+          "recipient": "enemy"
+        }
+      ],
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "constantCookery",
+      "name": "Constant Off-the-Cuff Cookery",
+      "source": "Escoffier · Passive",
+      "category": "passive",
+      "description": "Cooking passive with no combat effect.",
+      "impact": "No calculator modifier.",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "always"
+      },
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "escoffierC1",
+      "name": "C1 · Pre-Dinner Dance for Your Taste Buds",
+      "source": "Escoffier · Constellation",
+      "category": "constellation",
+      "description": "With four Hydro/Cryo party members, Skill or Burst grants 60% Cryo CRIT DMG for 15 seconds.",
+      "ownershipRequirements": {
+        "local:escoffierConstellation": 1
+      },
+      "requiresEffects": [
+        "inspirationSeasoning"
+      ],
+      "activation": {
+        "event": "skillOrBurstUsed",
+        "conditions": [
+          {
+            "type": "contextAtLeast",
+            "input": "hydroCryoCount",
+            "value": 4
+          }
+        ]
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "elements": [
+              "Cryo"
+            ]
+          },
+          "crit": {
+            "additionalDamage": {
+              "expression": {
+                "type": "constant",
+                "value": 60
+              }
+            }
+          },
+          "recipient": "party"
+        }
+      ],
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "escoffierC2",
+      "name": "C2 · Fresh, Fragrant Stew Is an Art",
+      "source": "Escoffier · Constellation",
+      "category": "constellation",
+      "description": "Grants five Cold Dish stacks; another active character's Cryo hit gains Base DMG equal to 240% of Escoffier's ATK.",
+      "ownershipRequirements": {
+        "local:escoffierConstellation": 2
+      },
+      "activation": {
+        "event": "coldDishConsumed"
+      },
+      "recipient": "self",
+      "statChanges": [],
+      "formulaModifiers": [
+        {
+          "targets": {
+            "elements": [
+              "Cryo"
+            ],
+            "anyTags": [
+              "normalAttack",
+              "chargedAttack",
+              "plungingAttack",
+              "elementalSkill",
+              "elementalBurst"
+            ]
+          },
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 2.4
+              }
+            ]
+          },
+          "recipient": "activeCharacter",
+          "excludeSource": true
+        }
+      ]
+    },
+    {
+      "id": "escoffierC3",
+      "name": "C3 · The Bakery Magic of Caramel Browning",
+      "source": "Escoffier · Constellation",
+      "category": "constellation",
+      "description": "Increases Low-Temperature Cooking's talent level by 3.",
+      "ownershipRequirements": {
+        "local:escoffierConstellation": 3
+      },
+      "activation": {
+        "event": "always"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15,
+          "recipient": "self"
+        }
+      ],
+      "recipient": "self"
+    },
+    {
+      "id": "escoffierC4",
+      "name": "C4 · Secret Rosemary Recipe",
+      "source": "Escoffier · Constellation",
+      "category": "constellation",
+      "description": "Extends Rehab Diet and restores Energy when its healing triggers.",
+      "impact": "Healing and rotation utility only.",
+      "ownershipRequirements": {
+        "local:escoffierConstellation": 4
+      },
+      "activation": {
+        "event": "rehabDietActive"
+      },
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "escoffierC5",
+      "name": "C5 · Symphony of a Thousand Sauces",
+      "source": "Escoffier · Constellation",
+      "category": "constellation",
+      "description": "Increases Scoring Cuts' talent level by 3.",
+      "ownershipRequirements": {
+        "local:escoffierConstellation": 5
+      },
+      "activation": {
+        "event": "always"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15,
+          "recipient": "self"
+        }
+      ],
+      "recipient": "self"
+    },
+    {
+      "id": "escoffierC6",
+      "name": "C6 · Tea Parties Bursting With Color",
+      "source": "Escoffier · Constellation",
+      "category": "constellation",
+      "description": "Normal, Charged, or Plunging hits can make the Cooking Mek fire a special Frosty Parfait for 500% ATK Cryo Skill DMG, up to six times per Cold Storage use.",
+      "ownershipRequirements": {
+        "local:escoffierConstellation": 6
+      },
+      "activation": {
+        "event": "normalChargedOrPlungeHit"
+      },
+      "recipient": "self",
+      "statChanges": []
+    }
   ],
-  "effects":[
-    {"id":"betterToSalivate","name":"Better to Salivate Than Medicate","source":"Escoffier · Passive","category":"passive","description":"After Burst, applies Rehab Diet healing over time.","impact":"Healing only; no outgoing damage modifier.","defaultEnabled":true,"activation":{"event":"burstUsed"}},
-    {"id":"inspirationSeasoning","name":"Inspiration-Immersed Seasoning","source":"Escoffier · Passive","category":"passive","description":"After Skill or Burst hits, reduces enemy Hydro and Cryo RES by 5%/10%/15%/55% when the party contains 1/2/3/4 Hydro or Cryo characters.","defaultEnabled":true,"activation":{"event":"skillOrBurstHit"},"formulaModifiers":[
-      {"targets":{"elements":["Hydro","Cryo"]},"conditions":[{"type":"contextAtLeast","input":"hydroCryoCount","value":1}],"resistanceMitigation":{"reduction":{"expression":{"type":"constant","value":5}}}},
-      {"targets":{"elements":["Hydro","Cryo"]},"conditions":[{"type":"contextAtLeast","input":"hydroCryoCount","value":2}],"resistanceMitigation":{"reduction":{"expression":{"type":"constant","value":5}}}},
-      {"targets":{"elements":["Hydro","Cryo"]},"conditions":[{"type":"contextAtLeast","input":"hydroCryoCount","value":3}],"resistanceMitigation":{"reduction":{"expression":{"type":"constant","value":5}}}},
-      {"targets":{"elements":["Hydro","Cryo"]},"conditions":[{"type":"contextAtLeast","input":"hydroCryoCount","value":4}],"resistanceMitigation":{"reduction":{"expression":{"type":"constant","value":40}}}}
-    ]},
-    {"id":"constantCookery","name":"Constant Off-the-Cuff Cookery","source":"Escoffier · Passive","category":"passive","description":"Cooking passive with no combat effect.","impact":"No calculator modifier.","defaultEnabled":true,"activation":{"event":"always"}},
-    {"id":"escoffierC1","name":"C1 · Pre-Dinner Dance for Your Taste Buds","source":"Escoffier · Constellation","category":"constellation","description":"With four Hydro/Cryo party members, Skill or Burst grants 60% Cryo CRIT DMG for 15 seconds.","ownershipRequirements":{"escoffierConstellation":1},"requiresEffects":["inspirationSeasoning"],"activation":{"event":"skillOrBurstUsed","conditions":[{"type":"contextAtLeast","input":"hydroCryoCount","value":4}]},"formulaModifiers":[{"targets":{"elements":["Cryo"]},"crit":{"additionalDamage":{"expression":{"type":"constant","value":60}}}}]},
-    {"id":"escoffierC2","name":"C2 · Fresh, Fragrant Stew Is an Art","source":"Escoffier · Constellation","category":"constellation","description":"Grants five Cold Dish stacks; another active character's Cryo hit gains Base DMG equal to 240% of Escoffier's ATK.","impact":"Does not affect Escoffier herself; applied by her teammate profile.","ownershipRequirements":{"escoffierConstellation":2},"activation":{"event":"coldDishConsumed"}},
-    {"id":"escoffierC3","name":"C3 · The Bakery Magic of Caramel Browning","source":"Escoffier · Constellation","category":"constellation","description":"Increases Low-Temperature Cooking's talent level by 3.","ownershipRequirements":{"escoffierConstellation":3},"activation":{"event":"always"},"statChanges":[{"stat":"skillTalentLevel","operation":"flatAdd","value":{"type":"constant","value":3},"maximum":15}]},
-    {"id":"escoffierC4","name":"C4 · Secret Rosemary Recipe","source":"Escoffier · Constellation","category":"constellation","description":"Extends Rehab Diet and restores Energy when its healing triggers.","impact":"Healing and rotation utility only.","ownershipRequirements":{"escoffierConstellation":4},"activation":{"event":"rehabDietActive"}},
-    {"id":"escoffierC5","name":"C5 · Symphony of a Thousand Sauces","source":"Escoffier · Constellation","category":"constellation","description":"Increases Scoring Cuts' talent level by 3.","ownershipRequirements":{"escoffierConstellation":5},"activation":{"event":"always"},"statChanges":[{"stat":"burstTalentLevel","operation":"flatAdd","value":{"type":"constant","value":3},"maximum":15}]},
-    {"id":"escoffierC6","name":"C6 · Tea Parties Bursting With Color","source":"Escoffier · Constellation","category":"constellation","description":"Normal, Charged, or Plunging hits can make the Cooking Mek fire a special Frosty Parfait for 500% ATK Cryo Skill DMG, up to six times per Cold Storage use.","ownershipRequirements":{"escoffierConstellation":6},"activation":{"event":"normalChargedOrPlungeHit"}}
-  ]
+  "notes": [],
+  "sources": [
+    "data/characters/data/escoffier.json",
+    "https://keqingmains.com/q/escoffier-quickguide/"
+  ],
+  "inputDefaults": {
+    "maxHp": 15000,
+    "attack": 1800,
+    "defense": 800,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  }
 }

@@ -46,6 +46,28 @@ genshin.content.material-identity-catalog-url=https://raw.githubusercontent.com/
 
 ## Web mode
 
+### UI development without restarting
+
+Start once from the repository root with the UI development flag:
+
+```powershell
+.\gradlew.bat bootRun -PuiDev
+# Or, for desktop mode:
+.\gradlew.bat desktopRun -PuiDev
+```
+
+Save changes to `src/main/resources/templates/` or `src/main/resources/static/`,
+then refresh the browser. Templates, CSS, JavaScript, and static images are read
+directly from source with caching disabled: no rebuild or application restart is
+needed. If an older session cached an asset, hard-refresh once (Ctrl+F5).
+This does not automatically refresh the browser.
+
+For an IntelliJ application run configuration, add `ui-dev` to its active Spring
+profiles (alongside `desktop` if applicable) and set the working directory to the
+repository root. Restart the existing application once to enable the profile.
+Kotlin/Java code and application configuration changes still need a rebuild/restart.
+Normal runs and packaged releases retain their existing resource settings.
+
 Character detail pages are imported once per character, with completion saved in the database.
 Before calculating a material plan, missing cost details are fetched for the included
 characters (including the selected Traveler element), with at most four imports in parallel.

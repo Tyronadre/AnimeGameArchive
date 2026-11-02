@@ -15,6 +15,45 @@ const initializeCharacterCatalog = () => {
     const rarityButtons = Array.from(catalog.querySelectorAll("[data-rarity-filter]"));
     if (!form || !search || !clearSearch || !resetFilters || !resultCount || !emptyState) return;
 
+    // Keep the original footprint so docking never changes the scroll threshold.
+    const filterSlot = document.createElement("div");
+    filterSlot.style.display = "flow-root";
+    form.before(filterSlot);
+    filterSlot.append(form);
+    const desktopFilters = window.matchMedia("(min-width: 2080px)");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let docked = false;
+    let dockAnimation;
+    const updateDock = () => {
+        const slot = filterSlot.getBoundingClientRect();
+        const shouldDock = desktopFilters.matches && slot.top < (docked ? 96 : 80);
+        if (shouldDock === docked) return;
+        const before = form.getBoundingClientRect();
+        dockAnimation?.cancel();
+        if (shouldDock) filterSlot.style.height = `${filterSlot.offsetHeight}px`;
+        docked = shouldDock;
+        catalog.classList.toggle("has-docked-filters", docked);
+        if (!docked) filterSlot.style.height = "";
+        const after = form.getBoundingClientRect();
+        if (!reducedMotion.matches && form.animate) {
+            dockAnimation = form.animate([
+                {transform: `translate(${before.left - after.left}px, ${before.top - after.top}px) scale(${before.width / after.width}, ${before.height / after.height})`},
+                {transform: "none"},
+            ], {duration: 420, easing: "cubic-bezier(0.22, 1, 0.36, 1)"});
+        }
+    };
+    let dockFrame;
+    const scheduleDock = () => {
+        if (dockFrame) return;
+        dockFrame = requestAnimationFrame(() => {
+            dockFrame = null;
+            updateDock();
+        });
+    };
+    window.addEventListener("scroll", scheduleDock, {passive: true});
+    window.addEventListener("resize", scheduleDock);
+    scheduleDock();
+
     const storageKey = "genshinapp.characterCatalog.filters";
     const allowedValues = (buttons, dataKey) =>
         new Set(buttons.map((button) => button.dataset[dataKey]));

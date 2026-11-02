@@ -1,38 +1,15 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "weaponType": "Catalyst",
   "key": "nahida",
   "name": "Nahida",
   "element": "Dendro",
   "characterDataResource": "data/characters/data/nahida.json",
   "statBindings": {
-    "elementalMastery": "nahidaElementalMastery"
+    "elementalMastery": "nahidaElementalMastery",
+    "constellation": "nahidaConstellation"
   },
   "inputs": [
-    {
-      "id": "nahidaConstellation",
-      "label": "Nahida constellation",
-      "defaultValue": 0,
-      "min": 0,
-      "max": 6,
-      "step": 1,
-      "initialValueSource": {
-        "valueKey": "constellation"
-      },
-      "section": "constellations"
-    },
-    {
-      "id": "nahidaElementalMastery",
-      "label": "Nahida EM",
-      "defaultValue": 1000,
-      "min": 0,
-      "max": 3000,
-      "step": 1,
-      "initialValueSource": {
-        "valueKey": "stat:eleMas"
-      },
-      "hintTag": "elementalMastery"
-    },
     {
       "id": "nahidaMarkedOpponents",
       "label": "Nahida marked opponents",
@@ -65,7 +42,7 @@
       },
       "statChanges": [
         {
-          "stat": "elementalMastery",
+          "stat": "recipient:elementalMastery",
           "operation": "flatAdd",
           "value": {
             "type": "min",
@@ -89,9 +66,11 @@
               }
             ]
           },
-          "phase": 10
+          "phase": 10,
+          "recipient": "activeCharacter"
         }
-      ]
+      ],
+      "recipient": "party"
     },
     {
       "id": "nahidaNewMoonsEmbrace",
@@ -130,7 +109,7 @@
                   "operands": [
                     {
                       "type": "input",
-                      "input": "nahidaElementalMastery"
+                      "input": "source:elementalMastery"
                     },
                     {
                       "type": "constant",
@@ -142,7 +121,9 @@
             }
           }
         }
-      ]
+      ],
+      "recipient": "party",
+      "statChanges": []
     },
     {
       "id": "nahidaC1",
@@ -155,9 +136,11 @@
         "event": "buffActive"
       },
       "ownershipRequirements": {
-        "nahidaConstellation": 1
+        "local:nahidaConstellation": 1
       },
-      "impact": "Nahida's Burst effects / duration only."
+      "impact": "Nahida's Burst effects / duration only.",
+      "recipient": "party",
+      "statChanges": []
     },
     {
       "id": "nahidaC2",
@@ -171,13 +154,13 @@
         "conditions": [
           {
             "type": "inputAtLeast",
-            "input": "nahidaMarkedOpponents",
+            "input": "local:nahidaMarkedOpponents",
             "value": 1
           }
         ]
       },
       "ownershipRequirements": {
-        "nahidaConstellation": 2
+        "local:nahidaConstellation": 2
       },
       "formulaModifiers": [
         {
@@ -206,7 +189,7 @@
           "conditions": [
             {
               "type": "inputAtLeast",
-              "input": "nahidaQuickenActive",
+              "input": "local:nahidaQuickenActive",
               "value": 1
             }
           ],
@@ -217,9 +200,12 @@
                 "value": 30
               }
             }
-          }
+          },
+          "recipient": "enemy"
         }
-      ]
+      ],
+      "recipient": "party",
+      "statChanges": []
     },
     {
       "id": "nahidaC3",
@@ -232,9 +218,11 @@
         "event": "buffActive"
       },
       "ownershipRequirements": {
-        "nahidaConstellation": 3
+        "local:nahidaConstellation": 3
       },
-      "impact": "Personal damage only."
+      "impact": "Personal damage only.",
+      "recipient": "party",
+      "statChanges": []
     },
     {
       "id": "nahidaC4",
@@ -248,17 +236,17 @@
         "conditions": [
           {
             "type": "inputAtLeast",
-            "input": "nahidaMarkedOpponents",
+            "input": "local:nahidaMarkedOpponents",
             "value": 1
           }
         ]
       },
       "ownershipRequirements": {
-        "nahidaConstellation": 4
+        "local:nahidaConstellation": 4
       },
       "statChanges": [
         {
-          "stat": "nahidaElementalMastery",
+          "stat": "recipient:elementalMastery",
           "operation": "flatAdd",
           "value": {
             "type": "add",
@@ -283,16 +271,18 @@
                       },
                       {
                         "type": "input",
-                        "input": "nahidaMarkedOpponents"
+                        "input": "local:nahidaMarkedOpponents"
                       }
                     ]
                   }
                 ]
               }
             ]
-          }
+          },
+          "recipient": "self"
         }
-      ]
+      ],
+      "recipient": "party"
     },
     {
       "id": "nahidaC5",
@@ -305,9 +295,11 @@
         "event": "buffActive"
       },
       "ownershipRequirements": {
-        "nahidaConstellation": 5
+        "local:nahidaConstellation": 5
       },
-      "impact": "Nahida's Burst effects / duration only."
+      "impact": "Nahida's Burst effects / duration only.",
+      "recipient": "party",
+      "statChanges": []
     },
     {
       "id": "nahidaC6",
@@ -320,9 +312,11 @@
         "event": "buffActive"
       },
       "ownershipRequirements": {
-        "nahidaConstellation": 6
+        "local:nahidaConstellation": 6
       },
-      "impact": "Personal damage only."
+      "impact": "Personal damage only.",
+      "recipient": "party",
+      "statChanges": []
     }
   ],
   "notes": [
@@ -333,5 +327,13 @@
     "data/characters/data/nahida.json",
     "https://genshin-impact.fandom.com/wiki/Nahida",
     "https://keqingmains.com/misc/lunar-reactions/"
-  ]
+  ],
+  "characterKey": "nahida",
+  "talents": [],
+  "defaultTeam": [
+    "nahida"
+  ],
+  "inputDefaults": {
+    "elementalMastery": 1000
+  }
 }

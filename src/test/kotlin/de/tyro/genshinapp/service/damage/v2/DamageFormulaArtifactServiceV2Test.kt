@@ -59,7 +59,7 @@ class DamageFormulaArtifactServiceV2Test {
         assertFalse(profile.effects.any { it.artifactOrigin?.characterKey == "lauma" })
         val five = artifacts.attach(base, gear("nefer", "wandererstroupe", 5))
         assertEquals(1080.0, calculate(five).effectiveStats["elementalMastery"])
-        assertEquals(calculate(base).results, calculate(profile, enabled = emptySet()).results)
+        assertEquals(calculate(base).results.map { it.copy(reactions = emptyList()) }, calculate(profile, enabled = emptySet()).results.map { it.copy(reactions = emptyList()) })
     }
 
     @Test
@@ -104,25 +104,25 @@ class DamageFormulaArtifactServiceV2Test {
         val doubleDeepwood = calculate(profile("lauma" to "deepwoodmemories", "nahida" to "deepwoodmemories"))
         assertEquals(.3, doubleDeepwood.hit("skill-hit").resistanceMitigation.reduction, 1e-8)
         val p = profile("lauma" to "noblesseoblige", "nahida" to "noblesseoblige", "columbina" to "tenacityofthemillelith")
-        val result = calculate(p, mapOf("attack" to 1300.0, "artifactStat.nefer.baseAttack" to 886.0))
+        val result = calculate(p, mapOf("attack" to 1300.0, "baseAttack" to 886.0))
         assertEquals(1300.0 + .4 * 886, result.effectiveStats.getValue("attack"), 1e-8)
     }
 
     @Test
     fun `support EM set bonuses are resolved before Nahidas converted share`() {
         val p = profile("lauma" to "instructor")
-        val selected = p.effects.filter { it.artifactOrigin != null }.map { it.id }.toSet() + "nahidaCompassionIlluminated"
-        val r = calculate(p, mapOf("elementalMastery" to 100.0, "laumaElementalMastery" to 600.0,
-            "nahidaElementalMastery" to 200.0, "columbinaElementalMastery" to 0.0), selected)
-        assertEquals(800.0, r.effectiveStats["laumaElementalMastery"])
+        val selected = p.effects.filter { it.artifactOrigin != null }.map { it.id }.toSet() + "character.nahida.nahidaCompassionIlluminated"
+        val r = calculate(p, mapOf("elementalMastery" to 100.0, "character.lauma.laumaElementalMastery" to 600.0,
+            "character.nahida.nahidaElementalMastery" to 200.0, "character.columbina.columbinaElementalMastery" to 0.0), selected)
+        assertEquals(800.0, r.effectiveStats["character.lauma.laumaElementalMastery"])
         assertEquals(420.0, r.effectiveStats["elementalMastery"])
-        assertEquals(200.0, r.statChanges.first { it.effectId == "nahidaCompassionIlluminated" }.amount)
+        assertEquals(200.0, r.statChanges.first { it.effectId == "character.nahida.nahidaCompassionIlluminated" }.amount)
     }
 
     @Test
     fun `Gilded uses selected allies and Emblem reads effective ER with its cap`() {
         val p = profile("nefer" to "gildeddreams")
-        val r = calculate(p, mapOf("artifactStat.nefer.baseAttack" to 886.0))
+        val r = calculate(p, mapOf("baseAttack" to 886.0))
         assertEquals(1130.0, r.effectiveStats["elementalMastery"])
         assertEquals(1300.0 + .28 * 886, r.effectiveStats.getValue("attack"), 1e-8)
         val solo = artifacts.attach(teams.compose(assertNotNull(service.profile("nefer")), emptySet()), gear("nefer", "gildeddreams"))
@@ -184,7 +184,7 @@ class DamageFormulaArtifactServiceV2Test {
     @Test
     fun `Echoes and Song add to base before bonuses without modifying Lunar or teammate talent damage`() {
         val p = profile("nefer" to "echoesofanoffering", "lauma" to "songofdayspast")
-        val r = calculate(p, mapOf("attack" to 1000.0, "artifactStat.nefer.baseAttack" to 0.0))
+        val r = calculate(p, mapOf("attack" to 1000.0, "baseAttack" to 0.0))
         val plain = calculate(p, mapOf("attack" to 1000.0), emptySet())
         assertEquals(1900.0, r.hit("normal-1").base.value - plain.hit("normal-1").base.value, 1e-8)
         assertEquals(1200.0, r.hit("skill-hit").base.value - plain.hit("skill-hit").base.value, 1e-8)

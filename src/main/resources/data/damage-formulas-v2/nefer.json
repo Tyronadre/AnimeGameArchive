@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "weaponType": "Catalyst",
   "key": "nefer",
   "characterKey": "nefer",
@@ -8,7 +8,7 @@
   "characterDataResource": "data/characters/data/nefer.json",
   "moonsignContribution": 1,
   "statBindings": {
-    "elementalMastery": "elementalMastery"
+    "constellation": "neferConstellation"
   },
   "defaultTeam": [
     "nefer",
@@ -17,154 +17,6 @@
     "columbina"
   ],
   "inputs": [
-    {
-      "id": "characterLevel",
-      "label": "Character level",
-      "defaultValue": 90,
-      "min": 1,
-      "max": 90,
-      "step": 1,
-      "initialValueSource": {
-        "valueKey": "level"
-      }
-    },
-    {
-      "id": "enemyLevel",
-      "label": "Enemy level",
-      "defaultValue": 90,
-      "min": 1,
-      "max": 120,
-      "step": 1
-    },
-    {
-      "id": "attack",
-      "label": "Total ATK",
-      "defaultValue": 1300,
-      "min": 0,
-      "max": 6000,
-      "step": 1,
-      "initialValueSource": {
-        "valueKey": "totalAttack"
-      }
-    },
-    {
-      "id": "elementalMastery",
-      "label": "Elemental Mastery",
-      "defaultValue": 1000,
-      "min": 0,
-      "max": 3000,
-      "step": 1,
-      "initialValueSource": {
-        "valueKey": "stat:eleMas"
-      }
-    },
-    {
-      "id": "elementalDamageBonus",
-      "label": "Dendro DMG Bonus",
-      "defaultValue": 0,
-      "min": 0,
-      "max": 300,
-      "step": 0.1,
-      "unit": "percentPoints",
-      "initialValueSource": {
-        "valueKey": "stat:dendro_dmg_"
-      }
-    },
-    {
-      "id": "critRate",
-      "label": "CRIT Rate",
-      "defaultValue": 82.3,
-      "min": 0,
-      "max": 100,
-      "step": 0.1,
-      "unit": "percentPoints",
-      "initialValueSource": {
-        "valueKey": "stat:critRate_"
-      }
-    },
-    {
-      "id": "critDamage",
-      "label": "CRIT DMG",
-      "defaultValue": 337.7,
-      "min": 0,
-      "max": 500,
-      "step": 0.1,
-      "unit": "percentPoints",
-      "initialValueSource": {
-        "valueKey": "stat:critDMG_"
-      }
-    },
-    {
-      "id": "neferConstellation",
-      "label": "Nefer constellation",
-      "defaultValue": 0,
-      "min": 0,
-      "max": 6,
-      "step": 1,
-      "initialValueSource": {
-        "valueKey": "constellation"
-      }
-    },
-    {
-      "id": "enemyResistance",
-      "label": "Enemy Dendro RES",
-      "defaultValue": 10,
-      "min": -100,
-      "max": 150,
-      "step": 0.1,
-      "unit": "percentPoints"
-    },
-    {
-      "id": "defenseReduction",
-      "label": "DEF reduction",
-      "defaultValue": 0,
-      "min": 0,
-      "max": 100,
-      "step": 0.1,
-      "unit": "percentPoints"
-    },
-    {
-      "id": "defenseIgnore",
-      "label": "DEF ignored",
-      "defaultValue": 0,
-      "min": 0,
-      "max": 100,
-      "step": 0.1,
-      "unit": "percentPoints"
-    },
-    {
-      "id": "normalTalentLevel",
-      "label": "Normal Attack level",
-      "defaultValue": 10,
-      "min": 1,
-      "max": 15,
-      "step": 1,
-      "initialValueSource": {
-        "valueKey": "normalTalent"
-      }
-    },
-    {
-      "id": "skillTalentLevel",
-      "label": "Elemental Skill level",
-      "defaultValue": 10,
-      "min": 1,
-      "max": 15,
-      "step": 1,
-      "initialValueSource": {
-        "valueKey": "skillTalent"
-      }
-    },
-    {
-      "id": "burstTalentLevel",
-      "label": "Elemental Burst level",
-      "defaultValue": 10,
-      "min": 1,
-      "max": 15,
-      "step": 1,
-      "initialValueSource": {
-        "valueKey": "burstTalent"
-      }
-    },
     {
       "id": "skillActive",
       "label": "Elemental Skill activated",
@@ -180,58 +32,6 @@
       "min": 0,
       "max": 5,
       "step": 1
-    }
-  ],
-  "damageTypes": [
-    {
-      "id": "directDendro",
-      "element": "Dendro",
-      "defenseBehavior": "standard",
-      "appliesElementalDamageBonus": true,
-      "allowsCriticalHits": true,
-      "innateDamageBonus": null
-    },
-    {
-      "id": "lunarBloom",
-      "kind": "lunar",
-      "element": "Dendro",
-      "defenseBehavior": "bypass",
-      "appliesElementalDamageBonus": false,
-      "allowsCriticalHits": true,
-      "innateDamageBonus": {
-        "unit": "ratio",
-        "expression": {
-          "type": "divide",
-          "operands": [
-            {
-              "type": "multiply",
-              "operands": [
-                {
-                  "type": "constant",
-                  "value": 6
-                },
-                {
-                  "type": "input",
-                  "input": "elementalMastery"
-                }
-              ]
-            },
-            {
-              "type": "add",
-              "operands": [
-                {
-                  "type": "input",
-                  "input": "elementalMastery"
-                },
-                {
-                  "type": "constant",
-                  "value": 2000
-                }
-              ]
-            }
-          ]
-        }
-      }
     }
   ],
   "talents": [
@@ -251,13 +51,13 @@
             "operands": [
               {
                 "type": "input",
-                "input": "attack"
+                "input": "source:attack"
               },
               {
                 "type": "talentParameter",
                 "talent": "combat1",
                 "parameter": "param1",
-                "levelInput": "normalTalentLevel"
+                "levelInput": "local:normalTalentLevel"
               }
             ]
           },
@@ -278,13 +78,13 @@
             "operands": [
               {
                 "type": "input",
-                "input": "attack"
+                "input": "source:attack"
               },
               {
                 "type": "talentParameter",
                 "talent": "combat1",
                 "parameter": "param2",
-                "levelInput": "normalTalentLevel"
+                "levelInput": "local:normalTalentLevel"
               }
             ]
           },
@@ -306,13 +106,13 @@
             "operands": [
               {
                 "type": "input",
-                "input": "attack"
+                "input": "source:attack"
               },
               {
                 "type": "talentParameter",
                 "talent": "combat1",
                 "parameter": "param3",
-                "levelInput": "normalTalentLevel"
+                "levelInput": "local:normalTalentLevel"
               },
               {
                 "type": "constant",
@@ -337,13 +137,13 @@
             "operands": [
               {
                 "type": "input",
-                "input": "attack"
+                "input": "source:attack"
               },
               {
                 "type": "talentParameter",
                 "talent": "combat1",
                 "parameter": "param4",
-                "levelInput": "normalTalentLevel"
+                "levelInput": "local:normalTalentLevel"
               }
             ]
           },
@@ -364,13 +164,13 @@
             "operands": [
               {
                 "type": "input",
-                "input": "attack"
+                "input": "source:attack"
               },
               {
                 "type": "talentParameter",
                 "talent": "combat1",
                 "parameter": "param5",
-                "levelInput": "normalTalentLevel"
+                "levelInput": "local:normalTalentLevel"
               }
             ]
           },
@@ -391,13 +191,13 @@
             "operands": [
               {
                 "type": "input",
-                "input": "attack"
+                "input": "source:attack"
               },
               {
                 "type": "talentParameter",
                 "talent": "combat1",
                 "parameter": "param8",
-                "levelInput": "normalTalentLevel"
+                "levelInput": "local:normalTalentLevel"
               }
             ]
           },
@@ -418,13 +218,13 @@
             "operands": [
               {
                 "type": "input",
-                "input": "attack"
+                "input": "source:attack"
               },
               {
                 "type": "talentParameter",
                 "talent": "combat1",
                 "parameter": "param9",
-                "levelInput": "normalTalentLevel"
+                "levelInput": "local:normalTalentLevel"
               }
             ]
           },
@@ -445,13 +245,13 @@
             "operands": [
               {
                 "type": "input",
-                "input": "attack"
+                "input": "source:attack"
               },
               {
                 "type": "talentParameter",
                 "talent": "combat1",
                 "parameter": "param10",
-                "levelInput": "normalTalentLevel"
+                "levelInput": "local:normalTalentLevel"
               }
             ]
           },
@@ -482,13 +282,13 @@
                 "operands": [
                   {
                     "type": "input",
-                    "input": "attack"
+                    "input": "source:attack"
                   },
                   {
                     "type": "talentParameter",
                     "talent": "combat2",
                     "parameter": "param1",
-                    "levelInput": "skillTalentLevel"
+                    "levelInput": "local:skillTalentLevel"
                   }
                 ]
               },
@@ -497,13 +297,13 @@
                 "operands": [
                   {
                     "type": "input",
-                    "input": "elementalMastery"
+                    "input": "source:elementalMastery"
                   },
                   {
                     "type": "talentParameter",
                     "talent": "combat2",
                     "parameter": "param2",
-                    "levelInput": "skillTalentLevel"
+                    "levelInput": "local:skillTalentLevel"
                   }
                 ]
               }
@@ -531,13 +331,13 @@
                 "operands": [
                   {
                     "type": "input",
-                    "input": "attack"
+                    "input": "source:attack"
                   },
                   {
                     "type": "talentParameter",
                     "talent": "combat2",
                     "parameter": "param5",
-                    "levelInput": "skillTalentLevel"
+                    "levelInput": "local:skillTalentLevel"
                   }
                 ]
               },
@@ -546,13 +346,13 @@
                 "operands": [
                   {
                     "type": "input",
-                    "input": "elementalMastery"
+                    "input": "source:elementalMastery"
                   },
                   {
                     "type": "talentParameter",
                     "talent": "combat2",
                     "parameter": "param6",
-                    "levelInput": "skillTalentLevel"
+                    "levelInput": "local:skillTalentLevel"
                   }
                 ]
               }
@@ -583,13 +383,13 @@
                 "operands": [
                   {
                     "type": "input",
-                    "input": "attack"
+                    "input": "source:attack"
                   },
                   {
                     "type": "talentParameter",
                     "talent": "combat2",
                     "parameter": "param7",
-                    "levelInput": "skillTalentLevel"
+                    "levelInput": "local:skillTalentLevel"
                   }
                 ]
               },
@@ -598,13 +398,13 @@
                 "operands": [
                   {
                     "type": "input",
-                    "input": "elementalMastery"
+                    "input": "source:elementalMastery"
                   },
                   {
                     "type": "talentParameter",
                     "talent": "combat2",
                     "parameter": "param8",
-                    "levelInput": "skillTalentLevel"
+                    "levelInput": "local:skillTalentLevel"
                   }
                 ]
               }
@@ -634,7 +434,7 @@
             "operands": [
               {
                 "type": "input",
-                "input": "elementalMastery"
+                "input": "source:elementalMastery"
               },
               {
                 "type": "constant",
@@ -666,7 +466,7 @@
             "operands": [
               {
                 "type": "input",
-                "input": "elementalMastery"
+                "input": "source:elementalMastery"
               },
               {
                 "type": "constant",
@@ -694,13 +494,13 @@
             "operands": [
               {
                 "type": "input",
-                "input": "elementalMastery"
+                "input": "source:elementalMastery"
               },
               {
                 "type": "talentParameter",
                 "talent": "combat2",
                 "parameter": "param9",
-                "levelInput": "skillTalentLevel"
+                "levelInput": "local:skillTalentLevel"
               }
             ]
           },
@@ -724,13 +524,13 @@
             "operands": [
               {
                 "type": "input",
-                "input": "elementalMastery"
+                "input": "source:elementalMastery"
               },
               {
                 "type": "talentParameter",
                 "talent": "combat2",
                 "parameter": "param10",
-                "levelInput": "skillTalentLevel"
+                "levelInput": "local:skillTalentLevel"
               }
             ]
           },
@@ -754,13 +554,13 @@
             "operands": [
               {
                 "type": "input",
-                "input": "elementalMastery"
+                "input": "source:elementalMastery"
               },
               {
                 "type": "talentParameter",
                 "talent": "combat2",
                 "parameter": "param11",
-                "levelInput": "skillTalentLevel"
+                "levelInput": "local:skillTalentLevel"
               }
             ]
           },
@@ -790,13 +590,13 @@
                 "operands": [
                   {
                     "type": "input",
-                    "input": "attack"
+                    "input": "source:attack"
                   },
                   {
                     "type": "talentParameter",
                     "talent": "combat3",
                     "parameter": "param1",
-                    "levelInput": "burstTalentLevel"
+                    "levelInput": "local:burstTalentLevel"
                   }
                 ]
               },
@@ -805,13 +605,13 @@
                 "operands": [
                   {
                     "type": "input",
-                    "input": "elementalMastery"
+                    "input": "source:elementalMastery"
                   },
                   {
                     "type": "talentParameter",
                     "talent": "combat3",
                     "parameter": "param2",
-                    "levelInput": "burstTalentLevel"
+                    "levelInput": "local:burstTalentLevel"
                   }
                 ]
               }
@@ -824,13 +624,13 @@
               "operands": [
                 {
                   "type": "input",
-                  "input": "veilStacks"
+                  "input": "local:veilStacks"
                 },
                 {
                   "type": "talentParameter",
                   "talent": "combat3",
                   "parameter": "param5",
-                  "levelInput": "burstTalentLevel"
+                  "levelInput": "local:burstTalentLevel"
                 }
               ]
             }
@@ -854,13 +654,13 @@
                 "operands": [
                   {
                     "type": "input",
-                    "input": "attack"
+                    "input": "source:attack"
                   },
                   {
                     "type": "talentParameter",
                     "talent": "combat3",
                     "parameter": "param3",
-                    "levelInput": "burstTalentLevel"
+                    "levelInput": "local:burstTalentLevel"
                   }
                 ]
               },
@@ -869,13 +669,13 @@
                 "operands": [
                   {
                     "type": "input",
-                    "input": "elementalMastery"
+                    "input": "source:elementalMastery"
                   },
                   {
                     "type": "talentParameter",
                     "talent": "combat3",
                     "parameter": "param4",
-                    "levelInput": "burstTalentLevel"
+                    "levelInput": "local:burstTalentLevel"
                   }
                 ]
               }
@@ -888,13 +688,13 @@
               "operands": [
                 {
                   "type": "input",
-                  "input": "veilStacks"
+                  "input": "local:veilStacks"
                 },
                 {
                   "type": "talentParameter",
                   "talent": "combat3",
                   "parameter": "param5",
-                  "levelInput": "burstTalentLevel"
+                  "levelInput": "local:burstTalentLevel"
                 }
               ]
             }
@@ -942,7 +742,7 @@
                   "operands": [
                     {
                       "type": "input",
-                      "input": "elementalMastery"
+                      "input": "source:elementalMastery"
                     },
                     {
                       "type": "constant",
@@ -952,7 +752,9 @@
                 }
               ]
             }
-          }
+          },
+          "conditions": [],
+          "requiresEffects": []
         }
       ],
       "metrics": [
@@ -971,7 +773,7 @@
                 "operands": [
                   {
                     "type": "input",
-                    "input": "elementalMastery"
+                    "input": "source:elementalMastery"
                   },
                   {
                     "type": "constant",
@@ -982,7 +784,8 @@
             ]
           }
         }
-      ]
+      ],
+      "recipient": "party"
     },
     {
       "id": "aWagerOfMoonlight",
@@ -998,14 +801,14 @@
         "conditions": [
           {
             "type": "inputAtLeast",
-            "input": "skillActive",
+            "input": "local:skillActive",
             "value": 1
           }
         ]
       },
       "statChanges": [
         {
-          "stat": "elementalMastery",
+          "stat": "recipient:elementalMastery",
           "operation": "flatAdd",
           "value": {
             "type": "constant",
@@ -1014,10 +817,11 @@
           "conditions": [
             {
               "type": "inputAtLeast",
-              "input": "veilStacks",
+              "input": "local:veilStacks",
               "value": 3
             }
-          ]
+          ],
+          "recipient": "self"
         }
       ],
       "formulaModifiers": [
@@ -1029,8 +833,9 @@
             ]
           },
           "base": null,
-          "damageBonus": {
-            "unit": "percentPoints",
+          "conditions": [],
+          "requiresEffects": [],
+          "baseDamageMultiplier": {
             "expression": {
               "type": "multiply",
               "operands": [
@@ -1040,10 +845,11 @@
                 },
                 {
                   "type": "input",
-                  "input": "veilStacks"
+                  "input": "local:veilStacks"
                 }
               ]
-            }
+            },
+            "unit": "percentPoints"
           }
         }
       ],
@@ -1060,12 +866,13 @@
               },
               {
                 "type": "input",
-                "input": "veilStacks"
+                "input": "local:veilStacks"
               }
             ]
           }
         }
-      ]
+      ],
+      "recipient": "self"
     },
     {
       "id": "daughterOfDustAndSand",
@@ -1080,7 +887,7 @@
         "conditions": [
           {
             "type": "inputAtLeast",
-            "input": "skillActive",
+            "input": "local:skillActive",
             "value": 1
           }
         ]
@@ -1113,7 +920,7 @@
                         "operands": [
                           {
                             "type": "input",
-                            "input": "elementalMastery"
+                            "input": "source:elementalMastery"
                           },
                           {
                             "type": "constant",
@@ -1132,7 +939,8 @@
             ]
           }
         }
-      ]
+      ],
+      "recipient": "self"
     },
     {
       "id": "neferC1",
@@ -1143,7 +951,7 @@
       "impact": "Added as flat Base DMG before the Moonsign Base DMG multiplier.",
       "defaultEnabled": false,
       "ownershipRequirements": {
-        "neferConstellation": 1
+        "local:neferConstellation": 1
       },
       "activation": {
         "event": "phantasmPerformance",
@@ -1164,32 +972,16 @@
             "operands": [
               {
                 "type": "input",
-                "input": "elementalMastery"
+                "input": "source:elementalMastery"
               },
               {
-                "type": "add",
-                "operands": [
-                  {
-                    "type": "constant",
-                    "value": 0.6
-                  },
-                  {
-                    "type": "multiply",
-                    "operands": [
-                      {
-                        "type": "input",
-                        "input": "veilStacks"
-                      },
-                      {
-                        "type": "constant",
-                        "value": 0.08
-                      }
-                    ]
-                  }
-                ]
+                "type": "constant",
+                "value": 0.6
               }
             ]
-          }
+          },
+          "conditions": [],
+          "requiresEffects": []
         }
       ],
       "metrics": [
@@ -1201,7 +993,7 @@
             "operands": [
               {
                 "type": "input",
-                "input": "elementalMastery"
+                "input": "source:elementalMastery"
               },
               {
                 "type": "add",
@@ -1215,7 +1007,7 @@
                     "operands": [
                       {
                         "type": "input",
-                        "input": "veilStacks"
+                        "input": "local:veilStacks"
                       },
                       {
                         "type": "constant",
@@ -1228,7 +1020,8 @@
             ]
           }
         }
-      ]
+      ],
+      "recipient": "self"
     },
     {
       "id": "neferC2",
@@ -1239,7 +1032,7 @@
       "impact": "Adds the second 100 EM at 5 Veils; A Wager's per-Veil DMG Bonus can reach 40%.",
       "defaultEnabled": false,
       "ownershipRequirements": {
-        "neferConstellation": 2
+        "local:neferConstellation": 2
       },
       "requiresEffects": [
         "aWagerOfMoonlight"
@@ -1250,7 +1043,7 @@
       },
       "statChanges": [
         {
-          "stat": "elementalMastery",
+          "stat": "recipient:elementalMastery",
           "operation": "flatAdd",
           "value": {
             "type": "constant",
@@ -1259,14 +1052,16 @@
           "conditions": [
             {
               "type": "inputAtLeast",
-              "input": "veilStacks",
+              "input": "local:veilStacks",
               "value": 5
             }
-          ]
+          ],
+          "recipient": "self"
         }
       ],
       "formulaModifiers": [],
-      "metrics": []
+      "metrics": [],
+      "recipient": "self"
     },
     {
       "id": "neferC3",
@@ -1277,7 +1072,7 @@
       "impact": "Uses the effective Skill multiplier row after the +3 level increase.",
       "defaultEnabled": false,
       "ownershipRequirements": {
-        "neferConstellation": 3
+        "local:neferConstellation": 3
       },
       "activation": {
         "event": "always",
@@ -1285,13 +1080,14 @@
       },
       "statChanges": [
         {
-          "stat": "skillTalentLevel",
+          "stat": "recipient:skillTalentLevel",
           "operation": "flatAdd",
           "value": {
             "type": "constant",
             "value": 3
           },
-          "maximum": 15
+          "maximum": 15,
+          "recipient": "self"
         }
       ],
       "formulaModifiers": [],
@@ -1304,7 +1100,8 @@
             "value": 3
           }
         }
-      ]
+      ],
+      "recipient": "self"
     },
     {
       "id": "neferC4",
@@ -1315,14 +1112,14 @@
       "impact": "Applied in the RES layer to every displayed Nefer damage instance.",
       "defaultEnabled": false,
       "ownershipRequirements": {
-        "neferConstellation": 4
+        "local:neferConstellation": 4
       },
       "activation": {
         "event": "shadowDance",
         "conditions": [
           {
             "type": "inputAtLeast",
-            "input": "skillActive",
+            "input": "local:skillActive",
             "value": 1
           }
         ]
@@ -1345,7 +1142,9 @@
                 "value": 20
               }
             }
-          }
+          },
+          "conditions": [],
+          "requiresEffects": []
         }
       ],
       "metrics": [
@@ -1357,7 +1156,8 @@
             "value": 20
           }
         }
-      ]
+      ],
+      "recipient": "self"
     },
     {
       "id": "neferC5",
@@ -1368,7 +1168,7 @@
       "impact": "Uses the effective Burst multiplier row after the +3 level increase.",
       "defaultEnabled": false,
       "ownershipRequirements": {
-        "neferConstellation": 5
+        "local:neferConstellation": 5
       },
       "activation": {
         "event": "always",
@@ -1376,13 +1176,14 @@
       },
       "statChanges": [
         {
-          "stat": "burstTalentLevel",
+          "stat": "recipient:burstTalentLevel",
           "operation": "flatAdd",
           "value": {
             "type": "constant",
             "value": 3
           },
-          "maximum": 15
+          "maximum": 15,
+          "recipient": "self"
         }
       ],
       "formulaModifiers": [],
@@ -1395,7 +1196,8 @@
             "value": 3
           }
         }
-      ]
+      ],
+      "recipient": "self"
     },
     {
       "id": "neferC6",
@@ -1406,7 +1208,7 @@
       "impact": "Replaces the original second-hit formula, adds a new damage instance, and applies a separate ×1.15 Elevation layer.",
       "defaultEnabled": false,
       "ownershipRequirements": {
-        "neferConstellation": 6
+        "local:neferConstellation": 6
       },
       "activation": {
         "event": "phantasmPerformance",
@@ -1434,7 +1236,8 @@
               "type": "constant",
               "value": 15
             }
-          }
+          },
+          "requiresEffects": []
         }
       ],
       "metrics": [
@@ -1453,7 +1256,17 @@
             }
           ]
         }
-      ]
+      ],
+      "recipient": "self"
     }
-  ]
+  ],
+  "inputDefaults": {
+    "attack": 1300,
+    "elementalMastery": 1000,
+    "critRate": 82.3,
+    "critDamage": 337.7,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  }
 }

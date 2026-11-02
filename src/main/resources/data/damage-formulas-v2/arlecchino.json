@@ -1,76 +1,1213 @@
 {
-  "schemaVersion":2,"key":"arlecchino","characterKey":"arlecchino","name":"Arlecchino","element":"Pyro","weaponType":"Polearm",
-  "characterDataResource":"data/characters/data/arlecchino.json","defaultTeam":["arlecchino","bennett","xiangling","xingqiu"],
-  "statBindings":{"maxHp":"maxHp","attack":"attack","elementalMastery":"elementalMastery","physicalDamageBonus":"physicalDamageBonus"},
-  "inputs":[
-    {"id":"characterLevel","label":"Character level","defaultValue":90,"min":1,"max":90,"step":1,"initialValueSource":{"valueKey":"level"}},
-    {"id":"enemyLevel","label":"Enemy level","defaultValue":90,"min":1,"max":120,"step":1,"section":"enemy"},
-    {"id":"maxHp","label":"Max HP","defaultValue":20000,"min":0,"max":200000,"step":1,"initialValueSource":{"valueKey":"totalHp"}},
-    {"id":"attack","label":"Total ATK","defaultValue":2200,"min":0,"max":20000,"step":1,"initialValueSource":{"valueKey":"totalAttack"}},
-    {"id":"defense","label":"Total DEF","defaultValue":800,"min":0,"max":20000,"step":1,"initialValueSource":{"valueKey":"totalDefense"}},
-    {"id":"elementalMastery","label":"Elemental Mastery","defaultValue":0,"min":0,"max":5000,"step":1,"initialValueSource":{"valueKey":"stat:eleMas"}},
-    {"id":"elementalDamageBonus","label":"Pyro DMG Bonus","defaultValue":0,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:pyro_dmg_"}},
-    {"id":"physicalDamageBonus","label":"Physical DMG Bonus","defaultValue":0,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:physical_dmg_"}},
-    {"id":"energyRecharge","label":"Energy Recharge","defaultValue":100,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:enerRech_"}},
-    {"id":"critRate","label":"CRIT Rate","defaultValue":5,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:critRate_"}},
-    {"id":"critDamage","label":"CRIT DMG","defaultValue":50,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:critDMG_"}},
-    {"id":"arlecchinoConstellation","label":"Arlecchino constellation","defaultValue":0,"min":0,"max":6,"step":1,"initialValueSource":{"valueKey":"constellation"},"section":"constellations"},
-    {"id":"normalTalentLevel","label":"Normal Attack level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"normalTalent"}},
-    {"id":"skillTalentLevel","label":"Elemental Skill level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"skillTalent"}},
-    {"id":"burstTalentLevel","label":"Elemental Burst level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"burstTalent"}},
-    {"id":"bondOfLifePercent","label":"Current Bond of Life (% Max HP)","defaultValue":130,"min":0,"max":200,"step":0.1,"unit":"percentPoints","section":"combat"},
-    {"id":"enemyResistance","label":"Enemy Pyro RES","defaultValue":10,"min":-100,"max":150,"step":0.1,"unit":"percentPoints","section":"enemy"},
-    {"id":"enemyPhysicalResistance","label":"Enemy Physical RES","defaultValue":10,"min":-100,"max":150,"step":0.1,"unit":"percentPoints","section":"enemy"},
-    {"id":"defenseReduction","label":"DEF reduction","defaultValue":0,"min":0,"max":100,"step":0.1,"unit":"percentPoints","section":"enemy"},
-    {"id":"defenseIgnore","label":"DEF ignored","defaultValue":0,"min":0,"max":100,"step":0.1,"unit":"percentPoints","section":"enemy"}
+  "schemaVersion": 3,
+  "key": "arlecchino",
+  "characterKey": "arlecchino",
+  "name": "Arlecchino",
+  "element": "Pyro",
+  "weaponType": "Polearm",
+  "characterDataResource": "data/characters/data/arlecchino.json",
+  "defaultTeam": [
+    "arlecchino",
+    "bennett",
+    "xiangling",
+    "xingqiu"
   ],
-  "damageTypes":[
-    {"id":"directPyro","element":"Pyro"},
-    {"id":"directPhysical","element":"Physical","appliesElementalDamageBonus":false,"resistanceInput":"enemyPhysicalResistance","innateDamageBonus":{"unit":"percentPoints","expression":{"type":"input","input":"physicalDamageBonus"}}}
+  "statBindings": {
+    "constellation": "arlecchinoConstellation"
+  },
+  "inputs": [
+    {
+      "id": "bondOfLifePercent",
+      "label": "Current Bond of Life (% Max HP)",
+      "defaultValue": 130,
+      "min": 0,
+      "max": 200,
+      "step": 0.1,
+      "unit": "percentPoints",
+      "section": "combat"
+    }
   ],
-  "talents":[
-    {"key":"normal","name":"Invitation to a Beheading","formulas":[
-      {"id":"normal-1","label":"1-Hit Physical DMG","damageType":"directPhysical","tags":["normalAttack"],"excludedEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param1","levelInput":"normalTalentLevel"}]}},
-      {"id":"normal-2","label":"2-Hit Physical DMG","damageType":"directPhysical","tags":["normalAttack"],"excludedEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param2","levelInput":"normalTalentLevel"}]}},
-      {"id":"normal-3","label":"3-Hit Physical DMG","damageType":"directPhysical","tags":["normalAttack"],"excludedEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param3","levelInput":"normalTalentLevel"}]}},
-      {"id":"normal-4","label":"4-Hit Physical DMG (2 strikes)","damageType":"directPhysical","tags":["normalAttack","multiHit"],"excludedEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param4","levelInput":"normalTalentLevel"},{"type":"constant","value":2}]}},
-      {"id":"normal-5","label":"5-Hit Physical DMG","damageType":"directPhysical","tags":["normalAttack"],"excludedEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param5","levelInput":"normalTalentLevel"}]}},
-      {"id":"normal-6","label":"6-Hit Physical DMG","damageType":"directPhysical","tags":["normalAttack"],"excludedEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param6","levelInput":"normalTalentLevel"}]}},
-      {"id":"charged","label":"Charged Physical DMG","damageType":"directPhysical","tags":["chargedAttack"],"excludedEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param7","levelInput":"normalTalentLevel"}]}},
-      {"id":"plunge","label":"Plunge Physical DMG","damageType":"directPhysical","tags":["plungingAttack"],"excludedEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param9","levelInput":"normalTalentLevel"}]}},
-      {"id":"low-plunge","label":"Low Plunge Physical DMG","damageType":"directPhysical","tags":["plungingAttack"],"excludedEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param10","levelInput":"normalTalentLevel"}]}},
-      {"id":"high-plunge","label":"High Plunge Physical DMG","damageType":"directPhysical","tags":["plungingAttack"],"excludedEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param11","levelInput":"normalTalentLevel"}]}},
-      {"id":"masque-normal-1","label":"Masque 1-Hit Pyro DMG","damageType":"directPyro","tags":["normalAttack","masqueNormal","infusedAttack"],"requiredEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"add","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param1","levelInput":"normalTalentLevel"},{"type":"multiply","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param12","levelInput":"normalTalentLevel"},{"type":"input","input":"bondOfLifePercent"},{"type":"constant","value":0.01}]}]}]}},
-      {"id":"masque-normal-2","label":"Masque 2-Hit Pyro DMG","damageType":"directPyro","tags":["normalAttack","masqueNormal","infusedAttack"],"requiredEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"add","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param2","levelInput":"normalTalentLevel"},{"type":"multiply","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param12","levelInput":"normalTalentLevel"},{"type":"input","input":"bondOfLifePercent"},{"type":"constant","value":0.01}]}]}]}},
-      {"id":"masque-normal-3","label":"Masque 3-Hit Pyro DMG","damageType":"directPyro","tags":["normalAttack","masqueNormal","infusedAttack"],"requiredEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"add","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param3","levelInput":"normalTalentLevel"},{"type":"multiply","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param12","levelInput":"normalTalentLevel"},{"type":"input","input":"bondOfLifePercent"},{"type":"constant","value":0.01}]}]}]}},
-      {"id":"masque-normal-4","label":"Masque 4-Hit Pyro DMG (2 strikes)","damageType":"directPyro","tags":["normalAttack","masqueNormal","infusedAttack","multiHit"],"requiredEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"constant","value":2},{"type":"add","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param4","levelInput":"normalTalentLevel"},{"type":"multiply","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param12","levelInput":"normalTalentLevel"},{"type":"input","input":"bondOfLifePercent"},{"type":"constant","value":0.01}]}]}]}},
-      {"id":"masque-normal-5","label":"Masque 5-Hit Pyro DMG","damageType":"directPyro","tags":["normalAttack","masqueNormal","infusedAttack"],"requiredEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"add","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param5","levelInput":"normalTalentLevel"},{"type":"multiply","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param12","levelInput":"normalTalentLevel"},{"type":"input","input":"bondOfLifePercent"},{"type":"constant","value":0.01}]}]}]}},
-      {"id":"masque-normal-6","label":"Masque 6-Hit Pyro DMG","damageType":"directPyro","tags":["normalAttack","masqueNormal","infusedAttack"],"requiredEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"add","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param6","levelInput":"normalTalentLevel"},{"type":"multiply","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param12","levelInput":"normalTalentLevel"},{"type":"input","input":"bondOfLifePercent"},{"type":"constant","value":0.01}]}]}]}},
-      {"id":"masque-charged","label":"Masque Charged Pyro DMG","damageType":"directPyro","tags":["chargedAttack","infusedAttack"],"requiredEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param7","levelInput":"normalTalentLevel"}]}},
-      {"id":"masque-plunge","label":"Masque Plunge Pyro DMG","damageType":"directPyro","tags":["plungingAttack","infusedAttack"],"requiredEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param9","levelInput":"normalTalentLevel"}]}},
-      {"id":"masque-low-plunge","label":"Masque Low Plunge Pyro DMG","damageType":"directPyro","tags":["plungingAttack","infusedAttack"],"requiredEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param10","levelInput":"normalTalentLevel"}]}},
-      {"id":"masque-high-plunge","label":"Masque High Plunge Pyro DMG","damageType":"directPyro","tags":["plungingAttack","infusedAttack"],"requiredEffects":["masqueRedDeath"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param11","levelInput":"normalTalentLevel"}]}}
-    ]},
-    {"key":"skill","name":"All Is Ash","formulas":[
-      {"id":"skill-spike","label":"Spike DMG","damageType":"directPyro","tags":["elementalSkill"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param1","levelInput":"skillTalentLevel"}]}},
-      {"id":"skill-cleave","label":"Cleave DMG","damageType":"directPyro","tags":["elementalSkill"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param2","levelInput":"skillTalentLevel"}]}},
-      {"id":"blood-debt-tick","label":"Blood-Debt Directive DMG (per tick)","damageType":"directPyro","tags":["elementalSkill","bloodDebt"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param3","levelInput":"skillTalentLevel"}]}},
-      {"id":"c2-balefire","label":"C2 Balemoon Bloodfire DMG","damageType":"directPyro","tags":["elementalSkill","constellationDamage"],"requiredEffects":["arlecchinoC2"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"constant","value":9}]}}
-    ]},
-    {"key":"burst","name":"Balemoon Rising","formulas":[
-      {"id":"burst-hit","label":"Skill DMG","damageType":"directPyro","tags":["elementalBurst"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat3","parameter":"param1","levelInput":"burstTalentLevel"}]}}
-    ]}
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Invitation to a Beheading",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "1-Hit Physical DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "excludedEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-2",
+          "label": "2-Hit Physical DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "excludedEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-3",
+          "label": "3-Hit Physical DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "excludedEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-4",
+          "label": "4-Hit Physical DMG (2 strikes)",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack",
+            "multiHit"
+          ],
+          "excludedEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "local:normalTalentLevel"
+              },
+              {
+                "type": "constant",
+                "value": 2
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-5",
+          "label": "5-Hit Physical DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "excludedEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-6",
+          "label": "6-Hit Physical DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "excludedEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "charged",
+          "label": "Charged Physical DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "chargedAttack"
+          ],
+          "excludedEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "plunge",
+          "label": "Plunge Physical DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack"
+          ],
+          "excludedEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "low-plunge",
+          "label": "Low Plunge Physical DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack"
+          ],
+          "excludedEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "high-plunge",
+          "label": "High Plunge Physical DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack"
+          ],
+          "excludedEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param11",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "masque-normal-1",
+          "label": "Masque 1-Hit Pyro DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "normalAttack",
+            "masqueNormal",
+            "infusedAttack"
+          ],
+          "requiredEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat1",
+                    "parameter": "param1",
+                    "levelInput": "local:normalTalentLevel"
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "talentParameter",
+                        "talent": "combat1",
+                        "parameter": "param12",
+                        "levelInput": "local:normalTalentLevel"
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:bondOfLifePercent"
+                      },
+                      {
+                        "type": "constant",
+                        "value": 0.01
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "masque-normal-2",
+          "label": "Masque 2-Hit Pyro DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "normalAttack",
+            "masqueNormal",
+            "infusedAttack"
+          ],
+          "requiredEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat1",
+                    "parameter": "param2",
+                    "levelInput": "local:normalTalentLevel"
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "talentParameter",
+                        "talent": "combat1",
+                        "parameter": "param12",
+                        "levelInput": "local:normalTalentLevel"
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:bondOfLifePercent"
+                      },
+                      {
+                        "type": "constant",
+                        "value": 0.01
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "masque-normal-3",
+          "label": "Masque 3-Hit Pyro DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "normalAttack",
+            "masqueNormal",
+            "infusedAttack"
+          ],
+          "requiredEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat1",
+                    "parameter": "param3",
+                    "levelInput": "local:normalTalentLevel"
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "talentParameter",
+                        "talent": "combat1",
+                        "parameter": "param12",
+                        "levelInput": "local:normalTalentLevel"
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:bondOfLifePercent"
+                      },
+                      {
+                        "type": "constant",
+                        "value": 0.01
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "masque-normal-4",
+          "label": "Masque 4-Hit Pyro DMG (2 strikes)",
+          "damageType": "directPyro",
+          "tags": [
+            "normalAttack",
+            "masqueNormal",
+            "infusedAttack",
+            "multiHit"
+          ],
+          "requiredEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 2
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat1",
+                    "parameter": "param4",
+                    "levelInput": "local:normalTalentLevel"
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "talentParameter",
+                        "talent": "combat1",
+                        "parameter": "param12",
+                        "levelInput": "local:normalTalentLevel"
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:bondOfLifePercent"
+                      },
+                      {
+                        "type": "constant",
+                        "value": 0.01
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "masque-normal-5",
+          "label": "Masque 5-Hit Pyro DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "normalAttack",
+            "masqueNormal",
+            "infusedAttack"
+          ],
+          "requiredEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat1",
+                    "parameter": "param5",
+                    "levelInput": "local:normalTalentLevel"
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "talentParameter",
+                        "talent": "combat1",
+                        "parameter": "param12",
+                        "levelInput": "local:normalTalentLevel"
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:bondOfLifePercent"
+                      },
+                      {
+                        "type": "constant",
+                        "value": 0.01
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "masque-normal-6",
+          "label": "Masque 6-Hit Pyro DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "normalAttack",
+            "masqueNormal",
+            "infusedAttack"
+          ],
+          "requiredEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat1",
+                    "parameter": "param6",
+                    "levelInput": "local:normalTalentLevel"
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "talentParameter",
+                        "talent": "combat1",
+                        "parameter": "param12",
+                        "levelInput": "local:normalTalentLevel"
+                      },
+                      {
+                        "type": "input",
+                        "input": "local:bondOfLifePercent"
+                      },
+                      {
+                        "type": "constant",
+                        "value": 0.01
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "masque-charged",
+          "label": "Masque Charged Pyro DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "chargedAttack",
+            "infusedAttack"
+          ],
+          "requiredEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "masque-plunge",
+          "label": "Masque Plunge Pyro DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "plungingAttack",
+            "infusedAttack"
+          ],
+          "requiredEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "masque-low-plunge",
+          "label": "Masque Low Plunge Pyro DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "plungingAttack",
+            "infusedAttack"
+          ],
+          "requiredEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "masque-high-plunge",
+          "label": "Masque High Plunge Pyro DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "plungingAttack",
+            "infusedAttack"
+          ],
+          "requiredEffects": [
+            "masqueRedDeath"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param11",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "All Is Ash",
+      "formulas": [
+        {
+          "id": "skill-spike",
+          "label": "Spike DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalSkill"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "skill-cleave",
+          "label": "Cleave DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalSkill"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param2",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "blood-debt-tick",
+          "label": "Blood-Debt Directive DMG (per tick)",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalSkill",
+            "bloodDebt"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param3",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "c2-balefire",
+          "label": "C2 Balemoon Bloodfire DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalSkill",
+            "constellationDamage"
+          ],
+          "requiredEffects": [
+            "arlecchinoC2"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 9
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Balemoon Rising",
+      "formulas": [
+        {
+          "id": "burst-hit",
+          "label": "Skill DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalBurst"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "local:burstTalentLevel"
+              }
+            ]
+          }
+        }
+      ]
+    }
   ],
-  "effects":[
-    {"id":"masqueRedDeath","name":"Masque of the Red Death","source":"Arlecchino · Normal Attack","category":"talent","description":"At 30% or more Bond of Life, converts Normal, Charged, and Plunging Attacks to Pyro. Normal hits also add ATK × Masque scaling × current Bond percentage to Base DMG.","defaultEnabled":true,"activation":{"event":"bondOfLifeActive","conditions":[{"type":"inputAtLeast","input":"bondOfLifePercent","value":30}]}},
-    {"id":"agonyRepaid","name":"Agony Alone May Be Repaid","source":"Arlecchino · Passive","category":"passive","description":"Defeated or matured Blood-Debt Directives grant a 130% Max HP Bond of Life, subject to the Skill's cap.","impact":"Resource setup; current Bond is controlled directly by the Bond slider.","defaultEnabled":true,"activation":{"event":"bloodDebtAbsorbed"}},
-    {"id":"strengthDefend","name":"Strength Alone Can Defend","source":"Arlecchino · Passive","category":"passive","description":"For every 100 ATK above 1,000, grants 1% All Elemental and Physical RES, capped at 20%.","impact":"Incoming-damage resistance only; outgoing damage is unchanged.","defaultEnabled":true,"activation":{"event":"always"},"metrics":[{"label":"All RES gained","unit":"percentPoints","expression":{"type":"min","operands":[{"type":"constant","value":20},{"type":"max","operands":[{"type":"constant","value":0},{"type":"multiply","operands":[{"type":"add","operands":[{"type":"input","input":"attack"},{"type":"constant","value":-1000}]},{"type":"constant","value":0.01}]}]}]}}]},
-    {"id":"balemoonAlone","name":"The Balemoon Alone May Know","source":"Arlecchino · Passive","category":"passive","description":"While in combat, grants 40% Pyro DMG Bonus and prevents healing except from Balemoon Rising.","defaultEnabled":true,"activation":{"event":"inCombat"},"formulaModifiers":[{"targets":{"elements":["Pyro"]},"damageBonus":{"expression":{"type":"constant","value":40}}}]},
-    {"id":"arlecchinoC1","name":"C1 · All Reprisals and Arrears, Mine to Bear...","source":"Arlecchino · Constellation","category":"constellation","description":"Adds another 100% coefficient to Masque's current-Bond term and grants interruption resistance during Normal and Charged Attacks.","ownershipRequirements":{"arlecchinoConstellation":1},"requiresEffects":["masqueRedDeath"],"activation":{"event":"masqueActive"},"formulaModifiers":[{"targets":{"requiredTags":["masqueNormal"]},"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"input","input":"bondOfLifePercent"},{"type":"constant","value":0.01}]}},{"targets":{"formulaIds":["masque-normal-4"]},"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"input","input":"bondOfLifePercent"},{"type":"constant","value":0.01}]}}]},
-    {"id":"arlecchinoC2","name":"C2 · All Rewards and Retribution, Mine to Bestow...","source":"Arlecchino · Constellation","category":"constellation","description":"Blood-Debt Directives begin as Due. Absorbing one can deal 900% ATK AoE Pyro DMG and grants 20% All Elemental and Physical RES for 15 seconds.","ownershipRequirements":{"arlecchinoConstellation":2},"activation":{"event":"bloodDebtAbsorbed"}},
-    {"id":"arlecchinoC3","name":"C3 · You Shall Become a New Member of Our Family...","source":"Arlecchino · Constellation","category":"constellation","description":"Increases Invitation to a Beheading's talent level by 3.","ownershipRequirements":{"arlecchinoConstellation":3},"activation":{"event":"always"},"statChanges":[{"stat":"normalTalentLevel","operation":"flatAdd","value":{"type":"constant","value":3},"maximum":15}]},
-    {"id":"arlecchinoC4","name":"C4 · You Shall Love and Protect Each Other Henceforth...","source":"Arlecchino · Constellation","category":"constellation","description":"Absorbing a Directive reduces Burst cooldown by 2 seconds and restores 15 Energy, once every 10 seconds.","impact":"Energy and rotation utility only.","ownershipRequirements":{"arlecchinoConstellation":4},"activation":{"event":"bloodDebtAbsorbed"}},
-    {"id":"arlecchinoC5","name":"C5 · For Alone, We Are as Good as Dead...","source":"Arlecchino · Constellation","category":"constellation","description":"Increases Balemoon Rising's talent level by 3.","ownershipRequirements":{"arlecchinoConstellation":5},"activation":{"event":"always"},"statChanges":[{"stat":"burstTalentLevel","operation":"flatAdd","value":{"type":"constant","value":3},"maximum":15}]},
-    {"id":"arlecchinoC6","name":"C6 · From This Day On, We Shall Delight in New Life Together","source":"Arlecchino · Constellation","category":"constellation","description":"Adds ATK × 700% × current Bond percentage to Burst Base DMG. After Skill, Normal Attacks and Burst gain 10% CRIT Rate and 70% CRIT DMG.","ownershipRequirements":{"arlecchinoConstellation":6},"activation":{"event":"skillUsed"},"formulaModifiers":[{"targets":{"formulaIds":["burst-hit"]},"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"constant","value":7},{"type":"input","input":"bondOfLifePercent"},{"type":"constant","value":0.01}]}},{"targets":{"anyTags":["normalAttack","elementalBurst"]},"crit":{"additionalRate":{"expression":{"type":"constant","value":10}},"additionalDamage":{"expression":{"type":"constant","value":70}}}}]}
-  ]
+  "effects": [
+    {
+      "id": "masqueRedDeath",
+      "name": "Masque of the Red Death",
+      "source": "Arlecchino · Normal Attack",
+      "category": "talent",
+      "description": "At 30% or more Bond of Life, converts Normal, Charged, and Plunging Attacks to Pyro. Normal hits also add ATK × Masque scaling × current Bond percentage to Base DMG.",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "bondOfLifeActive",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:bondOfLifePercent",
+            "value": 30
+          }
+        ]
+      },
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "agonyRepaid",
+      "name": "Agony Alone May Be Repaid",
+      "source": "Arlecchino · Passive",
+      "category": "passive",
+      "description": "Defeated or matured Blood-Debt Directives grant a 130% Max HP Bond of Life, subject to the Skill's cap.",
+      "impact": "Resource setup; current Bond is controlled directly by the Bond slider.",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "bloodDebtAbsorbed"
+      },
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "strengthDefend",
+      "name": "Strength Alone Can Defend",
+      "source": "Arlecchino · Passive",
+      "category": "passive",
+      "description": "For every 100 ATK above 1,000, grants 1% All Elemental and Physical RES, capped at 20%.",
+      "impact": "Incoming-damage resistance only; outgoing damage is unchanged.",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "always"
+      },
+      "metrics": [
+        {
+          "label": "All RES gained",
+          "unit": "percentPoints",
+          "expression": {
+            "type": "min",
+            "operands": [
+              {
+                "type": "constant",
+                "value": 20
+              },
+              {
+                "type": "max",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 0
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "add",
+                        "operands": [
+                          {
+                            "type": "input",
+                            "input": "source:attack"
+                          },
+                          {
+                            "type": "constant",
+                            "value": -1000
+                          }
+                        ]
+                      },
+                      {
+                        "type": "constant",
+                        "value": 0.01
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "balemoonAlone",
+      "name": "The Balemoon Alone May Know",
+      "source": "Arlecchino · Passive",
+      "category": "passive",
+      "description": "While in combat, grants 40% Pyro DMG Bonus and prevents healing except from Balemoon Rising.",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "inCombat"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "elements": [
+              "Pyro"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 40
+            }
+          }
+        }
+      ],
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "arlecchinoC1",
+      "name": "C1 · All Reprisals and Arrears, Mine to Bear...",
+      "source": "Arlecchino · Constellation",
+      "category": "constellation",
+      "description": "Adds another 100% coefficient to Masque's current-Bond term and grants interruption resistance during Normal and Charged Attacks.",
+      "ownershipRequirements": {
+        "local:arlecchinoConstellation": 1
+      },
+      "requiresEffects": [
+        "masqueRedDeath"
+      ],
+      "activation": {
+        "event": "masqueActive"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "masqueNormal"
+            ]
+          },
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "input",
+                "input": "local:bondOfLifePercent"
+              },
+              {
+                "type": "constant",
+                "value": 0.01
+              }
+            ]
+          }
+        },
+        {
+          "targets": {
+            "formulaIds": [
+              "masque-normal-4"
+            ]
+          },
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "input",
+                "input": "local:bondOfLifePercent"
+              },
+              {
+                "type": "constant",
+                "value": 0.01
+              }
+            ]
+          }
+        }
+      ],
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "arlecchinoC2",
+      "name": "C2 · All Rewards and Retribution, Mine to Bestow...",
+      "source": "Arlecchino · Constellation",
+      "category": "constellation",
+      "description": "Blood-Debt Directives begin as Due. Absorbing one can deal 900% ATK AoE Pyro DMG and grants 20% All Elemental and Physical RES for 15 seconds.",
+      "ownershipRequirements": {
+        "local:arlecchinoConstellation": 2
+      },
+      "activation": {
+        "event": "bloodDebtAbsorbed"
+      },
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "arlecchinoC3",
+      "name": "C3 · You Shall Become a New Member of Our Family...",
+      "source": "Arlecchino · Constellation",
+      "category": "constellation",
+      "description": "Increases Invitation to a Beheading's talent level by 3.",
+      "ownershipRequirements": {
+        "local:arlecchinoConstellation": 3
+      },
+      "activation": {
+        "event": "always"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:normalTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15,
+          "recipient": "self"
+        }
+      ],
+      "recipient": "self"
+    },
+    {
+      "id": "arlecchinoC4",
+      "name": "C4 · You Shall Love and Protect Each Other Henceforth...",
+      "source": "Arlecchino · Constellation",
+      "category": "constellation",
+      "description": "Absorbing a Directive reduces Burst cooldown by 2 seconds and restores 15 Energy, once every 10 seconds.",
+      "impact": "Energy and rotation utility only.",
+      "ownershipRequirements": {
+        "local:arlecchinoConstellation": 4
+      },
+      "activation": {
+        "event": "bloodDebtAbsorbed"
+      },
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "arlecchinoC5",
+      "name": "C5 · For Alone, We Are as Good as Dead...",
+      "source": "Arlecchino · Constellation",
+      "category": "constellation",
+      "description": "Increases Balemoon Rising's talent level by 3.",
+      "ownershipRequirements": {
+        "local:arlecchinoConstellation": 5
+      },
+      "activation": {
+        "event": "always"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15,
+          "recipient": "self"
+        }
+      ],
+      "recipient": "self"
+    },
+    {
+      "id": "arlecchinoC6",
+      "name": "C6 · From This Day On, We Shall Delight in New Life Together",
+      "source": "Arlecchino · Constellation",
+      "category": "constellation",
+      "description": "Adds ATK × 700% × current Bond percentage to Burst Base DMG. After Skill, Normal Attacks and Burst gain 10% CRIT Rate and 70% CRIT DMG.",
+      "ownershipRequirements": {
+        "local:arlecchinoConstellation": 6
+      },
+      "activation": {
+        "event": "skillUsed"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "formulaIds": [
+              "burst-hit"
+            ]
+          },
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 7
+              },
+              {
+                "type": "input",
+                "input": "local:bondOfLifePercent"
+              },
+              {
+                "type": "constant",
+                "value": 0.01
+              }
+            ]
+          }
+        },
+        {
+          "targets": {
+            "anyTags": [
+              "normalAttack",
+              "elementalBurst"
+            ]
+          },
+          "crit": {
+            "additionalRate": {
+              "expression": {
+                "type": "constant",
+                "value": 10
+              }
+            },
+            "additionalDamage": {
+              "expression": {
+                "type": "constant",
+                "value": 70
+              }
+            }
+          }
+        }
+      ],
+      "recipient": "self",
+      "statChanges": []
+    }
+  ],
+  "notes": [],
+  "sources": [
+    "data/characters/data/arlecchino.json",
+    "https://keqingmains.com/q/arlecchino-quickguide/"
+  ],
+  "inputDefaults": {
+    "maxHp": 20000,
+    "attack": 2200,
+    "defense": 800,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  }
 }

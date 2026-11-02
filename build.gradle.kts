@@ -69,6 +69,14 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+// Opt in for either bootRun or desktopRun without changing packaged behavior.
+tasks.withType<JavaExec>().configureEach {
+    if (providers.gradleProperty("uiDev").isPresent && name in setOf("bootRun", "desktopRun")) {
+        workingDir = projectDir
+        systemProperty("spring.profiles.include", "ui-dev")
+    }
+}
+
 val desktopMainClass = "de.tyro.genshinapp.desktop.DesktopLauncherKt"
 val scraperMainClass = "de.tyro.genshinapp.tools.Game8BuildProfileScraperKt"
 val bundledCatalogSnapshotMainClass =

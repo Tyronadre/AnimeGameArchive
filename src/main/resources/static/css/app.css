@@ -12188,3 +12188,59 @@ html[data-theme="dark"] .missing-materials-page .character-need-row > b {
 @media (prefers-reduced-motion: reduce) {
     .dashboard-page *, .dashboard-page *::before, .dashboard-page *::after { animation: none !important; transition: none !important; }
 }
+
+/* Scroll docking: keep filters accessible beside the roster. */
+.character-catalog-controls {
+    position: relative;
+    top: auto;
+    transform-origin: top left;
+    max-height: none;
+}
+
+/* 1440px content + two 320px margins: never borrow space from the cards. */
+@media (min-width: 2080px) {
+    .has-docked-filters .character-catalog-controls {
+        --dock-width: clamp(272px, calc((100vw - 1440px) / 2 - 48px), 440px);
+        position: fixed;
+        top: 84px;
+        left: calc((100% - 1440px) / 2 - 24px - var(--dock-width));
+        width: var(--dock-width);
+        grid-template-columns: minmax(0, 1fr);
+        box-sizing: border-box;
+        max-height: calc(100dvh - 104px);
+        margin-top: 0;
+        border-radius: 24px;
+        box-shadow: 0 20px 50px rgba(13, 21, 31, 0.2);
+    }
+
+    .has-docked-filters .character-catalog-search-row {
+        min-width: 0;
+        flex-wrap: wrap;
+    }
+
+    .has-docked-filters .character-catalog-search {
+        flex-basis: 100%;
+        min-width: 0;
+    }
+
+    .has-docked-filters .character-filter-groups {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .has-docked-filters .character-filter-group {
+        grid-column: 1;
+    }
+
+    .has-docked-filters .character-filter-chips {
+        flex-wrap: wrap;
+    }
+
+    .has-docked-filters .character-filter-segmented {
+        flex-wrap: wrap;
+    }
+
+    .has-docked-filters .character-filter-segmented button {
+        flex: 1 1 auto;
+        white-space: normal;
+    }
+}

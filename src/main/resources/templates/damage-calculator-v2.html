@@ -22,6 +22,8 @@
       th:attr="data-profile-url=@{/api/damage-formulas/v2/{key}(key=${profileKey})},
           data-calculate-url=@{/api/damage-formulas/v2/{key}/calculate(key=${profileKey})},
           data-team-url=@{/api/damage-formulas/v2/{key}/team(key=${profileKey})},
+          data-label-talent-effects=#{damage.v2.effects.talent},
+          data-label-talent-effects-help=#{damage.v2.effects.talent.help},
           data-label-team-effects=#{damage.effects.section.team},
           data-label-team-effects-help=#{damage.effects.section.team.help},
           data-label-section-team-stats=#{damage.v2.effects.conditions},
@@ -151,6 +153,8 @@
 
     <section class="damage-calculator-hero">
         <div class="damage-calculator-hero-copy">
+            <a class="damage-version-link" th:if="${#arrays.contains(@environment.activeProfiles, 'ui-dev')}"
+               th:href="@{/damage-calculator-v2/editor}">Edit formulas ↗</a>
             <a class="damage-back-link" th:href="@{/characters/{key}(key=${character.key})}">
                 <span aria-hidden="true">←</span>
                 <span th:text="#{damage.backToCharacter(${character.name})}">Back to Nefer</span>
@@ -179,7 +183,7 @@
             <div class="damage-scope-note">
                 <span aria-hidden="true">◇</span>
                 <p th:text="#{damage.v2.scope}">
-                    This comparison currently contains Nefer's basic talent formulas and A Wager of Moonlight.
+                    The selected damage character is treated as on field. Eligible party and equipment effects apply to this hit.
                 </p>
             </div>
         </div>

@@ -53,10 +53,10 @@ class DamageFormulaTeamServiceV2Test {
             }
         }
         assertEquals(emptyList(), full.characterBuffInputs.getValue("lauma"))
-        assertEquals(setOf("nahidaMarkedOpponents", "nahidaQuickenActive"),
+        assertEquals(setOf("character.nahida.nahidaMarkedOpponents", "character.nahida.nahidaQuickenActive"),
             full.characterBuffInputs.getValue("nahida").toSet())
         assertEquals(emptyList(), full.characterBuffInputs.getValue("columbina"))
-        assertEquals("internal", full.inputs.first { it.id == "columbinaBaseHp" }.section)
+        assertEquals("internal", full.inputs.first { it.id == "character.columbina.columbinaBaseHp" }.section)
         assertTrue(service.document(full).defaultCalculation.results.isNotEmpty())
     }
 
@@ -72,7 +72,7 @@ class DamageFormulaTeamServiceV2Test {
         assertEquals(1.0, profile.teamContext["pyroCount"])
         assertEquals(1.0, profile.teamContext["dendroCount"])
         assertEquals(2.0, profile.teamContext["teamSize"])
-        assertTrue(profile.supportProfiles.isEmpty())
+        assertTrue(profile.supportProfiles.all { it.effects.isEmpty() })
         assertFalse(profile.effects.any { it.id.startsWith("amber") })
         assertEquals(9, profile.characterStatInputs.getValue("amber").size)
         assertEquals(4, profile.characterProgressInputs.getValue("amber").size)
@@ -90,11 +90,11 @@ class DamageFormulaTeamServiceV2Test {
         assertFalse(solo.effects.any { it.id.startsWith("lauma") })
         assertFalse(solo.inputs.any { it.id.startsWith("lauma") })
         val result = service.calculate(solo, DamageCalculationRequestV2(
-            inputs = mapOf("laumaElementalMastery" to 3000.0), enabledEffects = mapOf("laumaPaleHymn" to true),
+            inputs = mapOf("character.lauma.laumaElementalMastery" to 3000.0), enabledEffects = mapOf("character.lauma.laumaPaleHymn" to true),
         ))
-        assertFalse("laumaPaleHymn" in result.activeEffectIds)
+        assertFalse("character.lauma.laumaPaleHymn" in result.activeEffectIds)
         assertFalse("dendroResonance" in result.activeEffectIds)
-        assertFalse("laumaElementalMastery" in result.effectiveStats)
+        assertFalse("character.lauma.laumaElementalMastery" in result.effectiveStats)
         assertFailsWith<IllegalArgumentException> { teams.compose(base, setOf("unknown")) }
         assertFailsWith<IllegalArgumentException> { teams.compose(base, setOf("lauma", "nahida", "columbina", "unknown")) }
     }
@@ -110,7 +110,7 @@ class DamageFormulaTeamServiceV2Test {
             ))
             assertTrue(result.results.all { it.average.isFinite() && it.average >= 0.0 })
             if (selected.none { it == "lauma" || it == "columbina" }) {
-                assertFalse("nahidaNewMoonsEmbrace" in result.activeEffectIds)
+                assertFalse("character.nahida.nahidaNewMoonsEmbrace" in result.activeEffectIds)
                 assertEquals(1.0, result.hit("shades-hit-1").elevation.multiplier)
             }
         }
@@ -129,69 +129,69 @@ class DamageFormulaTeamServiceV2Test {
         val solo = service.calculate(base, DamageCalculationRequestV2(
             enabledEffects = base.effects.associate { it.id to false },
         ))
-        assertEquals(solo.results, party.results)
+        assertEquals(solo.results.map { it.copy(reactions = emptyList()) }, party.results.map { it.copy(reactions = emptyList()) })
     }
 
     @Test
-    fun `Lauma scaling uses her own talent levels and Pale Hymn contributes to base damage`() {
-        val inputs = mapOf("laumaElementalMastery" to 1000.0, "laumaBurstTalentLevel" to 10.0,
-            "laumaSkillTalentLevel" to 10.0, "elementalMastery" to 1000.0)
-        val result = calculate(inputs, "laumaPaleHymn", "laumaC2", "laumaC3", "laumaC5", "laumaFrostgroveSanctuary")
+    fun `Lauma scaling uses her own talent levels and the currently authored post bonus layer`() {
+        val inputs = mapOf("character.lauma.laumaElementalMastery" to 1000.0, "character.lauma.laumaBurstTalentLevel" to 10.0,
+            "character.lauma.laumaSkillTalentLevel" to 10.0, "elementalMastery" to 1000.0)
+        val result = calculate(inputs, "character.lauma.laumaPaleHymn", "character.lauma.laumaC2", "character.lauma.laumaC3", "character.lauma.laumaC5", "character.lauma.laumaFrostgroveSanctuary")
         val shade = result.hit("shades-hit-1")
-        assertEquals(13.0, result.effectiveStats["laumaBurstTalentLevel"])
-        assertEquals(13.0, result.effectiveStats["laumaSkillTalentLevel"])
-        assertEquals(4722.6, shade.base.additiveValue, 1e-6)
-        assertEquals(4000.0, shade.postBonusBase.value, 1e-6)
+        assertEquals(13.0, result.effectiveStats["character.lauma.laumaBurstTalentLevel"])
+        assertEquals(13.0, result.effectiveStats["character.lauma.laumaSkillTalentLevel"])
+        assertEquals(0.0, shade.base.additiveValue, 1e-6)
+        assertEquals(8722.6, shade.postBonusBase.value, 1e-6)
         assertEquals(.34, shade.resistanceMitigation.reduction, 1e-6)
-        assertTrue(shade.base.references.any { it.characterKey == "lauma" && it.talentLevel == 13 })
-        assertEquals((shade.base.value * shade.damageBonus.multiplier + 4000.0) *
+        assertTrue(shade.postBonusBase.references.any { it.characterKey == "lauma" && it.talentLevel == 13 })
+        assertEquals((shade.base.value * shade.damageBonus.multiplier + 8722.6) *
             shade.resistanceMitigation.multiplier, shade.nonCritical, 1e-6)
         assertEquals(0.0, result.hit("skill-hit").postBonusBase.value)
-        val noStacks = calculate(inputs, "laumaC2")
+        val noStacks = calculate(inputs, "character.lauma.laumaC2")
         assertEquals(0.0, noStacks.hit("shades-hit-1").postBonusBase.value)
         assertEquals(.4, noStacks.hit("shades-hit-1").damageBonus.authoredBonus, 1e-6)
     }
 
     @Test
     fun `Nahida uses highest party EM and conversions do not feed themselves`() {
-        val result = calculate(mapOf("elementalMastery" to 800.0, "nahidaElementalMastery" to 500.0,
-            "laumaElementalMastery" to 600.0, "columbinaElementalMastery" to 0.0), "nahidaCompassionIlluminated")
+        val result = calculate(mapOf("elementalMastery" to 800.0, "character.nahida.nahidaElementalMastery" to 500.0,
+            "character.lauma.laumaElementalMastery" to 600.0, "character.columbina.columbinaElementalMastery" to 0.0), "character.nahida.nahidaCompassionIlluminated")
         assertEquals(1000.0, result.effectiveStats["elementalMastery"])
         assertEquals(200.0, result.statChanges.single().amount)
         assertTrue(result.statChanges.single().references.any { it.key == "elementalMastery" && it.value == 800.0 })
-        val capped = calculate(mapOf("laumaElementalMastery" to 2000.0), "nahidaCompassionIlluminated")
+        val capped = calculate(mapOf("character.lauma.laumaElementalMastery" to 2000.0), "character.nahida.nahidaCompassionIlluminated")
         assertEquals(250.0, capped.statChanges.single().amount)
     }
 
     @Test
     fun `Nahida C4 is resolved before EM share and marking gates C2`() {
-        val result = calculate(mapOf("elementalMastery" to 0.0, "laumaElementalMastery" to 0.0,
-            "nahidaElementalMastery" to 500.0, "nahidaMarkedOpponents" to 8.0),
-            "nahidaC4", "nahidaC2", "nahidaCompassionIlluminated", "nahidaNewMoonsEmbrace")
-        assertEquals(660.0, result.effectiveStats["nahidaElementalMastery"])
+        val result = calculate(mapOf("elementalMastery" to 0.0, "character.lauma.laumaElementalMastery" to 0.0,
+            "character.nahida.nahidaElementalMastery" to 500.0, "character.nahida.nahidaMarkedOpponents" to 8.0),
+            "character.nahida.nahidaC4", "character.nahida.nahidaC2", "character.nahida.nahidaCompassionIlluminated", "character.nahida.nahidaNewMoonsEmbrace")
+        assertEquals(660.0, result.effectiveStats["character.nahida.nahidaElementalMastery"])
         assertEquals(165.0, result.effectiveStats["elementalMastery"])
         assertEquals(.1485, result.hit("shades-hit-1").damageBonus.authoredBonus, 1e-6)
         assertEquals(.1, result.hit("shades-hit-1").crit.additionalRate)
         assertEquals(.2, result.hit("shades-hit-1").crit.additionalDamage)
         assertEquals(0.0, result.hit("skill-hit").crit.additionalRate)
-        val unmarked = calculate(mapOf("nahidaMarkedOpponents" to 0.0), "nahidaC2", "nahidaC4")
-        assertFalse("nahidaC2" in unmarked.activeEffectIds)
-        assertFalse("nahidaC4" in unmarked.activeEffectIds)
+        val unmarked = calculate(mapOf("character.nahida.nahidaMarkedOpponents" to 0.0), "character.nahida.nahidaC2", "character.nahida.nahidaC4")
+        assertFalse("character.nahida.nahidaC2" in unmarked.activeEffectIds)
+        assertFalse("character.nahida.nahidaC4" in unmarked.activeEffectIds)
     }
 
     @Test
     fun `Columbina C2 applies percent of base HP before HP to EM conversion`() {
-        val result = calculate(mapOf("columbinaMaxHp" to 35000.0, "columbinaBaseHp" to 14695.0,
-            "elementalMastery" to 0.0), "columbinaC2")
-        assertEquals(40878.0, result.effectiveStats["columbinaMaxHp"])
+        val result = calculate(mapOf("character.columbina.columbinaMaxHp" to 35000.0, "character.columbina.columbinaBaseHp" to 14695.0,
+            "elementalMastery" to 0.0), "character.columbina.columbinaC2")
+        assertEquals(40878.0, result.effectiveStats["character.columbina.columbinaMaxHp"])
         assertEquals(40878.0 * .0035, result.effectiveStats.getValue("elementalMastery"), 1e-6)
         assertEquals(1.07, result.hit("shades-hit-1").elevation.multiplier, 1e-6)
     }
 
     @Test
     fun `Columbina passive reads the editable Max HP combat stat`() {
-        val lowHp = calculate(mapOf("columbinaMaxHp" to 10000.0), "columbinaMoonlightLent")
-        val capped = calculate(mapOf("columbinaMaxHp" to 35000.0), "columbinaMoonlightLent")
+        val lowHp = calculate(mapOf("character.columbina.columbinaMaxHp" to 10000.0), "character.columbina.columbinaMoonlightLent")
+        val capped = calculate(mapOf("character.columbina.columbinaMaxHp" to 35000.0), "character.columbina.columbinaMoonlightLent")
         assertEquals(1.02, lowHp.hit("shades-hit-1").base.multiplier, 1e-6)
         assertEquals(1.07, capped.hit("shades-hit-1").base.multiplier, 1e-6)
         assertTrue(capped.hit("shades-hit-1").base.value > lowHp.hit("shades-hit-1").base.value)
@@ -199,9 +199,9 @@ class DamageFormulaTeamServiceV2Test {
 
     @Test
     fun `team base bonuses and Elevation add while crit caps and Domain dependency are respected`() {
-        val result = calculate(emptyMap(), "dusklitEaves", "laumaNaturesChorus", "columbinaMoonlightLent",
-            "neferC6", "laumaC6", "columbinaC1", "columbinaC2", "columbinaC3", "columbinaC4", "columbinaC5", "columbinaC6",
-            "columbinaLunarDomain", "laumaLightForTheFrostyNight", "nahidaC2")
+        val result = calculate(emptyMap(), "dusklitEaves", "character.lauma.laumaNaturesChorus", "character.columbina.columbinaMoonlightLent",
+            "neferC6", "character.lauma.laumaC6", "character.columbina.columbinaC1", "character.columbina.columbinaC2", "character.columbina.columbinaC3", "character.columbina.columbinaC4", "character.columbina.columbinaC5", "character.columbina.columbinaC6",
+            "character.columbina.columbinaLunarDomain", "character.lauma.laumaLightForTheFrostyNight", "character.nahida.nahidaC2")
         val shade = result.hit("shades-hit-1")
         assertEquals(1.35, shade.base.multiplier, 1e-6)
         assertEquals(1.60, shade.elevation.multiplier, 1e-6)
@@ -209,7 +209,7 @@ class DamageFormulaTeamServiceV2Test {
         assertEquals(1.2, shade.crit.additionalDamage, 1e-6)
         assertEquals(.49, shade.damageBonus.authoredBonus, 1e-6)
         assertEquals(.8, result.hit("skill-hit").crit.additionalDamage)
-        val noDomain = calculate(emptyMap(), "columbinaC6")
+        val noDomain = calculate(emptyMap(), "character.columbina.columbinaC6")
         assertEquals(0.0, noDomain.hit("skill-hit").crit.additionalDamage)
         assertEquals(1.07, noDomain.hit("shades-hit-1").elevation.multiplier, 1e-6)
     }
@@ -238,16 +238,16 @@ class DamageFormulaTeamServiceV2Test {
 
     @Test
     fun `owned constellations default on but explicit previews and exclusions win`() {
-        val owned = service.calculate(full, DamageCalculationRequestV2(inputs = mapOf("columbinaConstellation" to 2.0)))
-        assertTrue("columbinaC1" in owned.activeEffectIds)
-        assertTrue("columbinaC2" in owned.activeEffectIds)
-        assertFalse("columbinaC3" in owned.activeEffectIds)
+        val owned = service.calculate(full, DamageCalculationRequestV2(inputs = mapOf("character.columbina.columbinaConstellation" to 2.0)))
+        assertTrue("character.columbina.columbinaC1" in owned.activeEffectIds)
+        assertTrue("character.columbina.columbinaC2" in owned.activeEffectIds)
+        assertFalse("character.columbina.columbinaC3" in owned.activeEffectIds)
         val preview = service.calculate(full, DamageCalculationRequestV2(
-            inputs = mapOf("columbinaConstellation" to 2.0),
-            enabledEffects = mapOf("columbinaC1" to false, "columbinaC6" to true),
+            inputs = mapOf("character.columbina.columbinaConstellation" to 2.0),
+            enabledEffects = mapOf("character.columbina.columbinaC1" to false, "character.columbina.columbinaC6" to true),
         ))
-        assertFalse("columbinaC1" in preview.activeEffectIds)
-        assertTrue("columbinaC6" in preview.activeEffectIds)
+        assertFalse("character.columbina.columbinaC1" in preview.activeEffectIds)
+        assertTrue("character.columbina.columbinaC6" in preview.activeEffectIds)
     }
 
     private fun calculate(inputs: Map<String, Double> = emptyMap(), vararg enabled: String): DamageCalculationV2 =

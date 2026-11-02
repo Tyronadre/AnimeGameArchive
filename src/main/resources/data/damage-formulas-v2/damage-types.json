@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 2,
+  "damageTypes": [
+    {
+      "id": "directPyro",
+      "element": "Pyro",
+      "resistanceInput": "enemyPyroResistance"
+    },
+    {
+      "id": "directPhysical",
+      "element": "Physical",
+      "appliesElementalDamageBonus": false,
+      "resistanceInput": "enemyPhysicalResistance",
+      "innateDamageBonus": {
+        "unit": "percentPoints",
+        "expression": {
+          "type": "input",
+          "input": "source:physicalDamageBonus"
+        }
+      }
+    },
+    {
+      "id": "directCryo",
+      "element": "Cryo",
+      "resistanceInput": "enemyCryoResistance"
+    },
+    {
+      "id": "directHydro",
+      "element": "Hydro",
+      "resistanceInput": "enemyHydroResistance"
+    },
+    {
+      "id": "directDendro",
+      "element": "Dendro",
+      "defenseBehavior": "standard",
+      "appliesElementalDamageBonus": true,
+      "allowsCriticalHits": true,
+      "innateDamageBonus": null,
+      "resistanceInput": "enemyDendroResistance"
+    },
+    {
+      "id": "lunarBloom",
+      "resistanceInput": "enemyDendroResistance",
+      "kind": "lunar",
+      "element": "Dendro",
+      "defenseBehavior": "bypass",
+      "appliesElementalDamageBonus": false,
+      "allowsCriticalHits": true,
+      "innateDamageBonus": {
+        "unit": "ratio",
+        "expression": {
+          "type": "divide",
+          "operands": [
+            {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 6
+                },
+                {
+                  "type": "input",
+                  "input": "source:elementalMastery"
+                }
+              ]
+            },
+            {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "input",
+                  "input": "source:elementalMastery"
+                },
+                {
+                  "type": "constant",
+                  "value": 2000
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "artifactPhysicalProc",
+      "element": "Physical",
+      "defenseBehavior": "bypass",
+      "appliesElementalDamageBonus": false,
+      "appliesOtherDamageBonus": false,
+      "allowsCriticalHits": false,
+      "resistanceInput": "enemyPhysicalResistance",
+      "independentProc": true,
+      "kind": "artifactProc"
+    },
+    {
+      "id": "directAnemo",
+      "element": "Anemo",
+      "resistanceInput": "enemyAnemoResistance"
+    },
+    {
+      "id": "directElectro",
+      "element": "Electro",
+      "resistanceInput": "enemyElectroResistance"
+    },
+    {
+      "id": "directGeo",
+      "element": "Geo",
+      "resistanceInput": "enemyGeoResistance"
+    }
+  ]
+}

@@ -1,84 +1,1027 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "key": "bennett",
   "characterKey": "bennett",
   "name": "Bennett",
   "element": "Pyro",
   "weaponType": "Sword",
   "characterDataResource": "data/characters/data/bennett.json",
-  "defaultTeam": ["bennett", "arlecchino", "xiangling", "xingqiu"],
-  "statBindings": {"attack":"attack","elementalMastery":"elementalMastery","energyRecharge":"energyRecharge","physicalDamageBonus":"physicalDamageBonus"},
-  "inputs": [
-    {"id":"characterLevel","label":"Character level","defaultValue":90,"min":1,"max":90,"step":1,"initialValueSource":{"valueKey":"level"}},
-    {"id":"enemyLevel","label":"Enemy level","defaultValue":90,"min":1,"max":120,"step":1,"section":"enemy"},
-    {"id":"maxHp","label":"Max HP","defaultValue":15000,"min":0,"max":200000,"step":1,"initialValueSource":{"valueKey":"totalHp"}},
-    {"id":"attack","label":"Total ATK","defaultValue":1500,"min":0,"max":20000,"step":1,"initialValueSource":{"valueKey":"totalAttack"}},
-    {"id":"baseAttack","label":"Base ATK","defaultValue":800,"min":0,"max":2000,"step":1,"initialValueSource":{"valueKey":"baseAttack"},"section":"internal"},
-    {"id":"defense","label":"Total DEF","defaultValue":800,"min":0,"max":20000,"step":1,"initialValueSource":{"valueKey":"totalDefense"}},
-    {"id":"elementalMastery","label":"Elemental Mastery","defaultValue":0,"min":0,"max":5000,"step":1,"initialValueSource":{"valueKey":"stat:eleMas"}},
-    {"id":"elementalDamageBonus","label":"Pyro DMG Bonus","defaultValue":0,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:pyro_dmg_"}},
-    {"id":"physicalDamageBonus","label":"Physical DMG Bonus","defaultValue":0,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:physical_dmg_"}},
-    {"id":"energyRecharge","label":"Energy Recharge","defaultValue":100,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:enerRech_"}},
-    {"id":"critRate","label":"CRIT Rate","defaultValue":5,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:critRate_"}},
-    {"id":"critDamage","label":"CRIT DMG","defaultValue":50,"min":0,"max":1000,"step":0.1,"unit":"percentPoints","initialValueSource":{"valueKey":"stat:critDMG_"}},
-    {"id":"bennettConstellation","label":"Bennett constellation","defaultValue":0,"min":0,"max":6,"step":1,"initialValueSource":{"valueKey":"constellation"},"section":"constellations"},
-    {"id":"normalTalentLevel","label":"Normal Attack level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"normalTalent"}},
-    {"id":"skillTalentLevel","label":"Elemental Skill level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"skillTalent"}},
-    {"id":"burstTalentLevel","label":"Elemental Burst level","defaultValue":10,"min":1,"max":15,"step":1,"initialValueSource":{"valueKey":"burstTalent"}},
-    {"id":"hpBelow70","label":"HP below 70%","defaultValue":0,"min":0,"max":1,"step":1,"section":"combat"},
-    {"id":"enemyResistance","label":"Enemy Pyro RES","defaultValue":10,"min":-100,"max":150,"step":0.1,"unit":"percentPoints","section":"enemy"},
-    {"id":"enemyPhysicalResistance","label":"Enemy Physical RES","defaultValue":10,"min":-100,"max":150,"step":0.1,"unit":"percentPoints","section":"enemy"},
-    {"id":"defenseReduction","label":"DEF reduction","defaultValue":0,"min":0,"max":100,"step":0.1,"unit":"percentPoints","section":"enemy"},
-    {"id":"defenseIgnore","label":"DEF ignored","defaultValue":0,"min":0,"max":100,"step":0.1,"unit":"percentPoints","section":"enemy"}
+  "defaultTeam": [
+    "bennett",
+    "arlecchino",
+    "xiangling",
+    "xingqiu"
   ],
-  "damageTypes": [
-    {"id":"directPyro","element":"Pyro"},
-    {"id":"directPhysical","element":"Physical","appliesElementalDamageBonus":false,"resistanceInput":"enemyPhysicalResistance","innateDamageBonus":{"unit":"percentPoints","expression":{"type":"input","input":"physicalDamageBonus"}}}
+  "statBindings": {
+    "constellation": "bennettConstellation"
+  },
+  "inputs": [
+    {
+      "id": "hpBelow70",
+      "label": "HP below 70%",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1,
+      "section": "combat"
+    }
   ],
   "talents": [
-    {"key":"normal","name":"Strike of Fortune","formulas":[
-      {"id":"normal-1","label":"1-Hit DMG","damageType":"directPhysical","tags":["normalAttack"],"excludedEffects":["bennettC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param1","levelInput":"normalTalentLevel"}]}},
-      {"id":"normal-2","label":"2-Hit DMG","damageType":"directPhysical","tags":["normalAttack"],"excludedEffects":["bennettC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param2","levelInput":"normalTalentLevel"}]}},
-      {"id":"normal-3","label":"3-Hit DMG","damageType":"directPhysical","tags":["normalAttack"],"excludedEffects":["bennettC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param3","levelInput":"normalTalentLevel"}]}},
-      {"id":"normal-4","label":"4-Hit DMG","damageType":"directPhysical","tags":["normalAttack"],"excludedEffects":["bennettC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param4","levelInput":"normalTalentLevel"}]}},
-      {"id":"normal-5","label":"5-Hit DMG","damageType":"directPhysical","tags":["normalAttack"],"excludedEffects":["bennettC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param5","levelInput":"normalTalentLevel"}]}},
-      {"id":"charged","label":"Charged Attack DMG (2 hits)","damageType":"directPhysical","tags":["chargedAttack","multiHit"],"excludedEffects":["bennettC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"add","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param6","levelInput":"normalTalentLevel"},{"type":"talentParameter","talent":"combat1","parameter":"param7","levelInput":"normalTalentLevel"}]}]}},
-      {"id":"plunge","label":"Plunge DMG","damageType":"directPhysical","tags":["plungingAttack"],"excludedEffects":["bennettC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param9","levelInput":"normalTalentLevel"}]}},
-      {"id":"low-plunge","label":"Low Plunge DMG","damageType":"directPhysical","tags":["plungingAttack"],"excludedEffects":["bennettC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param10","levelInput":"normalTalentLevel"}]}},
-      {"id":"high-plunge","label":"High Plunge DMG","damageType":"directPhysical","tags":["plungingAttack"],"excludedEffects":["bennettC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param11","levelInput":"normalTalentLevel"}]}},
-      {"id":"c6-normal-1","label":"1-Hit DMG (C6 Pyro Infusion)","damageType":"directPyro","tags":["normalAttack","infusedAttack"],"requiredEffects":["bennettC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param1","levelInput":"normalTalentLevel"}]}},
-      {"id":"c6-normal-2","label":"2-Hit DMG (C6 Pyro Infusion)","damageType":"directPyro","tags":["normalAttack","infusedAttack"],"requiredEffects":["bennettC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param2","levelInput":"normalTalentLevel"}]}},
-      {"id":"c6-normal-3","label":"3-Hit DMG (C6 Pyro Infusion)","damageType":"directPyro","tags":["normalAttack","infusedAttack"],"requiredEffects":["bennettC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param3","levelInput":"normalTalentLevel"}]}},
-      {"id":"c6-normal-4","label":"4-Hit DMG (C6 Pyro Infusion)","damageType":"directPyro","tags":["normalAttack","infusedAttack"],"requiredEffects":["bennettC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param4","levelInput":"normalTalentLevel"}]}},
-      {"id":"c6-normal-5","label":"5-Hit DMG (C6 Pyro Infusion)","damageType":"directPyro","tags":["normalAttack","infusedAttack"],"requiredEffects":["bennettC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param5","levelInput":"normalTalentLevel"}]}},
-      {"id":"c6-charged","label":"Charged Attack DMG (C6, 2 hits)","damageType":"directPyro","tags":["chargedAttack","multiHit","infusedAttack"],"requiredEffects":["bennettC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"add","operands":[{"type":"talentParameter","talent":"combat1","parameter":"param6","levelInput":"normalTalentLevel"},{"type":"talentParameter","talent":"combat1","parameter":"param7","levelInput":"normalTalentLevel"}]}]}},
-      {"id":"c6-plunge","label":"Plunge DMG (C6 Pyro Infusion)","damageType":"directPyro","tags":["plungingAttack","infusedAttack"],"requiredEffects":["bennettC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param9","levelInput":"normalTalentLevel"}]}},
-      {"id":"c6-low-plunge","label":"Low Plunge DMG (C6 Pyro Infusion)","damageType":"directPyro","tags":["plungingAttack","infusedAttack"],"requiredEffects":["bennettC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param10","levelInput":"normalTalentLevel"}]}},
-      {"id":"c6-high-plunge","label":"High Plunge DMG (C6 Pyro Infusion)","damageType":"directPyro","tags":["plungingAttack","infusedAttack"],"requiredEffects":["bennettC6"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat1","parameter":"param11","levelInput":"normalTalentLevel"}]}}
-    ]},
-    {"key":"skill","name":"Passion Overload","formulas":[
-      {"id":"skill-press","label":"Press DMG","damageType":"directPyro","tags":["elementalSkill"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param1","levelInput":"skillTalentLevel"}]}},
-      {"id":"skill-charge1-1","label":"Charge Level 1 · 1st Hit","damageType":"directPyro","tags":["elementalSkill"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param2","levelInput":"skillTalentLevel"}]}},
-      {"id":"skill-charge1-2","label":"Charge Level 1 · 2nd Hit","damageType":"directPyro","tags":["elementalSkill"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param3","levelInput":"skillTalentLevel"}]}},
-      {"id":"skill-charge2-1","label":"Charge Level 2 · 1st Hit","damageType":"directPyro","tags":["elementalSkill"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param4","levelInput":"skillTalentLevel"}]}},
-      {"id":"skill-charge2-2","label":"Charge Level 2 · 2nd Hit","damageType":"directPyro","tags":["elementalSkill"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param5","levelInput":"skillTalentLevel"}]}},
-      {"id":"skill-charge2-explosion","label":"Charge Level 2 · Explosion","damageType":"directPyro","tags":["elementalSkill"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param6","levelInput":"skillTalentLevel"}]}},
-      {"id":"skill-c4-followup","label":"Charge Level 1 · C4 Follow-Up","damageType":"directPyro","tags":["elementalSkill","constellationDamage"],"requiredEffects":["bennettC4"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat2","parameter":"param3","levelInput":"skillTalentLevel"},{"type":"constant","value":1.35}]}}
-    ]},
-    {"key":"burst","name":"Fantastic Voyage","formulas":[
-      {"id":"burst-hit","label":"Skill DMG","damageType":"directPyro","tags":["elementalBurst"],"base":{"type":"multiply","operands":[{"type":"input","input":"attack"},{"type":"talentParameter","talent":"combat3","parameter":"param1","levelInput":"burstTalentLevel"}]}}
-    ]}
+    {
+      "key": "normal",
+      "name": "Strike of Fortune",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "1-Hit DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "excludedEffects": [
+            "bennettC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-2",
+          "label": "2-Hit DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "excludedEffects": [
+            "bennettC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-3",
+          "label": "3-Hit DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "excludedEffects": [
+            "bennettC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-4",
+          "label": "4-Hit DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "excludedEffects": [
+            "bennettC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-5",
+          "label": "5-Hit DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "excludedEffects": [
+            "bennettC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "charged",
+          "label": "Charged Attack DMG (2 hits)",
+          "damageType": "directPhysical",
+          "tags": [
+            "chargedAttack",
+            "multiHit"
+          ],
+          "excludedEffects": [
+            "bennettC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat1",
+                    "parameter": "param6",
+                    "levelInput": "local:normalTalentLevel"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat1",
+                    "parameter": "param7",
+                    "levelInput": "local:normalTalentLevel"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "plunge",
+          "label": "Plunge DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack"
+          ],
+          "excludedEffects": [
+            "bennettC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "low-plunge",
+          "label": "Low Plunge DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack"
+          ],
+          "excludedEffects": [
+            "bennettC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "high-plunge",
+          "label": "High Plunge DMG",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack"
+          ],
+          "excludedEffects": [
+            "bennettC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param11",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "c6-normal-1",
+          "label": "1-Hit DMG (C6 Pyro Infusion)",
+          "damageType": "directPyro",
+          "tags": [
+            "normalAttack",
+            "infusedAttack"
+          ],
+          "requiredEffects": [
+            "bennettC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "c6-normal-2",
+          "label": "2-Hit DMG (C6 Pyro Infusion)",
+          "damageType": "directPyro",
+          "tags": [
+            "normalAttack",
+            "infusedAttack"
+          ],
+          "requiredEffects": [
+            "bennettC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "c6-normal-3",
+          "label": "3-Hit DMG (C6 Pyro Infusion)",
+          "damageType": "directPyro",
+          "tags": [
+            "normalAttack",
+            "infusedAttack"
+          ],
+          "requiredEffects": [
+            "bennettC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "c6-normal-4",
+          "label": "4-Hit DMG (C6 Pyro Infusion)",
+          "damageType": "directPyro",
+          "tags": [
+            "normalAttack",
+            "infusedAttack"
+          ],
+          "requiredEffects": [
+            "bennettC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "c6-normal-5",
+          "label": "5-Hit DMG (C6 Pyro Infusion)",
+          "damageType": "directPyro",
+          "tags": [
+            "normalAttack",
+            "infusedAttack"
+          ],
+          "requiredEffects": [
+            "bennettC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "c6-charged",
+          "label": "Charged Attack DMG (C6, 2 hits)",
+          "damageType": "directPyro",
+          "tags": [
+            "chargedAttack",
+            "multiHit",
+            "infusedAttack"
+          ],
+          "requiredEffects": [
+            "bennettC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat1",
+                    "parameter": "param6",
+                    "levelInput": "local:normalTalentLevel"
+                  },
+                  {
+                    "type": "talentParameter",
+                    "talent": "combat1",
+                    "parameter": "param7",
+                    "levelInput": "local:normalTalentLevel"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "c6-plunge",
+          "label": "Plunge DMG (C6 Pyro Infusion)",
+          "damageType": "directPyro",
+          "tags": [
+            "plungingAttack",
+            "infusedAttack"
+          ],
+          "requiredEffects": [
+            "bennettC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "c6-low-plunge",
+          "label": "Low Plunge DMG (C6 Pyro Infusion)",
+          "damageType": "directPyro",
+          "tags": [
+            "plungingAttack",
+            "infusedAttack"
+          ],
+          "requiredEffects": [
+            "bennettC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param10",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "c6-high-plunge",
+          "label": "High Plunge DMG (C6 Pyro Infusion)",
+          "damageType": "directPyro",
+          "tags": [
+            "plungingAttack",
+            "infusedAttack"
+          ],
+          "requiredEffects": [
+            "bennettC6"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param11",
+                "levelInput": "local:normalTalentLevel"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Passion Overload",
+      "formulas": [
+        {
+          "id": "skill-press",
+          "label": "Press DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalSkill"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "skill-charge1-1",
+          "label": "Charge Level 1 · 1st Hit",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalSkill"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param2",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "skill-charge1-2",
+          "label": "Charge Level 1 · 2nd Hit",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalSkill"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param3",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "skill-charge2-1",
+          "label": "Charge Level 2 · 1st Hit",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalSkill"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "skill-charge2-2",
+          "label": "Charge Level 2 · 2nd Hit",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalSkill"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param5",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "skill-charge2-explosion",
+          "label": "Charge Level 2 · Explosion",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalSkill"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param6",
+                "levelInput": "local:skillTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "skill-c4-followup",
+          "label": "Charge Level 1 · C4 Follow-Up",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalSkill",
+            "constellationDamage"
+          ],
+          "requiredEffects": [
+            "bennettC4"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param3",
+                "levelInput": "local:skillTalentLevel"
+              },
+              {
+                "type": "constant",
+                "value": 1.35
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Fantastic Voyage",
+      "formulas": [
+        {
+          "id": "burst-hit",
+          "label": "Skill DMG",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalBurst"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "local:burstTalentLevel"
+              }
+            ]
+          }
+        }
+      ]
+    }
   ],
   "effects": [
-    {"id":"fantasticVoyageField","name":"Fantastic Voyage · Inspiration Field","source":"Bennett · Elemental Burst","category":"talent","description":"Adds the selected Burst-level ATK Bonus Ratio multiplied by Bennett's Base ATK. The calculator assumes the recipient is eligible for the field buff.","defaultEnabled":true,"activation":{"event":"burstFieldActive"},"statChanges":[{"stat":"attack","operation":"flatAdd","phase":1,"value":{"type":"multiply","operands":[{"type":"input","input":"baseAttack"},{"type":"talentParameter","talent":"combat3","parameter":"param4","levelInput":"burstTalentLevel"}]}}],"metrics":[{"label":"Flat ATK granted","expression":{"type":"multiply","operands":[{"type":"input","input":"baseAttack"},{"type":"talentParameter","talent":"combat3","parameter":"param4","levelInput":"burstTalentLevel"}]}}]},
-    {"id":"rekindle","name":"Rekindle","source":"Bennett · Passive","category":"passive","description":"Decreases Passion Overload's cooldown by 20%.","impact":"Rotation utility; no change to damage per hit.","defaultEnabled":true,"activation":{"event":"always"}},
-    {"id":"fearnaught","name":"Fearnaught","source":"Bennett · Passive","category":"passive","description":"Inside Fantastic Voyage, Passion Overload's cooldown is reduced by 50% and Charge Level 2 no longer launches Bennett.","impact":"Rotation and utility only.","defaultEnabled":true,"activation":{"event":"burstFieldActive"}},
-    {"id":"itShouldBeSafe","name":"It Should Be Safe...","source":"Bennett · Passive","category":"passive","description":"Expedition-time passive with no combat damage effect.","impact":"No calculator modifier.","defaultEnabled":true,"activation":{"event":"always"}},
-    {"id":"bennettC1","name":"C1 · Grand Expectation","source":"Bennett · Constellation","category":"constellation","description":"Removes Fantastic Voyage's HP restriction and adds another 20% of Bennett's Base ATK to its flat ATK buff.","ownershipRequirements":{"bennettConstellation":1},"activation":{"event":"burstFieldActive"},"statChanges":[{"stat":"attack","operation":"flatAdd","value":{"type":"multiply","operands":[{"type":"input","input":"baseAttack"},{"type":"constant","value":0.2}]}}]},
-    {"id":"bennettC2","name":"C2 · Impasse Conqueror","source":"Bennett · Constellation","category":"constellation","description":"Below 70% HP, increases Bennett's Energy Recharge by 30%.","ownershipRequirements":{"bennettConstellation":2},"activation":{"event":"hpThreshold","conditions":[{"type":"inputAtLeast","input":"hpBelow70","value":1}]},"statChanges":[{"stat":"energyRecharge","operation":"flatAdd","value":{"type":"constant","value":30}}]},
-    {"id":"bennettC3","name":"C3 · Unstoppable Fervor","source":"Bennett · Constellation","category":"constellation","description":"Increases Passion Overload's talent level by 3.","ownershipRequirements":{"bennettConstellation":3},"activation":{"event":"always"},"statChanges":[{"stat":"skillTalentLevel","operation":"flatAdd","value":{"type":"constant","value":3},"maximum":15}]},
-    {"id":"bennettC4","name":"C4 · Unexpected Odyssey","source":"Bennett · Constellation","category":"constellation","description":"A Normal Attack during Charge Level 1 performs a follow-up equal to 135% of its second hit.","ownershipRequirements":{"bennettConstellation":4},"activation":{"event":"chargedSkillFollowUp"}},
-    {"id":"bennettC5","name":"C5 · True Explorer","source":"Bennett · Constellation","category":"constellation","description":"Increases Fantastic Voyage's talent level by 3, strengthening both its hit and ATK buff.","ownershipRequirements":{"bennettConstellation":5},"activation":{"event":"always"},"statChanges":[{"stat":"burstTalentLevel","operation":"flatAdd","value":{"type":"constant","value":3},"maximum":15}]},
-    {"id":"bennettC6","name":"C6 · Fire Ventures With Me","source":"Bennett · Constellation","category":"constellation","description":"Inside Fantastic Voyage, grants 15% Pyro DMG Bonus. Bennett's Sword Normal, Charged, and Plunging Attacks are shown as Pyro-infused replacements.","ownershipRequirements":{"bennettConstellation":6},"activation":{"event":"burstFieldActive"},"formulaModifiers":[{"targets":{"elements":["Pyro"]},"damageBonus":{"expression":{"type":"constant","value":15}}}]}
-  ]
+    {
+      "id": "fantasticVoyageField",
+      "name": "Fantastic Voyage · Inspiration Field",
+      "source": "Bennett · Elemental Burst",
+      "category": "talent",
+      "description": "Adds the selected Burst-level ATK Bonus Ratio multiplied by Bennett's Base ATK. The calculator assumes the recipient is eligible for the field buff.",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "burstFieldActive"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:attack",
+          "operation": "flatAdd",
+          "phase": 1,
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:baseAttack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param4",
+                "levelInput": "local:burstTalentLevel"
+              }
+            ]
+          },
+          "recipient": "activeCharacter"
+        }
+      ],
+      "metrics": [
+        {
+          "label": "Flat ATK granted",
+          "expression": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:baseAttack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param4",
+                "levelInput": "local:burstTalentLevel"
+              }
+            ]
+          }
+        }
+      ],
+      "recipient": "self"
+    },
+    {
+      "id": "rekindle",
+      "name": "Rekindle",
+      "source": "Bennett · Passive",
+      "category": "passive",
+      "description": "Decreases Passion Overload's cooldown by 20%.",
+      "impact": "Rotation utility; no change to damage per hit.",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "always"
+      },
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "fearnaught",
+      "name": "Fearnaught",
+      "source": "Bennett · Passive",
+      "category": "passive",
+      "description": "Inside Fantastic Voyage, Passion Overload's cooldown is reduced by 50% and Charge Level 2 no longer launches Bennett.",
+      "impact": "Rotation and utility only.",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "burstFieldActive"
+      },
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "itShouldBeSafe",
+      "name": "It Should Be Safe...",
+      "source": "Bennett · Passive",
+      "category": "passive",
+      "description": "Expedition-time passive with no combat damage effect.",
+      "impact": "No calculator modifier.",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "always"
+      },
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "bennettC1",
+      "name": "C1 · Grand Expectation",
+      "source": "Bennett · Constellation",
+      "category": "constellation",
+      "description": "Removes Fantastic Voyage's HP restriction and adds another 20% of Bennett's Base ATK to its flat ATK buff.",
+      "ownershipRequirements": {
+        "local:bennettConstellation": 1
+      },
+      "activation": {
+        "event": "burstFieldActive"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:attack",
+          "operation": "flatAdd",
+          "value": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:baseAttack"
+              },
+              {
+                "type": "constant",
+                "value": 0.2
+              }
+            ]
+          },
+          "recipient": "activeCharacter"
+        }
+      ],
+      "requiresEffects": [
+        "fantasticVoyageField"
+      ],
+      "recipient": "self"
+    },
+    {
+      "id": "bennettC2",
+      "name": "C2 · Impasse Conqueror",
+      "source": "Bennett · Constellation",
+      "category": "constellation",
+      "description": "Below 70% HP, increases Bennett's Energy Recharge by 30%.",
+      "ownershipRequirements": {
+        "local:bennettConstellation": 2
+      },
+      "activation": {
+        "event": "hpThreshold",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:hpBelow70",
+            "value": 1
+          }
+        ]
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:energyRecharge",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 30
+          },
+          "recipient": "self"
+        }
+      ],
+      "recipient": "self"
+    },
+    {
+      "id": "bennettC3",
+      "name": "C3 · Unstoppable Fervor",
+      "source": "Bennett · Constellation",
+      "category": "constellation",
+      "description": "Increases Passion Overload's talent level by 3.",
+      "ownershipRequirements": {
+        "local:bennettConstellation": 3
+      },
+      "activation": {
+        "event": "always"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15,
+          "recipient": "self"
+        }
+      ],
+      "recipient": "self"
+    },
+    {
+      "id": "bennettC4",
+      "name": "C4 · Unexpected Odyssey",
+      "source": "Bennett · Constellation",
+      "category": "constellation",
+      "description": "A Normal Attack during Charge Level 1 performs a follow-up equal to 135% of its second hit.",
+      "ownershipRequirements": {
+        "local:bennettConstellation": 4
+      },
+      "activation": {
+        "event": "chargedSkillFollowUp"
+      },
+      "recipient": "self",
+      "statChanges": []
+    },
+    {
+      "id": "bennettC5",
+      "name": "C5 · True Explorer",
+      "source": "Bennett · Constellation",
+      "category": "constellation",
+      "description": "Increases Fantastic Voyage's talent level by 3, strengthening both its hit and ATK buff.",
+      "ownershipRequirements": {
+        "local:bennettConstellation": 5
+      },
+      "activation": {
+        "event": "always"
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15,
+          "recipient": "self"
+        }
+      ],
+      "recipient": "self"
+    },
+    {
+      "id": "bennettC6",
+      "name": "C6 · Fire Ventures With Me",
+      "source": "Bennett · Constellation",
+      "category": "constellation",
+      "description": "Inside Fantastic Voyage, grants 15% Pyro DMG Bonus. Bennett's Sword Normal, Charged, and Plunging Attacks are shown as Pyro-infused replacements.",
+      "ownershipRequirements": {
+        "local:bennettConstellation": 6
+      },
+      "activation": {
+        "event": "burstFieldActive"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "elements": [
+              "Pyro"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 15
+            }
+          },
+          "recipient": "activeCharacter"
+        }
+      ],
+      "requiresEffects": [
+        "fantasticVoyageField"
+      ],
+      "recipient": "self",
+      "statChanges": []
+    }
+  ],
+  "notes": [
+    "The field ATK buff is sourced from Bennett's stored Base ATK and current Burst talent level."
+  ],
+  "sources": [
+    "data/characters/data/bennett.json",
+    "https://keqingmains.com/q/bennett-quickguide/"
+  ],
+  "inputDefaults": {
+    "maxHp": 15000,
+    "attack": 1500,
+    "baseAttack": 800,
+    "defense": 800,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  }
 }

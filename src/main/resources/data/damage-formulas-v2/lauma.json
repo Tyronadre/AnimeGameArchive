@@ -1,0 +1,753 @@
+{
+  "schemaVersion": 3,
+  "weaponType": "Catalyst",
+  "key": "lauma",
+  "name": "Lauma",
+  "element": "Dendro",
+  "moonsignContribution": 1,
+  "characterDataResource": "data/characters/data/lauma.json",
+  "statBindings": {
+    "elementalMastery": "laumaElementalMastery",
+    "constellation": "laumaConstellation",
+    "skillTalentLevel": "laumaSkillTalentLevel",
+    "burstTalentLevel": "laumaBurstTalentLevel",
+    "normalTalentLevel": "newInput"
+  },
+  "inputs": [
+    {
+      "id": "verdantDew",
+      "label": "Verdant Dew",
+      "defaultValue": 6,
+      "min": 0,
+      "max": 6,
+      "step": 1
+    },
+    {
+      "id": "moonSong",
+      "label": "Moon Song",
+      "defaultValue": 3,
+      "min": 0,
+      "max": 3,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "id": "laumaFrostgroveSanctuary",
+      "name": "Frostgrove Sanctuary",
+      "source": "Lauma · Elemental Skill",
+      "description": "Assumes a Skill hit within the last 10 seconds. Reduces Dendro and Hydro RES using Lauma's effective Skill level.",
+      "category": "team",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "elements": [
+              "Dendro",
+              "Hydro"
+            ]
+          },
+          "resistanceMitigation": {
+            "reduction": {
+              "expression": {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param8",
+                "levelInput": "local:laumaSkillTalentLevel"
+              },
+              "unit": "ratio"
+            }
+          },
+          "conditions": [],
+          "requiresEffects": [],
+          "recipient": "enemy"
+        }
+      ],
+      "recipient": "party",
+      "statChanges": []
+    },
+    {
+      "id": "laumaLightForTheFrostyNight",
+      "name": "Light for the Frosty Night",
+      "source": "Lauma · Passive",
+      "description": "After Lauma's Skill, Ascendant Gleam grants Lunar-Bloom +10% CRIT Rate and +20% CRIT DMG for 20 seconds. The Nascent buff affects ordinary Bloom reactions, not these hits.",
+      "category": "team",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "skillActivation",
+        "conditions": [
+          {
+            "type": "contextAtLeast",
+            "input": "moonsignLevel",
+            "value": 2
+          }
+        ]
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "crit": {
+            "additionalRate": {
+              "expression": {
+                "type": "constant",
+                "value": 10
+              }
+            },
+            "additionalDamage": {
+              "expression": {
+                "type": "constant",
+                "value": 20
+              }
+            }
+          },
+          "conditions": [],
+          "requiresEffects": []
+        }
+      ],
+      "recipient": "party",
+      "statChanges": []
+    },
+    {
+      "id": "laumaNaturesChorus",
+      "name": "Moonsign Benediction: Nature's Chorus",
+      "source": "Lauma · Passive",
+      "description": "Adds 0.0175% Lunar-Bloom base damage per EM, capped at 14%. Lauma also contributes one Moonsign level while in the party.",
+      "category": "team",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "baseDamageBonus": {
+            "expression": {
+              "type": "min",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 14
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "input",
+                      "input": "source:elementalMastery"
+                    },
+                    {
+                      "type": "constant",
+                      "value": 0.0175
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "conditions": [],
+          "requiresEffects": []
+        }
+      ],
+      "recipient": "party",
+      "statChanges": []
+    },
+    {
+      "id": "laumaPaleHymn",
+      "name": "Pale Hymn",
+      "source": "Lauma · Elemental Burst",
+      "description": "Assumes a Pale Hymn stack is available for this hit. Adds Lauma's EM × the Burst scaling to base damage before damage bonuses, RES, CRIT, and Elevation. Stack depletion is not simulated.",
+      "category": "team",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "buffActive"
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "conditions": [],
+          "requiresEffects": [],
+          "postBonusBase": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:elementalMastery"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param4",
+                "levelInput": "local:laumaBurstTalentLevel"
+              }
+            ]
+          }
+        }
+      ],
+      "recipient": "party",
+      "statChanges": []
+    },
+    {
+      "id": "laumaC1",
+      "name": "C1 · O Lips, Weave Me Songs and Psalms",
+      "source": "Lauma constellation",
+      "description": "Adds healing and movement utility; no modifier to the active character's damage.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "local:laumaConstellation": 1
+      },
+      "impact": "Healing / utility only.",
+      "metrics": [
+        {
+          "label": "Healing per trigger",
+          "expression": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:elementalMastery"
+              },
+              {
+                "type": "constant",
+                "value": 5
+              }
+            ]
+          },
+          "unit": "number"
+        }
+      ],
+      "formulaModifiers": [],
+      "recipient": "party",
+      "statChanges": []
+    },
+    {
+      "id": "laumaC2",
+      "name": "C2 · Twine Warnings and Tales From the North",
+      "source": "Lauma constellation",
+      "description": "Pale Hymn adds another 400% of Lauma's EM to Lunar-Bloom. Separately, Ascendant Gleam grants 40% Lunar-Bloom DMG Bonus, including when no Pale Hymn stack is available.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "local:laumaConstellation": 2
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "requiresEffects": [
+            "laumaPaleHymn"
+          ],
+          "postBonusBase": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:elementalMastery"
+              },
+              {
+                "type": "constant",
+                "value": 4
+              }
+            ]
+          },
+          "conditions": []
+        },
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "contextAtLeast",
+              "input": "moonsignLevel",
+              "value": 2
+            }
+          ],
+          "damageBonus": {
+            "expression": {
+              "type": "constant",
+              "value": 40
+            }
+          },
+          "requiresEffects": []
+        }
+      ],
+      "recipient": "party",
+      "statChanges": []
+    },
+    {
+      "id": "laumaC3",
+      "name": "C3 · Seek Not to Tread the Sly Fox's Path",
+      "source": "Lauma constellation",
+      "description": "Adds three Burst talent levels, up to level 15; increases Pale Hymn scaling.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "local:laumaConstellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15,
+          "recipient": "self"
+        }
+      ],
+      "formulaModifiers": [],
+      "recipient": "party"
+    },
+    {
+      "id": "laumaC4",
+      "name": "C4 · Nor Yearn for the Great Bear's Might",
+      "source": "Lauma constellation",
+      "description": "Restores Lauma's Energy on Sanctuary hits. Changes Burst uptime, not damage per hit.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "local:laumaConstellation": 4
+      },
+      "impact": "Energy / rotation only.",
+      "formulaModifiers": [],
+      "recipient": "party",
+      "statChanges": []
+    },
+    {
+      "id": "laumaC5",
+      "name": "C5 · If Truth May Be Subject to Witness",
+      "source": "Lauma constellation",
+      "description": "Adds three Skill talent levels, up to level 15; increases the RES reduction.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "local:laumaConstellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15,
+          "recipient": "self"
+        }
+      ],
+      "formulaModifiers": [],
+      "recipient": "party"
+    },
+    {
+      "id": "laumaC6",
+      "name": "C6 · I Offer Blood and Tears to the Moonlight",
+      "source": "Lauma constellation",
+      "description": "At Ascendant Gleam, grants 25% Lunar-Bloom Elevation. Lauma's extra attacks and Pale Hymn generation affect her own damage and the rotation, not the active character's hit count.",
+      "category": "constellation",
+      "defaultEnabled": false,
+      "activation": {
+        "event": "buffActive"
+      },
+      "ownershipRequirements": {
+        "local:laumaConstellation": 6
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "lunarBloom"
+            ]
+          },
+          "conditions": [
+            {
+              "type": "contextAtLeast",
+              "input": "moonsignLevel",
+              "value": 2
+            }
+          ],
+          "elevation": {
+            "expression": {
+              "type": "constant",
+              "value": 25
+            }
+          },
+          "requiresEffects": []
+        }
+      ],
+      "recipient": "party",
+      "statChanges": []
+    }
+  ],
+  "notes": [
+    "Support profile: personal attacks, healing timelines and stack consumption are not simulated.",
+    "Cleansing for the Spring and Prayers for the Forest do not modify a teammate's damage."
+  ],
+  "sources": [
+    "data/characters/data/lauma.json",
+    "https://library.keqingmains.com/characters/dendro/lauma",
+    "https://keqingmains.com/misc/lunar-reactions/"
+  ],
+  "characterKey": "lauma",
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Peregrination of Linnunrata",
+      "formulas": [
+        {
+          "id": "lauma1HitDMG",
+          "label": "1-Hit DMG",
+          "damageType": "directDendro",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "characterKey": "lauma",
+                "talent": "combat1",
+                "levelInput": "source:normalTalentLevel",
+                "parameter": "param1"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lauma1HitDMGCopy",
+          "label": "2-Hit DMG",
+          "damageType": "directDendro",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "characterKey": "lauma",
+                "talent": "combat1",
+                "levelInput": "source:normalTalentLevel",
+                "parameter": "param2"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lauma1HitDMGCopyCopy",
+          "label": "3-Hit DMG",
+          "damageType": "directDendro",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "characterKey": "lauma",
+                "talent": "combat1",
+                "levelInput": "source:normalTalentLevel",
+                "parameter": "param3"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lauma1HitDMGCopyCopyCopy",
+          "label": "Charged Attack DMG",
+          "damageType": "directDendro",
+          "tags": [
+            "chargedAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "characterKey": "lauma",
+                "talent": "combat1",
+                "levelInput": "source:normalTalentLevel",
+                "parameter": "param9"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lauma1HitDMGCopyCopyCopyCopy",
+          "label": "Plunge DMG",
+          "damageType": "directDendro",
+          "tags": [
+            "chargedAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "characterKey": "lauma",
+                "talent": "combat1",
+                "levelInput": "source:normalTalentLevel",
+                "parameter": "param10"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lauma1HitDMGCopyCopyCopyCopyCopy",
+          "label": "Low Plunge DMG",
+          "damageType": "directDendro",
+          "tags": [
+            "chargedAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "characterKey": "lauma",
+                "talent": "combat1",
+                "levelInput": "source:normalTalentLevel",
+                "parameter": "param11"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lauma1HitDMGCopyCopyCopyCopyCopyCopy",
+          "label": "High Plunge DMG",
+          "damageType": "directDendro",
+          "tags": [
+            "chargedAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "characterKey": "lauma",
+                "talent": "combat1",
+                "levelInput": "source:normalTalentLevel",
+                "parameter": "param12"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Runo: Dawnless Rest of Karsikko",
+      "formulas": [
+        {
+          "id": "laumaPressDMG",
+          "label": "Press DMG",
+          "damageType": "directPyro",
+          "tags": [],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "talentParameter",
+                "characterKey": "lauma",
+                "talent": "combat2",
+                "levelInput": "source:skillTalentLevel",
+                "parameter": "param1"
+              },
+              {
+                "type": "input",
+                "input": "source:elementalMastery"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lauma1HitHoldDMG",
+          "label": "1-Hit Hold DMG",
+          "damageType": "directDendro",
+          "tags": [
+            "elementalSkill"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:elementalMastery"
+              },
+              {
+                "type": "talentParameter",
+                "characterKey": "lauma",
+                "talent": "combat2",
+                "levelInput": "source:skillTalentLevel",
+                "parameter": "param2"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lauma1HitHoldDMGCopy",
+          "label": "2-Hit Hold DMG",
+          "damageType": "lunarBloom",
+          "tags": [
+            "elementalSkill",
+            "lunarBloom"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:elementalMastery"
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "talentParameter",
+                    "characterKey": "lauma",
+                    "talent": "combat2",
+                    "levelInput": "source:skillTalentLevel",
+                    "parameter": "param3"
+                  },
+                  {
+                    "type": "max",
+                    "operands": [
+                      {
+                        "type": "input",
+                        "input": "local:moonSong"
+                      },
+                      {
+                        "type": "constant",
+                        "value": 3
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "laumaFrostmoonSanctuaryDMG",
+          "label": "Frostmoon Sanctuary DMG",
+          "damageType": "directDendro",
+          "tags": [
+            "elementalSkill"
+          ],
+          "base": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "talentParameter",
+                    "characterKey": "lauma",
+                    "talent": "combat2",
+                    "levelInput": "source:skillTalentLevel",
+                    "parameter": "param4"
+                  },
+                  {
+                    "type": "input",
+                    "input": "source:attack"
+                  }
+                ]
+              },
+              {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "talentParameter",
+                    "characterKey": "lauma",
+                    "talent": "combat2",
+                    "levelInput": "source:skillTalentLevel",
+                    "parameter": "param5"
+                  },
+                  {
+                    "type": "input",
+                    "input": "source:elementalMastery"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "defaultTeam": [
+    "lauma"
+  ],
+  "inputDefaults": {
+    "elementalMastery": 1000,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10,
+    "normalTalentLevel": 9
+  }
+}

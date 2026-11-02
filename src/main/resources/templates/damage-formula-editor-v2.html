@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formula studio · Genshin Archive</title>
+<link rel="stylesheet" th:href="@{/css/app.css}"><link rel="stylesheet" th:href="@{/css/formula-editor-v2.css}">
+<script th:src="@{/js/theme.js}"></script><script defer th:src="@{/js/formula-editor-v2.js}"></script>
+</head>
+<body>
+<header th:replace="~{fragments :: siteHeader('damage-calculator')}"></header>
+<main class="formula-studio" data-formula-studio th:attr="data-api=@{/api/damage-formulas/v2/editor},data-csrf-header=${_csrf.headerName},data-csrf-token=${_csrf.token}">
+<header class="studio-heading"><div><p class="eyebrow">Damage calculator v2</p><h1>Formula studio</h1><p>Build inputs, damage instances, and effects. Validate your changes before saving.</p></div><a th:href="@{/damage-calculator-v2}">Open calculator ↗</a></header>
+<div class="studio-layout">
+<aside class="studio-library"><label for="studio-search">Formula library</label><input id="studio-search" type="search" placeholder="Search characters, weapons, sets…"><nav id="studio-files" aria-label="Formula files"></nav></aside>
+<section class="studio-document" aria-label="Formula editor">
+<header class="studio-toolbar"><div><strong id="studio-name">Choose a formula file</strong><small id="studio-dirty"></small></div><div class="studio-actions"><button id="studio-reload" type="button" disabled>Reload</button><button id="studio-validate" type="button" disabled>Validate</button><button id="studio-save" type="button" disabled>Save changes</button></div></header>
+<p id="studio-status" role="status" aria-live="polite">Loading formula library…</p>
+<nav id="studio-tabs" aria-label="Document sections"></nav>
+<div id="studio-fields"><p class="studio-empty">Select a character, weapon, artifact set, or shared rule to begin.</p></div>
+</section>
+<aside class="studio-reference"><p class="eyebrow">Modifier guide</p><h2>Choose a damage layer</h2>
+<dl><dt>Base addition</dt><dd>Flat damage added to the base. Lunar damage applies its base multiplier to this addition.</dd><dt>Base damage bonus</dt><dd>Percentage added to the base multiplier.</dd><dt>Independent base multiplier</dt><dd>Each contribution multiplies the completed base separately. +20% and +30% give ×1.2 ×1.3.</dd><dt>Damage bonus</dt><dd>Percentage added to the damage bonus layer.</dd><dt>Post-bonus addition</dt><dd>Flat damage after damage bonuses, before mitigation and CRIT.</dd><dt>Defense / resistance</dt><dd>Reduction, ignore, or defense bypass.</dd><dt>CRIT</dt><dd>Additional rate or damage.</dd><dt>Elevation</dt><dd>A separate final multiplier.</dd></dl><p>Target selectors combine together. Empty selectors match every damage instance. Select <b>Lunar</b> under damage kinds to target all Lunar damage.</p><p>Saving updates the source file. Refresh the calculator to use the saved formulas.</p>
+</aside>
+</div></main></body></html>

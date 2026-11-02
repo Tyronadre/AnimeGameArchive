@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import de.tyro.genshinapp.model.GoodKeyNormalizer
 import de.tyro.genshinapp.model.PlayerWeapon
 import de.tyro.genshinapp.model.TravelerIdentity
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import org.springframework.stereotype.Service
 
 data class DamageWeaponDefinitionV2(
@@ -20,8 +19,8 @@ class DamageFormulaWeaponServiceV2(
     private val objectMapper: ObjectMapper,
     private val equipmentBinder: DamageFormulaArtifactServiceV2,
 ) {
-    private val definitions by lazy {
-        val weapons = PathMatchingResourcePatternResolver().getResources("classpath*:data/damage-formulas-v2/weapons/*.json")
+    private val definitions by reloadableFormulaV2 {
+        val weapons = DamageFormulaResourcesV2.resources("classpath*:data/damage-formulas-v2/weapons/*.json")
             .map { it.inputStream.use { stream -> objectMapper.readValue(stream, DamageWeaponDefinitionV2::class.java) } }
         require(weapons.map { it.key }.distinct().size == weapons.size) { "Duplicate weapon formula keys" }
         weapons.forEach {

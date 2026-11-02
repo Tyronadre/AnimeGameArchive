@@ -6,10 +6,10 @@ data class DamageFormulaProfileV2(
     val characterKey: String,
     val name: String,
     val element: String,
-    val characterDataResource: String,
-    val inputs: List<DamageFormulaInputV2>,
-    val damageTypes: List<DamageTypeDefinitionV2>,
-    val talents: List<DamageTalentV2>,
+    val characterDataResource: String = "",
+    val inputs: List<DamageFormulaInputV2> = emptyList(),
+    val damageTypes: List<DamageTypeDefinitionV2> = emptyList(),
+    val talents: List<DamageTalentV2> = emptyList(),
     val effects: List<DamageEffectV2> = emptyList(),
     val moonsignContribution: Int = 0,
     val statBindings: Map<String, String> = emptyMap(),
@@ -27,9 +27,14 @@ data class DamageFormulaProfileV2(
     val characterProgressInputs: Map<String, Map<String, String>> = emptyMap(),
     /** Additional authored teammate controls that feed that character's buffs. */
     val characterBuffInputs: Map<String, List<String>> = emptyMap(),
+    val talentParameters: Map<String, List<Double>> = emptyMap(),
+    val notes: List<String> = emptyList(),
+    val sources: List<String> = emptyList(),
+    /** Optional preview values for inherited standard inputs, keyed by logical input name. */
+    val inputDefaults: Map<String, Double> = emptyMap(),
 )
 
-/** Hand-authored support kit; discovered from resources, never inferred from talent prose. */
+/** Derived selected-member metadata for the V2 response; never a separately authored file. */
 data class DamageSupportProfileV2(
     val schemaVersion: Int,
     val key: String,
@@ -93,6 +98,8 @@ data class DamageTypeDefinitionV2(
     val resistanceInput: String = "enemyResistance",
     val independentProc: Boolean = false,
     val kind: String = "talent",
+    /** Bound at composition time for a hit using a different element from its owner. */
+    val elementalBonusInput: String? = null,
 )
 
 data class DamageTalentV2(
@@ -195,6 +202,9 @@ data class DamageEffectV2(
     val stackingPriority: FormulaExpressionV2? = null,
     val effectTags: List<String> = emptyList(),
     val artifactOrigin: DamageArtifactOriginV2? = null,
+    val recipient: String = "self",
+    val excludeSource: Boolean = false,
+    val sourceCharacterKey: String? = null,
 )
 
 data class EffectActivationV2(
@@ -219,6 +229,8 @@ data class StatChangeV2(
     val maximum: Double? = null,
     val phase: Int = 0,
     val requiresEffects: List<String> = emptyList(),
+    val recipient: String? = null,
+    val excludeSource: Boolean = false,
 )
 
 data class FormulaModifierV2(
@@ -234,6 +246,10 @@ data class FormulaModifierV2(
     val elevation: FormulaContributionV2? = null,
     /** Added after the DMG bonus multiplier, before mitigation, elevation, and CRIT. */
     val postBonusBase: FormulaExpressionV2? = null,
+    /** Each matching contribution multiplies the completed base by (1 + contribution). */
+    val baseDamageMultiplier: FormulaContributionV2? = null,
+    val recipient: String? = null,
+    val excludeSource: Boolean = false,
 )
 
 data class EffectMetricV2(
@@ -343,6 +359,7 @@ data class EvaluatedFormulaPartV2(
     val formulaValue: Double = value,
     val additiveValue: Double = 0.0,
     val multiplier: Double = 1.0,
+    val independentMultiplier: Double = 1.0,
 )
 
 data class ResolvedFormulaReferenceV2(
