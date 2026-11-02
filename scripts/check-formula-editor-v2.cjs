@@ -9,15 +9,18 @@ const standardFixture=[['characterLevel','Character level','level',90],['normalT
 const server=http.createServer(async(req,res)=>{
  const url=new URL(req.url,'http://localhost');
  const json=x=>{res.setHeader('Content-Type','application/json');res.end(JSON.stringify(x));};
+ if(url.pathname.endsWith('/new-file-options'))return json([{key:'fischl',name:'Fischl',element:'Electro',weaponType:'Bow',characterDataResource:'data/characters/data/fischl.json',exists:savedDocuments.has('fischl.json'),talents:['normal','skill','burst'].map(key=>({key,name:key,formulas:[]}))}]);
  if(url.pathname.endsWith('/damage-types'))return json(JSON.parse(savedDocuments.get('damage-types.json')||fs.readFileSync(path.join(resources,'data/damage-formulas-v2/damage-types.json'),'utf8')).damageTypes);
- if(url.pathname.endsWith('/standard-inputs'))return json({Dendro:standardFixture});
+ if(url.pathname.endsWith('/standard-inputs'))return json(Object.fromEntries(['Pyro','Hydro','Electro','Cryo','Dendro','Anemo','Geo','Physical'].map(element=>[element,standardFixture])));
  if(url.pathname.endsWith('/catalog')){
  return json(['nefer','lauma'].map(key=>{const support=JSON.parse(fs.readFileSync(path.join(resources,`data/damage-formulas-v2/${key}.json`))),character=JSON.parse(fs.readFileSync(path.join(resources,`data/characters/data/${key}.json`)));
  return {key,name:support.name,file:key+'.json',damageAvailable:support.talents.length>0,inputs:[...standardFixture.map(i=>({...i,id:support.statBindings?.[i.id]||i.id,defaultValue:support.inputDefaults?.[i.id]??i.defaultValue})),...support.inputs],talents:Object.entries(character.talents).filter(([k])=>k.startsWith('combat')).map(([key,t])=>({key,name:t.name,parameters:Object.entries(t.attributes.parameters).map(([key,values])=>({key,values,label:t.attributes.labels.find(l=>l.includes('{'+key+':'))?.split('|')[0]||key}))}))};}));
  }
- if(url.pathname.endsWith('/files'))return json(['nefer.json','lauma.json','damage-types.json']);
+ if(url.pathname.endsWith('/files'))return json([...new Set(['nefer.json','lauma.json','damage-types.json',...savedDocuments.keys()])]);
  if(url.pathname.endsWith('/file'))return json({content:savedDocuments.get(url.searchParams.get('path'))||fs.readFileSync(path.join(resources,'data/damage-formulas-v2',url.searchParams.get('path')),'utf8'),revision:'one'});
- if(req.method==='POST'){let body='';for await(const chunk of req)body+=chunk;saved=JSON.parse(body);savedDocuments.set(saved.path,saved.content);return json({message:'Saved',revision:'two'});}
+ if(req.method==='POST'){let body='';for await(const chunk of req)body+=chunk;saved=JSON.parse(body);
+ if(url.pathname.endsWith('/create')){if(savedDocuments.has(saved.path)){res.statusCode=409;return json({error:'This file already exists.'});}savedDocuments.set(saved.path,saved.content);return json({message:'Created',path:saved.path,content:saved.content,revision:'two'});}
+ savedDocuments.set(saved.path,saved.content);return json({message:'Saved',revision:'two'});}
  if(url.pathname==='/'){
  let html=fs.readFileSync(path.join(resources,'templates/damage-formula-editor-v2.html'),'utf8');
  html=html.replace(/th:(href|src)="@\{([^}]+)\}"/g,'$1="$2"').replace('data-formula-studio th:attr=', 'data-formula-studio data-api="/api/damage-formulas/v2/editor" th:attr=');
@@ -153,5 +156,32 @@ withBrowser(server,async({base,call,evaluate,until,screenshot,errors})=>{
  await evaluate(`[...document.querySelectorAll('#studio-tabs button')].find(b=>b.textContent.startsWith('Talents')).click();window.attackTalent=document.querySelector('#studio-fields > div > .studio-list-item > details');attackTalent.open=true;attackCards()[0].open=true;`);
  assert.equal(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth`),true,'Expanded formulas and duplicate controls must fit on mobile');
  assert.equal(errors.length,0,JSON.stringify(errors));
- console.log('Formula studio browser checks passed: stable panels, scroll and focus; independent formula duplication; protected fields; inherited inputs; shared damage types; effect forms; mobile layout.');
+ // New files start in the structured editor; importing does not replace existing entries.
+ await evaluate(`document.getElementById('studio-new').click()`);
+ await until(()=>evaluate(`document.querySelector('#studio-new-character option[value="fischl"]')!==null`),'New-character choices did not load');
+ await evaluate(`const picker=document.getElementById('studio-new-character');picker.value='fischl';picker.dispatchEvent(new Event('change',{bubbles:true}));`);
+ assert.equal(await evaluate(`document.getElementById('studio-new-key').value`),'fischl');
+ assert.equal(await evaluate(`document.getElementById('studio-new-element').value`),'Electro');
+ assert.equal(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth`),true,'New-file dialog must fit mobile');
+ await screenshot('formula-studio-new-file.png');
+ await evaluate(`document.getElementById('studio-new-form').requestSubmit()`);
+ await until(()=>evaluate(`document.getElementById('studio-name').textContent==='fischl.json'&&!document.getElementById('studio-new-dialog').open`),'New file was not opened');
+ const created=JSON.parse(savedDocuments.get('fischl.json'));
+ assert.equal(created.characterDataResource,'data/characters/data/fischl.json');assert.equal(created.schemaVersion,3);assert.equal(created.talents.length,3);assert.deepEqual(created.inputs,[]);
+ await evaluate(`[...document.querySelectorAll('#studio-tabs button')].find(b=>b.textContent.startsWith('Inputs')).click()`);
+ assert.ok(await evaluate(`document.querySelectorAll('.studio-standard-row').length>10`),'New characters inherit standard inputs');
+ await evaluate(`document.getElementById('studio-new').click()`);
+ await until(()=>evaluate(`document.querySelector('#studio-new-character option[value="fischl"]')?.disabled===true`),'Existing characters must be identified');
+ await evaluate(`document.getElementById('studio-new-key').value='fischl';document.getElementById('studio-new-name').value='Duplicate';document.getElementById('studio-new-form').requestSubmit()`);
+ assert.equal(await evaluate(`document.getElementById('studio-new-status').dataset.error`),'true');
+ assert.equal(JSON.parse(savedDocuments.get('fischl.json')).name,'Fischl');
+ await evaluate(`(()=>{const field=document.getElementById('studio-new-import'),transfer=new DataTransfer();transfer.items.add(new File(['{bad json'], 'bad.json',{type:'application/json'}));field.files=transfer.files;field.dispatchEvent(new Event('change',{bubbles:true}));})()`);
+ await until(()=>evaluate(`document.getElementById('studio-new-import').value===''&&!document.getElementById('studio-new-create').disabled`),'Invalid import did not report an error');
+ await evaluate(`document.getElementById('studio-new-kind').value='weapon';document.getElementById('studio-new-kind').dispatchEvent(new Event('change',{bubbles:true}));(()=>{const transfer=new DataTransfer();transfer.items.add(new File([JSON.stringify({schemaVersion:2,key:'testblade',name:'Test Blade',inputs:[],effects:[]})],'testblade.json',{type:'application/json'}));const field=document.getElementById('studio-new-import');field.files=transfer.files;field.dispatchEvent(new Event('change',{bubbles:true}));})()`);
+ await until(()=>evaluate(`document.getElementById('studio-new-key').value==='testblade'&&!document.getElementById('studio-new-create').disabled`),'Weapon import did not load');
+ await evaluate(`document.getElementById('studio-new-form').requestSubmit()`);
+ await until(()=>evaluate(`document.getElementById('studio-name').textContent==='weapons/testblade.json'`),'Imported weapon was not opened');
+ assert.deepEqual(JSON.parse(savedDocuments.get('weapons/testblade.json')),{schemaVersion:2,key:'testblade',name:'Test Blade',inputs:[],effects:[]});
+ assert.equal(errors.length,0,JSON.stringify(errors));
+ console.log('Formula studio browser checks passed: stable editing, duplication, inherited inputs, damage types, mobile layout, new characters, duplicate protection, and JSON imports.');
 }).catch(error=>{console.error(error);process.exitCode=1;});

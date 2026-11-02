@@ -11,7 +11,7 @@
 <main class="formula-studio" data-formula-studio th:attr="data-api=@{/api/damage-formulas/v2/editor},data-csrf-header=${_csrf.headerName},data-csrf-token=${_csrf.token}">
 <header class="studio-heading"><div><p class="eyebrow">Damage calculator v2</p><h1>Formula studio</h1><p>Build inputs, damage instances, and effects. Validate your changes before saving.</p></div><a th:href="@{/damage-calculator-v2}">Open calculator ↗</a></header>
 <div class="studio-layout">
-<aside class="studio-library"><label for="studio-search">Formula library</label><input id="studio-search" type="search" placeholder="Search characters, weapons, sets…"><nav id="studio-files" aria-label="Formula files"></nav></aside>
+<aside class="studio-library"><label for="studio-search">Formula library</label><button id="studio-new" type="button">+ New calculation file</button><input id="studio-search" type="search" placeholder="Search characters, weapons, sets…"><nav id="studio-files" aria-label="Formula files"></nav></aside>
 <section class="studio-document" aria-label="Formula editor">
 <header class="studio-toolbar"><div><strong id="studio-name">Choose a formula file</strong><small id="studio-dirty"></small></div><div class="studio-actions"><button id="studio-reload" type="button" disabled>Reload</button><button id="studio-validate" type="button" disabled>Validate</button><button id="studio-save" type="button" disabled>Save changes</button></div></header>
 <p id="studio-status" role="status" aria-live="polite">Loading formula library…</p>
@@ -21,4 +21,22 @@
 <aside class="studio-reference"><p class="eyebrow">Modifier guide</p><h2>Choose a damage layer</h2>
 <dl><dt>Base addition</dt><dd>Flat damage added to the base. Lunar damage applies its base multiplier to this addition.</dd><dt>Base damage bonus</dt><dd>Percentage added to the base multiplier.</dd><dt>Independent base multiplier</dt><dd>Each contribution multiplies the completed base separately. +20% and +30% give ×1.2 ×1.3.</dd><dt>Damage bonus</dt><dd>Percentage added to the damage bonus layer.</dd><dt>Post-bonus addition</dt><dd>Flat damage after damage bonuses, before mitigation and CRIT.</dd><dt>Defense / resistance</dt><dd>Reduction, ignore, or defense bypass.</dd><dt>CRIT</dt><dd>Additional rate or damage.</dd><dt>Elevation</dt><dd>A separate final multiplier.</dd></dl><p>Target selectors combine together. Empty selectors match every damage instance. Select <b>Lunar</b> under damage kinds to target all Lunar damage.</p><p>Saving updates the source file. Refresh the calculator to use the saved formulas.</p>
 </aside>
-</div></main></body></html>
+</div>
+<dialog id="studio-new-dialog" aria-labelledby="studio-new-title">
+<form id="studio-new-form">
+<h2 id="studio-new-title">New calculation file</h2>
+<p>Start with an empty definition, or import a generated JSON file. Existing files are kept safe.</p>
+<div class="studio-grid">
+<label class="studio-field"><span>File type</span><select id="studio-new-kind"><option value="character">Character</option><option value="weapon">Weapon</option><option value="artifact">Artifact set</option></select></label>
+<label class="studio-field" id="studio-new-character-field"><span>Character</span><select id="studio-new-character"><option value="">Custom character…</option></select></label>
+<label class="studio-field"><span>Key</span><input id="studio-new-key" required pattern="[a-z0-9][a-z0-9_-]*" placeholder="e.g. fischl" autocomplete="off"></label>
+<label class="studio-field"><span>Name</span><input id="studio-new-name" required placeholder="Display name" autocomplete="off"></label>
+<label class="studio-field" id="studio-new-element-field"><span>Element</span><select id="studio-new-element"><option>Pyro</option><option>Hydro</option><option>Electro</option><option>Cryo</option><option>Dendro</option><option>Anemo</option><option>Geo</option></select></label>
+<label class="studio-field" id="studio-new-weapon-field"><span>Weapon</span><select id="studio-new-weapon"><option>Sword</option><option>Claymore</option><option>Polearm</option><option>Bow</option><option>Catalyst</option></select></label>
+<label class="studio-field studio-wide"><span>Import JSON (optional)</span><input id="studio-new-import" type="file" accept=".json,application/json"></label>
+</div>
+<p id="studio-new-status" role="status" aria-live="polite">Character definitions include standard inputs automatically.</p>
+<div class="studio-actions"><button id="studio-new-cancel" type="button">Cancel</button><button id="studio-new-create" type="submit">Create file</button></div>
+</form>
+</dialog>
+</main></body></html>

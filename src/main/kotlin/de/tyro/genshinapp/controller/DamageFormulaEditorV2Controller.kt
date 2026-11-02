@@ -14,6 +14,9 @@ import org.springframework.web.server.ResponseStatusException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
+import java.nio.file.StandardOpenOption
+import java.nio.file.FileAlreadyExistsException
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import java.security.MessageDigest
 
 data class FormulaEditorRequestV2(val path: String, val content: String, val revision: String = "")
@@ -49,6 +52,22 @@ class DamageFormulaEditorV2Controller(
         paths.filter { Files.isRegularFile(it) && it.toString().endsWith(".json") && it.toRealPath().startsWith(root.toRealPath()) }
             .map { root.relativize(it).toString().replace('\\', '/') }.sorted().toList()
     }
+
+    @GetMapping("/api/damage-formulas/v2/editor/new-file-options")
+    @ResponseBody
+    fun newFileOptions(): List<Map<String, Any>> = PathMatchingResourcePatternResolver()
+        .getResources("classpath*:data/characters/data/*.json").map { resource ->
+            val character = resource.inputStream.use(mapper::readTree)
+            val key = requireNotNull(resource.filename).removeSuffix(".json")
+            mapOf("key" to key, "name" to character.path("name").asText(key),
+                "element" to character.path("elementText").asText(), "weaponType" to character.path("weaponText").asText(),
+                "characterDataResource" to "data/characters/data/$key.json",
+                "exists" to Files.exists(root.resolve("$key.json")),
+                "talents" to listOf("combat1", "combat2", "combat3").mapIndexed { index, talent ->
+                    mapOf("key" to listOf("normal", "skill", "burst")[index],
+                        "name" to character.path("talents").path(talent).path("name").asText(talent), "formulas" to emptyList<Any>())
+                })
+        }.distinctBy { it.getValue("key") }.sortedBy { it.getValue("name").toString() }
 
     @GetMapping("/api/damage-formulas/v2/editor/catalog")
     @ResponseBody
@@ -86,6 +105,15 @@ class DamageFormulaEditorV2Controller(
     }
     private fun hash(text: String) = MessageDigest.getInstance("SHA-256").digest(text.toByteArray()).joinToString("") { "%02x".format(it) }
 
+    private fun newFile(name: String): Path {
+        require(name.matches(Regex("(?:weapons/|artifacts/)?[a-z0-9][a-z0-9_-]*\\.json"))) { "Use a character, weapon, or artifact key for the filename" }
+        require(name !in setOf("damage-types.json", "team-rules.json", "elemental-reactions.json")) { "Shared catalogs already have their own editor entries" }
+        val target = root.resolve(name).normalize()
+        require(target.startsWith(root) && Files.isDirectory(target.parent) && target.parent.toRealPath().startsWith(root.toRealPath())) { "Choose a file inside the formula library" }
+        if (Files.exists(target)) throw ResponseStatusException(HttpStatus.CONFLICT, "This file already exists. Open it from the library instead.")
+        return target
+    }
+
     @GetMapping("/api/damage-formulas/v2/editor/file")
     @ResponseBody
     fun read(@RequestParam path: String): Map<String, String> {
@@ -96,11 +124,20 @@ class DamageFormulaEditorV2Controller(
     @PostMapping("/api/damage-formulas/v2/editor/validate")
     @ResponseBody
     fun validate(@RequestBody request: FormulaEditorRequestV2): Map<String, String> {
-        file(request.path)
+        val isNew = !Files.exists(root.resolve(request.path).normalize())
+        if (isNew) newFile(request.path) else file(request.path)
         require(request.content.length <= 2_000_000) { "File is too large" }
         val reader = mapper.reader().with(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
         val tree: com.fasterxml.jackson.databind.JsonNode = reader.readTree(request.content)
         require(tree.isObject) { "The JSON root must be an object" }
+        if (isNew) {
+            val key = request.path.substringAfterLast('/').removeSuffix(".json")
+            require(tree.path("key").asText() == key) { "The document key must match the filename" }
+            if ('/' !in request.path) {
+                require(tree.path("schemaVersion").asInt() == 3 && tree.path("characterKey").asText() == key) { "Character files require schema 3 and a matching characterKey" }
+                require(tree.path("element").asText() in CharacterStandardInputsV3.elements) { "Choose a valid character element" }
+            } else require(tree.path("schemaVersion").asInt() == 2) { "Equipment files require schema 2" }
+        }
         DamageFormulaResourcesV2.preview(request.path, request.content) {
             val formulas = DamageFormulaServiceV2(mapper)
             formulas.validateDamageTypes()
@@ -137,6 +174,22 @@ class DamageFormulaEditorV2Controller(
             }
         }
         return mapOf("message" to "Valid JSON. Formula profiles and team calculations loaded successfully.")
+    }
+
+    @PostMapping("/api/damage-formulas/v2/editor/create")
+    @ResponseBody
+    @Synchronized
+    fun create(@RequestBody request: FormulaEditorRequestV2): Map<String, String> {
+        val target = newFile(request.path)
+        validate(request)
+        try {
+            Files.writeString(target, request.content, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)
+        } catch (error: FileAlreadyExistsException) {
+            throw ResponseStatusException(HttpStatus.CONFLICT, "This file was just created elsewhere. Open it from the library instead.")
+        }
+        DamageFormulaResourcesV2.revision.incrementAndGet()
+        return mapOf("message" to "Created. Add damage instances and effects in the editor.",
+            "path" to request.path, "content" to request.content, "revision" to hash(request.content))
     }
 
     @PostMapping("/api/damage-formulas/v2/editor/save")

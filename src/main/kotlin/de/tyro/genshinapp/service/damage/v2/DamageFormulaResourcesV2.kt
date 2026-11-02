@@ -26,9 +26,17 @@ object DamageFormulaResourcesV2 {
     fun resources(pattern: String): Array<Resource> {
         val root = sourceRoot
         val resolved = if (root == null) pattern else root.toUri().toString() + pattern.substringAfter("data/damage-formulas-v2/")
-        return PathMatchingResourcePatternResolver().getResources(resolved).map { item ->
+        val existing = PathMatchingResourcePatternResolver().getResources(resolved).map { item ->
             if (root == null) item else resource("data/damage-formulas-v2/" + root.relativize(item.file.toPath()).toString().replace('\\', '/'))
-        }.toTypedArray()
+        }
+        // New drafts are not on disk yet, but must participate in registry validation.
+        val matcher = org.springframework.util.AntPathMatcher()
+        val additions = preview.get().orEmpty().keys.filter { path ->
+            pattern.contains("data/damage-formulas-v2/") &&
+                matcher.match(pattern.substringAfter("data/damage-formulas-v2/"), path.substringAfter("data/damage-formulas-v2/")) &&
+                existing.none { it.filename == path.substringAfterLast('/') }
+        }.map(::resource)
+        return (existing + additions).toTypedArray()
     }
     fun <T> preview(path: String, content: String, action: () -> T): T {
         preview.set(mapOf("data/damage-formulas-v2/$path" to content))

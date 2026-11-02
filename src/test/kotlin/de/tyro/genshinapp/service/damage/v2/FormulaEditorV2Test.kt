@@ -26,6 +26,65 @@ class FormulaEditorV2Test {
         DamageFormulaResourcesV2.sourceRoot = null
         DamageFormulaResourcesV2.revision.incrementAndGet()
     }
+    private fun newCharacter(key: String = "editorcharacter", base: String = """{"type":"constant","value":100}""") = FormulaEditorRequestV2(
+        "$key.json", """{
+          "schemaVersion":3,"key":"$key","characterKey":"$key","name":"Editor character","element":"Pyro","weaponType":"Sword",
+          "talents":[{"key":"normal","name":"Attack","formulas":[{"id":"hit","label":"Hit","damageType":"directPyro","tags":["normalAttack"],"base":$base}]}]
+        }""")
+
+    @Test fun `new character preview validates without writing and creation refreshes existing registries`() {
+        val request = newCharacter()
+        val service = DamageFormulaServiceV2(mapper)
+        assertNull(service.profile("editorcharacter"))
+        editor.validate(request)
+        assertFalse(Files.exists(directory.resolve(request.path)))
+        val created = editor.create(request)
+        assertEquals(request.path, created["path"])
+        assertEquals(request.content, editor.read(request.path)["content"])
+        assertEquals(editor.read(request.path)["revision"], created["revision"])
+        assertNotNull(service.profile("editorcharacter"))
+        assertTrue(request.path in editor.files())
+        assertTrue(editor.catalog().any { it["key"] == "editorcharacter" })
+    }
+
+    @Test fun `new invalid references and mismatched keys never create a file`() {
+        val broken = newCharacter(base = """{"type":"input","input":"local:undefined"}""")
+        assertFailsWith<IllegalArgumentException> { editor.create(broken) }
+        assertFalse(Files.exists(directory.resolve(broken.path)))
+        val mismatch = newCharacter().copy(path = "wrongkey.json")
+        assertFailsWith<IllegalArgumentException> { editor.create(mismatch) }
+        assertFalse(Files.exists(directory.resolve(mismatch.path)))
+    }
+
+    @Test fun `creation rejects duplicates traversal and reserved catalog paths`() {
+        val current = editor.read("nefer.json")
+        val error = assertFailsWith<org.springframework.web.server.ResponseStatusException> {
+            editor.create(FormulaEditorRequestV2("nefer.json", current.getValue("content")))
+        }
+        assertEquals(409, error.statusCode.value())
+        assertEquals(current, editor.read("nefer.json"))
+        for (name in listOf("../outside.json", "weapons/../outside.json", "nested/file.json", "damage-types.json")) {
+            assertFails { editor.create(newCharacter().copy(path = name)) }
+        }
+    }
+
+    @Test fun `new weapon and artifact definitions validate before writing`() {
+        for (folder in listOf("weapons", "artifacts")) {
+            val request = FormulaEditorRequestV2("$folder/editoritem.json", """{"schemaVersion":2,"key":"editoritem","name":"Editor item","inputs":[],"effects":[]}""")
+            editor.create(request)
+            assertEquals(request.content, editor.read(request.path)["content"])
+        }
+    }
+
+    @Test fun `new character choices include precise talent resource and existing status`() {
+        val choices = editor.newFileOptions()
+        val chasca = choices.first { it["key"] == "chasca" }
+        assertEquals("Anemo", chasca["element"])
+        assertEquals("Bow", chasca["weaponType"])
+        assertEquals("data/characters/data/chasca.json", chasca["characterDataResource"])
+        assertEquals(true, chasca["exists"])
+        assertEquals(3, (chasca["talents"] as List<*>).size)
+    }
     @Test fun `invalid references are rejected before source files change`() {
         val current = editor.read("nefer.json")
         val broken = current.getValue("content").replace("\"id\": \"veilStacks\"", "\"id\": \"missingInput\"")

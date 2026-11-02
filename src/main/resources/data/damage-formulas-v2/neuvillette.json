@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 3,
+  "key": "neuvillette",
+  "name": "Neuvillette",
+  "inputs": [
+    {
+      "id": "sourcewaterDroplets",
+      "label": "Sourcewater Droplets",
+      "defaultValue": 3,
+      "min": 0,
+      "max": 12,
+      "step": 1
+    }
+  ],
+  "effects": [],
+  "sources": [],
+  "characterKey": "neuvillette",
+  "element": "Hydro",
+  "weaponType": "Catalyst",
+  "characterDataResource": "data/characters/data/neuvillette.json",
+  "talents": [
+    {
+      "key": "normal",
+      "name": "As Water Seeks Equilibrium",
+      "formulas": [
+        {
+          "id": "neuvillette1HitDMG",
+          "label": "1-Hit DMG",
+          "damageType": "directHydro",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "characterKey": "neuvillette",
+                "talent": "combat1",
+                "levelInput": "source:normalTalentLevel",
+                "parameter": "param1"
+              }
+            ]
+          }
+        },
+        {
+          "id": "neuvillette2HitDMG",
+          "label": "2-Hit DMG",
+          "damageType": "directHydro",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "characterKey": "neuvillette",
+                "talent": "combat1",
+                "levelInput": "source:normalTalentLevel",
+                "parameter": "param2"
+              }
+            ]
+          }
+        },
+        {
+          "id": "neuvillette2HitDMG",
+          "label": "3-Hit DMG",
+          "damageType": "directHydro",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "characterKey": "neuvillette",
+                "talent": "combat1",
+                "levelInput": "source:normalTalentLevel",
+                "parameter": "param3"
+              }
+            ]
+          }
+        },
+        {
+          "id": "neuvilletteChargedAttackDMG",
+          "label": "Charged Attack DMG",
+          "damageType": "directHydro",
+          "tags": [
+            "chargedAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "characterKey": "neuvillette",
+                "talent": "combat1",
+                "levelInput": "source:normalTalentLevel",
+                "parameter": "param4"
+              }
+            ]
+          }
+        },
+        {
+          "id": "neuvilletteChargedAttackEquitableJudgment",
+          "label": "Charged Attack: Equitable Judgment",
+          "damageType": "directHydro",
+          "tags": [
+            "chargedAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:maxHp"
+              },
+              {
+                "type": "talentParameter",
+                "characterKey": "neuvillette",
+                "talent": "combat1",
+                "levelInput": "source:normalTalentLevel",
+                "parameter": "param5"
+              },
+              {
+                "type": "constant",
+                "value": 8
+              }
+            ]
+          }
+        },
+        {
+          "id": "neuvillettePlungeDMG",
+          "label": "Plunge DMG",
+          "damageType": "directHydro",
+          "tags": [
+            "plungingAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "characterKey": "neuvillette",
+                "talent": "combat1",
+                "levelInput": "source:normalTalentLevel",
+                "parameter": "param11"
+              }
+            ]
+          }
+        },
+        {
+          "id": "neuvilletteLowPlungeDMG",
+          "label": "Low Plunge DMG ",
+          "damageType": "directHydro",
+          "tags": [
+            "plungingAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "characterKey": "neuvillette",
+                "talent": "combat1",
+                "levelInput": "source:normalTalentLevel",
+                "parameter": "param12"
+              }
+            ]
+          }
+        },
+        {
+          "id": "neuvilletteHighPlungeDMG",
+          "label": "High Plunge DMG",
+          "damageType": "directHydro",
+          "tags": [
+            "plungingAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "characterKey": "neuvillette",
+                "talent": "combat1",
+                "levelInput": "source:normalTalentLevel",
+                "parameter": "param13"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "O Tears, I Shall Repay",
+      "formulas": []
+    },
+    {
+      "key": "burst",
+      "name": "O Tides, I Have Returned",
+      "formulas": []
+    }
+  ],
+  "defaultTeam": [
+    "neuvillette"
+  ],
+  "inputDefaults": {
+    "attack": 1500,
+    "maxHp": 30000,
+    "defense": 1000,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10
+  }
+}

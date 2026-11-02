@@ -1,0 +1,2922 @@
+{
+  "schemaVersion": 3,
+  "key": "chasca",
+  "characterKey": "chasca",
+  "name": "Chasca",
+  "element": "Anemo",
+  "weaponType": "Bow",
+  "characterDataResource": "data/characters/data/chasca.json",
+  "inputs": [
+    {
+      "id": "burningShotElement",
+      "label": "A4 Burning Shot element (0=off, 1=Anemo, 2=Pyro, 3=Hydro, 4=Electro, 5=Cryo)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "number",
+      "section": "combat",
+      "description": "Select actual shot from a Nightsoul Burst trigger; Anemo is only possible without eligible Pyro/Hydro/Electro/Cryo allies."
+    },
+    {
+      "id": "c2ProcElement",
+      "label": "C2 additional AoE element (0=off, 1=Pyro, 2=Hydro, 3=Electro, 4=Cryo)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "number",
+      "section": "combat",
+      "description": "One additional 400% ATK hit after a Shining Shadowhunt Shell lands, at most once per Multitarget Fire."
+    },
+    {
+      "id": "c4ProcElement",
+      "label": "C4 additional AoE element (0=off, 1=Pyro, 2=Hydro, 3=Electro, 4=Cryo)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "number",
+      "section": "combat",
+      "description": "One additional 400% ATK hit after a Radiant Burst shell lands, at most once per Burst."
+    },
+    {
+      "id": "fatalRoundsActive",
+      "label": "C6 Fatal Rounds active for this Multitarget Fire salvo",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1,
+      "unit": "number",
+      "section": "combat",
+      "description": "Manual trigger for C6 critical damage. Does not simulate the 3-second duration or cooldown."
+    }
+  ],
+  "inputDefaults": {
+    "attack": 1500,
+    "normalTalentLevel": 10,
+    "skillTalentLevel": 10,
+    "burstTalentLevel": 10,
+    "characterLevel": 90,
+    "critRate": 24.2,
+    "critDamage": 100
+  },
+  "talents": [
+    {
+      "key": "normal",
+      "name": "Phantom Feather Flurry",
+      "formulas": [
+        {
+          "id": "normal-1",
+          "label": "Normal Attack hit 1",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param1",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-2",
+          "label": "Normal Attack hit 2",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param2",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-3",
+          "label": "Normal Attack hit 3 (one of 2 arrows)",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param3",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "normal-4",
+          "label": "Normal Attack hit 4 (one of 3 arrows)",
+          "damageType": "directPhysical",
+          "tags": [
+            "normalAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param4",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "aimed-shot",
+          "label": "Uncharged aimed shot",
+          "damageType": "directPhysical",
+          "tags": [
+            "chargedAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param5",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "aimed-full",
+          "label": "Fully charged Anemo aimed shot",
+          "damageType": "directAnemo",
+          "tags": [
+            "chargedAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param6",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          },
+          "infusionRule": "locked"
+        },
+        {
+          "id": "plunge-path",
+          "label": "Ordinary plunge, midair path (low/high impact alternatives)",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "plunge-low",
+          "label": "Ordinary plunge, low impact (low/high impact alternatives)",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param8",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "plunge-high",
+          "label": "Ordinary plunge, high impact (low/high impact alternatives)",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack",
+            "plungeImpact"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "name": "Spirit Reins, Shadow Hunt",
+      "formulas": [
+        {
+          "id": "skill-resonance",
+          "label": "Skill activation: Resonance AoE",
+          "damageType": "directAnemo",
+          "tags": [
+            "elementalSkill",
+            "nightsoul"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param1",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "infusionRule": "locked"
+        },
+        {
+          "id": "multitarget-tap",
+          "label": "Multitarget Fire Tap (Normal Attack damage)",
+          "damageType": "directAnemo",
+          "tags": [
+            "normalAttack",
+            "nightsoul"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param2",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "infusionRule": "locked"
+        },
+        {
+          "id": "shadowhunt-anemo",
+          "label": "One ordinary Anemo Shadowhunt Shell (Charged Attack damage)",
+          "damageType": "directAnemo",
+          "tags": [
+            "chargedAttack",
+            "nightsoul",
+            "chascaMultitargetShell"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param3",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "infusionRule": "locked"
+        },
+        {
+          "id": "shining-pyro",
+          "label": "One Shining Shadowhunt Shell — Pyro (Charged Attack damage)",
+          "damageType": "directPyro",
+          "tags": [
+            "chargedAttack",
+            "nightsoul",
+            "chascaMultitargetShell",
+            "chascaShiningShell"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "requiredEffects": [
+            "has-pyro"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "shining-hydro",
+          "label": "One Shining Shadowhunt Shell — Hydro (Charged Attack damage)",
+          "damageType": "directHydro",
+          "tags": [
+            "chargedAttack",
+            "nightsoul",
+            "chascaMultitargetShell",
+            "chascaShiningShell"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "requiredEffects": [
+            "has-hydro"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "shining-electro",
+          "label": "One Shining Shadowhunt Shell — Electro (Charged Attack damage)",
+          "damageType": "directElectro",
+          "tags": [
+            "chargedAttack",
+            "nightsoul",
+            "chascaMultitargetShell",
+            "chascaShiningShell"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "requiredEffects": [
+            "has-electro"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "shining-cryo",
+          "label": "One Shining Shadowhunt Shell — Cryo (Charged Attack damage)",
+          "damageType": "directCryo",
+          "tags": [
+            "chargedAttack",
+            "nightsoul",
+            "chascaMultitargetShell",
+            "chascaShiningShell"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "source:skillTalentLevel"
+              }
+            ]
+          },
+          "requiredEffects": [
+            "has-cryo"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "nightsoul-plunge-path",
+          "label": "Mounted Nightsoul plunge, midair path (alternative to ordinary plunge)",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack",
+            "nightsoul"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param7",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "nightsoul-plunge-low",
+          "label": "Mounted Nightsoul plunge, low impact (alternative to ordinary plunge)",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack",
+            "nightsoul",
+            "plungeImpact"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param8",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "nightsoul-plunge-high",
+          "label": "Mounted Nightsoul plunge, high impact (alternative to ordinary plunge)",
+          "damageType": "directPhysical",
+          "tags": [
+            "plungingAttack",
+            "nightsoul",
+            "plungeImpact"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat1",
+                "parameter": "param9",
+                "levelInput": "source:normalTalentLevel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "a4-shot-anemo",
+          "label": "A4 Burning Shadowhunt Shot — Anemo (one separate triggered hit)",
+          "damageType": "directAnemo",
+          "tags": [
+            "chargedAttack",
+            "nightsoul",
+            "chascaA4Shot"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param3",
+                "levelInput": "source:skillTalentLevel"
+              },
+              {
+                "type": "constant",
+                "value": 1.5
+              }
+            ]
+          },
+          "requiredEffects": [
+            "a4-burning-anemo"
+          ],
+          "excludedEffects": [
+            "has-pyro",
+            "has-hydro",
+            "has-electro",
+            "has-cryo"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "a4-shot-pyro",
+          "label": "A4 Burning Shadowhunt Shot — Pyro (one triggered hit)",
+          "damageType": "directPyro",
+          "tags": [
+            "chargedAttack",
+            "nightsoul",
+            "chascaA4Shot"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "source:skillTalentLevel"
+              },
+              {
+                "type": "constant",
+                "value": 1.5
+              }
+            ]
+          },
+          "requiredEffects": [
+            "a4-burning-pyro"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "a4-shot-hydro",
+          "label": "A4 Burning Shadowhunt Shot — Hydro (one triggered hit)",
+          "damageType": "directHydro",
+          "tags": [
+            "chargedAttack",
+            "nightsoul",
+            "chascaA4Shot"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "source:skillTalentLevel"
+              },
+              {
+                "type": "constant",
+                "value": 1.5
+              }
+            ]
+          },
+          "requiredEffects": [
+            "a4-burning-hydro"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "a4-shot-electro",
+          "label": "A4 Burning Shadowhunt Shot — Electro (one triggered hit)",
+          "damageType": "directElectro",
+          "tags": [
+            "chargedAttack",
+            "nightsoul",
+            "chascaA4Shot"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "source:skillTalentLevel"
+              },
+              {
+                "type": "constant",
+                "value": 1.5
+              }
+            ]
+          },
+          "requiredEffects": [
+            "a4-burning-electro"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "a4-shot-cryo",
+          "label": "A4 Burning Shadowhunt Shot — Cryo (one triggered hit)",
+          "damageType": "directCryo",
+          "tags": [
+            "chargedAttack",
+            "nightsoul",
+            "chascaA4Shot"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat2",
+                "parameter": "param4",
+                "levelInput": "source:skillTalentLevel"
+              },
+              {
+                "type": "constant",
+                "value": 1.5
+              }
+            ]
+          },
+          "requiredEffects": [
+            "a4-burning-cryo"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "c2-proc-pyro",
+          "label": "C2 additional AoE proc — Pyro (one per eligible Skill salvo/Burst)",
+          "damageType": "directPyro",
+          "tags": [
+            "chargedAttack",
+            "nightsoul",
+            "chascaC2Proc"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 4
+              }
+            ]
+          },
+          "requiredEffects": [
+            "c2-proc-pyro"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "c2-proc-hydro",
+          "label": "C2 additional AoE proc — Hydro (one per eligible Skill salvo/Burst)",
+          "damageType": "directHydro",
+          "tags": [
+            "chargedAttack",
+            "nightsoul",
+            "chascaC2Proc"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 4
+              }
+            ]
+          },
+          "requiredEffects": [
+            "c2-proc-hydro"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "c2-proc-electro",
+          "label": "C2 additional AoE proc — Electro (one per eligible Skill salvo/Burst)",
+          "damageType": "directElectro",
+          "tags": [
+            "chargedAttack",
+            "nightsoul",
+            "chascaC2Proc"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 4
+              }
+            ]
+          },
+          "requiredEffects": [
+            "c2-proc-electro"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "c2-proc-cryo",
+          "label": "C2 additional AoE proc — Cryo (one per eligible Skill salvo/Burst)",
+          "damageType": "directCryo",
+          "tags": [
+            "chargedAttack",
+            "nightsoul",
+            "chascaC2Proc"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 4
+              }
+            ]
+          },
+          "requiredEffects": [
+            "c2-proc-cryo"
+          ],
+          "infusionRule": "locked"
+        }
+      ]
+    },
+    {
+      "key": "burst",
+      "name": "Soul Reaper's Fatal Round",
+      "formulas": [
+        {
+          "id": "burst-opening",
+          "label": "Galesplitting Soulseeker Shell (opening AoE)",
+          "damageType": "directAnemo",
+          "tags": [
+            "elementalBurst",
+            "nightsoul"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param1",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "infusionRule": "locked"
+        },
+        {
+          "id": "burst-soulseeker",
+          "label": "One ordinary Anemo Soulseeker Shell (out of six followups)",
+          "damageType": "directAnemo",
+          "tags": [
+            "elementalBurst",
+            "nightsoul"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param2",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "infusionRule": "locked"
+        },
+        {
+          "id": "burst-radiant-pyro",
+          "label": "One converted Radiant Soulseeker Shell — Pyro (out of six followups)",
+          "damageType": "directPyro",
+          "tags": [
+            "elementalBurst",
+            "nightsoul",
+            "chascaRadiantBurstShell"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param3",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "requiredEffects": [
+            "has-pyro"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "burst-radiant-hydro",
+          "label": "One converted Radiant Soulseeker Shell — Hydro (out of six followups)",
+          "damageType": "directHydro",
+          "tags": [
+            "elementalBurst",
+            "nightsoul",
+            "chascaRadiantBurstShell"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param3",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "requiredEffects": [
+            "has-hydro"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "burst-radiant-electro",
+          "label": "One converted Radiant Soulseeker Shell — Electro (out of six followups)",
+          "damageType": "directElectro",
+          "tags": [
+            "elementalBurst",
+            "nightsoul",
+            "chascaRadiantBurstShell"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param3",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "requiredEffects": [
+            "has-electro"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "burst-radiant-cryo",
+          "label": "One converted Radiant Soulseeker Shell — Cryo (out of six followups)",
+          "damageType": "directCryo",
+          "tags": [
+            "elementalBurst",
+            "nightsoul",
+            "chascaRadiantBurstShell"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "talentParameter",
+                "talent": "combat3",
+                "parameter": "param3",
+                "levelInput": "source:burstTalentLevel"
+              }
+            ]
+          },
+          "requiredEffects": [
+            "has-cryo"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "c4-proc-pyro",
+          "label": "C4 additional AoE proc — Pyro (one per eligible Skill salvo/Burst)",
+          "damageType": "directPyro",
+          "tags": [
+            "chargedAttack",
+            "nightsoul",
+            "chascaC4Proc"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 4
+              }
+            ]
+          },
+          "requiredEffects": [
+            "c4-proc-pyro"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "c4-proc-hydro",
+          "label": "C4 additional AoE proc — Hydro (one per eligible Skill salvo/Burst)",
+          "damageType": "directHydro",
+          "tags": [
+            "chargedAttack",
+            "nightsoul",
+            "chascaC4Proc"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 4
+              }
+            ]
+          },
+          "requiredEffects": [
+            "c4-proc-hydro"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "c4-proc-electro",
+          "label": "C4 additional AoE proc — Electro (one per eligible Skill salvo/Burst)",
+          "damageType": "directElectro",
+          "tags": [
+            "chargedAttack",
+            "nightsoul",
+            "chascaC4Proc"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 4
+              }
+            ]
+          },
+          "requiredEffects": [
+            "c4-proc-electro"
+          ],
+          "infusionRule": "locked"
+        },
+        {
+          "id": "c4-proc-cryo",
+          "label": "C4 additional AoE proc — Cryo (one per eligible Skill salvo/Burst)",
+          "damageType": "directCryo",
+          "tags": [
+            "chargedAttack",
+            "nightsoul",
+            "chascaC4Proc"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "input",
+                "input": "source:attack"
+              },
+              {
+                "type": "constant",
+                "value": 4
+              }
+            ]
+          },
+          "requiredEffects": [
+            "c4-proc-cryo"
+          ],
+          "infusionRule": "locked"
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "has-pyro",
+      "name": "Party includes Pyro",
+      "source": "Chasca",
+      "description": "Presence condition for Pyro shell or proc alternatives.",
+      "category": "team",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "teamComposition",
+        "conditions": [
+          {
+            "type": "contextAtLeast",
+            "input": "pyroCount",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "has-hydro",
+      "name": "Party includes Hydro",
+      "source": "Chasca",
+      "description": "Presence condition for Hydro shell or proc alternatives.",
+      "category": "team",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "teamComposition",
+        "conditions": [
+          {
+            "type": "contextAtLeast",
+            "input": "hydroCount",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "has-electro",
+      "name": "Party includes Electro",
+      "source": "Chasca",
+      "description": "Presence condition for Electro shell or proc alternatives.",
+      "category": "team",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "teamComposition",
+        "conditions": [
+          {
+            "type": "contextAtLeast",
+            "input": "electroCount",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "has-cryo",
+      "name": "Party includes Cryo",
+      "source": "Chasca",
+      "description": "Presence condition for Cryo shell or proc alternatives.",
+      "category": "team",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "teamComposition",
+        "conditions": [
+          {
+            "type": "contextAtLeast",
+            "input": "cryoCount",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "a4-burning-anemo",
+      "name": "A4 Burning Shot — Anemo",
+      "source": "Chasca",
+      "description": "Only when no Pyro/Hydro/Electro/Cryo teammate exists.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "reactionTriggered",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:burningShotElement",
+            "value": 1
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:burningShotElement",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "a4-burning-pyro",
+      "name": "A4 Burning Shot — Pyro",
+      "source": "Chasca",
+      "description": "Requires the selected element in the party and an actual Nightsoul Burst trigger.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "reactionTriggered",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:burningShotElement",
+            "value": 2
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:burningShotElement",
+            "value": 2
+          },
+          {
+            "type": "contextAtLeast",
+            "input": "pyroCount",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "a4-burning-hydro",
+      "name": "A4 Burning Shot — Hydro",
+      "source": "Chasca",
+      "description": "Requires the selected element in the party and an actual Nightsoul Burst trigger.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "reactionTriggered",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:burningShotElement",
+            "value": 3
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:burningShotElement",
+            "value": 3
+          },
+          {
+            "type": "contextAtLeast",
+            "input": "hydroCount",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "a4-burning-electro",
+      "name": "A4 Burning Shot — Electro",
+      "source": "Chasca",
+      "description": "Requires the selected element in the party and an actual Nightsoul Burst trigger.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "reactionTriggered",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:burningShotElement",
+            "value": 4
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:burningShotElement",
+            "value": 4
+          },
+          {
+            "type": "contextAtLeast",
+            "input": "electroCount",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "a4-burning-cryo",
+      "name": "A4 Burning Shot — Cryo",
+      "source": "Chasca",
+      "description": "Requires the selected element in the party and an actual Nightsoul Burst trigger.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "reactionTriggered",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:burningShotElement",
+            "value": 5
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:burningShotElement",
+            "value": 5
+          },
+          {
+            "type": "contextAtLeast",
+            "input": "cryoCount",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "c2-proc-pyro",
+      "name": "C2 AoE proc — Pyro",
+      "source": "Chasca",
+      "description": "400% ATK charged-attack damage, one triggered hit. Requires a landed converted shell of this element.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "chargedAttackHit",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:c2ProcElement",
+            "value": 1
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:c2ProcElement",
+            "value": 1
+          },
+          {
+            "type": "contextAtLeast",
+            "input": "pyroCount",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      }
+    },
+    {
+      "id": "c2-proc-hydro",
+      "name": "C2 AoE proc — Hydro",
+      "source": "Chasca",
+      "description": "400% ATK charged-attack damage, one triggered hit. Requires a landed converted shell of this element.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "chargedAttackHit",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:c2ProcElement",
+            "value": 2
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:c2ProcElement",
+            "value": 2
+          },
+          {
+            "type": "contextAtLeast",
+            "input": "hydroCount",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      }
+    },
+    {
+      "id": "c2-proc-electro",
+      "name": "C2 AoE proc — Electro",
+      "source": "Chasca",
+      "description": "400% ATK charged-attack damage, one triggered hit. Requires a landed converted shell of this element.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "chargedAttackHit",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:c2ProcElement",
+            "value": 3
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:c2ProcElement",
+            "value": 3
+          },
+          {
+            "type": "contextAtLeast",
+            "input": "electroCount",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      }
+    },
+    {
+      "id": "c2-proc-cryo",
+      "name": "C2 AoE proc — Cryo",
+      "source": "Chasca",
+      "description": "400% ATK charged-attack damage, one triggered hit. Requires a landed converted shell of this element.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "chargedAttackHit",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:c2ProcElement",
+            "value": 4
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:c2ProcElement",
+            "value": 4
+          },
+          {
+            "type": "contextAtLeast",
+            "input": "cryoCount",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      }
+    },
+    {
+      "id": "c4-proc-pyro",
+      "name": "C4 AoE proc — Pyro",
+      "source": "Chasca",
+      "description": "400% ATK charged-attack damage, one triggered hit. Requires a landed converted shell of this element.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "burstUsed",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:c4ProcElement",
+            "value": 1
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:c4ProcElement",
+            "value": 1
+          },
+          {
+            "type": "contextAtLeast",
+            "input": "pyroCount",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      }
+    },
+    {
+      "id": "c4-proc-hydro",
+      "name": "C4 AoE proc — Hydro",
+      "source": "Chasca",
+      "description": "400% ATK charged-attack damage, one triggered hit. Requires a landed converted shell of this element.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "burstUsed",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:c4ProcElement",
+            "value": 2
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:c4ProcElement",
+            "value": 2
+          },
+          {
+            "type": "contextAtLeast",
+            "input": "hydroCount",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      }
+    },
+    {
+      "id": "c4-proc-electro",
+      "name": "C4 AoE proc — Electro",
+      "source": "Chasca",
+      "description": "400% ATK charged-attack damage, one triggered hit. Requires a landed converted shell of this element.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "burstUsed",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:c4ProcElement",
+            "value": 3
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:c4ProcElement",
+            "value": 3
+          },
+          {
+            "type": "contextAtLeast",
+            "input": "electroCount",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      }
+    },
+    {
+      "id": "c4-proc-cryo",
+      "name": "C4 AoE proc — Cryo",
+      "source": "Chasca",
+      "description": "400% ATK charged-attack damage, one triggered hit. Requires a landed converted shell of this element.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "burstUsed",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:c4ProcElement",
+            "value": 4
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:c4ProcElement",
+            "value": 4
+          },
+          {
+            "type": "contextAtLeast",
+            "input": "cryoCount",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      }
+    },
+    {
+      "id": "a1-bullet-trick",
+      "name": "Bullet Trick: Spirit of the Radiant Shadow",
+      "source": "Chasca",
+      "description": "0/1/2/3 distinct eligible teammate elements grant 0%/15%/35%/65% additive Shining Shadowhunt Shell DMG Bonus.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "teamComposition",
+        "conditions": []
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "chascaShiningShell"
+            ],
+            "damageKinds": [
+              "talent"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 15
+                    },
+                    {
+                      "type": "min",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 1
+                        },
+                        {
+                          "type": "max",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 0
+                            },
+                            {
+                              "type": "add",
+                              "operands": [
+                                {
+                                  "type": "add",
+                                  "operands": [
+                                    {
+                                      "type": "min",
+                                      "operands": [
+                                        {
+                                          "type": "constant",
+                                          "value": 1
+                                        },
+                                        {
+                                          "type": "context",
+                                          "input": "pyroCount"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "min",
+                                      "operands": [
+                                        {
+                                          "type": "constant",
+                                          "value": 1
+                                        },
+                                        {
+                                          "type": "context",
+                                          "input": "hydroCount"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "min",
+                                      "operands": [
+                                        {
+                                          "type": "constant",
+                                          "value": 1
+                                        },
+                                        {
+                                          "type": "context",
+                                          "input": "electroCount"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "min",
+                                      "operands": [
+                                        {
+                                          "type": "constant",
+                                          "value": 1
+                                        },
+                                        {
+                                          "type": "context",
+                                          "input": "cryoCount"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "constant",
+                                  "value": 0
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 20
+                    },
+                    {
+                      "type": "min",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 1
+                        },
+                        {
+                          "type": "max",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 0
+                            },
+                            {
+                              "type": "add",
+                              "operands": [
+                                {
+                                  "type": "add",
+                                  "operands": [
+                                    {
+                                      "type": "min",
+                                      "operands": [
+                                        {
+                                          "type": "constant",
+                                          "value": 1
+                                        },
+                                        {
+                                          "type": "context",
+                                          "input": "pyroCount"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "min",
+                                      "operands": [
+                                        {
+                                          "type": "constant",
+                                          "value": 1
+                                        },
+                                        {
+                                          "type": "context",
+                                          "input": "hydroCount"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "min",
+                                      "operands": [
+                                        {
+                                          "type": "constant",
+                                          "value": 1
+                                        },
+                                        {
+                                          "type": "context",
+                                          "input": "electroCount"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "min",
+                                      "operands": [
+                                        {
+                                          "type": "constant",
+                                          "value": 1
+                                        },
+                                        {
+                                          "type": "context",
+                                          "input": "cryoCount"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "constant",
+                                  "value": -1
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 30
+                    },
+                    {
+                      "type": "min",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 1
+                        },
+                        {
+                          "type": "max",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 0
+                            },
+                            {
+                              "type": "add",
+                              "operands": [
+                                {
+                                  "type": "add",
+                                  "operands": [
+                                    {
+                                      "type": "min",
+                                      "operands": [
+                                        {
+                                          "type": "constant",
+                                          "value": 1
+                                        },
+                                        {
+                                          "type": "context",
+                                          "input": "pyroCount"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "min",
+                                      "operands": [
+                                        {
+                                          "type": "constant",
+                                          "value": 1
+                                        },
+                                        {
+                                          "type": "context",
+                                          "input": "hydroCount"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "min",
+                                      "operands": [
+                                        {
+                                          "type": "constant",
+                                          "value": 1
+                                        },
+                                        {
+                                          "type": "context",
+                                          "input": "electroCount"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "min",
+                                      "operands": [
+                                        {
+                                          "type": "constant",
+                                          "value": 1
+                                        },
+                                        {
+                                          "type": "context",
+                                          "input": "cryoCount"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "constant",
+                                  "value": -2
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ],
+      "metrics": [
+        {
+          "label": "A1 unique eligible elements",
+          "expression": {
+            "type": "add",
+            "operands": [
+              {
+                "type": "min",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 1
+                  },
+                  {
+                    "type": "context",
+                    "input": "pyroCount"
+                  }
+                ]
+              },
+              {
+                "type": "min",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 1
+                  },
+                  {
+                    "type": "context",
+                    "input": "hydroCount"
+                  }
+                ]
+              },
+              {
+                "type": "min",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 1
+                  },
+                  {
+                    "type": "context",
+                    "input": "electroCount"
+                  }
+                ]
+              },
+              {
+                "type": "min",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 1
+                  },
+                  {
+                    "type": "context",
+                    "input": "cryoCount"
+                  }
+                ]
+              }
+            ]
+          },
+          "unit": "number"
+        },
+        {
+          "label": "A1 Spiritbinding Conversion chance (%)",
+          "expression": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "constant",
+                "value": 33.333333333333336
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "min",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 1
+                      },
+                      {
+                        "type": "context",
+                        "input": "pyroCount"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "min",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 1
+                      },
+                      {
+                        "type": "context",
+                        "input": "hydroCount"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "min",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 1
+                      },
+                      {
+                        "type": "context",
+                        "input": "electroCount"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "min",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 1
+                      },
+                      {
+                        "type": "context",
+                        "input": "cryoCount"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "unit": "percentPoints"
+        }
+      ],
+      "stackingPriority": {
+        "type": "constant",
+        "value": 1
+      },
+      "stackingGroup": "chasca-radiant-shadow"
+    },
+    {
+      "id": "c2-extra-radiant-stack",
+      "name": "C2: Additional Spirit of the Radiant Shadow stack",
+      "source": "Chasca",
+      "description": "Adds one stack when Chasca takes the field; stacks cap at three; replaces the C0 tier to prevent double counting.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "teamComposition",
+        "conditions": []
+      },
+      "ownershipRequirements": {
+        "source:constellation": 2
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "chascaShiningShell"
+            ],
+            "damageKinds": [
+              "talent"
+            ]
+          },
+          "damageBonus": {
+            "expression": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 15
+                    },
+                    {
+                      "type": "min",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 1
+                        },
+                        {
+                          "type": "max",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 0
+                            },
+                            {
+                              "type": "add",
+                              "operands": [
+                                {
+                                  "type": "min",
+                                  "operands": [
+                                    {
+                                      "type": "constant",
+                                      "value": 3
+                                    },
+                                    {
+                                      "type": "add",
+                                      "operands": [
+                                        {
+                                          "type": "add",
+                                          "operands": [
+                                            {
+                                              "type": "min",
+                                              "operands": [
+                                                {
+                                                  "type": "constant",
+                                                  "value": 1
+                                                },
+                                                {
+                                                  "type": "context",
+                                                  "input": "pyroCount"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "type": "min",
+                                              "operands": [
+                                                {
+                                                  "type": "constant",
+                                                  "value": 1
+                                                },
+                                                {
+                                                  "type": "context",
+                                                  "input": "hydroCount"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "type": "min",
+                                              "operands": [
+                                                {
+                                                  "type": "constant",
+                                                  "value": 1
+                                                },
+                                                {
+                                                  "type": "context",
+                                                  "input": "electroCount"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "type": "min",
+                                              "operands": [
+                                                {
+                                                  "type": "constant",
+                                                  "value": 1
+                                                },
+                                                {
+                                                  "type": "context",
+                                                  "input": "cryoCount"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "type": "constant",
+                                          "value": 1
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "constant",
+                                  "value": 0
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 20
+                    },
+                    {
+                      "type": "min",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 1
+                        },
+                        {
+                          "type": "max",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 0
+                            },
+                            {
+                              "type": "add",
+                              "operands": [
+                                {
+                                  "type": "min",
+                                  "operands": [
+                                    {
+                                      "type": "constant",
+                                      "value": 3
+                                    },
+                                    {
+                                      "type": "add",
+                                      "operands": [
+                                        {
+                                          "type": "add",
+                                          "operands": [
+                                            {
+                                              "type": "min",
+                                              "operands": [
+                                                {
+                                                  "type": "constant",
+                                                  "value": 1
+                                                },
+                                                {
+                                                  "type": "context",
+                                                  "input": "pyroCount"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "type": "min",
+                                              "operands": [
+                                                {
+                                                  "type": "constant",
+                                                  "value": 1
+                                                },
+                                                {
+                                                  "type": "context",
+                                                  "input": "hydroCount"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "type": "min",
+                                              "operands": [
+                                                {
+                                                  "type": "constant",
+                                                  "value": 1
+                                                },
+                                                {
+                                                  "type": "context",
+                                                  "input": "electroCount"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "type": "min",
+                                              "operands": [
+                                                {
+                                                  "type": "constant",
+                                                  "value": 1
+                                                },
+                                                {
+                                                  "type": "context",
+                                                  "input": "cryoCount"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "type": "constant",
+                                          "value": 1
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "constant",
+                                  "value": -1
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 30
+                    },
+                    {
+                      "type": "min",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 1
+                        },
+                        {
+                          "type": "max",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 0
+                            },
+                            {
+                              "type": "add",
+                              "operands": [
+                                {
+                                  "type": "min",
+                                  "operands": [
+                                    {
+                                      "type": "constant",
+                                      "value": 3
+                                    },
+                                    {
+                                      "type": "add",
+                                      "operands": [
+                                        {
+                                          "type": "add",
+                                          "operands": [
+                                            {
+                                              "type": "min",
+                                              "operands": [
+                                                {
+                                                  "type": "constant",
+                                                  "value": 1
+                                                },
+                                                {
+                                                  "type": "context",
+                                                  "input": "pyroCount"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "type": "min",
+                                              "operands": [
+                                                {
+                                                  "type": "constant",
+                                                  "value": 1
+                                                },
+                                                {
+                                                  "type": "context",
+                                                  "input": "hydroCount"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "type": "min",
+                                              "operands": [
+                                                {
+                                                  "type": "constant",
+                                                  "value": 1
+                                                },
+                                                {
+                                                  "type": "context",
+                                                  "input": "electroCount"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "type": "min",
+                                              "operands": [
+                                                {
+                                                  "type": "constant",
+                                                  "value": 1
+                                                },
+                                                {
+                                                  "type": "context",
+                                                  "input": "cryoCount"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "type": "constant",
+                                          "value": 1
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "constant",
+                                  "value": -2
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "unit": "percentPoints"
+          }
+        }
+      ],
+      "metrics": [
+        {
+          "label": "C2 total Radiant Shadow stacks",
+          "expression": {
+            "type": "min",
+            "operands": [
+              {
+                "type": "constant",
+                "value": 3
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "add",
+                    "operands": [
+                      {
+                        "type": "min",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 1
+                          },
+                          {
+                            "type": "context",
+                            "input": "pyroCount"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "min",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 1
+                          },
+                          {
+                            "type": "context",
+                            "input": "hydroCount"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "min",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 1
+                          },
+                          {
+                            "type": "context",
+                            "input": "electroCount"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "min",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 1
+                          },
+                          {
+                            "type": "context",
+                            "input": "cryoCount"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "constant",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          "unit": "number"
+        }
+      ],
+      "stackingPriority": {
+        "type": "constant",
+        "value": 2
+      },
+      "stackingGroup": "chasca-radiant-shadow"
+    },
+    {
+      "id": "c1-cylinder",
+      "name": "C1: Cylinder, the Restless Roulette",
+      "source": "Chasca",
+      "description": "Allows the 2nd shell to convert with A1 proc and adds 33.3 points to conversion chance, up to 100%; selection of converted hit counts remains manual.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "teamComposition",
+        "conditions": []
+      },
+      "ownershipRequirements": {
+        "source:constellation": 1
+      },
+      "metrics": [
+        {
+          "label": "C1 Spiritbinding Conversion chance (%)",
+          "expression": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "min",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 1
+                  },
+                  {
+                    "type": "add",
+                    "operands": [
+                      {
+                        "type": "min",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 1
+                          },
+                          {
+                            "type": "context",
+                            "input": "pyroCount"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "min",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 1
+                          },
+                          {
+                            "type": "context",
+                            "input": "hydroCount"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "min",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 1
+                          },
+                          {
+                            "type": "context",
+                            "input": "electroCount"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "min",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 1
+                          },
+                          {
+                            "type": "context",
+                            "input": "cryoCount"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "min",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 100
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "add",
+                        "operands": [
+                          {
+                            "type": "add",
+                            "operands": [
+                              {
+                                "type": "min",
+                                "operands": [
+                                  {
+                                    "type": "constant",
+                                    "value": 1
+                                  },
+                                  {
+                                    "type": "context",
+                                    "input": "pyroCount"
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "min",
+                                "operands": [
+                                  {
+                                    "type": "constant",
+                                    "value": 1
+                                  },
+                                  {
+                                    "type": "context",
+                                    "input": "hydroCount"
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "min",
+                                "operands": [
+                                  {
+                                    "type": "constant",
+                                    "value": 1
+                                  },
+                                  {
+                                    "type": "context",
+                                    "input": "electroCount"
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "min",
+                                "operands": [
+                                  {
+                                    "type": "constant",
+                                    "value": 1
+                                  },
+                                  {
+                                    "type": "context",
+                                    "input": "cryoCount"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "type": "constant",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      {
+                        "type": "constant",
+                        "value": 33.333333333333336
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "unit": "percentPoints"
+        },
+        {
+          "label": "Additional converted shell when A1 triggers",
+          "expression": {
+            "type": "constant",
+            "value": 1
+          },
+          "unit": "number"
+        }
+      ]
+    },
+    {
+      "id": "c3-skill-level",
+      "name": "C3: Reins, Her Careful Control",
+      "source": "Chasca",
+      "description": "Raises Skill talent level by 3, up to 15.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "always",
+        "conditions": []
+      },
+      "ownershipRequirements": {
+        "source:constellation": 3
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:skillTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "c5-burst-level",
+      "name": "C5: Brim, the Sandshadow's Silhouette",
+      "source": "Chasca",
+      "description": "Raises Burst talent level by 3, up to 15.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "always",
+        "conditions": []
+      },
+      "ownershipRequirements": {
+        "source:constellation": 5
+      },
+      "statChanges": [
+        {
+          "stat": "recipient:burstTalentLevel",
+          "operation": "flatAdd",
+          "value": {
+            "type": "constant",
+            "value": 3
+          },
+          "maximum": 15
+        }
+      ]
+    },
+    {
+      "id": "c6-fatal-rounds",
+      "name": "C6: Fatal Rounds",
+      "source": "Chasca",
+      "description": "When a prior Spiritbinding Conversion triggers, +120 percentage points CRIT DMG on the next Multitarget Fire shell salvo. Requires manual active state.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "chargedAttackHit",
+        "conditions": [
+          {
+            "type": "inputAtLeast",
+            "input": "local:fatalRoundsActive",
+            "value": 1
+          },
+          {
+            "type": "inputAtMost",
+            "input": "local:fatalRoundsActive",
+            "value": 1
+          }
+        ]
+      },
+      "ownershipRequirements": {
+        "source:constellation": 6
+      },
+      "formulaModifiers": [
+        {
+          "targets": {
+            "requiredTags": [
+              "chascaMultitargetShell"
+            ],
+            "damageKinds": [
+              "talent"
+            ]
+          },
+          "crit": {
+            "additionalDamage": {
+              "expression": {
+                "type": "constant",
+                "value": 120
+              },
+              "unit": "percentPoints"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "resource-info",
+      "name": "Night Realm's Gift and non-damage mechanics",
+      "source": "Chasca",
+      "description": "Nightsoul/phlogiston movement and resources do not directly modify hit damage.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "always",
+        "conditions": []
+      },
+      "metrics": [
+        {
+          "label": "Nightsoul points on Skill activation",
+          "expression": {
+            "type": "talentParameter",
+            "talent": "combat2",
+            "parameter": "param5",
+            "levelInput": "source:skillTalentLevel"
+          },
+          "unit": "number"
+        },
+        {
+          "label": "Nightsoul Transmission points",
+          "expression": {
+            "type": "constant",
+            "value": 32
+          },
+          "unit": "number"
+        },
+        {
+          "label": "Skill cooldown (seconds)",
+          "expression": {
+            "type": "talentParameter",
+            "talent": "combat2",
+            "parameter": "param6",
+            "levelInput": "source:skillTalentLevel"
+          },
+          "unit": "number"
+        },
+        {
+          "label": "Burst cooldown (seconds)",
+          "expression": {
+            "type": "talentParameter",
+            "talent": "combat3",
+            "parameter": "param4",
+            "levelInput": "source:burstTalentLevel"
+          },
+          "unit": "number"
+        },
+        {
+          "label": "Burst Energy cost",
+          "expression": {
+            "type": "talentParameter",
+            "talent": "combat3",
+            "parameter": "param5",
+            "levelInput": "source:burstTalentLevel"
+          },
+          "unit": "number"
+        }
+      ]
+    },
+    {
+      "id": "c4-energy-info",
+      "name": "C4 Energy restored by Radiant Burst hit",
+      "source": "Chasca",
+      "description": "Restores 1.5 Energy on each Radiant follow-up hit; the additional AoE triggers at most once, but Energy is not damage.",
+      "category": "constellation",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "always",
+        "conditions": []
+      },
+      "ownershipRequirements": {
+        "source:constellation": 4
+      },
+      "metrics": [
+        {
+          "label": "Energy restored per Radiant Burst shell hit",
+          "expression": {
+            "type": "constant",
+            "value": 1.5
+          },
+          "unit": "number"
+        }
+      ]
+    },
+    {
+      "id": "mediation-info",
+      "name": "Mediation's True Meaning",
+      "source": "Chasca",
+      "description": "25 Phlogiston from party defeats, once per 12s, unavailable in Domains, Trounce Domains and the Spiral Abyss.",
+      "category": "passive",
+      "recipient": "self",
+      "defaultEnabled": true,
+      "activation": {
+        "event": "always",
+        "conditions": []
+      },
+      "metrics": [
+        {
+          "label": "Phlogiston from eligible overworld defeat",
+          "expression": {
+            "type": "constant",
+            "value": 25
+          },
+          "unit": "number"
+        }
+      ]
+    }
+  ],
+  "defaultTeam": [
+    "chasca"
+  ],
+  "moonsignContribution": 0,
+  "notes": [
+    "Uses the EXACT combat1/2/3 paramN mapping from the supplied formulaAuthoring.talentReferences packet, reading all 15 talent levels from the confirmed packaged data/characters/data/chasca.json. No copied or rounded inline talentParameters.",
+    "Every normal arrow and skill/burst shell formula represents ONE hit. Normal hit 3 fires 2 arrows and normal hit 4 fires 3; the per-arrow entries are NOT combined totals. Low/high plunge impact alternatives are mutually exclusive.",
+    "Shadowhunt and Radiant Soulseeker formulas are per-hit damage CLASS alternatives, not six simultaneous elemental slot outputs. For a full Skill salvo at C0, shell 1 and 2 are ordinary Anemo; shell 3 converts with A1 chance; shells 4-6 convert one per qualifying Pyro/Hydro/Electro/Cryo teammate. At C1, shell 2 additionally converts when the A1 proc occurs. Shells fire last-in-first-out.",
+    "The converter lists one ordinary Anemo shell and one Shining shell per eligible element; the chosen element is randomized by the game. Each converted formula is gated by the selected-team presence of that element. No independent projectile selectors or slot-level random sampling are implemented. Do NOT add all alternative formula outputs as though every element hits simultaneously.",
+    "A1 unique eligible element count is derived by summing min(1,team elemental count) for Pyro/Hydro/Electro/Cryo, not by total teammates, so duplicate elements do not inflate it. Its 0/15/35/65% bonus is additive in the ordinary damage bonus bucket only for Shining Shadowhunt Shells, not ordinary Anemo shells, Burst, Burning Shot or C2/C4 AoE.",
+    "C2 adds one Radiant Shadow stack (maximum 3); its higher-priority stacking effect REPLACES the C0 A1 damage-bonus effect rather than stacking both. The C1 extra conversion chance only changes which of the representative converted shells may occur.",
+    "For Burst, the opening Galesplitting hit is Anemo and the six follow-up shells contain two converted hits per Pyro/Hydro/Electro/Cryo teammate, up to six in total; other hits are Anemo. Element order is random. Converted Radiant shells deal Burst damage; C4 extra AoE is Charged Attack damage.",
+    "A4 Burning Shot appears only if burningShotElement is manually selected after a nearby party member triggers a Nightsoul Burst. Use 1 Anemo only with NO eligible elements, or values 2..5 for a present Pyro/Hydro/Electro/Cryo teammate. It deals 150% of the BASE Skill-shell talent multiplier (combat2 param3/4); it does not automatically inherit A1 Shining-shell bonus.",
+    "C2 and C4 extra AoE have local element selectors, 0=not triggered, 1=Pyro, 2=Hydro, 3=Electro, 4=Cryo. They represent ONE 400%-ATK hit per eligible Skill salvo/Burst, respectively. The selected element must match a landed Shining/Radiant shell; party-presence conditions reject impossible elements, but the calculator cannot verify the triggering shell or number of enemies hit.",
+    "C6 Fatal Rounds is a MANUAL 0/1 state and adds 120 percentage points of CRIT DMG only to the Skill Multitarget Fire shells; does not apply to A4, Skill tap/activation, C2 AoE, C4 AoE or Burst. The trigger, 3-second duration, cooldown and charge speed are not simulated.",
+    "C3 and C5 add exactly 3 to Skill/Burst talent levels (capped at 15); provide base, not constellation-preincreased, talent levels as calculator inputs to avoid double counting.",
+    "Mounted Nightsoul plunge uses Normal Attack plunge multipliers; its rows are alternatives to the ordinary plunge rows and should never be summed with the same physical plunge. An ordinary Anemo Shining conversion is not an external infusion, therefore converted hits have infusionRule locked.",
+    "For a solo Chasca, the team has no eligible Pyro/Hydro/Electro/Cryo teammate, so no Shining Shell, converted Burning Shot, Radiant Burst Shell, C2 or C4 converted AoE formula is active.",
+    "The calculator does not model projectile order and reaction ICD, enemy aura, number of targets, chance of shell conversion, projectile firing count, resource depletion, movement, rotation DPS or snapshot timings. Its ordinary reaction previews are per hit, not an automatically valid multi-shell reaction sequence.",
+    "The C1 out-of-combat Nightsoul/Phlogiston consumption reduction, Nightsoul point recovery, passive exploration buffs and C4 Energy restoration are informational, not outgoing damage modifiers. Chasca has no verified Hexerei or Moonsign contribution."
+  ],
+  "sources": [
+    "data/characters/data/chasca.json",
+    "https://keqingmains.com/q/chasca-quickguide/",
+    "https://library.keqingmains.com/characters/anemo/chasca",
+    "https://genshin-impact.fandom.com/wiki/Chasca"
+  ]
+}

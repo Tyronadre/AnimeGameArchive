@@ -69,7 +69,7 @@ const schemas={
 };
 const topSchema={hexereiCharacters:[],schemaVersion:3,key:'',name:'',characterKey:'',element:'Dendro',weaponType:'Catalyst',characterDataResource:'',moonsignContribution:0,statBindings:{},defaultTeam:[],inputs:[],damageTypes:[],talents:[],effects:[],sources:[],notes:[],talentParameters:{},characterLevelMultipliers:[],crystallizeLevelMultipliers:[],reactions:[]};
 function changed(){dirty=true;$('dirty').textContent='Unsaved changes';controls();syncSummaries();}
-function controls(){for(const id of ['save','validate','reload'])$(id).disabled=!data||busy;}
+function controls(){for(const id of ['save','validate','reload'])$(id).disabled=!data||busy;$('new').disabled=busy;}
 function status(text,error=false){$('status').textContent=text;$('status').dataset.error=String(error);}
 function select(options,value,onchange){const n=node('select');[...new Set([value,...options])].forEach(v=>{const o=node('option',title(String(v)));o.value=v;n.append(o);});n.value=value;n.addEventListener('change',()=>onchange(n.value));return n;}
 function enumValues(key,kind){
@@ -438,6 +438,67 @@ function render({reset=false}={}){
  restoreUI($('fields'),state);
 }
 async function request(url,body){const headers={'Accept':'application/json'};if(body){headers['Content-Type']='application/json';headers[root.dataset.csrfHeader]=root.dataset.csrfToken;}const r=await fetch(api+url,{method:body?'POST':'GET',headers,body:body?JSON.stringify(body):undefined});let payload;try{payload=await r.json();}catch{throw new Error('Could not read the server response. Check your connection and sign-in.');}if(!r.ok)throw new Error(payload.error||payload.message||`Request failed (${r.status})`);return payload;}
+let newOptions=[],importedDocument=null,importReading=false;
+function newStatus(text,error=false){$('new-status').textContent=text;$('new-status').dataset.error=String(error);}
+function newKindChanged(){
+ const character=$('new-kind').value==='character';
+ for(const id of ['character-field','element-field','weapon-field'])$('new-'+id).hidden=!character;
+}
+function newPath(){return ({character:'',weapon:'weapons/',artifact:'artifacts/'})[$('new-kind').value]+$('new-key').value.trim()+'.json';}
+async function openNew(){
+ if(busy)return;importedDocument=null;$('new-form').reset();newKindChanged();
+ $('new-character').replaceChildren(new Option('Custom character…',''));
+ newStatus('Choose a character, enter details, or import calculation JSON.');$('new-dialog').showModal();
+ try{newOptions=await request('/new-file-options');
+  for(const item of newOptions){const option=new Option(item.name+(item.exists?' · already exists':''),item.key);option.disabled=item.exists;$('new-character').append(option);}
+ }catch(e){newStatus('Character suggestions are unavailable. You can still enter details or import a file.');}
+}
+$('new').addEventListener('click',openNew);
+$('new-kind').addEventListener('change',newKindChanged);
+$('new-character').addEventListener('change',()=>{
+ const item=newOptions.find(c=>c.key===$('new-character').value);if(!item)return;
+ $('new-key').value=item.key;$('new-name').value=item.name;$('new-element').value=item.element;$('new-weapon').value=item.weaponType;
+});
+$('new-cancel').addEventListener('click',()=>{if(!busy)$('new-dialog').close();});
+$('new-dialog').addEventListener('cancel',e=>{if(busy)e.preventDefault();});
+$('new-import').addEventListener('change',async()=>{
+ const file=$('new-import').files[0];if(!file){importedDocument=null;return;}
+ importReading=true;$('new-create').disabled=true;
+ try{
+  if(file.size>2000000)throw new Error('This JSON file is too large.');
+  const parsed=JSON.parse(await file.text());
+  if(!parsed||typeof parsed!=='object'||Array.isArray(parsed)||!parsed.key||!parsed.name)throw new Error('Choose a calculation JSON file with a key and name, rather than a generator input packet.');
+  importedDocument=parsed;$('new-kind').value=parsed.characterKey?'character':parsed.effects?.some(e=>'pieces' in e)?'artifact':$('new-kind').value==='artifact'?'artifact':'weapon';
+  $('new-key').value=parsed.key;$('new-name').value=parsed.name;
+  if(parsed.element)$('new-element').value=parsed.element;if(parsed.weaponType)$('new-weapon').value=parsed.weaponType;
+  newKindChanged();newStatus('JSON loaded. Create file will validate it before saving.');
+ }catch(e){importedDocument=null;$('new-import').value='';newStatus(e.message,true);}
+ finally{importReading=false;$('new-create').disabled=false;}
+});
+$('new-form').addEventListener('submit',async e=>{
+ e.preventDefault();if(busy||importReading)return;
+ const nextPath=newPath(),key=$('new-key').value.trim(),name=$('new-name').value.trim(),kind=$('new-kind').value;
+ if(!key||!name){newStatus('Enter a key and name.',true);return;}
+ if(files.includes(nextPath)){newStatus('This file already exists. Open it from the library instead.',true);return;}
+ if(dirty&&!window.confirm('Discard unsaved changes to the current file and create a new one?'))return;
+ let draft=importedDocument?structuredClone(importedDocument):{schemaVersion:kind==='character'?3:2,key,name,inputs:[],effects:[],sources:[]};
+ draft.key=key;draft.name=name;
+ if(kind==='character'){
+  draft.characterKey=key;draft.element=$('new-element').value;draft.weaponType=$('new-weapon').value;
+  if(!importedDocument){const item=newOptions.find(c=>c.key===key);draft.characterDataResource=item?.characterDataResource||'';
+   draft.talents=structuredClone(item?.talents||['normal','skill','burst'].map(key=>({key,name:title(key),formulas:[]})));
+   draft.defaultTeam=[key];draft.inputDefaults={attack:1500,maxHp:30000,defense:1000,normalTalentLevel:10,skillTalentLevel:10,burstTalentLevel:10};}
+ }
+ busy=true;controls();$('new-create').disabled=true;$('new-cancel').disabled=true;newStatus('Validating the new file and team calculations…');
+ try{
+  const result=await request('/create',{path:nextPath,content:JSON.stringify(draft,null,2)+'\n'});
+  data=JSON.parse(result.content);revision=result.revision;path=result.path;dirty=false;section='Overview';
+  files=[...new Set([...files,path])].sort();$('search').value='';$('name').textContent=path;$('dirty').textContent='All changes saved';
+  $('new-dialog').close();status(result.message);render({reset:true});
+  request('/catalog').then(next=>{catalog=next;renderFiles();}).catch(()=>{});
+ }catch(error){newStatus(error.message,true);}
+ finally{busy=false;controls();$('new-create').disabled=false;$('new-cancel').disabled=false;renderFiles();}
+});
 async function load(next){if(busy)return;if(dirty&&!window.confirm('Discard unsaved changes to this file?'))return;busy=true;controls();try{const result=await request('/file?path='+encodeURIComponent(next));data=JSON.parse(result.content);revision=result.revision;path=next;dirty=false;section='Overview';$('name').textContent=next;$('dirty').textContent='All changes saved';status('Ready to edit. Changes stay in this form until you save.');render({reset:true});renderFiles();}catch(e){status(e.message,true);}finally{busy=false;controls();renderFiles();}}
 function renderFiles(){const query=$('search').value.toLowerCase();$('files').replaceChildren();files.filter(f=>f.toLowerCase().includes(query)).forEach(f=>{const b=button(f,()=>load(f));const character=catalog.find(c=>c.file===f);if(character){const badge=node('small',character.damageAvailable?'Damage + support':'Support only','studio-file-badge');b.append(badge);}b.setAttribute('aria-current',String(f===path));b.disabled=busy;$('files').append(b);});}
 async function submit(save){if(!data||busy)return;busy=true;controls();status(save?'Validating and saving…':'Checking formula definitions and team calculations…');try{const result=await request(save?'/save':'/validate',{path,content:JSON.stringify(data,null,2)+'\n',revision});if(save){revision=result.revision;dirty=false;$('dirty').textContent='All changes saved';request('/catalog').then(next=>{catalog=next;renderFiles();}).catch(()=>{});request('/damage-types').then(next=>{sharedDamageTypes=next;}).catch(()=>{});}status(result.message);}catch(e){status(e.message,true);}finally{busy=false;controls();}}
