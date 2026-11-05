@@ -19,6 +19,10 @@ A **damage formula** defines one damage instance: its name, damage type, classif
 
 Use **Duplicate** beside a formula to create the next hit in an attack sequence. The copy has its own unique ID and an independent copy of all scaling terms, tags, and modifiers. For successive basic attacks, change the copied talent parameter instead of rebuilding the expression. **Remove** deletes a whole formula or talent; expression terms and other list entries also have their own removal controls. Individual property fields have no remove button.
 
+Renaming a new or duplicated formula updates its generated ID, adding a numeric suffix when another formula already uses that ID. The advanced ID field updates immediately. Editing the ID yourself stops automatic renaming for that formula.
+
+Weapon effects can include a **Formulas** list for separate damage procs. Use **Active Character** for a buff to the currently selected damage character, or **Active Other** for a handoff that must exclude the weapon holder. See [weapon coverage and combat assumptions](weapon-formula-coverage.md).
+
 Dropdown changes update the affected editor section while preserving focus, scroll position, and both open and closed panels. Adding or duplicating a formula opens that new formula and keeps the existing panels in their current state.
 
 | User supplies | Interface provides | Saved JSON |

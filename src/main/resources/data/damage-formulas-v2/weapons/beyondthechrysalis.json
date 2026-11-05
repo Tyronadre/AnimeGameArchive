@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 2,
+  "key": "beyondthechrysalis",
+  "name": "Beyond the Chrysalis",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "devotion",
+      "label": "Winds of Devotion active (10s)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "defiance",
+      "label": "Winds of Defiance active (10s)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "devotion",
+        "name": "Beyond the Chrysalis · devotion",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Each time the equipping character uses their Elemental Skill or Elemental Burst, they gain one of the following three effects in sequence:Winds of Devotion: Increases the equipping character's CRIT DMG by 56%/72%/88%/104%/120% for 10s;Winds of Defiance: Increases Stellar Swirl reaction DMG dealt by the equipping character by 36%/45%/54%/63%/72% for 10s; andWinds of Plenty: Regenerates 5/5.5/6/6.5/7 Elemental Energy for the equipping character. Up to 5/5.5/6/6.5/7 Elemental Energy can be regenerated in this way every 4s.The aforementioned effects are removed and the sequence is reset when the equipping character leaves the field. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:devotion",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [
+          {
+            "stat": "critDamage",
+            "operation": "flatAdd",
+            "value": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 56
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 16
+                    },
+                    {
+                      "type": "add",
+                      "operands": [
+                        {
+                          "type": "input",
+                          "input": "local:refinement"
+                        },
+                        {
+                          "type": "constant",
+                          "value": -1
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "phase": 0
+          }
+        ],
+        "formulaModifiers": []
+      }
+    },
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "defiance",
+        "name": "Beyond the Chrysalis · defiance",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Each time the equipping character uses their Elemental Skill or Elemental Burst, they gain one of the following three effects in sequence:Winds of Devotion: Increases the equipping character's CRIT DMG by 56%/72%/88%/104%/120% for 10s;Winds of Defiance: Increases Stellar Swirl reaction DMG dealt by the equipping character by 36%/45%/54%/63%/72% for 10s; andWinds of Plenty: Regenerates 5/5.5/6/6.5/7 Elemental Energy for the equipping character. Up to 5/5.5/6/6.5/7 Elemental Energy can be regenerated in this way every 4s.The aforementioned effects are removed and the sequence is reset when the equipping character leaves the field. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:defiance",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "stellar"
+              ],
+              "requiredTags": [
+                "stellarSwirl"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 36
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 9
+                      },
+                      {
+                        "type": "add",
+                        "operands": [
+                          {
+                            "type": "input",
+                            "input": "local:refinement"
+                          },
+                          {
+                            "type": "constant",
+                            "value": -1
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/11728"
+  ]
+}

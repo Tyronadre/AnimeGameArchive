@@ -1,0 +1,308 @@
+{
+  "schemaVersion": 2,
+  "key": "silvershowerheartstrings",
+  "name": "Silvershower Heartstrings",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "remedy",
+      "label": "Remedy stacks",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 3,
+      "step": 1
+    },
+    {
+      "id": "burstCrit",
+      "label": "3-stack Burst CRIT buff active (includes 4s grace period)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "passive",
+        "name": "Silvershower Heartstrings · passive",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "The equipping character can gain the Remedy effect. When they possess 1/2/3 Remedy stacks, Max HP will increase by 12%/24%/40% | 15%/30%/50% | 18%/36%/60% | 21%/42%/70% | 24%/48%/80%. 1 stack may be gained when the following conditions are met: 1 stack for 25s when using an Elemental Skill; 1 stack for 25s when the value of a Bond of Life value increases; 1 stack for 20s for performing healing. Stacks can still be triggered when the equipping character is not on the field. Each stack's duration is counted independently. In addition, when 3 stacks are active, Elemental Burst CRIT Rate will be increased by 28%/35%/42%/49%/56%. This effect will be canceled 4s after falling under 3 stacks. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "always",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "maxHp",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 0.01
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "add",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 0
+                        },
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 12
+                            },
+                            {
+                              "type": "min",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 1
+                                },
+                                {
+                                  "type": "max",
+                                  "operands": [
+                                    {
+                                      "type": "constant",
+                                      "value": 0
+                                    },
+                                    {
+                                      "type": "add",
+                                      "operands": [
+                                        {
+                                          "type": "input",
+                                          "input": "local:remedy"
+                                        },
+                                        {
+                                          "type": "constant",
+                                          "value": 0
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 12
+                            },
+                            {
+                              "type": "min",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 1
+                                },
+                                {
+                                  "type": "max",
+                                  "operands": [
+                                    {
+                                      "type": "constant",
+                                      "value": 0
+                                    },
+                                    {
+                                      "type": "add",
+                                      "operands": [
+                                        {
+                                          "type": "input",
+                                          "input": "local:remedy"
+                                        },
+                                        {
+                                          "type": "constant",
+                                          "value": -1
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 16
+                            },
+                            {
+                              "type": "min",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 1
+                                },
+                                {
+                                  "type": "max",
+                                  "operands": [
+                                    {
+                                      "type": "constant",
+                                      "value": 0
+                                    },
+                                    {
+                                      "type": "add",
+                                      "operands": [
+                                        {
+                                          "type": "input",
+                                          "input": "local:remedy"
+                                        },
+                                        {
+                                          "type": "constant",
+                                          "value": -2
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "add",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 1
+                        },
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 0.25
+                            },
+                            {
+                              "type": "add",
+                              "operands": [
+                                {
+                                  "type": "input",
+                                  "input": "local:refinement"
+                                },
+                                {
+                                  "type": "constant",
+                                  "value": -1
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "input",
+                  "input": "recipient:baseHp"
+                }
+              ]
+            },
+            "phase": 0
+          }
+        ],
+        "formulaModifiers": []
+      }
+    },
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "burstCrit",
+        "name": "Silvershower Heartstrings · burst Crit",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "The equipping character can gain the Remedy effect. When they possess 1/2/3 Remedy stacks, Max HP will increase by 12%/24%/40% | 15%/30%/50% | 18%/36%/60% | 21%/42%/70% | 24%/48%/80%. 1 stack may be gained when the following conditions are met: 1 stack for 25s when using an Elemental Skill; 1 stack for 25s when the value of a Bond of Life value increases; 1 stack for 20s for performing healing. Stacks can still be triggered when the equipping character is not on the field. Each stack's duration is counted independently. In addition, when 3 stacks are active, Elemental Burst CRIT Rate will be increased by 28%/35%/42%/49%/56%. This effect will be canceled 4s after falling under 3 stacks. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:burstCrit",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent",
+                "artifactProc"
+              ],
+              "anyTags": [
+                "elementalBurst"
+              ]
+            },
+            "crit": {
+              "additionalRate": {
+                "unit": "percentPoints",
+                "expression": {
+                  "type": "add",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 28
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 7
+                        },
+                        {
+                          "type": "add",
+                          "operands": [
+                            {
+                              "type": "input",
+                              "input": "local:refinement"
+                            },
+                            {
+                              "type": "constant",
+                              "value": -1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/5673"
+  ]
+}

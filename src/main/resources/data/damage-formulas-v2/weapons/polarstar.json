@@ -1,0 +1,316 @@
+{
+  "schemaVersion": 2,
+  "key": "polarstar",
+  "name": "Polar Star",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "stacks",
+      "label": "Active passive stacks",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 4,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "passive",
+        "name": "Polar Star · passive",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Elemental Skill and Elemental Burst DMG increased by 12%/15%/18%/21%/24%. After a Normal Attack, Charged Attack, Elemental Skill or Elemental Burst hits an opponent, 1 stack of Ashen Nightstar will be gained for 12s. When 1/2/3/4 stacks of Ashen Nightstar are present, ATK is increased by 10%/20%/30%/48% | 12.5%/25%/37.5%/60% | 15%/30%/45%/72% | 17.5%/35%/52.5%/84% | 20%/40%/60%/96%. The stack of Ashen Nightstar created by the Normal Attack, Charged Attack, Elemental Skill or Elemental Burst will be counted independently of the others. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "always",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "attack",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 0.01
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "add",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 0
+                        },
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 10
+                            },
+                            {
+                              "type": "min",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 1
+                                },
+                                {
+                                  "type": "max",
+                                  "operands": [
+                                    {
+                                      "type": "constant",
+                                      "value": 0
+                                    },
+                                    {
+                                      "type": "add",
+                                      "operands": [
+                                        {
+                                          "type": "input",
+                                          "input": "local:stacks"
+                                        },
+                                        {
+                                          "type": "constant",
+                                          "value": 0
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 10
+                            },
+                            {
+                              "type": "min",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 1
+                                },
+                                {
+                                  "type": "max",
+                                  "operands": [
+                                    {
+                                      "type": "constant",
+                                      "value": 0
+                                    },
+                                    {
+                                      "type": "add",
+                                      "operands": [
+                                        {
+                                          "type": "input",
+                                          "input": "local:stacks"
+                                        },
+                                        {
+                                          "type": "constant",
+                                          "value": -1
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 10
+                            },
+                            {
+                              "type": "min",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 1
+                                },
+                                {
+                                  "type": "max",
+                                  "operands": [
+                                    {
+                                      "type": "constant",
+                                      "value": 0
+                                    },
+                                    {
+                                      "type": "add",
+                                      "operands": [
+                                        {
+                                          "type": "input",
+                                          "input": "local:stacks"
+                                        },
+                                        {
+                                          "type": "constant",
+                                          "value": -2
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 18
+                            },
+                            {
+                              "type": "min",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 1
+                                },
+                                {
+                                  "type": "max",
+                                  "operands": [
+                                    {
+                                      "type": "constant",
+                                      "value": 0
+                                    },
+                                    {
+                                      "type": "add",
+                                      "operands": [
+                                        {
+                                          "type": "input",
+                                          "input": "local:stacks"
+                                        },
+                                        {
+                                          "type": "constant",
+                                          "value": -3
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "add",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 1
+                        },
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 0.25
+                            },
+                            {
+                              "type": "add",
+                              "operands": [
+                                {
+                                  "type": "input",
+                                  "input": "local:refinement"
+                                },
+                                {
+                                  "type": "constant",
+                                  "value": -1
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "input",
+                  "input": "recipient:baseAttack"
+                }
+              ]
+            },
+            "phase": 0
+          }
+        ],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent",
+                "artifactProc"
+              ],
+              "anyTags": [
+                "elementalSkill",
+                "elementalBurst"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 12
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 3
+                      },
+                      {
+                        "type": "add",
+                        "operands": [
+                          {
+                            "type": "input",
+                            "input": "local:refinement"
+                          },
+                          {
+                            "type": "constant",
+                            "value": -1
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/1936"
+  ]
+}

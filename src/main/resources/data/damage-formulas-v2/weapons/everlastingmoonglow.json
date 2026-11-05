@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 2,
+  "key": "everlastingmoonglow",
+  "name": "Everlasting Moonglow",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "passive",
+        "name": "Everlasting Moonglow · passive",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Healing Bonus increased by 10%/12.5%/15%/17.5%/20%, Normal Attack DMG is increased by 1%/1.5%/2%/2.5%/3% of the Max HP of the character equipping this weapon. For 12s after using an Elemental Burst, Normal Attacks that hit opponents will restore 0.6 Energy. Energy can be restored this way once every 0.1s. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "always",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "healingBonus",
+            "operation": "flatAdd",
+            "value": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 10
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 2.5
+                    },
+                    {
+                      "type": "add",
+                      "operands": [
+                        {
+                          "type": "input",
+                          "input": "local:refinement"
+                        },
+                        {
+                          "type": "constant",
+                          "value": -1
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "phase": 0
+          }
+        ],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent",
+                "artifactProc"
+              ],
+              "anyTags": [
+                "normalAttack"
+              ]
+            },
+            "base": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 0.01
+                },
+                {
+                  "type": "add",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 1
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 0.5
+                        },
+                        {
+                          "type": "add",
+                          "operands": [
+                            {
+                              "type": "input",
+                              "input": "local:refinement"
+                            },
+                            {
+                              "type": "constant",
+                              "value": -1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "input",
+                  "input": "wearer:maxHp"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/1932"
+  ]
+}

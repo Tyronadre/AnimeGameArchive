@@ -1,0 +1,340 @@
+{
+  "schemaVersion": 2,
+  "key": "hymnofthemaelstrom",
+  "name": "Hymn of the Maelstrom",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "vintage",
+      "label": "Vatsamonga Vintage stacks",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 3,
+      "step": 1
+    },
+    {
+      "id": "frozenOrSwirl",
+      "label": "Frozen/Stellar Swirl enhancement active (5s)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "passive",
+        "name": "Hymn of the Maelstrom · passive",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Increases Healing Bonus by 4%/5%/6%/7%/8%.When performing healing, the equipping character gains the \"Vatsamonga's Vatic Vintage\" effect, which increases Max HP by 4%/5%/6%/7%/8% as well as increases the currently active party member's ATK by 0.4%/0.5%/0.6%/0.7%/0.8% for every 1,000 Max HP the equipping character has over 40,000. A maximum of 8%/10%/12%/14%/16% ATK can be gained in this way. This effect lasts 10s, max 3 stacks.When a nearby party member triggers a Frozen or Stellar Swirl reaction, the aforementioned Max HP and ATK boosts will be further increased by 75% for the next 5s.The aforementioned effects can still trigger even when the equipping character is not on the field. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "always",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "healingBonus",
+            "operation": "flatAdd",
+            "value": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 4
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 1
+                    },
+                    {
+                      "type": "add",
+                      "operands": [
+                        {
+                          "type": "input",
+                          "input": "local:refinement"
+                        },
+                        {
+                          "type": "constant",
+                          "value": -1
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "phase": 0
+          },
+          {
+            "stat": "maxHp",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 0.01
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "add",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 4
+                        },
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 1
+                            },
+                            {
+                              "type": "add",
+                              "operands": [
+                                {
+                                  "type": "input",
+                                  "input": "local:refinement"
+                                },
+                                {
+                                  "type": "constant",
+                                  "value": -1
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "input",
+                      "input": "local:vintage"
+                    },
+                    {
+                      "type": "add",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 1
+                        },
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 0.75
+                            },
+                            {
+                              "type": "input",
+                              "input": "local:frozenOrSwirl"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "input",
+                  "input": "recipient:baseHp"
+                }
+              ]
+            },
+            "phase": 0
+          }
+        ],
+        "formulaModifiers": []
+      }
+    },
+    {
+      "recipient": "activeCharacter",
+      "effect": {
+        "id": "activeAttack",
+        "name": "Hymn of the Maelstrom · active Attack",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Increases Healing Bonus by 4%/5%/6%/7%/8%.When performing healing, the equipping character gains the \"Vatsamonga's Vatic Vintage\" effect, which increases Max HP by 4%/5%/6%/7%/8% as well as increases the currently active party member's ATK by 0.4%/0.5%/0.6%/0.7%/0.8% for every 1,000 Max HP the equipping character has over 40,000. A maximum of 8%/10%/12%/14%/16% ATK can be gained in this way. This effect lasts 10s, max 3 stacks.When a nearby party member triggers a Frozen or Stellar Swirl reaction, the aforementioned Max HP and ATK boosts will be further increased by 75% for the next 5s.The aforementioned effects can still trigger even when the equipping character is not on the field. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "always",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "attack",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 0.01
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "input",
+                      "input": "local:vintage"
+                    },
+                    {
+                      "type": "add",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 1
+                        },
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 0.75
+                            },
+                            {
+                              "type": "input",
+                              "input": "local:frozenOrSwirl"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "min",
+                      "operands": [
+                        {
+                          "type": "add",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 8
+                            },
+                            {
+                              "type": "multiply",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 2
+                                },
+                                {
+                                  "type": "add",
+                                  "operands": [
+                                    {
+                                      "type": "input",
+                                      "input": "local:refinement"
+                                    },
+                                    {
+                                      "type": "constant",
+                                      "value": -1
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "add",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 0.4
+                                },
+                                {
+                                  "type": "multiply",
+                                  "operands": [
+                                    {
+                                      "type": "constant",
+                                      "value": 0.1
+                                    },
+                                    {
+                                      "type": "add",
+                                      "operands": [
+                                        {
+                                          "type": "input",
+                                          "input": "local:refinement"
+                                        },
+                                        {
+                                          "type": "constant",
+                                          "value": -1
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "max",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 0
+                                },
+                                {
+                                  "type": "add",
+                                  "operands": [
+                                    {
+                                      "type": "input",
+                                      "input": "wearer:maxHp"
+                                    },
+                                    {
+                                      "type": "constant",
+                                      "value": -40000
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "constant",
+                              "value": 0.001
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "input",
+                  "input": "recipient:baseAttack"
+                }
+              ]
+            },
+            "phase": 10
+          }
+        ],
+        "formulaModifiers": [],
+        "stackingGroup": "hymnOfTheMaelstrom",
+        "stackingPriority": {
+          "type": "input",
+          "input": "local:refinement"
+        }
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/11729"
+  ]
+}

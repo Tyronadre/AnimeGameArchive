@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 2,
+  "key": "calamityofeshu",
+  "name": "Calamity of Eshu",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "shield",
+      "label": "Protected by a shield",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "shield",
+        "name": "Calamity of Eshu · shield",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "While characters are protected by a Shield, DMG dealt by Normal and Charged Attacks is increased by 20%/25%/30%/35%/40%, and Normal and Charged Attack CRIT Rate is increased by 8%/10%/12%/14%/16%. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:shield",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent",
+                "artifactProc"
+              ],
+              "anyTags": [
+                "normalAttack",
+                "chargedAttack"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 20
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 5
+                      },
+                      {
+                        "type": "add",
+                        "operands": [
+                          {
+                            "type": "input",
+                            "input": "local:refinement"
+                          },
+                          {
+                            "type": "constant",
+                            "value": -1
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "targets": {
+              "damageKinds": [
+                "talent",
+                "artifactProc"
+              ],
+              "anyTags": [
+                "normalAttack",
+                "chargedAttack"
+              ]
+            },
+            "crit": {
+              "additionalRate": {
+                "unit": "percentPoints",
+                "expression": {
+                  "type": "add",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 8
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 2
+                        },
+                        {
+                          "type": "add",
+                          "operands": [
+                            {
+                              "type": "input",
+                              "input": "local:refinement"
+                            },
+                            {
+                              "type": "constant",
+                              "value": -1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/7113"
+  ]
+}

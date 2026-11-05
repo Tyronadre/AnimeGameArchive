@@ -24,7 +24,7 @@ class DamageFormulaArtifactServiceV2(private val objectMapper: ObjectMapper) {
         sets.forEach { set ->
             require(set.schemaVersion == 2 && set.key == GoodKeyNormalizer.normalize(set.key))
             require(set.effects.map { it.effect.id }.distinct().size == set.effects.size)
-            require(set.effects.all { it.pieces in listOf(1, 2, 4) && it.recipient in listOf("wearer", "party", "others") })
+            require(set.effects.all { it.pieces in listOf(1, 2, 4) && it.recipient in listOf("wearer", "party", "others", "activeCharacter", "activeOther") })
         }
         sets.associateBy { it.key }
     }
@@ -99,6 +99,13 @@ class DamageFormulaArtifactServiceV2(private val objectMapper: ObjectMapper) {
                     "offField" to if (wearer.key != profile.characterKey) 1.0 else 0.0,
                     "sameElementAllies" to members.count { it.key != wearer.key && it.element == wearer.element }.toDouble(),
                     "differentElementAllies" to members.count { it.key != wearer.key && it.element != wearer.element }.toDouble(),
+                    "distinctElements" to members.map { it.element }.distinct().size.toDouble(),
+                    "liyueCount" to members.count { it.region.equals("Liyue", true) }.toDouble(),
+                    "natlanOrDifferentElementCount" to members.count { it.region.equals("Natlan", true) || it.element != wearer.element }.toDouble(),
+                    "wearerIsTraveler" to if (wearer.key.startsWith("traveler")) 1.0 else 0.0,
+                    "wearerIsAloy" to if (wearer.key == "aloy") 1.0 else 0.0,
+                    "recipientHexerei" to profile.teamContext.getOrDefault("character.${profile.characterKey}.hexerei", 0.0),
+                    "recipientElement.${profile.element}" to 1.0,
                 ) + profile.teamContext
                 localContext.forEach { (name, value) -> context[prefix + name] = value }
                 // Include only controls referenced by an available tier (some 2-piece
@@ -147,7 +154,9 @@ class DamageFormulaArtifactServiceV2(private val objectMapper: ObjectMapper) {
                 fun modifiers(values: List<FormulaModifierV2>, recipient: String) = values.map { modifier ->
                     modifier.copy(
                         conditions = conditions(modifier.conditions), requiresEffects = modifier.requiresEffects.map { prefix + it },
-                        targets = modifier.targets.copy(elements = modifier.targets.elements.flatMap { element ->
+                        targets = modifier.targets.copy(formulaIds = modifier.targets.formulaIds.map { id ->
+                            if (set.effects.any { effect -> effect.formulas.any { it.id == id } }) prefix + id else id
+                        }, elements = modifier.targets.elements.flatMap { element ->
                             when (element) {
                                 "wearer" -> listOf(wearer.element)
                                 "recipient" -> listOf(profile.element)
@@ -163,6 +172,8 @@ class DamageFormulaArtifactServiceV2(private val objectMapper: ObjectMapper) {
                     val recipients = when (template.recipient) {
                         "party" -> members.map { it.key }
                         "others" -> members.filter { it.key != wearer.key }.map { it.key }
+                        "activeCharacter" -> listOf(profile.characterKey)
+                        "activeOther" -> listOf(profile.characterKey).filter { it != wearer.key }
                         else -> listOf(wearer.key)
                     }
                     val statChanges = recipients.flatMap { recipient ->
@@ -184,7 +195,9 @@ class DamageFormulaArtifactServiceV2(private val objectMapper: ObjectMapper) {
                         formulaModifiers = if (profile.characterKey in recipients) modifiers(source.formulaModifiers, profile.characterKey) else emptyList(),
                         metrics = source.metrics.map { it.copy(expression = expression(it.expression, wearer.key), conditions = conditions(it.conditions)) },
                     )
-                    if (template.formulas.isNotEmpty()) {
+                    // A weapon proc is shown when its wearer is the selected damage character.
+                    // This keeps its CRIT, buffs and enemy controls tied to the correct build.
+                    if (template.formulas.isNotEmpty() && (kind != "weapon" || wearer.key == profile.characterKey)) {
                         val boundTypes = mutableMapOf<String, String>()
                         set.damageTypes.forEach { type ->
                             // A stat-dependent shared type must read this wearer's build, even if another wearer uses it too.
@@ -201,7 +214,17 @@ class DamageFormulaArtifactServiceV2(private val objectMapper: ObjectMapper) {
                         talents += DamageTalentV2(prefix + source.id, "${wearer.name} · ${set.name}", template.formulas.map { formula ->
                             formula.copy(
                                 id = prefix + formula.id, damageType = boundTypes.getValue(formula.damageType),
-                                requiredEffects = listOf(prefix + source.id), base = expression(formula.base, wearer.key)
+                                requiredEffects = listOf(prefix + source.id) + formula.requiredEffects.map { prefix + it },
+                                excludedEffects = formula.excludedEffects.map { prefix + it },
+                                base = expression(formula.base, wearer.key),
+                                damageBonus = contribution(formula.damageBonus, wearer.key),
+                                defenseMitigation = formula.defenseMitigation?.copy(
+                                    reduction = contribution(formula.defenseMitigation.reduction, wearer.key),
+                                    ignore = contribution(formula.defenseMitigation.ignore, wearer.key)),
+                                resistanceMitigation = formula.resistanceMitigation?.copy(
+                                    reduction = contribution(formula.resistanceMitigation.reduction, wearer.key)),
+                                crit = formula.crit?.copy(additionalRate = contribution(formula.crit.additionalRate, wearer.key),
+                                    additionalDamage = contribution(formula.crit.additionalDamage, wearer.key))
                             )
                         })
                     }

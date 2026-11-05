@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 2,
+  "key": "splendoroftranquilwaters",
+  "name": "Splendor of Tranquil Waters",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "partyHpChanges",
+      "label": "Other members HP-change stacks",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 2,
+      "step": 1
+    },
+    {
+      "id": "ownHpChanges",
+      "label": "Own HP-change stacks",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 3,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "passive",
+        "name": "Splendor of Tranquil Waters · passive",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "When the equipping character's current HP increases or decreases, Elemental Skill DMG dealt will be increased by 8%/10%/12%/14%/16% for 6s. Max 3 stacks. This effect can be triggered once every 0.2s. When other party members' current HP increases or decreases, the equipping character's Max HP will be increased by 14%/17.5%/21%/24.5%/28% for 6s. Max 2 stacks. This effect can be triggered once every 0.2s. The aforementioned effects can be triggered even if the wielder is off-field. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "always",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "maxHp",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 0.01
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "add",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 14
+                        },
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 3.5
+                            },
+                            {
+                              "type": "add",
+                              "operands": [
+                                {
+                                  "type": "input",
+                                  "input": "local:refinement"
+                                },
+                                {
+                                  "type": "constant",
+                                  "value": -1
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "input",
+                      "input": "local:partyHpChanges"
+                    }
+                  ]
+                },
+                {
+                  "type": "input",
+                  "input": "recipient:baseHp"
+                }
+              ]
+            },
+            "phase": 0
+          }
+        ],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent",
+                "artifactProc"
+              ],
+              "anyTags": [
+                "elementalSkill"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "add",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 8
+                      },
+                      {
+                        "type": "multiply",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 2
+                          },
+                          {
+                            "type": "add",
+                            "operands": [
+                              {
+                                "type": "input",
+                                "input": "local:refinement"
+                              },
+                              {
+                                "type": "constant",
+                                "value": -1
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "input",
+                    "input": "local:ownHpChanges"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/4570"
+  ]
+}

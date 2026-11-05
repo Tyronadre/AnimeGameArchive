@@ -3,7 +3,8 @@ use std::io::{BufWriter, Write};
 use std::path::Path;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use auto_artifactarium::GameCommand;
+use auto_artifactarium::{GameCommand, KeyDiscoveryFailure};
+use base64::prelude::*;
 use serde::Serialize;
 
 const FORMAT_VERSION: &str = "genshin-archive-packet-inspection-v1";
@@ -110,6 +111,19 @@ impl PacketInspectionLogger {
         }
     }
 
+    pub fn log_key_discovery_failure(&mut self, failure: &KeyDiscoveryFailure) {
+        self.write_event(&KeyDiscoveryFailureEvent {
+            event: "key_discovery_failure",
+            timestamp_ms: timestamp_ms(),
+            encrypted_command_base64: BASE64_STANDARD.encode(&failure.encrypted_command),
+            sent_time: failure.sent_time,
+            retained_client_time: failure.retained_client_time,
+            // Decimal strings avoid loss of u64 precision in JSON tooling.
+            server_seeds: failure.server_seeds.iter().map(u64::to_string).collect(),
+        });
+        let _ = self.writer.flush();
+    }
+
     fn write_event<T: Serialize>(&mut self, event: &T) {
         if self.limit_reached {
             return;
@@ -140,6 +154,17 @@ impl PacketInspectionLogger {
             self.bytes_written += next_size;
         }
     }
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+struct KeyDiscoveryFailureEvent {
+    event: &'static str,
+    timestamp_ms: u64,
+    encrypted_command_base64: String,
+    sent_time: Option<u64>,
+    retained_client_time: Option<u64>,
+    server_seeds: Vec<String>,
 }
 
 #[derive(Serialize)]
@@ -448,6 +473,30 @@ mod tests {
     #[test]
     fn disabled_logger_can_be_constructed_without_path() {
         assert!(PacketInspectionLogger::open(None, 1024).is_none());
+    }
+
+    #[test]
+    fn key_failure_sample_is_flushed_and_preserves_seed_precision() {
+        let path = std::env::temp_dir().join(format!(
+            "irminsul-key-diagnostic-{}-{}.jsonl",
+            std::process::id(),
+            super::timestamp_ms()
+        ));
+        let mut logger = PacketInspectionLogger::open(Some(&path), 4096).unwrap();
+        logger.log_key_discovery_failure(&auto_artifactarium::KeyDiscoveryFailure {
+            encrypted_command: vec![1, 2, 3],
+            sent_time: Some(1234),
+            retained_client_time: None,
+            server_seeds: vec![u64::MAX],
+        });
+        let contents = std::fs::read_to_string(&path).unwrap();
+        let event: serde_json::Value =
+            serde_json::from_str(contents.lines().last().unwrap()).unwrap();
+        assert_eq!(event["event"], "key_discovery_failure");
+        assert_eq!(event["encryptedCommandBase64"], "AQID");
+        assert_eq!(event["serverSeeds"][0], u64::MAX.to_string());
+        drop(logger);
+        std::fs::remove_file(path).unwrap();
     }
 
     #[test]

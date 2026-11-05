@@ -1,0 +1,372 @@
+{
+  "schemaVersion": 2,
+  "key": "angelosheptades",
+  "name": "Angelos' Heptades",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "pathfinder",
+      "label": "Pathfinder Light active after creating a shield (20s)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "recipientOffField",
+      "label": "Selected damage character is off field (Hexerei extension)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "passive",
+        "name": "Angelos' Heptades · passive",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "ATK is increased by 12%/15%/18%/21%/24%. After the equipping character creates a Shield, they gain \"Pathfinder's Light\" for 20s: Increases your active party member's DMG by 10%/13%/16%/19%/22% for every 1,000 ATK the equipping character has, up to a maximum of 26%/34%/42%/50%/58%. Additionally, when the equipping character creates a Shield, they will also gain \"Guide's Contentment\": Restores 14/15/16/17/18 Elemental Energy to the equipping character. The aforementioned effect can trigger once every 14s, and can also be triggered when any type of chest is opened outside of combat. The equipping character may trigger this effect even when they are an off-field.Hexerei: Secret Rite: When your own Hexerei character is off-field in the party, they will also gain 50% of the DMG increase from Pathfinder's Light. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "always",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "attack",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 0.01
+                },
+                {
+                  "type": "add",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 12
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 3
+                        },
+                        {
+                          "type": "add",
+                          "operands": [
+                            {
+                              "type": "input",
+                              "input": "local:refinement"
+                            },
+                            {
+                              "type": "constant",
+                              "value": -1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "input",
+                  "input": "recipient:baseAttack"
+                }
+              ]
+            },
+            "phase": 0
+          }
+        ],
+        "formulaModifiers": []
+      }
+    },
+    {
+      "recipient": "activeCharacter",
+      "effect": {
+        "id": "pathfinder",
+        "name": "Angelos' Heptades · pathfinder",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "ATK is increased by 12%/15%/18%/21%/24%. After the equipping character creates a Shield, they gain \"Pathfinder's Light\" for 20s: Increases your active party member's DMG by 10%/13%/16%/19%/22% for every 1,000 ATK the equipping character has, up to a maximum of 26%/34%/42%/50%/58%. Additionally, when the equipping character creates a Shield, they will also gain \"Guide's Contentment\": Restores 14/15/16/17/18 Elemental Energy to the equipping character. The aforementioned effect can trigger once every 14s, and can also be triggered when any type of chest is opened outside of combat. The equipping character may trigger this effect even when they are an off-field.Hexerei: Secret Rite: When your own Hexerei character is off-field in the party, they will also gain 50% of the DMG increase from Pathfinder's Light. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:pathfinder",
+              "value": 1
+            },
+            {
+              "type": "inputAtMost",
+              "input": "local:recipientOffField",
+              "value": 0
+            }
+          ]
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent",
+                "artifactProc"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "min",
+                "operands": [
+                  {
+                    "type": "add",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 26
+                      },
+                      {
+                        "type": "multiply",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 8
+                          },
+                          {
+                            "type": "add",
+                            "operands": [
+                              {
+                                "type": "input",
+                                "input": "local:refinement"
+                              },
+                              {
+                                "type": "constant",
+                                "value": -1
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "add",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 10
+                          },
+                          {
+                            "type": "multiply",
+                            "operands": [
+                              {
+                                "type": "constant",
+                                "value": 3
+                              },
+                              {
+                                "type": "add",
+                                "operands": [
+                                  {
+                                    "type": "input",
+                                    "input": "local:refinement"
+                                  },
+                                  {
+                                    "type": "constant",
+                                    "value": -1
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "input",
+                        "input": "wearer:attack"
+                      },
+                      {
+                        "type": "constant",
+                        "value": 0.001
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "stackingGroup": "angelosHeptades.pathfinder",
+        "stackingPriority": {
+          "type": "input",
+          "input": "local:refinement"
+        }
+      }
+    },
+    {
+      "recipient": "party",
+      "effect": {
+        "id": "hexereiExtension",
+        "name": "Angelos' Heptades · hexerei Extension",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "ATK is increased by 12%/15%/18%/21%/24%. After the equipping character creates a Shield, they gain \"Pathfinder's Light\" for 20s: Increases your active party member's DMG by 10%/13%/16%/19%/22% for every 1,000 ATK the equipping character has, up to a maximum of 26%/34%/42%/50%/58%. Additionally, when the equipping character creates a Shield, they will also gain \"Guide's Contentment\": Restores 14/15/16/17/18 Elemental Energy to the equipping character. The aforementioned effect can trigger once every 14s, and can also be triggered when any type of chest is opened outside of combat. The equipping character may trigger this effect even when they are an off-field.Hexerei: Secret Rite: When your own Hexerei character is off-field in the party, they will also gain 50% of the DMG increase from Pathfinder's Light. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:pathfinder",
+              "value": 1
+            },
+            {
+              "type": "inputAtLeast",
+              "input": "local:recipientOffField",
+              "value": 1
+            },
+            {
+              "type": "contextAtLeast",
+              "input": "context:hexereiCount",
+              "value": 2
+            },
+            {
+              "type": "contextAtLeast",
+              "input": "context:recipientHexerei",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent",
+                "artifactProc"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 0.5
+                  },
+                  {
+                    "type": "min",
+                    "operands": [
+                      {
+                        "type": "add",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 26
+                          },
+                          {
+                            "type": "multiply",
+                            "operands": [
+                              {
+                                "type": "constant",
+                                "value": 8
+                              },
+                              {
+                                "type": "add",
+                                "operands": [
+                                  {
+                                    "type": "input",
+                                    "input": "local:refinement"
+                                  },
+                                  {
+                                    "type": "constant",
+                                    "value": -1
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "multiply",
+                        "operands": [
+                          {
+                            "type": "add",
+                            "operands": [
+                              {
+                                "type": "constant",
+                                "value": 10
+                              },
+                              {
+                                "type": "multiply",
+                                "operands": [
+                                  {
+                                    "type": "constant",
+                                    "value": 3
+                                  },
+                                  {
+                                    "type": "add",
+                                    "operands": [
+                                      {
+                                        "type": "input",
+                                        "input": "local:refinement"
+                                      },
+                                      {
+                                        "type": "constant",
+                                        "value": -1
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "type": "input",
+                            "input": "wearer:attack"
+                          },
+                          {
+                            "type": "constant",
+                            "value": 0.001
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "stackingGroup": "angelosHeptades.pathfinder",
+        "stackingPriority": {
+          "type": "input",
+          "input": "local:refinement"
+        }
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/10757"
+  ]
+}

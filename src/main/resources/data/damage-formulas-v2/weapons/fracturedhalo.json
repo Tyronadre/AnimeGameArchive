@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 2,
+  "key": "fracturedhalo",
+  "name": "Fractured Halo",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "skillOrBurst",
+      "label": "Skill/Burst ATK buff active (20s)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "edict",
+      "label": "Electrifying Edict active after creating a shield (20s)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "skillOrBurst",
+        "name": "Fractured Halo · skill Or Burst",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "After an Elemental Skill or Elemental Burst is used, ATK is increased by 24%/30%/36%/42%/48% for 20s. If the equipping character creates a Shield while this effect is active, they will gain the Electrifying Edict effect for 20s: All nearby party members deal 40%/50%/60%/70%/80% more Lunar-Charged DMG. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:skillOrBurst",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [
+          {
+            "stat": "attack",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 0.01
+                },
+                {
+                  "type": "add",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 24
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 6
+                        },
+                        {
+                          "type": "add",
+                          "operands": [
+                            {
+                              "type": "input",
+                              "input": "local:refinement"
+                            },
+                            {
+                              "type": "constant",
+                              "value": -1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "input",
+                  "input": "recipient:baseAttack"
+                }
+              ]
+            },
+            "phase": 0
+          }
+        ],
+        "formulaModifiers": []
+      }
+    },
+    {
+      "recipient": "party",
+      "effect": {
+        "id": "edict",
+        "name": "Fractured Halo · edict",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "After an Elemental Skill or Elemental Burst is used, ATK is increased by 24%/30%/36%/42%/48% for 20s. If the equipping character creates a Shield while this effect is active, they will gain the Electrifying Edict effect for 20s: All nearby party members deal 40%/50%/60%/70%/80% more Lunar-Charged DMG. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:edict",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "lunar"
+              ],
+              "requiredTags": [
+                "lunarCharged"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 40
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 10
+                      },
+                      {
+                        "type": "add",
+                        "operands": [
+                          {
+                            "type": "input",
+                            "input": "local:refinement"
+                          },
+                          {
+                            "type": "constant",
+                            "value": -1
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "stackingGroup": "fracturedHalo.edict",
+        "stackingPriority": {
+          "type": "input",
+          "input": "local:refinement"
+        }
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/8299"
+  ]
+}

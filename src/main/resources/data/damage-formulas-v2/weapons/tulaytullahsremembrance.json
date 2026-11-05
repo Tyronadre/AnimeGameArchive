@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 2,
+  "key": "tulaytullahsremembrance",
+  "name": "Tulaytullah's Remembrance",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "progress",
+      "label": "Normal Attack buff progress (0–10; each step = one second or half a hit)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 10,
+      "step": 0.1
+    }
+  ],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "passive",
+        "name": "Tulaytullah's Remembrance · passive",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Normal Attack SPD is increased by 10%/12.5%/15%/17.5%/20%. After the wielder unleashes an Elemental Skill, Normal Attack DMG will increase by 4.8%/6%/7.2%/8.4%/9.6% every second for 14s. After hitting an opponent with a Normal Attack during this duration, Normal Attack DMG will be increased by 9.6%/12%/14.4%/16.8%/19.2%. This increase can be triggered once every 0.3s. The maximum Normal Attack DMG increase per single duration of the overall effect is 48%/60%/72%/84%/96%. The effect will be removed when the wielder leaves the field, and using the Elemental Skill again will reset all DMG buffs. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "always",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent",
+                "artifactProc"
+              ],
+              "anyTags": [
+                "normalAttack"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "add",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 4.8
+                      },
+                      {
+                        "type": "multiply",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 1.2
+                          },
+                          {
+                            "type": "add",
+                            "operands": [
+                              {
+                                "type": "input",
+                                "input": "local:refinement"
+                              },
+                              {
+                                "type": "constant",
+                                "value": -1
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "input",
+                    "input": "local:progress"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/3320"
+  ]
+}

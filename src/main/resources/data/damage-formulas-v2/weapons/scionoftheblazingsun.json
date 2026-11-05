@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 2,
+  "key": "scionoftheblazingsun",
+  "name": "Scion of the Blazing Sun",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "proc",
+      "label": "Weapon damage proc available for this hit",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "heartsearer",
+      "label": "Target affected by Heartsearer",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "proc",
+        "name": "Scion of the Blazing Sun · proc",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "After a Charged Attack hits an opponent, a Sunfire Arrow will descend upon the opponent hit, dealing 60%/75%/90%/105%/120% ATK as DMG, and applying the Heartsearer effect to the opponent damaged by said Arrow for 10s. Opponents affected by Heartsearer take 28%/35%/42%/49%/56% more Charged Attack DMG from the wielder. A Sunfire Arrow can be triggered once every 10s. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:proc",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [],
+        "formulaModifiers": []
+      },
+      "formulas": [
+        {
+          "id": "proc",
+          "label": "Scion of the Blazing Sun · proc",
+          "damageType": "directPhysical",
+          "infusionRule": "locked",
+          "tags": [
+            "weaponProc",
+            "noReaction"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "constant",
+                "value": 0.01
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 60
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 15
+                      },
+                      {
+                        "type": "add",
+                        "operands": [
+                          {
+                            "type": "input",
+                            "input": "local:refinement"
+                          },
+                          {
+                            "type": "constant",
+                            "value": -1
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "input",
+                "input": "wearer:attack"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "heartsearer",
+        "name": "Scion of the Blazing Sun · heartsearer",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "After a Charged Attack hits an opponent, a Sunfire Arrow will descend upon the opponent hit, dealing 60%/75%/90%/105%/120% ATK as DMG, and applying the Heartsearer effect to the opponent damaged by said Arrow for 10s. Opponents affected by Heartsearer take 28%/35%/42%/49%/56% more Charged Attack DMG from the wielder. A Sunfire Arrow can be triggered once every 10s. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:heartsearer",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent",
+                "artifactProc"
+              ],
+              "anyTags": [
+                "chargedAttack"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 28
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 7
+                      },
+                      {
+                        "type": "add",
+                        "operands": [
+                          {
+                            "type": "input",
+                            "input": "local:refinement"
+                          },
+                          {
+                            "type": "constant",
+                            "value": -1
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/4002"
+  ]
+}

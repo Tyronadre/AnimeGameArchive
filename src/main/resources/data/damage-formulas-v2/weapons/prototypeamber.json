@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 2,
+  "key": "prototypeamber",
+  "name": "Prototype Amber",
+  "inputs": [],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "utility",
+        "name": "Prototype Amber · utility",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Using an Elemental Burst regenerates 4/4.5/5/5.5/6 Energy every 2s for 6s. All party members will regenerate 4%/4.5%/5%/5.5%/6% HP every 2s for this duration. This passive has no direct per-hit damage modifier. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "always",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": []
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/2029"
+  ]
+}

@@ -97,8 +97,8 @@ pub enum ConnectionPacket {
 
 #[repr(u16)]
 enum CommandId {
-    AvatarDataNotify = 27799,
-    PlayerStoreNotify = 22160,
+    AvatarDataNotify = 20143,
+    PlayerStoreNotify = 20892,
 }
 
 /// Game command header.
@@ -194,6 +194,17 @@ pub enum Key {
     Session(Vec<u8>),
 }
 
+/// Private, local diagnostic for replaying a failed session-key search.
+/// Only collected when explicitly enabled; at most one bounded command per handshake.
+pub struct KeyDiscoveryFailure {
+    pub encrypted_command: Vec<u8>,
+    pub sent_time: Option<u64>,
+    pub retained_client_time: Option<u64>,
+    pub server_seeds: Vec<u64>,
+}
+
+const MAX_KEY_DIAGNOSTIC_BYTES: usize = 64 * 1024;
+
 #[derive(Default)]
 pub struct GameSniffer {
     sent_kcp: Option<KcpSniffer>,
@@ -204,6 +215,9 @@ pub struct GameSniffer {
     rsa_keys: Vec<RsaPrivateKey>,
     sent_time: Option<u64>,
     possible_seeds: Vec<u64>,
+    key_diagnostics_enabled: bool,
+    key_diagnostic_recorded: bool,
+    key_discovery_failure: Option<KeyDiscoveryFailure>,
 }
 
 impl GameSniffer {
@@ -242,6 +256,30 @@ impl GameSniffer {
         }
     }
 
+    pub fn with_key_diagnostics(mut self, enabled: bool) -> Self {
+        self.key_diagnostics_enabled = enabled;
+        self
+    }
+
+    pub fn take_key_discovery_failure(&mut self) -> Option<KeyDiscoveryFailure> {
+        self.key_discovery_failure.take()
+    }
+
+    fn record_key_discovery_failure(&mut self, data: &[u8]) {
+        if self.key_diagnostics_enabled
+            && !self.key_diagnostic_recorded
+            && data.len() <= MAX_KEY_DIAGNOSTIC_BYTES
+        {
+            self.key_discovery_failure = Some(KeyDiscoveryFailure {
+                encrypted_command: data.to_vec(),
+                sent_time: self.sent_time,
+                retained_client_time: self.client_seed,
+                server_seeds: self.possible_seeds.clone(),
+            });
+            self.key_diagnostic_recorded = true;
+        }
+    }
+
     #[instrument(skip_all, fields(len = bytes.len()))]
     pub fn receive_packet(&mut self, bytes: Vec<u8>) -> Option<GamePacket> {
         let packet = parse_connection_packet(&PORTS, bytes)?;
@@ -251,6 +289,10 @@ impl GameSniffer {
                 self.recv_kcp = None;
                 self.sent_kcp = None;
                 self.key = None;
+                self.sent_time = None;
+                self.possible_seeds.clear();
+                self.key_diagnostic_recorded = false;
+                self.key_discovery_failure = None;
                 Some(GamePacket::Connection(packet))
             }
             ConnectionPacket::HandshakeEstablished | ConnectionPacket::Disconnected => {
@@ -353,6 +395,7 @@ impl GameSniffer {
                     match discovered_key {
                         Some(key) => key,
                         None => {
+                            self.record_key_discovery_failure(&data);
                             error!("Couldn't bruteforce from deduced keys");
                             return None;
                         }
@@ -418,7 +461,7 @@ pub fn matches_achievement_packet(game_command: &GameCommand) -> Option<Vec<Achi
 
 #[cfg(test)]
 mod session_key_tests {
-    use super::GameSniffer;
+    use super::{GameSniffer, Key, MAX_KEY_DIAGNOSTIC_BYTES};
 
     #[test]
     fn restores_and_exposes_only_a_session_key() {
@@ -427,6 +470,37 @@ mod session_key_tests {
 
         assert_eq!(sniffer.session_key(), Some(key.as_slice()));
         assert!(GameSniffer::new().session_key().is_none());
+    }
+
+    #[test]
+    fn failed_key_search_records_one_replay_sample_when_enabled() {
+        let mut sniffer = GameSniffer::new().with_key_diagnostics(true);
+        sniffer.key = Some(Key::Dispatch(vec![0; 4096]));
+        sniffer.sent_time = Some(1234);
+        // No seeds: exercise failure without an expensive brute-force search.
+        let encrypted = vec![0x55; 20];
+        assert!(sniffer.receive_command(encrypted.clone()).is_none());
+        let failure = sniffer.take_key_discovery_failure().unwrap();
+        assert_eq!(failure.encrypted_command, encrypted);
+        assert_eq!(failure.sent_time, Some(1234));
+        assert!(sniffer.receive_command(vec![0x66; 20]).is_none());
+        assert!(sniffer.take_key_discovery_failure().is_none());
+    }
+
+    #[test]
+    fn diagnostics_are_opt_in_and_skip_oversized_commands() {
+        let mut sniffer = GameSniffer::new();
+        sniffer.record_key_discovery_failure(&[1; 20]);
+        assert!(sniffer.take_key_discovery_failure().is_none());
+        sniffer = sniffer.with_key_diagnostics(true);
+        sniffer.record_key_discovery_failure(&vec![1; MAX_KEY_DIAGNOSTIC_BYTES + 1]);
+        assert!(sniffer.take_key_discovery_failure().is_none());
+        sniffer.possible_seeds = vec![u64::MAX];
+        sniffer.record_key_discovery_failure(&[2; 20]);
+        assert_eq!(
+            sniffer.take_key_discovery_failure().unwrap().server_seeds,
+            vec![u64::MAX]
+        );
     }
 }
 

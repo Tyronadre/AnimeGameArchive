@@ -1,0 +1,459 @@
+{
+  "schemaVersion": 2,
+  "key": "exaiphanesblade",
+  "name": "Exaiphanes Blade",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "resonatedElements",
+      "label": "Elements the Traveler has resonated with",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 7,
+      "step": 1
+    },
+    {
+      "id": "hit",
+      "label": "ATK buff after hitting an opponent active (8s)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "traveler",
+        "name": "Exaiphanes Blade · traveler",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "When the Traveler equips this, their CRIT DMG increases by 0%/6%/6%/6%/6% for every Element they have resonated with. Additionally, the Traveler's ATK will also increase by 16%/20%/24%/32%/40% for 8s, and regenerate 3/3/5/5/5 Elemental Energy, after they attack and hit an opponent. This effect can trigger once every 5s. This can be triggered even when the character is not on the field. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "contextAtLeast",
+              "input": "context:wearerIsTraveler",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [
+          {
+            "stat": "critDamage",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "add",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 0
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 6
+                        },
+                        {
+                          "type": "min",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 1
+                            },
+                            {
+                              "type": "max",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 0
+                                },
+                                {
+                                  "type": "add",
+                                  "operands": [
+                                    {
+                                      "type": "input",
+                                      "input": "local:refinement"
+                                    },
+                                    {
+                                      "type": "constant",
+                                      "value": -1
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 0
+                        },
+                        {
+                          "type": "min",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 1
+                            },
+                            {
+                              "type": "max",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 0
+                                },
+                                {
+                                  "type": "add",
+                                  "operands": [
+                                    {
+                                      "type": "input",
+                                      "input": "local:refinement"
+                                    },
+                                    {
+                                      "type": "constant",
+                                      "value": -2
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 0
+                        },
+                        {
+                          "type": "min",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 1
+                            },
+                            {
+                              "type": "max",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 0
+                                },
+                                {
+                                  "type": "add",
+                                  "operands": [
+                                    {
+                                      "type": "input",
+                                      "input": "local:refinement"
+                                    },
+                                    {
+                                      "type": "constant",
+                                      "value": -3
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 0
+                        },
+                        {
+                          "type": "min",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 1
+                            },
+                            {
+                              "type": "max",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 0
+                                },
+                                {
+                                  "type": "add",
+                                  "operands": [
+                                    {
+                                      "type": "input",
+                                      "input": "local:refinement"
+                                    },
+                                    {
+                                      "type": "constant",
+                                      "value": -4
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "input",
+                  "input": "local:resonatedElements"
+                }
+              ]
+            },
+            "phase": 0
+          }
+        ],
+        "formulaModifiers": []
+      }
+    },
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "hit",
+        "name": "Exaiphanes Blade · hit",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "When the Traveler equips this, their CRIT DMG increases by 0%/6%/6%/6%/6% for every Element they have resonated with. Additionally, the Traveler's ATK will also increase by 16%/20%/24%/32%/40% for 8s, and regenerate 3/3/5/5/5 Elemental Energy, after they attack and hit an opponent. This effect can trigger once every 5s. This can be triggered even when the character is not on the field. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "contextAtLeast",
+              "input": "context:wearerIsTraveler",
+              "value": 1
+            },
+            {
+              "type": "inputAtLeast",
+              "input": "local:hit",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [
+          {
+            "stat": "attack",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 0.01
+                },
+                {
+                  "type": "add",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 16
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 4
+                        },
+                        {
+                          "type": "min",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 1
+                            },
+                            {
+                              "type": "max",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 0
+                                },
+                                {
+                                  "type": "add",
+                                  "operands": [
+                                    {
+                                      "type": "input",
+                                      "input": "local:refinement"
+                                    },
+                                    {
+                                      "type": "constant",
+                                      "value": -1
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 4
+                        },
+                        {
+                          "type": "min",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 1
+                            },
+                            {
+                              "type": "max",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 0
+                                },
+                                {
+                                  "type": "add",
+                                  "operands": [
+                                    {
+                                      "type": "input",
+                                      "input": "local:refinement"
+                                    },
+                                    {
+                                      "type": "constant",
+                                      "value": -2
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 8
+                        },
+                        {
+                          "type": "min",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 1
+                            },
+                            {
+                              "type": "max",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 0
+                                },
+                                {
+                                  "type": "add",
+                                  "operands": [
+                                    {
+                                      "type": "input",
+                                      "input": "local:refinement"
+                                    },
+                                    {
+                                      "type": "constant",
+                                      "value": -3
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "multiply",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 8
+                        },
+                        {
+                          "type": "min",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 1
+                            },
+                            {
+                              "type": "max",
+                              "operands": [
+                                {
+                                  "type": "constant",
+                                  "value": 0
+                                },
+                                {
+                                  "type": "add",
+                                  "operands": [
+                                    {
+                                      "type": "input",
+                                      "input": "local:refinement"
+                                    },
+                                    {
+                                      "type": "constant",
+                                      "value": -4
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "input",
+                  "input": "recipient:baseAttack"
+                }
+              ]
+            },
+            "phase": 0
+          }
+        ],
+        "formulaModifiers": []
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/11211"
+  ]
+}

@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 2,
+  "key": "fadingtwilight",
+  "name": "Fading Twilight",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "state",
+      "label": "State: 1 Evengleam, 2 Afterglow, 3 Dawnblaze",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 3,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "passive",
+        "name": "Fading Twilight · passive",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Has three states, Evengleam, Afterglow, and Dawnblaze, which increase DMG dealt by 6%/10%/14% | 7.5%/12.5%/17.5% | 9%/15%/21% | 10.5%/17.5%/24.5% | 12%/20%/28% respectively. When attacks hit opponents, this weapon will switch to the next state. This weapon can change states once every 7s. The character equipping this weapon can still trigger the state switch while not on the field. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "always",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent",
+                "artifactProc"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "add",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 6
+                      },
+                      {
+                        "type": "multiply",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 4
+                          },
+                          {
+                            "type": "min",
+                            "operands": [
+                              {
+                                "type": "constant",
+                                "value": 1
+                              },
+                              {
+                                "type": "max",
+                                "operands": [
+                                  {
+                                    "type": "constant",
+                                    "value": 0
+                                  },
+                                  {
+                                    "type": "add",
+                                    "operands": [
+                                      {
+                                        "type": "input",
+                                        "input": "local:state"
+                                      },
+                                      {
+                                        "type": "constant",
+                                        "value": -1
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "multiply",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 4
+                          },
+                          {
+                            "type": "min",
+                            "operands": [
+                              {
+                                "type": "constant",
+                                "value": 1
+                              },
+                              {
+                                "type": "max",
+                                "operands": [
+                                  {
+                                    "type": "constant",
+                                    "value": 0
+                                  },
+                                  {
+                                    "type": "add",
+                                    "operands": [
+                                      {
+                                        "type": "input",
+                                        "input": "local:state"
+                                      },
+                                      {
+                                        "type": "constant",
+                                        "value": -2
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "add",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 1
+                      },
+                      {
+                        "type": "multiply",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 0.25
+                          },
+                          {
+                            "type": "add",
+                            "operands": [
+                              {
+                                "type": "input",
+                                "input": "local:refinement"
+                              },
+                              {
+                                "type": "constant",
+                                "value": -1
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/2255"
+  ]
+}

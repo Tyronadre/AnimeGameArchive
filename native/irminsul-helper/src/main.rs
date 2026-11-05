@@ -140,6 +140,7 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
     let mut sniffer = GameSniffer::new().set_initial_keys(keys);
     let mut packet_inspection =
         PacketInspectionLogger::open(args.packet_log_file.as_deref(), args.packet_log_max_bytes);
+    sniffer = sniffer.with_key_diagnostics(packet_inspection.is_some());
     let mut restored_session = false;
     if args.reuse_session_key {
         let path = args
@@ -175,7 +176,7 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
         if args.reuse_session_key {
             "Capture is running with the cached development session key. Make an inventory change in Genshin Impact."
         } else {
-            "Capture is running. Start Genshin Impact and enter the game."
+            "Capture is running. Fully close Genshin Impact if it is open, then launch it again and enter the game."
         },
     )
     .await?;
@@ -293,6 +294,12 @@ async fn run_capture(client: &Client, args: &Args) -> Result<()> {
                     packets_since_report += 1;
                 }
                 let received = sniffer.receive_packet(packet);
+                if let Some(failure) = sniffer.take_key_discovery_failure()
+                    && let Some(logger) = packet_inspection.as_mut()
+                {
+                    logger.log_key_discovery_failure(&failure);
+                    tracing::warn!("Session-key discovery failed; saved a private replay sample to the packet inspection log");
+                }
                 let Some(GamePacket::Commands(commands)) = received else {
                     continue;
                 };

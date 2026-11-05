@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 2,
+  "key": "swordofdescension",
+  "name": "Sword of Descension",
+  "inputs": [
+    {
+      "id": "playstation",
+      "label": "PlayStation-only passive enabled",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "proc",
+      "label": "Weapon damage proc available for this hit",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "traveler",
+        "name": "Sword of Descension · traveler",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Effective only on the following platform: \"PlayStation Network\"Hitting opponents with Normal and Charged Attacks grants a 50% chance to deal 200% ATK as DMG in a small AoE. This effect can only occur once every 10s. Additionally, if the Traveler equips the Sword of Descension, their ATK is increased by 66. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:playstation",
+              "value": 1
+            },
+            {
+              "type": "contextAtLeast",
+              "input": "context:wearerIsTraveler",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [
+          {
+            "stat": "attack",
+            "operation": "flatAdd",
+            "value": {
+              "type": "constant",
+              "value": 66
+            },
+            "phase": 0
+          }
+        ],
+        "formulaModifiers": []
+      }
+    },
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "proc",
+        "name": "Sword of Descension · proc",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Effective only on the following platform: \"PlayStation Network\"Hitting opponents with Normal and Charged Attacks grants a 50% chance to deal 200% ATK as DMG in a small AoE. This effect can only occur once every 10s. Additionally, if the Traveler equips the Sword of Descension, their ATK is increased by 66. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:playstation",
+              "value": 1
+            },
+            {
+              "type": "inputAtLeast",
+              "input": "local:proc",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [],
+        "formulaModifiers": []
+      },
+      "formulas": [
+        {
+          "id": "proc",
+          "label": "Sword of Descension · proc",
+          "damageType": "directPhysical",
+          "infusionRule": "locked",
+          "tags": [
+            "weaponProc",
+            "noReaction"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "constant",
+                "value": 0.01
+              },
+              {
+                "type": "constant",
+                "value": 200
+              },
+              {
+                "type": "input",
+                "input": "wearer:attack"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/2041"
+  ]
+}

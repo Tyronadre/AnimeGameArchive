@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 2,
+  "key": "kingssquire",
+  "name": "King's Squire",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "teachings",
+      "label": "Teachings of the Forest active",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "proc",
+      "label": "Weapon damage proc available for this hit",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "teachings",
+        "name": "King's Squire · teachings",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Obtain the Teachings of the Forest effect when unleashing Elemental Skills and Bursts, increasing Elemental Mastery by 60/80/100/120/140 for 12s. This effect will be removed when switching characters. When the Teachings of the Forest effect ends or is removed, it will deal 100%/120%/140%/160%/180% of ATK as DMG to 1 nearby opponent. The Teachings of the Forest effect can be triggered once every 20s. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:teachings",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [
+          {
+            "stat": "elementalMastery",
+            "operation": "flatAdd",
+            "value": {
+              "type": "add",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 60
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "constant",
+                      "value": 20
+                    },
+                    {
+                      "type": "add",
+                      "operands": [
+                        {
+                          "type": "input",
+                          "input": "local:refinement"
+                        },
+                        {
+                          "type": "constant",
+                          "value": -1
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "phase": 0
+          }
+        ],
+        "formulaModifiers": []
+      }
+    },
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "proc",
+        "name": "King's Squire · proc",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Obtain the Teachings of the Forest effect when unleashing Elemental Skills and Bursts, increasing Elemental Mastery by 60/80/100/120/140 for 12s. This effect will be removed when switching characters. When the Teachings of the Forest effect ends or is removed, it will deal 100%/120%/140%/160%/180% of ATK as DMG to 1 nearby opponent. The Teachings of the Forest effect can be triggered once every 20s. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:proc",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [],
+        "formulaModifiers": []
+      },
+      "formulas": [
+        {
+          "id": "proc",
+          "label": "King's Squire · proc",
+          "damageType": "directPhysical",
+          "infusionRule": "locked",
+          "tags": [
+            "weaponProc",
+            "noReaction"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "constant",
+                "value": 0.01
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 100
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 20
+                      },
+                      {
+                        "type": "add",
+                        "operands": [
+                          {
+                            "type": "input",
+                            "input": "local:refinement"
+                          },
+                          {
+                            "type": "constant",
+                            "value": -1
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "input",
+                "input": "wearer:attack"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/2670"
+  ]
+}

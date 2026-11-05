@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 2,
+  "key": "favoniussword",
+  "name": "Favonius Sword",
+  "inputs": [],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "utility",
+        "name": "Favonius Sword · utility",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "CRIT Hits have a 60%/70%/80%/90%/100% chance to generate a small amount of Elemental Particles, which will regenerate 6 Energy for the character. Can only occur once every 12/10.5/9/7.5/6s. This passive has no direct per-hit damage modifier. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "always",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": []
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/2017"
+  ]
+}

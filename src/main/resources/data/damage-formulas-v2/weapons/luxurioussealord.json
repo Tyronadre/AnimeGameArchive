@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 2,
+  "key": "luxurioussealord",
+  "name": "Luxurious Sea-Lord",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "proc",
+      "label": "Weapon damage proc available for this hit",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "passive",
+        "name": "Luxurious Sea-Lord · passive",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Increases Elemental Burst DMG by 12%/15%/18%/21%/24%. When Elemental Burst hits opponents, there is a 100% chance of summoning a huge onrush of tuna that deals 100%/125%/150%/175%/200% ATK as AoE DMG. This effect can occur once every 15s. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "always",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent",
+                "artifactProc"
+              ],
+              "anyTags": [
+                "elementalBurst"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 12
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 3
+                      },
+                      {
+                        "type": "add",
+                        "operands": [
+                          {
+                            "type": "input",
+                            "input": "local:refinement"
+                          },
+                          {
+                            "type": "constant",
+                            "value": -1
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "proc",
+        "name": "Luxurious Sea-Lord · proc",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Increases Elemental Burst DMG by 12%/15%/18%/21%/24%. When Elemental Burst hits opponents, there is a 100% chance of summoning a huge onrush of tuna that deals 100%/125%/150%/175%/200% ATK as AoE DMG. This effect can occur once every 15s. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:proc",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [],
+        "formulaModifiers": []
+      },
+      "formulas": [
+        {
+          "id": "proc",
+          "label": "Luxurious Sea-Lord · proc",
+          "damageType": "directPhysical",
+          "infusionRule": "locked",
+          "tags": [
+            "weaponProc",
+            "noReaction"
+          ],
+          "base": {
+            "type": "multiply",
+            "operands": [
+              {
+                "type": "constant",
+                "value": 0.01
+              },
+              {
+                "type": "add",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 100
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 25
+                      },
+                      {
+                        "type": "add",
+                        "operands": [
+                          {
+                            "type": "input",
+                            "input": "local:refinement"
+                          },
+                          {
+                            "type": "constant",
+                            "value": -1
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "input",
+                "input": "wearer:attack"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/2016"
+  ]
+}

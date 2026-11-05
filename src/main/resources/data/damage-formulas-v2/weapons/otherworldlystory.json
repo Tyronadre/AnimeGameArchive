@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 2,
+  "key": "otherworldlystory",
+  "name": "Otherworldly Story",
+  "inputs": [],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "utility",
+        "name": "Otherworldly Story · utility",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Each Elemental Orb or Particle collected restores 1%/1.25%/1.5%/1.75%/2% HP. This passive has no direct per-hit damage modifier. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "always",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": []
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/1966"
+  ]
+}

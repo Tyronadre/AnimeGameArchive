@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 2,
+  "key": "beginnersprotector",
+  "name": "Beginner's Protector",
+  "inputs": [],
+  "effects": [],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/1976"
+  ]
+}

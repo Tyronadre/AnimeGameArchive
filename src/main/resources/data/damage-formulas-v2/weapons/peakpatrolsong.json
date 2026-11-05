@@ -1,0 +1,302 @@
+{
+  "schemaVersion": 2,
+  "key": "peakpatrolsong",
+  "name": "Peak Patrol Song",
+  "inputs": [
+    {
+      "id": "refinement",
+      "label": "Weapon refinement",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "stacks",
+      "label": "Active passive stacks",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 2,
+      "step": 1
+    },
+    {
+      "id": "partyBuff",
+      "label": "Party elemental bonus active after reaching/refreshing 2 stacks (15s)",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "passive",
+        "name": "Peak Patrol Song · passive",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Gain \"Ode to Flowers\" after Normal or Plunging Attacks hit an opponent: DEF increases by 8%/10%/12%/14%/16% and gain a 10%/12.5%/15%/17.5%/20% All Elemental DMG Bonus for 6s. Max 2 stacks. Can trigger once per 0.1s. When this effect reaches 2 stacks or the 2nd stack's duration is refreshed, increase all nearby party members' All Elemental DMG Bonus by 8%/10%/12%/14%/16% for every 1,000 DEF the equipping character has, up to a maximum of 25.6%/32%/38.4%/44.8%/51.2%, for 15s. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "always",
+          "conditions": []
+        },
+        "statChanges": [
+          {
+            "stat": "defense",
+            "operation": "flatAdd",
+            "value": {
+              "type": "multiply",
+              "operands": [
+                {
+                  "type": "constant",
+                  "value": 0.01
+                },
+                {
+                  "type": "multiply",
+                  "operands": [
+                    {
+                      "type": "add",
+                      "operands": [
+                        {
+                          "type": "constant",
+                          "value": 8
+                        },
+                        {
+                          "type": "multiply",
+                          "operands": [
+                            {
+                              "type": "constant",
+                              "value": 2
+                            },
+                            {
+                              "type": "add",
+                              "operands": [
+                                {
+                                  "type": "input",
+                                  "input": "local:refinement"
+                                },
+                                {
+                                  "type": "constant",
+                                  "value": -1
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "input",
+                      "input": "local:stacks"
+                    }
+                  ]
+                },
+                {
+                  "type": "input",
+                  "input": "recipient:baseDefense"
+                }
+              ]
+            },
+            "phase": 0
+          }
+        ],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent",
+                "artifactProc"
+              ],
+              "elements": [
+                "Pyro",
+                "Hydro",
+                "Electro",
+                "Cryo",
+                "Dendro",
+                "Anemo",
+                "Geo"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "add",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 10
+                      },
+                      {
+                        "type": "multiply",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 2.5
+                          },
+                          {
+                            "type": "add",
+                            "operands": [
+                              {
+                                "type": "input",
+                                "input": "local:refinement"
+                              },
+                              {
+                                "type": "constant",
+                                "value": -1
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "input",
+                    "input": "local:stacks"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "recipient": "party",
+      "effect": {
+        "id": "partyBuff",
+        "name": "Peak Patrol Song · party Buff",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Gain \"Ode to Flowers\" after Normal or Plunging Attacks hit an opponent: DEF increases by 8%/10%/12%/14%/16% and gain a 10%/12.5%/15%/17.5%/20% All Elemental DMG Bonus for 6s. Max 2 stacks. Can trigger once per 0.1s. When this effect reaches 2 stacks or the 2nd stack's duration is refreshed, increase all nearby party members' All Elemental DMG Bonus by 8%/10%/12%/14%/16% for every 1,000 DEF the equipping character has, up to a maximum of 25.6%/32%/38.4%/44.8%/51.2%, for 15s. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:partyBuff",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent",
+                "artifactProc"
+              ],
+              "elements": [
+                "Pyro",
+                "Hydro",
+                "Electro",
+                "Cryo",
+                "Dendro",
+                "Anemo",
+                "Geo"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "min",
+                "operands": [
+                  {
+                    "type": "add",
+                    "operands": [
+                      {
+                        "type": "constant",
+                        "value": 25.6
+                      },
+                      {
+                        "type": "multiply",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 6.4
+                          },
+                          {
+                            "type": "add",
+                            "operands": [
+                              {
+                                "type": "input",
+                                "input": "local:refinement"
+                              },
+                              {
+                                "type": "constant",
+                                "value": -1
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "multiply",
+                    "operands": [
+                      {
+                        "type": "add",
+                        "operands": [
+                          {
+                            "type": "constant",
+                            "value": 8
+                          },
+                          {
+                            "type": "multiply",
+                            "operands": [
+                              {
+                                "type": "constant",
+                                "value": 2
+                              },
+                              {
+                                "type": "add",
+                                "operands": [
+                                  {
+                                    "type": "input",
+                                    "input": "local:refinement"
+                                  },
+                                  {
+                                    "type": "constant",
+                                    "value": -1
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "input",
+                        "input": "wearer:defense"
+                      },
+                      {
+                        "type": "constant",
+                        "value": 0.001
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "stackingGroup": "peakPatrolSong",
+        "stackingPriority": {
+          "type": "input",
+          "input": "local:refinement"
+        }
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/7029"
+  ]
+}

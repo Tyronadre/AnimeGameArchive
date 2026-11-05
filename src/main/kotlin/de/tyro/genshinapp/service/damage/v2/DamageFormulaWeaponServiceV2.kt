@@ -12,7 +12,10 @@ data class DamageWeaponDefinitionV2(
     val effects: List<DamageWeaponEffectV2>, val sources: List<String> = emptyList(),
 )
 
-data class DamageWeaponEffectV2(val recipient: String = "wearer", val effect: DamageEffectV2)
+data class DamageWeaponEffectV2(
+    val recipient: String = "wearer", val effect: DamageEffectV2,
+    val formulas: List<DamageFormulaV2> = emptyList(),
+)
 
 @Service
 class DamageFormulaWeaponServiceV2(
@@ -26,7 +29,7 @@ class DamageFormulaWeaponServiceV2(
         weapons.forEach {
             require(it.schemaVersion == 2 && it.key == GoodKeyNormalizer.normalize(it.key))
             require(it.effects.map { effect -> effect.effect.id }.distinct().size == it.effects.size)
-            require(it.effects.all { effect -> effect.recipient in listOf("wearer", "party", "others") })
+            require(it.effects.all { effect -> effect.recipient in listOf("wearer", "party", "others", "activeCharacter", "activeOther") })
         }
         weapons.associateBy { it.key }
     }
@@ -39,9 +42,11 @@ class DamageFormulaWeaponServiceV2(
             .groupBy { TravelerIdentity.canonicalCharacterKey(it.location.orEmpty()) }
         require(equipped.values.all { it.size == 1 }) { "Multiple weapons equipped on the same character" }
         val refinements = equipped.mapValues { (_, copies) -> copies.single().refinement.coerceIn(1, 5) }
+        val damageTypes = DamageTypeRegistryV2(objectMapper)
         val tiers = definitions.mapValues { (_, weapon) -> DamageArtifactSetV2(
             weapon.schemaVersion, weapon.key, weapon.name, weapon.inputs,
-            weapon.effects.map { DamageArtifactEffectV2(1, it.recipient, it.effect) }, sources = weapon.sources,
+            weapon.effects.map { DamageArtifactEffectV2(1, it.recipient, it.effect, it.formulas) },
+            damageTypes = damageTypes.resolve(weapon.effects.flatMap { it.formulas }.map { it.damageType }), sources = weapon.sources,
         ) }
         val gear = equipped.map { (owner, copies) -> EquippedEffectItemV2(owner, copies.single().key, "weapon") }
         return equipmentBinder.bindEquipment(profile, gear, tiers, "weapon", refinements)

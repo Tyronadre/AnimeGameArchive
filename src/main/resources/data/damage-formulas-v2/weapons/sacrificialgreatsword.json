@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 2,
+  "key": "sacrificialgreatsword",
+  "name": "Sacrificial Greatsword",
+  "inputs": [],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "utility",
+        "name": "Sacrificial Greatsword · utility",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "After damaging an opponent with an Elemental Skill, the skill has a 40%/50%/60%/70%/80% chance to end its own CD. Can only occur once every 30/26/22s/19/16s. This passive has no direct per-hit damage modifier. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "always",
+          "conditions": []
+        },
+        "statChanges": [],
+        "formulaModifiers": []
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/2004"
+  ]
+}

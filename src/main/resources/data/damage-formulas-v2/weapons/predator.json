@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 2,
+  "key": "predator",
+  "name": "Predator",
+  "inputs": [
+    {
+      "id": "playstation",
+      "label": "PlayStation-only passive enabled",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "id": "stacks",
+      "label": "Active passive stacks",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 2,
+      "step": 1
+    }
+  ],
+  "effects": [
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "strongStrike",
+        "name": "Predator · strong Strike",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Effective only on the following platform: \"PlayStation Network\"Dealing Cryo DMG to opponents increases this character's Normal and Charged Attack DMG by 10% for 6s. This effect can have a maximum of 2 stacks. Additionally, when Aloy equips Predator, ATK is increased by 66. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:playstation",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [],
+        "formulaModifiers": [
+          {
+            "targets": {
+              "damageKinds": [
+                "talent",
+                "artifactProc"
+              ],
+              "anyTags": [
+                "normalAttack",
+                "chargedAttack"
+              ]
+            },
+            "damageBonus": {
+              "unit": "percentPoints",
+              "expression": {
+                "type": "multiply",
+                "operands": [
+                  {
+                    "type": "constant",
+                    "value": 10
+                  },
+                  {
+                    "type": "input",
+                    "input": "local:stacks"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "recipient": "wearer",
+      "effect": {
+        "id": "aloy",
+        "name": "Predator · aloy",
+        "source": "Weapon",
+        "category": "weapon",
+        "defaultEnabled": true,
+        "description": "Effective only on the following platform: \"PlayStation Network\"Dealing Cryo DMG to opponents increases this character's Normal and Charged Attack DMG by 10% for 6s. This effect can have a maximum of 2 stacks. Additionally, when Aloy equips Predator, ATK is increased by 66. Combat snapshot: set the controls for this hit; durations, stack consumption, healing, energy and cooldowns are not simulated.",
+        "activation": {
+          "event": "buffActive",
+          "conditions": [
+            {
+              "type": "inputAtLeast",
+              "input": "local:playstation",
+              "value": 1
+            },
+            {
+              "type": "contextAtLeast",
+              "input": "context:wearerIsAloy",
+              "value": 1
+            }
+          ]
+        },
+        "statChanges": [
+          {
+            "stat": "attack",
+            "operation": "flatAdd",
+            "value": {
+              "type": "constant",
+              "value": 66
+            },
+            "phase": 0
+          }
+        ],
+        "formulaModifiers": []
+      }
+    }
+  ],
+  "sources": [
+    "https://wiki.hoyolab.com/pc/genshin/entry/1973"
+  ]
+}
